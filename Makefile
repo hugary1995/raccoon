@@ -32,12 +32,12 @@ FLUID_PROPERTIES    := no
 HEAT_CONDUCTION     := no
 MISC                := no
 NAVIER_STOKES       := no
-PHASE_FIELD         := no
+PHASE_FIELD         := yes
 RDG                 := no
 RICHARDS            := no
 SOLID_MECHANICS     := no
 STOCHASTIC_TOOLS    := no
-TENSOR_MECHANICS    := no
+TENSOR_MECHANICS    := yes
 XFEM                := no
 POROUS_FLOW         := no
 
