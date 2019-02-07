@@ -10,49 +10,32 @@
 []
 
 [Variables]
-  [./d]
-  [../]
   [./disp_x]
   [../]
   [./disp_y]
   [../]
 []
 
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = d
+[AuxVariables]
+  [./d]
   [../]
+[]
+
+[Kernels]
   [./TensorMechanics]
     displacements = 'disp_x disp_y'
   [../]
-  [./offdiag_x]
-    type = PhaseFieldFractureMechanicsOffDiag
-    component = 0
-    variable = disp_x
-    c = d
-  [../]
-  [./offdiag_y]
-    type = PhaseFieldFractureMechanicsOffDiag
-    component = 1
-    variable = disp_y
-    c = d
+[]
+
+[AuxKernels]
+  [./d]
+    type = FunctionAux
+    variable = d
+    function = t*x
   [../]
 []
 
 [BCs]
-  [./left]
-    type = FunctionDirichletBC
-    variable = d
-    boundary = left
-    function = 0
-  [../]
-  [./right]
-    type = FunctionDirichletBC
-    variable = d
-    boundary = right
-    function = t
-  [../]
   [./top_disp_x]
     type = DirichletBC
     variable = disp_x
