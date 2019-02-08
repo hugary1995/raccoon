@@ -8,7 +8,8 @@ validParams<DecompositionWarehouse>()
 {
   InputParameters params = validParams<ComputeStressBase>();
   params.addParam<bool>("staggered", false, "whether this is used in a staggered scheme");
-  params.addRequiredParam<std::string>("decomposition", "which decomposition to use");
+  MooseEnum decompositionType("STRAIN_SPECTRAL NO_DECOMP", "NO_DECOMP");
+  params.addParam<MooseEnum>("decomposition", decompositionType, "which decomposition to use");
   params.addRequiredCoupledVar("damage_fields", "use vector coupling for all damage fields");
   params.addParam<std::string>(
       "lumped_degradation_name", "g", "name of the material that holds the lumped degradation");
@@ -20,7 +21,7 @@ validParams<DecompositionWarehouse>()
 DecompositionWarehouse::DecompositionWarehouse(const InputParameters & parameters)
   : ComputeStressBase(parameters),
     _staggered(getParam<bool>("staggered")),
-    _decomposition(decomposition(getParam<std::string>("decomposition"))),
+    _decomposition(getParam<MooseEnum>("decomposition").getEnum<Decomposition>()),
     _g_name(getParam<std::string>("lumped_degradation_name")),
     _g(getMaterialPropertyByName<Real>(_g_name)),
     _num_fields(coupledComponents("damage_fields")),
@@ -151,28 +152,12 @@ Real
 DecompositionWarehouse::decomposeStressAndComputePositiveStrainEnergy()
 {
   Real E_el_pos;
-  if (_decomposition == NO_DECOMP)
+  if (_decomposition == Decomposition::No_decomp)
     E_el_pos = noDecomp();
-  else if (_decomposition == STRAIN_SPECTRAL)
+  else if (_decomposition == Decomposition::Strain_spectral)
     E_el_pos = spectralStrainDecomp();
   else
     mooseError("Undefined decomposition method.");
 
   return E_el_pos;
-}
-
-Decomposition
-DecompositionWarehouse::decomposition(std::string name)
-{
-  Decomposition decomposition(INVALID);
-  std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-
-  if ("no_decomp" == name)
-    decomposition = NO_DECOMP;
-  else if ("strain_spectral" == name)
-    decomposition = STRAIN_SPECTRAL;
-  else
-    ::mooseError("Invalid decomposition method found: ", name);
-
-  return decomposition;
 }

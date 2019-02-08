@@ -19,12 +19,20 @@ raccoonApp::raccoonApp(InputParameters parameters) : MooseApp(parameters)
 
 raccoonApp::~raccoonApp() {}
 
+static void
+associateSyntaxInner(Syntax & syntax, ActionFactory & /*action_factory*/)
+{
+  registerSyntax("BrittleFractureAction", "Modules/BrittleFracture/Damage/*");
+  registerSyntax("MechanicalCouplingAction", "Modules/BrittleFracture/MechanicalCoupling/*");
+}
+
 void
 raccoonApp::registerAll(Factory & f, ActionFactory & af, Syntax & s)
 {
   ModulesApp::registerAll(f, af, s);
   Registry::registerObjectsTo(f, {"raccoonApp"});
   Registry::registerActionsTo(af, {"raccoonApp"});
+  associateSyntaxInner(s, af);
 
   /* register custom execute flags, action syntax, etc. here */
 }

@@ -45,7 +45,7 @@
     type = FunctionDirichletBC
     variable = d
     boundary = left
-    function = 0
+    function = t
   [../]
   [./right]
     type = FunctionDirichletBC
@@ -80,24 +80,28 @@
 []
 
 [Materials]
-  [./mobility]
-    type = GenericConstantMaterial
-    prop_names = 'mobility_d'
-    prop_values = '1'
+  [./bulk]
+    type = BrittleFractureMaterial
+    d = d
+    Gc = 1
+    L = 0.1
+    local_dissipation_norm = 0.5
   [../]
   [./degradation]
-    type = Degradation
+    type = DerivativeParsedMaterial
     f_name = 'g_d'
     args = 'd'
-    constant_names       = 'eta'
-    constant_expressions = '0'
-    function = '(1-d)^2*(1-eta)+eta'
+    function = '(1-d)^2'
+    derivative_order = 2
+    tol_names = 'd'
+    tol_values = 1e-6
   [../]
   [./local]
-    type = LocalDissipation
+    type = DerivativeParsedMaterial
     f_name = 'w_d'
     args = 'd'
     function = 'd^2'
+    derivative_order = 2
   [../]
   [./lump]
     type = LumpedDegradation
@@ -115,14 +119,13 @@
     outputs = none
   [../]
   [./stress]
-    type = ComputeDegradedStress
+    type = LinearElasticDegradedStress
     damage_fields = 'd'
-    decomposition = no_decomp
+    decomposition = NO_DECOMP
   [../]
   [./driving_energy]
     type = FractureDrivingForce
     damage_fields = 'd'
-    local_dissipation_names = 'w_d'
   [../]
 []
 

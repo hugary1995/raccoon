@@ -19,7 +19,7 @@ protected:
   virtual void computeQpProperties() override;
 
   /// property name of the lumped degradation
-  std::string _prop_name;
+  const MaterialPropertyName _prop_name;
 
   /// number of coupled damage fields
   const unsigned int _num_fields;

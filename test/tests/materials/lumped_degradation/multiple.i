@@ -52,23 +52,22 @@
 
 [Materials]
   [./quadratic]
-    type = Degradation
+    type = DerivativeParsedMaterial
     f_name = 'g_d1'
     args = 'd1'
     function = '(1-d1)^2'
-    outputs = exodus
+    derivative_order = 2
   [../]
   [./cubic]
-    type = Degradation
+    type = DerivativeParsedMaterial
     f_name = 'g_d2'
     args = 'd2'
     function = '(1-d2)^3'
-    outputs = exodus
+    derivative_order = 2
   [../]
   [./lump]
     type = LumpedDegradation
     damage_fields = 'd1 d2'
-    outputs = exodus
   [../]
 []
 

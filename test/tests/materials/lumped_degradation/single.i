@@ -1,3 +1,7 @@
+[GlobalParams]
+  outputs = exodus
+[]
+
 [Mesh]
   type = GeneratedMesh
   dim = 2
@@ -34,18 +38,17 @@
 
 [Materials]
   [./quadratic]
-    type = Degradation
+    type = DerivativeParsedMaterial
     f_name = 'g_d'
     args = 'd'
     constant_names = 'eta'
     constant_expressions = '0.1'
     function = '(1-eta)*(1-d)^2+eta'
-    outputs = exodus
+    derivative_order = 2
   [../]
   [./lump]
     type = LumpedDegradation
     damage_fields = d
-    outputs = exodus
   [../]
 []
 

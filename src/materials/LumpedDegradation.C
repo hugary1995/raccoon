@@ -10,14 +10,14 @@ validParams<LumpedDegradation>()
   params.addClassDescription("Lump all degradations associated with each coupled damage field, and "
                              "automatically computes their derivatives");
   params.addRequiredCoupledVar("damage_fields", "use vector coupling for all damage fields");
-  params.addParam<std::string>(
-      "lumped_degradation_name", "g", "name of the material that holds the lumped degradation");
+  params.addParam<MaterialPropertyName>(
+      "degradation_base_name", "g", "name of the material that holds the lumped degradation");
   return params;
 }
 
 LumpedDegradation::LumpedDegradation(const InputParameters & parameters)
   : DerivativeMaterialInterface<Material>(parameters),
-    _prop_name(getParam<std::string>("lumped_degradation_name")),
+    _prop_name(getParam<MaterialPropertyName>("degradation_base_name")),
     _num_fields(coupledComponents("damage_fields"))
 {
   // reserve space
@@ -35,10 +35,11 @@ LumpedDegradation::LumpedDegradation(const InputParameters & parameters)
   // get all degradations and their derivatives
   for (unsigned int i = 0; i < _num_fields; ++i)
   {
-    _g[i] = &getMaterialProperty<Real>("g_" + _var_names[i]);
-    _dg_dd[i] = &getMaterialPropertyDerivative<Real>("g_" + _var_names[i], _var_names[i]);
-    _d2g_dd2[i] =
-        &getMaterialPropertyDerivative<Real>("g_" + _var_names[i], _var_names[i], _var_names[i]);
+    _g[i] = &getMaterialProperty<Real>(_prop_name + "_" + _var_names[i]);
+    _dg_dd[i] =
+        &getMaterialPropertyDerivative<Real>(_prop_name + "_" + _var_names[i], _var_names[i]);
+    _d2g_dd2[i] = &getMaterialPropertyDerivative<Real>(
+        _prop_name + "_" + _var_names[i], _var_names[i], _var_names[i]);
   }
 
   // declare lumped degradation

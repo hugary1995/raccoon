@@ -64,12 +64,15 @@
 
 [Materials]
   [./degradation]
-    type = Degradation
+    type = DerivativeParsedMaterial
     f_name = 'g_d'
     args = 'd'
     constant_names       = 'eta'
     constant_expressions = '0'
     function = '(1-d)^2*(1-eta)+eta'
+    derivative_order = 2
+    tol_names = 'd'
+    tol_values = 1e-6
   [../]
   [./lump]
     type = LumpedDegradation
@@ -85,9 +88,9 @@
     displacements = 'disp_x disp_y'
   [../]
   [./stress]
-    type = ComputeDegradedStress
+    type = LinearElasticDegradedStress
     damage_fields = 'd'
-    decomposition = strain_spectral
+    decomposition = STRAIN_SPECTRAL
   [../]
 []
 

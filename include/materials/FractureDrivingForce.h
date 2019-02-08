@@ -22,19 +22,19 @@ protected:
   const unsigned int _num_fields;
 
   /// names of the local dissipation energy
-  std::vector<std::string> _w_names;
+  const MaterialPropertyName _w_name;
 
   /// base name of the driving force
-  std::string _D_name;
+  const MaterialPropertyName _D_name;
 
   /// elastic energy name
-  MaterialPropertyName _E_el_name;
+  const MaterialPropertyName _E_el_name;
 
   /// elastic energy
   const MaterialProperty<Real> & _E_el;
 
   /// base name of mobility
-  MaterialPropertyName _mobility_base_name;
+  const MaterialPropertyName _mobility_base_name;
 
   /// names of the coupled damage fields
   std::vector<std::string> _var_names;

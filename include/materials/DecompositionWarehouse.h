@@ -5,13 +5,6 @@
 #include "RankFourTensor.h"
 #include "RankTwoTensor.h"
 
-enum Decomposition
-{
-  INVALID,
-  NO_DECOMP,
-  STRAIN_SPECTRAL
-};
-
 // Forward Declarations
 class DecompositionWarehouse;
 
@@ -22,7 +15,6 @@ class DecompositionWarehouse : public ComputeStressBase
 {
 public:
   DecompositionWarehouse(const InputParameters & parameters);
-  static Decomposition decomposition(std::string name);
 
 protected:
   virtual Real Macaulay(Real);
@@ -36,7 +28,11 @@ protected:
   const bool _staggered;
 
   /// type of decomposition
-  const Decomposition _decomposition;
+  enum class Decomposition
+  {
+    No_decomp,
+    Strain_spectral
+  } _decomposition;
 
   /// name of the material that holds the lumped degradation function
   std::string _g_name;
