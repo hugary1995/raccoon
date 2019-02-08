@@ -102,11 +102,11 @@ RACCOON is designed bottom-up to make the implementation of this weak form modul
 | Residual term | Variable | Parameters | Energy derivative | Kernel |
 | - | - | - | - | - |
 $\left(\psi, \beta\dot{d_i}\right)$ | $d_i$ | | | [`MaterialTimeDerivative`](/MaterialTimeDerivative.md) |
-$\left( \nabla\psi, M_i\nabla(\kappa_id_i) \right)$ | $d_i$ | | | `ACInterface` |
-$M_i ( \psi, \frac{\partial \left[w(d_i)+\frac{g(d)F_e^+}{M_i}\right]}{\partial d_i} )$ | $d_i$ | | | `AllenCahn` |
- | | $\kappa_i,M_i$ | | [`PFFracBulkMaterial`](/PFFracBulkMaterial.md) |
- | | $g(d_i)$ | | [`Degradation`](/Degradation.md) |
+$\left( \nabla\psi, M_i\nabla(\kappa_id_i) \right)$ | $d_i$ | | | [`ACInterface`](/ACInterface.md) |
+$M_i ( \psi, \frac{\partial \left[w(d_i)+\frac{g(d)F_e^+}{M_i}\right]}{\partial d_i} )$ | $d_i$ | | | [`AllenCahn`](/AllenCahn.md) |
+ | | $\kappa_i,M_i$ | | [`BrittleFractureMaterial`](/BrittleFractureMaterial.md) |
+ | | $g(d_i)$ | | [`DerivativeParsedMaterial`](/DerivativeParsedMaterial.md) |
  | | $g(d)$ | | [`LumpedDegradation`](/LumpedDegradation.md) |
- | | | $w(d_i)$ | [`LocalDissipation`](/LocalDissipation.md) |
- | | | $F_e^+$ | [`ComputeDegradedStress`](/ComputeDegradedStress.md) |
+ | | | $w(d_i)$ | [`DerivativeParsedMaterial`](/DerivativeParsedMaterial.md) |
+ | | | $F_e^+$ | [`LinearElasticDegradedStress`](/LinearElasticDegradedStress.md) |
  | | | $w(d_i)+\frac{g(d)F_e^+}{M_i}$ | [`FractureDrivingForce`](/FractureDrivingForce.md) |
