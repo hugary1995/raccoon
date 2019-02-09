@@ -1,10 +1,10 @@
-#include "BrittleFractureMaterial.h"
+#include "FractureMaterial.h"
 
-registerMooseObject("raccoonApp", BrittleFractureMaterial);
+registerMooseObject("raccoonApp", FractureMaterial);
 
 template <>
 InputParameters
-validParams<BrittleFractureMaterial>()
+validParams<FractureMaterial>()
 {
   InputParameters params = validParams<Material>();
   params.addClassDescription(
@@ -23,7 +23,7 @@ validParams<BrittleFractureMaterial>()
   return params;
 }
 
-BrittleFractureMaterial::BrittleFractureMaterial(const InputParameters & parameters)
+FractureMaterial::FractureMaterial(const InputParameters & parameters)
   : Material(parameters),
     _Gc(getFunction("Gc")),
     _L(getFunction("L")),
@@ -36,7 +36,7 @@ BrittleFractureMaterial::BrittleFractureMaterial(const InputParameters & paramet
 }
 
 void
-BrittleFractureMaterial::computeQpProperties()
+FractureMaterial::computeQpProperties()
 {
   Real L = _L.value(_t, _q_point[_qp]);
   Real Gc = _Gc.value(_t, _q_point[_qp]);

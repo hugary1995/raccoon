@@ -150,7 +150,7 @@ BrittleFractureAction::act()
   else if (_current_task == "add_material")
   {
     // Bulk
-    type = "BrittleFractureMaterial";
+    type = "FractureMaterial";
     name = type + "_" + _var_name;
     InputParameters params1 = _factory.getValidParams(type);
     params1.set<std::vector<VariableName>>("d") = {_var_name};

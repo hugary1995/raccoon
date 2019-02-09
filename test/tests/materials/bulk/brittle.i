@@ -19,7 +19,7 @@
 
 [Materials]
   [./bulk]
-    type = BrittleFractureMaterial
+    type = FractureMaterial
     d = d5
     Gc = 1
     L = 2
