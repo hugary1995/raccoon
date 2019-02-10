@@ -63,6 +63,11 @@
 []
 
 [Materials]
+  [./mobility]
+    type = GenericConstantMaterial
+    prop_names = 'M_d'
+    prop_values = '1'
+  [../]
   [./degradation]
     type = DerivativeParsedMaterial
     f_name = 'g_d'
@@ -71,12 +76,11 @@
     constant_expressions = '0'
     function = '(1-d)^2*(1-eta)+eta'
     derivative_order = 2
-    tol_names = 'd'
-    tol_values = 1e-6
   [../]
   [./lump]
     type = LumpedDegradation
     damage_fields = 'd'
+    degradation_name = g
   [../]
   [./Cijkl]
     type = ComputeIsotropicElasticityTensor
@@ -88,9 +92,8 @@
     displacements = 'disp_x disp_y'
   [../]
   [./stress]
-    type = LinearElasticDegradedStress
+    type = SmallStrainElasticDegradedStress
     damage_fields = 'd'
-    decomposition = STRAIN_SPECTRAL
   [../]
 []
 

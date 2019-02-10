@@ -108,5 +108,5 @@ $M_i ( \psi, \frac{\partial \left[w(d_i)+\frac{g(d)F_e^+}{M_i}\right]}{\partial 
  | | $g(d_i)$ | | [`DerivativeParsedMaterial`](/DerivativeParsedMaterial.md) |
  | | $g(d)$ | | [`LumpedDegradation`](/LumpedDegradation.md) |
  | | | $w(d_i)$ | [`DerivativeParsedMaterial`](/DerivativeParsedMaterial.md) |
- | | | $F_e^+$ | [`LinearElasticDegradedStress`](/LinearElasticDegradedStress.md) |
- | | | $w(d_i)+\frac{g(d)F_e^+}{M_i}$ | [`FractureDrivingForce`](/FractureDrivingForce.md) |
+ | | | $F_e^+$ | [`SmallStrainElasticDegradedStress`](/SmallStrainElasticDegradedStress.md) |
+ | | | $w(d_i)+\frac{g(d)F_e^+}{M_i}$ | [`DerivativeSumMaterial`](/DerivativeSumMaterial.md) |

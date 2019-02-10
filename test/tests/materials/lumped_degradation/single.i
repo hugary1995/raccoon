@@ -49,6 +49,7 @@
   [./lump]
     type = LumpedDegradation
     damage_fields = d
+    degradation_name = g
   [../]
 []
 

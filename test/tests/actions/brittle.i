@@ -29,8 +29,9 @@
     [./MechanicalCoupling]
       [./all]
         damage_fields = 'd'
+        strain = SMALL
         decomposition = STRAIN_SPECTRAL
-        irreversibility = NONE
+        irreversibility = HISTORY
         block = 1
       [../]
     [../]

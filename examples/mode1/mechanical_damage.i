@@ -16,14 +16,14 @@
   [./ACBulk]
     type = AllenCahn
     variable = d
-    f_name = D_d
-    mob_name = 'mobility_d'
+    f_name = 'D_d'
+    mob_name = 'M_d'
   [../]
   [./ACInterface]
     type = ACInterface
     variable = d
     kappa_name = 'kappa_d'
-    mob_name = 'mobility_d'
+    mob_name = 'M_d'
   [../]
   [./TensorMechanics]
     displacements = 'disp_x disp_y'
@@ -65,7 +65,7 @@
 
 [Materials]
   [./bulk]
-    type = PFFracBulkMaterial
+    type = FractureMaterial
     d = d
     Gc = 1e-3
     L = 0.01
@@ -75,10 +75,10 @@
     type = DerivativeParsedMaterial
     f_name = 'g_d'
     args = 'd'
-    function = '(1-d)^2'
+    constant_names = 'eta'
+    constant_expressions = '1e-6'
+    function = '(1-d)^2*(1-eta)+eta'
     derivative_order = 2
-    tol_names = 'd'
-    tol_values = 1e-6
   [../]
   [./local]
     type = DerivativeParsedMaterial
@@ -86,6 +86,13 @@
     args = 'd'
     function = 'd^2'
     derivative_order = 2
+  [../]
+  [./driving_energy]
+    type = DerivativeSumMaterial
+    args = 'd'
+    derivative_order = 2
+    f_name = 'D_d'
+    sum_materials = 'E_el_d w_d'
   [../]
 
   [./elasticity_tensor]
@@ -98,17 +105,11 @@
     displacements = 'disp_x disp_y'
   [../]
   [./stress]
-    type = LinearElasticDegradedStress
+    type = SmallStrainElasticDegradedStress
     damage_fields = 'd'
-    decomposition = strain_spectral
-    history = false
   [../]
   [./lump]
     type = LumpedDegradation
-    damage_fields = 'd'
-  [../]
-  [./driving_energy]
-    type = FractureDrivingForce
     damage_fields = 'd'
   [../]
 []
@@ -117,19 +118,21 @@
   [./SMP]
     type = SMP
     full = true
+    ksp_norm = default
   [../]
 []
 
 [Executioner]
   type = Transient
   solve_type = 'NEWTON'
-  petsc_options_iname = '-ksp-type -pc_type'
-  petsc_options_value = 'preonly   lu'
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -snes_linesearch_type -sub_pc_factor_levels'
+  petsc_options_value = 'asm      ilu          200         200                basic                 0'
   dt = 1e-5
   end_time = 5e-3
 []
 
 [Outputs]
+  print_linear_residuals = false
   exodus = true
   perf_graph = true
 []

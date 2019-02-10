@@ -10,49 +10,32 @@
 []
 
 [Variables]
-  [./d]
-  [../]
   [./disp_x]
   [../]
   [./disp_y]
   [../]
 []
 
-[Kernels]
-  [./diff]
-    type = Diffusion
-    variable = d
+[AuxVariables]
+  [./d]
   [../]
+[../]
+
+[Kernels]
   [./TensorMechanics]
     displacements = 'disp_x disp_y'
   [../]
-  [./offdiag_x]
-    type = PhaseFieldFractureMechanicsOffDiag
-    component = 0
-    variable = disp_x
-    c = d
-  [../]
-  [./offdiag_y]
-    type = PhaseFieldFractureMechanicsOffDiag
-    component = 1
-    variable = disp_y
-    c = d
+[]
+
+[AuxKernels]
+  [./d]
+    type = FunctionAux
+    variable = d
+    function = t
   [../]
 []
 
 [BCs]
-  [./left]
-    type = FunctionDirichletBC
-    variable = d
-    boundary = left
-    function = t
-  [../]
-  [./right]
-    type = FunctionDirichletBC
-    variable = d
-    boundary = right
-    function = t
-  [../]
   [./top_disp_x]
     type = DirichletBC
     variable = disp_x
@@ -91,10 +74,10 @@
     type = DerivativeParsedMaterial
     f_name = 'g_d'
     args = 'd'
-    function = '(1-d)^2'
+    constant_names = 'eta'
+    constant_expressions = '1e-6'
+    function = '(1-d)^2*(1-eta)+eta'
     derivative_order = 2
-    tol_names = 'd'
-    tol_values = 1e-6
   [../]
   [./local]
     type = DerivativeParsedMaterial
@@ -110,7 +93,7 @@
   [./Cijkl]
     type = ComputeIsotropicElasticityTensor
     youngs_modulus = 1
-    poissons_ratio = 0.2
+    poissons_ratio = 0.3
     outputs = none
   [../]
   [./strain]
@@ -119,13 +102,15 @@
     outputs = none
   [../]
   [./stress]
-    type = LinearElasticDegradedStress
+    type = SmallStrainElasticDegradedStress
     damage_fields = 'd'
-    decomposition = NO_DECOMP
   [../]
   [./driving_energy]
-    type = FractureDrivingForce
-    damage_fields = 'd'
+    type = DerivativeSumMaterial
+    args = 'd'
+    derivative_order = 2
+    f_name = 'D_d'
+    sum_materials = 'E_el_d w_d'
   [../]
 []
 
@@ -141,6 +126,7 @@
   solve_type = 'NEWTON'
   petsc_options_iname = '-ksp-type -pc_type'
   petsc_options_value = 'preonly   lu'
+  nl_abs_tol = 1e-6
   dt = 0.1
   end_time = 1
 []

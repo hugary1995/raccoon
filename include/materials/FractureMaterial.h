@@ -21,7 +21,7 @@ protected:
   Function & _L;
   Real _w_norm;
   MaterialProperty<Real> & _kappa;
-  MaterialProperty<Real> & _mobility;
+  MaterialProperty<Real> & _M;
 };
 
 #endif // FractureMaterial_H
