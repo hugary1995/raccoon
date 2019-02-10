@@ -1,5 +1,5 @@
-#ifndef DamageCouplingAction_H
-#define DamageCouplingAction_H
+#ifndef BrittleFractureAction_H
+#define BrittleFractureAction_H
 
 // MOOSE includes
 #include "Action.h"
@@ -8,15 +8,15 @@
 #include "libmesh/fe_type.h"
 
 // Forward declaration
-class DamageCouplingAction;
+class BrittleFractureAction;
 
 template <>
-InputParameters validParams<DamageCouplingAction>();
+InputParameters validParams<BrittleFractureAction>();
 
-class DamageCouplingAction : public Action
+class BrittleFractureAction : public Action
 {
 public:
-  DamageCouplingAction(const InputParameters & params);
+  BrittleFractureAction(const InputParameters & params);
 
   virtual void act();
 
@@ -29,4 +29,4 @@ protected:
   const std::vector<VariableName> _displacements;
 };
 
-#endif // NDamageCouplingAction_H
+#endif // NBrittleFractureAction_H

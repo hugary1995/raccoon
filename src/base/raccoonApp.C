@@ -22,7 +22,7 @@ raccoonApp::~raccoonApp() {}
 static void
 associateSyntaxInner(Syntax & syntax, ActionFactory & /*action_factory*/)
 {
-  registerSyntax("DamageCouplingAction", "Modules/PhaseFieldFracture/Damage/*");
+  registerSyntax("BrittleFractureAction", "Modules/PhaseFieldFracture/BrittleFracture/*");
   registerSyntax("ElasticCouplingAction", "Modules/PhaseFieldFracture/ElasticCoupling/*");
 }
 

@@ -7,6 +7,8 @@ InputParameters
 validParams<SmallStrainElasticDegradedStress>()
 {
   InputParameters params = validParams<DegradedStressBase>();
+  params.addClassDescription("Compute stress and degrade it based on the lumped degradation "
+                             "function. Also compute elastic energy and its derivatives .");
   params.addParam<MaterialPropertyName>(
       "elastic_energy_name",
       "E_el",

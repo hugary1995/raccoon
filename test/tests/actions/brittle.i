@@ -17,8 +17,8 @@
       [../]
     [../]
   [../]
-  [./BrittleFracture]
-    [./Damage]
+  [./PhaseFieldFracture]
+    [./BrittleFracture]
       [./d]
         block = 1
         viscosity = 1e-12
@@ -26,7 +26,7 @@
         L = 0.02
       [../]
     [../]
-    [./MechanicalCoupling]
+    [./ElasticCoupling]
       [./all]
         damage_fields = 'd'
         strain = SMALL

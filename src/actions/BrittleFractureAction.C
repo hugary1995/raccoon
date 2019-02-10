@@ -1,4 +1,4 @@
-#include "DamageCouplingAction.h"
+#include "BrittleFractureAction.h"
 
 // MOOSE includes
 #include "Factory.h"
@@ -7,13 +7,13 @@
 // LIBMESH includes
 #include "libmesh/string_to_enum.h"
 
-registerMooseAction("raccoonApp", DamageCouplingAction, "add_variable");
-registerMooseAction("raccoonApp", DamageCouplingAction, "add_kernel");
-registerMooseAction("raccoonApp", DamageCouplingAction, "add_material");
+registerMooseAction("raccoonApp", BrittleFractureAction, "add_variable");
+registerMooseAction("raccoonApp", BrittleFractureAction, "add_kernel");
+registerMooseAction("raccoonApp", BrittleFractureAction, "add_material");
 
 template <>
 InputParameters
-validParams<DamageCouplingAction>()
+validParams<BrittleFractureAction>()
 {
   InputParameters params = validParams<Action>();
   params.addClassDescription(
@@ -74,7 +74,7 @@ validParams<DamageCouplingAction>()
   return params;
 }
 
-DamageCouplingAction::DamageCouplingAction(const InputParameters & params)
+BrittleFractureAction::BrittleFractureAction(const InputParameters & params)
   : Action(params),
     _var_name(name()),
     _fe_type(Utility::string_to_enum<Order>(getParam<MooseEnum>("order")),
@@ -84,7 +84,7 @@ DamageCouplingAction::DamageCouplingAction(const InputParameters & params)
 }
 
 void
-DamageCouplingAction::act()
+BrittleFractureAction::act()
 {
   std::string type = "";
   std::string name = "";
