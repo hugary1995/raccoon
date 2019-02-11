@@ -54,6 +54,10 @@ validParams<BrittleFractureAction>()
       "kappa_name", "kappa", "name of the material that holds the interface coefficient");
   params.addParam<MaterialPropertyName>(
       "mob_name", "M", "name of the material that holds the mobility");
+  params.addParam<MaterialPropertyName>(
+      "fracture_energy_barrier_name",
+      "b",
+      "name of the material that holds the critical fracture energy");
 
   // for degradation
   params.addParam<MaterialPropertyName>("degradation_name", "g", "base name of degradation");
@@ -196,5 +200,14 @@ BrittleFractureAction::act()
     params4.set<unsigned int>("derivative_order") = 2;
     params4.applyParameters(parameters());
     _problem->addMaterial(type, name, params4);
+    // critical fracture energy
+    type = "FractureEnergyBarrier";
+    name = type + "_" + _var_name;
+    InputParameters params5 = _factory.getValidParams(type);
+    params5.set<std::vector<VariableName>>("d") = {_var_name};
+    params5.set<Real>("initial_degradation_slope") = -2.0;
+    params5.set<Real>("initial_local_dissipation_slope") = 0.0;
+    params5.applyParameters(parameters());
+    _problem->addMaterial(type, name, params5);
   }
 }

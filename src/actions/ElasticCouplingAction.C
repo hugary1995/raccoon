@@ -42,6 +42,10 @@ validParams<ElasticCouplingAction>()
       "initial_positive_elastic_energy", 0, "variable that holds the initial strain energy field");
   params.addParam<MaterialPropertyName>(
       "mob_name", "M", "name of the material that holds the mobility");
+  params.addParam<MaterialPropertyName>(
+      "fracture_energy_barrier_name",
+      "b",
+      "name of the material that holds the critical fracture energy");
 
   return params;
 }

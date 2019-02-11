@@ -94,6 +94,12 @@
     f_name = 'D_d'
     sum_materials = 'E_el_d w_d'
   [../]
+  [./critical_fracture_energy]
+    type = FractureEnergyBarrier
+    initial_degradation_slope = -2
+    initial_local_dissipation_slope = 0
+    d = d
+  [../]
 
   [./elasticity_tensor]
     type = ComputeElasticityTensor

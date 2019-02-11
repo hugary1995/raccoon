@@ -17,10 +17,10 @@ public:
 protected:
   virtual void initQpStatefulProperties() override;
   virtual void computeQpStress() override;
-  virtual void computeAdditionalFreeEnergy(Real, Real);
+  virtual void computeAdditionalFreeEnergy(Real);
 
-  /// name of the material holding elastic energy
-  MaterialPropertyName _E_el_name;
+  /// elastic energy name
+  const MaterialPropertyName _E_el_name;
 
   /// initial strain energy field (if any)
   const VariableValue & _E_el_pos_initial;
@@ -30,12 +30,6 @@ protected:
 
   /// history maximum of positive strain energy upto the previous time step
   const MaterialProperty<Real> & _E_el_pos_old;
-
-  /// mobility name
-  const MaterialPropertyName _mob_name;
-
-  /// elastic energy names
-  std::vector<std::string> _E_el_names;
 
   /// normalized elastic energy for each damage field
   std::vector<MaterialProperty<Real> *> _E_el;
@@ -48,6 +42,9 @@ protected:
 
   /// mobility values for each damage field
   std::vector<const MaterialProperty<Real> *> _M;
+
+  /// fracture energy barrier
+  std::vector<const MaterialProperty<Real> *> _E_crit;
 };
 
 #endif // SmallStrainElasticDegradedStress_H
