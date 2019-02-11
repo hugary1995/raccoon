@@ -96,9 +96,9 @@
     sum_materials = 'E_el_d w_d'
   [../]
   [./critical_fracture_energy]
-    type = ParsedMaterial
-    f_name = 'b_d'
-    function = 0.005
+    type = GenericFunctionMaterial
+    prop_names = 'b_d'
+    prop_values = '0.005'
   [../]
 
   [./elasticity_tensor]

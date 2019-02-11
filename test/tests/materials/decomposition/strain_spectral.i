@@ -95,6 +95,12 @@
     type = SmallStrainElasticDegradedStress
     damage_fields = 'd'
   [../]
+  [./fracture_energy_barrier]
+    type = FractureEnergyBarrier
+    initial_degradation_slope = -2
+    initial_local_dissipation_slope = 0
+    d = d
+  [../]
 []
 
 [Preconditioning]
