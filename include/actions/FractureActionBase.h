@@ -21,6 +21,11 @@ public:
   virtual void act();
 
 protected:
+  /**
+   * Get the block ids from the input parameters
+   * @return A set of block ids defined in the input
+   */
+  std::set<SubdomainID> getSubdomainIDs();
   /// Name of the variable being created
   const NonlinearVariableName _var_name;
   /// FEType for the variable being created

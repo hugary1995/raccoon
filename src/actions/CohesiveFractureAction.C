@@ -82,7 +82,7 @@ CohesiveFractureAction::act()
     _problem->addMaterial(type, name, params2);
 
     // critical fracture energy
-    type = "GenericFunctionMaterial";
+    type = "StationaryGenericFunctionMaterial";
     name = "FractureEnergyBarrier_" + _var_name;
     InputParameters params3 = _factory.getValidParams(type);
     params3.set<std::vector<std::string>>("prop_names") = {

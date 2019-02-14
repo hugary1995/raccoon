@@ -92,7 +92,14 @@ FractureActionBase::act()
   // Add variable
   //
   if (_current_task == "add_variable")
-    _problem->addVariable(_var_name, _fe_type, getParam<Real>("scaling"));
+  {
+    // Blocks from the input
+    std::set<SubdomainID> blocks = getSubdomainIDs();
+    if (blocks.empty())
+      _problem->addVariable(_var_name, _fe_type, getParam<Real>("scaling"));
+    else
+      _problem->addVariable(_var_name, _fe_type, getParam<Real>("scaling"), &blocks);
+  }
   //
   // Add kernels
   //
@@ -171,4 +178,18 @@ FractureActionBase::act()
     params2.applyParameters(parameters());
     _problem->addMaterial(type, name, params2);
   }
+}
+
+std::set<SubdomainID>
+FractureActionBase::getSubdomainIDs()
+{
+  // Extract and return the block ids supplied in the input
+  std::set<SubdomainID> blocks;
+  std::vector<SubdomainName> block_param = getParam<std::vector<SubdomainName>>("block");
+  for (const auto & subdomain_name : block_param)
+  {
+    SubdomainID blk_id = _problem->mesh().getSubdomainID(subdomain_name);
+    blocks.insert(blk_id);
+  }
+  return blocks;
 }
