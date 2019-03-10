@@ -20,7 +20,8 @@ DegradedStressBase::DegradedStressBase(const InputParameters & parameters)
     _num_fields(coupledComponents("damage_fields")),
     _g_name(getParam<MaterialPropertyName>("degradation_name")),
     _g(getMaterialPropertyByName<Real>(_g_name)),
-    _history(getParam<bool>("history"))
+    _history(getParam<bool>("history")),
+    _elasticity_tensor(getMaterialPropertyByName<RankFourTensor>(_base_name + "elasticity_tensor"))
 {
   // reserve space for damage field names
   _var_names.resize(_num_fields);

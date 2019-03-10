@@ -49,6 +49,11 @@ protected:
 
   /// Derivatives of the stress W.R.T. each damage field
   std::vector<MaterialProperty<RankTwoTensor> *> _dstress_dd;
+
+  // elasticity tensor C_ijkl
+  // We have to get the elasticity tensor in every derived stress calculator due to an annoying
+  // change in MOOSE framework
+  const MaterialProperty<RankFourTensor> & _elasticity_tensor;
 };
 
 #endif // DegradedStressBase_H
