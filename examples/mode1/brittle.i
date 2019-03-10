@@ -124,15 +124,14 @@
   [./SMP]
     type = SMP
     full = true
-    ksp_norm = default
   [../]
 []
 
 [Executioner]
   type = Transient
   solve_type = 'NEWTON'
-  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -snes_linesearch_type -sub_pc_factor_levels'
-  petsc_options_value = 'asm      ilu          200         200                basic                 0'
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
+  petsc_options_value = 'asm      ilu          200         200                0                     newtontr'
   dt = 1e-5
   end_time = 5e-3
 []

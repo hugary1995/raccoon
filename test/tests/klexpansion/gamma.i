@@ -11,10 +11,11 @@
 
 [Modules]
   [./KLExpansion]
-    output_base = 'output/basis'
     file_name = 'gold/kl_info.txt'
     field_name = 'random_field'
     field_distribution = GAMMA
+    perturbation = CUSTOM
+    custom_Gaussian_weights = '-0.9 -0.7 -0.5 -0.3 -0.1 0.1 0.3 0.5 0.7 0.9'
     mean = 100
     CV = 0.30
   [../]
@@ -37,8 +38,5 @@
 []
 
 [Outputs]
-  [./exodus]
-    type = Exodus
-    file_base = output/klexpansion
-  [../]
+  exodus = true
 []

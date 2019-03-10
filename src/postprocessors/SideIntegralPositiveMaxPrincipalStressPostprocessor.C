@@ -7,6 +7,7 @@ InputParameters
 validParams<SideIntegralPositiveMaxPrincipalStressPostprocessor>()
 {
   InputParameters params = validParams<SideIntegralPostprocessor>();
+  params.addClassDescription("Compute the boundary integral of maximum principal stress");
   params.addParam<std::string>("base_name",
                                "Optional parameter that allows the user to define "
                                "multiple mechanics material systems on the same "

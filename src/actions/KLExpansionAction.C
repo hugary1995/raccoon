@@ -21,6 +21,8 @@ validParams<KLExpansionAction>()
   MooseEnum families(AddAuxVariableAction::getAuxVariableFamilies());
   MooseEnum orders(AddAuxVariableAction::getAuxVariableOrders());
   InputParameters params = validParams<Action>();
+  params.addClassDescription("Automatically generate data files for KL basis functions and add "
+                             "functions to interpolate the random field");
   params.addParam<MooseEnum>(
       "family", families, "Specifies the family of FE shape functions to use for this variable");
   params.addParam<MooseEnum>("order",
@@ -31,8 +33,6 @@ validParams<KLExpansionAction>()
   params.addRequiredParam<FileName>("file_name",
                                     "name of the file containing information for the KL expansion "
                                     "(run writeKL.m to generate KL info)");
-  params.addParam<std::string>(
-      "output_base", "basis", "file base of the dumped kl basis text files");
   MooseEnum perturbationType("RANDOM CUSTOM", "RANDOM");
   params.addParam<MooseEnum>("perturbation", perturbationType, "type of perturbation");
   params.addParam<std::vector<Real>>("custom_Gaussian_weights", "custom Gaussian weights");
@@ -163,7 +163,7 @@ KLExpansionAction::generateDataFile()
   // Let's write!
   for (unsigned int i = 0; i < _num_bases; i++)
   {
-    std::ofstream file(getParam<std::string>("output_base") + std::to_string(i) + ".txt");
+    std::ofstream file(_file_name + std::to_string(i));
     // write preamble
     file << preamble;
     // write eigvec
@@ -180,8 +180,7 @@ KLExpansionAction::addFunctionInterpolator()
     std::string name = "basis_" + std::to_string(i);
     _functions[i] = name;
     InputParameters interpolator_params = _factory.getValidParams(type);
-    interpolator_params.set<FileName>("data_file") =
-        getParam<std::string>("output_base") + std::to_string(i) + ".txt";
+    interpolator_params.set<FileName>("data_file") = _file_name + std::to_string(i);
     interpolator_params.applyParameters(parameters());
     _problem->addFunction(type, name, interpolator_params);
   }

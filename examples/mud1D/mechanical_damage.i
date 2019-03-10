@@ -11,7 +11,6 @@
   [./KLExpansion]
     file_name = 'gold/kl_info.txt'
     field_name = 'E_crit'
-    output_base = 'output/basis'
     field_distribution = GAMMA
     mean = 4e-4
     CV = 0.3
@@ -114,7 +113,7 @@
 [UserObjects]
   [./termination]
     type = Terminator
-    expression = 'driving < 0.4 & integral_damage > 0.0'
+    expression = 'driving < 0.2 & integral_damage > 0.0'
   [../]
 []
 
@@ -136,7 +135,7 @@
   l_max_its = 100
   nl_max_its = 50
   dt = 1e-3
-  dtmin = 1e-11
+  dtmin = 1e-3
 []
 
 [Outputs]

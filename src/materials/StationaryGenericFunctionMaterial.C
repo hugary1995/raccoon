@@ -8,6 +8,7 @@ InputParameters
 validParams<StationaryGenericFunctionMaterial>()
 {
   InputParameters params = validParams<Material>();
+  params.addClassDescription("Time independent version of GenericFunctionMaterial");
   params.addParam<std::vector<std::string>>("prop_names",
                                             "The names of the properties this material will have");
   params.addParam<std::vector<FunctionName>>("prop_values",
