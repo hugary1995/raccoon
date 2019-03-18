@@ -56,26 +56,8 @@ PiolaKirchhoffStressDivergence::computeQpResidual()
 Real
 PiolaKirchhoffStressDivergence::computeQpJacobian()
 {
-  // Real jacobian = 0.0;
-  //
-  // // jacobian = W_{i,I}S_{IJ}U_{i,J} + W_{i,J} F_{iI}C_{IJKL}F_{kK} Phi_{k,L}
-  // //          = geometric stiffness  + material stiffness
-  //
-  // // geometric stiffness
-  // jacobian += _stress[_qp] * _grad_test[_i][_qp] * _grad_phi[_j][_qp];
-  //
-  // // material stiffness
-  // RankFourTensor FCF = _Jacobian_mult[_qp];
-  // for (unsigned int I = 0; I < _ndisp; I++)
-  //   for (unsigned int K = 0; K < _ndisp; K++)
-  //     for (unsigned int L = 0; L < _ndisp; L++)
-  //       for (unsigned int J = 0; J < _ndisp; J++)
-  //         FCF(I, J, K, L) *= _F[_qp](_component, I) * _F[_qp](_component, K);
-  //
-  // jacobian += ElasticityTensorTools::elasticJacobian(
-  //     FCF, _component, _component, _grad_test[_i][_qp], _grad_phi[_j][_qp]);
-  //
-  // return jacobian;
+  // jacobian = W_{i,I}S_{IJ}U_{i,J} + W_{i,J} F_{iI}C_{IJKL}F_{kK} Phi_{k,L}
+  //          = geometric stiffness  + material stiffness
 
   Real jacobian = 0.0;
   RealVectorValue gt = _grad_test[_i][_qp];
@@ -86,12 +68,17 @@ PiolaKirchhoffStressDivergence::computeQpJacobian()
   unsigned int i = _component;
   unsigned int k = _component;
 
+  // geometric stiffness
+  for (unsigned int I = 0; I < _ndisp; I++)
+    for (unsigned int J = 0; J < _ndisp; J++)
+      jacobian += gt(I) * S(I, J) * gp(J);
+
+  // material stiffness
   for (unsigned int I = 0; I < _ndisp; I++)
     for (unsigned int J = 0; J < _ndisp; J++)
       for (unsigned int K = 0; K < _ndisp; K++)
         for (unsigned int L = 0; L < _ndisp; L++)
-          jacobian += gt(I) * S(I, J) * gp(J) +
-                      gt(J) * F(i, I) * _Jacobian_mult[_qp](I, J, K, L) * F(k, K) * gp(L);
+          jacobian += gt(J) * F(i, I) * _Jacobian_mult[_qp](I, J, K, L) * F(k, K) * gp(L);
 
   return jacobian;
 }
@@ -103,26 +90,8 @@ PiolaKirchhoffStressDivergence::computeQpOffDiagJacobian(unsigned int jvar)
   for (unsigned int coupled_component = 0; coupled_component < _ndisp; ++coupled_component)
     if (jvar == _disp_var[coupled_component])
     {
-      // Real jacobian = 0.0;
-      //
-      // // jacobian = W_{i,I}S_{IJ}U_{i,J} + W_{i,J}F_{iI}C_{IJKL}F_{kK}Phi_{k,L}
-      // //          = geometric stiffness  + material stiffness
-      //
-      // // geometric stiffness
-      // jacobian += _stress[_qp] * _grad_test[_i][_qp] * _grad_phi[_j][_qp];
-      //
-      // // material stiffness
-      // RankFourTensor FCF = _Jacobian_mult[_qp];
-      // for (unsigned int I = 0; I < _ndisp; I++)
-      //   for (unsigned int K = 0; K < _ndisp; K++)
-      //     for (unsigned int L = 0; L < _ndisp; L++)
-      //       for (unsigned int J = 0; J < _ndisp; J++)
-      //         FCF(I, J, K, L) *= _F[_qp](_component, I) * _F[_qp](coupled_component, K);
-      //
-      // jacobian += ElasticityTensorTools::elasticJacobian(
-      //     FCF, _component, coupled_component, _grad_test[_i][_qp], _grad_phi[_j][_qp]);
-      //
-      // return jacobian;
+      // jacobian = W_{i,J}F_{iI}C_{IJKL}F_{kK}Phi_{k,L}
+      //          = material stiffness
 
       Real jacobian = 0.0;
       RealVectorValue gt = _grad_test[_i][_qp];
@@ -137,8 +106,7 @@ PiolaKirchhoffStressDivergence::computeQpOffDiagJacobian(unsigned int jvar)
         for (unsigned int J = 0; J < _ndisp; J++)
           for (unsigned int K = 0; K < _ndisp; K++)
             for (unsigned int L = 0; L < _ndisp; L++)
-              jacobian += gt(I) * S(I, J) * gp(J) +
-                          gt(J) * F(i, I) * _Jacobian_mult[_qp](I, J, K, L) * F(k, K) * gp(L);
+              jacobian += gt(J) * F(i, I) * _Jacobian_mult[_qp](I, J, K, L) * F(k, K) * gp(L);
 
       return jacobian;
     }

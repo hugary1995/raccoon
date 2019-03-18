@@ -24,7 +24,7 @@ GreenStrainLinearElasticStress::computeQpStress()
   // second piola kirchhoff stress
   _stress[_qp] = _elasticity_tensor[_qp] * _mechanical_strain[_qp];
 
-  // elastic strain in current configuration
+  // elastic strain in reference configuration
   _elastic_strain[_qp] = _mechanical_strain[_qp];
 
   // dstress_dstrain

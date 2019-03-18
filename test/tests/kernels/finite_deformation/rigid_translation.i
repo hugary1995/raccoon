@@ -99,11 +99,10 @@
     fill_method = symmetric_isotropic
   [../]
   [./greem_strain]
-    type = ComputeSmallStrain
-    outputs = exodus
+    type = GreenStrain
   [../]
   [./second_piola_kirchhoff_stress]
-    type = ComputeLinearElasticStress
+    type = GreenStrainLinearElasticStress
   [../]
 []
 
@@ -116,9 +115,13 @@
 
 [Executioner]
   type = Transient
-  solve_type = PJFNK
+
+  solve_type = NEWTON
+  petsc_options_iname = '-pc_type'
+  petsc_options_value = 'lu'
+
   dt = 0.1
-  num_steps = 10
+  num_steps = 2
 []
 
 [Outputs]
