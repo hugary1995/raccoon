@@ -7,7 +7,7 @@ template <>
 InputParameters
 validParams<PiolaKirchhoffStressDivergence>()
 {
-  InputParameters params = validParams<Kernel>();
+  InputParameters params = validParams<ALEKernel>();
   params.addClassDescription(
       "Piola Kirchhoff stress divergence kernel for the Cartesian coordinate system");
   params.addRequiredParam<unsigned int>("component",
@@ -22,7 +22,7 @@ validParams<PiolaKirchhoffStressDivergence>()
 }
 
 PiolaKirchhoffStressDivergence::PiolaKirchhoffStressDivergence(const InputParameters & parameters)
-  : Kernel(parameters),
+  : ALEKernel(parameters),
     _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
     _stress(getMaterialPropertyByName<RankTwoTensor>(_base_name + "stress")),
     _F(getMaterialPropertyByName<RankTwoTensor>(_base_name + "deformation_gradient")),
@@ -48,7 +48,7 @@ PiolaKirchhoffStressDivergence::computeQpResidual()
 {
   RealVectorValue P = _stress[_qp] * _F[_qp].row(_component);
 
-  Real residual = _grad_test[_i][_qp] * P;
+  Real residual = _grad_test_undisplaced[_i][_qp] * P;
 
   return residual;
 }
@@ -60,8 +60,8 @@ PiolaKirchhoffStressDivergence::computeQpJacobian()
   //          = geometric stiffness  + material stiffness
 
   Real jacobian = 0.0;
-  RealVectorValue gt = _grad_test[_i][_qp];
-  RealVectorValue gp = _grad_phi[_j][_qp];
+  RealVectorValue gt = _grad_test_undisplaced[_i][_qp];
+  RealVectorValue gp = _grad_phi_undisplaced[_j][_qp];
   RankTwoTensor S = _stress[_qp];
   RankTwoTensor F = _F[_qp];
 
@@ -69,9 +69,7 @@ PiolaKirchhoffStressDivergence::computeQpJacobian()
   unsigned int k = _component;
 
   // geometric stiffness
-  for (unsigned int I = 0; I < _ndisp; I++)
-    for (unsigned int J = 0; J < _ndisp; J++)
-      jacobian += gt(I) * S(I, J) * gp(J);
+  jacobian += (S * gt) * gp;
 
   // material stiffness
   for (unsigned int I = 0; I < _ndisp; I++)
@@ -94,8 +92,8 @@ PiolaKirchhoffStressDivergence::computeQpOffDiagJacobian(unsigned int jvar)
       //          = material stiffness
 
       Real jacobian = 0.0;
-      RealVectorValue gt = _grad_test[_i][_qp];
-      RealVectorValue gp = _grad_phi[_j][_qp];
+      RealVectorValue gt = _grad_test_undisplaced[_i][_qp];
+      RealVectorValue gp = _grad_phi_undisplaced[_j][_qp];
       RankTwoTensor S = _stress[_qp];
       RankTwoTensor F = _F[_qp];
 

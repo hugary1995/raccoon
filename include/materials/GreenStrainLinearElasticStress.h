@@ -21,6 +21,12 @@ protected:
 
   /// Elasticity tensor material property
   const MaterialProperty<RankFourTensor> & _elasticity_tensor;
+
+  /// Cauchy stress
+  MaterialProperty<RankTwoTensor> * _cauchy_stress;
+
+  /// deformation gradient
+  const MaterialProperty<RankTwoTensor> * _deformation_gradient;
 };
 
 #endif // GreenStrainLinearElasticStress_H

@@ -70,6 +70,10 @@ validParams<FractureActionBase>()
   params.addParam<std::vector<VariableName>>(
       "displacements", "The nonlinear displacement variables for the problem");
 
+  // run on current configuration
+  params.addParam<bool>(
+      "use_displaced_mesh", true, "whether or not to run kernels on the displaced mesh");
+
   return params;
 }
 

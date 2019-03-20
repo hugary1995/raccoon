@@ -1,7 +1,7 @@
 #ifndef PiolaKirchhoffStressDivergence_H
 #define PiolaKirchhoffStressDivergence_H
 
-#include "Kernel.h"
+#include "ALEKernel.h"
 #include "RankTwoTensor.h"
 #include "RankFourTensor.h"
 
@@ -11,7 +11,7 @@ class PiolaKirchhoffStressDivergence;
 template <>
 InputParameters validParams<PiolaKirchhoffStressDivergence>();
 
-class PiolaKirchhoffStressDivergence : public Kernel
+class PiolaKirchhoffStressDivergence : public ALEKernel
 {
 public:
   PiolaKirchhoffStressDivergence(const InputParameters & parameters);
