@@ -7,22 +7,7 @@
   file = 'gold/geo.e'
 []
 
-[Variables]
-  [./disp_x]
-  [../]
-  [./disp_y]
-  [../]
-[]
-
 [Modules]
-  # [./TensorMechanics]
-  #   [./Master]
-  #     [./all]
-  #       add_variables = true
-  #       strain = SMALL
-  #     [../]
-  #   [../]
-  # [../]
   [./PhaseFieldFracture]
     [./CohesiveFracture]
       [./d]
@@ -31,15 +16,15 @@
         Gc = 1e-3
         L = 0.02
         fracture_energy_barrier = 0.005
+        residual_degradation = 0
       [../]
     [../]
     [./ElasticCoupling]
       [./all]
         damage_fields = 'd'
-        strain = SMALL
+        strain = FINITE
         decomposition = STRAIN_SPECTRAL
         irreversibility = HISTORY
-        block = 1
       [../]
     [../]
   [../]
@@ -66,27 +51,11 @@
   [../]
 []
 
-[Kernels]
-  [./solid_x]
-    type = PiolaKirchhoffStressDivergence
-    variable = disp_x
-    component = 0
-  [../]
-  [./solid_y]
-    type = PiolaKirchhoffStressDivergence
-    variable = disp_y
-    component = 1
-  [../]
-[]
-
 [Materials]
   [./elasticity_tensor]
     type = ComputeElasticityTensor
     C_ijkl = '120.0 80.0'
     fill_method = symmetric_isotropic
-  [../]
-  [./gree_strain]
-    type = GreenStrain
   [../]
 []
 

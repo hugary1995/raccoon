@@ -1,6 +1,5 @@
 [GlobalParams]
   displacements = 'disp_x disp_y'
-  outputs = exodus
 []
 
 [Mesh]
@@ -9,14 +8,6 @@
 []
 
 [Modules]
-  [./TensorMechanics]
-    [./Master]
-      [./all]
-        add_variables = true
-        strain = SMALL
-      [../]
-    [../]
-  [../]
   [./PhaseFieldFracture]
     [./BrittleFracture]
       [./d]

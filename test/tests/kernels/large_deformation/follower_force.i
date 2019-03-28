@@ -16,42 +16,6 @@
   [../]
 []
 
-[AuxVariables]
-  [./stress_xx]
-    family = MONOMIAL
-  [../]
-  [./stress_yy]
-    family = MONOMIAL
-  [../]
-  [./stress_xy]
-    family = MONOMIAL
-  [../]
-[]
-
-[AuxKernels]
-  [./stress_xx]
-    type = RankTwoAux
-    variable = stress_xx
-    rank_two_tensor = 'stress'
-    index_i = 0
-    index_j = 0
-  [../]
-  [./stress_yy]
-    type = RankTwoAux
-    variable = stress_yy
-    rank_two_tensor = 'stress'
-    index_i = 1
-    index_j = 1
-  [../]
-  [./stress_xy]
-    type = RankTwoAux
-    variable = stress_xy
-    rank_two_tensor = 'stress'
-    index_i = 0
-    index_j = 1
-  [../]
-[]
-
 [Kernels]
   [./solid_x]
     type = PiolaKirchhoffStressDivergence
@@ -66,41 +30,43 @@
 []
 
 [BCs]
-  [./xdisp_bottom]
-    type = FunctionDirichletBC
-    variable = disp_x
-    boundary = 'bottom'
-    function = '0'
-  [../]
   [./ydisp_bottom]
     type = FunctionDirichletBC
     variable = disp_y
     boundary = 'bottom'
-    function = '0'
+    function = 'if( t<=10, 0, x*sin((t-10)*pi/20) )'
   [../]
-  [./xpressure_top]
-    type = PressureBC
+  [./xdisp_bottom]
+    type = FunctionDirichletBC
     variable = disp_x
-    boundary = 'top'
-    component = 0
-    function = '-5*t'
+    boundary = 'bottom'
+    function = 'if( t<=10, 0, x*(cos((t-10)*pi/20)-1) )'
   [../]
-  [./ypressure_top]
-    type = PressureBC
-    variable = disp_y
+  [./xforce]
+    type = FollowerForceBC
+    variable = disp_x
+    component = 0
+    function_x = 0
+    function_y = 'if( t<=10, 5*t, 50 )'
     boundary = 'top'
+  [../]
+  [./yforce]
+    type = FollowerForceBC
+    variable = disp_y
     component = 1
-    function = '-5*t'
+    function_x = 0
+    function_y = 'if( t<=10, 5*t, 50 )'
+    boundary = 'top'
   [../]
 []
 
 [Materials]
   [./elasticity_tensor]
-    type = ComputeElasticityTensor
-    C_ijkl = '120.0 80.0'
-    fill_method = symmetric_isotropic
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 100
+    poissons_ratio = 0
   [../]
-  [./greem_strain]
+  [./green_strain]
     type = GreenStrain
   [../]
   [./second_piola_kirchhoff_stress]
@@ -122,8 +88,13 @@
   petsc_options_iname = '-pc_type'
   petsc_options_value = 'lu'
 
+  nl_abs_tol = 1e-50
+  nl_rel_tol = 1e-6
+
   dt = 1
-  num_steps = 20
+  end_time = 20
+
+  abort_on_solve_fail = true
 []
 
 [Outputs]

@@ -74,24 +74,29 @@
 []
 
 [BCs]
-  [./ydisp]
+  [./ydisp_bottom]
     type = FunctionDirichletBC
     variable = disp_y
     boundary = 'bottom'
     function = 'if( t<=10, 0, x*sin((t-10)*pi/20) )'
   [../]
-  [./xdisp]
+  [./xdisp_bottom]
     type = FunctionDirichletBC
     variable = disp_x
     boundary = 'bottom'
     function = 'if( t<=10, 0, x*(cos((t-10)*pi/20)-1) )'
   [../]
-  [./Pressure]
-    [./top]
-      boundary = 'top'
-      function = 'if(t<=10,-t,-10)'
-      displacements = 'disp_x disp_y'
-    [../]
+  [./ydisp_top]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = 'top'
+    function = 'if( t<=10, 0.05*t, x*sin((t-10)*pi/20)+1.5*(cos((t-10)*pi/20)-1)+0.5 )'
+  [../]
+  [./xdisp_top]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = 'top'
+    function = 'if( t<=10, 0, x*(cos((t-10)*pi/20)-1)-1.5*sin((t-10)*pi/20) )'
   [../]
 []
 
@@ -114,17 +119,17 @@
   [./stress_xx]
     type = ElementalVariableValue
     variable = stress_xx
-    elementid = 1
+    elementid = 0
   [../]
   [./stress_yy]
     type = ElementalVariableValue
     variable = stress_yy
-    elementid = 1
+    elementid = 0
   [../]
   [./stress_xy]
     type = ElementalVariableValue
     variable = stress_xy
-    elementid = 1
+    elementid = 0
   [../]
 []
 

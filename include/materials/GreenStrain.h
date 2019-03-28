@@ -1,14 +1,22 @@
 #ifndef GreenStrain_H
 #define GreenStrain_H
 
-#include "ComputeStrainBase.h"
+#include "ADComputeStrainBase.h"
 
+template <ComputeStage>
 class GreenStrain;
+template <typename>
+class RankTwoTensorTempl;
+typedef RankTwoTensorTempl<Real> RankTwoTensor;
+typedef RankTwoTensorTempl<DualReal> DualRankTwoTensor;
 
-template <>
-InputParameters validParams<GreenStrain>();
+declareADValidParams(GreenStrain);
 
-class GreenStrain : public ComputeStrainBase
+/**
+ * GreenStrain defines a non-linear Green-Lagrange strain tensor
+ */
+template <ComputeStage compute_stage>
+class GreenStrain : public ADComputeStrainBase<compute_stage>
 {
 public:
   GreenStrain(const InputParameters & parameters);
@@ -16,7 +24,9 @@ public:
 protected:
   virtual void computeQpProperties() override;
 
-  MaterialProperty<RankTwoTensor> & _F;
+  ADMaterialProperty(RankTwoTensor) & _F;
+
+  usingComputeStrainBaseMembers;
 };
 
 #endif // GreenStrain_H

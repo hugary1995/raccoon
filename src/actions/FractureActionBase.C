@@ -33,9 +33,7 @@ validParams<FractureActionBase>()
                                               "applied to");
   params.addParam<Real>("scaling", 1.0, "Specifies a scaling factor to apply to this variable");
   params.addParam<bool>("implicit", true, "Whether kernels are implicit or not");
-  params.addParam<bool>(
-      "use_displaced_mesh", false, "Whether to use displaced mesh in the kernels");
-  params.addParamNamesToGroup("scaling implicit use_displaced_mesh", "Advanced");
+  params.addParamNamesToGroup("scaling implicit", "Advanced");
 
   // viscosity
   params.addParam<Real>("viscosity", 0.0, "viscosity of crack growth");
@@ -70,10 +68,6 @@ validParams<FractureActionBase>()
   params.addParam<std::vector<VariableName>>(
       "displacements", "The nonlinear displacement variables for the problem");
 
-  // run on current configuration
-  params.addParam<bool>(
-      "use_displaced_mesh", true, "whether or not to run kernels on the displaced mesh");
-
   return params;
 }
 
@@ -99,10 +93,8 @@ FractureActionBase::act()
   {
     // Blocks from the input
     std::set<SubdomainID> blocks = getSubdomainIDs();
-    if (blocks.empty())
-      _problem->addVariable(_var_name, _fe_type, getParam<Real>("scaling"));
-    else
-      _problem->addVariable(_var_name, _fe_type, getParam<Real>("scaling"), &blocks);
+    _problem->addVariable(
+        _var_name, _fe_type, getParam<Real>("scaling"), blocks.empty() ? NULL : &blocks);
   }
   //
   // Add kernels

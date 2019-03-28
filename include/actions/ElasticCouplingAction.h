@@ -34,6 +34,8 @@ protected:
     Trust_region,
     none
   } _irreversibility;
+  /// nonliear displacement variables
+  std::vector<VariableName> _displacements;
 };
 
 #endif // NElasticCouplingAction_H

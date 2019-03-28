@@ -6,6 +6,8 @@
 #include "MooseObjectAction.h"
 
 registerMooseAction("raccoonApp", ElasticCouplingAction, "add_material");
+registerMooseAction("raccoonApp", ElasticCouplingAction, "add_kernel");
+registerMooseAction("raccoonApp", ElasticCouplingAction, "add_variable");
 
 template <>
 InputParameters
@@ -47,6 +49,10 @@ validParams<ElasticCouplingAction>()
       "b",
       "name of the material that holds the critical fracture energy");
 
+  // displacement variables
+  params.addParam<std::vector<VariableName>>(
+      "displacements", "The nonlinear displacement variables for the problem");
+
   return params;
 }
 
@@ -54,7 +60,8 @@ ElasticCouplingAction::ElasticCouplingAction(const InputParameters & params)
   : Action(params),
     _block_name(name()),
     _strain(getParam<MooseEnum>("strain").getEnum<Strain>()),
-    _irreversibility(getParam<MooseEnum>("irreversibility").getEnum<Irreversibility>())
+    _irreversibility(getParam<MooseEnum>("irreversibility").getEnum<Irreversibility>()),
+    _displacements(getParam<std::vector<VariableName>>("displacements"))
 {
 }
 
@@ -65,9 +72,31 @@ ElasticCouplingAction::act()
   std::string name = "";
 
   //
+  // Add kernels
+  //
+  if (_current_task == "add_kernel")
+  {
+    if (_strain == Strain::Small)
+      type = "StressDivergenceTensors";
+    if (_strain == Strain::Finite)
+      type = "PiolaKirchhoffStressDivergence";
+    InputParameters kernel_params = _factory.getValidParams(type);
+
+    for (unsigned int i = 0; i < _displacements.size(); ++i)
+    {
+      name = "TM_block_" + _block_name + "_" + Moose::stringify(i);
+      kernel_params.set<unsigned int>("component") = i;
+      kernel_params.set<NonlinearVariableName>("variable") = _displacements[i];
+      kernel_params.applyParameters(parameters());
+
+      _problem->addKernel(type, name, kernel_params);
+    }
+  }
+
+  //
   // Add Materials
   //
-  if (_current_task == "add_material")
+  else if (_current_task == "add_material")
   {
     // degradation
     type = "LumpedDegradation";
@@ -75,16 +104,52 @@ ElasticCouplingAction::act()
     InputParameters params1 = _factory.getValidParams(type);
     params1.applyParameters(parameters());
     _problem->addMaterial(type, name, params1);
+
     // degraded stress
+    type = "SmallStrainElasticDegradedStress";
+    name = type + "_block_" + _block_name;
+    InputParameters params2 = _factory.getValidParams(type);
+    if (_irreversibility != Irreversibility::History)
+      params2.set<bool>("history") = false;
+    params2.applyParameters(parameters());
+    _problem->addMaterial(type, name, params2);
+
+    // strain
     if (_strain == Strain::Small)
     {
-      type = "SmallStrainElasticDegradedStress";
+      type = "ComputeSmallStrain";
+      InputParameters params3 = _factory.getValidParams(type);
       name = type + "_block_" + _block_name;
-      InputParameters params2 = _factory.getValidParams(type);
-      if (_irreversibility != Irreversibility::History)
-        params2.set<bool>("history") = false;
-      params2.applyParameters(parameters());
-      _problem->addMaterial(type, name, params2);
+      params3.applyParameters(parameters());
+      _problem->addMaterial(type, name, params3);
     }
+    if (_strain == Strain::Finite)
+    {
+      // we use automatic differention for deformation gradient
+      type = "GreenStrain";
+      InputParameters params3_residual = _factory.getValidParams(type + "<RESIDUAL>");
+      InputParameters params3_jacobian = _factory.getValidParams(type + "<JACOBIAN>");
+      name = type + "_block_" + _block_name;
+      params3_residual.applyParameters(parameters());
+      params3_jacobian.applyParameters(parameters());
+      _problem->addADResidualMaterial(type + "<RESIDUAL>", name + "_residual", params3_residual);
+      _problem->addADJacobianMaterial(type + "<JACOBIAN>", name + "_jacobian", params3_jacobian);
+      _problem->haveADObjects(true);
+    }
+  }
+
+  //
+  // Add variables
+  //
+  else if (_current_task == "add_variable")
+  {
+    // determine necessary order
+    const bool second = _problem->mesh().hasSecondOrderElements();
+    // Loop through the displacement variables
+    for (const auto & disp : _displacements)
+      _problem->addVariable(disp,
+                            FEType(Utility::string_to_enum<Order>(second ? "SECOND" : "FIRST"),
+                                   Utility::string_to_enum<FEFamily>("LAGRANGE")),
+                            1.0);
   }
 }

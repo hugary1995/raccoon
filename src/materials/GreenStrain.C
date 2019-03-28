@@ -1,42 +1,42 @@
 #include "GreenStrain.h"
 
-registerMooseObject("raccoonApp", GreenStrain);
+registerADMooseObject("raccoonApp", GreenStrain);
 
-template <>
-InputParameters
-validParams<GreenStrain>()
-{
-  InputParameters params = validParams<ComputeStrainBase>();
-  params.addClassDescription("Compute Green strain.");
-  return params;
-}
+defineADValidParams(GreenStrain,
+                    ADComputeStrainBase,
+                    params.addClassDescription("Compute a Green strain."););
 
-GreenStrain::GreenStrain(const InputParameters & parameters)
-  : ComputeStrainBase(parameters),
-    _F(declareProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
+template <ComputeStage compute_stage>
+GreenStrain<compute_stage>::GreenStrain(const InputParameters & parameters)
+  : ADComputeStrainBase<compute_stage>(parameters),
+    _F(adDeclareADProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
 {
 }
 
+template <ComputeStage compute_stage>
 void
-GreenStrain::computeQpProperties()
+GreenStrain<compute_stage>::computeQpProperties()
 {
+  // deformation gradient
   // F = I + A
   //         A = U_{i,I}, displacement gradient in reference configuration
-  RankTwoTensor A((*_grad_disp[0])[_qp], (*_grad_disp[1])[_qp], (*_grad_disp[2])[_qp]);
+  ADRankTwoTensor A((*_grad_disp[0])[_qp], (*_grad_disp[1])[_qp], (*_grad_disp[2])[_qp]);
   _F[_qp] = A;
   _F[_qp].addIa(1.0);
 
+  // Green strain defined in the reference configuration
   // E = 0.5(F^T F - I)
-  RankTwoTensor E = _F[_qp].transpose() * _F[_qp];
+  ADRankTwoTensor E = _F[_qp].transpose() * _F[_qp];
   E.addIa(-1.0);
   E *= 0.5;
 
-  // total strain
+  // total strain defined in the current configuration
+  // e = F E F^T / det(F)
   _total_strain[_qp] = E;
   if (_global_strain)
     _total_strain[_qp] += (*_global_strain)[_qp];
 
-  // mechanical strain
+  // mechanical strain in the current configuration
   _mechanical_strain[_qp] = _total_strain[_qp];
   for (auto es : _eigenstrains)
     _mechanical_strain[_qp] -= (*es)[_qp];
