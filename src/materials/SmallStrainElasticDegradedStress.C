@@ -28,10 +28,7 @@ SmallStrainElasticDegradedStress::SmallStrainElasticDegradedStress(
     _E_el_name(getParam<MaterialPropertyName>("elastic_energy_name")),
     _E_el_pos_initial(coupledValue("initial_positive_elastic_energy")),
     _E_el_pos(declareProperty<Real>(_E_el_name + "_pos")),
-    _E_el_pos_old(getMaterialPropertyOldByName<Real>(_E_el_name + "_pos")),
-    _F(hasMaterialPropertyByName<RankTwoTensor>(_base_name + "deformation_gradient")
-           ? &getMaterialPropertyByName<RankTwoTensor>(_base_name + "deformation_gradient")
-           : NULL)
+    _E_el_pos_old(getMaterialPropertyOldByName<Real>(_E_el_name + "_pos"))
 {
   // reserve space for normalized elastic energy and their derivatives
   _E_el.resize(_num_fields);
@@ -97,11 +94,7 @@ SmallStrainElasticDegradedStress::computeQpStress()
   // degraded stress
   _stress[_qp] = _elasticity_tensor[_qp] * strain0 - (1.0 - _g[_qp]) * stress_pos;
   for (unsigned int i = 0; i < _num_fields; ++i)
-  {
     (*_dstress_dd[i])[_qp] = (*_dg_dd[i])[_qp] * stress_pos;
-    if (_F)
-      (*_dstress_dd[i])[_qp] = (*_F)[_qp] * (*_dstress_dd[i])[_qp];
-  }
 
   // correct jacobian
   RankFourTensor Jacobian_pos = lambda * dMacaulay(strain0_tr) * I2I2 + 2.0 * mu * proj_pos;

@@ -136,17 +136,17 @@ FractureActionBase::act()
     params3.applyParameters(parameters());
     _problem->addKernel(type, name, params3);
     // add off diagonal kernels for dR_disp/dd
-    type = "PhaseFieldFractureMechanicsOffDiag";
-    name = type + "_" + _var_name;
-    InputParameters params4 = _factory.getValidParams(type);
-    for (unsigned int i = 0; i < _displacements.size(); ++i)
-    {
-      params4.set<unsigned int>("component") = i;
-      params4.set<NonlinearVariableName>("variable") = _displacements[i];
-      params4.set<std::vector<VariableName>>("c") = {_var_name};
-      params4.applyParameters(parameters());
-      _problem->addKernel(type, name + "_" + Moose::stringify(i), params4);
-    }
+    // type = "PhaseFieldFractureMechanicsOffDiag";
+    // name = type + "_" + _var_name;
+    // InputParameters params4 = _factory.getValidParams(type);
+    // for (unsigned int i = 0; i < _displacements.size(); ++i)
+    // {
+    //   params4.set<unsigned int>("component") = i;
+    //   params4.set<NonlinearVariableName>("variable") = _displacements[i];
+    //   params4.set<std::vector<VariableName>>("c") = {_var_name};
+    //   params4.applyParameters(parameters());
+    //   _problem->addKernel(type, name + "_" + Moose::stringify(i), params4);
+    // }
   }
   //
   // Add Materials

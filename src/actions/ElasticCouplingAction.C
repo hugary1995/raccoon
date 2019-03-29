@@ -76,10 +76,7 @@ ElasticCouplingAction::act()
   //
   if (_current_task == "add_kernel")
   {
-    if (_strain == Strain::Small)
-      type = "StressDivergenceTensors";
-    if (_strain == Strain::Finite)
-      type = "PiolaKirchhoffStressDivergence";
+    type = "PiolaKirchhoffStressDivergence";
     InputParameters kernel_params = _factory.getValidParams(type);
 
     for (unsigned int i = 0; i < _displacements.size(); ++i)

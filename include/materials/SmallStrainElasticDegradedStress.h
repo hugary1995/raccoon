@@ -45,9 +45,6 @@ protected:
 
   /// fracture energy barrier
   std::vector<const MaterialProperty<Real> *> _E_crit;
-
-  /// pointer to the deformation gradient
-  const MaterialProperty<RankTwoTensor> * _F;
 };
 
 #endif // SmallStrainElasticDegradedStress_H
