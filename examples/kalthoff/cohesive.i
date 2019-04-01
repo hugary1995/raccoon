@@ -13,7 +13,7 @@
       [./d]
         viscosity = 0
         Gc = 22.2
-        L = 0.35
+        L = 0.3
         p = 1
         fracture_energy_barrier = 7.9
         residual_degradation = 1e-6
@@ -134,7 +134,7 @@
   petsc_options_value = 'asm      ilu          200         200                0                     vinewtonrsls'
 
   end_time = 8.5e-5
-  dt = 1e-7
+  dt = 5e-8
 
   nl_rel_tol = 1e-08
 
@@ -148,5 +148,5 @@
 [Outputs]
   exodus = true
   print_linear_residuals = false
-  interval = 1
+  interval = 2
 []

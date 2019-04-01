@@ -1,3 +1,4 @@
+#ifdef LIBMESH_HAVE_EXTERNAL_BOOST
 #ifndef GammaRandomFieldFromBasisFunctions_H
 #define GammaRandomFieldFromBasisFunctions_H
 
@@ -31,3 +32,4 @@ private:
 };
 
 #endif // GammaRandomFieldFromBasisFunctions_H
+#endif

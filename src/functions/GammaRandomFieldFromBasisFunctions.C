@@ -1,3 +1,4 @@
+#ifdef LIBMESH_HAVE_EXTERNAL_BOOST
 #include "GammaRandomFieldFromBasisFunctions.h"
 
 registerMooseObject("raccoonApp", GammaRandomFieldFromBasisFunctions);
@@ -38,3 +39,4 @@ GammaRandomFieldFromBasisFunctions::GaussianToGamma(Real val)
   Real g = boost::math::gamma_p_inv(_k, x) * _theta;
   return g;
 }
+#endif
