@@ -4,7 +4,7 @@
 #include "GaussianRandomFieldFromBasisFunctions.h"
 // BOOST
 #include "libmesh/ignore_warnings.h"
-#include <boost/math/special_functions/gamma.hpp>
+#include <boost/math/distributions/gamma.hpp>
 #include <boost/math/special_functions/erf.hpp>
 #include "libmesh/restore_warnings.h"
 
