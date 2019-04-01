@@ -2,12 +2,12 @@ L = 100;
 H = 100;
 D = 50; // crack depth
 I = 25; // crack position (distance from bottom)
-A = 65; // crack projectile angle
+A = 62; // crack projectile angle
 C = 75*Cos(A*Pi/180)+D;
 t = 0.1;
 
 E = 1.6; // coarse mesh size
-e = 1.6; // refined mesh size
+e = 0.2; // refined mesh size
 
 Point(1) = {0,0,0,E};
 Point(2) = {0,I-t/2,0,E};

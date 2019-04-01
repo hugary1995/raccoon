@@ -1,3 +1,4 @@
+#ifdef LIBMESH_HAVE_EXTERNAL_BOOST
 #ifndef KLExpansionAction_H
 #define KLExpansionAction_H
 
@@ -67,4 +68,5 @@ private:
   boost::variate_generator<boost::mt19937 &, boost::normal_distribution<>> _Gaussian_gen;
 };
 
-#endif // NKLExpansionAction_H
+#endif // KLExpansionAction_H
+#endif

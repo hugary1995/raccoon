@@ -7,18 +7,6 @@
   file = 'gold/mesh.msh'
 []
 
-[Adaptivity]
-  cycles_per_step = 4
-  marker = crack
-  max_h_level = 3
-  [./Markers]
-    [./crack]
-      type = FractureMarker
-      damage_fields = 'd'
-    [../]
-  [../]
-[]
-
 [Modules]
   [./PhaseFieldFracture]
     [./CohesiveFracture]
@@ -28,7 +16,7 @@
         L = 0.35
         p = 1
         fracture_energy_barrier = 7.9
-        residual_degradation = 1e-12
+        residual_degradation = 1e-6
       [../]
     [../]
   [../]
@@ -139,8 +127,11 @@
   type = Transient
 
   solve_type = 'NEWTON'
-  petsc_options_iname = '-pc_type -snes_type -pc_factor_mat_solver_package'
-  petsc_options_value = 'lu vinewtonrsls superlu_dist'
+  # petsc_options_iname = '-pc_type -snes_type -pc_factor_mat_solver_package'
+  # petsc_options_value = 'lu vinewtonrsls superlu_dist'
+
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
+  petsc_options_value = 'asm      ilu          200         200                0                     vinewtonrsls'
 
   end_time = 8.5e-5
   dt = 1e-7

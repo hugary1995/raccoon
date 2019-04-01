@@ -1,3 +1,4 @@
+#ifdef LIBMESH_HAVE_EXTERNAL_BOOST
 #include "KLExpansionAction.h"
 
 // MOOSE includes
@@ -204,3 +205,5 @@ KLExpansionAction::addFieldGenerator()
   field_params.applyParameters(parameters());
   _problem->addFunction(type, name, field_params);
 }
+
+#endif
