@@ -35,5 +35,6 @@ GammaRandomFieldFromBasisFunctions::GaussianToGamma(Real val)
   // get cdf of val
   Real x = 0.5 * boost::math::erfc(-val / std::sqrt(2.0));
   // convert cdf to Gamma pdf
-  return boost::math::gamma_p_inv(_k, x) * _theta;
+  Real g = boost::math::gamma_p_inv(_k, x) * _theta;
+  return g;
 }
