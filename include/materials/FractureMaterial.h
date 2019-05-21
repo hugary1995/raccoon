@@ -18,12 +18,25 @@ protected:
   virtual void initQpStatefulProperties() override;
   virtual void computeQpProperties() override;
 
+  /// energy release rate
   Function & _Gc;
+
+  /// length scale in the fracture surface energy density
   Function & _L;
-  Real _w_norm;
+
+  /// norm of the local dissipation function
+  Function & _w_norm;
+
+  /// interface coefficient in Allen-Cahn equation
   MaterialProperty<Real> & _kappa;
+
+  /// interface coefficient at the previous time step
   const MaterialProperty<Real> & _kappa_old;
+
+  /// Mobility in Allen-Cahn equation
   MaterialProperty<Real> & _M;
+
+  /// Mobility at the previous time step
   const MaterialProperty<Real> & _M_old;
 };
 

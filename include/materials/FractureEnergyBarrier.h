@@ -16,11 +16,17 @@ public:
 protected:
   virtual void computeQpProperties() override;
 
-  const std::string _var_name;
-  const Real _dw_dd;
-  const Real _dg_dd;
+  /// slope of the local dissipation function when d = 1
+  Function & _dw_dd;
+
+  /// slope of the degradation function when d = 1
+  Function & _dg_dd;
+
+  /// Mobility
   const MaterialProperty<Real> & _M;
-  MaterialProperty<Real> & _E_crit;
+
+  /// computed fracture energy barrier
+  MaterialProperty<Real> & _b;
 };
 
 #endif // FractureEnergyBarrier_H

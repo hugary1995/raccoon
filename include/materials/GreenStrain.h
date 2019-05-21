@@ -5,10 +5,6 @@
 
 template <ComputeStage>
 class GreenStrain;
-template <typename>
-class RankTwoTensorTempl;
-typedef RankTwoTensorTempl<Real> RankTwoTensor;
-typedef RankTwoTensorTempl<DualReal> DualRankTwoTensor;
 
 declareADValidParams(GreenStrain);
 

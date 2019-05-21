@@ -1,13 +1,13 @@
-#include "GreenStrain.h"
+#include "LCGStrain.h"
 
-registerADMooseObject("raccoonApp", GreenStrain);
+registerADMooseObject("raccoonApp", LCGStrain);
 
-defineADValidParams(GreenStrain,
+defineADValidParams(LCGStrain,
                     ADComputeStrainBase,
-                    params.addClassDescription("Compute a Green strain."););
+                    params.addClassDescription("Compute the left Cauchy-Green strain."););
 
 template <ComputeStage compute_stage>
-GreenStrain<compute_stage>::GreenStrain(const InputParameters & parameters)
+LCGStrain<compute_stage>::LCGStrain(const InputParameters & parameters)
   : ADComputeStrainBase<compute_stage>(parameters),
     _F(adDeclareADProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
 {
@@ -15,7 +15,7 @@ GreenStrain<compute_stage>::GreenStrain(const InputParameters & parameters)
 
 template <ComputeStage compute_stage>
 void
-GreenStrain<compute_stage>::computeQpProperties()
+LCGStrain<compute_stage>::computeQpProperties()
 {
   // deformation gradient
   // F = I + A
@@ -26,12 +26,11 @@ GreenStrain<compute_stage>::computeQpProperties()
 
   // Green strain defined in the reference configuration
   // E = 0.5(F^T F - I)
-  ADRankTwoTensor E = _F[_qp].transpose() * _F[_qp];
-  E.addIa(-1.0);
-  E *= 0.5;
+  ADRankTwoTensor b = _F[_qp] * _F[_qp].transpose();
 
-  // total strain defined in the reference configuration
-  _total_strain[_qp] = E;
+  // total strain defined in the current configuration
+  // e = F E F^T / det(F)
+  _total_strain[_qp] = b;
   if (_global_strain)
     _total_strain[_qp] += (*_global_strain)[_qp];
 

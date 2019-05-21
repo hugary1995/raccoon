@@ -29,7 +29,7 @@ protected:
   virtual MarkerValue computeQpMarker() = 0;
 
   /// The quadrature rule for the system
-  QBase *& _qrule;
+  const QBase * _qrule;
 
   /// Position of the current quadrature point
   const MooseArray<Point> & _q_point;

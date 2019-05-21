@@ -1,6 +1,5 @@
 #ifdef LIBMESH_HAVE_EXTERNAL_BOOST
 #include "GammaRandomFieldFromBasisFunctions.h"
-
 registerMooseObject("raccoonApp", GammaRandomFieldFromBasisFunctions);
 
 template <>

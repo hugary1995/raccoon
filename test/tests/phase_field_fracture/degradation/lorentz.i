@@ -3,8 +3,10 @@
 []
 
 [Mesh]
-  type = FileMesh
-  file = 'gold/geo.e'
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
 []
 
 [Variables]
@@ -12,8 +14,18 @@
   [../]
   [./disp_y]
   [../]
+[]
+
+[AuxVariables]
   [./d]
-    scaling = 1e7
+  [../]
+[../]
+
+[AuxKernels]
+  [./d]
+    type = FunctionAux
+    variable = d
+    function = t
   [../]
 []
 
@@ -28,71 +40,61 @@
     variable = disp_y
     component = 1
   [../]
-  [./damage]
-    type = PhaseFieldFractureEvolution
-    variable = d
-    driving_energy_name = E_el
-  [../]
 []
 
 [BCs]
-  [./ydisp]
-    type = FunctionDirichletBC
-    variable = disp_y
-    boundary = 2
-    function = 't'
-  [../]
-  [./yfix]
-    type = DirichletBC
-    variable = disp_y
-    boundary = 1
-    value = 0
-  [../]
-  [./xfix]
+  [./top_disp_x]
     type = DirichletBC
     variable = disp_x
-    boundary = '1 2'
+    boundary = top
+    value = 0
+  [../]
+  [./top_disp_y]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = top
+    function = '0.05*t'
+  [../]
+  [./bottom_disp_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = bottom
+    value = 0
+  [../]
+  [./bottom_disp_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
     value = 0
   [../]
 []
 
 [Materials]
+  [./b]
+    type = GenericFunctionMaterial
+    prop_names = 'b'
+    prop_values = '1'
+  [../]
+  [./fracture_properties]
+    type = FractureMaterial
+    Gc = 1
+    L = 0.1
+    local_dissipation_norm = 8/3
+  [../]
+  [./quadratic]
+    type = LorentzDegradation
+    d = d
+  [../]
   [./elasticity_tensor]
-    type = ComputeElasticityTensor
-    C_ijkl = '120.0 80.0'
-    fill_method = symmetric_isotropic
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 100
+    poissons_ratio = 0.3
   [../]
   [./strain]
     type = ADComputeSmallStrain
   [../]
   [./stress]
-    type = SmallStrainDegradedPK2Stress_NoSplit
-  [../]
-  [./fracture_energy_barrier]
-    type = GenericFunctionMaterial
-    prop_names = 'b'
-    prop_values = '0.005'
-  [../]
-  [./local_dissipation]
-    type = LinearLocalDissipation
-    d = d
-  [../]
-  [./fracture_properties]
-    type = FractureMaterial
-    Gc = 1e-3
-    L = 0.02
-    local_dissipation_norm = 8/3
-  [../]
-  [./degradation]
-    type = LorentzDegradation
-    d = d
-  [../]
-[]
-
-[Preconditioning]
-  [./SMP]
-    type = SMP
-    full = true
+    type = SmallStrainDegradedPK2Stress_StrainSpectral
   [../]
 []
 
@@ -101,8 +103,11 @@
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type'
   petsc_options_value = 'lu'
-  dt = 1e-5
-  end_time = 5e-3
+  dt = 0.1
+  end_time = 1
+
+  nl_abs_tol = 1e-10
+  nl_rel_tol = 1e-08
 []
 
 [Outputs]
