@@ -1,5 +1,8 @@
-#ifndef SideIntegralPositiveMaxPrincipalStressPostprocessor_H
-#define SideIntegralPositiveMaxPrincipalStressPostprocessor_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 #include "SideIntegralPostprocessor.h"
 #include "RankTwoTensor.h"
@@ -24,4 +27,3 @@ protected:
   const MaterialProperty<RankTwoTensor> & _stress;
 };
 
-#endif

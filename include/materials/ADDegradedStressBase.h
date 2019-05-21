@@ -1,5 +1,8 @@
-#ifndef ADDegradedStressBase_H
-#define ADDegradedStressBase_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 #include "ADComputeStressBase.h"
 
@@ -68,4 +71,3 @@ protected:
   usingComputeStressBaseMembers;
 };
 
-#endif // ADDegradedStressBase_H

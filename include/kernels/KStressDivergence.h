@@ -1,5 +1,8 @@
-#ifndef KStressDivergence_H
-#define KStressDivergence_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 #include "ALEKernel.h"
 #include "RankTwoTensor.h"
@@ -61,4 +64,3 @@ protected:
   std::vector<const MaterialProperty<RankTwoTensor> *> _dstress_dd;
 };
 
-#endif // KStressDivergence_H

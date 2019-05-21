@@ -1,5 +1,8 @@
-#ifndef NormalRandomFieldFromBasisFunctions_H
-#define NormalRandomFieldFromBasisFunctions_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 #include "GaussianRandomFieldFromBasisFunctions.h"
 
@@ -25,4 +28,3 @@ private:
   Real _sigma;
 };
 
-#endif // NormalRandomFieldFromBasisFunctions_H

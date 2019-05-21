@@ -1,5 +1,8 @@
-#ifndef FractureMarker_H
-#define FractureMarker_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 #include "FractureMarkerBase.h"
 #include "CoupleableMooseVariableDependencyIntermediateInterface.h"
@@ -29,4 +32,3 @@ protected:
   std::vector<const MaterialProperty<Real> *> _dw_dd;
 };
 
-#endif /* FractureMarker_H */

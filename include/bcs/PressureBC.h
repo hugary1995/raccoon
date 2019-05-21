@@ -1,5 +1,8 @@
-#ifndef PressureBC_H
-#define PressureBC_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 #include "ADIntegratedBC.h"
 
@@ -25,4 +28,3 @@ protected:
   usingIntegratedBCMembers;
 };
 
-#endif /* PressureBC_H */

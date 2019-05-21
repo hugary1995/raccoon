@@ -1,5 +1,8 @@
-#ifndef FractureActionBase_H
-#define FractureActionBase_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 // MOOSE includes
 #include "Action.h"
@@ -34,4 +37,3 @@ protected:
   const std::vector<VariableName> _displacements;
 };
 
-#endif // NFractureActionBase_H

@@ -1,5 +1,8 @@
-#ifndef FractureEnergyBarrier_H
-#define FractureEnergyBarrier_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 #include "Material.h"
 
@@ -29,4 +32,3 @@ protected:
   MaterialProperty<Real> & _b;
 };
 
-#endif // FractureEnergyBarrier_H

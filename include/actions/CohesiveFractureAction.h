@@ -1,5 +1,8 @@
-#ifndef CohesiveFractureAction_H
-#define CohesiveFractureAction_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 // MOOSE includes
 #include "FractureActionBase.h"
@@ -20,4 +23,3 @@ public:
 protected:
 };
 
-#endif // NCohesiveFractureAction_H

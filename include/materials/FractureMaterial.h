@@ -1,5 +1,8 @@
-#ifndef FractureMaterial_H
-#define FractureMaterial_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 #include "Material.h"
 #include "Function.h"
@@ -40,4 +43,3 @@ protected:
   const MaterialProperty<Real> & _M_old;
 };
 
-#endif // FractureMaterial_H

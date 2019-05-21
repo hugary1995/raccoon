@@ -1,5 +1,8 @@
-#ifndef ComputeEigenstrainFromFunctionEigenstress_H
-#define ComputeEigenstrainFromFunctionEigenstress_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 #include "ComputeEigenstrainFromInitialStress.h"
 
@@ -17,4 +20,3 @@ protected:
   virtual void computeQpEigenstrain() override;
 };
 
-#endif // ComputeEigenstrainFromFunctionEigenstress_H

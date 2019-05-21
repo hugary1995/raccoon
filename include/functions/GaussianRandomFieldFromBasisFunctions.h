@@ -1,5 +1,8 @@
-#ifndef GaussianRandomFieldFromBasisFunctions_H
-#define GaussianRandomFieldFromBasisFunctions_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 #include "Function.h"
 #include "FunctionInterface.h"
@@ -21,4 +24,3 @@ private:
   std::vector<Function *> _f;
 };
 
-#endif // GaussianRandomFieldFromBasisFunctions_H

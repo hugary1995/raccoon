@@ -1,6 +1,9 @@
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 #ifdef LIBMESH_HAVE_EXTERNAL_BOOST
-#ifndef KLExpansionAction_H
-#define KLExpansionAction_H
 
 // MOOSE includes
 #include "Action.h"
@@ -69,4 +72,3 @@ private:
 };
 
 #endif // KLExpansionAction_H
-#endif

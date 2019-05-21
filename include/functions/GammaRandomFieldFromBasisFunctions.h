@@ -1,6 +1,9 @@
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 #ifdef LIBMESH_HAVE_EXTERNAL_BOOST
-#ifndef GammaRandomFieldFromBasisFunctions_H
-#define GammaRandomFieldFromBasisFunctions_H
 
 #include "GaussianRandomFieldFromBasisFunctions.h"
 // BOOST
@@ -32,4 +35,3 @@ private:
 };
 
 #endif // GammaRandomFieldFromBasisFunctions_H
-#endif

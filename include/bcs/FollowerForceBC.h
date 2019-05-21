@@ -1,5 +1,8 @@
-#ifndef FollowerForceBC_H
-#define FollowerForceBC_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 #include "ADIntegratedBC.h"
 
@@ -34,4 +37,3 @@ protected:
   usingIntegratedBCMembers;
 };
 
-#endif /* FollowerForceBC_H */

@@ -1,3 +1,7 @@
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
 #ifdef LIBMESH_HAVE_EXTERNAL_BOOST
 #include "GammaRandomFieldFromBasisFunctions.h"
 registerMooseObject("raccoonApp", GammaRandomFieldFromBasisFunctions);

@@ -1,5 +1,8 @@
-#ifndef FractureMarkerBase_H
-#define FractureMarkerBase_H
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#pragma once
 
 #include "Marker.h"
 #include "Coupleable.h"
@@ -38,4 +41,3 @@ protected:
   unsigned int _qp;
 };
 
-#endif /* FractureMarkerBase_H */

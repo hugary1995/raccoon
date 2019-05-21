@@ -1,3 +1,7 @@
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
 #include "CNHPK1Stress.h"
 
 registerADMooseObject("raccoonApp", CNHPK1Stress);
