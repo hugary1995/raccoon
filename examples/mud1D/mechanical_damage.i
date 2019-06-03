@@ -7,6 +7,15 @@
   file = gold/film.msh
 []
 
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./d]
+  [../]
+[]
+
 [Modules]
   [./KLExpansion]
     file_name = 'gold/kl_info.txt'
@@ -15,32 +24,23 @@
     mean = 4e-4
     CV = 0.3
   [../]
-  [./TensorMechanics]
-    [./Master]
-      [./all]
-        add_variables = true
-        strain = SMALL
-        eigenstrain_names = is
-        additional_generate_output = max_principal_stress
-      [../]
-    [../]
+[]
+
+[Kernels]
+  [./solid_x]
+    type = ADStressDivergenceTensors
+    variable = disp_x
+    component = 0
   [../]
-  [./PhaseFieldFracture]
-    [./CohesiveFracture]
-      [./d]
-        Gc = 8e-4
-        L = 0.075
-        fracture_energy_barrier = E_crit
-      [../]
-    [../]
-    [./ElasticCoupling]
-      [./all]
-        damage_fields = 'd'
-        strain = SMALL
-        decomposition = STRAIN_SPECTRAL
-        irreversibility = HISTORY
-      [../]
-    [../]
+  [./solid_y]
+    type = ADStressDivergenceTensors
+    variable = disp_y
+    component = 1
+  [../]
+  [./damage]
+    type = PhaseFieldFractureEvolution
+    variable = d
+    driving_energy_name = E_el
   [../]
 []
 
@@ -54,6 +54,32 @@
     type = ComputeIsotropicElasticityTensor
     poissons_ratio = 0.2
     youngs_modulus = 4
+  [../]
+  [./strain]
+    type = ADComputeSmallStrain
+    eigenstrain_names = is
+  [../]
+  [./stress]
+    type = SmallStrainDegradedPK2Stress_NoSplit
+  [../]
+  [./fracture_energy_barrier]
+    type = GenericFunctionMaterial
+    prop_names = 'b'
+    prop_values = 'E_crit'
+  [../]
+  [./local_dissipation]
+    type = LinearLocalDissipation
+    d = d
+  [../]
+  [./fracture_properties]
+    type = FractureMaterial
+    Gc = 8e-4
+    L = 0.075
+    local_dissipation_norm = 8/3
+  [../]
+  [./degradation]
+    type = LorentzDegradation
+    d = d
   [../]
 []
 
@@ -128,12 +154,10 @@
 [Executioner]
   type = Transient
   solve_type = NEWTON
-  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -snes_linesearch_type -sub_pc_factor_levels'
-  petsc_options_value = 'asm      ilu          200         200                basic                 0'
-  nl_abs_tol = 1e-6
-  nl_rel_tol = 1e-6
-  l_max_its = 100
-  nl_max_its = 50
+  petsc_options_iname = '-pc_type'
+  petsc_options_value = 'lu'
+  nl_abs_tol = 1e-06
+  nl_rel_tol = 1e-06
   dt = 1e-3
   dtmin = 1e-3
 []

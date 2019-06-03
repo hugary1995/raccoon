@@ -19,7 +19,7 @@ defineADValidParams(
                                                   "name of the driving energy");
     params.addParam<bool>(
         "lag_driving_energy",
-        true,
+        false,
         "whether we should use last step's driving energy to improve convergence"););
 
 template <ComputeStage compute_stage>
@@ -43,10 +43,10 @@ ADResidual
 PhaseFieldFractureEvolution<compute_stage>::computeQpResidual()
 {
   // diffusion
-  ADReal residual_diffusion = -_M[_qp] * _kappa[_qp] * _grad_test[_i][_qp] * _grad_u[_qp];
+  ADReal residual_diffusion = _M[_qp] * _kappa[_qp] * _grad_test[_i][_qp] * _grad_u[_qp];
 
   // reaction like driving force
-  ADReal residual_driving = -_test[_i][_qp] * (_dg_dd[_qp] * _D[_qp] + _dw_dd[_qp] * _M[_qp]);
+  ADReal residual_driving = _test[_i][_qp] * (_dg_dd[_qp] * _D[_qp] + _dw_dd[_qp] * _M[_qp]);
 
   return residual_diffusion + residual_driving;
 }

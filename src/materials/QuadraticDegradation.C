@@ -16,8 +16,10 @@ QuadraticDegradation<compute_stage>::QuadraticDegradation(const InputParameters 
 
 template <ComputeStage compute_stage>
 void
-QuadraticDegradation<compute_stage>::computeDegradation(ADReal & d)
+QuadraticDegradation<compute_stage>::computeDegradation()
 {
-  _g[_qp] = (1.0 - d) * (1.0 - d) * (1.0 - _eta) + _eta;
+  ADReal d = _d[_qp];
+  ADReal d_old = _lag ? _d_old[_qp] : d;
+  _g[_qp] = (1.0 - d_old) * (1.0 - d_old) * (1.0 - _eta) + _eta;
   _dg_dd[_qp] = -2.0 * (1.0 - d) * (1.0 - _eta);
 }

@@ -10,10 +10,12 @@
 #define usingDegradationBaseMembers                                                                \
   usingMaterialMembers;                                                                            \
   using DegradationBase<compute_stage>::_d;                                                        \
+  using DegradationBase<compute_stage>::_d_old;                                                    \
   using DegradationBase<compute_stage>::_g_name;                                                   \
   using DegradationBase<compute_stage>::_g;                                                        \
   using DegradationBase<compute_stage>::_dg_dd;                                                    \
-  using DegradationBase<compute_stage>::_eta;
+  using DegradationBase<compute_stage>::_eta;                                                      \
+  using DegradationBase<compute_stage>::_lag;
 
 // Forward Declarations
 template <ComputeStage>
@@ -30,11 +32,14 @@ public:
 
 protected:
   virtual void computeQpProperties() override;
-  virtual void computeDegradation(ADReal &) = 0;
+  virtual void computeDegradation() = 0;
   virtual void postComputeDegradation();
 
   /// coupled damage variable
   const ADVariableValue & _d;
+
+  /// last converged damage variable
+  const VariableValue & _d_old;
 
   /// name of degradation
   const MaterialPropertyName _g_name;
@@ -47,6 +52,9 @@ protected:
 
   /// residual degradation
   const Real & _eta;
+
+  /// whether to lag the degradation
+  const bool _lag;
 
   usingMaterialMembers;
 };

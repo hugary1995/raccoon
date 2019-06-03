@@ -19,7 +19,7 @@ public:
   LorentzDegradation(const InputParameters & parameters);
 
 protected:
-  virtual void computeDegradation(ADReal &) override;
+  virtual void computeDegradation() override;
 
   /// mobility
   const MaterialProperty<Real> & _M;

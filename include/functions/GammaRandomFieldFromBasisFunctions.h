@@ -3,7 +3,6 @@
 //* http://dolbow.pratt.duke.edu
 
 #pragma once
-#ifdef LIBMESH_HAVE_EXTERNAL_BOOST
 
 #include "GaussianRandomFieldFromBasisFunctions.h"
 // BOOST
@@ -22,7 +21,7 @@ class GammaRandomFieldFromBasisFunctions : public GaussianRandomFieldFromBasisFu
 public:
   GammaRandomFieldFromBasisFunctions(const InputParameters & parameters);
 
-  virtual Real value(Real t, const Point & pt) override;
+  virtual Real value(Real, const Point &) override;
 
 private:
   // transform from a Gaussian RV to a Gamma RV
@@ -33,5 +32,3 @@ private:
   // scale parameter
   Real _theta;
 };
-
-#endif // GammaRandomFieldFromBasisFunctions_H

@@ -19,7 +19,7 @@ public:
   QuadraticDegradation(const InputParameters & parameters);
 
 protected:
-  virtual void computeDegradation(ADReal &) override;
+  virtual void computeDegradation() override;
 
   usingDegradationBaseMembers
 };

@@ -2,7 +2,6 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#ifdef LIBMESH_HAVE_EXTERNAL_BOOST
 #include "GammaRandomFieldFromBasisFunctions.h"
 registerMooseObject("raccoonApp", GammaRandomFieldFromBasisFunctions);
 
@@ -24,6 +23,9 @@ GammaRandomFieldFromBasisFunctions::GammaRandomFieldFromBasisFunctions(
     _k(1.0 / getParam<Real>("CV") / getParam<Real>("CV")),
     _theta(getParam<Real>("mean") / _k)
 {
+#ifndef LIBMESH_HAVE_EXTERNAL_BOOST
+  mooseError("GammaRandomFieldFromBasisFunctions requires BOOST");
+#endif
 }
 
 Real
@@ -42,4 +44,3 @@ GammaRandomFieldFromBasisFunctions::GaussianToGamma(Real val)
   Real g = boost::math::gamma_p_inv(_k, x) * _theta;
   return g;
 }
-#endif

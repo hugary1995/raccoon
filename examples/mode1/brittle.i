@@ -13,7 +13,20 @@
   [./disp_y]
   [../]
   [./d]
-    scaling = 1e7
+  [../]
+[]
+
+[AuxVariables]
+  [./bounds_dummy]
+  [../]
+[]
+
+[Bounds]
+  [./irreversibility]
+    type = Irreversibility
+    variable = bounds_dummy
+    bounded_var = d
+    execute_on = 'TIMESTEP_BEGIN'
   [../]
 []
 
@@ -87,21 +100,15 @@
   [./degradation]
     type = QuadraticDegradation
     d = d
-  [../]
-[]
-
-[Preconditioning]
-  [./SMP]
-    type = SMP
-    full = true
+    lag_degradation = true
   [../]
 []
 
 [Executioner]
   type = Transient
   solve_type = 'NEWTON'
-  petsc_options_iname = '-pc_type'
-  petsc_options_value = 'lu'
+  petsc_options_iname = '-pc_type -snes_type'
+  petsc_options_value = 'lu vinewtonrsls'
   dt = 1e-5
   end_time = 5e-3
 []
