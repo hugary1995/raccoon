@@ -17,10 +17,9 @@ class GaussianRandomFieldFromBasisFunctions : public Function, protected Functio
 public:
   GaussianRandomFieldFromBasisFunctions(const InputParameters & parameters);
 
-  virtual Real value(Real t, const Point & pt) override;
+  virtual Real value(Real t, const Point & p) const override;
 
 private:
   std::vector<Real> _w;
-  std::vector<Function *> _f;
+  std::vector<const Function *> _f;
 };
-

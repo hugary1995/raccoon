@@ -4,24 +4,25 @@ clc
 %% Field parameters
 
 % Correlation length
-Lc = 0.0003;
+Lcx = 2;
+Lcy = inf;
 % Boolean for periodicity
-XPeriodic = 0;
-YPeriodic = 0;
+XPeriodic = true;
+YPeriodic = false;
 % tolerance
 tol = 0.1;
 
 %% Mesh
 
 % Dimension of mesh
-X1 = -0.0042;
-X2 = 0.0042;
-Y1 = -0.0042;
-Y2 = 0.0042;
+X1 = 0;
+X2 = 20;
+Y1 = 0;
+Y2 = 1;
 
 % Discretization of the mesh
-Nx = 101;
-Ny = 101;
+Nx = 201;
+Ny = 2;
 
 % Generate mesh
 Np = Nx*Ny;
@@ -32,7 +33,7 @@ Sy = linspace(Y1,Y2,Ny);
 %% KL expansion
 
 % Set up the covariance matrix and solve the expansion
-[d,v] = KLexpansion(1,Lc,Xmesh,Ymesh,Np,XPeriodic,YPeriodic,tol);
+[d,v] = KLexpansion(Lcx,Lcy,Xmesh,Ymesh,Np,XPeriodic,YPeriodic,tol);
 
 % stochastic dimension = num of KL terms per field * num of fields
 nu = length(d)*1;

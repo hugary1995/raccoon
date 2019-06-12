@@ -21,10 +21,9 @@ protected:
   virtual ADReal computeQpResidual() override;
 
   /// The function describing the pressure magnitude
-  Function & _function;
+  const Function & _function;
 
   const unsigned int _component;
 
   usingIntegratedBCMembers;
 };
-

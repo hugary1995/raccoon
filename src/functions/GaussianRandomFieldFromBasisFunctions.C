@@ -35,7 +35,7 @@ GaussianRandomFieldFromBasisFunctions::GaussianRandomFieldFromBasisFunctions(
   {
     if (name() == names[i])
       mooseError("A GaussianRandomFieldFromBasisFunctions must not reference itself");
-    Function * const f = &getFunctionByName(names[i]);
+    const Function * f = &getFunctionByName(names[i]);
     if (!f)
       mooseError("GaussianRandomFieldFromBasisFunctions: The basis function ",
                  names[i],
@@ -47,7 +47,7 @@ GaussianRandomFieldFromBasisFunctions::GaussianRandomFieldFromBasisFunctions(
 }
 
 Real
-GaussianRandomFieldFromBasisFunctions::value(Real t, const Point & p)
+GaussianRandomFieldFromBasisFunctions::value(Real t, const Point & p) const
 {
   Real val = 0;
   for (unsigned i = 0; i < _f.size(); ++i)

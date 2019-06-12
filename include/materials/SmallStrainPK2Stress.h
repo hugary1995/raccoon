@@ -23,6 +23,11 @@ protected:
   /// Elasticity tensor material property
   const ADMaterialProperty(RankFourTensor) & _elasticity_tensor;
 
+  /// elastic energy name
+  const MaterialPropertyName _E_el_name;
+
+  /// positive elastic driving energy
+  ADMaterialProperty(Real) & _E_el_pos;
+
   usingComputeStressBaseMembers;
 };
-

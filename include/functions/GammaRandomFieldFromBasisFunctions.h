@@ -21,11 +21,11 @@ class GammaRandomFieldFromBasisFunctions : public GaussianRandomFieldFromBasisFu
 public:
   GammaRandomFieldFromBasisFunctions(const InputParameters & parameters);
 
-  virtual Real value(Real, const Point &) override;
+  virtual Real value(Real, const Point &) const override;
 
 private:
   // transform from a Gaussian RV to a Gamma RV
-  virtual Real GaussianToGamma(Real);
+  virtual Real GaussianToGamma(Real) const;
 
   // shape parameter
   Real _k;

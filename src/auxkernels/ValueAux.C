@@ -24,7 +24,5 @@ ValueAux::ValueAux(const InputParameters & parameters)
 Real
 ValueAux::computeValue()
 {
-  if (_current_node->id() == 1)
-    std::cout << "In ValueAux\n";
   return _v[_qp];
 }

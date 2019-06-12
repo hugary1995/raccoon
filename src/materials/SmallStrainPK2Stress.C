@@ -9,12 +9,17 @@ registerADMooseObject("raccoonApp", SmallStrainPK2Stress);
 defineADValidParams(
     SmallStrainPK2Stress,
     ADComputeStressBase,
-    params.addClassDescription("Compute stress following small deformation elasticity"););
+    params.addClassDescription("Compute stress following small deformation elasticity");
+    params.addParam<MaterialPropertyName>("elastic_energy_name",
+                                          "E_el",
+                                          "name of the material that holds the elastic energy"););
 
 template <ComputeStage compute_stage>
 SmallStrainPK2Stress<compute_stage>::SmallStrainPK2Stress(const InputParameters & parameters)
   : ADComputeStressBase<compute_stage>(parameters),
-    _elasticity_tensor(adGetADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor"))
+    _elasticity_tensor(adGetADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
+    _E_el_name(adGetParam<MaterialPropertyName>("elastic_energy_name")),
+    _E_el_pos(adDeclareADProperty<Real>(_E_el_name))
 {
 }
 

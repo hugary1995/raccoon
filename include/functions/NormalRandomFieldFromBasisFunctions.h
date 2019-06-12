@@ -16,15 +16,14 @@ class NormalRandomFieldFromBasisFunctions : public GaussianRandomFieldFromBasisF
 public:
   NormalRandomFieldFromBasisFunctions(const InputParameters & parameters);
 
-  virtual Real value(Real t, const Point & pt) override;
+  virtual Real value(Real t, const Point & pt) const override;
 
 private:
   // transform from a Gaussian RV to a Gamma RV
-  virtual Real GaussianToNormal(Real);
+  virtual Real GaussianToNormal(Real) const;
 
   // mean
   Real _mu;
   // standard deviation
   Real _sigma;
 };
-

@@ -24,9 +24,9 @@ public:
 protected:
   virtual ADReal computeQpResidual() override;
 
-  Function & _function_x;
-  Function & _function_y;
-  Function & _function_z;
+  const Function & _function_x;
+  const Function & _function_y;
+  const Function & _function_z;
 
   const unsigned int _component;
 
@@ -36,4 +36,3 @@ protected:
 
   usingIntegratedBCMembers;
 };
-

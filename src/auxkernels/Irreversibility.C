@@ -14,8 +14,8 @@ InputParameters
 validParams<Irreversibility>()
 {
   InputParameters params = validParams<AuxKernel>();
-
   params.addRequiredCoupledVar("bounded_var", "variable to be bounded");
+  params.addRequiredCoupledVar("lower", "lower bound");
   params.addParam<Real>("upper", 1.0, "upper bound");
   return params;
 }
@@ -25,7 +25,7 @@ Irreversibility::Irreversibility(const InputParameters & parameters)
     _upper_vector(_nl_sys.getVector("upper_bound")),
     _lower_vector(_nl_sys.getVector("lower_bound")),
     _bounded_var_num(coupled("bounded_var")),
-    _lower_bound(coupledValueOld("bounded_var")),
+    _lower_bound(coupledValue("lower")),
     _upper_bound(getParam<Real>("upper"))
 {
   if (!isNodal())

@@ -27,14 +27,14 @@ NormalRandomFieldFromBasisFunctions::NormalRandomFieldFromBasisFunctions(
 }
 
 Real
-NormalRandomFieldFromBasisFunctions::value(Real t, const Point & p)
+NormalRandomFieldFromBasisFunctions::value(Real t, const Point & p) const
 {
   Real val = GaussianRandomFieldFromBasisFunctions::value(t, p);
   return GaussianToNormal(val);
 }
 
 Real
-NormalRandomFieldFromBasisFunctions::GaussianToNormal(Real val)
+NormalRandomFieldFromBasisFunctions::GaussianToNormal(Real val) const
 {
   return val * _sigma + _mu;
 }

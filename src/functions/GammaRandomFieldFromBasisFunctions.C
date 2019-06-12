@@ -29,14 +29,14 @@ GammaRandomFieldFromBasisFunctions::GammaRandomFieldFromBasisFunctions(
 }
 
 Real
-GammaRandomFieldFromBasisFunctions::value(Real t, const Point & p)
+GammaRandomFieldFromBasisFunctions::value(Real t, const Point & p) const
 {
   Real val = GaussianRandomFieldFromBasisFunctions::value(t, p);
   return GaussianToGamma(val);
 }
 
 Real
-GammaRandomFieldFromBasisFunctions::GaussianToGamma(Real val)
+GammaRandomFieldFromBasisFunctions::GaussianToGamma(Real val) const
 {
   // get cdf of val
   Real x = 0.5 * boost::math::erfc(-val / std::sqrt(2.0));
