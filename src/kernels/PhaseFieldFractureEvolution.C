@@ -50,6 +50,3 @@ PhaseFieldFractureEvolution<compute_stage>::computeQpResidual()
 
   return residual_diffusion + residual_driving;
 }
-
-template class PhaseFieldFractureEvolution<RESIDUAL>;
-template class PhaseFieldFractureEvolution<JACOBIAN>;

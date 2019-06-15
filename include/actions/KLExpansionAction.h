@@ -37,6 +37,8 @@ protected:
   virtual void addFunctionInterpolator();
   virtual void addFieldGenerator();
 
+  /// name of the action as the field name
+  const std::string _field_name;
   /// FEType for the variable being created
   const FEType _fe_type;
   // name of the file containing KL expansion information
@@ -53,8 +55,6 @@ protected:
     Normal,
     Gamma
   } _field_distribution;
-  // whether to output auxvariables to visualize bases
-  const bool _monitor_bases;
   // whether to output auxvariables to visualize field
   const bool _monitor_field;
   // number of bases

@@ -42,12 +42,9 @@ validParams<KLExpansionAction>()
   params.addParam<MooseEnum>("perturbation", perturbationType, "type of perturbation");
   params.addParam<std::vector<Real>>("custom_Gaussian_weights", "custom Gaussian weights");
   params.addParam<bool>(
-      "monitor_bases", false, "add aux variables and aux kernels to visualize bases");
-  params.addParam<bool>(
       "monitor_field",
       true,
       "add aux variables and aux kernels to visualize the generated random field");
-  params.addRequiredParam<std::string>("field_name", "name of the generated random field");
   MooseEnum distributionType("NORMAL GAMMA");
   params.addRequiredParam<MooseEnum>(
       "field_distribution", distributionType, "type of distribution");
@@ -58,12 +55,12 @@ validParams<KLExpansionAction>()
 
 KLExpansionAction::KLExpansionAction(const InputParameters & params)
   : Action(params),
+    _field_name(name()),
     _fe_type(Utility::string_to_enum<Order>(getParam<MooseEnum>("order")),
              Utility::string_to_enum<FEFamily>(getParam<MooseEnum>("family"))),
     _file_name(getParam<FileName>("file_name")),
     _Gaussian_perturbation(getParam<MooseEnum>("perturbation").getEnum<GaussianPerturbation>()),
     _field_distribution(getParam<MooseEnum>("field_distribution").getEnum<FieldDistribution>()),
-    _monitor_bases(getParam<bool>("monitor_bases")),
     _monitor_field(getParam<bool>("monitor_field")),
     _Gaussian_gen(ENGINE, GAUSSIAN_DIST)
 {
@@ -87,33 +84,15 @@ KLExpansionAction::act()
 {
   if (_current_task == "add_aux_variable")
   {
-    if (_monitor_bases)
-      for (unsigned int i = 0; i < _num_bases; i++)
-        _problem->addAuxVariable("basis_" + std::to_string(i), _fe_type);
     if (_monitor_field)
-      _problem->addAuxVariable(getParam<std::string>("field_name"), _fe_type);
+      _problem->addAuxVariable(_field_name, _fe_type);
   }
   else if (_current_task == "add_aux_kernel")
   {
-    if (_monitor_bases)
-      for (unsigned int i = 0; i < _num_bases; i++)
-      {
-        std::string type = "FunctionAux";
-        std::string name = "basis_" + std::to_string(i);
-        InputParameters aux_params = _factory.getValidParams(type);
-        aux_params.set<AuxVariableName>("variable") = name;
-        aux_params.set<FunctionName>("function") = name;
-        // Set the execute options
-        ExecFlagEnum execute_options = MooseUtils::getDefaultExecFlagEnum();
-        execute_options = {EXEC_INITIAL};
-        aux_params.set<ExecFlagEnum>("execute_on") = execute_options;
-        aux_params.applyParameters(parameters());
-        _problem->addAuxKernel(type, name, aux_params);
-      }
     if (_monitor_field)
     {
       std::string type = "FunctionAux";
-      std::string name = getParam<std::string>("field_name");
+      std::string name = _field_name;
       InputParameters aux_params = _factory.getValidParams(type);
       aux_params.set<AuxVariableName>("variable") = name;
       aux_params.set<FunctionName>("function") = name;
@@ -184,10 +163,13 @@ KLExpansionAction::addFunctionInterpolator()
     std::string type = "PiecewiseMultilinear";
     std::string name = "basis_" + std::to_string(i);
     _functions[i] = name;
-    InputParameters interpolator_params = _factory.getValidParams(type);
-    interpolator_params.set<FileName>("data_file") = _file_name + std::to_string(i);
-    interpolator_params.applyParameters(parameters());
-    _problem->addFunction(type, name, interpolator_params);
+    if (!_problem->hasFunction(name))
+    {
+      InputParameters interpolator_params = _factory.getValidParams(type);
+      interpolator_params.set<FileName>("data_file") = _file_name + std::to_string(i);
+      interpolator_params.applyParameters(parameters());
+      _problem->addFunction(type, name, interpolator_params);
+    }
   }
 }
 
@@ -202,7 +184,7 @@ KLExpansionAction::addFieldGenerator()
   else
     mooseError("unknown filed distribution type");
 
-  std::string name = getParam<std::string>("field_name");
+  std::string name = _field_name;
   InputParameters field_params = _factory.getValidParams(type);
   field_params.set<std::vector<FunctionName>>("functions") = _functions;
   field_params.set<std::vector<Real>>("w") = _Gaussian_weights;
