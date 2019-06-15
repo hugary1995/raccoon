@@ -4,8 +4,8 @@ clc
 %% Field parameters
 
 % Correlation length
-Lcx = 5;
-Lcy = 5;
+Lcx = 4;
+Lcy = 4;
 % Boolean for periodicity
 XPeriodic = true;
 YPeriodic = true;
@@ -16,13 +16,13 @@ tol = 0.1;
 
 % Dimension of mesh
 X1 = 0;
-X2 = 100;
+X2 = 20;
 Y1 = 0;
-Y2 = 100;
+Y2 = 20;
 
 % Discretization of the mesh
-Nx = 101;
-Ny = 101;
+Nx = 41;
+Ny = 41;
 
 % Generate mesh
 Np = Nx*Ny;

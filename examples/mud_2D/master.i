@@ -65,5 +65,6 @@
 
 [Executioner]
   type = Transient
-  dt = 1e-4
+  dt = 1e-3
+  end_time = 0.22
 []

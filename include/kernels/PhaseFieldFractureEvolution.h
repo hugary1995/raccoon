@@ -29,7 +29,12 @@ protected:
   const ADMaterialProperty(Real) & _dg_dd;
   const MaterialPropertyName _w_name;
   const ADMaterialProperty(Real) & _dw_dd;
-  const MaterialProperty<Real> & _D;
+  const bool _lag;
+  const bool _D_material_coupled;
+  const bool _D_variable_coupled;
+  const ADMaterialProperty(Real) * _D_mat;
+  const MaterialProperty<Real> * _D_mat_old;
+  const VariableValue * _D_var;
 
   usingKernelMembers;
 };
