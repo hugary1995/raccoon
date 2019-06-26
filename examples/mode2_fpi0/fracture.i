@@ -1,6 +1,6 @@
 [Mesh]
   type = FileMesh
-  file = 'gold/geo.e'
+  file = 'gold/geo.msh'
 []
 
 [Variables]
@@ -41,7 +41,7 @@
   [./fracture_energy_barrier]
     type = StationaryGenericFunctionMaterial
     prop_names = 'b'
-    prop_values = '0.005'
+    prop_values = '14.88'
   [../]
   [./local_dissipation]
     type = LinearLocalDissipation
@@ -49,13 +49,14 @@
   [../]
   [./fracture_properties]
     type = FractureMaterial
-    Gc = 1e-3
-    L = 0.02
+    Gc = 2.7
+    L = 0.0075
     local_dissipation_norm = 8/3
   [../]
   [./degradation]
     type = LorentzDegradation
     d = d
+    residual_degradation = 1e-03
   [../]
 []
 
@@ -64,7 +65,7 @@
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -snes_type'
   petsc_options_value = 'lu vinewtonrsls'
-  dt = 5e-7
+  dt = 1e-5
 
   nl_abs_tol = 1e-06
   nl_rel_tol = 1e-06

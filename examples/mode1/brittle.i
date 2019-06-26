@@ -21,14 +21,14 @@
   [../]
 []
 
-[Bounds]
-  [./irreversibility]
-    type = Irreversibility
-    variable = bounds_dummy
-    bounded_var = d
-    execute_on = 'TIMESTEP_BEGIN'
-  [../]
-[]
+# [Bounds]
+#   [./irreversibility]
+#     type = Irreversibility
+#     variable = bounds_dummy
+#     bounded_var = d
+#     execute_on = 'TIMESTEP_BEGIN'
+#   [../]
+# []
 
 [Kernels]
   [./solid_x]

@@ -82,9 +82,8 @@
     type = ADComputeSmallStrain
   [../]
   [./stress]
-    type = SmallStrainDegradedPK2Stress_NoSplit
+    type = SmallStrainDegradedPK2Stress_StressSpectral
     d = d
-    d_crit = 0.95
     history = false
   [../]
   [./fracture_energy_barrier]
@@ -106,7 +105,6 @@
     type = LorentzDegradation
     d = d
     lag_degradation = true
-    residual_degradation = 1e-03
   [../]
 []
 

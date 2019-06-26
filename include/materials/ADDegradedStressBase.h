@@ -8,9 +8,14 @@
 
 #define usingDegradedStressBaseMembers                                                             \
   usingComputeStressBaseMembers;                                                                   \
+  using ADDegradedStressBase<compute_stage>::computeQpHistory;                                     \
+  using ADDegradedStressBase<compute_stage>::computeQpTractionFreeStress;                          \
   using ADDegradedStressBase<compute_stage>::Macaulay;                                             \
   using ADDegradedStressBase<compute_stage>::dMacaulay;                                            \
   using ADDegradedStressBase<compute_stage>::_elasticity_tensor;                                   \
+  using ADDegradedStressBase<compute_stage>::_d;                                                   \
+  using ADDegradedStressBase<compute_stage>::_grad_d;                                              \
+  using ADDegradedStressBase<compute_stage>::_d_crit;                                              \
   using ADDegradedStressBase<compute_stage>::_g_name;                                              \
   using ADDegradedStressBase<compute_stage>::_g;                                                   \
   using ADDegradedStressBase<compute_stage>::_history;                                             \
@@ -32,17 +37,33 @@ public:
   ADDegradedStressBase(const InputParameters & parameters);
 
 protected:
+  virtual void computeQpProperties() override;
+  virtual void initQpStatefulProperties() override;
+  virtual void computeQpStress() = 0;
+
+  /// initialize stateful elastic driving energy
+  virtual ADReal computeQpHistory(const ADReal & E_el_pos);
+
+  /// enforce traction-free boundary condition
+  virtual void computeQpTractionFreeStress();
+
   /// Macaulay bracket operator
   virtual ADReal Macaulay(ADReal x);
 
   /// derivative of Macaulay bracket with respect to its operand
   virtual ADReal dMacaulay(ADReal x);
 
-  /// initialize stateful elastic driving energy
-  virtual void initQpStatefulProperties() override;
-
   /// Elasticity tensor material property
   const ADMaterialProperty(RankFourTensor) & _elasticity_tensor;
+
+  /// damage value
+  const ADVariableValue & _d;
+
+  /// damage gradient
+  const ADVariableGradient & _grad_d;
+
+  /// critical damage value for enforcing the traction-free boundary condition
+  const Real _d_crit;
 
   /// degradation name
   const MaterialPropertyName _g_name;
@@ -70,4 +91,3 @@ protected:
 
   usingComputeStressBaseMembers;
 };
-

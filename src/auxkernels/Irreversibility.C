@@ -15,7 +15,7 @@ validParams<Irreversibility>()
 {
   InputParameters params = validParams<AuxKernel>();
   params.addRequiredCoupledVar("bounded_var", "variable to be bounded");
-  params.addRequiredCoupledVar("lower", "lower bound");
+  params.addRequiredParam<VariableName>("lower", "lower bound");
   params.addParam<Real>("upper", 1.0, "upper bound");
   return params;
 }
@@ -25,7 +25,7 @@ Irreversibility::Irreversibility(const InputParameters & parameters)
     _upper_vector(_nl_sys.getVector("upper_bound")),
     _lower_vector(_nl_sys.getVector("lower_bound")),
     _bounded_var_num(coupled("bounded_var")),
-    _lower_bound(coupledValue("lower")),
+    _d_var(_subproblem.getStandardVariable(_tid, getParam<VariableName>("lower"))),
     _upper_bound(getParam<Real>("upper"))
 {
   if (!isNodal())
@@ -45,10 +45,11 @@ Irreversibility::computeValue()
 {
   if (_current_node->n_dofs(_nl_sys.number(), _bounded_var_num) > 0)
   {
+    Real lower_bound = _d_var.getNodalValueOld(*_current_node);
     // The zero is for the component, this will only work for Lagrange variables!
     dof_id_type dof = _current_node->dof_number(_nl_sys.number(), _bounded_var_num, 0);
     _upper_vector.set(dof, _upper_bound);
-    _lower_vector.set(dof, _lower_bound[_qp]);
+    _lower_vector.set(dof, lower_bound);
   }
 
   return 0.0;

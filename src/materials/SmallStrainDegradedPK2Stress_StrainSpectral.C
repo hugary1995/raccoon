@@ -56,11 +56,9 @@ SmallStrainDegradedPK2Stress_StrainSpectral<compute_stage>::computeQpStress()
 
   // enforce irreversibility using history approach
   if (_E_el_pos_old)
-  {
-    E_el_pos = std::max(E_el_pos, (*_E_el_pos_old)[_qp]);
-    E_el_pos = std::max(E_el_pos, _b[_qp]);
-  }
+    E_el_pos = computeQpHistory(E_el_pos);
 
-  // store the positive elastic energy so that it becomes the old value in the next step
+  // store the positive elastic energy
+  // note that it becomes the old value in the next step
   _E_el_pos[_qp] = E_el_pos;
 }

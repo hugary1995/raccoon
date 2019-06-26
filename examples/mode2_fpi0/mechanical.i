@@ -4,7 +4,7 @@
 
 [Mesh]
   type = FileMesh
-  file = 'gold/geo.e'
+  file = 'gold/geo.msh'
 []
 
 [MultiApps]
@@ -87,45 +87,45 @@
 []
 
 [BCs]
-  [./ydisp]
+  [./xdisp]
     type = ScalarDirichletBC
-    variable = disp_y
-    boundary = 2
+    variable = disp_x
+    boundary = 'top'
     scalar_var = load
   [../]
   [./yfix]
     type = DirichletBC
     variable = disp_y
-    boundary = 1
+    boundary = 'top bottom left right'
     value = 0
   [../]
   [./xfix]
     type = DirichletBC
     variable = disp_x
-    boundary = '1 2'
+    boundary = 'bottom'
     value = 0
   [../]
 []
 
 [Materials]
   [./elasticity_tensor]
-    type = ComputeElasticityTensor
-    C_ijkl = '120.0 80.0'
-    fill_method = symmetric_isotropic
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 2.1e5
+    poissons_ratio = 0.3
   [../]
   [./strain]
     type = ADComputeSmallStrain
   [../]
   [./stress]
-    type = SmallStrainDegradedPK2Stress_NoSplit
+    type = SmallStrainDegradedPK2Stress_StrainSpectral
     d = d
-    d_crit = 0.95
+    d_crit = 0.6
     history = false
   [../]
   [./fracture_energy_barrier]
     type = GenericFunctionMaterial
     prop_names = 'b'
-    prop_values = '0.005'
+    prop_values = '14.88'
   [../]
   [./local_dissipation]
     type = LinearLocalDissipation
@@ -133,13 +133,14 @@
   [../]
   [./fracture_properties]
     type = FractureMaterial
-    Gc = 1e-3
-    L = 0.02
+    Gc = 2.7
+    L = 0.0075
     local_dissipation_norm = 8/3
   [../]
   [./degradation]
     type = LorentzDegradation
     d = d
+    residual_degradation = 1e-03
   [../]
 []
 
@@ -148,7 +149,7 @@
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type'
   petsc_options_value = 'lu'
-  dt = 5e-7
+  dt = 1e-5
 
   nl_abs_tol = 1e-10
   nl_rel_tol = 1e-06

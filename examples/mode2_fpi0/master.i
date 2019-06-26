@@ -4,7 +4,7 @@
 
 [Mesh]
   type = FileMesh
-  file = 'gold/geo.e'
+  file = 'gold/geo.msh'
 []
 
 [MultiApps]
@@ -15,7 +15,7 @@
     execute_on = 'TIMESTEP_END'
     sub_cycling = true
     detect_steady_state = true
-    steady_state_tol = 1e-06
+    steady_state_tol = 1e-03
   [../]
 []
 
@@ -65,6 +65,6 @@
 
 [Executioner]
   type = Transient
-  dt = 1e-5
-  end_time = 5e-3
+  dt = 1e-4
+  end_time = 2e-2
 []
