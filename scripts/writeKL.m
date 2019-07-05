@@ -4,25 +4,25 @@ clc
 %% Field parameters
 
 % Correlation length
-Lc1 = 20;
-Lc2 = 2;
+Lc1 = 10;
+Lc2 = 10;
 % orientation
 angle = 0;
 e1 = [cos(angle);sin(angle)];
 e2 = [-sin(angle);cos(angle)];
 % Boolean for periodicity
-XPeriodic = true;
-YPeriodic = true;
+XPeriodic = false;
+YPeriodic = false;
 % tolerance
 tol = 0.1;
 
 %% Mesh
 
 % Dimension of mesh
-X1 = 0;
-X2 = 100;
-Y1 = 0;
-Y2 = 100;
+X1 = -50;
+X2 = 50;
+Y1 = -50;
+Y2 = 50;
 
 % Discretization of the mesh
 Nx = 101;
