@@ -19,12 +19,12 @@ DegradationBase<compute_stage>::DegradationBase(const InputParameters & paramete
   : ADMaterial<compute_stage>(parameters),
     _d(adCoupledValue("d")),
     _d_old(coupledValueOld("d")),
-    _g_name(adGetParam<MaterialPropertyName>("degradation_name")),
-    _g(adDeclareADProperty<Real>(_g_name)),
-    _dg_dd(adDeclareADProperty<Real>(
+    _g_name(getParam<MaterialPropertyName>("degradation_name")),
+    _g(declareADProperty<Real>(_g_name)),
+    _dg_dd(declareADProperty<Real>(
         derivativePropertyNameFirst(_g_name, this->getVar("d", 0)->name()))),
-    _eta(adGetParam<Real>("residual_degradation")),
-    _lag(adGetParam<bool>("lag_degradation"))
+    _eta(getParam<Real>("residual_degradation")),
+    _lag(getParam<bool>("lag_degradation"))
 {
 }
 

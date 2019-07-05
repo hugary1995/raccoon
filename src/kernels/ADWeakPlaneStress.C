@@ -22,14 +22,14 @@ defineADValidParams(
 template <ComputeStage compute_stage>
 ADWeakPlaneStress<compute_stage>::ADWeakPlaneStress(const InputParameters & parameters)
   : ADKernel<compute_stage>(parameters),
-    _base_name(isParamValid("base_name") ? adGetParam<std::string>("base_name") + "_" : ""),
-    _stress(adGetADMaterialProperty<RankTwoTensor>(_base_name + "stress")),
-    _direction(adGetParam<MooseEnum>("out_of_plane_strain_direction"))
+    _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
+    _stress(getADMaterialProperty<RankTwoTensor>(_base_name + "stress")),
+    _direction(getParam<MooseEnum>("out_of_plane_strain_direction"))
 {
 }
 
 template <ComputeStage compute_stage>
-ADResidual
+ADReal
 ADWeakPlaneStress<compute_stage>::computeQpResidual()
 {
   return _stress[_qp](_direction, _direction) * _test[_i][_qp];

@@ -25,14 +25,14 @@ defineADValidParams(
 template <ComputeStage compute_stage>
 CNHDegradedPK1Stress<compute_stage>::CNHDegradedPK1Stress(const InputParameters & parameters)
   : ADComputeStressBase<compute_stage>(parameters),
-    _elasticity_tensor(adGetADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
-    _F(adGetADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
-    _g_name(adGetParam<MaterialPropertyName>("degradation_name")),
-    _g(adGetADMaterialProperty<Real>(_g_name)),
-    _history(adGetParam<bool>("history")),
-    _E_el_name(adGetParam<MaterialPropertyName>("elastic_energy_name")),
-    _E_el_pos(adDeclareADProperty<Real>(_E_el_name)),
-    _E_el_pos_old(adGetMaterialPropertyOld<Real>(_E_el_name))
+    _elasticity_tensor(getADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
+    _F(getADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
+    _g_name(getParam<MaterialPropertyName>("degradation_name")),
+    _g(getADMaterialProperty<Real>(_g_name)),
+    _history(getParam<bool>("history")),
+    _E_el_name(getParam<MaterialPropertyName>("elastic_energy_name")),
+    _E_el_pos(declareADProperty<Real>(_E_el_name)),
+    _E_el_pos_old(getMaterialPropertyOld<Real>(_E_el_name))
 {
 }
 

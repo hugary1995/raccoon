@@ -21,7 +21,7 @@ public:
   PFBrittleFractureADTest(const InputParameters & parameters);
 
 protected:
-  virtual ADResidual computeQpResidual() override;
+  virtual ADReal computeQpResidual() override;
 
   const MaterialProperty<Real> & _kappa;
   const MaterialProperty<Real> & _M;

@@ -32,7 +32,7 @@ Irreversibility::Irreversibility(const InputParameters & parameters)
     mooseError("Irreversibility must be used on a nodal auxiliary variable!");
 
   const std::vector<std::string> & solver_options =
-      _app.getExecutioner()->getParam<std::vector<std::string>>("petsc_options_value");
+      _app.getExecutioner()->getParamTempl<std::vector<std::string>>("petsc_options_value");
   if (std::find(solver_options.begin(), solver_options.end(), "vinewtonrsls") ==
           solver_options.end() &&
       std::find(solver_options.begin(), solver_options.end(), "vinewtonssls") ==

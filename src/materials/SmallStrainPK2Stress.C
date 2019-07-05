@@ -17,9 +17,9 @@ defineADValidParams(
 template <ComputeStage compute_stage>
 SmallStrainPK2Stress<compute_stage>::SmallStrainPK2Stress(const InputParameters & parameters)
   : ADComputeStressBase<compute_stage>(parameters),
-    _elasticity_tensor(adGetADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
-    _E_el_name(adGetParam<MaterialPropertyName>("elastic_energy_name")),
-    _E_el_pos(adDeclareADProperty<Real>(_E_el_name))
+    _elasticity_tensor(getADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
+    _E_el_name(getParam<MaterialPropertyName>("elastic_energy_name")),
+    _E_el_pos(declareADProperty<Real>(_E_el_name))
 {
 }
 

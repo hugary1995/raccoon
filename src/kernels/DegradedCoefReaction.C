@@ -15,12 +15,12 @@ defineADValidParams(DegradedCoefReaction,
 
 template <ComputeStage compute_stage>
 DegradedCoefReaction<compute_stage>::DegradedCoefReaction(const InputParameters & parameters)
-  : ADCoefReaction<compute_stage>(parameters), _g(adGetADMaterialProperty<Real>("degradation_name"))
+  : ADCoefReaction<compute_stage>(parameters), _g(getADMaterialProperty<Real>("degradation_name"))
 {
 }
 
 template <ComputeStage compute_stage>
-ADResidual
+ADReal
 DegradedCoefReaction<compute_stage>::computeQpResidual()
 {
   return _g[_qp] * ADCoefReaction<compute_stage>::computeQpResidual();

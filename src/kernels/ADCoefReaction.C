@@ -12,12 +12,12 @@ defineADValidParams(ADCoefReaction,
 
 template <ComputeStage compute_stage>
 ADCoefReaction<compute_stage>::ADCoefReaction(const InputParameters & parameters)
-  : ADKernel<compute_stage>(parameters), _coef(adGetParam<Real>("coefficient"))
+  : ADKernel<compute_stage>(parameters), _coef(getParam<Real>("coefficient"))
 {
 }
 
 template <ComputeStage compute_stage>
-ADResidual
+ADReal
 ADCoefReaction<compute_stage>::computeQpResidual()
 {
   return _coef * _u[_qp];

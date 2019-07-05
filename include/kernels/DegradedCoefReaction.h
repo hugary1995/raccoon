@@ -19,7 +19,7 @@ public:
   DegradedCoefReaction(const InputParameters & parameters);
 
 protected:
-  virtual ADResidual computeQpResidual() override;
+  virtual ADReal computeQpResidual() override;
 
   /// degradation
   const ADMaterialProperty(Real) & _g;

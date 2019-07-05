@@ -17,16 +17,16 @@ defineADValidParams(
 template <ComputeStage compute_stage>
 PFBrittleFractureADTest<compute_stage>::PFBrittleFractureADTest(const InputParameters & parameters)
   : ADKernel<compute_stage>(parameters),
-    _kappa(adGetMaterialProperty<Real>("kappa_name")),
-    _M(adGetMaterialProperty<Real>("mobility_name")),
-    _g_name(adGetParam<MaterialPropertyName>("degradation_name")),
-    _dg_dd(adGetADMaterialProperty<Real>(propertyNameFirst(_g_name, _var.name()))),
-    _E_el_pos_old(adGetMaterialPropertyOld<Real>("elastic_energy_name"))
+    _kappa(getMaterialProperty<Real>("kappa_name")),
+    _M(getMaterialProperty<Real>("mobility_name")),
+    _g_name(getParam<MaterialPropertyName>("degradation_name")),
+    _dg_dd(getADMaterialProperty<Real>(propertyNameFirst(_g_name, _var.name()))),
+    _E_el_pos_old(getMaterialPropertyOld<Real>("elastic_energy_name"))
 {
 }
 
 template <ComputeStage compute_stage>
-ADResidual
+ADReal
 PFBrittleFractureADTest<compute_stage>::computeQpResidual()
 {
   // diffusion

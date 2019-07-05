@@ -26,13 +26,13 @@ template <ComputeStage compute_stage>
 PhaseFieldFractureEvolution<compute_stage>::PhaseFieldFractureEvolution(
     const InputParameters & parameters)
   : ADKernel<compute_stage>(parameters),
-    _kappa(adGetMaterialProperty<Real>("kappa_name")),
-    _M(adGetMaterialProperty<Real>("mobility_name")),
-    _g_name(adGetParam<MaterialPropertyName>("degradation_name")),
-    _dg_dd(adGetADMaterialProperty<Real>(derivativePropertyNameFirst(_g_name, _var.name()))),
-    _w_name(adGetParam<MaterialPropertyName>("local_dissipation_name")),
-    _dw_dd(adGetADMaterialProperty<Real>(derivativePropertyNameFirst(_w_name, _var.name()))),
-    _lag(adGetParam<bool>("lag_driving_energy")),
+    _kappa(getMaterialProperty<Real>("kappa_name")),
+    _M(getMaterialProperty<Real>("mobility_name")),
+    _g_name(getParam<MaterialPropertyName>("degradation_name")),
+    _dg_dd(getADMaterialProperty<Real>(derivativePropertyNameFirst(_g_name, _var.name()))),
+    _w_name(getParam<MaterialPropertyName>("local_dissipation_name")),
+    _dw_dd(getADMaterialProperty<Real>(derivativePropertyNameFirst(_w_name, _var.name()))),
+    _lag(getParam<bool>("lag_driving_energy")),
     _D_material_coupled(isParamValid("driving_energy_name")),
     _D_variable_coupled(isParamValid("driving_energy_var")),
     _D_mat(nullptr),
@@ -43,15 +43,15 @@ PhaseFieldFractureEvolution<compute_stage>::PhaseFieldFractureEvolution(
     _D_var = &coupledValue("driving_energy_var");
   else if (!_D_variable_coupled && _D_material_coupled)
     if (_lag)
-      _D_mat_old = &adGetMaterialPropertyOld<Real>("driving_energy_name");
+      _D_mat_old = &getMaterialPropertyOld<Real>("driving_energy_name");
     else
-      _D_mat = &adGetADMaterialProperty<Real>("driving_energy_name");
+      _D_mat = &getADMaterialProperty<Real>("driving_energy_name");
   else
     mooseError("Driving energy should be either provided as a material property or an auxiliary "
                "variable, not both");
 }
 template <ComputeStage compute_stage>
-ADResidual
+ADReal
 PhaseFieldFractureEvolution<compute_stage>::computeQpResidual()
 {
   ADReal D;

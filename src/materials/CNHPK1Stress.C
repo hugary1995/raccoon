@@ -14,8 +14,8 @@ defineADValidParams(
 template <ComputeStage compute_stage>
 CNHPK1Stress<compute_stage>::CNHPK1Stress(const InputParameters & parameters)
   : ADComputeStressBase<compute_stage>(parameters),
-    _elasticity_tensor(adGetADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
-    _F(adGetADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
+    _elasticity_tensor(getADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
+    _F(getADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
 {
 }
 

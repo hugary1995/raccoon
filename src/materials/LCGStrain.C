@@ -13,7 +13,7 @@ defineADValidParams(LCGStrain,
 template <ComputeStage compute_stage>
 LCGStrain<compute_stage>::LCGStrain(const InputParameters & parameters)
   : ADComputeStrainBase<compute_stage>(parameters),
-    _F(adDeclareADProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
+    _F(declareADProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
 {
 }
 

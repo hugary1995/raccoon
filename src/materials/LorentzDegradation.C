@@ -20,9 +20,9 @@ defineADValidParams(
 template <ComputeStage compute_stage>
 LorentzDegradation<compute_stage>::LorentzDegradation(const InputParameters & parameters)
   : DegradationBase<compute_stage>(parameters),
-    _M(adGetMaterialProperty<Real>("mobility_name")),
-    _b(adGetMaterialProperty<Real>("fracture_energy_barrier_name")),
-    _p(adGetParam<Real>("p"))
+    _M(getMaterialProperty<Real>("mobility_name")),
+    _b(getMaterialProperty<Real>("fracture_energy_barrier_name")),
+    _p(getParam<Real>("p"))
 {
 }
 

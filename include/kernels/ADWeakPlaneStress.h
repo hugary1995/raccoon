@@ -28,7 +28,7 @@ public:
   ADWeakPlaneStress(const InputParameters & parameters);
 
 protected:
-  ADResidual computeQpResidual() override;
+  ADReal computeQpResidual() override;
 
   const std::string _base_name;
 

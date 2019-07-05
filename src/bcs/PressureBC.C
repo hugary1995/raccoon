@@ -20,7 +20,7 @@ template <ComputeStage compute_stage>
 PressureBC<compute_stage>::PressureBC(const InputParameters & parameters)
   : ADIntegratedBC<compute_stage>(parameters),
     _function(getFunction("function")),
-    _component(adGetParam<unsigned int>("component"))
+    _component(getParam<unsigned int>("component"))
 {
 }
 

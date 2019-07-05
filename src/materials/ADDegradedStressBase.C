@@ -29,18 +29,18 @@ defineADValidParams(
 template <ComputeStage compute_stage>
 ADDegradedStressBase<compute_stage>::ADDegradedStressBase(const InputParameters & parameters)
   : ADComputeStressBase<compute_stage>(parameters),
-    _elasticity_tensor(adGetMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
+    _elasticity_tensor(getMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
     _d(adCoupledValue("d")),
     _grad_d(adCoupledGradient("d")),
-    _d_crit(adGetParam<Real>("d_crit")),
-    _g_name(adGetParam<MaterialPropertyName>("degradation_name")),
-    _g(adGetADMaterialProperty<Real>(_g_name)),
-    _history(adGetParam<bool>("history")),
-    _E_el_name(adGetParam<MaterialPropertyName>("elastic_energy_name")),
-    _E_el_pos(adDeclareADProperty<Real>(_E_el_name)),
-    _E_el_pos_old(_history ? &adGetMaterialPropertyOld<Real>(_E_el_name) : NULL),
-    _b_name(adGetParam<MaterialPropertyName>("fracture_energy_barrier_name")),
-    _b(adGetADMaterialProperty<Real>(_b_name))
+    _d_crit(getParam<Real>("d_crit")),
+    _g_name(getParam<MaterialPropertyName>("degradation_name")),
+    _g(getADMaterialProperty<Real>(_g_name)),
+    _history(getParam<bool>("history")),
+    _E_el_name(getParam<MaterialPropertyName>("elastic_energy_name")),
+    _E_el_pos(declareADProperty<Real>(_E_el_name)),
+    _E_el_pos_old(_history ? &getMaterialPropertyOld<Real>(_E_el_name) : NULL),
+    _b_name(getParam<MaterialPropertyName>("fracture_energy_barrier_name")),
+    _b(getADMaterialProperty<Real>(_b_name))
 {
 }
 

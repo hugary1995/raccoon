@@ -17,10 +17,10 @@ defineADValidParams(
 template <ComputeStage compute_stage>
 SVKPK1Stress<compute_stage>::SVKPK1Stress(const InputParameters & parameters)
   : ADComputeStressBase<compute_stage>(parameters),
-    _elasticity_tensor(adGetADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
-    _F(adGetADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
-    _cauchy_stress(adGetParam<bool>("cauchy_stress")
-                       ? &adDeclareADProperty<RankTwoTensor>(_base_name + "cauchy_stress")
+    _elasticity_tensor(getADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
+    _F(getADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
+    _cauchy_stress(getParam<bool>("cauchy_stress")
+                       ? &declareADProperty<RankTwoTensor>(_base_name + "cauchy_stress")
                        : NULL)
 {
 }

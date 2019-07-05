@@ -24,9 +24,9 @@ FollowerForceBC<compute_stage>::FollowerForceBC(const InputParameters & paramete
     _function_x(getFunction("function_x")),
     _function_y(getFunction("function_y")),
     _function_z(getFunction("function_z")),
-    _component(adGetParam<unsigned int>("component")),
-    _base_name(this->isParamValid("base_name") ? adGetParam<std::string>("base_name") + "_" : ""),
-    _F(adGetADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
+    _component(getParam<unsigned int>("component")),
+    _base_name(this->isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
+    _F(getADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
 {
 }
 

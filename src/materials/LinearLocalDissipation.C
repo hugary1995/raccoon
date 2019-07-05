@@ -18,9 +18,9 @@ template <ComputeStage compute_stage>
 LinearLocalDissipation<compute_stage>::LinearLocalDissipation(const InputParameters & parameters)
   : ADMaterial<compute_stage>(parameters),
     _d(adCoupledValue("d")),
-    _w_name(adGetParam<MaterialPropertyName>("local_dissipation_name")),
-    _w(adDeclareADProperty<Real>(_w_name)),
-    _dw_dd(adDeclareADProperty<Real>(
+    _w_name(getParam<MaterialPropertyName>("local_dissipation_name")),
+    _w(declareADProperty<Real>(_w_name)),
+    _dw_dd(declareADProperty<Real>(
         derivativePropertyNameFirst(_w_name, this->getVar("d", 0)->name())))
 {
 }
