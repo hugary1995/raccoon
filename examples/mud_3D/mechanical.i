@@ -87,6 +87,12 @@
     value = 0
     boundary = 'bottom'
   [../]
+  [./z_fix]
+    type = DirichletBC
+    variable = disp_z
+    value = 0
+    boundary = 'bottom'
+  [../]
 []
 
 [Materials]
