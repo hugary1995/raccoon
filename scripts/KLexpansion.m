@@ -1,4 +1,4 @@
-function [d,v] = KLexpansion(Lcx,Lcy,X,Y,Np,XPeriodic,YPeriodic,tol)
+function [d,v] = KLexpansion(e1,e2,Lc1,Lc2,X,Y,Np,XPeriodic,YPeriodic,tol)
 %%
 
 disp('------------------------------------------------')
@@ -11,50 +11,30 @@ Ly = max(Y(:))-min(Y(:));
 
 %% Correlation function
 
-  C = @(tau, Lc) exp(-pi*tau^2/4/Lc^2);
+C = @(tau, Lc) exp(-pi*tau^2/4/Lc^2);
 
 %% Correlation matrix
 
 disp('setting up correlation matrix...')
 R = eye(Np,Np);
-count = 0;
-progress = 0;
-p_step = 0.01;
-nstars = 0;
-nspaces = 0;
-fprintf('     ');
 
-for i = 1:Np
-  for j = (i+1):Np
+parfor i = 1:Np
+  for j = 1:Np
     correlation = zeros(1,5);
-    correlation(1) = abs(C(X(i)-X(j),Lcx)*C(Y(i)-Y(j),Lcy));
+    correlation(1) = abs(C(e1'*[X(i)-X(j);Y(i)-Y(j)],Lc1)*C(e2'*[X(i)-X(j);Y(i)-Y(j)],Lc2));
     % If the field is periodic in X, we create two phantom meshes on
     % left and right and choose the largest correlation
     if XPeriodic
-      correlation(2) = abs(C(X(i)-X(j)-Lx,Lcx)*C(Y(i)-Y(j),Lcy));
-      correlation(3) = abs(C(X(i)-X(j)+Lx,Lcx)*C(Y(i)-Y(j),Lcy));
+      correlation(2) = abs(C(e1'*[X(i)-X(j)-Lx;Y(i)-Y(j)],Lc1)*C(e2'*[X(i)-X(j)-Lx;Y(i)-Y(j)],Lc2));
+      correlation(3) = abs(C(e1'*[X(i)-X(j)+Lx;Y(i)-Y(j)],Lc1)*C(e2'*[X(i)-X(j)+Lx;Y(i)-Y(j)],Lc2));
     end
     if YPeriodic
-      correlation(4) = abs(C(X(i)-X(j),Lcx)*C(Y(i)-Y(j)-Ly,Lcy));
-      correlation(5) = abs(C(X(i)-X(j),Lcx)*C(Y(i)-Y(j)+Ly,Lcy));
+      correlation(4) = abs(C(e1'*[X(i)-X(j);Y(i)-Y(j)-Ly],Lc1)*C(e2'*[X(i)-X(j);Y(i)-Y(j)-Ly],Lc2));
+      correlation(5) = abs(C(e1'*[X(i)-X(j);Y(i)-Y(j)+Ly],Lc1)*C(e2'*[X(i)-X(j);Y(i)-Y(j)+Ly],Lc2));
     end
     R(i,j) = max(correlation);
-    count = count + 1;
-  end
-  % print progress bar, doesn't do any real work
-  if 2*count/Np/(Np-1) >= (progress + p_step)
-    fprintf(repmat('\b',1,nstars+nspaces+5));
-    progress = progress + p_step;
-    nstars = round(50*progress);
-    nspaces = round(50*(1-progress));
-    fprintf('||');
-    fprintf(repmat('>',1,nstars));
-    fprintf(repmat(' ',1,nspaces));
-    fprintf('||\n');
-    pause(.01);
   end
 end
-R = R + R' - diag(diag(R));
 
 %% Find KL basis
 

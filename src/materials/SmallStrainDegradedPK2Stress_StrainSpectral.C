@@ -10,7 +10,7 @@ defineADValidParams(
     SmallStrainDegradedPK2Stress_StrainSpectral,
     ADDegradedStressBase,
     params.addClassDescription("Compute degraded stress following small deformation elasticity "
-                               "without active/inactive split"););
+                               "with a spectra-based active/inactive split"););
 
 template <ComputeStage compute_stage>
 SmallStrainDegradedPK2Stress_StrainSpectral<
@@ -24,8 +24,8 @@ void
 SmallStrainDegradedPK2Stress_StrainSpectral<compute_stage>::computeQpStress()
 {
   // Isotropic elasticity is assumed and should be enforced
-  ADReal lambda = _elasticity_tensor[_qp](0, 0, 1, 1);
-  ADReal mu = _elasticity_tensor[_qp](0, 1, 0, 1);
+  const Real lambda = _elasticity_tensor[_qp](0, 0, 1, 1);
+  const Real mu = _elasticity_tensor[_qp](0, 1, 0, 1);
 
   // spectral decomposition
   ADRankTwoTensor E = _mechanical_strain[_qp];

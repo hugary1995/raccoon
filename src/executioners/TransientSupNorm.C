@@ -28,5 +28,10 @@ TransientSupNorm::relativeSolutionDifferenceNorm()
   _sln_diff = current_solution;
   _sln_diff -= old_solution;
 
+  Real norm = _sln_diff.linfty_norm();
+
+  if (std::isnan(norm))
+    return 0.0;
+
   return _sln_diff.linfty_norm() * _dt;
 }

@@ -54,7 +54,7 @@ protected:
   virtual ADReal dMacaulay(ADReal x);
 
   /// Elasticity tensor material property
-  const ADMaterialProperty(RankFourTensor) & _elasticity_tensor;
+  const MaterialProperty<RankFourTensor> & _elasticity_tensor;
 
   /// damage value
   const ADVariableValue & _d;

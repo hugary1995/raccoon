@@ -29,7 +29,7 @@ defineADValidParams(
 template <ComputeStage compute_stage>
 ADDegradedStressBase<compute_stage>::ADDegradedStressBase(const InputParameters & parameters)
   : ADComputeStressBase<compute_stage>(parameters),
-    _elasticity_tensor(adGetADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
+    _elasticity_tensor(adGetMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
     _d(adCoupledValue("d")),
     _grad_d(adCoupledGradient("d")),
     _d_crit(adGetParam<Real>("d_crit")),
