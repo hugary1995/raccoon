@@ -29,7 +29,6 @@ associateSyntaxInner(Syntax & syntax, ActionFactory & /*action_factory*/)
   registerSyntax("BrittleFractureAction", "Modules/PhaseFieldFracture/BrittleFracture/*");
   registerSyntax("CohesiveFractureAction", "Modules/PhaseFieldFracture/CohesiveFracture/*");
   registerSyntax("ElasticCouplingAction", "Modules/PhaseFieldFracture/ElasticCoupling/*");
-  registerSyntax("KLExpansionAction", "Modules/KLExpansion/*");
 }
 
 void
