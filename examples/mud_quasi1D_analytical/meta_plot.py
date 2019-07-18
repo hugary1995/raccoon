@@ -65,6 +65,16 @@ for R in Eratio:
     ax1.semilogx(L,driving,'o-')
     ax2.semilogx(L_analytical,driving_analytical)
 
+    with open(R+'_numerical.csv', mode='w') as numerical_file:
+        writer = csv.writer(numerical_file, delimiter=' ', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for i in range(len(L)):
+            writer.writerow([L[i],driving[i]])
+
+    with open(R+'_analytical.csv', mode='w') as analytical_file:
+        writer = csv.writer(analytical_file, delimiter=' ', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for i in range(len(L_analytical)):
+            writer.writerow([L_analytical[i],driving_analytical[i]])
+
 plt.ylim(0,2)
 
 ax1.set_xlabel("Dimensionless Fragment Size $\lambda/h$")

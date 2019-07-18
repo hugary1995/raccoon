@@ -4,8 +4,8 @@ clc
 %% Field parameters
 
 % Correlation length
-Lcr = 50;
-Lca = 4;
+Lcr = 4;
+Lca = 50;
 % tolerance
 tol = 0.1;
 

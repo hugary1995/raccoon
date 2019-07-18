@@ -24,5 +24,5 @@ protected:
   /// degradation
   const ADMaterialProperty(Real) & _g;
 
-  usingCoefReactionMembers;
+  usingCoefReactionMembers
 };

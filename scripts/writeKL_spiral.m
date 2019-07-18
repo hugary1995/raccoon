@@ -4,7 +4,7 @@ clc
 %% Field parameters
 
 % Correlation length
-Lc = 20;
+Lc = 500;
 % spiral parameter
 r0 = 658.6062;
 a = 0.06;
@@ -20,8 +20,8 @@ Y1 = -50;
 Y2 = 50;
 
 % Discretization of the mesh
-Nx = 151;
-Ny = 151;
+Nx = 51;
+Ny = 51;
 
 % Generate mesh
 Np = Nx*Ny;
