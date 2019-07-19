@@ -70,11 +70,18 @@
   [../]
 []
 
+[Functions]
+  [./Gc]
+    type = PiecewiseMultilinear
+    data_file = gold/Gc.txt
+  [../]
+[]
+
 [Materials]
   [./fracture_energy_barrier]
     type = StationaryGenericFunctionMaterial
     prop_names = 'b'
-    prop_values = '14.88'
+    prop_values = '0.005'
   [../]
   [./local_dissipation]
     type = LinearLocalDissipation
@@ -82,8 +89,8 @@
   [../]
   [./fracture_properties]
     type = FractureMaterial
-    Gc = 2.7
-    L = 0.015
+    Gc = Gc
+    L = 0.1
     local_dissipation_norm = 8/3
   [../]
   [./degradation]
@@ -98,7 +105,7 @@
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -snes_type'
   petsc_options_value = 'lu vinewtonrsls'
-  dt = 1e-5
+  dt = 5e-9
 
   nl_abs_tol = 1e-06
   nl_rel_tol = 1e-06

@@ -35,6 +35,18 @@
     order = CONSTANT
     family = MONOMIAL
   [../]
+  [./bounds_dummy]
+  [../]
+[]
+
+[Bounds]
+  [./T]
+    type = BoundsAux
+    variable = bounds_dummy
+    bounded_variable = T
+    lower = 300
+    execute_on = 'LINEAR TIMESTEP_BEGIN'
+  [../]
 []
 
 [AuxKernels]
@@ -46,16 +58,23 @@
   [../]
 []
 
+[Functions]
+  [./Gc]
+    type = PiecewiseMultilinear
+    data_file = gold/Gc.txt
+  [../]
+[]
+
 [Materials]
   [./density]
     type = GenericConstantMaterial
     prop_names = 'density'
-    prop_values = '8000'
+    prop_values = '2.6e-9'
   [../]
   [./elasticity_tensor]
     type = ComputeIsotropicElasticityTensor
-    youngs_modulus = 1e10
-    poissons_ratio = 0.345
+    youngs_modulus = 1.08e4
+    poissons_ratio = 0.3461
   [../]
   [./strain]
     type = ADComputeAxisymmetricRZSmallStrain
@@ -71,8 +90,8 @@
   [./thermal]
     type = HeatConductionMaterial
     temp = 'T'
-    thermal_conductivity = 2
-    specific_heat = 1e8
+    thermal_conductivity = 2.259
+    specific_heat = 8.343e8
   [../]
   [./thermal_expansion]
     type = ADComputeThermalExpansionEigenstrain
@@ -85,7 +104,7 @@
   [./fracture_energy_barrier]
     type = GenericFunctionMaterial
     prop_names = 'b'
-    prop_values = '14.88'
+    prop_values = '0.005'
   [../]
   [./local_dissipation]
     type = LinearLocalDissipation
@@ -93,8 +112,8 @@
   [../]
   [./fracture_properties]
     type = FractureMaterial
-    Gc = 2.7
-    L = 0.015
+    Gc = Gc
+    L = 0.1
     local_dissipation_norm = 8/3
   [../]
   [./degradation]
@@ -185,39 +204,21 @@
   [./Hsource]
     type = HeatSource
     variable = T
-    function = '100*t'
+    function = 'if (t<1e-7, 1e18*t, if (t<9e-7, 1e11, if (t<1e-6, 1e12-1e18*t, 0)))'
     block = source
   []
 []
 
 [BCs]
-  [./bottom_r_fix]
-    type = PresetBC
-    variable = disp_r
-    boundary = 'bottom'
-    value = 0
-  [../]
-  [./bottom_z_fix]
-    type = PresetBC
-    variable = disp_z
-    boundary = 'bottom'
-    value = 0
-  [../]
-  [./top_z_disp]
-    type = FunctionPresetBC
-    variable = disp_z
-    boundary = 'top'
-    function = -t
-  [../]
 []
 
 [Executioner]
   type = Transient
   solve_type = NEWTON
-  petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
-  petsc_options_value = 'lu       superlu_dist'
+  petsc_options_iname = '-pc_type -snes_type'
+  petsc_options_value = 'lu       vinewtonrsls'
 
-  dt = 0.1
+  dt = 5e-9
   end_time = 1
 
   automatic_scaling = false

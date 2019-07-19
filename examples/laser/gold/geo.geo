@@ -1,15 +1,15 @@
 // outer radius
-R = 10;
+R = 6.5;
 
 // height
-H = 30;
+H = 6.5;
 
 // sphere radius of the heat source
-r = 2;
+r = 0.2;
 
 // element characteristic length
-E = 1;
-e = 0.5;
+E = 0.1;
+e = 0.05;
 
 Point(1) = {0,0,0,E};
 Point(2) = {0,H-r,0,e};

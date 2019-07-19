@@ -4,8 +4,8 @@ clc
 %% Field parameters
 
 % Correlation length
-Lc1 = 10;
-Lc2 = 10;
+Lc1 = 0.5;
+Lc2 = 0.5;
 % orientation
 angle = 0;
 e1 = [cos(angle);sin(angle)];
@@ -15,18 +15,27 @@ XPeriodic = false;
 YPeriodic = false;
 % tolerance
 tol = 0.1;
+% quantity name
+name = 'Gc';
+% Mean value of the field
+average = 2.188e-2;
+% Coefficient of variance
+CV = 0.3;
+% Solving shape and scale parameters for a Gaussian distribution
+A = 1/CV^2;
+B = average*CV^2;
 
 %% Mesh
 
 % Dimension of mesh
-X1 = -50;
-X2 = 50;
-Y1 = -50;
-Y2 = 50;
+X1 = 0;
+X2 = 6.5;
+Y1 = 0;
+Y2 = 6.5;
 
 % Discretization of the mesh
-Nx = 101;
-Ny = 101;
+Nx = 66;
+Ny = 66;
 
 % Generate mesh
 Np = Nx*Ny;
@@ -46,46 +55,40 @@ nu = length(d)*1;
 
 xi = randn(nu,1);
 G = v*(sqrt(d).*xi);
-G = reshape(G,Ny,Nx);
+field = gaminv(normcdf(G,0,1),A,B);
+G = reshape(field,Ny,Nx);
 surf(Sx,Sy,G);
 view(2);
 
 %% write to txt
 
-fileID = fopen('kl_info.txt','wt');
+fileID = fopen([name,'.txt'],'wt');
 
 % write X coordinates
 fprintf(fileID,'AXIS X\n');
 for i = 1:Nx-1
-    fprintf(fileID,'%E ',Sx(i));
+  fprintf(fileID,'%E ',Sx(i));
 end
 fprintf(fileID,'%E\n',Sx(Nx));
 
 % write Y coordinates
 fprintf(fileID,'AXIS Y\n');
 for i = 1:Ny-1
-    fprintf(fileID,'%E ',Sy(i));
+  fprintf(fileID,'%E ',Sy(i));
 end
 fprintf(fileID,'%E\n',Sy(Ny));
 
-for n = 1:nu
-    
-    fprintf('writing field %d into kl_info.txt\n',n);
-    
-    % normalize eigenvector, v_n_normalized = sqrt(d_n)*v_n
-    field = v(:,n) * sqrt(d(n));
-        
-    % Preprocess eigenvector to match MOOSE syntax
-    field = reshape(field,Ny,Nx);
-    field = field';
-    
-    % write normalized eigenvector
-    fprintf(fileID,'DATA\n');
-    for i = 1:Np-1
-        fprintf(fileID,'%E ',field(i));
-    end
-    fprintf(fileID,'%E\n',field(Np));
-    
+fprintf('writing field\n');
+
+% Preprocess eigenvector to match MOOSE syntax
+field = reshape(field,Ny,Nx);
+field = field';
+
+% write normalized eigenvector
+fprintf(fileID,'DATA\n');
+for i = 1:Np-1
+  fprintf(fileID,'%E ',field(i));
 end
+fprintf(fileID,'%E\n',field(Np));
 
 fclose(fileID);
