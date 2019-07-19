@@ -54,19 +54,19 @@
 
 [BCs]
   [./bottom_r_fix]
-    type = DirichletBC
+    type = PresetBC
     variable = disp_r
     boundary = 'bottom'
     value = 0
   [../]
   [./bottom_z_fix]
-    type = DirichletBC
+    type = PresetBC
     variable = disp_z
     boundary = 'bottom'
     value = 0
   [../]
   [./top_z_disp]
-    type = FunctionDirichletBC
+    type = FunctionPresetBC
     variable = disp_z
     boundary = 'top'
     function = -t
@@ -76,15 +76,17 @@
 [Executioner]
   type = Transient
   solve_type = NEWTON
-  petsc_options_iname = '-pc_type'
-  petsc_options_value = 'lu'
+
+  petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
+  petsc_options_value = 'lu       superlu_dist'
 
   dt = 0.1
   end_time = 1
 
-  automatic_scaling = true
+  automatic_scaling = false
 []
 
 [Outputs]
   exodus = true
+  print_linear_residuals = false
 []

@@ -1,12 +1,4 @@
 [Mesh]
-  # type = GeneratedMesh
-  # dim = 2
-  # xmin = 0
-  # xmax = 10
-  # ymin = 0
-  # ymax = 30
-  # nx = 10
-  # ny = 30
   type = FileMesh
   file = gold/geo.msh
 []
@@ -37,6 +29,21 @@
   [./stress]
     family = MONOMIAL
   [../]
+  [./d]
+  [../]
+  [./E_el]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./E_el]
+    type = MaterialRealAux
+    property = 'E_el'
+    variable = 'E_el'
+    execute_on = 'TIMESTEP_END'
+  [../]
 []
 
 [Materials]
@@ -56,7 +63,9 @@
     eigenstrain_names = 'thermal_eigenstrain'
   [../]
   [./stress]
-    type = ADComputeLinearElasticStress
+    type = SmallStrainDegradedPK2Stress_StrainSpectral
+    d = d
+    history = false
   [../]
 
   [./thermal]
@@ -71,6 +80,27 @@
     temperature = 'T'
     thermal_expansion_coeff = 8e-6
     eigenstrain_name = thermal_eigenstrain
+  [../]
+
+  [./fracture_energy_barrier]
+    type = GenericFunctionMaterial
+    prop_names = 'b'
+    prop_values = '14.88'
+  [../]
+  [./local_dissipation]
+    type = LinearLocalDissipation
+    d = d
+  [../]
+  [./fracture_properties]
+    type = FractureMaterial
+    Gc = 2.7
+    L = 0.015
+    local_dissipation_norm = 8/3
+  [../]
+  [./degradation]
+    type = LorentzDegradation
+    d = d
+    residual_degradation = 1e-06
   [../]
 []
 
@@ -162,19 +192,19 @@
 
 [BCs]
   [./bottom_r_fix]
-    type = DirichletBC
+    type = PresetBC
     variable = disp_r
     boundary = 'bottom'
     value = 0
   [../]
   [./bottom_z_fix]
-    type = DirichletBC
+    type = PresetBC
     variable = disp_z
     boundary = 'bottom'
     value = 0
   [../]
   [./top_z_disp]
-    type = FunctionDirichletBC
+    type = FunctionPresetBC
     variable = disp_z
     boundary = 'top'
     function = -t
@@ -184,13 +214,13 @@
 [Executioner]
   type = Transient
   solve_type = NEWTON
-  petsc_options_iname = '-pc_type'
-  petsc_options_value = 'lu'
+  petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
+  petsc_options_value = 'lu       superlu_dist'
 
   dt = 0.1
   end_time = 1
 
-  automatic_scaling = true
+  automatic_scaling = false
 []
 
 [Outputs]

@@ -129,19 +129,19 @@
 
 [BCs]
   [./bottom_r_fix]
-    type = DirichletBC
+    type = PresetBC
     variable = disp_r
     boundary = 'bottom'
     value = 0
   [../]
   [./bottom_z_fix]
-    type = DirichletBC
+    type = PresetBC
     variable = disp_z
     boundary = 'bottom'
     value = 0
   [../]
   [./top_z_disp]
-    type = FunctionDirichletBC
+    type = FunctionPresetBC
     variable = disp_z
     boundary = 'top'
     function = -t
