@@ -39,7 +39,7 @@ public:
 protected:
   virtual void computeQpProperties() override;
   virtual void initQpStatefulProperties() override;
-  virtual void computeQpStress() = 0;
+  virtual void computeQpStress() override {}
 
   /// initialize stateful elastic driving energy
   virtual ADReal computeQpHistory(const ADReal & E_el_pos);
