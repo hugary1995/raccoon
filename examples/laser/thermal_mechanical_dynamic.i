@@ -1,3 +1,9 @@
+[GlobalParams]
+  beta = 0.25
+  gamma = 0.5
+  dt_master = 5e-9
+[]
+
 [Mesh]
   type = FileMesh
   file = gold/geo.msh
@@ -18,14 +24,6 @@
 []
 
 [AuxVariables]
-  [./vel_r]
-  [../]
-  [./vel_z]
-  [../]
-  [./accel_r]
-  [../]
-  [./accel_z]
-  [../]
   [./stress]
     family = MONOMIAL
   [../]
@@ -37,6 +35,22 @@
   [../]
   [./bounds_dummy]
   [../]
+  [./load]
+    family = SCALAR
+  [../]
+
+  [./disp_r_ref]
+  [../]
+  [./disp_z_ref]
+  [../]
+  [./vel_r_ref]
+  [../]
+  [./vel_z_ref]
+  [../]
+  [./accel_r_ref]
+  [../]
+  [./accel_z_ref]
+  [../]
 []
 
 [Bounds]
@@ -45,7 +59,6 @@
     variable = bounds_dummy
     bounded_variable = T
     lower = 300
-    execute_on = 'LINEAR TIMESTEP_BEGIN'
   [../]
 []
 
@@ -124,36 +137,6 @@
 []
 
 [AuxKernels]
-  [./accel_r]
-    type = NewmarkAccelAux
-    variable = accel_r
-    displacement = disp_r
-    velocity = vel_r
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./vel_r]
-    type = NewmarkVelAux
-    variable = vel_r
-    acceleration = accel_r
-    gamma = 0.5
-    execute_on = timestep_end
-  [../]
-  [./accel_z]
-    type = NewmarkAccelAux
-    variable = accel_z
-    displacement = disp_z
-    velocity = vel_z
-    beta = 0.25
-    execute_on = timestep_end
-  [../]
-  [./vel_z]
-    type = NewmarkVelAux
-    variable = vel_z
-    acceleration = accel_z
-    gamma = 0.5
-    execute_on = timestep_end
-  [../]
   [./stress]
     type = RankTwoScalarAux
     variable = stress
@@ -165,20 +148,18 @@
 
 [Kernels]
   [./inertia_r]
-    type = InertialForce
+    type = InertialForceFPI
     variable = disp_r
-    velocity = vel_r
-    acceleration = accel_r
-    beta = 0.25
-    gamma = 0.5
+    displacement_old = disp_r_ref
+    velocity = vel_r_ref
+    acceleration = accel_r_ref
   [../]
   [./inertia_z]
-    type = InertialForce
+    type = InertialForceFPI
     variable = disp_z
-    velocity = vel_z
-    acceleration = accel_z
-    beta = 0.25
-    gamma = 0.5
+    displacement_old = disp_z_ref
+    velocity = vel_z_ref
+    acceleration = accel_z_ref
   [../]
   [./solid_r]
     type = ADStressDivergenceRZTensors
@@ -202,28 +183,30 @@
     variable = T
   [../]
   [./Hsource]
-    type = HeatSource
+    type = ScalarBodyForce
     variable = T
-    function = 'if (t<1e-7, 1e18*t, if (t<9e-7, 1e11, if (t<1e-6, 1e12-1e18*t, 0)))'
+    scalar = load
     block = source
-  []
-[]
-
-[BCs]
+  [../]
 []
 
 [Executioner]
   type = Transient
   solve_type = NEWTON
-  petsc_options_iname = '-pc_type -snes_type'
-  petsc_options_value = 'lu       vinewtonrsls'
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type  '
+  petsc_options_value = 'asm      ilu          1000        200                0                     vinewtonrsls'
 
-  dt = 5e-9
+  dt = 5e-11
   end_time = 1
+
+  nl_abs_tol = 1e-8
+  nl_rel_tol = 1e-6
 
   automatic_scaling = false
 []
 
 [Outputs]
+  hide = 'load'
   exodus = true
+  print_linear_residuals = false
 []

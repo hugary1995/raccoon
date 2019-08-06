@@ -6,6 +6,7 @@
 
 defineADValidParams(
     DegradationBase, ADMaterial, params.addRequiredCoupledVar("d", "phase-field damage variable");
+    params.addCoupledVar("d_relaxed", "relaxed phase-field damage variable");
     params.addParam<MaterialPropertyName>(
         "degradation_name", "g", "name of the material that holds the degradation function value");
     params.addParam<Real>("residual_degradation", 1e-6, "residual degradation");
@@ -18,7 +19,7 @@ template <ComputeStage compute_stage>
 DegradationBase<compute_stage>::DegradationBase(const InputParameters & parameters)
   : ADMaterial<compute_stage>(parameters),
     _d(adCoupledValue("d")),
-    _d_old(coupledValueOld("d")),
+    _d_old(isParamValid("d_relaxed") ? coupledValue("d_relaxed") : coupledValueOld("d")),
     _g_name(getParam<MaterialPropertyName>("degradation_name")),
     _g(declareADProperty<Real>(_g_name)),
     _dg_dd(declareADProperty<Real>(

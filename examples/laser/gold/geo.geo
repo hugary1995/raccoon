@@ -8,8 +8,8 @@ H = 6.5;
 r = 0.2;
 
 // element characteristic length
-E = 0.1;
-e = 0.05;
+E = 0.05;
+e = 0.025;
 
 Point(1) = {0,0,0,E};
 Point(2) = {0,H-r,0,e};

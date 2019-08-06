@@ -3,7 +3,7 @@
     type = TransientMultiApp
     input_files = 'thermal_mechanical_dynamic.i'
     app_type = raccoonApp
-    execute_on = 'TIMESTEP_END'
+    execute_on = 'TIMESTEP_BEGIN'
   [../]
 []
 
@@ -15,6 +15,20 @@
     source_variable = 'E_el'
     variable = 'E_el'
   [../]
+  [./get_disp_r]
+    type = MultiAppCopyTransfer
+    multi_app = thermomechanical
+    direction = from_multiapp
+    source_variable = 'disp_r'
+    variable = 'disp_r'
+  [../]
+  [./get_disp_z]
+    type = MultiAppCopyTransfer
+    multi_app = thermomechanical
+    direction = from_multiapp
+    source_variable = 'disp_z'
+    variable = 'disp_z'
+  [../]
   [./send_d]
     type = MultiAppMeshFunctionTransfer
     multi_app = thermomechanical
@@ -22,12 +36,55 @@
     source_variable = 'd'
     variable = 'd'
   [../]
-  [./get_d_ref]
-    type = MultiAppMeshFunctionTransfer
+  [./send_load]
+    type = MultiAppScalarToAuxScalarTransfer
     multi_app = thermomechanical
-    direction = from_multiapp
-    source_variable = 'd'
-    variable = 'd_ref'
+    direction = to_multiapp
+    source_variable = 'load'
+    to_aux_scalar = 'load'
+  [../]
+
+  [./send_disp_r_ref]
+    type = MultiAppCopyTransfer
+    multi_app = thermomechanical
+    direction = to_multiapp
+    source_variable = 'disp_r_ref'
+    variable = 'disp_r_ref'
+  [../]
+  [./send_vel_r_ref]
+    type = MultiAppCopyTransfer
+    multi_app = thermomechanical
+    direction = to_multiapp
+    source_variable = 'vel_r_ref'
+    variable = 'vel_r_ref'
+  [../]
+  [./send_accel_r_ref]
+    type = MultiAppCopyTransfer
+    multi_app = thermomechanical
+    direction = to_multiapp
+    source_variable = 'accel_r_ref'
+    variable = 'accel_r_ref'
+  [../]
+  [./send_disp_z_ref]
+    type = MultiAppCopyTransfer
+    multi_app = thermomechanical
+    direction = to_multiapp
+    source_variable = 'disp_z_ref'
+    variable = 'disp_z_ref'
+  [../]
+  [./send_vel_z_ref]
+    type = MultiAppCopyTransfer
+    multi_app = thermomechanical
+    direction = to_multiapp
+    source_variable = 'vel_z_ref'
+    variable = 'vel_z_ref'
+  [../]
+  [./send_accel_z_ref]
+    type = MultiAppCopyTransfer
+    multi_app = thermomechanical
+    direction = to_multiapp
+    source_variable = 'accel_z_ref'
+    variable = 'accel_z_ref'
   [../]
 []
 
@@ -42,6 +99,9 @@
 []
 
 [AuxVariables]
+  [./load]
+    family = SCALAR
+  [../]
   [./E_el]
     order = CONSTANT
     family = MONOMIAL
@@ -50,13 +110,30 @@
   [../]
   [./bounds_dummy]
   [../]
+  [./disp_r]
+  [../]
+  [./disp_z]
+  [../]
+
+  [./disp_r_ref]
+  [../]
+  [./disp_z_ref]
+  [../]
+  [./vel_r_ref]
+  [../]
+  [./vel_z_ref]
+  [../]
+  [./accel_r_ref]
+  [../]
+  [./accel_z_ref]
+  [../]
 []
 
 [Bounds]
   [./irreversibility]
     type = Irreversibility
     variable = bounds_dummy
-    bounded_var = d
+    bounded_variable = d
     upper = 1
     lower = d_ref
   [../]
@@ -101,16 +178,17 @@
 []
 
 [Executioner]
-  type = Transient
+  type = TransientSupNorm
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -snes_type'
   petsc_options_value = 'lu vinewtonrsls'
-  dt = 5e-9
+  dt = 5e-11
 
   nl_abs_tol = 1e-06
   nl_rel_tol = 1e-06
 []
 
 [Outputs]
+  hide = 'load'
   print_linear_residuals = false
 []

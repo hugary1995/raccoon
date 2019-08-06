@@ -1,7 +1,3 @@
-[GlobalParams]
-  displacements = 'disp_x disp_y'
-[]
-
 [Mesh]
   type = FileMesh
   file = 'gold/geo.e'
@@ -21,15 +17,25 @@
   [../]
   [./d_ref]
   [../]
+  [./d_relaxed]
+  [../]
 []
 
 [Bounds]
   [./irreversibility]
     type = Irreversibility
     variable = bounds_dummy
-    bounded_var = d
+    bounded_variable = d
     lower = d_ref
-    execute_on = 'LINEAR TIMESTEP_BEGIN'
+  [../]
+[]
+
+[AuxKernels]
+  [./relaxation]
+    type = DamageRelaxation
+    variable = d_relaxed
+    d = d
+    execute_on = 'NONLINEAR'
   [../]
 []
 
@@ -38,11 +44,13 @@
     type = ADStressDivergenceTensors
     variable = disp_x
     component = 0
+    displacements = 'disp_x disp_y'
   [../]
   [./solid_y]
     type = ADStressDivergenceTensors
     variable = disp_y
     component = 1
+    displacements = 'disp_x disp_y'
   [../]
   [./damage]
     type = PhaseFieldFractureEvolution
@@ -80,12 +88,13 @@
   [../]
   [./strain]
     type = ADComputeSmallStrain
+    displacements = 'disp_x disp_y'
   [../]
   [./stress]
     type = SmallStrainDegradedPK2Stress_NoSplit
     d = d
-    d_crit = 0.95
-    history = false
+    # d_crit = 0.95
+    # history = false
   [../]
   [./fracture_energy_barrier]
     type = GenericFunctionMaterial
@@ -105,18 +114,26 @@
   [./degradation]
     type = LorentzDegradation
     d = d
-    lag_degradation = true
-    residual_degradation = 1e-03
+    residual_degradation = 1e-06
+    # d_relaxed = d_relaxed
+    # lag_degradation = true
   [../]
 []
 
 [Executioner]
   type = Transient
   solve_type = 'NEWTON'
-  petsc_options_iname = '-pc_type -snes_type'
-  petsc_options_value = 'lu vinewtonrsls'
+  petsc_options = '-snes_converged_reason'
+  # petsc_options_iname = '-pc_type -snes_type'
+  # petsc_options_value = 'lu vinewtonrsls'
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type  '
+  petsc_options_value = 'asm      ilu          1000        200                0                     vinewtonrsls'
+  line_search = none
   dt = 1e-5
   end_time = 5e-3
+
+  # automatic_scaling = true
+  # compute_scaling_once = false
 []
 
 [Outputs]
