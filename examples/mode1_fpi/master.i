@@ -4,7 +4,7 @@
 
 [Mesh]
   type = FileMesh
-  file = 'gold/geo.e'
+  file = 'gold/geo.msh'
 []
 
 [MultiApps]
@@ -12,35 +12,48 @@
     type = TransientMultiApp
     input_files = 'mechanical.i'
     app_type = raccoonApp
-    execute_on = 'TIMESTEP_END'
+    execute_on = 'TIMESTEP_BEGIN'
     sub_cycling = true
     detect_steady_state = true
-    steady_state_tol = 1e-06
+    steady_state_tol = 1e-6
   [../]
 []
 
 [Transfers]
-  [./load]
+  [./get_disp_x]
+    type = MultiAppCopyTransfer
+    multi_app = mechanical
+    direction = from_multiapp
+    source_variable = 'disp_x'
+    variable = 'disp_x'
+  [../]
+  [./get_disp_y]
+    type = MultiAppCopyTransfer
+    multi_app = mechanical
+    direction = from_multiapp
+    source_variable = 'disp_y'
+    variable = 'disp_y'
+  [../]
+  [./send_load]
     type = MultiAppScalarToAuxScalarTransfer
     multi_app = mechanical
     direction = to_multiapp
     source_variable = 'load'
     to_aux_scalar = 'load'
-    execute_on = SAME_AS_MULTIAPP
   [../]
   [./get_d_ref]
     type = MultiAppCopyTransfer
     multi_app = mechanical
     direction = from_multiapp
     source_variable = 'd'
-    variable = 'd_ref'
+    variable = 'd'
     execute_on = 'TIMESTEP_END'
   [../]
   [./send_d_ref]
     type = MultiAppCopyTransfer
     multi_app = mechanical
     direction = to_multiapp
-    source_variable = 'd_ref'
+    source_variable = 'd'
     variable = 'd_ref'
     execute_on = 'TIMESTEP_BEGIN'
   [../]
@@ -50,7 +63,11 @@
   [./load]
     family = SCALAR
   [../]
-  [./d_ref]
+  [./d]
+  [../]
+  [./disp_x]
+  [../]
+  [./disp_y]
   [../]
 []
 
@@ -65,6 +82,10 @@
 
 [Executioner]
   type = Transient
-  dt = 1e-5
-  end_time = 5e-3
+  dt = 1e-4
+  end_time = 6e-3
+[]
+
+[Outputs]
+  exodus = true
 []

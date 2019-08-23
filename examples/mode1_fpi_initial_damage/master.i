@@ -80,10 +80,25 @@
   [../]
 []
 
+[ICs]
+  [./d]
+    type = CohesiveDamageIC
+    variable = d
+    d0 = 1.0
+    l = 0.03
+    x1 = -0.5
+    y1 = 0
+    z1 = 0
+    x2 = 0
+    y2 = 0
+    z2 = 0
+  [../]
+[]
+
 [Executioner]
   type = Transient
   dt = 1e-4
-  end_time = 2e-2
+  end_time = 6e-3
 []
 
 [Outputs]

@@ -4,8 +4,8 @@ clc
 %% Field parameters
 
 % Correlation length
-Lcr = 4;
-Lca = 50;
+Lcr = 50;
+Lca = 4;
 % tolerance
 tol = 0.1;
 
@@ -40,7 +40,9 @@ nu = length(d)*1;
 xi = randn(nu,1);
 G = v*(sqrt(d).*xi);
 G = reshape(G,Ny,Nx);
-surf(Sx,Sy,G);
+surf(Sx,Sy,G,'EdgeColor','none');
+axis equal
+axis off
 view(2);
 
 %% write to txt

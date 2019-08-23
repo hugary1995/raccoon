@@ -167,11 +167,8 @@
 []
 
 [Outputs]
+  csv = true
   print_linear_residuals = false
-  [./csv]
-    type = CSV
-    delimiter = ' '
-  [../]
   [./console]
     type = Console
     hide = 'load Fy'

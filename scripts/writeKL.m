@@ -1,24 +1,24 @@
-clear
+close all
 clc
 
 %% Field parameters
 
 % Correlation length
-Lc1 = 0.5;
-Lc2 = 0.5;
+Lc1 = 20;
+Lc2 = 20;
 % orientation
 angle = 0;
 e1 = [cos(angle);sin(angle)];
 e2 = [-sin(angle);cos(angle)];
 % Boolean for periodicity
-XPeriodic = false;
-YPeriodic = false;
+XPeriodic = true;
+YPeriodic = true;
 % tolerance
-tol = 0.1;
+tol = 0.001;
 % quantity name
-name = 'Gc';
+name = 'Gc_20';
 % Mean value of the field
-average = 2.188e-2;
+average = 8e-4;
 % Coefficient of variance
 CV = 0.3;
 % Solving shape and scale parameters for a Gaussian distribution
@@ -29,13 +29,13 @@ B = average*CV^2;
 
 % Dimension of mesh
 X1 = 0;
-X2 = 6.5;
+X2 = 100;
 Y1 = 0;
-Y2 = 6.5;
+Y2 = 100;
 
 % Discretization of the mesh
-Nx = 66;
-Ny = 66;
+Nx = 101;
+Ny = 101;
 
 % Generate mesh
 Np = Nx*Ny;
@@ -55,10 +55,28 @@ nu = length(d)*1;
 
 xi = randn(nu,1);
 G = v*(sqrt(d).*xi);
-field = gaminv(normcdf(G,0,1),A,B);
-G = reshape(field,Ny,Nx);
-surf(Sx,Sy,G);
+
+gaussian = reshape(G,Ny,Nx);
+gaussian = gaussian';
+figure
+h = surf(Sx,Sy,gaussian');
 view(2);
+axis equal
+axis off
+colorbar
+
+field = gaminv(normcdf(G,0,1),A,B);
+% Preprocess to match MOOSE syntax
+field = reshape(field,Ny,Nx);
+field = field';
+figure
+surf(Sx,Sy,field','EdgeColor','none');
+view(2);
+axis equal
+axis off
+colorbar
+
+G = field(:);
 
 %% write to txt
 
@@ -79,10 +97,6 @@ end
 fprintf(fileID,'%E\n',Sy(Ny));
 
 fprintf('writing field\n');
-
-% Preprocess eigenvector to match MOOSE syntax
-field = reshape(field,Ny,Nx);
-field = field';
 
 % write normalized eigenvector
 fprintf(fileID,'DATA\n');

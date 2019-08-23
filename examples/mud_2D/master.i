@@ -8,39 +8,38 @@
 []
 
 [MultiApps]
-  [./mechanical]
+  [./fracture]
     type = TransientMultiApp
-    input_files = 'mechanical.i'
+    input_files = 'fracture.i'
     app_type = raccoonApp
     execute_on = 'TIMESTEP_END'
     sub_cycling = true
     detect_steady_state = true
-    steady_state_tol = 1e-03
+    steady_state_tol = 0.1
   [../]
 []
 
 [Transfers]
-  [./load]
+  [./send_load]
     type = MultiAppScalarToAuxScalarTransfer
-    multi_app = mechanical
+    multi_app = fracture
     direction = to_multiapp
     source_variable = 'load'
     to_aux_scalar = 'load'
-    execute_on = SAME_AS_MULTIAPP
   [../]
   [./get_d_ref]
     type = MultiAppCopyTransfer
-    multi_app = mechanical
+    multi_app = fracture
     direction = from_multiapp
     source_variable = 'd'
-    variable = 'd_ref'
+    variable = 'd'
     execute_on = 'TIMESTEP_END'
   [../]
   [./send_d_ref]
     type = MultiAppCopyTransfer
-    multi_app = mechanical
+    multi_app = fracture
     direction = to_multiapp
-    source_variable = 'd_ref'
+    source_variable = 'd'
     variable = 'd_ref'
     execute_on = 'TIMESTEP_BEGIN'
   [../]
@@ -50,7 +49,7 @@
   [./load]
     family = SCALAR
   [../]
-  [./d_ref]
+  [./d]
   [../]
 []
 
@@ -67,4 +66,8 @@
   type = Transient
   dt = 1e-3
   end_time = 0.22
+[]
+
+[Outputs]
+  exodus = true
 []

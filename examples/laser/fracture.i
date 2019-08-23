@@ -127,6 +127,18 @@
   [../]
   [./accel_z_ref]
   [../]
+
+  [./Gc]
+  [../]
+[]
+
+[AuxKernels]
+  [./Gc]
+    type = FunctionAux
+    variable = Gc
+    function = Gc
+    execute_on = 'INITIAL'
+  [../]
 []
 
 [Bounds]

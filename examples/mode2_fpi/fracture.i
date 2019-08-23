@@ -9,6 +9,9 @@
 []
 
 [AuxVariables]
+  [./load]
+    family = SCALAR
+  [../]
   [./E_el]
     order = CONSTANT
     family = MONOMIAL
@@ -23,7 +26,7 @@
   [./irreversibility]
     type = Irreversibility
     variable = bounds_dummy
-    bounded_var = d
+    bounded_variable = d
     upper = 1
     lower = d_ref
   [../]
@@ -56,7 +59,7 @@
   [./degradation]
     type = LorentzDegradation
     d = d
-    residual_degradation = 1e-03
+    residual_degradation = 1e-09
   [../]
 []
 
@@ -65,12 +68,13 @@
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -snes_type'
   petsc_options_value = 'lu vinewtonrsls'
-  dt = 1e-5
+  dt = 1e-6
 
-  nl_abs_tol = 1e-06
+  nl_abs_tol = 1e-08
   nl_rel_tol = 1e-06
 []
 
 [Outputs]
+  hide = 'load'
   print_linear_residuals = false
 []
