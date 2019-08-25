@@ -1,17 +1,8 @@
-// STL
-#include <vector>
-#include <iostream>
-#include <iomanip>
-#include <algorithm>
-
 // external
-#include "csv.h"
-#include "matplotlibcpp.h"
-namespace plt = matplotlibcpp;
-#include "exodusII.h"
+// #include "csv.h"
 
 // FragCount includes
-#include "T3.h"
+#include "mesh.h"
 
 node *
 find_node(std::vector<node *> & nodes, unsigned int nid)
@@ -48,10 +39,10 @@ move_elem_from_to(std::vector<T3 *>::iterator e, std::vector<T3 *> & from, std::
 int
 main(int argc, char const * argv[])
 {
-  int CPU_word_size = sizeof(double);
-  int IO_word_size = 8;
-  int exoid = ex_create("text.e", EX_CLOBBER, &CPU_word_size, &IO_word_size);
-  // plt::backend("Qt4Agg");
+  mesh m(argv[1]);
+
+  m.plot_mesh();
+
   //
   // // read damage
   //
@@ -82,7 +73,8 @@ main(int argc, char const * argv[])
   // while (csv_conn.read_row(_eid, _n1, _n2, _n3))
   // {
   //   T3 * _e =
-  //       new T3(_eid, find_node(nodes, _n1), find_node(nodes, _n2), find_node(nodes, _n3), 0.5);
+  //       new T3(_eid, find_node(nodes, _n1), find_node(nodes, _n2), find_node(nodes, _n3),
+  //       0.5);
   //   elems.push_back(_e);
   //   std::cout << "Element #" << std::setw(6) << _e->id() << ", intact = " << _e->good()
   //             << ", area = " << _e->area() << std::endl;
@@ -151,7 +143,8 @@ main(int argc, char const * argv[])
   //                     << (int)(((double)good_classified.size() + (double)bad.size()) /
   //                              (double)elems.size() * 100)
   //                     << "%] "
-  //                     << "Element #" << std::setw(6) << (*itr)->id() << " classified as bad.\n";
+  //                     << "Element #" << std::setw(6) << (*itr)->id() << " classified as
+  //                     bad.\n";
   //           itr = move_elem_from_to(itr, raw, bad);
   //         }
   //       }
@@ -181,7 +174,8 @@ main(int argc, char const * argv[])
   //     }
   //   }
   //   std::cout << "[" << std::setw(3) << (int)((double)i / (double)bad.size() * 100) << "%] "
-  //             << "Bad element #" << std::setw(6) << bad[i]->id() << " classified as cluster #"
+  //             << "Bad element #" << std::setw(6) << bad[i]->id() << " classified as cluster
+  //             #"
   //             << bad[i]->cluster() << std::endl;
   // }
   //
@@ -190,7 +184,8 @@ main(int argc, char const * argv[])
   // for (unsigned int i = 0; i < elems.size(); i++)
   // {
   //   cluster_area[elems[i]->cluster()] += elems[i]->area();
-  //   std::cout << "[" << std::setw(3) << (int)((double)i / (double)elems.size() * 100) << "%] "
+  //   std::cout << "[" << std::setw(3) << (int)((double)i / (double)elems.size() * 100) << "%]
+  //   "
   //             << "Counting area, element #" << std::setw(6) << elems[i]->id() << std::endl;
   // }
   // double max = *std::max_element(cluster_area.begin(), cluster_area.end());
@@ -231,7 +226,8 @@ main(int argc, char const * argv[])
   //   keywords["edgecolor"] = colors[good_classified[i]->cluster() % colors.size()];
   //   keywords["linewidth"] = "1";
   //   plt::fill(x, y, keywords);
-  //   std::cout << "[" << std::setw(3) << (int)((double)i / (double)good_classified.size() * 100)
+  //   std::cout << "[" << std::setw(3) << (int)((double)i / (double)good_classified.size() *
+  //   100)
   //             << "%] "
   //             << "Element #" << std::setw(6) << good_classified[i]->id() << " plotted.\n";
   // }

@@ -1,5 +1,8 @@
+#pragma once
+
 #include "node.h"
 #include <math.h>
+#include <vector>
 
 class T3
 {

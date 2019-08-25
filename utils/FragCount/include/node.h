@@ -1,3 +1,8 @@
+#pragma once
+
+#include <iostream>
+#include <iomanip>
+
 class node
 {
 public:
