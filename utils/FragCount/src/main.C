@@ -2,7 +2,7 @@
 // #include "csv.h"
 
 // FragCount includes
-#include "mesh.h"
+#include "problem.h"
 
 node *
 find_node(std::vector<node *> & nodes, unsigned int nid)
@@ -39,11 +39,10 @@ move_elem_from_to(std::vector<T3 *>::iterator e, std::vector<T3 *> & from, std::
 int
 main(int argc, char const * argv[])
 {
-  mesh m(argv[1]);
+  problem p(argv[1]);
 
-  m.plot_mesh();
+  p.plot_damage();
 
-  //
   // // read damage
   //
   // io::CSVReader<4> csv_nodes(argv[1]);

@@ -16,6 +16,9 @@ public:
 
     _area = std::abs(0.5 * (_n1->x() * (_n2->y() - _n3->y()) + _n2->x() * (_n3->y() - _n1->y()) +
                             _n3->x() * (_n1->y() - _n2->y())));
+
+    _xc = (_n1->x() + _n2->x() + _n3->x()) / 3;
+    _yc = (_n1->y() + _n2->y() + _n3->y()) / 3;
   }
 
   unsigned int id() { return _id; }
@@ -24,6 +27,8 @@ public:
   node * n3() { return _n3; }
   double area() { return _area; }
   bool good() { return _good; }
+  double xc() { return _xc; }
+  double yc() { return _yc; }
   int cluster() { return _cluster; }
   void set_cluster(int cluster) { _cluster = cluster; }
   double distance(T3 * e)
@@ -102,5 +107,7 @@ private:
   double _cutoff;
   bool _good;
   double _area;
+  double _xc;
+  double _yc;
   int _cluster;
 };

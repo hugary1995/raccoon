@@ -817,6 +817,39 @@ bool scatter(const std::vector<NumericX> & x,
 
 template <typename Numeric>
 bool
+scatter(const std::vector<Numeric> & x,
+        const std::vector<Numeric> & y,
+        const double s,
+        const std::vector<Numeric> & c)
+{
+  assert(x.size() == y.size());
+  assert(x.size() == c.size());
+
+  PyObject * xarray = get_array(x);
+  PyObject * yarray = get_array(y);
+  PyObject * carray = get_array(c);
+
+  PyObject * kwargs = PyDict_New();
+  PyDict_SetItemString(kwargs, "s", PyLong_FromLong(s));
+  PyDict_SetItemString(kwargs, "c", carray);
+
+  PyObject * plot_args = PyTuple_New(2);
+  PyTuple_SetItem(plot_args, 0, xarray);
+  PyTuple_SetItem(plot_args, 1, yarray);
+
+  PyObject * res =
+      PyObject_Call(detail::_interpreter::get().s_python_function_scatter, plot_args, kwargs);
+
+  Py_DECREF(plot_args);
+  Py_DECREF(kwargs);
+  if (res)
+    Py_DECREF(res);
+
+  return res;
+}
+
+template <typename Numeric>
+bool
 bar(const std::vector<Numeric> & x,
     const std::vector<Numeric> & y,
     std::string ec = "black",
