@@ -832,6 +832,7 @@ scatter(const std::vector<Numeric> & x,
   PyObject * kwargs = PyDict_New();
   PyDict_SetItemString(kwargs, "s", PyLong_FromLong(s));
   PyDict_SetItemString(kwargs, "c", carray);
+  PyDict_SetItemString(kwargs, "edgecolors", PyString_FromString("none"));
 
   PyObject * plot_args = PyTuple_New(2);
   PyTuple_SetItem(plot_args, 0, xarray);

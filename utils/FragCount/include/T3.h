@@ -8,17 +8,23 @@ class T3
 {
 public:
   T3(unsigned int id, node * n1, node * n2, node * n3, double cutoff)
-    : _id(id), _n1(n1), _n2(n2), _n3(n3), _cutoff(cutoff), _cluster(-1)
+    : _id(id), _n1(n1), _n2(n2), _n3(n3), _cutoff(cutoff), _cluster(0)
   {
-    _good = true;
-    if (_n1->d() > _cutoff || _n2->d() > _cutoff || _n3->d() > _cutoff)
-      _good = false;
+    binarize();
 
     _area = std::abs(0.5 * (_n1->x() * (_n2->y() - _n3->y()) + _n2->x() * (_n3->y() - _n1->y()) +
                             _n3->x() * (_n1->y() - _n2->y())));
 
     _xc = (_n1->x() + _n2->x() + _n3->x()) / 3;
     _yc = (_n1->y() + _n2->y() + _n3->y()) / 3;
+  }
+  ~T3() {}
+
+  void binarize()
+  {
+    _good = true;
+    if (_n1->d() > _cutoff || _n2->d() > _cutoff || _n3->d() > _cutoff)
+      _good = false;
   }
 
   unsigned int id() { return _id; }
@@ -29,8 +35,8 @@ public:
   bool good() { return _good; }
   double xc() { return _xc; }
   double yc() { return _yc; }
-  int cluster() { return _cluster; }
-  void set_cluster(int cluster) { _cluster = cluster; }
+  size_t cluster() { return _cluster; }
+  void set_cluster(size_t cluster) { _cluster = cluster; }
   double distance(T3 * e)
   {
     double x1 = (_n1->x() + _n2->x() + _n3->x()) / 3.0;
@@ -41,6 +47,9 @@ public:
   }
   bool is_connected_to(T3 * e)
   {
+    if (!e)
+      return false;
+
     if (_n1 == e->n1())
       return true;
     if (_n1 == e->n2())
@@ -109,5 +118,5 @@ private:
   double _area;
   double _xc;
   double _yc;
-  int _cluster;
+  size_t _cluster;
 };

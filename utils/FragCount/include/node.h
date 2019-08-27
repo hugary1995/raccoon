@@ -10,7 +10,7 @@ public:
   unsigned int id() { return _id; }
   double x() { return _x; }
   double y() { return _y; }
-  double d() { return _d; }
+  double & d() { return _d; }
 
 protected:
 private:

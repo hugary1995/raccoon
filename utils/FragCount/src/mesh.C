@@ -5,21 +5,72 @@
 #define MAX_STRING_LEN 128
 #define OUTPUT_WIDTH 35
 
-mesh::mesh(const char * filename)
+mesh::mesh(const char * filename) : _filename(filename)
+{
+  read_exodus();
+  read_mesh_parameters();
+  read_nodes();
+  read_blocks();
+  read_elements();
+  read_times();
+  read_damage_at_step(1);
+}
+
+std::set<size_t>
+mesh::read_damage_at_step(int step)
+{
+  char * var_name = (char *)calloc((MAX_STR_LENGTH + 1), sizeof(char));
+  float * d = (float *)calloc(_num_nodes, sizeof(float));
+  for (int i = 0; i < _num_nodal_vars; i++)
+  {
+    _error = ex_get_variable_name(_exoid, EX_NODAL, i + 1, var_name);
+    if (strcmp(var_name, "d") == 0)
+      _error = ex_get_var(_exoid, step, EX_NODAL, i + 1, 0, _num_nodes, d);
+  }
+
+  for (int i = 0; i < _num_nodes; i++)
+    _nodes[i]->d() = d[i];
+
+  std::set<size_t> clusters_pending_update;
+  for (int i = 0; i < _num_elems; i++)
+  {
+    bool old_state = _elems[i]->good();
+    _elems[i]->binarize();
+    bool new_state = _elems[i]->good();
+    if (old_state != new_state)
+      clusters_pending_update.insert(_elems[i]->cluster());
+  }
+
+  std::cout << std::setw(OUTPUT_WIDTH) << "Updated damage for time step: " << step << std::endl;
+
+  std::cout << "================================================================\n";
+
+  free(var_name);
+  free(d);
+  return clusters_pending_update;
+}
+
+void
+mesh::read_exodus()
 {
   // open exodus
   int CPU_word_size = sizeof(float);
   int IO_word_size = 0;
-  int num_node_sets, num_side_sets;
-  char title[MAX_STRING_LEN + 1], type[MAX_STRING_LEN + 1];
 
-  _exoid = ex_open(filename, EX_READ, &CPU_word_size, &IO_word_size, &_version);
+  _exoid = ex_open(_filename, EX_READ, &CPU_word_size, &IO_word_size, &_version);
 
   if (_exoid < 0)
   {
-    std::cout << "Cannot open " << filename << std::endl;
+    std::cout << "Cannot open " << _filename << std::endl;
     exit(_exoid);
   }
+}
+
+void
+mesh::read_mesh_parameters()
+{
+  char title[MAX_STRING_LEN + 1];
+  int num_node_sets, num_side_sets;
 
   _error = ex_get_init(_exoid,
                        title,
@@ -32,7 +83,15 @@ mesh::mesh(const char * filename)
 
   if (_error)
   {
-    std::cout << "After ex_get_init, _error = " << _error << std::endl;
+    std::cout << "After ex_get_init, error = " << _error << std::endl;
+    ex_close(_exoid);
+    exit(_error);
+  }
+
+  _error = ex_get_variable_param(_exoid, EX_NODAL, &_num_nodal_vars);
+  if (_error)
+  {
+    std::cout << "After ex_get_variable_param, error = " << _error << std::endl;
     ex_close(_exoid);
     exit(_error);
   }
@@ -45,46 +104,15 @@ mesh::mesh(const char * filename)
   std::cout << std::setw(OUTPUT_WIDTH) << "Number of blocks: " << _num_blks << std::endl;
   std::cout << std::setw(OUTPUT_WIDTH) << "Number of node sets: " << num_node_sets << std::endl;
   std::cout << std::setw(OUTPUT_WIDTH) << "Number of side sets: " << num_side_sets << std::endl;
-
-  std::cout << "================================================================\n";
-
-  _error = ex_get_variable_param(_exoid, EX_NODAL, &_num_nodal_vars);
-  if (_error)
-  {
-    std::cout << "After ex_get_variable_param, _error = " << _error << std::endl;
-    ex_close(_exoid);
-    exit(_error);
-  }
   std::cout << std::setw(OUTPUT_WIDTH) << "Number of nodal variables: " << _num_nodal_vars
             << std::endl;
 
-  char * var_names[_num_nodal_vars];
-  for (int i = 0; i < _num_nodal_vars; i++)
-    var_names[i] = (char *)calloc((MAX_STR_LENGTH + 1), sizeof(char));
-  _error = ex_get_variable_names(_exoid, EX_NODAL, _num_nodal_vars, var_names);
-  std::cout << std::setw(OUTPUT_WIDTH) << "Variable names: ";
-  for (int i = 0; i < _num_nodal_vars; i++)
-    std::cout << var_names[i] << " ";
-  std::cout << std::endl;
-
-  // read time steps
-  _num_time_steps = ex_inquire_int(_exoid, EX_INQ_TIME);
-  _time_values = (float *)calloc(_num_time_steps, sizeof(float));
-  _error = ex_get_all_times(_exoid, _time_values);
-  std::cout << std::setw(OUTPUT_WIDTH) << "Number of time steps: " << _num_time_steps << std::endl;
-
-  // read damage
-  char * var_name = (char *)calloc((MAX_STR_LENGTH + 1), sizeof(char));
-  float * d = (float *)calloc(_num_nodes, sizeof(float));
-  for (int i = 0; i < _num_nodal_vars; i++)
-  {
-    _error = ex_get_variable_name(_exoid, EX_NODAL, i + 1, var_name);
-    if (strcmp(var_name, "d") == 0)
-      _error = ex_get_var(_exoid, _num_time_steps, EX_NODAL, i + 1, 0, _num_nodes, d);
-  }
-
   std::cout << "================================================================\n";
+}
 
+void
+mesh::read_nodes()
+{
   float * x = (float *)calloc(_num_nodes, sizeof(float));
   float * y = _num_dim >= 2 ? (float *)calloc(_num_nodes, sizeof(float)) : NULL;
   float * z = _num_dim >= 3 ? (float *)calloc(_num_nodes, sizeof(float)) : NULL;
@@ -92,95 +120,93 @@ mesh::mesh(const char * filename)
   _error = ex_get_coord(_exoid, x, y, z);
   if (_error)
   {
-    std::cout << "After ex_get_coord, _error = " << _error << std::endl;
+    std::cout << "After ex_get_coord, error = " << _error << std::endl;
     ex_close(_exoid);
     exit(_error);
   }
-  std::cout << std::setw(OUTPUT_WIDTH) << "First node coord: ";
-  std::cout << "(" << x[0] << ", " << y[0] << ")\n";
 
   for (int i = 0; i < _num_nodes; i++)
   {
-    node * tmp = new node(i + 1, x[i], y[i], d[i]);
+    node * tmp = new node(i + 1, x[i], y[i], 0);
     _nodes.push_back(tmp);
   }
 
   free(x);
   free(y);
   free(z);
-  free(d);
 
   std::cout << std::setw(OUTPUT_WIDTH) << "Allocated: " << _nodes.size() << " nodes.\n";
   std::cout << "================================================================\n";
+}
 
-  int * block_ids = (int *)calloc(_num_blks, sizeof(int));
-  _error = ex_get_ids(_exoid, EX_ELEM_BLOCK, block_ids);
+void
+mesh::read_blocks()
+{
+  _blk_ids = (int *)calloc(_num_blks, sizeof(int));
+  _error = ex_get_ids(_exoid, EX_ELEM_BLOCK, _blk_ids);
   if (_error)
   {
-    std::cout << "After ex_get_ids, _error = " << _error << std::endl;
+    std::cout << "After ex_get_ids, error = " << _error << std::endl;
     ex_close(_exoid);
     exit(_error);
   }
 
   std::cout << std::setw(OUTPUT_WIDTH) << "Block IDs: ";
   for (int i = 0; i < _num_blks; i++)
-    std::cout << block_ids[i] << " ";
+    std::cout << _blk_ids[i] << " ";
   std::cout << std::endl;
 
   std::cout << "================================================================\n";
 
-  int * _num_elems_in_blk = (int *)calloc(_num_blks, sizeof(int));
-  int * _num_nodes_per_elem = (int *)calloc(_num_blks, sizeof(int));
-  int * num_attrs = (int *)calloc(_num_blks, sizeof(int));
+  _num_elems_in_blk = (int *)calloc(_num_blks, sizeof(int));
+  _num_nodes_per_elem = (int *)calloc(_num_blks, sizeof(int));
+  char type[MAX_STRING_LEN + 1];
 
   for (int i = 0; i < _num_blks; i++)
   {
     _error = ex_get_block(_exoid,
                           EX_ELEM_BLOCK,
-                          block_ids[i],
+                          _blk_ids[i],
                           type,
                           &_num_elems_in_blk[i],
                           &_num_nodes_per_elem[i],
                           NULL,
                           NULL,
-                          &num_attrs[i]);
+                          NULL);
 
     if (_error)
     {
-      std::cout << "After ex_get_elem_block, _error = " << _error << std::endl;
+      std::cout << "After ex_get_elem_block, error = " << _error << std::endl;
       ex_close(_exoid);
       exit(_error);
     }
 
-    std::cout << "In block " << block_ids[0] << ": \n";
+    std::cout << std::setw(OUTPUT_WIDTH) << "In block: " << _blk_ids[0] << std::endl;
     std::cout << std::setw(OUTPUT_WIDTH) << "Element type: " << type << std::endl;
     std::cout << std::setw(OUTPUT_WIDTH) << "Number of elements: " << _num_elems_in_blk[i]
               << std::endl;
     std::cout << std::setw(OUTPUT_WIDTH)
               << "Number of nodes per element: " << _num_nodes_per_elem[i] << std::endl;
-    std::cout << std::setw(OUTPUT_WIDTH) << "Number of attributes per element: " << num_attrs[i]
-              << std::endl;
 
     std::cout << "================================================================\n";
   }
+}
 
+void
+mesh::read_elements()
+{
   for (int i = 0; i < _num_blks; i++)
   {
     int * connectivity =
         (int *)calloc((_num_nodes_per_elem[i] * _num_elems_in_blk[i]), sizeof(int));
 
-    _error = ex_get_conn(_exoid, EX_ELEM_BLOCK, block_ids[i], connectivity, NULL, NULL);
+    _error = ex_get_conn(_exoid, EX_ELEM_BLOCK, _blk_ids[i], connectivity, NULL, NULL);
     if (_error)
     {
-      std::cout << "After ex_get_conn, _error = " << _error << std::endl;
+      std::cout << "After ex_get_conn, error = " << _error << std::endl;
       ex_close(_exoid);
       exit(_error);
     }
-
-    std::cout << std::setw(OUTPUT_WIDTH) << "First element in block: " << block_ids[i] << ": ";
-    for (int j = 0; j < _num_nodes_per_elem[i]; j++)
-      std::cout << connectivity[j] << " ";
-    std::cout << std::endl;
 
     for (int j = 0; j < _num_elems_in_blk[i]; j++)
     {
@@ -196,6 +222,24 @@ mesh::mesh(const char * filename)
     std::cout << std::setw(OUTPUT_WIDTH) << "Allocated: " << _elems.size() << " elements.\n";
     std::cout << "================================================================\n";
   }
+}
+
+void
+mesh::read_times()
+{
+  // read time steps
+  _num_time_steps = ex_inquire_int(_exoid, EX_INQ_TIME);
+  _time_values = (float *)calloc(_num_time_steps, sizeof(float));
+  _error = ex_get_all_times(_exoid, _time_values);
+  if (_error)
+  {
+    std::cout << "After ex_get_all_times, error = " << _error << std::endl;
+    ex_close(_exoid);
+    exit(_error);
+  }
+  std::cout << std::setw(OUTPUT_WIDTH) << "Number of time steps: " << _num_time_steps << std::endl;
+
+  std::cout << "================================================================\n";
 }
 
 // void
