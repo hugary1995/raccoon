@@ -9,6 +9,7 @@ mesh::mesh(const char * filename) : _filename(filename)
 {
   read_exodus();
   read_mesh_parameters();
+  read_boundary_node_set();
   read_nodes();
   read_blocks();
   read_elements();
@@ -69,8 +70,7 @@ mesh::read_exodus()
 void
 mesh::read_mesh_parameters()
 {
-  char title[MAX_STRING_LEN + 1];
-  int num_node_sets, num_side_sets;
+  char title[MAX_STR_LENGTH + 1];
 
   _error = ex_get_init(_exoid,
                        title,
@@ -78,8 +78,8 @@ mesh::read_mesh_parameters()
                        &_num_nodes,
                        &_num_elems,
                        &_num_blks,
-                       &num_node_sets,
-                       &num_side_sets);
+                       &_num_node_sets,
+                       &_num_side_sets);
 
   if (_error)
   {
@@ -102,11 +102,41 @@ mesh::read_mesh_parameters()
   std::cout << std::setw(OUTPUT_WIDTH) << "Number of nodes: " << _num_nodes << std::endl;
   std::cout << std::setw(OUTPUT_WIDTH) << "Number of elements: " << _num_elems << std::endl;
   std::cout << std::setw(OUTPUT_WIDTH) << "Number of blocks: " << _num_blks << std::endl;
-  std::cout << std::setw(OUTPUT_WIDTH) << "Number of node sets: " << num_node_sets << std::endl;
-  std::cout << std::setw(OUTPUT_WIDTH) << "Number of side sets: " << num_side_sets << std::endl;
+  std::cout << std::setw(OUTPUT_WIDTH) << "Number of node sets: " << _num_node_sets << std::endl;
+  std::cout << std::setw(OUTPUT_WIDTH) << "Number of side sets: " << _num_side_sets << std::endl;
   std::cout << std::setw(OUTPUT_WIDTH) << "Number of nodal variables: " << _num_nodal_vars
             << std::endl;
 
+  std::cout << "================================================================\n";
+}
+
+void
+mesh::read_boundary_node_set()
+{
+  int * side_set_ids = (int *)calloc(_num_side_sets, sizeof(int));
+  _error = ex_get_ids(_exoid, EX_SIDE_SET, side_set_ids);
+  for (int i = 0; i < _num_side_sets; i++)
+  {
+    char set_name[MAX_STR_LENGTH + 1];
+    _error = ex_get_name(_exoid, EX_SIDE_SET, side_set_ids[i], set_name);
+    std::cout << std::setw(OUTPUT_WIDTH) << "Found set: " << set_name << std::endl;
+    if (strcmp(set_name, "top") && strcmp(set_name, "bottom") && strcmp(set_name, "left") &&
+        strcmp(set_name, "right"))
+      continue;
+    int num_elems_in_set;
+    _error = ex_get_set_param(_exoid, EX_SIDE_SET, side_set_ids[i], &num_elems_in_set, NULL);
+    int * node_ctr_list = (int *)calloc(num_elems_in_set, sizeof(int));
+    int * node_list = (int *)calloc(num_elems_in_set * 3, sizeof(int));
+    _error = ex_get_side_set_node_list(_exoid, side_set_ids[i], node_ctr_list, node_list);
+    for (int j = 0; j < num_elems_in_set * 3; j++)
+      _boundary_nodes.insert(node_list[j]);
+    free(node_ctr_list);
+    free(node_list);
+  }
+
+  free(side_set_ids);
+  std::cout << std::setw(OUTPUT_WIDTH) << "Number of boundary nodes: " << _boundary_nodes.size()
+            << std::endl;
   std::cout << "================================================================\n";
 }
 

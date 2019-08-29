@@ -1,11 +1,11 @@
 [Functions]
   [./Gc]
     type = PiecewiseMultilinear
-    data_file = 'gold/Gc_20.txt'
+    data_file = 'gold/Gc_5_3.txt'
   [../]
   [./E_crit]
     type = PiecewiseMultilinear
-    data_file = 'gold/E_crit_20.txt'
+    data_file = 'gold/E_crit_5_3.txt'
   [../]
 []
 
@@ -63,6 +63,23 @@
   [./d_ref]
   [../]
   [./bounds_dummy]
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./left_right]
+      variable = d
+      primary = 'left'
+      secondary = 'right'
+      translation = '100 0 0'
+    [../]
+    [./top_bottom]
+      variable = d
+      primary = 'top'
+      secondary = 'bottom'
+      translation = '0 -100 0'
+    [../]
   [../]
 []
 

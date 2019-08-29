@@ -1,11 +1,11 @@
 [Functions]
   [./Gc]
     type = PiecewiseMultilinear
-    data_file = 'gold/Gc_20.txt'
+    data_file = 'gold/Gc_5_3.txt'
   [../]
   [./E_crit]
     type = PiecewiseMultilinear
-    data_file = 'gold/E_crit_20.txt'
+    data_file = 'gold/E_crit_5_3.txt'
   [../]
 []
 

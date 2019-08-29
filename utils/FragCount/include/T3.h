@@ -50,6 +50,15 @@ public:
     if (!e)
       return false;
 
+    // if (contains_node(e->n1()) && contains_node(e->n2()))
+    //   return true;
+    // else if (contains_node(e->n1()) && contains_node(e->n3()))
+    //   return true;
+    // else if (contains_node(e->n2()) && contains_node(e->n3()))
+    //   return true;
+    //
+    // return false;
+
     if (_n1 == e->n1())
       return true;
     if (_n1 == e->n2())

@@ -4,6 +4,7 @@
 namespace plt = matplotlibcpp;
 
 #include <limits>
+#include <fstream>
 
 problem::problem(const char * filename)
 {
@@ -16,6 +17,26 @@ problem::problem(const char * filename)
   _good = new cluster(_num_elems);
   _bad = new cluster(_num_elems);
 
+  // initialize elem_to_elems map
+  std::cout << "[  0%] Building element to connected elements map...\n";
+  double progress = 0.0;
+  double threshold = 0.0;
+  _elem_to_elems_map.resize(_num_elems);
+  for (size_t i = 0; i < _num_elems; i++)
+  {
+    for (size_t j = 0; j < _num_elems; j++)
+      if (i != j && (*_all)[i]->is_connected_to((*_all)[j]))
+        _elem_to_elems_map[i].push_back(j);
+    progress = (double)i / (double)_num_elems * 100.0;
+    if (progress >= threshold)
+    {
+      std::cout << "[" << std::setw(3) << (int)progress
+                << "%] Building element to connected elements map...\n";
+      threshold += 10.0;
+    }
+  }
+  std::cout << "[100%] Building element to connected elements map...\n";
+
   // initially, put all elems in cluster 0
   // all elements' cluster id are set to 0 already
   cluster * new_cluster = new cluster(_mesh->elems());
@@ -25,21 +46,99 @@ problem::problem(const char * filename)
 }
 
 void
+problem::classify_all_times()
+{
+  std::ofstream out;
+  out.open(_mesh->filename() + ".stat.csv");
+  out << "step,num_fragments,mean,std\n";
+  for (int i = 1; i <= num_time_steps(); i++)
+  {
+    go_to_time_step(i);
+    classify();
+    out << i << "," << _num_fragments << "," << _mean << "," << _sigma << std::endl;
+    // if (_num_fragments >= 1)
+    //   plot_damage();
+    std::cout << "================================================================\n";
+  }
+  out.close();
+}
+
+void
 problem::plot_damage()
 {
   plt::clf();
   std::vector<double> x, y, d;
   std::vector<node *> nodes = _mesh->nodes();
-  for (unsigned int i = 0; i < nodes.size(); i++)
+  for (size_t i = 0; i < nodes.size(); i++)
   {
     x.push_back(nodes[i]->x());
     y.push_back(nodes[i]->y());
     d.push_back(nodes[i]->d());
-    // std::cout << "[" << std::setw(3) << (int)((double)i / (double)_elems.size() * 100) << "%] "
-    //           << "Element #" << std::setw(6) << _elems[i]->id() << " plotted.\n";
   }
   plt::scatter(x, y, 1, d);
+
+  for (size_t i = 0; i < _num_elems; i++)
+  {
+    if (!(*_bad)[i])
+      continue;
+    std::vector<size_t> connected_elems = _elem_to_elems_map[i];
+    for (size_t j = 0; j < connected_elems.size(); j++)
+    {
+      if ((*_bad)[i]->cluster() != (*_all)[connected_elems[j]]->cluster())
+      {
+        std::vector<double> x, y;
+        if ((*_bad)[i]->common_edge((*_all)[connected_elems[j]], x, y))
+          plt::plot(x, y, "k-");
+      }
+    }
+  }
+
+  plt::save(_mesh->filename() + ".damage_" + std::to_string(_step) + ".png");
+}
+
+void
+problem::plot_boundary_elems()
+{
+  plt::clf();
+  std::vector<double> x, y;
+  std::vector<T3 *> elems = _mesh->elems();
+  for (unsigned int i = 0; i < elems.size(); i++)
+  {
+    if (!_mesh->is_boundary_elem(elems[i]))
+      continue;
+    x.push_back(elems[i]->xc());
+    y.push_back(elems[i]->yc());
+  }
+  plt::plot(x, y, ".");
   plt::show();
+}
+
+void
+problem::PCA()
+{
+  std::ofstream out;
+  out.open(_mesh->filename() + ".PCA.csv");
+  for (size_t i = 0; i < _clusters.size(); i++)
+    if (!_clusters[i]->empty() && !_mesh->is_boundary_cluster(_clusters[i]))
+    {
+      _clusters[i]->PCA();
+      out << _clusters[i]->xp() << "," << _clusters[i]->yp() << std::endl;
+    }
+  out.close();
+  std::cout << "[100%] Stage 5: PCA complete!\n";
+}
+
+void
+problem::reinit_clusters()
+{
+  for (size_t i = 0; i < _clusters.size(); i++)
+    if (!_clusters[i]->empty())
+    {
+      _clusters[i]->compute_area();
+      _clusters[i]->compute_centroid();
+    }
+    else
+      _clusters[i]->clear();
 }
 
 void
@@ -52,8 +151,10 @@ problem::dessociate_bad()
     if (!(*_bad)[i])
       continue;
     for (size_t j = 0; j < _clusters.size(); j++)
-      (*_clusters[j])[i] = NULL;
+      if ((*_clusters[j])[i])
+        _clusters[j]->remove_elem(i);
   }
+  reinit_clusters();
   std::cout << "[  0%] Stage 1: Dessociate preserved bad elements.\n";
 }
 
@@ -62,9 +163,7 @@ problem::associate_bad()
 {
   // volume preserving clustring -- classify bad elements into its closest cluster
 
-  // compute centroid of each cluster
-  for (size_t i = 0; i < _clusters.size(); i++)
-    _clusters[i]->compute_centroid();
+  reinit_clusters();
 
   for (size_t i = 0; i < _num_elems; i++)
   {
@@ -77,6 +176,7 @@ problem::associate_bad()
     {
       if (_clusters[j]->empty())
         continue;
+      // double dist_new = _clusters[j]->distance_to_elem((*_bad)[i]) / _clusters[j]->area();
       double dist_new = _clusters[j]->distance_to_elem((*_bad)[i]);
       if (dist_new < dist)
       {
@@ -85,9 +185,12 @@ problem::associate_bad()
       }
     }
 
-    (*_clusters[cluster_id])[i] = (*_bad)[i];
     (*_bad)[i]->set_cluster(cluster_id);
+    _bad->copy_elem_to(i, _clusters[cluster_id]);
   }
+
+  reinit_clusters();
+
   std::cout << "[100%] Stage 4: Grouped bad elements into existing clusters.\n";
 }
 
@@ -104,6 +207,7 @@ problem::decluster()
     }
     std::cout << "[  0%] Stage 2: Declustered cluster #" << std::setw(3) << *i << std::endl;
   }
+  reinit_clusters();
   std::cout << "[  0%] Stage 2: Raw contains " << _raw->size() << " elements.\n";
 }
 
@@ -129,8 +233,8 @@ problem::reclassify()
     // create new cluster
     if (_good->empty())
       break;
-    size_t cluster_id = _clusters.size();
     cluster * new_cluster = new cluster(_num_elems);
+    int cluster_id = _clusters.size();
     _clusters.push_back(new_cluster);
 
     // dequeue the first element in good unclassified:
@@ -141,28 +245,64 @@ problem::reclassify()
     size_t to_dequeue = _good->first();
     while (to_dequeue < _num_elems)
     {
-      for (size_t i = 0; i < _num_elems; i++)
-        if ((*_raw)[i])
+      std::vector<size_t> connected_elems = _elem_to_elems_map[to_dequeue];
+      for (size_t i = 0; i < connected_elems.size(); i++)
+        if ((*_raw)[connected_elems[i]])
         {
-          if ((*_raw)[i]->is_connected_to((*_good)[to_dequeue]))
-          {
-            if ((*_raw)[i]->good())
-              _raw->move_elem_to(i, _good);
-            else
-              _raw->move_elem_to(i, _bad);
-          }
+          if ((*_raw)[connected_elems[i]]->good())
+            _raw->move_elem_to(connected_elems[i], _good);
+          else
+            _raw->move_elem_to(connected_elems[i], _bad);
         }
       (*_good)[to_dequeue]->set_cluster(cluster_id);
       _good->move_elem_to(to_dequeue, _clusters[cluster_id]);
       to_dequeue = _good->first();
     }
-    _clusters[cluster_id]->compute_centroid();
+    reinit_clusters();
     progress = (1.0 - (double)_raw->size() / (double)_num_elems) * 100.0;
     std::cout << "[" << std::setw(3) << (int)progress << "%] Stage 3: "
-              << "Cluster #" << std::setw(3) << cluster_id << " has "
+              << "Cluster #" << std::setw(4) << cluster_id << " has "
               << _clusters[cluster_id]->size()
               << " elements, area = " << _clusters[cluster_id]->area() << ", centroid = ("
               << _clusters[cluster_id]->xc() << ", " << _clusters[cluster_id]->yc() << ").\n";
+  }
+}
+
+void
+problem::statistics()
+{
+  // calculate cluster statistics
+
+  // areas
+  std::vector<double> areas;
+  double total;
+  for (size_t i = 0; i < _clusters.size(); i++)
+    if (_clusters[i]->size() > 0 && !_mesh->is_boundary_cluster(_clusters[i]))
+    {
+      areas.push_back(_clusters[i]->area());
+      total += _clusters[i]->area();
+    }
+
+  _num_fragments = areas.size();
+  std::cout << "[100%] Stage 5: Number of clusters: " << _num_fragments << std::endl;
+
+  if (_num_fragments >= 1)
+  {
+    _mean = total / _num_fragments;
+    std::cout << "[100%] Stage 5: Cluster area mean: " << _mean << std::endl;
+
+    _sigma = 0.0;
+    for (size_t i = 0; i < _num_fragments; i++)
+      _sigma += (areas[i] - _mean) * (areas[i] - _mean);
+    _sigma /= areas.size();
+    _sigma = std::sqrt(_sigma);
+
+    std::cout << "[100%] Stage 5: Cluster area std: " << _sigma << std::endl;
+  }
+  else
+  {
+    _mean = 0.0;
+    _sigma = 0.0;
   }
 }
 
@@ -177,40 +317,7 @@ problem::classify()
 
   associate_bad();
 
-  // calculate cluster statistics
-
-  // areas
-  std::vector<double> areas;
-  double total;
-  for (size_t i = 0; i < _clusters.size(); i++)
-    if (_clusters[i]->size() > 0)
-    {
-      areas.push_back(_clusters[i]->area());
-      total += _clusters[i]->area();
-    }
-
-  // remove the largest cluster
-  auto max = std::min_element(areas.begin(), areas.end());
-  total -= *max;
-  areas.erase(max);
-
-  std::cout << "[100%] Stage 5: Number of clusters: " << areas.size() << std::endl;
-
-  if (areas.size() >= 1)
-  {
-    double mean = total / areas.size();
-    std::cout << "[100%] Stage 5: Cluster area mean: " << mean << std::endl;
-
-    double sigma;
-    for (size_t i = 0; i < areas.size(); i++)
-      sigma += (areas[i] - mean) * (areas[i] - mean);
-    sigma /= areas.size();
-    sigma = std::sqrt(sigma);
-
-    std::cout << "[100%] Stage 5: Cluster area std: " << sigma << std::endl;
-  }
-
-  std::cout << "================================================================\n";
+  statistics();
 
   //
   // // time to plot

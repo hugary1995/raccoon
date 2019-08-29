@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -g -Iinclude -I/usr/include/python2.7 -I/opt/moose/seacas/include
+CXXFLAGS = -Wall -g -Iinclude -I/usr/include/python2.7 -I/opt/moose/seacas/include -Ieigen
 LDFLAGS = -L/opt/moose/seacas/lib
 LDLIBS = -lpython2.7 -lexodus -lnetcdf
 
