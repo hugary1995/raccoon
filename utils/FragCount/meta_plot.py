@@ -17,9 +17,6 @@ mu = E/2/(1+nu)
 m = 5
 b = 0.1
 h = math.sqrt(mu/m/b)
-random.seed()
-r = 1
-s = random.uniform(0.95,1.05)
 
 # f, (ax1, ax2) = plt.subplots(1, 2)
 
@@ -33,18 +30,16 @@ with open(sys.argv[1]) as csv_file:
     A = float(row[2])
     D = math.sqrt((1-nu*nu)*h/E/Gc)*sigma
     l = math.sqrt(A)/h
-    r = random.uniform(-0.02,0.02)
     x = [D]
-    y = [(s+r)*l]
+    y = [l]
 
     for row in csv_reader:
         sigma = float(row[0])/1000
         A = float(row[2])
         D = math.sqrt((1-nu*nu)*h/E/Gc)*sigma
         l = math.sqrt(A)/h
-        r = random.uniform(-0.02,0.02)
         x.append(D)
-        y.append((s+r)*l)
+        y.append(l)
 
 # ax1.errorbar(x,y,yerr)
 # ax1.errorbar(x,y,yerr)

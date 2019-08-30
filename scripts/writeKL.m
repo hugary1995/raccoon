@@ -4,8 +4,8 @@ clc
 %% Field parameters
 
 % Correlation length
-Lc1 = 15;
-Lc2 = 15;
+Lc1 = 5;
+Lc2 = 50;
 % orientation
 angle = 0;
 e1 = [cos(angle);sin(angle)];
@@ -16,9 +16,9 @@ YPeriodic = true;
 % tolerance
 tol = 0.001;
 % quantity name
-name = 'Gc_15';
+name = 'E_crit_brick';
 % Mean value of the field
-average = 8e-4;
+average = 3e-5;
 % Coefficient of variance
 CV = 0.3;
 % Solving shape and scale parameters for a Gaussian distribution
