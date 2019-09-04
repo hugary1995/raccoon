@@ -343,7 +343,7 @@ fracture_content = """\
   [./irreversibility]
     type = Irreversibility
     variable = bounds_dummy
-    bounded_var = d
+    bounded_variable = d
     upper = 1
     lower = d_ref
   [../]
