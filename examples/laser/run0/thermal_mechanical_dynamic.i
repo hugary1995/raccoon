@@ -1,12 +1,6 @@
-[GlobalParams]
-  beta = 0.25
-  gamma = 0.5
-  dt_master = 5e-9
-[]
-
 [Mesh]
   type = FileMesh
-  file = gold/geo.msh
+  file = ../gold/geo2.msh
 []
 
 [Problem]
@@ -24,6 +18,14 @@
 []
 
 [AuxVariables]
+  [./vel_r]
+  [../]
+  [./vel_z]
+  [../]
+  [./accel_r]
+  [../]
+  [./accel_z]
+  [../]
   [./stress]
     family = MONOMIAL
   [../]
@@ -35,21 +37,30 @@
   [../]
   [./bounds_dummy]
   [../]
-  [./load]
-    family = SCALAR
+  [./Gc]
+  [../]
+[]
+
+[Postprocessors]
+  [./thermal_ablation_volume]
+    type = ThermalAblationVolume
+    d = d
+    temperature = T
+    ablation_threshold = 1612
   [../]
 
-  [./disp_r_ref]
+  [./d_integral]
+    type = ElementIntegralVariablePostprocessor
+    variable = d
   [../]
-  [./disp_z_ref]
-  [../]
-  [./vel_r_ref]
-  [../]
-  [./vel_z_ref]
-  [../]
-  [./accel_r_ref]
-  [../]
-  [./accel_z_ref]
+[]
+
+[AuxKernels]
+  [./Gc]
+    type = FunctionAux
+    variable = Gc
+    function = Gc
+    execute_on = 'INITIAL'
   [../]
 []
 
@@ -59,6 +70,7 @@
     variable = bounds_dummy
     bounded_variable = T
     lower = 300
+    execute_on = 'LINEAR TIMESTEP_BEGIN'
   [../]
 []
 
@@ -74,7 +86,7 @@
 [Functions]
   [./Gc]
     type = PiecewiseMultilinear
-    data_file = gold/Gc.txt
+    data_file = ../gold/Gc2.txt
   [../]
 []
 
@@ -82,12 +94,12 @@
   [./density]
     type = GenericConstantMaterial
     prop_names = 'density'
-    prop_values = '2.6e-9'
+    prop_values = '2.0e-9'
   [../]
   [./elasticity_tensor]
     type = ComputeIsotropicElasticityTensor
-    youngs_modulus = 1.08e4
-    poissons_ratio = 0.3461
+    youngs_modulus = 2.74e4
+    poissons_ratio = 0.25
   [../]
   [./strain]
     type = ADComputeAxisymmetricRZSmallStrain
@@ -117,7 +129,7 @@
   [./fracture_energy_barrier]
     type = GenericFunctionMaterial
     prop_names = 'b'
-    prop_values = '0.005'
+    prop_values = '0.0009'
   [../]
   [./local_dissipation]
     type = LinearLocalDissipation
@@ -126,7 +138,7 @@
   [./fracture_properties]
     type = FractureMaterial
     Gc = Gc
-    L = 0.1
+    L = 0.18
     local_dissipation_norm = 8/3
   [../]
   [./degradation]
@@ -137,6 +149,36 @@
 []
 
 [AuxKernels]
+  [./accel_r]
+    type = NewmarkAccelAux
+    variable = accel_r
+    displacement = disp_r
+    velocity = vel_r
+    beta = 0.25
+    execute_on = timestep_end
+  [../]
+  [./vel_r]
+    type = NewmarkVelAux
+    variable = vel_r
+    acceleration = accel_r
+    gamma = 0.5
+    execute_on = timestep_end
+  [../]
+  [./accel_z]
+    type = NewmarkAccelAux
+    variable = accel_z
+    displacement = disp_z
+    velocity = vel_z
+    beta = 0.25
+    execute_on = timestep_end
+  [../]
+  [./vel_z]
+    type = NewmarkVelAux
+    variable = vel_z
+    acceleration = accel_z
+    gamma = 0.5
+    execute_on = timestep_end
+  [../]
   [./stress]
     type = RankTwoScalarAux
     variable = stress
@@ -148,18 +190,20 @@
 
 [Kernels]
   [./inertia_r]
-    type = InertialForceFPI
+    type = InertialForce
     variable = disp_r
-    displacement_old = disp_r_ref
-    velocity = vel_r_ref
-    acceleration = accel_r_ref
+    velocity = vel_r
+    acceleration = accel_r
+    beta = 0.25
+    gamma = 0.5
   [../]
   [./inertia_z]
-    type = InertialForceFPI
+    type = InertialForce
     variable = disp_z
-    displacement_old = disp_z_ref
-    velocity = vel_z_ref
-    acceleration = accel_z_ref
+    velocity = vel_z
+    acceleration = accel_z
+    beta = 0.25
+    gamma = 0.5
   [../]
   [./solid_r]
     type = ADStressDivergenceRZTensors
@@ -183,30 +227,31 @@
     variable = T
   [../]
   [./Hsource]
-    type = ScalarBodyForce
+    type = HeatSource
     variable = T
-    scalar = load
+    function = 'if (t<1.000000E-06, 1.335605E+13*t, if (t<7.050000E-05, 1.335605E+07, if (t<7.150000E-05, 9.549578E+08-1.335605E+13*t, 0)))'
     block = source
-  [../]
+  []
+[]
+
+[BCs]
 []
 
 [Executioner]
   type = Transient
   solve_type = NEWTON
-  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type  '
-  petsc_options_value = 'asm      ilu          1000        200                0                     vinewtonrsls'
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
+  petsc_options_value = 'asm      ilu          200         200                0                     vinewtonrsls'
 
-  dt = 5e-11
-  end_time = 1
-
-  nl_abs_tol = 1e-8
-  nl_rel_tol = 1e-6
+  dt = 5e-9
+  end_time = 7.150000E-05
 
   automatic_scaling = false
 []
 
 [Outputs]
-  hide = 'load'
-  exodus = true
+  file_base = run0
   print_linear_residuals = false
+  exodus = true
+  csv = true
 []
