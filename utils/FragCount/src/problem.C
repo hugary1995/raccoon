@@ -157,16 +157,11 @@ problem::dessociate_bad()
       {
         (*_clusters[i])[j]->set_cluster(0);
         _clusters[i]->move_elem_to(j, _bad);
-        break;
       }
     }
   reinit_clusters();
 
   std::cout << "[  0%] Stage 1: Dessociate preserved bad elements.\n";
-
-  for (size_t i = 0; i < _clusters.size(); i++)
-    std::cout << "[  0%] Stage 1: Cluster #" << std::setw(3) << i << " has " << _clusters[i]->size()
-              << " elements.\n";
 }
 
 void
@@ -177,10 +172,6 @@ problem::associate_bad()
   std::cout << "[100%] Stage 4: Group bad elements into existing clusters. [  0%]\n";
 
   reinit_clusters();
-
-  for (size_t i = 0; i < _clusters.size(); i++)
-    std::cout << "[100%] Stage 4: Cluster #" << std::setw(3) << i << " has " << _clusters[i]->size()
-              << " elements.\n";
 
   double threshold, progress;
   double total = (double)_bad->size();
@@ -306,15 +297,11 @@ problem::statistics()
   std::vector<double> areas;
   double total;
   for (size_t i = 0; i < _clusters.size(); i++)
-  {
-    std::cout << "[100%] Stage 5: Cluster #" << std::setw(3) << i << " has " << _clusters[i]->size()
-              << " elements.\n";
     if (_clusters[i]->size() > 0 && !_mesh->is_boundary_cluster(_clusters[i]))
     {
       areas.push_back(_clusters[i]->area());
       total += _clusters[i]->area();
     }
-  }
 
   _num_fragments = areas.size();
   std::cout << "[100%] Stage 5: Number of clusters: " << _num_fragments << std::endl;
