@@ -15,7 +15,7 @@
     execute_on = 'TIMESTEP_BEGIN'
     sub_cycling = true
     detect_steady_state = true
-    steady_state_tol = 1e-6
+    steady_state_tol = 1e-8
   [../]
 []
 

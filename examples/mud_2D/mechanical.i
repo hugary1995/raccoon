@@ -1,11 +1,11 @@
 [Functions]
   [./Gc]
     type = PiecewiseMultilinear
-    data_file = 'gold/Gc_5_5.txt'
+    data_file = 'gold/Gc_15_5.txt'
   [../]
   [./E_crit]
     type = PiecewiseMultilinear
-    data_file = 'gold/E_crit_5_5.txt'
+    data_file = 'gold/E_crit_15_5.txt'
   [../]
 []
 
@@ -150,8 +150,9 @@
     displacements = 'disp_x disp_y'
   [../]
   [./stress]
-    type = SmallStrainDegradedPK2Stress_NoSplit
+    type = SmallStrainDegradedPK2Stress_StrainSpectral
     d = d
+    d_crit = 0.6
     history = false
   [../]
   [./fracture_energy_barrier]

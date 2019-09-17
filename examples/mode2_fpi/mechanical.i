@@ -118,7 +118,7 @@
   [./stress]
     type = SmallStrainDegradedPK2Stress_StrainSpectral
     d = d
-    d_crit = 0.6
+    d_crit = 0.4
     history = false
   [../]
   [./fracture_energy_barrier]
@@ -167,8 +167,11 @@
 []
 
 [Outputs]
-  csv = true
   print_linear_residuals = false
+  [./csv]
+    type = CSV
+    delimiter = ' '
+  [../]
   [./console]
     type = Console
     hide = 'load Fx'

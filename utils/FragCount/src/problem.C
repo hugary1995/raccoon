@@ -3,8 +3,10 @@
 #include "matplotlibcpp.h"
 namespace plt = matplotlibcpp;
 
+#include <exception>
 #include <limits>
 #include <fstream>
+#include <set>
 
 problem::problem(const char * filename)
 {
@@ -56,8 +58,8 @@ problem::classify_all_times()
     go_to_time_step(i);
     classify();
     out << i << "," << _num_fragments << "," << _mean << "," << _sigma << std::endl;
-    // if (_num_fragments >= 1)
-    //   plot_damage();
+    if (_num_fragments >= 1)
+      plot_damage();
     std::cout << "================================================================\n";
   }
   out.close();
@@ -146,16 +148,25 @@ problem::dessociate_bad()
 {
   // remove bad elements from all clusters
 
-  for (size_t i = 0; i < _num_elems; i++)
-  {
-    if (!(*_bad)[i])
-      continue;
-    for (size_t j = 0; j < _clusters.size(); j++)
-      if ((*_clusters[j])[i])
-        _clusters[j]->remove_elem(i);
-  }
+  for (size_t i = 0; i < _clusters.size(); i++)
+    for (size_t j = 0; j < _num_elems; j++)
+    {
+      if (!(*_clusters[i])[j])
+        continue;
+      if (!(*_clusters[i])[j]->good())
+      {
+        (*_clusters[i])[j]->set_cluster(0);
+        _clusters[i]->move_elem_to(j, _bad);
+        break;
+      }
+    }
   reinit_clusters();
+
   std::cout << "[  0%] Stage 1: Dessociate preserved bad elements.\n";
+
+  for (size_t i = 0; i < _clusters.size(); i++)
+    std::cout << "[  0%] Stage 1: Cluster #" << std::setw(3) << i << " has " << _clusters[i]->size()
+              << " elements.\n";
 }
 
 void
@@ -163,35 +174,51 @@ problem::associate_bad()
 {
   // volume preserving clustring -- classify bad elements into its closest cluster
 
+  std::cout << "[100%] Stage 4: Group bad elements into existing clusters. [  0%]\n";
+
   reinit_clusters();
 
-  for (size_t i = 0; i < _num_elems; i++)
-  {
-    if (!(*_bad)[i])
-      continue;
+  for (size_t i = 0; i < _clusters.size(); i++)
+    std::cout << "[100%] Stage 4: Cluster #" << std::setw(3) << i << " has " << _clusters[i]->size()
+              << " elements.\n";
 
+  double threshold, progress;
+  double total = (double)_bad->size();
+  size_t to_dequeue = _bad->first();
+  while (to_dequeue < _num_elems)
+  {
+    std::vector<size_t> connected_elems = _elem_to_elems_map[to_dequeue];
     double dist = std::numeric_limits<double>::max();
     size_t cluster_id = 0;
-    for (size_t j = 0; j < _clusters.size(); j++)
-    {
-      if (_clusters[j]->empty())
-        continue;
-      // double dist_new = _clusters[j]->distance_to_elem((*_bad)[i]) / _clusters[j]->area();
-      double dist_new = _clusters[j]->distance_to_elem((*_bad)[i]);
-      if (dist_new < dist)
+    for (size_t i = 0; i < connected_elems.size(); i++)
+      if ((*_all)[connected_elems[i]]->cluster() != 0)
       {
-        dist = dist_new;
-        cluster_id = j;
+        double dist_new = (*_all)[connected_elems[i]]->distance((*_bad)[to_dequeue]);
+        if (dist_new < dist)
+        {
+          dist = dist_new;
+          cluster_id = (*_all)[connected_elems[i]]->cluster();
+        }
       }
+    if (cluster_id != 0)
+    {
+      (*_bad)[to_dequeue]->set_cluster(cluster_id);
+      _bad->move_elem_to(to_dequeue, _clusters[cluster_id]);
     }
+    to_dequeue = _bad->next(to_dequeue);
 
-    (*_bad)[i]->set_cluster(cluster_id);
-    _bad->copy_elem_to(i, _clusters[cluster_id]);
+    progress = (1.0 - (double)_bad->size() / total) * 100.0;
+    if (progress > threshold)
+    {
+      std::cout << "[100%] Stage 4: Group bad elements into existing clusters. [" << std::setw(3)
+                << (int)progress << "%]\n";
+      threshold += 10.0;
+    }
   }
 
   reinit_clusters();
 
-  std::cout << "[100%] Stage 4: Grouped bad elements into existing clusters.\n";
+  std::cout << "[100%] Stage 4: Group bad elements into existing clusters. [100%]\n";
 }
 
 void
@@ -203,6 +230,8 @@ problem::decluster()
     {
       if (!(*_clusters[*i])[j])
         continue;
+      if (!(*_clusters[*i])[j]->good())
+        throw 1;
       _clusters[*i]->move_elem_to(j, _raw);
     }
     std::cout << "[  0%] Stage 2: Declustered cluster #" << std::setw(3) << *i << std::endl;
@@ -277,11 +306,15 @@ problem::statistics()
   std::vector<double> areas;
   double total;
   for (size_t i = 0; i < _clusters.size(); i++)
+  {
+    std::cout << "[100%] Stage 5: Cluster #" << std::setw(3) << i << " has " << _clusters[i]->size()
+              << " elements.\n";
     if (_clusters[i]->size() > 0 && !_mesh->is_boundary_cluster(_clusters[i]))
     {
       areas.push_back(_clusters[i]->area());
       total += _clusters[i]->area();
     }
+  }
 
   _num_fragments = areas.size();
   std::cout << "[100%] Stage 5: Number of clusters: " << _num_fragments << std::endl;

@@ -3,6 +3,7 @@
 #include "T3.h"
 #include <Eigen/Dense>
 #include <Eigen/Eigenvalues>
+#include <limits>
 
 class cluster
 {
@@ -29,6 +30,23 @@ public:
       if (_elems[i])
         return i;
     return i;
+  }
+  size_t next(size_t i)
+  {
+    for (size_t j = i + 1; j < _num_elems; j++)
+      if (_elems[j])
+        return j;
+    for (size_t j = 0; j < i; j++)
+      if (_elems[j])
+        return j;
+    return _num_elems;
+  }
+  bool contain(T3 * e)
+  {
+    for (size_t i = 0; i < _num_elems; i++)
+      if (_elems[i] == e)
+        return true;
+    return false;
   }
   void move_elem_to(size_t i, cluster * to)
   {
@@ -93,7 +111,15 @@ public:
   }
   double distance_to_elem(T3 * e)
   {
-    return std::sqrt((_xc - e->xc()) * (_xc - e->xc()) + (_yc - e->yc()) * (_yc - e->yc()));
+    double dist = std::numeric_limits<double>::max();
+    double new_dist;
+    for (size_t i = 0; i < _num_elems; i++)
+      if (_elems[i])
+      {
+        new_dist = _elems[i]->distance(e);
+        dist = std::min(dist, new_dist);
+      }
+    return dist;
   }
   void clear()
   {

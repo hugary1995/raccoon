@@ -39,11 +39,7 @@ public:
   void set_cluster(size_t cluster) { _cluster = cluster; }
   double distance(T3 * e)
   {
-    double x1 = (_n1->x() + _n2->x() + _n3->x()) / 3.0;
-    double y1 = (_n1->y() + _n2->y() + _n3->y()) / 3.0;
-    double x2 = (e->n1()->x() + e->n2()->x() + e->n3()->x()) / 3.0;
-    double y2 = (e->n1()->y() + e->n2()->y() + e->n3()->y()) / 3.0;
-    return std::sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+    return std::sqrt((_xc - e->xc()) * (_xc - e->xc()) + (_yc - e->yc()) * (_yc - e->yc()));
   }
   bool is_connected_to(T3 * e)
   {
