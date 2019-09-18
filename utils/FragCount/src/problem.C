@@ -79,21 +79,24 @@ problem::plot_damage()
   }
   plt::scatter(x, y, 1, d);
 
-  for (size_t i = 0; i < _num_elems; i++)
-  {
-    if (!(*_bad)[i])
-      continue;
-    std::vector<size_t> connected_elems = _elem_to_elems_map[i];
-    for (size_t j = 0; j < connected_elems.size(); j++)
+  for (size_t i = 0; i < _clusters.size(); i++)
+    for (size_t j = 0; j < _num_elems; j++)
     {
-      if ((*_bad)[i]->cluster() != (*_all)[connected_elems[j]]->cluster())
+      if (!(*_clusters[i])[j])
+        continue;
+      if ((*_clusters[i])[j]->good())
+        continue;
+      std::vector<size_t> connected_elems = _elem_to_elems_map[j];
+      for (size_t k = 0; k < connected_elems.size(); k++)
       {
-        std::vector<double> x, y;
-        if ((*_bad)[i]->common_edge((*_all)[connected_elems[j]], x, y))
-          plt::plot(x, y, "k-");
+        if ((*_clusters[i])[j]->cluster() != (*_all)[connected_elems[k]]->cluster())
+        {
+          std::vector<double> x, y;
+          if ((*_clusters[i])[j]->common_edge((*_all)[connected_elems[k]], x, y))
+            plt::plot(x, y, "k-");
+        }
       }
     }
-  }
 
   plt::save(_mesh->filename() + ".damage_" + std::to_string(_step) + ".png");
 }
