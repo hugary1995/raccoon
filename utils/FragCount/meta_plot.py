@@ -28,22 +28,27 @@ with open(sys.argv[1]) as csv_file:
     row = csv_reader.next()
     sigma = float(row[0])/1000
     A = float(row[2])
+    A_error = float(row[3])
     D = math.sqrt((1-nu*nu)*h/E/Gc)*sigma
-    l = math.sqrt(A)/h
+    l = math.log(math.sqrt(A)/h)
+    l_error = A_error/2/A
     x = [D]
     y = [l]
+    y_error = [l_error]
 
     for row in csv_reader:
         sigma = float(row[0])/1000
         A = float(row[2])
+        A_error = float(row[3])
         D = math.sqrt((1-nu*nu)*h/E/Gc)*sigma
-        l = math.sqrt(A)/h
+        l = math.log(math.sqrt(A)/h)
+        l_error = A_error/2/A
         x.append(D)
         y.append(l)
+        y_error.append(l_error)
 
-# ax1.errorbar(x,y,yerr)
-# ax1.errorbar(x,y,yerr)
-plt.semilogy(x,y)
+plt.errorbar(x,y,y_error)
+# plt.semilogy(x,y)
 plt.show()
 # plt.savefig("meta_plot.png",dpi=300)
 

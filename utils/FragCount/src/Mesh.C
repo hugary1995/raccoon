@@ -1,24 +1,41 @@
-#include "mesh.h"
+#include "Mesh.h"
 #include "exodusII.h"
+
+#include <iostream>
+#include <iomanip>
+#include <algorithm>
 
 // macros
 #define MAX_STRING_LEN 128
 #define OUTPUT_WIDTH 35
 
-mesh::mesh(const char * filename) : _filename(filename)
+Mesh::Mesh(const char * filename) : _filename(filename)
 {
-  read_exodus();
-  read_mesh_parameters();
-  read_boundary_node_set();
-  read_nodes();
-  read_blocks();
-  read_elements();
-  read_times();
-  read_damage_at_step(1);
+  readExodus();
+  readMeshParameters();
+  readBoundaryNodeSet();
+  readNodes();
+  readBlocks();
+  readElements();
+  readTimes();
+  readDamageAtStep(1);
+  buildElementToNeighborElementsMap();
+}
+
+Mesh::~Mesh()
+{
+  free(_blk_ids);
+  free(_num_nodes_per_elem);
+  free(_num_elems_in_blk);
+  free(_time_values);
+  for (int i = 0; i < _num_nodes; i++)
+    delete _nodes[i];
+  for (int i = 0; i < _num_elems; i++)
+    delete _elems[i];
 }
 
 std::set<size_t>
-mesh::read_damage_at_step(int step)
+Mesh::readDamageAtStep(int step)
 {
   char * var_name = (char *)calloc((MAX_STR_LENGTH + 1), sizeof(char));
   float * d = (float *)calloc(_num_nodes, sizeof(float));
@@ -32,14 +49,14 @@ mesh::read_damage_at_step(int step)
   for (int i = 0; i < _num_nodes; i++)
     _nodes[i]->d() = d[i];
 
-  std::set<size_t> clusters_pending_update;
+  std::set<size_t> Clusters_pending_update;
   for (int i = 0; i < _num_elems; i++)
   {
     bool old_state = _elems[i]->good();
     _elems[i]->binarize();
     bool new_state = _elems[i]->good();
     if (old_state != new_state)
-      clusters_pending_update.insert(_elems[i]->cluster());
+      Clusters_pending_update.insert(_elems[i]->cluster());
   }
 
   std::cout << std::setw(OUTPUT_WIDTH) << "Updated damage for time step: " << step << std::endl;
@@ -48,11 +65,33 @@ mesh::read_damage_at_step(int step)
 
   free(var_name);
   free(d);
-  return clusters_pending_update;
+  return Clusters_pending_update;
+}
+
+bool
+Mesh::isBoundaryElem(T3 * e)
+{
+  if (_boundary_nodes.find(e->n1()->id()) != _boundary_nodes.end())
+    return true;
+  if (_boundary_nodes.find(e->n2()->id()) != _boundary_nodes.end())
+    return true;
+  if (_boundary_nodes.find(e->n3()->id()) != _boundary_nodes.end())
+    return true;
+  return false;
+}
+
+bool
+Mesh::isBoundaryCluster(Cluster * c)
+{
+  for (int i = 0; i < _num_elems; i++)
+    if ((*c)[i])
+      if (isBoundaryElem((*c)[i]))
+        return true;
+  return false;
 }
 
 void
-mesh::read_exodus()
+Mesh::readExodus()
 {
   // open exodus
   int CPU_word_size = sizeof(float);
@@ -68,7 +107,7 @@ mesh::read_exodus()
 }
 
 void
-mesh::read_mesh_parameters()
+Mesh::readMeshParameters()
 {
   char title[MAX_STR_LENGTH + 1];
 
@@ -99,10 +138,10 @@ mesh::read_mesh_parameters()
   std::cout << std::setw(OUTPUT_WIDTH) << "Exodus file ID: " << _exoid << std::endl;
   std::cout << std::setw(OUTPUT_WIDTH) << "Title: " << title << std::endl;
   std::cout << std::setw(OUTPUT_WIDTH) << "Dimension: " << _num_dim << std::endl;
-  std::cout << std::setw(OUTPUT_WIDTH) << "Number of nodes: " << _num_nodes << std::endl;
+  std::cout << std::setw(OUTPUT_WIDTH) << "Number of Nodes: " << _num_nodes << std::endl;
   std::cout << std::setw(OUTPUT_WIDTH) << "Number of elements: " << _num_elems << std::endl;
   std::cout << std::setw(OUTPUT_WIDTH) << "Number of blocks: " << _num_blks << std::endl;
-  std::cout << std::setw(OUTPUT_WIDTH) << "Number of node sets: " << _num_node_sets << std::endl;
+  std::cout << std::setw(OUTPUT_WIDTH) << "Number of Node sets: " << _num_node_sets << std::endl;
   std::cout << std::setw(OUTPUT_WIDTH) << "Number of side sets: " << _num_side_sets << std::endl;
   std::cout << std::setw(OUTPUT_WIDTH) << "Number of nodal variables: " << _num_nodal_vars
             << std::endl;
@@ -111,7 +150,7 @@ mesh::read_mesh_parameters()
 }
 
 void
-mesh::read_boundary_node_set()
+Mesh::readBoundaryNodeSet()
 {
   int * side_set_ids = (int *)calloc(_num_side_sets, sizeof(int));
   _error = ex_get_ids(_exoid, EX_SIDE_SET, side_set_ids);
@@ -125,23 +164,23 @@ mesh::read_boundary_node_set()
       continue;
     int num_elems_in_set;
     _error = ex_get_set_param(_exoid, EX_SIDE_SET, side_set_ids[i], &num_elems_in_set, NULL);
-    int * node_ctr_list = (int *)calloc(num_elems_in_set, sizeof(int));
-    int * node_list = (int *)calloc(num_elems_in_set * 3, sizeof(int));
-    _error = ex_get_side_set_node_list(_exoid, side_set_ids[i], node_ctr_list, node_list);
+    int * Node_ctr_list = (int *)calloc(num_elems_in_set, sizeof(int));
+    int * Node_list = (int *)calloc(num_elems_in_set * 3, sizeof(int));
+    _error = ex_get_side_set_node_list(_exoid, side_set_ids[i], Node_ctr_list, Node_list);
     for (int j = 0; j < num_elems_in_set * 3; j++)
-      _boundary_nodes.insert(node_list[j]);
-    free(node_ctr_list);
-    free(node_list);
+      _boundary_nodes.insert(Node_list[j]);
+    free(Node_ctr_list);
+    free(Node_list);
   }
 
   free(side_set_ids);
-  std::cout << std::setw(OUTPUT_WIDTH) << "Number of boundary nodes: " << _boundary_nodes.size()
+  std::cout << std::setw(OUTPUT_WIDTH) << "Number of boundary Nodes: " << _boundary_nodes.size()
             << std::endl;
   std::cout << "================================================================\n";
 }
 
 void
-mesh::read_nodes()
+Mesh::readNodes()
 {
   float * x = (float *)calloc(_num_nodes, sizeof(float));
   float * y = _num_dim >= 2 ? (float *)calloc(_num_nodes, sizeof(float)) : NULL;
@@ -157,7 +196,7 @@ mesh::read_nodes()
 
   for (int i = 0; i < _num_nodes; i++)
   {
-    node * tmp = new node(i + 1, x[i], y[i], 0);
+    Node * tmp = new Node(i, x[i], y[i], 0);
     _nodes.push_back(tmp);
   }
 
@@ -165,12 +204,12 @@ mesh::read_nodes()
   free(y);
   free(z);
 
-  std::cout << std::setw(OUTPUT_WIDTH) << "Allocated: " << _nodes.size() << " nodes.\n";
+  std::cout << std::setw(OUTPUT_WIDTH) << "Allocated: " << _nodes.size() << " Nodes.\n";
   std::cout << "================================================================\n";
 }
 
 void
-mesh::read_blocks()
+Mesh::readBlocks()
 {
   _blk_ids = (int *)calloc(_num_blks, sizeof(int));
   _error = ex_get_ids(_exoid, EX_ELEM_BLOCK, _blk_ids);
@@ -216,14 +255,14 @@ mesh::read_blocks()
     std::cout << std::setw(OUTPUT_WIDTH) << "Number of elements: " << _num_elems_in_blk[i]
               << std::endl;
     std::cout << std::setw(OUTPUT_WIDTH)
-              << "Number of nodes per element: " << _num_nodes_per_elem[i] << std::endl;
+              << "Number of Nodes per element: " << _num_nodes_per_elem[i] << std::endl;
 
     std::cout << "================================================================\n";
   }
 }
 
 void
-mesh::read_elements()
+Mesh::readElements()
 {
   for (int i = 0; i < _num_blks; i++)
   {
@@ -240,7 +279,7 @@ mesh::read_elements()
 
     for (int j = 0; j < _num_elems_in_blk[i]; j++)
     {
-      T3 * tmp = new T3(_elems.size() + 1,
+      T3 * tmp = new T3(_elems.size(),
                         _nodes[connectivity[j * _num_nodes_per_elem[i] + 0] - 1],
                         _nodes[connectivity[j * _num_nodes_per_elem[i] + 1] - 1],
                         _nodes[connectivity[j * _num_nodes_per_elem[i] + 2] - 1],
@@ -255,11 +294,11 @@ mesh::read_elements()
 }
 
 void
-mesh::read_times()
+Mesh::readTimes()
 {
   // read time steps
-  _num_time_steps = ex_inquire_int(_exoid, EX_INQ_TIME);
-  _time_values = (float *)calloc(_num_time_steps, sizeof(float));
+  _nun_time_steps = ex_inquire_int(_exoid, EX_INQ_TIME);
+  _time_values = (float *)calloc(_nun_time_steps, sizeof(float));
   _error = ex_get_all_times(_exoid, _time_values);
   if (_error)
   {
@@ -267,23 +306,32 @@ mesh::read_times()
     ex_close(_exoid);
     exit(_error);
   }
-  std::cout << std::setw(OUTPUT_WIDTH) << "Number of time steps: " << _num_time_steps << std::endl;
+  std::cout << std::setw(OUTPUT_WIDTH) << "Number of time steps: " << _nun_time_steps << std::endl;
 
   std::cout << "================================================================\n";
 }
 
-// void
-// mesh::plot_mesh()
-// {
-//   plt::clf();
-//   std::vector<double> x, y;
-//   for (unsigned int i = 0; i < _elems.size(); i++)
-//   {
-//     x.push_back(_elems[i]->xc());
-//     y.push_back(_elems[i]->yc());
-//     // std::cout << "[" << std::setw(3) << (int)((double)i / (double)_elems.size() * 100) << "%] "
-//     //           << "Element #" << std::setw(6) << _elems[i]->id() << " plotted.\n";
-//   }
-//   plt::plot(x, y, "k.");
-//   plt::show();
-// }
+void
+Mesh::buildElementToNeighborElementsMap()
+{
+  // initialize elem_to_elems map
+  double progress = 0.0;
+  double threshold = 0.0;
+  for (int i = 0; i < _num_elems; i++)
+  {
+    for (int j = i + 1; j < _num_elems; j++)
+      if (_elems[i]->isConnectedTo(_elems[j]))
+      {
+        _elems[i]->neighbors().push_back(_elems[j]);
+        _elems[j]->neighbors().push_back(_elems[i]);
+      }
+    progress = (double)i / (double)_num_elems * 100.0;
+    if (progress >= threshold)
+    {
+      std::cout << "[" << std::setw(3) << (int)progress
+                << "%] Building element to connected elements map...\n";
+      threshold += 10.0;
+    }
+  }
+  std::cout << "[100%] Building element to connected elements map...\n";
+}

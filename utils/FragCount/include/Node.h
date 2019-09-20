@@ -1,12 +1,9 @@
 #pragma once
 
-#include <iostream>
-#include <iomanip>
-
-class node
+class Node
 {
 public:
-  node(unsigned int id, double x, double y, double d) : _id(id), _x(x), _y(y), _d(d){};
+  Node(unsigned int id, double x, double y, double d) : _id(id), _x(x), _y(y), _d(d){};
   unsigned int id() { return _id; }
   double x() { return _x; }
   double y() { return _y; }
