@@ -5,8 +5,8 @@ clc
 %% Field parameters
 
 % correlation length
-Lc1 = 20;
-Lc2 = 20;
+Lc1 = 5;
+Lc2 = 5;
 % periodic correlation function
 p1 = 100;
 p2 = 100;
@@ -21,7 +21,7 @@ rho2 = @(tau) exp(-c2*sin(pi*tau/p2)^2/Lc2^2);
 % tolerance
 tol = 0.001;
 % quantity name
-name = 'Gc_20';
+name = 'Gc_5';
 % mean value of the field
 mean = 8e-4;
 % coefficient of variance

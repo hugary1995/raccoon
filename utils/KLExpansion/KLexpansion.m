@@ -15,7 +15,10 @@ Np = length(X(:));
 R = eye(Np,Np);
 coord = prepro.coordinate_system;
 
-parfor i = 1:Np
+progress = 0;
+threshold = 0;
+
+for i = 1:Np
   for j = 1:Np
     if strcmp(coord,'cartesian')
       tau1 = abs(X(i)-X(j));
@@ -25,7 +28,12 @@ parfor i = 1:Np
       tau2 = 0;
     end
     
-    R(i,j) = rho_1(tau1)*rho_2(tau2);
+    R(i,j) = single(rho_1(tau1)*rho_2(tau2));
+  end
+  progress = i/Np;
+  if progress >= threshold
+    fprintf('progress: %.2f%%\n',progress*100);
+    threshold = threshold+0.1;
   end
 end
 
