@@ -35,7 +35,7 @@
   [../]
   [./Gc]
   [../]
-  [./E_crit]
+  [./psic]
   [../]
 []
 
@@ -52,10 +52,10 @@
     function = Gc
     execute_on = 'INITIAL'
   [../]
-  [./E_crit]
+  [./psic]
     type = FunctionAux
-    variable = E_crit
-    function = E_crit
+    variable = psic
+    function = psic
     execute_on = 'INITIAL'
   [../]
 []
@@ -158,7 +158,7 @@
   [./fracture_energy_barrier]
     type = GenericFunctionMaterial
     prop_names = 'b'
-    prop_values = 'E_crit'
+    prop_values = 'psic'
   [../]
   [./local_dissipation]
     type = LinearLocalDissipation
