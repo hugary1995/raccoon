@@ -1,5 +1,34 @@
-[GlobalParams]
-  displacements = 'disp_x disp_y'
+[MultiApps]
+  [./fracture]
+    type = TransientMultiApp
+    input_files = 'fracture.i'
+    app_type = raccoonApp
+    execute_on = 'TIMESTEP_BEGIN'
+  [../]
+[]
+
+[Transfers]
+  [./send_E_el]
+    type = MultiAppCopyTransfer
+    multi_app = fracture
+    direction = to_multiapp
+    source_variable = 'E_el'
+    variable = 'E_el'
+  [../]
+  [./send_d_ref]
+    type = MultiAppCopyTransfer
+    multi_app = fracture
+    direction = to_multiapp
+    source_variable = 'd_ref'
+    variable = 'd_ref'
+  [../]
+  [./get_d]
+    type = MultiAppCopyTransfer
+    multi_app = fracture
+    direction = from_multiapp
+    source_variable = 'd'
+    variable = 'd'
+  [../]
 []
 
 [Mesh]
@@ -17,12 +46,16 @@
 [AuxVariables]
   [./d]
   [../]
+  [./d_ref]
+  [../]
   [./load]
     family = SCALAR
   [../]
   [./E_el]
     order = CONSTANT
     family = MONOMIAL
+  [../]
+  [./fx]
   [../]
 []
 
@@ -40,11 +73,14 @@
     type = ADStressDivergenceTensors
     variable = disp_x
     component = 0
+    displacements = 'disp_x disp_y'
+    save_in = fx
   [../]
   [./solid_y]
     type = ADStressDivergenceTensors
     variable = disp_y
     component = 1
+    displacements = 'disp_x disp_y'
   [../]
 []
 
@@ -77,11 +113,12 @@
   [../]
   [./strain]
     type = ADComputeSmallStrain
+    displacements = 'disp_x disp_y'
   [../]
   [./stress]
     type = SmallStrainDegradedPK2Stress_StrainSpectral
     d = d
-    d_crit = 0.6
+    d_crit = 0.2
     history = false
   [../]
   [./fracture_energy_barrier]
@@ -102,25 +139,41 @@
   [./degradation]
     type = LorentzDegradation
     d = d
-    residual_degradation = 1e-06
+    residual_degradation = 1e-09
   [../]
 []
 
 [Executioner]
-  type = Transient
+  type = TransientSupNorm
   solve_type = 'NEWTON'
-  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
-  petsc_options_value = 'asm      ilu          200         200                0                    '
-  dt = 1e-5
+  petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
+  petsc_options_value = 'lu       superlu_dist'
+  # petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
+  # petsc_options_value = 'asm      ilu          1000        200                0                    '
+  dt = 1e-6
 
-  nl_abs_tol = 1e-10
+  nl_abs_tol = 1e-08
   nl_rel_tol = 1e-06
 
   automatic_scaling = true
 []
 
+[Postprocessors]
+  [./Fx]
+    type = SideIntegralVariablePostprocessor
+    variable = fx
+    boundary = 'top'
+  [../]
+[]
+
 [Outputs]
-  hide = 'load'
-  exodus = true
   print_linear_residuals = false
+  [./csv]
+    type = CSV
+    delimiter = ' '
+  [../]
+  [./console]
+    type = Console
+    hide = 'load Fx'
+  [../]
 []

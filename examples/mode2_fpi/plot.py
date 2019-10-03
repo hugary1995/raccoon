@@ -13,7 +13,7 @@ if len(sys.argv) == 1:
 
 for file_i in range(len(sys.argv)-1):
     with open(sys.argv[file_i+1]) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
+        csv_reader = csv.reader(csv_file, delimiter=' ')
         # skip header
         csv_reader.next()
         # read first line of data
@@ -27,6 +27,6 @@ for file_i in range(len(sys.argv)-1):
             f.append(f_)
             u.append(u_)
 
-    plt.plot(u,f,'.-')
+    plt.plot(u,f,'-')
 
 plt.show()

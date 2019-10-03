@@ -4,18 +4,18 @@
 #include <string>
 #include <cstring>
 #include <set>
+#include "ProblemDefinition.h"
 
 class Mesh
 {
 public:
-  Mesh(const char * filename);
+  Mesh(ProblemDefinition config);
   ~Mesh();
 
   std::vector<Node *> Nodes() { return _nodes; }
   std::vector<T3 *> elems() { return _elems; }
   int numTimeSteps() { return _nun_time_steps; }
   std::set<size_t> readDamageAtStep(int step);
-  const std::string filename() { return std::string(_filename); }
   bool isBoundaryElem(T3 * e);
   bool isBoundaryCluster(Cluster * c);
 
@@ -30,7 +30,7 @@ private:
   void readTimes();
   void buildElementToNeighborElementsMap();
 
-  const char * _filename;
+  ProblemDefinition _config;
   int _exoid;
   int _error;
   int _num_dim;

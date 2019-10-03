@@ -1,31 +1,33 @@
 close all
+clear
 clc
 
 %% Field parameters
 
-% Correlation length
-Lc1 = 3;
-Lc2 = 3;
-% orientation
-angle = 0;
-e1 = [cos(angle);sin(angle)];
-e2 = [-sin(angle);cos(angle)];
-% Boolean for periodicity
-XPeriodic = true;
-YPeriodic = true;
+% correlation length
+Lc1 = 20;
+Lc2 = 20;
+% periodic correlation function
+p1 = 100;
+p2 = 100;
+syms c1 c2
+c1 = eval(vpasolve(0.5*p1*exp(-c1/2/Lc1^2)*besseli(0,c1/2/Lc1^2)-Lc1 == 0,c1));
+c2 = eval(vpasolve(0.5*p2*exp(-c2/2/Lc2^2)*besseli(0,c2/2/Lc2^2)-Lc2 == 0,c2));
+rho1 = @(tau) exp(-c1*sin(pi*tau/p1)^2/Lc1^2);
+rho2 = @(tau) exp(-c2*sin(pi*tau/p2)^2/Lc2^2);
+% non periodic correlation function
+% rho1 = @(tau) exp(-pi*tau^2/4/Lc1^2);
+% rho2 = @(tau) exp(-pi*tau^2/4/Lc2^2);
 % tolerance
 tol = 0.001;
 % quantity name
-name = 'Gc_3';
-% Mean value of the field
-average = 8e-4;
-% Coefficient of variance
+name = 'Gc_20';
+% mean value of the field
+mean = 8e-4;
+% coefficient of variance
 CV = 0.3;
-% Solving shape and scale parameters for a Gaussian distribution
-A = 1/CV^2;
-B = average*CV^2;
 % number of realizations
-num_realizations = 5;
+num_realizations = 10;
 
 %% Mesh
 
@@ -45,10 +47,14 @@ Sx = linspace(X1,X2,Nx);
 Sy = linspace(Y1,Y2,Ny);
 [Xmesh,Ymesh] = meshgrid(Sx,Sy);
 
+%% preprocessor
+
+prepro = PreProcessor(name,rho1,rho2,'cartesian',tol,mean,CV,num_realizations);
+
 %% KL expansion
 
 % Set up the covariance matrix and solve the expansion
-[d,v] = KLexpansion(e1,e2,Lc1,Lc2,Xmesh,Ymesh,Np,XPeriodic,YPeriodic,tol);
+[d,v] = KLexpansion(prepro,Xmesh,Ymesh);
 
 for realization = 1:num_realizations
   
@@ -59,28 +65,16 @@ for realization = 1:num_realizations
   
   xi = randn(nu,1);
   G = v*(sqrt(d).*xi);
-  
-  gaussian = reshape(G,Ny,Nx);
-  gaussian = gaussian';
-  % figure
-  % h = surf(Sx,Sy,gaussian');
-  % view(2);
-  % axis equal
-  % axis off
-  % colorbar
-  
-  field = gaminv(normcdf(G,0,1),A,B);
+  field = GaussianToGamma(prepro,G);
   % Preprocess to match MOOSE syntax
   field = reshape(field,Ny,Nx);
   field = field';
-  % figure
-  % surf(Sx,Sy,field','EdgeColor','none');
-  % view(2);
-  % axis equal
-  % axis off
-  % colorbar
-  
-  G = field(:);
+  figure
+  surf(Sx,Sy,field','EdgeColor','none');
+  view(2);
+  axis equal
+  axis off
+  colorbar
   
   %% write to txt
   

@@ -247,6 +247,7 @@
   end_time = 2.200000E-04
 
   automatic_scaling = false
+  compute_scaling_once = true
 []
 
 [Outputs]

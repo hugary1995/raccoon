@@ -7,7 +7,7 @@
 class Problem
 {
 public:
-  Problem(const char * filename);
+  Problem(ProblemDefinition config);
   ~Problem()
   {
     delete _mesh;
@@ -18,6 +18,8 @@ public:
     for (size_t i = 0; i < _clusters.size(); i++)
       delete _clusters[i];
   }
+  void preClassify();
+  void postClassify();
   void plotDamage();
   void plotBoundaryElems();
   void classifyAllTimes();
@@ -38,6 +40,10 @@ public:
 
 protected:
 private:
+  /// problem definition
+  ProblemDefinition _config;
+
+  /// mesh
   Mesh * _mesh;
 
   /// number of elements
@@ -75,4 +81,10 @@ private:
 
   /// step
   int _step;
+
+  /// output stream for statistics
+  std::ofstream _stat_out;
+
+  /// output stream for PCA
+  std::ofstream _pca_out;
 };

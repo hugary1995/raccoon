@@ -9,9 +9,9 @@ namespace plt = matplotlibcpp;
 #include <iostream>
 #include <iomanip>
 
-Problem::Problem(const char * filename)
+Problem::Problem(ProblemDefinition config) : _config(config)
 {
-  _mesh = new Mesh(filename);
+  _mesh = new Mesh(config);
   _num_elems = _mesh->elems().size();
 
   // initialize queues
@@ -20,35 +20,90 @@ Problem::Problem(const char * filename)
   _intact = new Cluster(_num_elems);
   _broken = new Cluster(_num_elems);
 
+  plt::backend(_config.output.fragments.backend);
+}
+
+void
+Problem::preClassify()
+{
+  if (_config.output.statistics.enable)
+  {
+    _stat_out.open(_config.exodus.file_name + "_" + _config.output.statistics.append + ".dat");
+    _stat_out << "step";
+    if (_config.output.statistics.number_of_fragments)
+      _stat_out << " number_of_fragments";
+    if (_config.output.statistics.mean_fragment_size)
+      _stat_out << " mean_fragment_size";
+    if (_config.output.statistics.std_fragment_size)
+      _stat_out << " std_fragment_size";
+    _stat_out << "\n";
+    _stat_out.flush();
+  }
+
   // initially, put all elems in Cluster 0
   // all elements' Cluster id are set to 0 already
   Cluster * new_cluster = new Cluster(_mesh->elems());
   _clusters.push_back(new_cluster);
+}
 
-  plt::backend("TkAgg");
+void
+Problem::postClassify()
+{
+  if (_config.output.statistics.enable)
+    _stat_out.close();
 }
 
 void
 Problem::classifyAllTimes()
 {
-  std::ofstream out;
-  out.open(_mesh->filename() + ".stat.csv");
-  out << "step,num_fragments,mean,std\n";
-  for (int i = 1; i <= numTimeSteps(); i++)
+  preClassify();
+
+  for (int i = _config.algorithm.time_step_begin;
+       i <= std::min(_config.algorithm.time_step_end, numTimeSteps());
+       i++)
   {
     goToTimeStep(i);
     classify();
-    out << i << "," << _num_fragments << "," << _mean << "," << _sigma << std::endl;
-    // if (_num_fragments >= 1)
-    //   plotDamage();
     std::cout << "================================================================\n";
   }
-  out.close();
+
+  postClassify();
+}
+
+void
+Problem::classify()
+{
+  dessociateBroken();
+
+  decluster();
+
+  reclassify();
+
+  if (_config.algorithm.preserve_volume)
+    associateBroken();
+
+  if (_config.output.fragments.enable)
+    plotDamage();
+
+  if (_config.output.statistics.enable)
+    statistics();
+
+  if (_config.output.PCA.enable)
+    PCA();
 }
 
 void
 Problem::plotDamage()
 {
+  // leave if it is not time to output
+  if (_config.output.fragments.interval == 0)
+  {
+    if (_step != std::min(_config.algorithm.time_step_end, numTimeSteps()))
+      return;
+  }
+  else if ((_step - _config.algorithm.time_step_begin) % _config.output.fragments.interval != 0)
+    return;
+
   plt::clf();
   std::vector<double> x, y, d;
   std::vector<Node *> Nodes = _mesh->Nodes();
@@ -58,9 +113,15 @@ Problem::plotDamage()
     y.push_back(Nodes[i]->y());
     d.push_back(Nodes[i]->d());
   }
-  plt::scatter(x, y, 1, d);
+  plt::scatter(x, y, 1, d, _config.output.fragments.colormap);
 
   for (size_t i = 0; i < _clusters.size(); i++)
+  {
+    if (!_clusters[i])
+      continue;
+    if (!_config.output.fragments.include_boundary_fragments &&
+        _mesh->isBoundaryCluster(_clusters[i]))
+      continue;
     for (size_t j = 0; j < _num_elems; j++)
     {
       if (!(*_clusters[i])[j])
@@ -78,39 +139,41 @@ Problem::plotDamage()
         }
       }
     }
-
-  plt::save(_mesh->filename() + ".damage_" + std::to_string(_step) + ".png");
-}
-
-void
-Problem::plotBoundaryElems()
-{
-  plt::clf();
-  std::vector<double> x, y;
-  std::vector<T3 *> elems = _mesh->elems();
-  for (unsigned int i = 0; i < elems.size(); i++)
-  {
-    if (!_mesh->isBoundaryElem(elems[i]))
-      continue;
-    x.push_back(elems[i]->xc());
-    y.push_back(elems[i]->yc());
   }
-  plt::plot(x, y, ".");
-  plt::show();
+
+  plt::save(_config.exodus.file_name + "_" + _config.output.fragments.append + "_step_" +
+            std::to_string(_step) + ".png");
 }
 
 void
 Problem::PCA()
 {
-  std::ofstream out;
-  out.open(_mesh->filename() + ".PCA.csv");
+  // leave if it is not time to output
+  if (_config.output.PCA.interval == 0)
+  {
+    if (_step != std::min(_config.algorithm.time_step_end, numTimeSteps()))
+      return;
+  }
+  else if ((_step - _config.algorithm.time_step_begin) % _config.output.PCA.interval != 0)
+    return;
+
+  _pca_out.open(_config.exodus.file_name + "_" + _config.output.PCA.append + "_step_" +
+                std::to_string(_step) + ".dat");
+
   for (size_t i = 0; i < _clusters.size(); i++)
-    if (!_clusters[i]->empty() && !_mesh->isBoundaryCluster(_clusters[i]))
+  {
+    if (!_config.output.PCA.include_boundary_fragments && _mesh->isBoundaryCluster(_clusters[i]))
+      continue;
+    if (!_clusters[i]->empty())
     {
       _clusters[i]->PCA();
-      out << _clusters[i]->xp() << "," << _clusters[i]->yp() << std::endl;
+      _pca_out << _clusters[i]->xp() << "," << _clusters[i]->yp() << std::endl;
     }
-  out.close();
+  }
+
+  _pca_out.flush();
+
+  _pca_out.close();
   std::cout << "Stage 5: PCA complete!\n";
 }
 
@@ -259,14 +322,24 @@ Problem::reclassify()
 void
 Problem::statistics()
 {
-  // calculate Cluster statistics
+  // leave if it is not time to output
+  if (_config.output.statistics.interval == 0)
+  {
+    if (_step != std::min(_config.algorithm.time_step_end, numTimeSteps()))
+      return;
+  }
+  else if ((_step - _config.algorithm.time_step_begin) % _config.output.statistics.interval != 0)
+    return;
 
   // areas
   std::vector<double> areas;
   double total;
   for (size_t i = 0; i < _clusters.size(); i++)
-    if (_clusters[i]->size() > 0)
+    if (!_clusters[i]->empty())
     {
+      if (!_config.output.statistics.include_boundary_fragments &&
+          _mesh->isBoundaryCluster(_clusters[i]))
+        continue;
       areas.push_back(_clusters[i]->area());
       total += _clusters[i]->area();
     }
@@ -292,18 +365,14 @@ Problem::statistics()
     _mean = 0.0;
     _sigma = 0.0;
   }
-}
 
-void
-Problem::classify()
-{
-  dessociateBroken();
-
-  decluster();
-
-  reclassify();
-
-  associateBroken();
-
-  statistics();
+  _stat_out << _step;
+  if (_config.output.statistics.number_of_fragments)
+    _stat_out << " " << _num_fragments;
+  if (_config.output.statistics.mean_fragment_size)
+    _stat_out << " " << _mean;
+  if (_config.output.statistics.std_fragment_size)
+    _stat_out << " " << _sigma;
+  _stat_out << "\n";
+  _stat_out.flush();
 }

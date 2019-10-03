@@ -118,7 +118,7 @@
   [./stress]
     type = SmallStrainDegradedPK2Stress_StrainSpectral
     d = d
-    d_crit = 0.4
+    d_crit = 0.2
     history = false
   [../]
   [./fracture_energy_barrier]

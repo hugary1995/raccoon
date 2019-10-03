@@ -820,7 +820,8 @@ bool
 scatter(const std::vector<Numeric> & x,
         const std::vector<Numeric> & y,
         const double s,
-        const std::vector<Numeric> & c)
+        const std::vector<Numeric> & c,
+        const std::string cmap)
 {
   assert(x.size() == y.size());
   assert(x.size() == c.size());
@@ -833,6 +834,7 @@ scatter(const std::vector<Numeric> & x,
   PyDict_SetItemString(kwargs, "s", PyLong_FromLong(s));
   PyDict_SetItemString(kwargs, "c", carray);
   PyDict_SetItemString(kwargs, "edgecolors", PyString_FromString("none"));
+  PyDict_SetItemString(kwargs, "cmap", PyString_FromString(cmap.c_str()));
 
   PyObject * plot_args = PyTuple_New(2);
   PyTuple_SetItem(plot_args, 0, xarray);

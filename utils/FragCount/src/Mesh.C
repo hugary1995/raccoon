@@ -9,7 +9,7 @@
 #define MAX_STRING_LEN 128
 #define OUTPUT_WIDTH 35
 
-Mesh::Mesh(const char * filename) : _filename(filename)
+Mesh::Mesh(ProblemDefinition config) : _config(config)
 {
   readExodus();
   readMeshParameters();
@@ -18,7 +18,6 @@ Mesh::Mesh(const char * filename) : _filename(filename)
   readBlocks();
   readElements();
   readTimes();
-  readDamageAtStep(1);
   buildElementToNeighborElementsMap();
 }
 
@@ -42,7 +41,7 @@ Mesh::readDamageAtStep(int step)
   for (int i = 0; i < _num_nodal_vars; i++)
   {
     _error = ex_get_variable_name(_exoid, EX_NODAL, i + 1, var_name);
-    if (strcmp(var_name, "d") == 0)
+    if (_config.exodus.damage_variable == var_name)
       _error = ex_get_var(_exoid, step, EX_NODAL, i + 1, 0, _num_nodes, d);
   }
 
@@ -83,6 +82,8 @@ Mesh::isBoundaryElem(T3 * e)
 bool
 Mesh::isBoundaryCluster(Cluster * c)
 {
+  if (!c)
+    return false;
   for (int i = 0; i < _num_elems; i++)
     if ((*c)[i])
       if (isBoundaryElem((*c)[i]))
@@ -97,11 +98,13 @@ Mesh::readExodus()
   int CPU_word_size = sizeof(float);
   int IO_word_size = 0;
 
-  _exoid = ex_open(_filename, EX_READ, &CPU_word_size, &IO_word_size, &_version);
+  std::string exodus_name = _config.exodus.file_name + ".e";
+
+  _exoid = ex_open(exodus_name.c_str(), EX_READ, &CPU_word_size, &IO_word_size, &_version);
 
   if (_exoid < 0)
   {
-    std::cout << "Cannot open " << _filename << std::endl;
+    std::cout << "Cannot open " << _config.exodus.file_name << std::endl;
     exit(_exoid);
   }
 }
@@ -159,8 +162,16 @@ Mesh::readBoundaryNodeSet()
     char set_name[MAX_STR_LENGTH + 1];
     _error = ex_get_name(_exoid, EX_SIDE_SET, side_set_ids[i], set_name);
     std::cout << std::setw(OUTPUT_WIDTH) << "Found set: " << set_name << std::endl;
-    if (strcmp(set_name, "top") && strcmp(set_name, "bottom") && strcmp(set_name, "left") &&
-        strcmp(set_name, "right"))
+    bool is_boundary = false;
+    for (auto b : _config.exodus.boundaries)
+      if (b == set_name)
+      {
+        is_boundary = true;
+        std::cout << std::setw(OUTPUT_WIDTH) << "set: " << set_name
+                  << " is on external boundary.\n";
+        break;
+      }
+    if (!is_boundary)
       continue;
     int num_elems_in_set;
     _error = ex_get_set_param(_exoid, EX_SIDE_SET, side_set_ids[i], &num_elems_in_set, NULL);
@@ -283,7 +294,7 @@ Mesh::readElements()
                         _nodes[connectivity[j * _num_nodes_per_elem[i] + 0] - 1],
                         _nodes[connectivity[j * _num_nodes_per_elem[i] + 1] - 1],
                         _nodes[connectivity[j * _num_nodes_per_elem[i] + 2] - 1],
-                        0.75);
+                        _config.algorithm.cut_off);
       _elems.push_back(tmp);
     }
 
