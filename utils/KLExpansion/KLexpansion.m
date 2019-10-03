@@ -15,7 +15,6 @@ Np = length(X(:));
 R = eye(Np,Np);
 coord = prepro.coordinate_system;
 
-progress = 0;
 threshold = 0;
 
 for i = 1:Np
@@ -31,7 +30,7 @@ for i = 1:Np
     R(i,j) = single(rho_1(tau1)*rho_2(tau2));
   end
   progress = i/Np;
-  if progress >= threshold
+  if progress >= threshold && labindex == 1
     fprintf('progress: %.2f%%\n',progress*100);
     threshold = threshold+0.1;
   end
@@ -41,7 +40,7 @@ end
 
 disp('solving for eignevalues and associated KL basis...')
 
-[V,D] = eig(R);
+[V,D] = eigs(R,1000,'largestreal');
 [d,ind] = sort(diag(D),'descend');
 v = V(:,ind);
 
