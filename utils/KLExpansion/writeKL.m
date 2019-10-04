@@ -6,10 +6,10 @@ clc
 %% parameters of the first field
 
 % quantity name
-name = 'Gc_Lc_5';
+name = 'Gc_Lc_20';
 % correlation length
-Lc1 = 5;
-Lc2 = 5;
+Lc1 = 20;
+Lc2 = 20;
 % periodic correlation function
 p1 = 100;
 p2 = 100;
@@ -32,10 +32,10 @@ field1 = Field(name,rho1,rho2,'cartesian',tol,mean,CV);
 %% parameters of the second field
 
 % quantity name
-name = 'psic_Lc_5';
+name = 'psic_Lc_20';
 % correlation length
-Lc1 = 5;
-Lc2 = 5;
+Lc1 = 20;
+Lc2 = 20;
 % periodic correlation function
 p1 = 100;
 p2 = 100;
