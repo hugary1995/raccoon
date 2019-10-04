@@ -6,10 +6,10 @@ clc
 %% parameters of the first field
 
 % quantity name
-name = 'Gc_Lc_20';
+name = 'Gc_pos_1';
 % correlation length
-Lc1 = 20;
-Lc2 = 20;
+Lc1 = 10;
+Lc2 = 10;
 % periodic correlation function
 p1 = 100;
 p2 = 100;
@@ -32,10 +32,10 @@ field1 = Field(name,rho1,rho2,'cartesian',tol,mean,CV);
 %% parameters of the second field
 
 % quantity name
-name = 'psic_Lc_20';
+name = 'psic_pos_1';
 % correlation length
-Lc1 = 20;
-Lc2 = 20;
+Lc1 = 10;
+Lc2 = 10;
 % periodic correlation function
 p1 = 100;
 p2 = 100;
@@ -76,7 +76,7 @@ Sy = linspace(Y1,Y2,Ny);
 %% sampling
 
 num_realizations = 10;
-rho = 0.0;
+rho = 1;
 same_kernel = true;
 sampler = Sampler(num_realizations,rho,field1,field2,Xmesh,Ymesh,same_kernel);
 sampler.run();
