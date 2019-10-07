@@ -44,21 +44,23 @@ classdef Sampler
       for sample = 1:this.num_samples
         G1 = this.field_1.sampleGaussian();
         G2 = this.field_2.sampleGaussian();
-        field1 = GaussianToGamma(this.field_1.mean,this.field_1.coef_variance,G1);
-        field2 = GaussianToGamma(this.field_2.mean,this.field_2.coef_variance,...
-          this.field_correlation*G1+sqrt(1-this.field_correlation^2)*G2);
-        % Preprocess to match MOOSE syntax
-        [Nx,Ny] = size(this.X);
-        field1 = reshape(field1,Ny,Nx);
-        field1 = field1';
-        field2 = reshape(field2,Ny,Nx);
-        field2 = field2';
-        if sample == 1
-          this.plotField(this.field_1.name,field1);
-          this.plotField(this.field_2.name,field2);
+        for rho = this.field_correlation
+          field1 = GaussianToGamma(this.field_1.mean,this.field_1.coef_variance,G1);
+          field2 = GaussianToGamma(this.field_2.mean,this.field_2.coef_variance,...
+            rho*G1+sqrt(1-rho^2)*G2);
+          % Preprocess to match MOOSE syntax
+          [Nx,Ny] = size(this.X);
+          field1 = reshape(field1,Ny,Nx);
+          field1 = field1';
+          field2 = reshape(field2,Ny,Nx);
+          field2 = field2';
+          if sample == 1
+            this.plotField([this.field_1.name,' rho = ',num2str(rho)],field1);
+            this.plotField([this.field_2.name,' rho = ',num2str(rho)],field2);
+          end
+          this.writeToTXT([this.field_1.name,'_sample_',num2str(sample),'_rho_',num2str(rho),'.txt'],field1);
+          this.writeToTXT([this.field_2.name,'_sample_',num2str(sample),'_rho_',num2str(rho),'.txt'],field2);
         end
-        this.writeToTXT([this.field_1.name,'_sample_',num2str(sample),'.txt'],field1);
-        this.writeToTXT([this.field_2.name,'_sample_',num2str(sample),'.txt'],field2);
       end
     end
     
@@ -71,7 +73,6 @@ classdef Sampler
       title(name)
       colorbar
     end
-    
     
     function writeToTXT(this,file_name,field)
       fprintf('writing field %s\n',file_name);

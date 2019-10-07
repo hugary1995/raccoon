@@ -6,7 +6,7 @@ clc
 %% parameters of the first field
 
 % quantity name
-name = 'Gc_pos_1';
+name = 'Gc';
 % correlation length
 Lc1 = 10;
 Lc2 = 10;
@@ -32,7 +32,7 @@ field1 = Field(name,rho1,rho2,'cartesian',tol,mean,CV);
 %% parameters of the second field
 
 % quantity name
-name = 'psic_pos_1';
+name = 'psic';
 % correlation length
 Lc1 = 10;
 Lc2 = 10;
@@ -76,7 +76,7 @@ Sy = linspace(Y1,Y2,Ny);
 %% sampling
 
 num_realizations = 10;
-rho = 1;
+rho = [0, 0.25, 0.5, 0.75, 1];
 same_kernel = true;
 sampler = Sampler(num_realizations,rho,field1,field2,Xmesh,Ymesh,same_kernel);
 sampler.run();
