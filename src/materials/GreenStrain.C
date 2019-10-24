@@ -13,8 +13,18 @@ defineADValidParams(GreenStrain,
 template <ComputeStage compute_stage>
 GreenStrain<compute_stage>::GreenStrain(const InputParameters & parameters)
   : ADComputeStrainBase<compute_stage>(parameters),
-    _F(declareADProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
+    _F(declareADProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
+    _e(declareADProperty<RankTwoTensor>(_base_name + "eulerian_almansi_strain"))
 {
+}
+
+template <ComputeStage compute_stage>
+void
+GreenStrain<compute_stage>::initQpStatefulProperties()
+{
+  ADComputeStrainBase<compute_stage>::initQpStatefulProperties();
+  _F[_qp].zero();
+  _F[_qp].addIa(1.0);
 }
 
 template <ComputeStage compute_stage>
@@ -33,6 +43,11 @@ GreenStrain<compute_stage>::computeQpProperties()
   ADRankTwoTensor E = _F[_qp].transpose() * _F[_qp];
   E.addIa(-1.0);
   E *= 0.5;
+
+  _e[_qp] = _F[_qp] * _F[_qp].transpose();
+  _e[_qp] = -_e[_qp].inverse();
+  _e[_qp].addIa(1.0);
+  _e[_qp] *= 0.5;
 
   // total strain defined in the reference configuration
   _total_strain[_qp] = E;

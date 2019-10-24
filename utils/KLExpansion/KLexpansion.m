@@ -40,22 +40,39 @@ end
 
 disp('solving for eignevalues and associated KL basis...')
 
-[V,D] = eigs(R,1000,'largestreal');
-[d,ind] = sort(diag(D),'descend');
-v = V(:,ind);
-
 nu = 0;
-err = 1;
 R_trace = trace(R);
-while err > prepro.tolerance
-  nu = nu + 1;
-  err = 1 - sum(d(1:nu))/R_trace;
+err = 1;
+d = [];
+v = [];
+converged = false;
+
+k = floor(Np/10);
+
+while ~converged
+  [V,D] = eigs(R,k,'largestreal');
+  [dd,ind] = sort(diag(D),'descend');
+  vv = V(:,ind);
+  
+  for i = 1:length(dd)
+    d = [d;dd(i)];
+    v = [v,vv(:,i)];
+    nu = nu+1;
+    err = 1-sum(d)/R_trace;
+    if err <= prepro.tolerance
+      converged = true;
+      clear R
+      break
+    end
+  end
+  
+  fprintf('%d eigenvalues have error = %.2f%%\n',nu,err*100);
+  
+  if ~converged
+    R = R-V*D*V';
+  end
+  
 end
-
-d = d(1:nu);
-v = v(:,1:nu);
-
-fprintf('need %d eigenpairs to reach a tolerance of %.2f%%\n',nu,prepro.tolerance*100);
 
 %% end
 

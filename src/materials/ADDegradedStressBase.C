@@ -39,6 +39,7 @@ ADDegradedStressBase<compute_stage>::ADDegradedStressBase(const InputParameters 
     _E_el_name(getParam<MaterialPropertyName>("elastic_energy_name")),
     _E_el_pos(declareADProperty<Real>(_E_el_name)),
     _E_el_pos_old(_history ? &getMaterialPropertyOld<Real>(_E_el_name) : NULL),
+    _E_driving(declareADProperty<Real>("fracture_driving_energy")),
     _b_name(getParam<MaterialPropertyName>("fracture_energy_barrier_name")),
     _b(getADMaterialProperty<Real>(_b_name))
 {

@@ -22,6 +22,7 @@
   using ADDegradedStressBase<compute_stage>::_E_el_name;                                           \
   using ADDegradedStressBase<compute_stage>::_E_el_pos;                                            \
   using ADDegradedStressBase<compute_stage>::_E_el_pos_old;                                        \
+  using ADDegradedStressBase<compute_stage>::_E_driving;                                           \
   using ADDegradedStressBase<compute_stage>::_b_name;                                              \
   using ADDegradedStressBase<compute_stage>::_b;
 
@@ -82,6 +83,9 @@ protected:
 
   /// old value of the driving energy
   const MaterialProperty<Real> * _E_el_pos_old;
+
+  /// fracture driving energy
+  ADMaterialProperty(Real) & _E_driving;
 
   /// degradation name
   const MaterialPropertyName _b_name;

@@ -21,10 +21,11 @@ public:
   GreenStrain(const InputParameters & parameters);
 
 protected:
+  virtual void initQpStatefulProperties() override;
   virtual void computeQpProperties() override;
 
   ADMaterialProperty(RankTwoTensor) & _F;
+  ADMaterialProperty(RankTwoTensor) & _e;
 
   usingComputeStrainBaseMembers;
 };
-
