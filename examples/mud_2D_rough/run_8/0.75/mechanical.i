@@ -194,6 +194,5 @@
 
 [Outputs]
   hide = 'load'
-  # exodus = true
   print_linear_residuals = false
 []
