@@ -106,7 +106,5 @@ $\left( \nabla\psi, M_i\nabla(\kappa_id_i) \right)$ | $d_i$ | | | [`ACInterface`
 $M_i ( \psi, \frac{\partial \left[w(d_i)+\frac{g(d)F_e^+}{M_i}\right]}{\partial d_i} )$ | $d_i$ | | | [`AllenCahn`](/AllenCahn.md) |
  | | $\kappa_i,M_i$ | | [`FractureMaterial`](/FractureMaterial.md) |
  | | $g(d_i)$ | | [`DerivativeParsedMaterial`](/DerivativeParsedMaterial.md) |
- | | $g(d)$ | | [`LumpedDegradation`](/LumpedDegradation.md) |
  | | | $w(d_i)$ | [`DerivativeParsedMaterial`](/DerivativeParsedMaterial.md) |
- | | | $F_e^+$ | [`SmallStrainElasticDegradedStress`](/SmallStrainElasticDegradedStress.md) |
  | | | $w(d_i)+\frac{g(d)F_e^+}{M_i}$ | [`DerivativeSumMaterial`](/DerivativeSumMaterial.md) |
