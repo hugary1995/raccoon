@@ -30,7 +30,7 @@ ADDITIONAL_CPPFLAGS=-Wall -Wextra -Werror
 ALL_MODULES         := no
 
 CHEMICAL_REACTIONS  := no
-CONTACT             := no
+CONTACT             := yes
 FLUID_PROPERTIES    := no
 HEAT_CONDUCTION     := yes
 MISC                := no

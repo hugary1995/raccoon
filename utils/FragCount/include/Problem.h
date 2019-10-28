@@ -24,6 +24,7 @@ public:
   void plotBoundaryElems();
   void classifyAllTimes();
   void PCA();
+  void fragment_size();
   int numTimeSteps() { return _mesh->numTimeSteps(); }
   void goToTimeStep(int step)
   {
@@ -87,4 +88,7 @@ private:
 
   /// output stream for PCA
   std::ofstream _pca_out;
+
+  /// output stream for fragment size
+  std::ofstream _size_out;
 };

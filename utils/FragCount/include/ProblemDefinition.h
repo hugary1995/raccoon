@@ -84,6 +84,7 @@ public:
     YAML::Node frag_node = out_node["fragments"];
     YAML::Node stat_node = out_node["statistics"];
     YAML::Node pca_node = out_node["PCA"];
+    YAML::Node size_node = out_node["fragment_size"];
 
     if (frag_node)
     {
@@ -117,6 +118,15 @@ public:
       parseOptionalParam<bool>(
           output.PCA.include_boundary_fragments, pca_node, "include boundary fragments");
       parseOptionalParam<int>(output.PCA.interval, pca_node, "interval");
+    }
+
+    if (size_node)
+    {
+      parseOptionalParam<bool>(output.fragment_size.enable, size_node, "enable");
+      parseOptionalParam<std::string>(output.fragment_size.append, size_node, "append");
+      parseOptionalParam<bool>(
+          output.fragment_size.include_boundary_fragments, size_node, "include boundary fragments");
+      parseOptionalParam<int>(output.fragment_size.interval, size_node, "interval");
     }
   }
 
@@ -162,9 +172,17 @@ public:
     {
       bool enable = true;
       std::string append = "PCA";
-      bool include_boundary_fragments = false;
+      bool include_boundary_fragments = true;
       int interval = 0;
     } PCA;
+
+    struct fragment_size_t
+    {
+      bool enable = true;
+      std::string append = "size";
+      bool include_boundary_fragments = true;
+      int interval = 0;
+    } fragment_size;
   } output;
 
 protected:

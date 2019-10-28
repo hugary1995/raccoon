@@ -90,6 +90,9 @@ Problem::classify()
 
   if (_config.output.PCA.enable)
     PCA();
+
+  if (_config.output.fragment_size.enable)
+    fragment_size();
 }
 
 void
@@ -175,6 +178,36 @@ Problem::PCA()
 
   _pca_out.close();
   std::cout << "Stage 5: PCA complete!\n";
+}
+
+void
+Problem::fragment_size()
+{
+  // leave if it is not time to output
+  if (_config.output.fragment_size.interval == 0)
+  {
+    if (_step != std::min(_config.algorithm.time_step_end, numTimeSteps()))
+      return;
+  }
+  else if ((_step - _config.algorithm.time_step_begin) % _config.output.fragment_size.interval != 0)
+    return;
+
+  _size_out.open(_config.exodus.file_name + "_" + _config.output.fragment_size.append + "_step_" +
+                 std::to_string(_step) + ".dat");
+
+  for (size_t i = 0; i < _clusters.size(); i++)
+  {
+    if (!_config.output.fragment_size.include_boundary_fragments &&
+        _mesh->isBoundaryCluster(_clusters[i]))
+      continue;
+    if (!_clusters[i]->empty())
+      _size_out << _clusters[i]->area() << std::endl;
+  }
+
+  _size_out.flush();
+
+  _size_out.close();
+  std::cout << "Stage 5: Fragment size complete!\n";
 }
 
 void
