@@ -1,3 +1,5 @@
 #!/bin/bash
 
-/dscrhome/th224/projects/raccoon_research/raccoon-opt -i master.i
+for d in *sample*/*.sh ; do
+    sbatch d
+done
