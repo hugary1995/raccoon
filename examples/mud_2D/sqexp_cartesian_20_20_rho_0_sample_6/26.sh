@@ -8,5 +8,5 @@
 #SBATCH -t 3-00:00
 #SBATCH -p dolbowlab --account=dolbowlab
 
-cd %s
+cd sqexp_cartesian_20_20_rho_0_sample_6
 mpiexec /dscrhome/th224/projects/raccoon/raccoon-opt -i master.i

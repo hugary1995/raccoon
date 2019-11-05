@@ -88,6 +88,6 @@ for run_name in run_names:
     ##################
 
     print("Writing batch file...")
-    f = open(run_name+"/"+str(count), "w")
-    f.write(batch_file)
+    f = open(run_name+"/"+str(count)+".sh", "w")
+    f.write(batch_file % (run_name))
     f.close()
