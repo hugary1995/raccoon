@@ -15,7 +15,7 @@
     execute_on = 'TIMESTEP_BEGIN'
     sub_cycling = true
     detect_steady_state = true
-    steady_state_tol = 1e-6
+    steady_state_tol = 1e-3
   [../]
 []
 
@@ -75,7 +75,7 @@
   [./load]
     type = FunctionScalarAux
     variable = crack_tip_x
-    function = t-0.4
+    function = t-0.5
     execute_on = 'INITIAL TIMESTEP_BEGIN'
   [../]
 []
@@ -83,7 +83,7 @@
 [Executioner]
   type = Transient
   dt = 1e-3
-  end_time = 0.9
+  end_time = 1
 []
 
 [Outputs]

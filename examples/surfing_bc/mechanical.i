@@ -65,7 +65,7 @@
 [AuxKernels]
   [./E_el]
     type = MaterialRealAux
-    property = 'E_el'
+    property = 'fracture_driving_energy'
     variable = 'E_el'
     execute_on = 'TIMESTEP_END'
   [../]
@@ -119,13 +119,15 @@
     poissons_ratio = 0.3
   [../]
   [./strain]
-    type = ADComputeSmallStrain
+    type = GreenStrain
     displacements = 'disp_x disp_y'
   [../]
-  [./stress]
-    type = SmallStrainDegradedPK2Stress_StrainSpectral
+  [./elastic]
+    type = CNHDegradedPK2ElastoPlasticStress
+    yield_stress = 2000
+    W0 = 500
     d = d
-    d_crit = 0.6
+    linear_hardening_coefficient = 688
     history = false
   [../]
   [./fracture_energy_barrier]
@@ -150,6 +152,13 @@
   [../]
 []
 
+[Postprocessors]
+  [./fracture_energy]
+    type = FractureEnergy
+    d = d
+  [../]
+[]
+
 [Executioner]
   type = TransientSupNorm
   solve_type = 'NEWTON'
@@ -167,12 +176,12 @@
 
 [Outputs]
   print_linear_residuals = false
-  # [./csv]
-  #   type = CSV
-  #   delimiter = ' '
-  # [../]
+  [./csv]
+    type = CSV
+    delimiter = ' '
+  [../]
   [./console]
     type = Console
-    hide = 'crack_tip_x crack_tip_y'
+    hide = 'crack_tip_y'
   [../]
 []

@@ -5,11 +5,18 @@ clc
 %% parameters of the first field
 
 % quantity name
-name = 'Gc';
+name = 'Gc_exp_cartesian_5_25';
+
+% coordinate system
+theta = 0;
+e1 = [cos(theta);sin(theta)];
+e2 = [-sin(theta);cos(theta)];
+% e1 = 50;
+% e2 = 50;
 
 % correlation length
-Lc1 = 30;
-Lc2 = 30;
+Lc1 = 5;
+Lc2 = 25;
 
 % periodic correlation function
 p1 = 100;
@@ -43,18 +50,23 @@ tol = 1e-2;
 mean = 8e-4;
 
 % coefficient of variance
-CV = 0.3;
+CV = 0.03;
 
-field1 = Field(name,rho1,rho2,'cartesian',tol,mean,CV);
+field1 = Field(name,rho1,rho2,'cartesian',e1,e2,tol,mean,CV);
 
 %% parameters of the second field
 
 % quantity name
-name = 'psic';
+name = 'psic_exp_cartesian_5_25';
+
+% coordinate system
+theta = 0;
+e1 = [cos(theta);sin(theta)];
+e2 = [-sin(theta);cos(theta)];
 
 % correlation length
-Lc1 = 30;
-Lc2 = 30;
+Lc1 = 5;
+Lc2 = 25;
 
 % periodic correlation function
 p1 = 100;
@@ -88,9 +100,9 @@ tol = 1e-2;
 mean = 3e-5;
 
 % coefficient of variance
-CV = 0.3;
+CV = 0.03;
 
-field2 = Field(name,rho1,rho2,'cartesian',tol,mean,CV);
+field2 = Field(name,rho1,rho2,'cartesian',e1,e2,tol,mean,CV);
 
 %% Mesh
 
@@ -101,8 +113,8 @@ Y1 = 0;
 Y2 = 100;
 
 % Discretization of the mesh
-Nx = 121;
-Ny = 121;
+Nx = 101;
+Ny = 101;
 
 % Generate mesh
 Np = Nx*Ny;
@@ -113,7 +125,7 @@ Sy = linspace(Y1,Y2,Ny);
 %% sampling
 
 num_realizations = 10;
-rho = [0, 0.25, 0.5, 0.75, 1];
+rho = [0];
 same_kernel = true;
 sampler = Sampler(num_realizations,rho,field1,field2,Xmesh,Ymesh,same_kernel);
 sampler.run();

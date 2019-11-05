@@ -36,6 +36,7 @@ protected:
   ADMaterialProperty(Real) & _Wp;
   const MaterialProperty<Real> & _Wp_old;
   const Real _W0;
+  ADMaterialProperty(Real) & _E_el_degraded;
 
   usingDegradedStressBaseMembers
 };

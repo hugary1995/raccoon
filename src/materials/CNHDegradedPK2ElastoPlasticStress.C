@@ -35,7 +35,8 @@ CNHDegradedPK2ElastoPlasticStress<compute_stage>::CNHDegradedPK2ElastoPlasticStr
     _cauchy_stress(declareADProperty<RankTwoTensor>(_base_name + "cauchy_stress")),
     _Wp(declareADProperty<Real>("Wp")),
     _Wp_old(getMaterialPropertyOld<Real>("Wp")),
-    _W0(getParam<Real>("W0"))
+    _W0(getParam<Real>("W0")),
+    _E_el_degraded(declareADProperty<Real>("degraded_elastic_energy"))
 {
 }
 
@@ -139,9 +140,12 @@ CNHDegradedPK2ElastoPlasticStress<compute_stage>::computeQpStress()
   _kirchhoff_stress[_qp] = tau;
   _cauchy_stress[_qp] = tau / J;
 
-  ADReal E_el_pos =
-      J >= 1 ? 0.5 * K * (0.5 * (J * J - 1) - std::log(J)) + 0.5 * mu * (_be_bar[_qp].trace() - 3.0)
-             : 0.5 * mu * (_be_bar[_qp].trace() - 3);
+  ADReal U = 0.5 * K * (0.5 * (J * J - 1) - std::log(J));
+  ADReal W = 0.5 * mu * (_be_bar[_qp].trace() - 3.0);
+  ADReal E_el_pos = J >= 1 ? U + W : W;
+  ADReal E_el_neg = J >= 1 ? 0 : U;
+  _E_el_degraded[_qp] = g * E_el_pos + E_el_neg;
+
   // enforce irreversibility using history approach
   if (_E_el_pos_old)
     E_el_pos = computeQpHistory(E_el_pos);

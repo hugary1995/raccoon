@@ -43,20 +43,6 @@
     variable = 'd_ref'
     execute_on = 'TIMESTEP_BEGIN'
   [../]
-  [./get_disp_x]
-    type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = from_multiapp
-    source_variable = 'disp_x'
-    variable = 'disp_x'
-  [../]
-  [./get_disp_y]
-    type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = from_multiapp
-    source_variable = 'disp_y'
-    variable = 'disp_y'
-  [../]
 []
 
 [AuxVariables]
@@ -64,10 +50,6 @@
     family = SCALAR
   [../]
   [./d]
-  [../]
-  [./disp_x]
-  [../]
-  [./disp_y]
   [../]
 []
 

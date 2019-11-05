@@ -58,8 +58,10 @@ classdef Sampler
             this.plotField([this.field_1.name,' rho = ',num2str(rho)],field1);
             this.plotField([this.field_2.name,' rho = ',num2str(rho)],field2);
           end
-          this.writeToTXT([this.field_1.name,'_sample_',num2str(sample),'_rho_',num2str(rho),'.txt'],field1);
-          this.writeToTXT([this.field_2.name,'_sample_',num2str(sample),'_rho_',num2str(rho),'.txt'],field2);
+          fprintf('%s: [%.3E, %.3E]\n',this.field_1.name,min(field1(:)),max(field1(:)));
+          fprintf('%s: [%.3E, %.3E]\n',this.field_2.name,min(field2(:)),max(field2(:)));
+          this.writeToTXT([this.field_1.name,'_rho_',num2str(rho),'_sample_',num2str(sample),'.txt'],field1);
+          this.writeToTXT([this.field_2.name,'_rho_',num2str(rho),'_sample_',num2str(sample),'.txt'],field2);
         end
       end
     end
