@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+#SBATCH -D sqexp_cartesian_10_10_rho_0_sample_10
 #SBATCH -o output.txt
 #SBATCH -e error.txt
 #SBATCH -n 6
@@ -8,5 +9,4 @@
 #SBATCH -t 3-00:00
 #SBATCH -p dolbowlab --account=dolbowlab
 
-cd sqexp_cartesian_10_10_rho_0_sample_10
 mpiexec /dscrhome/th224/projects/raccoon/raccoon-opt -i master.i
