@@ -5,7 +5,7 @@ clc
 %% parameters of the first field
 
 % quantity name
-name = 'Gc_exp_cartesian_5_25';
+name = 'ARBITRARY_Gc_exp_cartesian_5_25';
 
 % coordinate system
 theta = 0;
@@ -57,7 +57,7 @@ field1 = Field(name,rho1,rho2,'cartesian',e1,e2,tol,mean,CV);
 %% parameters of the second field
 
 % quantity name
-name = 'psic_exp_cartesian_5_25';
+name = 'ARBITRARY_psic_exp_cartesian_5_25';
 
 % coordinate system
 theta = 0;
@@ -122,9 +122,15 @@ Sx = linspace(X1,X2,Nx);
 Sy = linspace(Y1,Y2,Ny);
 [Xmesh,Ymesh] = meshgrid(Sx,Sy);
 
+%% sampling mode
+% default is random
+% provide a positive seed to generate reproducible samples
+field1.seed = string2hash('field_1_seed_h');
+field2.seed = string2hash('field_2_seed_h');
+
 %% sampling
 
-num_realizations = 10;
+num_realizations = 1;
 rho = [0];
 same_kernel = true;
 sampler = Sampler(num_realizations,rho,field1,field2,Xmesh,Ymesh,same_kernel);
