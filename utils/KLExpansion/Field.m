@@ -12,6 +12,7 @@ classdef Field < handle
     name;
     d;
     v;
+    seed = -1;
   end
   
   methods
@@ -31,6 +32,9 @@ classdef Field < handle
     
     function G = sampleGaussian(this)
       nu = length(this.d);
+      if this.seed >= 0
+        rng(this.seed);
+      end
       xi = randn(nu,1);
       G = this.v*(sqrt(this.d).*xi);
     end
