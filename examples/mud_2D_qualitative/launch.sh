@@ -1,5 +1,5 @@
 #!/bin/bash
 
-for d in *sample*/*.sh ; do
+for d in *seed*/*.sh ; do
     sbatch $d
 done
