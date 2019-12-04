@@ -22,10 +22,10 @@ protected:
   virtual void computeQpProperties() override;
 
   /// energy release rate
-  const Function & _Gc;
+  const MaterialProperty<Real> & _Gc;
 
-  /// length scale in the fracture surface energy density
-  const Function & _L;
+  /// phase field regularization length
+  const MaterialProperty<Real> & _L;
 
   /// norm of the local dissipation function
   const Function & _w_norm;

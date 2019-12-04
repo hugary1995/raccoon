@@ -31,6 +31,8 @@ with open('gold/fracture.i', 'r') as input:
     fracture_input = input.read()
 with open('gold/mechanical.i', 'r') as input:
     mechanical_input = input.read()
+with open('gold/field.i', 'r') as input:
+    field_input = input.read()
 with open('gold/batch.sh', 'r') as input:
     batch_file = input.read()
 
@@ -39,11 +41,11 @@ count = 0
 for run_name in run_names:
     count = count+1
     print("---------------------------------------------")
-    print("Remove existing run folder: "+run_name)
-    try:
-        shutil.rmtree(run_name)
-    except OSError as e:
-        print ("     %s: %s." % (e.filename, e.strerror))
+    # print("Remove existing run folder: "+run_name)
+    # try:
+    #     shutil.rmtree(run_name)
+    # except OSError as e:
+    #     print ("     %s: %s." % (e.filename, e.strerror))
 
     print("Create new run folder: "+run_name)
 
@@ -81,6 +83,15 @@ for run_name in run_names:
     print("Writing mechanical input file...")
     f = open(run_name+"/mechanical.i", "w")
     f.write(mechanical_input % (Gc_file,psic_file))
+    f.close()
+
+    ##################
+    ###   field    ###
+    ##################
+
+    print("Writing field visualization file...")
+    f = open(run_name+"/field.i", "w")
+    f.write(field_input % (Gc_file,psic_file))
     f.close()
 
     ##################

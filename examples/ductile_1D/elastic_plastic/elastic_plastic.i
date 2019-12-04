@@ -28,11 +28,27 @@
     order = CONSTANT
     family = MONOMIAL
   [../]
-  [./strain_yy]
+  [./green_strain_yy]
     order = CONSTANT
     family = MONOMIAL
   [../]
-  [./stress_yy]
+  [./left_cauchy_green_strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./eulerian_almansi_strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./kirchhoff_stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./cauchy_stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./second_piola_kirchhoff_stress_yy]
     order = CONSTANT
     family = MONOMIAL
   [../]
@@ -53,19 +69,47 @@
     j = 1
     property = plastic_strain
   [../]
-  [./strain_yy]
+  [./green_strain_yy]
     type = MaterialRankTwoTensorAux
-    variable = strain_yy
+    variable = green_strain_yy
+    i = 1
+    j = 1
+    property = mechanical_strain
+  [../]
+  [./left_cauchy_green_strain_yy]
+    type = MaterialRankTwoTensorAux
+    variable = left_cauchy_green_strain_yy
+    i = 1
+    j = 1
+    property = left_cauchy_green_strain
+  [../]
+  [./eulerian_almansi_strain]
+    type = MaterialRankTwoTensorAux
+    variable = eulerian_almansi_strain_yy
     i = 1
     j = 1
     property = eulerian_almansi_strain
   [../]
-  [./stress_yy]
+  [./cauchy_stress_yy]
     type = MaterialRankTwoTensorAux
-    variable = stress_yy
+    variable = cauchy_stress_yy
     i = 1
     j = 1
     property = cauchy_stress
+  [../]
+  [./kirchhoff_stress_yy]
+    type = MaterialRankTwoTensorAux
+    variable = kirchhoff_stress_yy
+    i = 1
+    j = 1
+    property = kirchhoff_stress
+  [../]
+  [./second_piola_kirchhoff_stress_yy]
+    type = MaterialRankTwoTensorAux
+    variable = second_piola_kirchhoff_stress_yy
+    i = 1
+    j = 1
+    property = second_piola_kirchhoff_stress
   [../]
 []
 
@@ -171,10 +215,6 @@
 []
 
 [Postprocessors]
-  [./stress_yy]
-    type = ElementAverageValue
-    variable = stress_yy
-  [../]
   [./plastic_strain_yy]
     type = ElementAverageValue
     variable = plastic_strain_yy
@@ -183,9 +223,29 @@
     type = ElementAverageValue
     variable = elastic_strain_yy
   [../]
-  [./strain_yy]
+  [./green_strain_yy]
     type = ElementAverageValue
-    variable = strain_yy
+    variable = green_strain_yy
+  [../]
+  [./left_cauchy_green_strain_yy]
+    type = ElementAverageValue
+    variable = left_cauchy_green_strain_yy
+  [../]
+  [./eulerian_almansi_strain_yy]
+    type = ElementAverageValue
+    variable = eulerian_almansi_strain_yy
+  [../]
+  [./cauchy_stress_yy]
+    type = ElementAverageValue
+    variable = cauchy_stress_yy
+  [../]
+  [./kirchhoff_stress_yy]
+    type = ElementAverageValue
+    variable = kirchhoff_stress_yy
+  [../]
+  [./second_piola_kirchhoff_stress_yy]
+    type = ElementAverageValue
+    variable = second_piola_kirchhoff_stress_yy
   [../]
 []
 

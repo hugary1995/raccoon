@@ -26,6 +26,7 @@ protected:
 
   ADMaterialProperty(RankTwoTensor) & _F;
   ADMaterialProperty(RankTwoTensor) & _e;
+  ADMaterialProperty(RankTwoTensor) & _b;
 
   usingComputeStrainBaseMembers;
 };

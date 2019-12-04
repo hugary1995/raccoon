@@ -14,10 +14,6 @@ validParams<FractureMaterial>()
   params.addClassDescription(
       "Compute interface coefficient kappa and mobility for a damage field based on provided "
       "energy release rate Gc and crack length scale L");
-  params.addRequiredParam<FunctionName>(
-      "Gc", "fracture energy release rate, alert: time dependency will be ignored");
-  params.addRequiredParam<FunctionName>(
-      "L", "characteristic crack length scale, alert: time dependency will be ignored");
   params.addRequiredParam<FunctionName>("local_dissipation_norm",
                                         "norm of the local dissipation ||w(d)||");
 
@@ -31,8 +27,8 @@ validParams<FractureMaterial>()
 
 FractureMaterial::FractureMaterial(const InputParameters & parameters)
   : Material(parameters),
-    _Gc(getFunction("Gc")),
-    _L(getFunction("L")),
+    _Gc(getMaterialPropertyByName<Real>("energy_release_rate")),
+    _L(getMaterialPropertyByName<Real>("phase_field_regularization_length")),
     _w_norm(getFunction("local_dissipation_norm")),
     _kappa(declareProperty<Real>(getParam<MaterialPropertyName>("kappa_name"))),
     _kappa_old(getMaterialPropertyOldByName<Real>(getParam<MaterialPropertyName>("kappa_name"))),
@@ -45,8 +41,8 @@ void
 FractureMaterial::initQpStatefulProperties()
 {
   // evaluate functions at t = 0
-  Real L = _L.value(0.0, _q_point[_qp]);
-  Real Gc = _Gc.value(0.0, _q_point[_qp]);
+  Real L = _L[_qp];
+  Real Gc = _Gc[_qp];
   Real c0 = _w_norm.value(0.0, _q_point[_qp]);
 
   _kappa[_qp] = 2.0 * L * L;

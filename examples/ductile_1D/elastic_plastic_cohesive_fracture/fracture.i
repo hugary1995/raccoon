@@ -39,19 +39,17 @@
 []
 
 [Materials]
-  [./fracture_energy_barrier]
+  [./fracture_properties]
     type = GenericConstantMaterial
-    prop_names = 'b'
-    prop_values = '1.816860465'
+    prop_names = 'energy_release_rate phase_field_regularization_length b'
+    prop_values = '68.9 2 1.816860465'
   [../]
   [./local_dissipation]
     type = LinearLocalDissipation
     d = d
   [../]
-  [./fracture_properties]
+  [./phase_field_properties]
     type = FractureMaterial
-    Gc = 68.9
-    L = 2
     local_dissipation_norm = 8/3
   [../]
   [./degradation]
@@ -66,8 +64,8 @@
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -snes_type'
   petsc_options_value = 'lu vinewtonrsls'
-  dt = 1e-5
-  dtmin = 1e-5
+  dt = 1e-4
+  dtmin = 1e-4
   end_time = 0.4
 
   nl_abs_tol = 1e-08

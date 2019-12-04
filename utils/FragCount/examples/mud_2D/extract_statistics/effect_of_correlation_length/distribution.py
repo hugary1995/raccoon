@@ -1,5 +1,6 @@
 # Author: Jake Vanderplas <jakevdp@cs.washington.edu>
 #
+import math
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
@@ -11,12 +12,12 @@ param = {'density': True}
 
 num_samples = 10
 prefix = "../../"
-infix = ["exp_cartesian_5_5","exp_cartesian_10_10","exp_cartesian_20_20","sqexp_cartesian_5_5"]
+infix = ["exp_cartesian_5_5","exp_cartesian_10_10","exp_cartesian_20_20","sqexp_cartesian_5_5","sqexp_cartesian_10_10","sqexp_cartesian_20_20"]
 postfix = "/out_size_step_221.dat"
 
 #----------------------------------------------------------------------
 # Compare coefficients of correlation
-fig1, ax1 = plt.subplots(2, 4)
+fig1, ax1 = plt.subplots(2, len(infix))
 fig2, ax2 = plt.subplots()
 
 for i in range(len(infix)):
@@ -35,7 +36,7 @@ for i in range(len(infix)):
     ax1[0,i].title.set_text(infix[i])
 
     # Gaussian KDE
-    kde = KernelDensity(kernel='gaussian', bandwidth=5).fit(size.reshape(-1,1))
+    kde = KernelDensity(kernel='gaussian', bandwidth=(max-min)/60).fit(size.reshape(-1,1))
     log_dens = kde.score_samples(X_plot.reshape(-1,1))
     ax1[1,i].plot(X_plot, np.exp(log_dens))
     ax2.plot(X_plot, np.exp(log_dens), label=infix[i])

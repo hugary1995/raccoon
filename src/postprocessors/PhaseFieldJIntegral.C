@@ -16,11 +16,9 @@ validParams<PhaseFieldJIntegral>()
                                "Optional parameter that allows the user to define "
                                "multiple mechanics material systems on the same "
                                "block, i.e. for multiple phases");
-  params.addParam<MaterialPropertyName>("degradation_name", "g", "name of degradation");
-  params.addParam<MaterialPropertyName>("elastic_energy_name",
-                                        "degraded_elastic_energy",
-                                        "name of the material that holds the elastic energy");
   params.addRequiredParam<RealVectorValue>("J_direction", "direction of J integral");
+  params.addRequiredParam<MaterialPropertyName>("elastic_energy_name",
+                                                "name of the elastic energy");
   params.addRequiredCoupledVar(
       "displacements",
       "The displacements appropriate for the simulation geometry and coordinate system");
@@ -31,7 +29,7 @@ PhaseFieldJIntegral::PhaseFieldJIntegral(const InputParameters & parameters)
   : SideIntegralPostprocessor(parameters),
     _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
     _stress(getMaterialPropertyByName<RankTwoTensor>(_base_name + "cauchy_stress")),
-    _E_el_degraded(getMaterialProperty<Real>("elastic_energy_name")),
+    _E_elastic(getMaterialProperty<Real>("elastic_energy_name")),
     _ndisp(coupledComponents("displacements")),
     _grad_disp_0(coupledGradient("displacements", 0)),
     _grad_disp_1(_ndisp >= 2 ? coupledGradient("displacements", 1) : _grad_zero),
@@ -45,5 +43,5 @@ PhaseFieldJIntegral::computeQpIntegral()
 {
   RankTwoTensor grad_tensor(_grad_disp_0[_qp], _grad_disp_1[_qp], _grad_disp_2[_qp]);
   RealVectorValue n = _normals[_qp];
-  return _E_el_degraded[_qp] * _t * n - _t * grad_tensor.transpose() * _stress[_qp] * n;
+  return _E_elastic[_qp] * _t * n - _t * grad_tensor.transpose() * _stress[_qp] * n;
 }

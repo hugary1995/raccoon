@@ -31,13 +31,13 @@ Irreversibility::Irreversibility(const InputParameters & parameters)
   if (!isNodal())
     mooseError("Irreversibility must be used on a nodal auxiliary variable!");
 
-  const std::vector<std::string> & solver_options =
-      _app.getExecutioner()->getParamTempl<std::vector<std::string>>("petsc_options_value");
-  if (std::find(solver_options.begin(), solver_options.end(), "vinewtonrsls") ==
-          solver_options.end() &&
-      std::find(solver_options.begin(), solver_options.end(), "vinewtonssls") ==
-          solver_options.end())
-    mooseError("A variational solver, i.e. vinewtonrsls, must be used to solve NCP");
+  // const std::vector<std::string> & solver_options =
+  //     _app.getExecutioner()->getParamTempl<std::vector<std::string>>("petsc_options_value");
+  // if (std::find(solver_options.begin(), solver_options.end(), "vinewtonrsls") ==
+  //         solver_options.end() &&
+  //     std::find(solver_options.begin(), solver_options.end(), "vinewtonssls") ==
+  //         solver_options.end())
+  //   mooseError("A variational solver, i.e. vinewtonrsls, must be used to solve NCP");
 }
 
 Real
@@ -45,7 +45,7 @@ Irreversibility::computeValue()
 {
   if (_current_node->n_dofs(_nl_sys.number(), _bounded_var_num) > 0)
   {
-    Real lower_bound = _d_var.getNodalValueOld(*_current_node);
+    Real lower_bound = _d_var.getNodalValue(*_current_node);
     // The zero is for the component, this will only work for Lagrange variables!
     dof_id_type dof = _current_node->dof_number(_nl_sys.number(), _bounded_var_num, 0);
     _upper_vector.set(dof, _upper_bound);

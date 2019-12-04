@@ -14,7 +14,8 @@ template <ComputeStage compute_stage>
 GreenStrain<compute_stage>::GreenStrain(const InputParameters & parameters)
   : ADComputeStrainBase<compute_stage>(parameters),
     _F(declareADProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
-    _e(declareADProperty<RankTwoTensor>(_base_name + "eulerian_almansi_strain"))
+    _e(declareADProperty<RankTwoTensor>(_base_name + "eulerian_almansi_strain")),
+    _b(declareADProperty<RankTwoTensor>(_base_name + "left_cauchy_green_strain"))
 {
 }
 
@@ -44,8 +45,8 @@ GreenStrain<compute_stage>::computeQpProperties()
   E.addIa(-1.0);
   E *= 0.5;
 
-  _e[_qp] = _F[_qp] * _F[_qp].transpose();
-  _e[_qp] = -_e[_qp].inverse();
+  _b[_qp] = _F[_qp] * _F[_qp].transpose();
+  _e[_qp] = -_b[_qp].inverse();
   _e[_qp].addIa(1.0);
   _e[_qp] *= 0.5;
 

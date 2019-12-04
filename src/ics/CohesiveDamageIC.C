@@ -22,8 +22,8 @@ CohesiveDamageIC::value(const Point & p)
   Real damage = 0.0;
 
   Real s = dist(p);
-  if (s <= _l)
-    damage = _d0 * (1.0 - s / _l) * (1.0 - s / _l);
+  if (s <= _l * 2.0)
+    damage = _d0 * (1.0 - s / _l / 2.0) * (1.0 - s / _l / 2.0);
 
   damage = std::min(damage, 1.0);
 

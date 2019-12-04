@@ -26,7 +26,7 @@ protected:
   /// stress tensor
   const MaterialProperty<RankTwoTensor> & _stress;
   /// degraded eleastic energy
-  const MaterialProperty<Real> & _E_el_degraded;
+  const MaterialProperty<Real> & _E_elastic;
   /// number of displacement variables provided
   const unsigned int _ndisp;
   /// du_dx

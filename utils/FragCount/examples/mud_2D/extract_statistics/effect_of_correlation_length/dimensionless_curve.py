@@ -72,4 +72,5 @@ for i in infix:
         for k in range(len(xx[0])):
             writer.writerow([xx[0][k],mean_y[k],min_y[k],max_y[k]])
 
+plt.legend(infix)
 plt.show()

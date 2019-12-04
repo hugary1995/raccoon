@@ -135,19 +135,17 @@
 []
 
 [Materials]
-  [./fracture_energy_barrier]
+  [./fracture_properties]
     type = GenericConstantMaterial
-    prop_names = 'b'
-    prop_values = '1.816860465'
+    prop_names = 'energy_release_rate phase_field_regularization_length b'
+    prop_values = '68.9 2 1.816860465'
   [../]
   [./local_dissipation]
     type = LinearLocalDissipation
     d = d
   [../]
-  [./fracture_properties]
+  [./phase_field_properties]
     type = FractureMaterial
-    Gc = 68.9
-    L = 2
     local_dissipation_norm = 8/3
   [../]
   [./degradation]
@@ -165,21 +163,21 @@
     type = GreenStrain
   [../]
   [./elastic]
-    type = CNHDegradedPK2ElastoPlasticStress
+    type = CNHDegradedPK1ElastoPlasticStress_VolDev
     yield_stress = 320
     W0 = 100
     d = d
     linear_hardening_coefficient = 688
-    history = true
+    history = false
   [../]
 []
 
 [BCs]
   [./ydisp]
-    type = FunctionPresetBC
+    type = ScalarPresetBC
     variable = disp_y
     boundary = top
-    function = 't'
+    scalar_var = 'load'
   [../]
   [./yfix]
     type = PresetBC
@@ -212,8 +210,8 @@
   nl_rel_tol = 1e-08
   nl_abs_tol = 1e-10
 
-  dtmin = 1e-5
-  dt = 1e-5
+  dtmin = 1e-4
+  dt = 1e-4
   end_time = 0.4
 []
 
