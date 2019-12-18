@@ -5,31 +5,31 @@ clc
 %% parameters of the first field
 
 % quantity name
-name = 'Gc_ring';
+name = 'Gc_L_8';
 
 % coordinate system
-% theta = 0;
-% e1 = [cos(theta);sin(theta)];
-% e2 = [-sin(theta);cos(theta)];
-e1 = 50;
-e2 = 50;
+theta = 0;
+e1 = [cos(theta);sin(theta)];
+e2 = [-sin(theta);cos(theta)];
+% e1 = 50;
+% e2 = 50;
 
 % correlation length
-Lc1 = 20;
-Lc2 = 0.4*pi;
+Lc1 = 8;
+Lc2 = 8;
 
 % periodic correlation function
 % p1 = 100;
-p2 = 2*pi;
+% p2 = 100;
 
 % p-periodic squared exponential
 % syms c1
 % c1 = eval(vpasolve(0.5*p1*exp(-c1/2/Lc1^2)*besseli(0,c1/2/Lc1^2)-Lc1 == 0,c1));
 % rho1 = @(tau) exp(-c1*sin(pi*tau/p1).^2/Lc1^2);
 
-syms c2
-c2 = eval(vpasolve(0.5*p2*exp(-c2/2/Lc2^2)*besseli(0,c2/2/Lc2^2)-Lc2 == 0,c2));
-rho2 = @(tau) exp(-c2*sin(pi*tau/p2).^2/Lc2^2);
+% syms c2
+% c2 = eval(vpasolve(0.5*p2*exp(-c2/2/Lc2^2)*besseli(0,c2/2/Lc2^2)-Lc2 == 0,c2));
+% rho2 = @(tau) exp(-c2*sin(pi*tau/p2).^2/Lc2^2);
 
 % p-periodic exponential
 % r1 = @(c1) 0.5*p1*(besseli(0,c1/Lc1)-struveL0(c1/Lc1))-Lc1;
@@ -43,11 +43,11 @@ rho2 = @(tau) exp(-c2*sin(pi*tau/p2).^2/Lc2^2);
 % rho2 = @(tau) exp(-c2*abs(sin(pi*tau/p2))/Lc2);
 
 % non periodic squared exponential
-% rho1 = @(tau) exp(-pi*tau^2/4/Lc1^2);
-% rho2 = @(tau) exp(-pi*tau^2/4/Lc2^2);
+rho1 = @(tau) exp(-pi*tau^2/4/Lc1^2);
+rho2 = @(tau) exp(-pi*tau^2/4/Lc2^2);
 
 % non periodic exponential
-rho1 = @(tau) exp(-tau/Lc1);
+% rho1 = @(tau) exp(-tau/Lc1);
 % rho2 = @(tau) exp(-tau/Lc2);
 
 % tolerance
@@ -59,36 +59,36 @@ mean = 8e-4;
 % coefficient of variance
 CV = 0.03;
 
-field1 = Field(name,rho1,rho2,'polar',e1,e2,tol,mean,CV);
+field1 = Field(name,rho1,rho2,'cartesian',e1,e2,tol,mean,CV);
 
 %% parameters of the second field
 
 % quantity name
-name = 'psic_ring';
+name = 'psic_L_8';
 
 % coordinate system
-% theta = 0;
-% e1 = [cos(theta);sin(theta)];
-% e2 = [-sin(theta);cos(theta)];
-e1 = 50;
-e2 = 50;
+theta = 0;
+e1 = [cos(theta);sin(theta)];
+e2 = [-sin(theta);cos(theta)];
+% e1 = 50;
+% e2 = 50;
 
 % correlation length
-Lc1 = 20;
-Lc2 = 0.4*pi;
+Lc1 = 8;
+Lc2 = 8;
 
 % periodic correlation function
 % p1 = 100;
-p2 = 2*pi;
+% p2 = 100;
 
 % p-periodic squared exponential
 % syms c1
 % c1 = eval(vpasolve(0.5*p1*exp(-c1/2/Lc1^2)*besseli(0,c1/2/Lc1^2)-Lc1 == 0,c1));
 % rho1 = @(tau) exp(-c1*sin(pi*tau/p1).^2/Lc1^2);
 
-syms c2
-c2 = eval(vpasolve(0.5*p2*exp(-c2/2/Lc2^2)*besseli(0,c2/2/Lc2^2)-Lc2 == 0,c2));
-rho2 = @(tau) exp(-c2*sin(pi*tau/p2).^2/Lc2^2);
+% syms c2
+% c2 = eval(vpasolve(0.5*p2*exp(-c2/2/Lc2^2)*besseli(0,c2/2/Lc2^2)-Lc2 == 0,c2));
+% rho2 = @(tau) exp(-c2*sin(pi*tau/p2).^2/Lc2^2);
 
 % p-periodic exponential
 % r1 = @(c1) 0.5*p1*(besseli(0,c1/Lc1)-struveL0(c1/Lc1))-Lc1;
@@ -102,11 +102,11 @@ rho2 = @(tau) exp(-c2*sin(pi*tau/p2).^2/Lc2^2);
 % rho2 = @(tau) exp(-c2*abs(sin(pi*tau/p2))/Lc2);
 
 % non periodic squared exponential
-% rho1 = @(tau) exp(-pi*tau^2/4/Lc1^2);
-% rho2 = @(tau) exp(-pi*tau^2/4/Lc2^2);
+rho1 = @(tau) exp(-pi*tau^2/4/Lc1^2);
+rho2 = @(tau) exp(-pi*tau^2/4/Lc2^2);
 
 % non periodic exponential
-rho1 = @(tau) exp(-tau/Lc1);
+% rho1 = @(tau) exp(-tau/Lc1);
 % rho2 = @(tau) exp(-tau/Lc2);
 
 % tolerance
@@ -118,15 +118,15 @@ mean = 3e-5;
 % coefficient of variance
 CV = 0.03;
 
-field2 = Field(name,rho1,rho2,'polar',e1,e2,tol,mean,CV);
+field2 = Field(name,rho1,rho2,'cartesian',e1,e2,tol,mean,CV);
 
 %% Mesh
 
 % Dimension of mesh
-X1 = 0;
-X2 = 100;
-Y1 = 0;
-Y2 = 100;
+X1 = -112.5;
+X2 = 112.5;
+Y1 = -112.5;
+Y2 = 112.5;
 
 % Discretization of the mesh
 Nx = 101;

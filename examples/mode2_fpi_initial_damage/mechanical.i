@@ -118,13 +118,13 @@
   [./stress]
     type = SmallStrainDegradedPK2Stress_StrainSpectral
     d = d
-    d_crit = 0.2
+    d_crit = 0.8
     history = false
   [../]
   [./fracture_energy_barrier]
-    type = GenericFunctionMaterial
-    prop_names = 'b'
-    prop_values = '14.88'
+    type = StationaryGenericFunctionMaterial
+    prop_names = 'energy_release_rate phase_field_regularization_length b'
+    prop_values = '2.7 0.015 14.88'
   [../]
   [./local_dissipation]
     type = LinearLocalDissipation
@@ -132,8 +132,6 @@
   [../]
   [./fracture_properties]
     type = FractureMaterial
-    Gc = 2.7
-    L = 0.015
     local_dissipation_norm = 8/3
   [../]
   [./degradation]

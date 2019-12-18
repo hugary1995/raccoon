@@ -1,27 +1,36 @@
 [Mesh]
   type = FileMesh
-  file = 'gold/${L}.msh'
+  file = 'gold/geo.msh'
 []
 
 [Variables]
   [./disp_x]
+    order = SECOND
   [../]
   [./disp_y]
+    order = SECOND
   [../]
   [./d]
+    order = SECOND
   [../]
 []
 
 [AuxVariables]
   [./bounds_dummy]
+    order = SECOND
+  [../]
+  [./zero]
+    order = SECOND
   [../]
   [./a]
     order = FIRST
     family = SCALAR
   [../]
   [./fx]
+    order = SECOND
   [../]
   [./fy]
+    order = SECOND
   [../]
   [./alpha]
     family = MONOMIAL
@@ -67,7 +76,7 @@
     variable = bounds_dummy
     bounded_variable = d
     upper = 1
-    lower = 'd'
+    lower = d
   [../]
 []
 
@@ -86,8 +95,13 @@
     displacements = 'disp_x disp_y'
     save_in = 'fy'
   [../]
-  [./fracture]
-    type = PhaseFieldFractureEvolution
+  [./react]
+    type = PhaseFieldFractureEvolutionReaction
+    variable = d
+    driving_energy_name = E_el
+  [../]
+  [./diff]
+    type = PhaseFieldFractureEvolutionDiffusion
     variable = d
     driving_energy_name = E_el
   [../]
@@ -145,7 +159,7 @@
   [./fracture_properties]
     type = GenericFunctionMaterial
     prop_names = 'energy_release_rate phase_field_regularization_length b'
-    prop_values = '2.7 0.03 14.88'
+    prop_values = '2.7 ${L} 14.88'
   [../]
   [./local_dissipation]
     type = LinearLocalDissipation
@@ -158,7 +172,7 @@
   [./degradation]
     type = LorentzDegradation
     d = d
-    residual_degradation = 1e-09
+    residual_degradation = 1e-06
   [../]
 []
 
@@ -194,40 +208,20 @@
   [../]
 []
 
-# [Preconditioning]
-#   [./FSP]
-#     type = FSP
-#     topsplit = 'ud'
-#     [./ud]
-#       splitting = 'u d'
-#       splitting_type  = additive
-#     [../]
-#     [./u]
-#       vars = 'disp_x disp_y'
-#       petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
-#       petsc_options_value = 'asm      ilu          1000        200                0                    '
-#     [../]
-#     [./d]
-#       vars = 'd'
-#       petsc_options_iname = '-pc_type -snes_type'
-#       petsc_options_value = 'lu       vinewtonrsls'
-#     [../]
-#   [../]
-# []
-
 [Executioner]
   type = Transient
   solve_type = 'NEWTON'
   # petsc_options_iname = '-pc_type -pc_factor_mat_solver_package -snes_type'
   # petsc_options_value = 'lu       superlu_dist                  vinewtonrsls'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
-  petsc_options_value = 'asm      ilu          1000        200                0                     vinewtonrsls'
-  dt = 3e-3
+  petsc_options_value = 'asm      ilu          1000        200                 0                     vinewtonrsls'
+  dt = 2.5e-3
   start_time = 0.1
-  end_time = 1.0
+  end_time = 0.6
 
-  nl_abs_tol = 1e-12
-  nl_rel_tol = 1e-08
+  nl_abs_tol = 1e-08
+  nl_rel_tol = 1e-06
+  nl_max_its = 200
 
   automatic_scaling = true
   compute_scaling_once = false

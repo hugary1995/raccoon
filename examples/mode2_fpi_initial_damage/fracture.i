@@ -43,8 +43,8 @@
 [Materials]
   [./fracture_energy_barrier]
     type = StationaryGenericFunctionMaterial
-    prop_names = 'b'
-    prop_values = '14.88'
+    prop_names = 'energy_release_rate phase_field_regularization_length b'
+    prop_values = '2.7 0.015 14.88'
   [../]
   [./local_dissipation]
     type = LinearLocalDissipation
@@ -52,8 +52,6 @@
   [../]
   [./fracture_properties]
     type = FractureMaterial
-    Gc = 2.7
-    L = 0.015
     local_dissipation_norm = 8/3
   [../]
   [./degradation]

@@ -45,10 +45,10 @@ GreenStrain<compute_stage>::computeQpProperties()
   E.addIa(-1.0);
   E *= 0.5;
 
-  _b[_qp] = _F[_qp] * _F[_qp].transpose();
-  _e[_qp] = -_b[_qp].inverse();
-  _e[_qp].addIa(1.0);
-  _e[_qp] *= 0.5;
+  // _b[_qp] = _F[_qp] * _F[_qp].transpose();
+  // _e[_qp] = -_b[_qp].inverse();
+  // _e[_qp].addIa(1.0);
+  // _e[_qp] *= 0.5;
 
   // total strain defined in the reference configuration
   _total_strain[_qp] = E;

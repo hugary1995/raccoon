@@ -48,6 +48,8 @@ protected:
   /// old value of the driving energy
   const MaterialProperty<Real> & _E_el_pos_old;
 
+  /// degraded elastic driving energy
+  ADMaterialProperty(Real) & _E_el_degraded;
+
   usingComputeStressBaseMembers;
 };
-

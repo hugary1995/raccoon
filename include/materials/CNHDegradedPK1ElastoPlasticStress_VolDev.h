@@ -29,6 +29,7 @@ protected:
   const MaterialProperty<Real> & _alpha_old;
   const Real _yield_stress;
   const Real _k;
+  const bool _degrade_plastic_work;
   ADMaterialProperty(RankTwoTensor) & _plastic_strain;
   ADMaterialProperty(RankTwoTensor) & _cauchy_stress;
   ADMaterialProperty(Real) & _Wp;
@@ -36,6 +37,18 @@ protected:
   ADMaterialProperty(Real) & _Wp_degraded;
   const Real _W0;
   ADMaterialProperty(Real) & _E_el_degraded;
+
+private:
+  ADRankTwoTensor I2;
+  ADRankTwoTensor f;
+  ADRankTwoTensor f_bar;
+  ADRankTwoTensor be_bar_trial;
+  ADRankTwoTensor s_trial;
+  ADRankTwoTensor s;
+  ADRankTwoTensor tau;
+  ADRankTwoTensor be_bar_dev;
+  ADRankTwoTensor be;
+  ADRankTwoTensor Cp;
 
   usingDegradedStressBaseMembers
 };

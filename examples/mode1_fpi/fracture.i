@@ -33,8 +33,13 @@
 []
 
 [Kernels]
-  [./damage]
-    type = PhaseFieldFractureEvolution
+  [./react]
+    type = PhaseFieldFractureEvolutionReaction
+    variable = d
+    driving_energy_var = E_el
+  [../]
+  [./diff]
+    type = PhaseFieldFractureEvolutionDiffusion
     variable = d
     driving_energy_var = E_el
   [../]
@@ -42,9 +47,9 @@
 
 [Materials]
   [./fracture_energy_barrier]
-    type = StationaryGenericFunctionMaterial
-    prop_names = 'b'
-    prop_values = '14.88'
+    type = GenericFunctionMaterial
+    prop_names = 'energy_release_rate phase_field_regularization_length b'
+    prop_values = '2.7 0.015 14.88'
   [../]
   [./local_dissipation]
     type = LinearLocalDissipation
@@ -52,8 +57,6 @@
   [../]
   [./fracture_properties]
     type = FractureMaterial
-    Gc = 2.7
-    L = 0.015
     local_dissipation_norm = 8/3
   [../]
   [./degradation]

@@ -32,7 +32,8 @@ CNHDegradedPK1Stress<compute_stage>::CNHDegradedPK1Stress(const InputParameters 
     _history(getParam<bool>("history")),
     _E_el_name(getParam<MaterialPropertyName>("elastic_energy_name")),
     _E_el_pos(declareADProperty<Real>(_E_el_name)),
-    _E_el_pos_old(getMaterialPropertyOld<Real>(_E_el_name))
+    _E_el_pos_old(getMaterialPropertyOld<Real>(_E_el_name)),
+    _E_el_degraded(declareADProperty<Real>("degraded_elastic_energy"))
 {
 }
 
@@ -76,8 +77,10 @@ CNHDegradedPK1Stress<compute_stage>::computeQpStress()
 
   // elastic driving energy
   ADReal E_el_vol = 0.5 * K * (0.5 * (J * J - 1.0) - lnJ);
-  ADReal E_el_dev = 0.5 * mu * std::pow(J, -2.0 / 3.0) * (C.trace() - 3);
+  ADReal E_el_dev = 0.5 * mu * (std::pow(J, -2.0 / 3.0) * C.trace() - 3.0);
   ADReal E_el_pos = J >= 1.0 ? E_el_vol + E_el_dev : E_el_dev;
+  ADReal E_el_neg = J >= 1.0 ? 0 : E_el_vol;
+  _E_el_degraded[_qp] = _g[_qp] * E_el_pos + E_el_neg;
 
   // store the positive elastic energy so that it becomes the old value in the next step
   _E_el_pos[_qp] = E_el_pos;
