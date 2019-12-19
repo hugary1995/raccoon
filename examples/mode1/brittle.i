@@ -83,7 +83,7 @@
     history = false
   [../]
   [./fracture_energy_barrier]
-    type = FractureEnergyBarrier
+    type = CriticalFractureEnergy
     initial_degradation_slope = -2
     initial_local_dissipation_slope = 0
   [../]

@@ -6,15 +6,15 @@
 
 #include "Material.h"
 
-class FractureEnergyBarrier;
+class CriticalFractureEnergy;
 
 template <>
-InputParameters validParams<FractureEnergyBarrier>();
+InputParameters validParams<CriticalFractureEnergy>();
 
-class FractureEnergyBarrier : public Material
+class CriticalFractureEnergy : public Material
 {
 public:
-  FractureEnergyBarrier(const InputParameters & parameters);
+  CriticalFractureEnergy(const InputParameters & parameters);
 
 protected:
   virtual void computeQpProperties() override;
@@ -29,5 +29,5 @@ protected:
   const MaterialProperty<Real> & _M;
 
   /// computed fracture energy barrier
-  MaterialProperty<Real> & _b;
+  MaterialProperty<Real> & _psi_critical;
 };

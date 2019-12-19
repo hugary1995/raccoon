@@ -14,7 +14,7 @@ PhaseFieldFractureEvolutionReaction<compute_stage>::validParams()
 {
   InputParameters params = ADKernelValue<compute_stage>::validParams();
   params.addClassDescription("computes the reaction term in phase-field evolution equation");
-  params.addParam<MaterialPropertyName>("mobility_name", "M", "name of mobility");
+  params.addParam<MaterialPropertyName>("mobility_name", "mobility", "name of mobility");
   params.addParam<MaterialPropertyName>("degradation_name", "g", "name of degradation");
   params.addParam<MaterialPropertyName>("local_dissipation_name", "w", "name of local dissipation");
   params.addParam<MaterialPropertyName>("driving_energy_name", "name of the driving energy");

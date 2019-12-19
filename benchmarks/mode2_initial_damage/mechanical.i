@@ -56,7 +56,7 @@
     order = CONSTANT
     family = MONOMIAL
   [../]
-  [./fy]
+  [./fx]
   [../]
 []
 
@@ -75,32 +75,32 @@
     variable = 'disp_x'
     component = 0
     displacements = 'disp_x disp_y'
+    save_in = 'fx'
   [../]
   [./solid_y]
     type = ADStressDivergenceTensors
     variable = 'disp_y'
     component = 1
     displacements = 'disp_x disp_y'
-    save_in = 'fy'
   [../]
 []
 
 [BCs]
-  [./ydisp]
+  [./xdisp]
     type = ScalarDirichletBC
-    variable = 'disp_y'
+    variable = 'disp_x'
     boundary = 'top'
     scalar_var = 'load'
-  [../]
-  [./xfix]
-    type = DirichletBC
-    variable = 'disp_x'
-    boundary = 'top bottom'
-    value = 0
   [../]
   [./yfix]
     type = DirichletBC
     variable = 'disp_y'
+    boundary = 'top bottom left right'
+    value = 0
+  [../]
+  [./xfix]
+    type = DirichletBC
+    variable = 'disp_x'
     boundary = 'bottom'
     value = 0
   [../]
@@ -159,9 +159,9 @@
 []
 
 [Postprocessors]
-  [./Fy]
+  [./Fx]
     type = NodalSum
-    variable = 'fy'
+    variable = 'fx'
     boundary = 'top'
   [../]
 []
@@ -180,6 +180,6 @@
   [../]
   [./console]
     type = Console
-    hide = 'load Fy'
+    hide = 'load Fx'
   [../]
 []

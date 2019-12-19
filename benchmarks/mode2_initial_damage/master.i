@@ -62,6 +62,21 @@ dc = 0.6
   [../]
 []
 
+[ICs]
+  [./d]
+    type = CohesiveDamageIC
+    variable = d
+    d0 = 1.5
+    l = ${l}
+    x1 = -0.5
+    y1 = 0
+    z1 = 0
+    x2 = 0
+    y2 = 0
+    z2 = 0
+  [../]
+[]
+
 [AuxScalarKernels]
   [./load]
     type = FunctionScalarAux

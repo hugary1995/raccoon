@@ -40,7 +40,7 @@
 
 [Materials]
   [./fracture_energy_barrier]
-    type = FractureEnergyBarrier
+    type = CriticalFractureEnergy
     initial_local_dissipation_slope = 0
     initial_degradation_slope = -2
   [../]

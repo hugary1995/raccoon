@@ -9,9 +9,9 @@ registerADMooseObject("raccoonApp", LorentzDegradation);
 defineADValidParams(
     LorentzDegradation,
     DegradationBase,
-    params.addParam<MaterialPropertyName>("mobility_name", "M", "name of the Mobility");
-    params.addParam<MaterialPropertyName>("fracture_energy_barrier_name",
-                                          "b",
+    params.addParam<MaterialPropertyName>("mobility_name", "mobility", "name of the Mobility");
+    params.addParam<MaterialPropertyName>("critical_fracture_energy_name",
+                                          "critical_fracture_energy",
                                           "critical fracture energy");
     params.addParam<Real>("p",
                           1.0,
@@ -21,7 +21,7 @@ template <ComputeStage compute_stage>
 LorentzDegradation<compute_stage>::LorentzDegradation(const InputParameters & parameters)
   : DegradationBase<compute_stage>(parameters),
     _M(getMaterialProperty<Real>("mobility_name")),
-    _b(getMaterialProperty<Real>("fracture_energy_barrier_name")),
+    _b(getMaterialProperty<Real>("critical_fracture_energy_name")),
     _p(getParam<Real>("p"))
 {
 }

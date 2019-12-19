@@ -20,7 +20,7 @@ validParams<FractureMaterial>()
   params.addParam<MaterialPropertyName>(
       "kappa_name", "kappa", "name of the material that holds the interface coefficient");
   params.addParam<MaterialPropertyName>(
-      "mob_name", "M", "name of the material that holds the mobility");
+      "mobility_name", "mobility", "name of the material that holds the mobility");
 
   return params;
 }
@@ -32,8 +32,8 @@ FractureMaterial::FractureMaterial(const InputParameters & parameters)
     _w_norm(getFunction("local_dissipation_norm")),
     _kappa(declareProperty<Real>(getParam<MaterialPropertyName>("kappa_name"))),
     _kappa_old(getMaterialPropertyOldByName<Real>(getParam<MaterialPropertyName>("kappa_name"))),
-    _M(declareProperty<Real>(getParam<MaterialPropertyName>("mob_name"))),
-    _M_old(getMaterialPropertyOldByName<Real>(getParam<MaterialPropertyName>("mob_name")))
+    _M(declareProperty<Real>(getParam<MaterialPropertyName>("mobility_name"))),
+    _M_old(getMaterialPropertyOldByName<Real>(getParam<MaterialPropertyName>("mobility_name")))
 {
 }
 

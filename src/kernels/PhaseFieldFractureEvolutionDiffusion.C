@@ -15,7 +15,7 @@ PhaseFieldFractureEvolutionDiffusion<compute_stage>::validParams()
   InputParameters params = ADKernelGrad<compute_stage>::validParams();
   params.addClassDescription("computes the diffusion term in phase-field evolution equation");
   params.addParam<MaterialPropertyName>("kappa_name", "kappa", "kappa name");
-  params.addParam<MaterialPropertyName>("mobility_name", "M", "name of mobility");
+  params.addParam<MaterialPropertyName>("mobility_name", "mobility", "name of mobility");
   return params;
 }
 

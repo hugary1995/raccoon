@@ -15,7 +15,7 @@ validParams<FractureEnergy>()
   params.addParam<MaterialPropertyName>(
       "kappa_name", "kappa", "name of the material that holds the interface coefficient");
   params.addParam<MaterialPropertyName>(
-      "mob_name", "M", "name of the material that holds the mobility");
+      "mobility_name", "mobility", "name of the material that holds the mobility");
   params.addParam<MaterialPropertyName>(
       "local_dissipation_name",
       "w",
@@ -26,7 +26,7 @@ validParams<FractureEnergy>()
 FractureEnergy::FractureEnergy(const InputParameters & parameters)
   : ElementIntegralPostprocessor(parameters),
     _kappa(getMaterialProperty<Real>("kappa_name")),
-    _M(getMaterialProperty<Real>("mob_name")),
+    _M(getMaterialProperty<Real>("mobility_name")),
     _grad_d(coupledGradient("d")),
     _w(getMaterialProperty<Real>("local_dissipation_name"))
 {

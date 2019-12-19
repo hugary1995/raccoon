@@ -1,1 +1,1 @@
-!template load file=stubs/moose_object.md.template name=FractureEnergyBarrier syntax=/Materials/FractureEnergyBarrier
+!template load file=stubs/moose_object.md.template name=CriticalFractureEnergy syntax=/Materials/CriticalFractureEnergy
