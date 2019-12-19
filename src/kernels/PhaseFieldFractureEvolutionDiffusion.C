@@ -12,7 +12,7 @@ template <ComputeStage compute_stage>
 InputParameters
 PhaseFieldFractureEvolutionDiffusion<compute_stage>::validParams()
 {
-  auto params = ADKernelGrad<compute_stage>::validParams();
+  InputParameters params = ADKernelGrad<compute_stage>::validParams();
   params.addClassDescription("computes the diffusion term in phase-field evolution equation");
   params.addParam<MaterialPropertyName>("kappa_name", "kappa", "kappa name");
   params.addParam<MaterialPropertyName>("mobility_name", "M", "name of mobility");
@@ -22,7 +22,7 @@ PhaseFieldFractureEvolutionDiffusion<compute_stage>::validParams()
 template <ComputeStage compute_stage>
 PhaseFieldFractureEvolutionDiffusion<compute_stage>::PhaseFieldFractureEvolutionDiffusion(
     const InputParameters & parameters)
-  : PhaseFieldFractureEvolutionBase<compute_stage>(parameters),
+  : ADKernelGrad<compute_stage>(parameters),
     _kappa(getMaterialProperty<Real>("kappa_name")),
     _M(getMaterialProperty<Real>("mobility_name"))
 {

@@ -4,7 +4,8 @@
 
 #pragma once
 
-#include "PhaseFieldFractureEvolutionBase.h"
+#include "ADKernelValue.h"
+#include "DerivativeMaterialPropertyNameInterface.h"
 
 // Forward Declarations
 template <ComputeStage>
@@ -13,7 +14,8 @@ class PhaseFieldFractureEvolutionReaction;
 declareADValidParams(PhaseFieldFractureEvolutionReaction);
 
 template <ComputeStage compute_stage>
-class PhaseFieldFractureEvolutionReaction : public PhaseFieldFractureEvolutionBase<compute_stage>
+class PhaseFieldFractureEvolutionReaction : public ADKernelValue<compute_stage>,
+                                            public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
@@ -21,7 +23,18 @@ public:
   PhaseFieldFractureEvolutionReaction(const InputParameters & parameters);
 
 protected:
-  virtual ADReal computeQpResidual() override;
+  virtual ADReal precomputeQpResidual() override;
 
-  usingPhaseFieldFractureEvolutionBaseMembers;
+  /// Allen-Cahn mobility calculated from fracture properties
+  const MaterialProperty<Real> & _M;
+
+  /// name of the degradation function
+  const ADMaterialProperty(Real) & _dg_dd;
+  const ADMaterialProperty(Real) & _dw_dd;
+  const bool _lag;
+  const ADMaterialProperty(Real) * _D_mat;
+  const MaterialProperty<Real> * _D_mat_old;
+  const ADVariableValue * _D_var;
+
+  usingKernelValueMembers;
 };

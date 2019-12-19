@@ -22,4 +22,12 @@ public:
 
 protected:
   virtual ADRealVectorValue precomputeQpResidual() override;
+
+  /// Allen-Cahn interface coefficient computed from fracture properties
+  const MaterialProperty<Real> & _kappa;
+
+  /// Allen-Cahn mobility computed from fracture properties
+  const MaterialProperty<Real> & _M;
+
+  usingKernelGradMembers;
 };
