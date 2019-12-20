@@ -1,0 +1,341 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>NonlinearSystem|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="552081d3-7b9e-46c9-b9df-31c018d86f1f"><i class="material-icons">menu</i></a><ul class="sidenav" id="552081d3-7b9e-46c9-b9df-31c018d86f1f"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">systems</span><a href="#" class="breadcrumb">NonlinearSystem</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="3b75002a-7049-407a-8a57-404ee8187218" data-section-level="1" data-section-text="NonlinearSystem"><h1 id="nonlinearsystem">NonlinearSystem</h1><p>The NonlinearSystem object holds the equation system created by the normal FEM process (e.g. the Matrix and RHS vector) to be solved. Normally MOOSE uses PETSc to store and solve this system. This object is where you will find the callback routines used by the PETSc solvers.</p><ul class="browser-default"><li><p><a href="#newtons_method">Solving Non-linear Systems</a> </p></li><li><p><a href="#jacobian_definition">Jacobian Definition</a> </p></li><li><p><a href="#linear_methods">Solving Linear Systems</a> </p></li><li><p><a href="#augmenting_sparsity">Augmenting Sparsity</a></p></li></ul><section class="scrollspy" id="a7b97d19-58eb-403c-a250-87ea2a5c02cd" data-section-level="2" data-section-text="Solving Non - linear Systems"><h2 id="newtons_method">Solving Non-linear Systems</h2><p>Application of the finite element method converts PDE(s) into a system of non-linear equations, <span tex="R_i(u_h)=0, \qquad i=1,\ldots, N" bookmark="moose-equation-007a81f3-de11-45a9-9521-ba69bbca8205" recursive="True" class="moose-katex-inline-equation" id="moose-equation-007a81f3-de11-45a9-9521-ba69bbca8205"><script>var element = document.getElementById("moose-equation-007a81f3-de11-45a9-9521-ba69bbca8205");katex.render("R_i(u_h)=0, \\qquad i=1,\\ldots, N", element, {displayMode:false,throwOnError:false});</script></span>   to solve for the coefficients <span tex="u_j, j=1,\dots,N" bookmark="moose-equation-141d5c46-570c-462f-90ad-88a3c5485ace" recursive="True" class="moose-katex-inline-equation" id="moose-equation-141d5c46-570c-462f-90ad-88a3c5485ace"><script>var element = document.getElementById("moose-equation-141d5c46-570c-462f-90ad-88a3c5485ace");katex.render("u_j, j=1,\\dots,N", element, {displayMode:false,throwOnError:false});</script></span>.</p><ul class="browser-default"><li><p>Newton&#x27;s method has good convergence properties, we use it to solve this system of nonlinear equations. </p></li><li><p>Newton&#x27;s method is a &quot;root finding&quot; method: it finds zeros of nonlinear equations. </p></li><li><p>Newton&#x27;s Method in &quot;Update Form&quot; for finding roots of the scalar equation <span tex="\begin{array}{rl}f(x)&=0, f(x): \mathbb{R} &\rightarrow \mathbb{R}\textrm{ is given by}:\\ f'(x_n) \delta x_{n+1} &= -f(x_n) \\ x_{n+1} &= x_n + \delta x_{n+1}\end{array}" bookmark="moose-equation-bcc96fb1-3869-4a02-94ae-7316442dd4bd" recursive="True" class="moose-katex-inline-equation" id="moose-equation-bcc96fb1-3869-4a02-94ae-7316442dd4bd"><script>var element = document.getElementById("moose-equation-bcc96fb1-3869-4a02-94ae-7316442dd4bd");katex.render("\\begin{array}{rl}f(x)&=0, f(x): \\mathbb{R} &\\rightarrow \\mathbb{R}\\textrm{ is given by}:\\\\ f'(x_n) \\delta x_{n+1} &= -f(x_n) \\\\ x_{n+1} &= x_n + \\delta x_{n+1}\\end{array}", element, {displayMode:false,throwOnError:false});</script></span> </p></li><li><p>We don&#x27;t have just one scalar equation: we have a system of nonlinear equations. </p></li><li><p>This leads to the following form of Newton&#x27;s Method:</p><p>  <span tex="\begin{aligned}   \mathbf{J}(\vec{u}_n) \delta\vec{u}_{n+1} &= -\vec{R}(\vec{u}_n) \\   \vec{u}_{n+1} &= \vec{u}_n + \delta\vec{u}_{n+1}\end{aligned}" bookmark="moose-equation-b3014d58-1ab7-462a-9e40-c80d79484e0a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b3014d58-1ab7-462a-9e40-c80d79484e0a"><script>var element = document.getElementById("moose-equation-b3014d58-1ab7-462a-9e40-c80d79484e0a");katex.render("\\begin{aligned}   \\mathbf{J}(\\vec{u}_n) \\delta\\vec{u}_{n+1} &= -\\vec{R}(\\vec{u}_n) \\\\   \\vec{u}_{n+1} &= \\vec{u}_n + \\delta\\vec{u}_{n+1}\\end{aligned}", element, {displayMode:false,throwOnError:false});</script></span></p><p></p></li><li><p>Where <span tex="\mathbf{J}(\vec{u}_n)" bookmark="moose-equation-a50639e5-748d-4250-a9e8-e1837f587c12" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a50639e5-748d-4250-a9e8-e1837f587c12"><script>var element = document.getElementById("moose-equation-a50639e5-748d-4250-a9e8-e1837f587c12");katex.render("\\mathbf{J}(\\vec{u}_n)", element, {displayMode:false,throwOnError:false});</script></span> is the Jacobian matrix evaluated at the current iterate:   <span tex="J_{ij}(\vec{u}_n) = \frac{\partial R_i(\vec{u}_n)}{\partial u_j}" bookmark="moose-equation-6f270b1e-c58b-4051-a479-cc80a60a19e5" recursive="True" class="moose-katex-inline-equation" id="moose-equation-6f270b1e-c58b-4051-a479-cc80a60a19e5"><script>var element = document.getElementById("moose-equation-6f270b1e-c58b-4051-a479-cc80a60a19e5");katex.render("J_{ij}(\\vec{u}_n) = \\frac{\\partial R_i(\\vec{u}_n)}{\\partial u_j}", element, {displayMode:false,throwOnError:false});</script></span></p><p></p></li><li><p>Note that:   <span tex="\frac{\partial u_h}{\partial u_j} =     \sum_k\frac{\partial }{\partial u_j}\left(u_k \phi_k\right) = \phi_j   \qquad   \frac{\partial \left(\nabla u_h\right)}{\partial u_j} =     \sum_k \frac{\partial }{\partial u_j}\left(u_k \nabla \phi_k\right) = \nabla \phi_j" bookmark="moose-equation-f818d908-2d51-4ed1-b8a7-edf1464a5947" recursive="True" class="moose-katex-inline-equation" id="moose-equation-f818d908-2d51-4ed1-b8a7-edf1464a5947"><script>var element = document.getElementById("moose-equation-f818d908-2d51-4ed1-b8a7-edf1464a5947");katex.render("\\frac{\\partial u_h}{\\partial u_j} =     \\sum_k\\frac{\\partial }{\\partial u_j}\\left(u_k \\phi_k\\right) = \\phi_j   \\qquad   \\frac{\\partial \\left(\\nabla u_h\\right)}{\\partial u_j} =     \\sum_k \\frac{\\partial }{\\partial u_j}\\left(u_k \\nabla \\phi_k\\right) = \\nabla \\phi_j", element, {displayMode:false,throwOnError:false});</script></span></p></li></ul></section><section class="scrollspy" id="fb91db8c-7d73-4e18-9ab4-f50ff3ea56e4" data-section-level="2" data-section-text="Jacobian Definition"><h2 id="jacobian_definition">Jacobian Definition</h2><p>An efficient Newton solve, e.g. one that requires few &quot;non-linear&quot; iterations, requires an accurate Jacobian matrix or an accurate approximation of its action on a vector. When no explicit matrix is formed for the Jacobian and only its action on a vector is computed, the algorithm is commonly referred to as matrix-free (PETSc jargon) or <a href="#JFNK">Jacobian-free</a> (MOOSE jargon). The default solve algorithm in MOOSE is <code>PJFNK</code>, or Preconditioned Jacobian-Free Newton-Krylov. &quot;Krylov&quot; refers to the <em>linear</em> solution algorithm used to solve each non-linear iteration of the Newton algorithm. For more information on solving linear systems, please see <a href="#linear_methods">Solving Linear Systems</a>. Even if a Jacobian-free non-linear algorithm is chosen, typically a good preconditioning matrix is still needed. Building the matrix can be accomplished <a href="#AD">automatically, using automatic differentiation</a> and/or <a href="#hand_coded_jac">manually</a>.</p><section id="cf67dfaf-4ca7-4fca-a3e6-7147ade23bda" data-section-level="3" data-section-text="Automatic Differentiation"><h3 id="AD">Automatic Differentiation</h3><p>One can elect to sacrifice some computing speed and calculate Jacobians automatically using <a href="https://en.wikipedia.org/wiki/Automatic_differentiation">automatic differentiation (AD)</a>. MOOSE employs the <code>DualNumber</code> class from the <a href="https://github.com/roystgnr/MetaPhysicL">MetaPhysicL</a> package in order to enable AD. If the application developer wants to make use of AD, they should inherit from <code>ADKernel</code> as opposed to <code>Kernel</code>. Additionally, when coupling in variables, the <code>adCoupled*</code> methods should be used. For example, to retrieve a coupled value, instead of using <code>coupledValue(&quot;v&quot;)</code> in the <code>ADKernel</code> constructor, <code>adCoupledValue(&quot;v&quot;)</code> should be used. <code>adCoupledGradient</code> should replace <code>coupledGradient</code>, etc. An example of coupling in an AD variable can be found in <a href="#b4dcb9ba-c01d-4539-9526-4ff6c60df1a8" class="modal-trigger"><code>ADCoupledConvection.C</code></a> and <a href="#ae2a940b-b007-46d9-a789-440c3843a914" class="modal-trigger"><code>ADCoupledConvection.h</code></a>. Moreover, material properties that may depend on the non-linear variables should be retrieved using <code>getADMaterialProperty</code> instead of <code>getMaterialProperty</code>. They should be declared in materials using <code>declareADProperty</code>. Example AD material source and header files can be found <a href="#e0e3e5ef-afe2-4494-bd15-2aa17cf4c2a9" class="modal-trigger">here</a> and <a href="#cbabd09e-8b8e-4659-a8b7-ef589d0dc1ce" class="modal-trigger">here</a>; example kernel source and header files that use AD material properties can be found <a href="#4f77e18e-b19b-473b-bfab-0b4dc2d349f2" class="modal-trigger">here</a> and <a href="#b2cfa28d-cd66-40d3-bd5a-02fbf8619c27" class="modal-trigger">here</a>. The object central to AD computing objects is <code>ADReal</code> which is defined in <a href="../utils/MooseTypes.html"><code>MooseTypes</code></a>.</p><div class="modal moose-modal" id="b4dcb9ba-c01d-4539-9526-4ff6c60df1a8"><div class="modal-content"><h4>/home/gary/projects/moose/test/src/kernels/ADCoupledConvection.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;ADCoupledConvection.h&quot;
+
+registerADMooseObject(&quot;MooseTestApp&quot;, ADCoupledConvection);
+
+template &lt;ComputeStage compute_stage&gt;
+InputParameters
+ADCoupledConvection&lt;compute_stage&gt;::validParams()
+{
+  InputParameters params = ADKernel&lt;compute_stage&gt;::validParams();
+  params.addParam&lt;Real&gt;(&quot;scale&quot;, 1, &quot;Scaling coefficient&quot;);
+  params.addRequiredCoupledVar(&quot;velocity_vector&quot;, &quot;Velocity Vector for the Convection ADKernel&quot;);
+  return params;
+}
+
+template &lt;ComputeStage compute_stage&gt;
+ADCoupledConvection&lt;compute_stage&gt;::ADCoupledConvection(const InputParameters &amp; parameters)
+  : ADKernel&lt;compute_stage&gt;(parameters),
+    _velocity_vector(adCoupledGradient(&quot;velocity_vector&quot;)),
+    _scale(getParam&lt;Real&gt;(&quot;scale&quot;))
+{
+}
+
+template &lt;ComputeStage compute_stage&gt;
+ADReal
+ADCoupledConvection&lt;compute_stage&gt;::computeQpResidual()
+{
+  return _scale * _test[_i][_qp] * _velocity_vector[_qp] * _grad_u[_qp];
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="ae2a940b-b007-46d9-a789-440c3843a914"><div class="modal-content"><h4>/home/gary/projects/moose/test/include/kernels/ADCoupledConvection.h</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#pragma once
+
+#include &quot;ADKernel.h&quot;
+
+/**
+ * Define the ADKernel for a convection operator that looks like:
+ *
+ * grad_some_var dot u&#x27;
+ */
+template &lt;ComputeStage compute_stage&gt;
+class ADCoupledConvection : public ADKernel&lt;compute_stage&gt;
+{
+public:
+  static InputParameters validParams();
+
+  ADCoupledConvection(const InputParameters &amp; parameters);
+
+protected:
+  virtual ADReal computeQpResidual() override;
+
+  usingKernelMembers;
+
+private:
+  const ADVariableGradient &amp; _velocity_vector;
+
+  const Real &amp; _scale;
+};
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="e0e3e5ef-afe2-4494-bd15-2aa17cf4c2a9"><div class="modal-content"><h4>/home/gary/projects/moose/test/src/materials/ADCoupledMaterial.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;ADCoupledMaterial.h&quot;
+
+registerADMooseObject(&quot;MooseTestApp&quot;, ADCoupledMaterial);
+
+template &lt;ComputeStage compute_stage&gt;
+InputParameters
+ADCoupledMaterial&lt;compute_stage&gt;::validParams()
+{
+  InputParameters params = ADMaterial&lt;compute_stage&gt;::validParams();
+  params.addRequiredCoupledVar(&quot;coupled_var&quot;, &quot;A coupledvariable&quot;);
+  params.addRequiredParam&lt;MaterialPropertyName&gt;(&quot;ad_mat_prop&quot;,
+                                                &quot;Name of the ad property this material defines&quot;);
+  params.addRequiredParam&lt;MaterialPropertyName&gt;(
+      &quot;regular_mat_prop&quot;, &quot;Name of the regular property this material defines&quot;);
+  return params;
+}
+
+template &lt;ComputeStage compute_stage&gt;
+ADCoupledMaterial&lt;compute_stage&gt;::ADCoupledMaterial(const InputParameters &amp; parameters)
+  : ADMaterial&lt;compute_stage&gt;(parameters),
+    _ad_mat_prop(declareADProperty&lt;Real&gt;(getParam&lt;MaterialPropertyName&gt;(&quot;ad_mat_prop&quot;))),
+    _regular_mat_prop(declareProperty&lt;Real&gt;(getParam&lt;MaterialPropertyName&gt;(&quot;regular_mat_prop&quot;))),
+    _coupled_var(adCoupledValue(&quot;coupled_var&quot;))
+{
+}
+
+// Note that the structure of the two (uncommented) methods below are for testing purposes only;
+// e.g. this material demonstrates that you get bad convergence when you drop the derivative
+// information from the coupled variable. A production version of this material would look like
+// this:
+//
+// template &lt;ComputeStage compute_stage&gt;
+// void
+// ADCoupledMaterial&lt;compute_stage&gt;::computeQpProperties()
+// {
+//   _ad_mat_prop[_qp] = 4.0 * _coupled_var[_qp];
+// }
+
+template &lt;ComputeStage compute_stage&gt;
+void
+ADCoupledMaterial&lt;compute_stage&gt;::computeQpProperties()
+{
+  _regular_mat_prop[_qp] = 4.0 * _coupled_var[_qp].value();
+  _ad_mat_prop[_qp] = 4.0 * _coupled_var[_qp];
+}
+
+template &lt;&gt;
+void
+ADCoupledMaterial&lt;RESIDUAL&gt;::computeQpProperties()
+{
+  _regular_mat_prop[_qp] = 4.0 * _coupled_var[_qp];
+  _ad_mat_prop[_qp] = 4.0 * _coupled_var[_qp];
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="cbabd09e-8b8e-4659-a8b7-ef589d0dc1ce"><div class="modal-content"><h4>/home/gary/projects/moose/test/include/materials/ADCoupledMaterial.h</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#pragma once
+
+#include &quot;ADMaterial.h&quot;
+
+/**
+ * A material that couples a material property
+ */
+template &lt;ComputeStage compute_stage&gt;
+class ADCoupledMaterial : public ADMaterial&lt;compute_stage&gt;
+{
+public:
+  static InputParameters validParams();
+
+  ADCoupledMaterial(const InputParameters &amp; parameters);
+
+protected:
+  virtual void computeQpProperties();
+
+  ADMaterialProperty(Real) &amp; _ad_mat_prop;
+  MaterialProperty&lt;Real&gt; &amp; _regular_mat_prop;
+
+  const ADVariableValue &amp; _coupled_var;
+
+  usingMaterialMembers;
+};
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="4f77e18e-b19b-473b-bfab-0b4dc2d349f2"><div class="modal-content"><h4>/home/gary/projects/moose/test/src/kernels/ADMatDiffusionTest.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;ADMatDiffusionTest.h&quot;
+
+registerADMooseObject(&quot;MooseTestApp&quot;, ADMatDiffusionTest);
+
+template &lt;ComputeStage compute_stage&gt;
+InputParameters
+ADMatDiffusionTest&lt;compute_stage&gt;::validParams()
+{
+  InputParameters params = ADKernel&lt;compute_stage&gt;::validParams();
+  params.addParam&lt;MaterialPropertyName&gt;(
+      &quot;ad_mat_prop&quot;, &quot;ad_diffusivity&quot;, &quot;the name of the AD material property we are going to use&quot;);
+  params.addParam&lt;MaterialPropertyName&gt;(&quot;regular_mat_prop&quot;,
+                                        &quot;regular_diffusivity&quot;,
+                                        &quot;the name of the AD material property we are going to use&quot;);
+  MooseEnum prop_to_use(&quot;AdAd AdReg RegAd RegReg&quot;, &quot;AdAd&quot;);
+  params.addParam&lt;MooseEnum&gt;(&quot;prop_to_use&quot;,
+                             prop_to_use,
+                             &quot;What type of property to use. The prefix indicates the getter type &quot;
+                             &quot;in the kernel; the suffix indicates the declaration type in the &quot;
+                             &quot;material.&quot;);
+  return params;
+}
+
+template &lt;ComputeStage compute_stage&gt;
+ADMatDiffusionTest&lt;compute_stage&gt;::ADMatDiffusionTest(const InputParameters &amp; parameters)
+  : ADKernel&lt;compute_stage&gt;(parameters),
+    _ad_diff_from_ad_prop(getADMaterialProperty&lt;Real&gt;(&quot;ad_mat_prop&quot;)),
+    _regular_diff_from_ad_prop(getMaterialProperty&lt;Real&gt;(&quot;ad_mat_prop&quot;)),
+    _ad_diff_from_regular_prop(getADMaterialProperty&lt;Real&gt;(&quot;regular_mat_prop&quot;)),
+    _regular_diff_from_regular_prop(getMaterialProperty&lt;Real&gt;(&quot;regular_mat_prop&quot;)),
+    _prop_to_use(getParam&lt;MooseEnum&gt;(&quot;prop_to_use&quot;))
+{
+}
+
+template &lt;ComputeStage compute_stage&gt;
+ADReal
+ADMatDiffusionTest&lt;compute_stage&gt;::computeQpResidual()
+{
+  if (_prop_to_use == &quot;AdAd&quot;)
+    return _ad_diff_from_ad_prop[_qp] * _grad_test[_i][_qp] * _grad_u[_qp];
+  else if (_prop_to_use == &quot;AdReg&quot;)
+    return _ad_diff_from_regular_prop[_qp] * _grad_test[_i][_qp] * _grad_u[_qp];
+  else if (_prop_to_use == &quot;RegAd&quot;)
+    return _regular_diff_from_ad_prop[_qp] * _grad_test[_i][_qp] * _grad_u[_qp];
+  else if (_prop_to_use == &quot;RegReg&quot;)
+    return _regular_diff_from_regular_prop[_qp] * _grad_test[_i][_qp] * _grad_u[_qp];
+  else
+    mooseError(&quot;Oops&quot;);
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="b2cfa28d-cd66-40d3-bd5a-02fbf8619c27"><div class="modal-content"><h4>/home/gary/projects/moose/test/include/kernels/ADMatDiffusionTest.h</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#pragma once
+
+#include &quot;ADKernel.h&quot;
+#include &quot;MaterialProperty.h&quot;
+
+template &lt;ComputeStage compute_stage&gt;
+class ADMatDiffusionTest : public ADKernel&lt;compute_stage&gt;
+{
+public:
+  static InputParameters validParams();
+
+  ADMatDiffusionTest(const InputParameters &amp; parameters);
+
+protected:
+  virtual ADReal computeQpResidual();
+
+  const ADMaterialProperty(Real) &amp; _ad_diff_from_ad_prop;
+  const MaterialProperty&lt;Real&gt; &amp; _regular_diff_from_ad_prop;
+  const ADMaterialProperty(Real) &amp; _ad_diff_from_regular_prop;
+  const MaterialProperty&lt;Real&gt; &amp; _regular_diff_from_regular_prop;
+  const MooseEnum _prop_to_use;
+
+  usingKernelMembers;
+};
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section id="c466cb7e-f168-4a2f-89c5-8b8935e8e9e0" data-section-level="3" data-section-text="Traditional Hand - coded Jacobians"><h3 id="hand_coded_jac">Traditional Hand-coded Jacobians</h3><p>Finite element shape functions are introduced in the documentation section <a href="../problems/FEProblemBase.html#shape_functions">Shape Functions</a>. There we outline how our primary variables are summations of those shape functions multiplied by constant coefficients which are our degrees of freedom. At the end of <a href="#newtons_method">Solving Non-linear Systems</a> we gave an explicit illustration of how the derivative of a variable <code>u</code> with respect to its jth degree of freedom (<span tex="u_j" bookmark="moose-equation-e4975aaa-13ea-4b14-b043-4e6a9aa1bbae" recursive="True" class="moose-katex-inline-equation" id="moose-equation-e4975aaa-13ea-4b14-b043-4e6a9aa1bbae"><script>var element = document.getElementById("moose-equation-e4975aaa-13ea-4b14-b043-4e6a9aa1bbae");katex.render("u_j", element, {displayMode:false,throwOnError:false});</script></span>) is equal to the jth shape function <span tex="\phi_j" bookmark="moose-equation-b698619d-b4ae-40ae-a7c8-49dc625901ff" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b698619d-b4ae-40ae-a7c8-49dc625901ff"><script>var element = document.getElementById("moose-equation-b698619d-b4ae-40ae-a7c8-49dc625901ff");katex.render("\\phi_j", element, {displayMode:false,throwOnError:false});</script></span>. Similarly the derivative of <span tex="\nabla u" bookmark="moose-equation-95fbb333-144e-4e85-8874-9e003e3ef0fd" recursive="True" class="moose-katex-inline-equation" id="moose-equation-95fbb333-144e-4e85-8874-9e003e3ef0fd"><script>var element = document.getElementById("moose-equation-95fbb333-144e-4e85-8874-9e003e3ef0fd");katex.render("\\nabla u", element, {displayMode:false,throwOnError:false});</script></span> with respect to <span tex="u_j" bookmark="moose-equation-de30a953-aa4e-4ee1-a4eb-a6fb05e47fcd" recursive="True" class="moose-katex-inline-equation" id="moose-equation-de30a953-aa4e-4ee1-a4eb-a6fb05e47fcd"><script>var element = document.getElementById("moose-equation-de30a953-aa4e-4ee1-a4eb-a6fb05e47fcd");katex.render("u_j", element, {displayMode:false,throwOnError:false});</script></span> is equal to <span tex="\nabla \phi_j" bookmark="moose-equation-4ccaa456-e41b-4441-ba48-5a4ac50006a8" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4ccaa456-e41b-4441-ba48-5a4ac50006a8"><script>var element = document.getElementById("moose-equation-4ccaa456-e41b-4441-ba48-5a4ac50006a8");katex.render("\\nabla \\phi_j", element, {displayMode:false,throwOnError:false});</script></span>. The code expression  <code>_phi[_j][_qp]</code> represents <span tex="\frac{\partial u}{\partial u_j}" bookmark="moose-equation-c66f9fdf-b196-4552-8a12-518fe7f89776" recursive="True" class="moose-katex-inline-equation" id="moose-equation-c66f9fdf-b196-4552-8a12-518fe7f89776"><script>var element = document.getElementById("moose-equation-c66f9fdf-b196-4552-8a12-518fe7f89776");katex.render("\\frac{\\partial u}{\\partial u_j}", element, {displayMode:false,throwOnError:false});</script></span> in any MOOSE framework residual and Jacobian computing objects such as kernels and boundary conditions.</p><p>Any MOOSE kernel may have an arbitrary number of variables coupled into it. If these coupled variables use the same shape function family and order, then their associated <span tex="\phi_j" bookmark="moose-equation-85c3afb4-af8a-426c-adc8-12aca4681f8a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-85c3afb4-af8a-426c-adc8-12aca4681f8a"><script>var element = document.getElementById("moose-equation-85c3afb4-af8a-426c-adc8-12aca4681f8a");katex.render("\\phi_j", element, {displayMode:false,throwOnError:false});</script></span>s will be equivalent. However, if <code>u</code> and <code>v</code> use different shape functions then <span tex="\phi_{j,u} \ne \phi_{j,v}" bookmark="moose-equation-e5c0ddad-b947-420d-afd1-5675a75901bf" recursive="True" class="moose-katex-inline-equation" id="moose-equation-e5c0ddad-b947-420d-afd1-5675a75901bf"><script>var element = document.getElementById("moose-equation-e5c0ddad-b947-420d-afd1-5675a75901bf");katex.render("\\phi_{j,u} \\ne \\phi_{j,v}", element, {displayMode:false,throwOnError:false});</script></span>. As a developer, however, you do not <em></em><em>in most cases</em><em></em> have to worry about these differences in <span tex="\phi" bookmark="moose-equation-8a479e1b-871e-40d7-84be-c0571e3e0018" recursive="True" class="moose-katex-inline-equation" id="moose-equation-8a479e1b-871e-40d7-84be-c0571e3e0018"><script>var element = document.getElementById("moose-equation-8a479e1b-871e-40d7-84be-c0571e3e0018");katex.render("\\phi", element, {displayMode:false,throwOnError:false});</script></span>. MOOSE automatically updates the object member variable <code>_phi</code> to use the shape functions of the variable for whom the Jacobian is currently being computed. <em></em><em>However</em><em></em>, if the primary variable <code>u</code> is a scalar-valued (single-component) finite element variable and the coupled variable <code>v</code> is a vector-valued (multi-component) finite element variable (or visa versa), then you must introduce an additional member variable to represent the shape functions of the vector-valued (scalar-valued) variable. The name of this variable is up to the developer, but we suggest perhaps a <code>_standard_</code> prefix for scalar valued finite-element variables and <code>_vector_</code> for vector valued finite-element variables. The <code>_standard_</code> prefix is suggested over <code>_scalar_</code> so as not to be confused with a <code>MooseVariableScalar</code>, which only has a single value over the entire spatial domain. An example constructor for a standard kernel that couples in a vector-valued FE variable is shown below:</p><pre class="moose-pre"><code class="language-text">
+EFieldAdvection::EFieldAdvection(const InputParameters &amp; parameters)
+  : Kernel(parameters),
+    _efield_id(coupled(&quot;efield&quot;)),
+    _efield(coupledVectorValue(&quot;efield&quot;)),
+    _efield_var(*getVectorVar(&quot;efield&quot;, 0)),
+    _vector_phi(_assembly.phi(_efield_var)),
+    _mobility(getParam&lt;Real&gt;(&quot;mobility&quot;))
+{
+}
+</code></pre><p>The associated declarations are:</p><pre class="moose-pre"><code class="language-text">
+  const unsigned int _efield_id;
+  const VectorVariableValue &amp; _efield;
+  VectorMooseVariable &amp; _efield_var;
+  const VectorVariablePhiValue &amp; _vector_phi;
+  const Real _mobility;
+  Real _sgn;
+</code></pre><p>Residual, on-diagonal, and off-diagonal methods are respectively</p><pre class="moose-pre"><code class="language-text">
+Real
+EFieldAdvection::computeQpResidual()
+{
+  return -_grad_test[_i][_qp] * _sgn * _mobility * _efield[_qp] * _u[_qp];
+}
+</code></pre><p>and</p><pre class="moose-pre"><code class="language-text">
+Real
+EFieldAdvection::computeQpJacobian()
+{
+  return -_grad_test[_i][_qp] * _sgn * _mobility * _efield[_qp] * _phi[_j][_qp];
+}
+</code></pre><p>and</p><pre class="moose-pre"><code class="language-text">
+Real
+EFieldAdvection::computeQpOffDiagJacobian(unsigned int jvar)
+{
+  if (jvar == _efield_id)
+    return -_grad_test[_i][_qp] * _sgn * _mobility * _vector_phi[_j][_qp] * _u[_qp];
+  else
+    return 0;
+}
+
+```
+An example constructor for a vector kernel that couples in a
+scalar-valued FE variable is shown below:
+
+```
+VectorCoupledGradientTimeDerivative::VectorCoupledGradientTimeDerivative(
+    const InputParameters &amp; parameters)
+  : VectorKernel(parameters),
+    _grad_v_dot(coupledGradientDot(&quot;v&quot;)),
+    _d_grad_v_dot_dv(coupledDotDu(&quot;v&quot;)),
+    _v_id(coupled(&quot;v&quot;)),
+    _v_var(*getVar(&quot;v&quot;, 0)),
+    _standard_grad_phi(_assembly.gradPhi(_v_var))
+{
+}
+
+```
+The associated declarations are:
+
+```
+  const VariableGradient &amp; _grad_v_dot;
+  const VariableValue &amp; _d_grad_v_dot_dv;
+  const unsigned _v_id;
+  MooseVariable &amp; _v_var;
+  const VariablePhiGradient &amp; _standard_grad_phi;
+</code></pre><p>Residual and off-diagonal Jacobian methods are respectively:</p><pre class="moose-pre"><code class="language-text">
+Real
+VectorCoupledGradientTimeDerivative::computeQpResidual()
+{
+  return _test[_i][_qp] * _grad_v_dot[_qp];
+}
+</code></pre><p>and</p><pre class="moose-pre"><code class="language-text">
+Real
+VectorCoupledGradientTimeDerivative::computeQpOffDiagJacobian(unsigned jvar)
+{
+  if (jvar == _v_id)
+    return _test[_i][_qp] * _d_grad_v_dot_dv[_qp] * _standard_grad_phi[_j][_qp];
+
+  else
+    return 0.;
+}
+</code></pre><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note:</span>Flexibility</div><div class="card-content"><div class="moose-alert-content"><p><p>Note that only one member is needed to represent shape functions for standard     <code>MooseVariable</code>s and <code>VectorMooseVariable</code>s. For example, if the vector-variables     <code>v</code> and <code>w</code> are coupled into a standard kernel for <code>u</code>, only a single     <code>_vector_phi</code> member needs to be added; there is not need for both a     <code>_v_phi</code> and <code>_w_phi</code>. <code>_vector_phi</code> will be automatically updated to     represent the shape functions for whichever vector variable the Jacobian is     being computed for.</p></p></div></div></div></section><section id="4c53969e-12f3-418a-a86d-0b6aacfc7abe" data-section-level="3" data-section-text="Newton for a Simple Equation"><h3 id="simple_newton">Newton for a Simple Equation</h3><ul class="browser-default"><li><p>Consider the convection-diffusion equation with nonlinear <span tex="k" bookmark="moose-equation-7854ece5-600f-4666-be49-67374b85a049" recursive="True" class="moose-katex-inline-equation" id="moose-equation-7854ece5-600f-4666-be49-67374b85a049"><script>var element = document.getElementById("moose-equation-7854ece5-600f-4666-be49-67374b85a049");katex.render("k", element, {displayMode:false,throwOnError:false});</script></span>, <span tex="\vec{\beta}" bookmark="moose-equation-de32c18f-c92d-40d3-b557-b3c279629ead" recursive="True" class="moose-katex-inline-equation" id="moose-equation-de32c18f-c92d-40d3-b557-b3c279629ead"><script>var element = document.getElementById("moose-equation-de32c18f-c92d-40d3-b557-b3c279629ead");katex.render("\\vec{\\beta}", element, {displayMode:false,throwOnError:false});</script></span>, and <span tex="f" bookmark="moose-equation-2c8e5de1-2606-4256-a59c-2f2fab7760c9" recursive="True" class="moose-katex-inline-equation" id="moose-equation-2c8e5de1-2606-4256-a59c-2f2fab7760c9"><script>var element = document.getElementById("moose-equation-2c8e5de1-2606-4256-a59c-2f2fab7760c9");katex.render("f", element, {displayMode:false,throwOnError:false});</script></span>:   <span tex="\begin{aligned}- \nabla\cdot k\nabla u + \vec{\beta} \cdot \nabla u = f\end{aligned}" bookmark="moose-equation-26323be2-0856-477f-9e9c-aa5ed99a6237" recursive="True" class="moose-katex-inline-equation" id="moose-equation-26323be2-0856-477f-9e9c-aa5ed99a6237"><script>var element = document.getElementById("moose-equation-26323be2-0856-477f-9e9c-aa5ed99a6237");katex.render("\\begin{aligned}- \\nabla\\cdot k\\nabla u + \\vec{\\beta} \\cdot \\nabla u = f\\end{aligned}", element, {displayMode:false,throwOnError:false});</script></span></p><p></p></li><li><p>The <span tex="i^{th}" bookmark="moose-equation-7bb5434f-5707-41a9-868e-9e9a2dfa975f" recursive="True" class="moose-katex-inline-equation" id="moose-equation-7bb5434f-5707-41a9-868e-9e9a2dfa975f"><script>var element = document.getElementById("moose-equation-7bb5434f-5707-41a9-868e-9e9a2dfa975f");katex.render("i^{th}", element, {displayMode:false,throwOnError:false});</script></span> component of the residual vector is:   <span tex="\begin{aligned}   R_i(u_h) = \left(\nabla\psi_i, k\nabla u_h \right) - \langle\psi_i, k\nabla u_h\cdot \hat{n} \rangle +   \left(\psi_i, \vec{\beta} \cdot \nabla u_h\right) - \left(\psi_i, f\right)\end{aligned}" bookmark="moose-equation-1f19d4c9-1736-4aac-b7ac-8cdcec6e12cc" recursive="True" class="moose-katex-inline-equation" id="moose-equation-1f19d4c9-1736-4aac-b7ac-8cdcec6e12cc"><script>var element = document.getElementById("moose-equation-1f19d4c9-1736-4aac-b7ac-8cdcec6e12cc");katex.render("\\begin{aligned}   R_i(u_h) = \\left(\\nabla\\psi_i, k\\nabla u_h \\right) - \\langle\\psi_i, k\\nabla u_h\\cdot \\hat{n} \\rangle +   \\left(\\psi_i, \\vec{\\beta} \\cdot \\nabla u_h\\right) - \\left(\\psi_i, f\\right)\\end{aligned}", element, {displayMode:false,throwOnError:false});</script></span></p></li></ul><ul class="browser-default"><li><p>Using the previously-defined rules for <span tex="\frac{\partial u_h}{\partial u_j}" bookmark="moose-equation-75895ca4-30a7-43d9-9223-c111c1a938db" recursive="True" class="moose-katex-inline-equation" id="moose-equation-75895ca4-30a7-43d9-9223-c111c1a938db"><script>var element = document.getElementById("moose-equation-75895ca4-30a7-43d9-9223-c111c1a938db");katex.render("\\frac{\\partial u_h}{\\partial u_j}", element, {displayMode:false,throwOnError:false});</script></span> and <span tex="\frac{\partial \left(\nabla u_h\right)}{\partial u_j}" bookmark="moose-equation-db43c6a3-9523-49a4-bbad-d81e603b92d0" recursive="True" class="moose-katex-inline-equation" id="moose-equation-db43c6a3-9523-49a4-bbad-d81e603b92d0"><script>var element = document.getElementById("moose-equation-db43c6a3-9523-49a4-bbad-d81e603b92d0");katex.render("\\frac{\\partial \\left(\\nabla u_h\\right)}{\\partial u_j}", element, {displayMode:false,throwOnError:false});</script></span>, the <span tex="(i,j)" bookmark="moose-equation-81590aa3-bfe3-4d6f-aa2a-24bb68e58cbe" recursive="True" class="moose-katex-inline-equation" id="moose-equation-81590aa3-bfe3-4d6f-aa2a-24bb68e58cbe"><script>var element = document.getElementById("moose-equation-81590aa3-bfe3-4d6f-aa2a-24bb68e58cbe");katex.render("(i,j)", element, {displayMode:false,throwOnError:false});</script></span> entry of the Jacobian is then:</p></li></ul><p><span tex="\begin{aligned} J_{ij}(u_h) &= \left(\nabla\psi_i, \frac{\partial k}{\partial u_j}\nabla u_h \right) + \left(\nabla\psi_i, k \nabla \phi_j \right) - \left \langle\psi_i, \frac{\partial k}{\partial u_j}\nabla u_h\cdot \hat{n} \right\rangle \\&- \left \langle\psi_i, k\nabla \phi_j\cdot \hat{n} \right\rangle + \left(\psi_i, \frac{\partial \vec{\beta}}{\partial u_j} \cdot\nabla u_h\right) + \left(\psi_i, \vec{\beta} \cdot \nabla \phi_j\right) - \left(\psi_i, \frac{\partial f}{\partial u_j}\right)\end{aligned}" bookmark="moose-equation-328ffdc3-4e3e-44ed-999d-17d9520db765" recursive="True" class="moose-katex-inline-equation" id="moose-equation-328ffdc3-4e3e-44ed-999d-17d9520db765"><script>var element = document.getElementById("moose-equation-328ffdc3-4e3e-44ed-999d-17d9520db765");katex.render("\\begin{aligned} J_{ij}(u_h) &= \\left(\\nabla\\psi_i, \\frac{\\partial k}{\\partial u_j}\\nabla u_h \\right) + \\left(\\nabla\\psi_i, k \\nabla \\phi_j \\right) - \\left \\langle\\psi_i, \\frac{\\partial k}{\\partial u_j}\\nabla u_h\\cdot \\hat{n} \\right\\rangle \\\\&- \\left \\langle\\psi_i, k\\nabla \\phi_j\\cdot \\hat{n} \\right\\rangle + \\left(\\psi_i, \\frac{\\partial \\vec{\\beta}}{\\partial u_j} \\cdot\\nabla u_h\\right) + \\left(\\psi_i, \\vec{\\beta} \\cdot \\nabla \\phi_j\\right) - \\left(\\psi_i, \\frac{\\partial f}{\\partial u_j}\\right)\\end{aligned}", element, {displayMode:false,throwOnError:false});</script></span></p><ul class="browser-default"><li><p>Note that even for this &quot;simple&quot; equation, the Jacobian entries are nontrivial: they depend on the partial derivatives of <span tex="k" bookmark="moose-equation-208eaa61-8849-425b-b612-bbceff3d4fe6" recursive="True" class="moose-katex-inline-equation" id="moose-equation-208eaa61-8849-425b-b612-bbceff3d4fe6"><script>var element = document.getElementById("moose-equation-208eaa61-8849-425b-b612-bbceff3d4fe6");katex.render("k", element, {displayMode:false,throwOnError:false});</script></span>, <span tex="\vec{\beta}" bookmark="moose-equation-6aebbd95-a5fb-470e-a315-be0df932eabf" recursive="True" class="moose-katex-inline-equation" id="moose-equation-6aebbd95-a5fb-470e-a315-be0df932eabf"><script>var element = document.getElementById("moose-equation-6aebbd95-a5fb-470e-a315-be0df932eabf");katex.render("\\vec{\\beta}", element, {displayMode:false,throwOnError:false});</script></span>, and <span tex="f" bookmark="moose-equation-078fd259-b730-4dc4-8c67-5a4febfa0f20" recursive="True" class="moose-katex-inline-equation" id="moose-equation-078fd259-b730-4dc4-8c67-5a4febfa0f20"><script>var element = document.getElementById("moose-equation-078fd259-b730-4dc4-8c67-5a4febfa0f20");katex.render("f", element, {displayMode:false,throwOnError:false});</script></span>, which may be difficult or time-consuming to compute analytically.</p><p></p></li><li><p>In a multiphysics setting with many coupled equations and complicated material properties, the Jacobian might be extremely difficult to determine.</p></li></ul></section><section id="e8eb8f89-b851-4b35-88a8-4344d298993a" data-section-level="3" data-section-text="Chain Rule"><h3 id="chain_rule">Chain Rule</h3><ul class="browser-default"><li><p>On the previous slide, the term <span tex="\frac{\partial f}{\partial u_j}" bookmark="moose-equation-e4b98563-0e69-4881-9764-9c1e2c63b0ee" recursive="True" class="moose-katex-inline-equation" id="moose-equation-e4b98563-0e69-4881-9764-9c1e2c63b0ee"><script>var element = document.getElementById("moose-equation-e4b98563-0e69-4881-9764-9c1e2c63b0ee");katex.render("\\frac{\\partial f}{\\partial u_j}", element, {displayMode:false,throwOnError:false});</script></span> was used, where <span tex="f" bookmark="moose-equation-b51644ac-447c-4749-b3ee-f04228a39fb8" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b51644ac-447c-4749-b3ee-f04228a39fb8"><script>var element = document.getElementById("moose-equation-b51644ac-447c-4749-b3ee-f04228a39fb8");katex.render("f", element, {displayMode:false,throwOnError:false});</script></span> was a nonlinear forcing function.</p><p></p></li><li><p>The chain rule allows us to write this term as</p><p><span tex="\begin{aligned}   \frac{\partial f}{\partial u_j} &= \frac{\partial f}{\partial u_h} \frac{\partial u_h}{\partial u_j}   \\   &=\frac{\partial f}{\partial u_h} \phi_j\end{aligned}" bookmark="moose-equation-2defdf70-ae3e-4677-b435-500831cf9b35" recursive="True" class="moose-katex-inline-equation" id="moose-equation-2defdf70-ae3e-4677-b435-500831cf9b35"><script>var element = document.getElementById("moose-equation-2defdf70-ae3e-4677-b435-500831cf9b35");katex.render("\\begin{aligned}   \\frac{\\partial f}{\\partial u_j} &= \\frac{\\partial f}{\\partial u_h} \\frac{\\partial u_h}{\\partial u_j}   \\\\   &=\\frac{\\partial f}{\\partial u_h} \\phi_j\\end{aligned}", element, {displayMode:false,throwOnError:false});</script></span></p><p></p></li><li><p>If a functional form of <span tex="f" bookmark="moose-equation-004c84da-d0dc-42a4-8394-00a9b1f7bfd5" recursive="True" class="moose-katex-inline-equation" id="moose-equation-004c84da-d0dc-42a4-8394-00a9b1f7bfd5"><script>var element = document.getElementById("moose-equation-004c84da-d0dc-42a4-8394-00a9b1f7bfd5");katex.render("f", element, {displayMode:false,throwOnError:false});</script></span> is known, e.g. <span tex="f(u) = \sin(u)" bookmark="moose-equation-a91d1bed-5dd4-436b-ba00-ce258162920e" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a91d1bed-5dd4-436b-ba00-ce258162920e"><script>var element = document.getElementById("moose-equation-a91d1bed-5dd4-436b-ba00-ce258162920e");katex.render("f(u) = \\sin(u)", element, {displayMode:false,throwOnError:false});</script></span>, this formula implies that its Jacobian contribution is given by</p><p> <span tex="\frac{\partial f}{\partial u_j} = \cos(u_h) \phi_j" bookmark="moose-equation-37bc1eb8-87f0-4b97-a4ef-7f571b77ffd6" recursive="True" class="moose-katex-inline-equation" id="moose-equation-37bc1eb8-87f0-4b97-a4ef-7f571b77ffd6"><script>var element = document.getElementById("moose-equation-37bc1eb8-87f0-4b97-a4ef-7f571b77ffd6");katex.render("\\frac{\\partial f}{\\partial u_j} = \\cos(u_h) \\phi_j", element, {displayMode:false,throwOnError:false});</script></span></p></li></ul></section><section id="7b84dc13-6cf2-4b95-a4f2-ca3ec124ea97" data-section-level="3" data-section-text="Jacobian - Free Newton - Krylov"><h3 id="JFNK">Jacobian-Free Newton-Krylov</h3><ul class="browser-default"><li><p><span tex="\mathbf{J}(\vec{u}_n)\delta \vec{u}_{n+1} = -\vec{R}(\vec{u}_n)" bookmark="moose-equation-fbb765e0-1b35-4c87-87de-7dfcb531f488" recursive="True" class="moose-katex-inline-equation" id="moose-equation-fbb765e0-1b35-4c87-87de-7dfcb531f488"><script>var element = document.getElementById("moose-equation-fbb765e0-1b35-4c87-87de-7dfcb531f488");katex.render("\\mathbf{J}(\\vec{u}_n)\\delta \\vec{u}_{n+1} = -\\vec{R}(\\vec{u}_n)", element, {displayMode:false,throwOnError:false});</script></span> is a linear system solved during each Newton step. </p></li><li><p>For simplicity, we can write this linear system as <span tex="\mathbf{A}\vec{x} = \vec{b}" bookmark="moose-equation-178d7c7c-d8cb-4d4e-9584-4b9a0a698bb2" recursive="True" class="moose-katex-inline-equation" id="moose-equation-178d7c7c-d8cb-4d4e-9584-4b9a0a698bb2"><script>var element = document.getElementById("moose-equation-178d7c7c-d8cb-4d4e-9584-4b9a0a698bb2");katex.render("\\mathbf{A}\\vec{x} = \\vec{b}", element, {displayMode:false,throwOnError:false});</script></span>, where:   - <span tex="\mathbf{A} \equiv \mathbf{J}(\vec{u}_n)" bookmark="moose-equation-2981c171-a7a8-4fac-b48f-61d6bf52b12d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-2981c171-a7a8-4fac-b48f-61d6bf52b12d"><script>var element = document.getElementById("moose-equation-2981c171-a7a8-4fac-b48f-61d6bf52b12d");katex.render("\\mathbf{A} \\equiv \\mathbf{J}(\\vec{u}_n)", element, {displayMode:false,throwOnError:false});</script></span>   - <span tex="\vec{x} \equiv \delta \vec{u}_{n+1}" bookmark="moose-equation-a7226af6-9820-498b-bf0a-9069941b0992" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a7226af6-9820-498b-bf0a-9069941b0992"><script>var element = document.getElementById("moose-equation-a7226af6-9820-498b-bf0a-9069941b0992");katex.render("\\vec{x} \\equiv \\delta \\vec{u}_{n+1}", element, {displayMode:false,throwOnError:false});</script></span>   - <span tex="\vec{b} \equiv -\vec{R}(\vec{u}_n)" bookmark="moose-equation-137b1141-9d97-4d5b-8009-3b8c1b58ed7f" recursive="True" class="moose-katex-inline-equation" id="moose-equation-137b1141-9d97-4d5b-8009-3b8c1b58ed7f"><script>var element = document.getElementById("moose-equation-137b1141-9d97-4d5b-8009-3b8c1b58ed7f");katex.render("\\vec{b} \\equiv -\\vec{R}(\\vec{u}_n)", element, {displayMode:false,throwOnError:false});</script></span> </p></li><li><p>We employ an iterative Krylov method (e.g. GMRES) to produce a sequence of iterates <span tex="\vec{x}_k \rightarrow \vec{x}" bookmark="moose-equation-636000cb-1b4d-44a5-a304-9bc64d4bb238" recursive="True" class="moose-katex-inline-equation" id="moose-equation-636000cb-1b4d-44a5-a304-9bc64d4bb238"><script>var element = document.getElementById("moose-equation-636000cb-1b4d-44a5-a304-9bc64d4bb238");katex.render("\\vec{x}_k \\rightarrow \\vec{x}", element, {displayMode:false,throwOnError:false});</script></span>, <span tex="k=1,2,\ldots" bookmark="moose-equation-b7a75c62-05e2-4ad0-9279-e8d3ea70fbb2" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b7a75c62-05e2-4ad0-9279-e8d3ea70fbb2"><script>var element = document.getElementById("moose-equation-b7a75c62-05e2-4ad0-9279-e8d3ea70fbb2");katex.render("k=1,2,\\ldots", element, {displayMode:false,throwOnError:false});</script></span> </p></li><li><p><span tex="\mathbf{A}" bookmark="moose-equation-9a5ebe0c-0d22-4563-92f1-890b93545f52" recursive="True" class="moose-katex-inline-equation" id="moose-equation-9a5ebe0c-0d22-4563-92f1-890b93545f52"><script>var element = document.getElementById("moose-equation-9a5ebe0c-0d22-4563-92f1-890b93545f52");katex.render("\\mathbf{A}", element, {displayMode:false,throwOnError:false});</script></span> and <span tex="\vec{b}" bookmark="moose-equation-4bd520df-75ad-423d-8d13-f3bac854180b" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4bd520df-75ad-423d-8d13-f3bac854180b"><script>var element = document.getElementById("moose-equation-4bd520df-75ad-423d-8d13-f3bac854180b");katex.render("\\vec{b}", element, {displayMode:false,throwOnError:false});</script></span> remain <em>fixed</em> during the iterative process. </p></li><li><p>The &quot;linear residual&quot; at step <span tex="k" bookmark="moose-equation-a2c0eacc-dea9-477f-890d-708496332b57" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a2c0eacc-dea9-477f-890d-708496332b57"><script>var element = document.getElementById("moose-equation-a2c0eacc-dea9-477f-890d-708496332b57");katex.render("k", element, {displayMode:false,throwOnError:false});</script></span> is defined as</p><p><span tex="\vec{\rho}_k \equiv \mathbf{A}\vec{x}_k - \vec{b}" bookmark="moose-equation-2d966262-6cc9-4601-8de9-7e1e17018cd5" recursive="True" class="moose-katex-inline-equation" id="moose-equation-2d966262-6cc9-4601-8de9-7e1e17018cd5"><script>var element = document.getElementById("moose-equation-2d966262-6cc9-4601-8de9-7e1e17018cd5");katex.render("\\vec{\\rho}_k \\equiv \\mathbf{A}\\vec{x}_k - \\vec{b}", element, {displayMode:false,throwOnError:false});</script></span></p><p></p></li><li><p>MOOSE prints the norm of this vector, <span tex="\|\vec{\rho}_k\|" bookmark="moose-equation-4166ff03-cec4-480e-96d7-5740ee93a96b" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4166ff03-cec4-480e-96d7-5740ee93a96b"><script>var element = document.getElementById("moose-equation-4166ff03-cec4-480e-96d7-5740ee93a96b");katex.render("\\|\\vec{\\rho}_k\\|", element, {displayMode:false,throwOnError:false});</script></span>, at each iteration, if you set <code>print_linear_residuals = true</code> in the <code>Outputs</code> block.</p><p></p></li><li><p>The &quot;nonlinear residual&quot; printed by MOOSE is <span tex="\|\vec{R}(\vec{u}_n)\|" bookmark="moose-equation-606bd0c9-de3c-4b10-bb03-10ebf90b74bf" recursive="True" class="moose-katex-inline-equation" id="moose-equation-606bd0c9-de3c-4b10-bb03-10ebf90b74bf"><script>var element = document.getElementById("moose-equation-606bd0c9-de3c-4b10-bb03-10ebf90b74bf");katex.render("\\|\\vec{R}(\\vec{u}_n)\\|", element, {displayMode:false,throwOnError:false});</script></span>.</p><p></p></li><li><p>By iterate <span tex="k" bookmark="moose-equation-b89d16d5-f594-47cb-83d5-751afd3f9fed" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b89d16d5-f594-47cb-83d5-751afd3f9fed"><script>var element = document.getElementById("moose-equation-b89d16d5-f594-47cb-83d5-751afd3f9fed");katex.render("k", element, {displayMode:false,throwOnError:false});</script></span>, the Krylov method has constructed the subspace</p><p><span tex="\mathcal{K}_k = \text{span}\{ \vec{b}, \mathbf{A}\vec{b}, \mathbf{A}^2\vec{b}, \ldots, \mathbf{A}^{k-1}\vec{b}\}" bookmark="moose-equation-6417bae1-14fb-4f39-bb91-5a02ca18ba6a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-6417bae1-14fb-4f39-bb91-5a02ca18ba6a"><script>var element = document.getElementById("moose-equation-6417bae1-14fb-4f39-bb91-5a02ca18ba6a");katex.render("\\mathcal{K}_k = \\text{span}\\{ \\vec{b}, \\mathbf{A}\\vec{b}, \\mathbf{A}^2\\vec{b}, \\ldots, \\mathbf{A}^{k-1}\\vec{b}\\}", element, {displayMode:false,throwOnError:false});</script></span></p><p></p></li><li><p>Different Krylov methods produce the <span tex="\vec{x}_k" bookmark="moose-equation-e86a0bb8-7c13-4983-9937-596e1fc97663" recursive="True" class="moose-katex-inline-equation" id="moose-equation-e86a0bb8-7c13-4983-9937-596e1fc97663"><script>var element = document.getElementById("moose-equation-e86a0bb8-7c13-4983-9937-596e1fc97663");katex.render("\\vec{x}_k", element, {displayMode:false,throwOnError:false});</script></span> iterates in different ways: </p></li><li><p>Conjugate Gradients: <span tex="\vec{\rho}_k" bookmark="moose-equation-299a15d6-4199-43f9-bff3-aea9725d3963" recursive="True" class="moose-katex-inline-equation" id="moose-equation-299a15d6-4199-43f9-bff3-aea9725d3963"><script>var element = document.getElementById("moose-equation-299a15d6-4199-43f9-bff3-aea9725d3963");katex.render("\\vec{\\rho}_k", element, {displayMode:false,throwOnError:false});</script></span> orthogonal to <span tex="\mathcal{K}_k" bookmark="moose-equation-c5f78627-b5a4-4d0a-aef9-c655a0b0e866" recursive="True" class="moose-katex-inline-equation" id="moose-equation-c5f78627-b5a4-4d0a-aef9-c655a0b0e866"><script>var element = document.getElementById("moose-equation-c5f78627-b5a4-4d0a-aef9-c655a0b0e866");katex.render("\\mathcal{K}_k", element, {displayMode:false,throwOnError:false});</script></span>. </p></li><li><p>GMRES/MINRES: <span tex="\vec{\rho}_k" bookmark="moose-equation-e71b17db-4bff-4590-a370-185f7449c43d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-e71b17db-4bff-4590-a370-185f7449c43d"><script>var element = document.getElementById("moose-equation-e71b17db-4bff-4590-a370-185f7449c43d");katex.render("\\vec{\\rho}_k", element, {displayMode:false,throwOnError:false});</script></span> has minimum norm for <span tex="\vec{x}_k" bookmark="moose-equation-7d65f7df-038d-4b3e-8f0f-2214a6cf8d86" recursive="True" class="moose-katex-inline-equation" id="moose-equation-7d65f7df-038d-4b3e-8f0f-2214a6cf8d86"><script>var element = document.getElementById("moose-equation-7d65f7df-038d-4b3e-8f0f-2214a6cf8d86");katex.render("\\vec{x}_k", element, {displayMode:false,throwOnError:false});</script></span> in <span tex="\mathcal{K}_k" bookmark="moose-equation-68ff8b05-5766-4942-98d0-2530479ed9e7" recursive="True" class="moose-katex-inline-equation" id="moose-equation-68ff8b05-5766-4942-98d0-2530479ed9e7"><script>var element = document.getElementById("moose-equation-68ff8b05-5766-4942-98d0-2530479ed9e7");katex.render("\\mathcal{K}_k", element, {displayMode:false,throwOnError:false});</script></span>. </p></li><li><p>Biconjugate Gradients: <span tex="\vec{\rho}_k" bookmark="moose-equation-3c23934e-6055-45e7-985e-416982bb51cb" recursive="True" class="moose-katex-inline-equation" id="moose-equation-3c23934e-6055-45e7-985e-416982bb51cb"><script>var element = document.getElementById("moose-equation-3c23934e-6055-45e7-985e-416982bb51cb");katex.render("\\vec{\\rho}_k", element, {displayMode:false,throwOnError:false});</script></span> is orthogonal to <span tex="\mathcal{K}_k(\mathbf{A}^T)" bookmark="moose-equation-54e49306-59ff-4e03-874e-6a84451ac29c" recursive="True" class="moose-katex-inline-equation" id="moose-equation-54e49306-59ff-4e03-874e-6a84451ac29c"><script>var element = document.getElementById("moose-equation-54e49306-59ff-4e03-874e-6a84451ac29c");katex.render("\\mathcal{K}_k(\\mathbf{A}^T)", element, {displayMode:false,throwOnError:false});</script></span></p><p></p></li><li><p><span tex="\mathbf{J}" bookmark="moose-equation-7a643cca-e6f6-47c4-b718-910f0d8613c9" recursive="True" class="moose-katex-inline-equation" id="moose-equation-7a643cca-e6f6-47c4-b718-910f0d8613c9"><script>var element = document.getElementById("moose-equation-7a643cca-e6f6-47c4-b718-910f0d8613c9");katex.render("\\mathbf{J}", element, {displayMode:false,throwOnError:false});</script></span> is never explicitly needed to construct the subspace, only the action of <span tex="\mathbf{J}" bookmark="moose-equation-f40384b8-d12f-4a0a-a921-104b6013b759" recursive="True" class="moose-katex-inline-equation" id="moose-equation-f40384b8-d12f-4a0a-a921-104b6013b759"><script>var element = document.getElementById("moose-equation-f40384b8-d12f-4a0a-a921-104b6013b759");katex.render("\\mathbf{J}", element, {displayMode:false,throwOnError:false});</script></span> on a vector is required.</p></li></ul><ul class="browser-default"><li><p>This action can be approximated by:   <span tex="\mathbf{J}\vec{v} \approx \frac{\vec{R}(\vec{u} + \epsilon\vec{v}) - \vec{R}(\vec{u})}{\epsilon}" bookmark="moose-equation-f43b81db-9634-4334-8eed-e36a09141a74" recursive="True" class="moose-katex-inline-equation" id="moose-equation-f43b81db-9634-4334-8eed-e36a09141a74"><script>var element = document.getElementById("moose-equation-f43b81db-9634-4334-8eed-e36a09141a74");katex.render("\\mathbf{J}\\vec{v} \\approx \\frac{\\vec{R}(\\vec{u} + \\epsilon\\vec{v}) - \\vec{R}(\\vec{u})}{\\epsilon}", element, {displayMode:false,throwOnError:false});</script></span></p><p></p></li><li><p>This form has many advantages:   - No need to do analytic derivatives to form <span tex="\mathbf{J}" bookmark="moose-equation-d6888ed2-9b07-4273-9c73-f0b79783e6e2" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d6888ed2-9b07-4273-9c73-f0b79783e6e2"><script>var element = document.getElementById("moose-equation-d6888ed2-9b07-4273-9c73-f0b79783e6e2");katex.render("\\mathbf{J}", element, {displayMode:false,throwOnError:false});</script></span>   - No time needed to compute <span tex="\mathbf{J}" bookmark="moose-equation-9a89178a-128b-4b06-8ed2-70a5dce89a47" recursive="True" class="moose-katex-inline-equation" id="moose-equation-9a89178a-128b-4b06-8ed2-70a5dce89a47"><script>var element = document.getElementById("moose-equation-9a89178a-128b-4b06-8ed2-70a5dce89a47");katex.render("\\mathbf{J}", element, {displayMode:false,throwOnError:false});</script></span> (just residual computations)   - No space needed to store <span tex="\mathbf{J}" bookmark="moose-equation-7e2f49c1-e0ec-45c2-a113-8124d945a787" recursive="True" class="moose-katex-inline-equation" id="moose-equation-7e2f49c1-e0ec-45c2-a113-8124d945a787"><script>var element = document.getElementById("moose-equation-7e2f49c1-e0ec-45c2-a113-8124d945a787");katex.render("\\mathbf{J}", element, {displayMode:false,throwOnError:false});</script></span></p></li></ul></section></section><section class="scrollspy" id="7e1f30e9-af5e-409a-82ae-b685687da578" data-section-level="2" data-section-text="Solving Linear Systems"><h2 id="linear_methods">Solving Linear Systems</h2><p>You will commonly hear of two ways to solve an implicit linear system of equations: directly or iteratively. A typical direct solve will perform a <a href="https://en.wikipedia.org/wiki/LU_decomposition">LU factorization</a>. Direct solves are a great tool for solving small-medium sized systems; however, they are extremely expensive when applied to large-scale problems. To solve large-scale systems, iterative methods must be used. The most successful iterative methods are Krylov methods. Krylov methods are work by finding a solution to <span tex="Ax=b" bookmark="moose-equation-f7b368e3-96dc-4f7d-b3b8-026a135a6ae7" recursive="True" class="moose-katex-inline-equation" id="moose-equation-f7b368e3-96dc-4f7d-b3b8-026a135a6ae7"><script>var element = document.getElementById("moose-equation-f7b368e3-96dc-4f7d-b3b8-026a135a6ae7");katex.render("Ax=b", element, {displayMode:false,throwOnError:false});</script></span> within a space called the <a href="https://en.wikipedia.org/wiki/Krylov_subspace">Krylov sub-space</a> which is spanned by images of <span tex="b" bookmark="moose-equation-23a59c1d-5799-4e3b-85b3-8f5c96af51d2" recursive="True" class="moose-katex-inline-equation" id="moose-equation-23a59c1d-5799-4e3b-85b3-8f5c96af51d2"><script>var element = document.getElementById("moose-equation-23a59c1d-5799-4e3b-85b3-8f5c96af51d2");katex.render("b", element, {displayMode:false,throwOnError:false});</script></span> under powers of <span tex="A" bookmark="moose-equation-a812a07d-47e7-4db4-a288-5d92aceadb47" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a812a07d-47e7-4db4-a288-5d92aceadb47"><script>var element = document.getElementById("moose-equation-a812a07d-47e7-4db4-a288-5d92aceadb47");katex.render("A", element, {displayMode:false,throwOnError:false});</script></span>. Two of the most used Krylov algorithms are <a href="https://en.wikipedia.org/wiki/Conjugate_gradient_method">Conjugate gradient</a> and <a href="https://en.wikipedia.org/wiki/GMRES">GMRES</a>. Conjugate gradient generally only works for symmetric positive-definite matrices. Because of its greater flexibility, GMRES is the default linear solution algorithm in PETSc and consequently for MOOSE.</p></section><section class="scrollspy" id="75273997-031a-45e7-b9a6-3a4d8a8f7432" data-section-level="2" data-section-text="Augmenting Sparsity"><h2 id="augmenting_sparsity">Augmenting Sparsity</h2><p>One such routine is <code>NonlinearSystemBase::augmentSparsity</code>, which as its name suggests augments the sparsity pattern of the matrix. Currently this method adds sparsity coming from MOOSE <code>Constraint</code> objects. It does this by querying geometric connectivity information between slave and master boundary pairs, and then querying the <code>DofMap</code> attached to the <code>NonlinearSystemBase</code> (through the libMesh <code>NonlinearImplicitSystem</code>) for the dof indices that exist on the elements attached to the slave/master nodes. The geometric connectivity information comes from <a href="../geomsearch/NearestNodeLocator.html"><code>NearestNodeLocators</code></a> held by <a href="../geomsearch/GeometricSearchData.html"><code>GeometricSearchData</code></a> objects in the <a href="../problems/FEProblemBase.html"><code>FEProblemBase</code></a> and <a href="../problems/DisplacedProblem.html"><code>DisplacedProblem</code></a> (the latter only if there are mesh displacements). In the future sparsity augmentation from constraints will occur through <a href="../relationshipmanagers/RelationshipManager.html"><code>RelationshipManagers</code></a> instead of through the <code>augmentSparsity</code> method. </p></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#a7b97d19-58eb-403c-a250-87ea2a5c02cd" class="tooltipped" data-position="left" data-tooltip="Solving Non - linear Systems">Solving Non - linear Systems</a></li><li><a href="#fb91db8c-7d73-4e18-9ab4-f50ff3ea56e4" class="tooltipped" data-position="left" data-tooltip="Jacobian Definition">Jacobian Definition</a></li><li><a href="#7e1f30e9-af5e-409a-82ae-b685687da578" class="tooltipped" data-position="left" data-tooltip="Solving Linear Systems">Solving Linear Systems</a></li><li><a href="#75273997-031a-45e7-b9a6-3a4d8a8f7432" class="tooltipped" data-position="left" data-tooltip="Augmenting Sparsity">Augmenting Sparsity</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

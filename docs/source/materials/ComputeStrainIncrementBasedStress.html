@@ -1,0 +1,235 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>Compute Strain Increment Based Stress|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="09b0f786-7151-45fd-919c-8e912a5e70e8"><i class="material-icons">menu</i></a><ul class="sidenav" id="09b0f786-7151-45fd-919c-8e912a5e70e8"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">materials</span><a href="#" class="breadcrumb">ComputeStrainIncrementBasedStress</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="57e0ae7b-1ab7-4665-a7f0-cae9a5ac88d2" data-section-level="1" data-section-text="Compute Strain Increment Based Stress"><h1 id="compute-strain-increment-based-stress">Compute Strain Increment Based Stress</h1><p>Compute stress after subtracting inelastic strain increments</p><section class="scrollspy" id="f79052a4-7f4d-4c7b-bdde-3aeac71c4b0f" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>This stress calculator finds the value of the stress as a function of the elastic strain increment when a series of inelastic strains are specified in the input file. The stress is calculated as <span class="moose-katex-block-equation"><span tex="\sigma_{ij} = \sigma_{ij}^{old} + C_{ijkl} \Delta \epsilon_{jk}^{el}" label="eqn:stress" number="1" bookmark="moose-equation-2cb9ca16-b4fd-4bd3-9d79-15ce4b8ccc88" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-2cb9ca16-b4fd-4bd3-9d79-15ce4b8ccc88"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-2cb9ca16-b4fd-4bd3-9d79-15ce4b8ccc88");katex.render("     \\sigma_{ij} = \\sigma_{ij}^{old} + C_{ijkl} \\Delta \\epsilon_{jk}^{el}", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="\sigma_{ij}" bookmark="moose-equation-84c9d754-8787-4ae0-9863-a0942a78b168" recursive="True" class="moose-katex-inline-equation" id="moose-equation-84c9d754-8787-4ae0-9863-a0942a78b168"><script>var element = document.getElementById("moose-equation-84c9d754-8787-4ae0-9863-a0942a78b168");katex.render("\\sigma_{ij}", element, {displayMode:false,throwOnError:false});</script></span> is the stress and <span tex="C_{ijkl}" bookmark="moose-equation-cb7f5985-19f3-4789-8498-79ccc8faa2f4" recursive="True" class="moose-katex-inline-equation" id="moose-equation-cb7f5985-19f3-4789-8498-79ccc8faa2f4"><script>var element = document.getElementById("moose-equation-cb7f5985-19f3-4789-8498-79ccc8faa2f4");katex.render("C_{ijkl}", element, {displayMode:false,throwOnError:false});</script></span> is the elasticity tensor of the material. The elastic strain increment, <span tex="\Delta \epsilon_{jk}^{el}" bookmark="moose-equation-5fb5814d-6240-4b48-b365-eaa69ccb81b0" recursive="True" class="moose-katex-inline-equation" id="moose-equation-5fb5814d-6240-4b48-b365-eaa69ccb81b0"><script>var element = document.getElementById("moose-equation-5fb5814d-6240-4b48-b365-eaa69ccb81b0");katex.render("\\Delta \\epsilon_{jk}^{el}", element, {displayMode:false,throwOnError:false});</script></span> is found by subtracting the sum of the inelastic strains from the mechanical strain: <span class="moose-katex-block-equation"><span tex="\Delta \boldsymbol{\epsilon}^{el} = \boldsymbol{\epsilon}^{mech} - \boldsymbol{\epsilon}^{mech-old}       - \sum_n \left( \boldsymbol{\epsilon}^{inel}_n - {\boldsymbol{\epsilon}^{inel-old}}_n \right)" label="eqn:elastic_strain_incr" number="2" bookmark="moose-equation-51c03f89-6613-42bb-8d19-44b00ca49449" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-51c03f89-6613-42bb-8d19-44b00ca49449"></span><span class="moose-katex-equation-number">(2)</span><script>var element = document.getElementById("moose-equation-51c03f89-6613-42bb-8d19-44b00ca49449");katex.render("     \\Delta \\boldsymbol{\\epsilon}^{el} = \\boldsymbol{\\epsilon}^{mech} - \\boldsymbol{\\epsilon}^{mech-old}       - \\sum_n \\left( \\boldsymbol{\\epsilon}^{inel}_n - {\\boldsymbol{\\epsilon}^{inel-old}}_n \\right)", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="\boldsymbol{\epsilon}^{mech}" bookmark="moose-equation-7e449443-5212-4fff-9373-2095cae3a255" recursive="True" class="moose-katex-inline-equation" id="moose-equation-7e449443-5212-4fff-9373-2095cae3a255"><script>var element = document.getElementById("moose-equation-7e449443-5212-4fff-9373-2095cae3a255");katex.render("\\boldsymbol{\\epsilon}^{mech}", element, {displayMode:false,throwOnError:false});</script></span> is the mechanical strain and <span tex="\boldsymbol{\epsilon}^{inel}" bookmark="moose-equation-723a76d2-8651-4c27-99d6-be2a43255759" recursive="True" class="moose-katex-inline-equation" id="moose-equation-723a76d2-8651-4c27-99d6-be2a43255759"><script>var element = document.getElementById("moose-equation-723a76d2-8651-4c27-99d6-be2a43255759");katex.render("\\boldsymbol{\\epsilon}^{inel}", element, {displayMode:false,throwOnError:false});</script></span> is the inelastic strain. In the tensor mechanics module mechanical strain is defined as the sum of the elastic and inelastic (e.g. creep and/or plasticity) strains.</p></section><section class="scrollspy" id="dfcf1f93-96f5-40c9-92e3-2cafac1f838a" data-section-level="2" data-section-text="Example Input File"><h2 id="example-input-file">Example Input File</h2><pre class="moose-pre"><code class="language-text">[./stress]
+  type = ComputeStrainIncrementBasedStress
+[../]
+</code></pre><a href="#ff202b0a-be47-43ce-a337-fd39daf71f96" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/plane_stress/weak_plane_stress_incremental.i)</a><div class="modal moose-modal" id="ff202b0a-be47-43ce-a337-fd39daf71f96"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/plane_stress/weak_plane_stress_incremental.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  order = FIRST
+  family = LAGRANGE
+  displacements = &#x27;disp_x disp_y&#x27;
+  temperature = temp
+  out_of_plane_strain = strain_zz
+[]
+
+[Mesh]
+  file = square.e
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+
+  [./strain_zz]
+  [../]
+[]
+
+[AuxVariables]
+  [./temp]
+  [../]
+
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_xy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./nl_strain_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Postprocessors]
+  [./react_z]
+    type = MaterialTensorIntegral
+    rank_two_tensor = stress
+    index_i = 2
+    index_j = 2
+  [../]
+  [./min_strain_zz]
+    type = NodalExtremeValue
+    variable = strain_zz
+    value_type = min
+  [../]
+  [./max_strain_zz]
+    type = NodalExtremeValue
+    variable = strain_zz
+    value_type = max
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    use_displaced_mesh = true
+  [../]
+
+  [./solid_z]
+    type = WeakPlaneStress
+    variable = strain_zz
+    use_displaced_mesh = true
+  [../]
+[]
+
+[AuxKernels]
+  [./tempfuncaux]
+    type = FunctionAux
+    variable = temp
+    function = tempfunc
+    use_displaced_mesh = false
+  [../]
+  [./stress_xx]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xx
+    index_i = 0
+    index_j = 0
+  [../]
+  [./stress_xy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xy
+    index_i = 0
+    index_j = 1
+  [../]
+  [./stress_yy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yy
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_zz]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_zz
+    index_i = 2
+    index_j = 2
+  [../]
+
+  [./strain_xx]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_xx
+    index_i = 0
+    index_j = 0
+  [../]
+  [./strain_xy]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_xy
+    index_i = 0
+    index_j = 1
+  [../]
+  [./strain_yy]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_yy
+    index_i = 1
+    index_j = 1
+  [../]
+  [./strain_zz]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = nl_strain_zz
+    index_i = 2
+    index_j = 2
+  [../]
+[]
+
+[Functions]
+  [./pull]
+    type = PiecewiseLinear
+    x=&#x27;0     1   100&#x27;
+    y=&#x27;0  0.00  0.00&#x27;
+  [../]
+  [./tempfunc]
+    type = ParsedFunction
+    value = &#x27;(1 - x) * t&#x27;
+  [../]
+[]
+
+[BCs]
+  [./bottomx]
+    type = PresetBC
+    boundary = 1
+    variable = disp_x
+    value = 0.0
+  [../]
+  [./bottomy]
+    type = PresetBC
+    boundary = 1
+    variable = disp_y
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    poissons_ratio = 0.3
+    youngs_modulus = 1e6
+  [../]
+  [./strain]
+    type = ComputePlaneIncrementalStrain
+    eigenstrain_names = eigenstrain
+  [../]
+  [./thermal_strain]
+    type = ComputeThermalExpansionEigenstrain
+    thermal_expansion_coeff = 0.02
+    stress_free_temperature = 0.5
+    eigenstrain_name = eigenstrain
+  [../]
+  [./stress]
+    type = ComputeStrainIncrementBasedStress
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = PJFNK
+  line_search = none
+
+# controls for linear iterations
+  l_max_its = 100
+  l_tol = 1e-06
+
+# controls for nonlinear iterations
+  nl_max_its = 15
+  nl_rel_tol = 1e-14
+  nl_abs_tol = 1e-12
+
+# time control
+  start_time = 0.0
+  dt = 1.0
+  dtmin = 1.0
+  end_time = 2.0
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="9268d033-742e-48c4-9a3a-ffaff441e11f" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="318fb680-6159-4f9c-8ee1-081200d0bf44" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">compute</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_on</span><span class="moose-parameter-header-default">NONE</span><span class="moose-parameter-header-description">When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>NONE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE ELEMENT SUBDOMAIN</p><p class="moose-parameter-description"><span>Description:</span>When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">inelastic_strain_names</span><span class="moose-parameter-header-description">Names of inelastic strain properties</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<MaterialPropertyName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Names of inelastic strain properties</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="63353f0b-ab02-408b-bc58-19005eda3952" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="80907a98-91d4-47b5-afd3-a40bbc9834c5" data-section-level="3" data-section-text="Outputs Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">output_properties</span><span class="moose-parameter-header-description">List of material properties, from this material, to output (outputs must also be defined to an output type)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of material properties, from this material, to output (outputs must also be defined to an output type)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-default">none </span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>none </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Outputs Parameters</h3></summary></details></section></section><section class="scrollspy" id="ed16915e-ba11-4f2c-8a74-f2affb4f8613" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#f79052a4-7f4d-4c7b-bdde-3aeac71c4b0f" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#dfcf1f93-96f5-40c9-92e3-2cafac1f838a" class="tooltipped" data-position="left" data-tooltip="Example Input File">Example Input File</a></li><li><a href="#9268d033-742e-48c4-9a3a-ffaff441e11f" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#ed16915e-ba11-4f2c-8a74-f2affb4f8613" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

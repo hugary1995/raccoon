@@ -1,0 +1,217 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../../contrib/plotly/plotly.min.js"></script><title>SalehaniIrani 3 D Coupled Traction separation law|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../../media/framework/github-logo.png" class="github-mark"></img><img src="../../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../../install/index.html">Install</a></li><li><a href="../../../examples/index.html">Examples</a></li><li><a href="../../../theory/index.html">Theory</a></li><li><a href="../../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="97ac0fcf-5868-4a5a-b939-321e272958e2"><i class="material-icons">menu</i></a><ul class="sidenav" id="97ac0fcf-5868-4a5a-b939-321e272958e2"><li><a href="../../../install/index.html">Install</a></li><li><a href="../../../examples/index.html">Examples</a></li><li><a href="../../../theory/index.html">Theory</a></li><li><a href="../../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href="../.." class="breadcrumb">source</a><span class="breadcrumb">materials</span><span class="breadcrumb">czm</span><a href="#" class="breadcrumb">SalehaniIrani3DCTraction</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="8cb89822-f406-4e1a-9d55-a94287d470ff" data-section-level="1" data-section-text="SalehaniIrani 3 D Coupled Traction separation law"><h1 id="salehaniirani-3-d-coupled-traction-separation-law">SalehaniIrani 3D Coupled Traction separation law</h1><p>3D Coupled (3DC) cohesive law of Salehani and Irani with no damage</p><p>##Description</p><p>This class implements the non-stateful traction separation law proposed by <a href="#salehani2018coupled">Salehani and Irani (2018)</a>. This material model is an extension to 3 dimensions of the 2-dimensional traction-separation law proposed by Xu and Needleman <a href="#xu1993void">Xu and Needleman (1993)</a>. This traction separation law should only be used for monotonic loading conditions as it will not produce realistic results for unloading and reloading. This model can be used for 1D, 2D and 3D problems.</p><p>The traction separation relationship is defined by: <span class="moose-katex-block-equation"><span tex="T_i = \frac{\phi_i}{\delta_i}\frac{\Delta_i}{\delta_i} \exp [ -\sum_{j=1}^{d}(\frac{\Delta_j}{\delta_j})^{\alpha}]" bookmark="moose-equation-5060dce6-8710-4e37-9326-7771feb8709f" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-5060dce6-8710-4e37-9326-7771feb8709f"></span><script>var element = document.getElementById("moose-equation-5060dce6-8710-4e37-9326-7771feb8709f");katex.render("T_i = \\frac{\\phi_i}{\\delta_i}\\frac{\\Delta_i}{\\delta_i} \\exp [ -\\sum_{j=1}^{d}(\\frac{\\Delta_j}{\\delta_j})^{\\alpha}]", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="i" bookmark="moose-equation-a89efac7-4d89-4b35-a104-9b97e7d98b42" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a89efac7-4d89-4b35-a104-9b97e7d98b42"><script>var element = document.getElementById("moose-equation-a89efac7-4d89-4b35-a104-9b97e7d98b42");katex.render("i", element, {displayMode:false,throwOnError:false});</script></span> and <span tex="j" bookmark="moose-equation-fd76c7f2-0ae2-404e-824b-0b501beadd84" recursive="True" class="moose-katex-inline-equation" id="moose-equation-fd76c7f2-0ae2-404e-824b-0b501beadd84"><script>var element = document.getElementById("moose-equation-fd76c7f2-0ae2-404e-824b-0b501beadd84");katex.render("j", element, {displayMode:false,throwOnError:false});</script></span> are indices representing the displacement jump component with the index 1 being associated with the opening direction, <span tex="\alpha" bookmark="moose-equation-6d1476cc-326e-4d18-b080-93a970321ad3" recursive="True" class="moose-katex-inline-equation" id="moose-equation-6d1476cc-326e-4d18-b080-93a970321ad3"><script>var element = document.getElementById("moose-equation-6d1476cc-326e-4d18-b080-93a970321ad3");katex.render("\\alpha", element, {displayMode:false,throwOnError:false});</script></span> is a model parameter with values  <span tex="\alpha = 1" bookmark="moose-equation-b111be1a-1b6f-454c-9de6-128c2dc43ae2" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b111be1a-1b6f-454c-9de6-128c2dc43ae2"><script>var element = document.getElementById("moose-equation-b111be1a-1b6f-454c-9de6-128c2dc43ae2");katex.render("\\alpha = 1", element, {displayMode:false,throwOnError:false});</script></span> if <span tex="j==1" bookmark="moose-equation-7d6b2254-1446-487a-8724-ccbbf85815c0" recursive="True" class="moose-katex-inline-equation" id="moose-equation-7d6b2254-1446-487a-8724-ccbbf85815c0"><script>var element = document.getElementById("moose-equation-7d6b2254-1446-487a-8724-ccbbf85815c0");katex.render("j==1", element, {displayMode:false,throwOnError:false});</script></span> or <span tex="\alpha = 2" bookmark="moose-equation-bcd9e1f4-4a22-4230-af4f-285b71296c39" recursive="True" class="moose-katex-inline-equation" id="moose-equation-bcd9e1f4-4a22-4230-af4f-285b71296c39"><script>var element = document.getElementById("moose-equation-bcd9e1f4-4a22-4230-af4f-285b71296c39");katex.render("\\alpha = 2", element, {displayMode:false,throwOnError:false});</script></span> if <span tex="j == 2,3" bookmark="moose-equation-74e0342e-6286-4310-aeb3-b5793bed2b34" recursive="True" class="moose-katex-inline-equation" id="moose-equation-74e0342e-6286-4310-aeb3-b5793bed2b34"><script>var element = document.getElementById("moose-equation-74e0342e-6286-4310-aeb3-b5793bed2b34");katex.render("j == 2,3", element, {displayMode:false,throwOnError:false});</script></span>, <span tex="d" bookmark="moose-equation-8a3a55dc-8a97-442c-993c-f1f1ea337cdb" recursive="True" class="moose-katex-inline-equation" id="moose-equation-8a3a55dc-8a97-442c-993c-f1f1ea337cdb"><script>var element = document.getElementById("moose-equation-8a3a55dc-8a97-442c-993c-f1f1ea337cdb");katex.render("d", element, {displayMode:false,throwOnError:false});</script></span> is a parameter representing the number of dimensions of the problem, <span tex="\Delta_i" bookmark="moose-equation-a93de19d-62ac-4f53-9be4-8ea0851a2cde" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a93de19d-62ac-4f53-9be4-8ea0851a2cde"><script>var element = document.getElementById("moose-equation-a93de19d-62ac-4f53-9be4-8ea0851a2cde");katex.render("\\Delta_i", element, {displayMode:false,throwOnError:false});</script></span> is the current gap value and <span tex="\delta_i" bookmark="moose-equation-67c443fd-0f59-4996-91e3-4893f136b140" recursive="True" class="moose-katex-inline-equation" id="moose-equation-67c443fd-0f59-4996-91e3-4893f136b140"><script>var element = document.getElementById("moose-equation-67c443fd-0f59-4996-91e3-4893f136b140");katex.render("\\delta_i", element, {displayMode:false,throwOnError:false});</script></span> is the characteristic length of separation related to the maximum sustainable traction. The symbol <span tex="\phi_i" bookmark="moose-equation-201993bc-5de4-4d3f-8ddb-4b4a203c7aee" recursive="True" class="moose-katex-inline-equation" id="moose-equation-201993bc-5de4-4d3f-8ddb-4b4a203c7aee"><script>var element = document.getElementById("moose-equation-201993bc-5de4-4d3f-8ddb-4b4a203c7aee");katex.render("\\phi_i", element, {displayMode:false,throwOnError:false});</script></span> represents the work of separation and is defined as <span class="moose-katex-block-equation"><span tex="\phi_i = T_{i,max} \lambda \delta_i" bookmark="moose-equation-622c745f-7423-445e-a7f2-834e5c24a400" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-622c745f-7423-445e-a7f2-834e5c24a400"></span><script>var element = document.getElementById("moose-equation-622c745f-7423-445e-a7f2-834e5c24a400");katex.render("\\phi_i = T_{i,max} \\lambda \\delta_i", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="\lambda = e" bookmark="moose-equation-0a12a8cd-e0b2-4683-bba0-53fbeb0d97f9" recursive="True" class="moose-katex-inline-equation" id="moose-equation-0a12a8cd-e0b2-4683-bba0-53fbeb0d97f9"><script>var element = document.getElementById("moose-equation-0a12a8cd-e0b2-4683-bba0-53fbeb0d97f9");katex.render("\\lambda = e", element, {displayMode:false,throwOnError:false});</script></span> if <span tex="i==1" bookmark="moose-equation-27dcdb0b-ab4d-4f2f-b175-28b5d3ac0125" recursive="True" class="moose-katex-inline-equation" id="moose-equation-27dcdb0b-ab4d-4f2f-b175-28b5d3ac0125"><script>var element = document.getElementById("moose-equation-27dcdb0b-ab4d-4f2f-b175-28b5d3ac0125");katex.render("i==1", element, {displayMode:false,throwOnError:false});</script></span> or <span tex="\lambda = \sqrt{2 e}" bookmark="moose-equation-5da51265-930d-477f-8f97-74b211899b91" recursive="True" class="moose-katex-inline-equation" id="moose-equation-5da51265-930d-477f-8f97-74b211899b91"><script>var element = document.getElementById("moose-equation-5da51265-930d-477f-8f97-74b211899b91");katex.render("\\lambda = \\sqrt{2 e}", element, {displayMode:false,throwOnError:false});</script></span> if <span tex="i == 2,3" bookmark="moose-equation-ee968bae-0cbb-4985-9a9d-743831ed3d9d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-ee968bae-0cbb-4985-9a9d-743831ed3d9d"><script>var element = document.getElementById("moose-equation-ee968bae-0cbb-4985-9a9d-743831ed3d9d");katex.render("i == 2,3", element, {displayMode:false,throwOnError:false});</script></span>. The parameter <span tex="T_{i,max}" bookmark="moose-equation-34dc50b2-c450-41ef-a782-d832f2077903" recursive="True" class="moose-katex-inline-equation" id="moose-equation-34dc50b2-c450-41ef-a782-d832f2077903"><script>var element = document.getElementById("moose-equation-34dc50b2-c450-41ef-a782-d832f2077903");katex.render("T_{i,max}", element, {displayMode:false,throwOnError:false});</script></span> represents the maximum allowed traction that the interface can withstand in the <span tex="i-th" bookmark="moose-equation-d0ce6eed-8720-4c7e-a1dc-81712d3640ba" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d0ce6eed-8720-4c7e-a1dc-81712d3640ba"><script>var element = document.getElementById("moose-equation-d0ce6eed-8720-4c7e-a1dc-81712d3640ba");katex.render("i-th", element, {displayMode:false,throwOnError:false});</script></span> direction. Note that the values of maximum allowed traction can be different in the normal and tangential directions, however <span tex="T_{2,max}" bookmark="moose-equation-32ceaa96-991e-4f34-a114-05ff6dba118e" recursive="True" class="moose-katex-inline-equation" id="moose-equation-32ceaa96-991e-4f34-a114-05ff6dba118e"><script>var element = document.getElementById("moose-equation-32ceaa96-991e-4f34-a114-05ff6dba118e");katex.render("T_{2,max}", element, {displayMode:false,throwOnError:false});</script></span> is assumed to be equal to <span tex="T_{3,max}" bookmark="moose-equation-27667239-c86a-47ae-9bcc-750826c502e7" recursive="True" class="moose-katex-inline-equation" id="moose-equation-27667239-c86a-47ae-9bcc-750826c502e7"><script>var element = document.getElementById("moose-equation-27667239-c86a-47ae-9bcc-750826c502e7");katex.render("T_{3,max}", element, {displayMode:false,throwOnError:false});</script></span>. The same restrictions on <span tex="T_{i,max}" bookmark="moose-equation-8d1159ca-eded-4e7e-8ab1-b2e0d26d809f" recursive="True" class="moose-katex-inline-equation" id="moose-equation-8d1159ca-eded-4e7e-8ab1-b2e0d26d809f"><script>var element = document.getElementById("moose-equation-8d1159ca-eded-4e7e-8ab1-b2e0d26d809f");katex.render("T_{i,max}", element, {displayMode:false,throwOnError:false});</script></span> apply to <span tex="\delta_i" bookmark="moose-equation-389b94a0-5a36-403c-a309-1c3d05efea60" recursive="True" class="moose-katex-inline-equation" id="moose-equation-389b94a0-5a36-403c-a309-1c3d05efea60"><script>var element = document.getElementById("moose-equation-389b94a0-5a36-403c-a309-1c3d05efea60");katex.render("\\delta_i", element, {displayMode:false,throwOnError:false});</script></span></p><section class="scrollspy" id="a7ae9889-0687-40e6-9ecb-7eff37eb8324" data-section-level="2" data-section-text="Examples"><h2 id="examples">Examples</h2><pre class="moose-pre"><code class="language-text">[./czm_3dc]
+  type = SalehaniIrani3DCTraction
+  boundary = &#x27;interface&#x27;
+  normal_gap_at_maximum_normal_traction = 1
+  tangential_gap_at_maximum_shear_traction = 0.5
+  maximum_normal_traction = 100
+  maximum_shear_traction = 70
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[../]
+</code></pre><a href="#b2e5a633-3b17-47de-810c-cea1301a2e0a" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/czm/czm_3DC_3D_base_input.i)</a><div class="modal moose-modal" id="b2e5a633-3b17-47de-810c-cea1301a2e0a"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/czm/czm_3DC_3D_base_input.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [./msh]
+    type = GeneratedMeshGenerator
+  []
+  [./subdomain_1]
+    type = SubdomainBoundingBoxGenerator
+    input = msh
+    bottom_left = &#x27;0 0 0&#x27;
+    block_id = 1
+    top_right = &#x27;0.5 1 1&#x27;
+  []
+  [./subdomain_2]
+    type = SubdomainBoundingBoxGenerator
+    input = subdomain_1
+    bottom_left = &#x27;0.5 0 0&#x27;
+    block_id = 2
+    top_right = &#x27;1 1 1&#x27;
+  []
+  [./breakmesh]
+    input = subdomain_2
+    type = BreakMeshByBlockGenerator
+  [../]
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    strain = SMALL
+    add_variables = true
+    generate_output = &#x27;stress_xx stress_yy stress_zz stress_yz stress_xz stress_xy&#x27;
+  [../]
+[]
+
+[Modules/TensorMechanics/CohesiveZoneMaster]
+  [./czm1]
+    boundary = &#x27;interface&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+  [../]
+[]
+
+[BCs]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./left_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = left
+    value = 0.0
+  [../]
+  [./left_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = left
+    value = 0.0
+  [../]
+  [./right_x]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = right
+  [../]
+  [./right_y]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = right
+  [../]
+  [./right_z]
+    type = FunctionDirichletBC
+    variable = disp_z
+    boundary = right
+  [../]
+[]
+
+[Materials]
+  [./Elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = &#x27;1 2&#x27;
+    fill_method = symmetric_isotropic
+    C_ijkl = &#x27;0.3 0.5e8&#x27;
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = &#x27;1 2&#x27;
+  [../]
+  [./czm_3dc]
+    type = SalehaniIrani3DCTraction
+    boundary = &#x27;interface&#x27;
+    normal_gap_at_maximum_normal_traction = 1
+    tangential_gap_at_maximum_shear_traction = 0.5
+    maximum_normal_traction = 100
+    maximum_shear_traction = 70
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;lu&#x27;
+  solve_type = NEWTON
+  nl_abs_tol = 1e-8
+  nl_rel_tol = 1e-6
+  nl_max_its = 5
+  l_tol = 1e-10
+  l_max_its = 50
+  start_time = 0.0
+  dt = 0.2
+  end_time = 5
+  dtmin = 0.2
+  line_search = none
+[]
+
+[Outputs]
+  [./out]
+    type = Exodus
+  [../]
+[]
+
+[Postprocessors]
+  [./sxx]
+    type = SideAverageValue
+    variable = stress_xx
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    boundary = &#x27;interface&#x27;
+  [../]
+  [./syy]
+    type = SideAverageValue
+    variable = stress_yy
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    boundary = &#x27;interface&#x27;
+  [../]
+  [./szz]
+    type = SideAverageValue
+    variable = stress_zz
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    boundary = &#x27;interface&#x27;
+  [../]
+  [./syz]
+    type = SideAverageValue
+    variable = stress_yz
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    boundary = &#x27;interface&#x27;
+  [../]
+  [./sxz]
+    type = SideAverageValue
+    variable = stress_xz
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    boundary = &#x27;interface&#x27;
+  [../]
+  [./sxy]
+    type = SideAverageValue
+    variable = stress_xy
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    boundary = &#x27;interface&#x27;
+  [../]
+  [./disp_x]
+    type = SideAverageValue
+    variable = disp_x
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    boundary = &#x27;right&#x27;
+  [../]
+  [./disp_y]
+    type = SideAverageValue
+    variable = disp_y
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    boundary = &#x27;right&#x27;
+  [../]
+  [./disp_z]
+    type = SideAverageValue
+    variable = disp_z
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    boundary = &#x27;right&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-bibliography"><ol><li id="salehani2018coupled">Mohsen&nbsp;Khajeh Salehani and Nilgoon Irani.
+A coupled mixed-mode cohesive zone model: an extension to three-dimensional contact problems.
+<em>arXiv preprint arXiv:1801.03430</em>, 2018.<a href="#aef8326c-7c5c-42af-825b-1deac094c27a" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="aef8326c-7c5c-42af-825b-1deac094c27a"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{salehani2018coupled,
+    author = "Salehani, Mohsen Khajeh and Irani, Nilgoon",
+    title = "A coupled mixed-mode cohesive zone model: An extension to three-dimensional contact problems",
+    journal = "arXiv preprint arXiv:1801.03430",
+    year = "2018"
+}
+</code></pre></div></div></li><li id="xu1993void">X-P Xu and A&nbsp;Needleman.
+Void nucleation by inclusion debonding in a crystal matrix.
+<em>Modelling and Simulation in Materials Science and Engineering</em>, 1(2):111, 1993.<a href="#a9311d2d-d4d4-4ee8-89f4-5a687b72b3fd" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="a9311d2d-d4d4-4ee8-89f4-5a687b72b3fd"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{xu1993void,
+    author = "Xu, X-P and Needleman, A",
+    title = "Void nucleation by inclusion debonding in a crystal matrix",
+    journal = "Modelling and Simulation in Materials Science and Engineering",
+    volume = "1",
+    number = "2",
+    pages = "111",
+    year = "1993",
+    publisher = "IOP Publishing"
+}
+</code></pre></div></div></li></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#a7ae9889-0687-40e6-9ecb-7eff37eb8324" class="tooltipped" data-position="left" data-tooltip="Examples">Examples</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../../js/init.js"></script><script type="text/javascript" src="../../../js/navigation.js"></script><script type="text/javascript" src="../../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../../js/search_index.js"></script>

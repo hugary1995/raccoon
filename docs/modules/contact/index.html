@@ -1,0 +1,616 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>Contact Module|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="6a45e0c6-9cc2-46c4-a963-c9c55a61f997"><i class="material-icons">menu</i></a><ul class="sidenav" id="6a45e0c6-9cc2-46c4-a963-c9c55a61f997"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><span class="breadcrumb">modules</span><a href="." class="breadcrumb">contact</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="7d836316-9ab3-400d-90a1-527e0bd60bf5" data-section-level="1" data-section-text="Contact Module"><h1 id="contact-module">Contact Module</h1><p>The interaction of moving bodies is a common occurrence in our world, and therefore modeling such problems is essential to accurately represent the mechanical behavior of the physical world. However, finite element methods do not have an inherent means of modeling contact. Therefore, specific contact algorithms are required. These algorithms enforce constraints between surfaces in the mesh, to prevent penetration and develop contact forces. The MOOSE contact module provides the necessary tools for modeling mechanical contact.</p><p><a href="---"></a></p><section class="scrollspy" id="4d81d807-adce-4243-81b0-ec196bb50365" data-section-level="2" data-section-text="Theory"><h2 id="theory">Theory</h2><p>Mechanical contact between two deformable bodies is based on three requirements.</p><p><span class="moose-katex-block-equation"><span tex="g \le 0," bookmark="moose-equation-987693ff-dca1-41d5-b398-9aa669bc1db0" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-987693ff-dca1-41d5-b398-9aa669bc1db0"></span><script>var element = document.getElementById("moose-equation-987693ff-dca1-41d5-b398-9aa669bc1db0");katex.render("g \\le 0,", element, {displayMode:true,throwOnError:false});</script></span> <span class="moose-katex-block-equation"><span tex="t_N \ge 0," bookmark="moose-equation-25a277da-511b-4417-932d-712b839270c7" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-25a277da-511b-4417-932d-712b839270c7"></span><script>var element = document.getElementById("moose-equation-25a277da-511b-4417-932d-712b839270c7");katex.render("t_N \\ge 0,", element, {displayMode:true,throwOnError:false});</script></span> <span class="moose-katex-block-equation"><span tex="t_N g = 0." bookmark="moose-equation-6a9d740c-55b9-4d46-a234-d9e714274804" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-6a9d740c-55b9-4d46-a234-d9e714274804"></span><script>var element = document.getElementById("moose-equation-6a9d740c-55b9-4d46-a234-d9e714274804");katex.render("t_N g = 0.", element, {displayMode:true,throwOnError:false});</script></span></p><p>That is, the penetration distance (typically referred to as the gap <span tex="g" bookmark="moose-equation-9a55c2e0-caa1-4e0f-a15a-46b3b826feb4" recursive="True" class="moose-katex-inline-equation" id="moose-equation-9a55c2e0-caa1-4e0f-a15a-46b3b826feb4"><script>var element = document.getElementById("moose-equation-9a55c2e0-caa1-4e0f-a15a-46b3b826feb4");katex.render("g", element, {displayMode:false,throwOnError:false});</script></span> in the contact literature) of one of the body into another must not be positive; the contact force <span tex="t_N" bookmark="moose-equation-b9ace23f-c9e8-4745-8102-54aaf52a882c" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b9ace23f-c9e8-4745-8102-54aaf52a882c"><script>var element = document.getElementById("moose-equation-b9ace23f-c9e8-4745-8102-54aaf52a882c");katex.render("t_N", element, {displayMode:false,throwOnError:false});</script></span> opposing penetration must be positive in the normal direction; and either the penetration distance or the contact force must be zero at all times.</p><p>In the MOOSE Contact Module, these contact constraints are enforced through the use of node/face constraints. This is accomplished in a manner similar to that detailed by <a href="#heinstein_algorithm_1999">Heinstein and Laursen (1999)</a>. First, a geometric search determines which slave nodes have penetrated master faces. For those nodes, the internal force computed by the divergence of stress is moved to the appropriate master face at the point of contact. Those forces are distributed to master nodes by employing the finite element shape functions. Additionally, the slave nodes are constrained to remain on the master faces, preventing penetration. The module currently supports frictionless, frictional, and glued contact.</p><p><a href="---"></a></p></section><section class="scrollspy" id="2bdddc89-d0e6-439d-ac58-3a45786d5f83" data-section-level="2" data-section-text="Procedure for using mechanical contact"><h2 id="procedure-for-using-mechanical-contact">Procedure for using mechanical contact</h2><p>In the contact module there are currently two systems to choose from mechanical contact : Dirac and Constraint.  The Constraint system is recommended for all problems, as the Dirac system will be removed in the future. The contact block in the MOOSE input file looks like this :</p><pre class="moose-pre"><code class="language-puppet">
+[Contact]
+  [./contact]
+    disp_x = &lt;variable&gt;
+    disp_y = &lt;variable&gt;
+    disp_z = &lt;variable&gt;
+    formulation = &lt;string&gt; (DEFAULT)
+    friction_coefficient = &lt;real&gt; (0)
+    master = &lt;string&gt;
+    model = &lt;string&gt; (frictionless)
+    normal_smoothing_distance = &lt;real&gt;
+    normal_smoothing_method = &lt;string&gt; (edge_based)
+    order = &lt;string&gt; (FIRST)
+    penalty = &lt;real&gt; (1e8)
+    normalize_penalty = &lt;bool&gt; (false)
+    slave = &lt;string&gt;
+    system = &lt;string&gt; (Dirac)
+    tangential_tolerance = &lt;real&gt;
+    tension_release = &lt;real&gt; (0)
+  [../]
+[]
+</code></pre><p>The parameters descriptions are :</p><ul class="browser-default"><li><p><code>disp_x</code> (<strong>Required</strong>) Variable name for displacement variable in x direction. Typically <code>disp_x</code>. </p></li><li><p><code>disp_y</code> Variable name for displacement variable in y direction. Typically <code>disp_y</code>. </p></li><li><p><code>disp_z</code> Variable name for displacement variable in z direction. Typically <code>disp_z</code> </p></li><li><p><code>formulation</code> Select either <code>DEFAULT</code>, <code>KINEMATIC</code>, or <code>PENALTY</code>. <code>DEFAULT</code> is <code>KINEMATIC</code>. </p></li><li><p><code>friction_coefficient</code> The friction coefficient. </p></li><li><p><code>master</code> (<strong>Required</strong>) The boundary ID for the master surface. </p></li><li><p><code>model</code> Select either <code>frictionless</code>, <code>glued</code>, or <code>coulomb</code>. </p></li><li><p><code>normal_smoothing_distance</code> Distance from face edge in parametric coordinates over which to smooth the contact normal. <span tex="0.1" bookmark="moose-equation-21aba683-7343-4b36-965c-e8cab1d61aa7" recursive="True" class="moose-katex-inline-equation" id="moose-equation-21aba683-7343-4b36-965c-e8cab1d61aa7"><script>var element = document.getElementById("moose-equation-21aba683-7343-4b36-965c-e8cab1d61aa7");katex.render("0.1", element, {displayMode:false,throwOnError:false});</script></span> is a reasonable value. </p></li><li><p><code>normal_smoothing_method</code> Select either <code>edge_based</code> or <code>nodal_normal_based</code>. If <code>nodal_normal_based</code>, must also have a <code>NodalNormals</code> block. </p></li><li><p><code>order</code> The order of the variable. Typical values are <code>FIRST</code> and <code>SECOND</code>. </p></li><li><p><code>penalty</code> The penalty stiffness value to be used in the constraint. </p></li><li><p><code>normalize_penalty</code> Whether to normalize the penalty stiffness by the nodal area of the slave node. </p></li><li><p><code>slave</code> (<strong>Required</strong>) The boundary ID for the slave surface. </p></li><li><p><code>system</code> The system to use for constraint enforcement. Options are Dirac <code>DiracKernel</code> or <code>Constraint</code>. The default is <code>Dirac</code>. </p></li><li><p><code>tangential_tolerance</code> Tangential distance to extend edges of contact surfaces. </p></li><li><p><code>tension_release</code> Tension release threshold. A node will not be released if its tensile load is below this value. If negative, no tension release will occur.</p></li></ul><p>It is good practice to make the surface with the coarser mesh to be the master surface.</p><p>The robustness and accuracy of the mechanical contact algorithm is strongly dependent on the penalty parameter. If the parameter is too small, inaccurate solutions are more likely. If the parameter is too large, the solver may struggle.</p><p>The <code>DEFAULT</code> option uses an enforcement algorithm that moves the internal forces at a slave node to Thu master face. The distance between the slave node and the master face is penalized, The <code>PENALTY</code> algorithm is the traditional penalty enforcement technique.</p><p><a href="---"></a></p></section><section class="scrollspy" id="98a78e48-8368-4f2f-94e4-cb394d6ba64f" data-section-level="2" data-section-text="Mortar - Based Mechanical Contact"><h2 id="mortar-based-mechanical-contact">Mortar-Based Mechanical Contact</h2><p>The <a href="../../syntax/Constraints/index.html">mortar constraint system</a> provides an alternative discretization technique for solving mechanical contact. Some results are summarized below.</p><p> The <code>contact/test/tests/bouncing-block-contact</code> directory provides a series of input files testing different algorithms for solving both normal and tangential frictional contact. Mortar contact can also be specified using the <code>Contact</code> block similar to pure node-face discretization contact. For normal mortar contact:</p><pre class="moose-pre"><code class="language-text">[Contact]
+  [frictionless]
+    mesh = simple_mesh
+    master = 2
+    slave = 1
+    formulation = mortar
+    system = constraint
+  []
+[]
+</code></pre><a href="#f4c1fd0f-d91f-4735-a0de-28d537622b3a" class="modal-trigger">(../moose/modules/contact/test/tests/mechanical-small-problem/frictionless-nodal-lm-mortar-disp-action.i)</a><div class="modal moose-modal" id="f4c1fd0f-d91f-4735-a0de-28d537622b3a"><div class="modal-content"><h4>/home/gary/projects/moose/modules/contact/test/tests/mechanical-small-problem/frictionless-nodal-lm-mortar-disp-action.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Mesh]
+  [./simple_mesh]
+    type = FileMeshGenerator
+    file = mesh.e
+  [../]
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Variables]
+  [./disp_x]
+    block = &#x27;1 2&#x27;
+  [../]
+  [./disp_y]
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[BCs]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;outside_left&#x27;
+    value = 0.0
+  [../]
+  [./left_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;outside_left&#x27;
+    value = 0.0
+  [../]
+  [./right_x]
+    type = FunctionPresetBC
+    variable = disp_x
+    boundary = &#x27;outside_right&#x27;
+    function = &#x27;-5e-3 * t&#x27;
+  [../]
+  [./right_y]
+    type = FunctionPresetBC
+    variable = disp_y
+    boundary = &#x27;outside_right&#x27;
+    function = 0
+  [../]
+[]
+
+[Kernels]
+  [disp_x]
+    type = Diffusion
+    variable = disp_x
+    block = &#x27;1 2&#x27;
+  []
+  [disp_y]
+    type = Diffusion
+    variable = disp_y
+    block = &#x27;1 2&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = 1
+[]
+
+[Contact]
+  [frictionless]
+    mesh = simple_mesh
+    master = 2
+    slave = 1
+    formulation = mortar
+    system = constraint
+  []
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = PJFNK
+  type = Transient
+  num_steps = 10
+  dt = 1
+  dtmin = 1
+  petsc_options_iname = &#x27;-pc_type -snes_linesearch_type -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       basic                 NONZERO               1e-15&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  hide = &#x27;contact_pressure nodal_area_frictionless penetration&#x27;
+[]
+
+[Postprocessors]
+  [contact]
+    type = ContactDOFSetSize
+    variable = frictionless_normal_lm
+    subdomain = &#x27;4&#x27;
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>For normal and tangential (frictional) mortar contact:</p><pre class="moose-pre"><code class="language-text">[Contact]
+  [frictional]
+    mesh = revised_file_mesh
+    master = 20
+    slave = 10
+    formulation = mortar
+    system = constraint
+    model = coulomb
+    friction_coefficient = 0.1
+  []
+[]
+</code></pre><a href="#480ad594-6b95-431d-bf76-ff1359bd03e1" class="modal-trigger">(../moose/modules/contact/test/tests/bouncing-block-contact/frictional-nodal-min-normal-lm-mortar-fb-tangential-lm-mortar-action.i)</a><div class="modal moose-modal" id="480ad594-6b95-431d-bf76-ff1359bd03e1"><div class="modal-content"><h4>/home/gary/projects/moose/modules/contact/test/tests/bouncing-block-contact/frictional-nodal-min-normal-lm-mortar-fb-tangential-lm-mortar-action.i</h4><pre class="moose-pre"><code class="language-text">starting_point = 2e-1
+
+# We offset slightly so we avoid the case where the bottom of the slave block and the top of the
+# master block are perfectly vertically aligned which can cause the backtracking line search some
+# issues for a coarse mesh (basic line search handles that fine)
+offset = 1e-2
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+  diffusivity = 1e0
+  scaling = 1e0
+[]
+
+[Mesh]
+  [./original_file_mesh]
+    type = FileMeshGenerator
+    file = long-bottom-block-1elem-blocks-coarse.e
+  [../]
+  # These sidesets need to be deleted because the contact action adds them automatically. For this
+  # particular mesh, the new IDs will be identical to the deleted ones and will conflict if we don&#x27;t
+  # remove the original ones.
+  [./delete_3]
+    type = BlockDeletionGenerator
+    input = original_file_mesh
+    block_id = 3
+  [../]
+  [./revised_file_mesh]
+    type = BlockDeletionGenerator
+    input = delete_3
+    block_id = 4
+  [../]
+[]
+
+[Variables]
+  [./disp_x]
+    block = &#x27;1 2&#x27;
+    # order = SECOND
+  [../]
+  [./disp_y]
+    block = &#x27;1 2&#x27;
+    # order = SECOND
+  [../]
+[]
+
+[Contact]
+  [frictional]
+    mesh = revised_file_mesh
+    master = 20
+    slave = 10
+    formulation = mortar
+    system = constraint
+    model = coulomb
+    friction_coefficient = 0.1
+  []
+[]
+
+[ICs]
+  [./disp_y]
+    block = 2
+    variable = disp_y
+    value = ${fparse starting_point + offset}
+    type = ConstantIC
+  [../]
+[]
+
+[Kernels]
+  [./disp_x]
+    type = MatDiffusion
+    variable = disp_x
+  [../]
+  [./disp_y]
+    type = MatDiffusion
+    variable = disp_y
+  [../]
+[]
+
+[BCs]
+  [./botx]
+    type = DirichletBC
+    variable = disp_x
+    boundary = 40
+    value = 0.0
+  [../]
+  [./boty]
+    type = DirichletBC
+    variable = disp_y
+    boundary = 40
+    value = 0.0
+  [../]
+  [./topy]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = 30
+    function = &#x27;${starting_point} * cos(2 * pi / 40 * t) + ${offset}&#x27;
+  [../]
+  [./leftx]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = 50
+    function = &#x27;1e-2 * t&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  end_time = 200
+  dt = 5
+  dtmin = .1
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options = &#x27;-snes_converged_reason -ksp_converged_reason -pc_svd_monitor -snes_linesearch_monitor -snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_factor_shift_type -pc_factor_shift_amount -mat_mffd_err&#x27;
+  petsc_options_value = &#x27;lu       NONZERO               1e-15                   1e-5&#x27;
+  l_max_its = 30
+  nl_max_its = 20
+  line_search = &#x27;none&#x27;
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Outputs]
+  exodus = true
+  hide = &#x27;contact_pressure nodal_area_frictional penetration&#x27;
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Postprocessors]
+  [./num_nl]
+    type = NumNonlinearIterations
+  [../]
+  [./cumulative]
+    type = CumulativeValuePostprocessor
+    postprocessor = num_nl
+  [../]
+  [contact]
+    type = ContactDOFSetSize
+    variable = frictional_normal_lm
+    subdomain = frictional_slave_subdomain
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><section id="e144bc87-fbb8-425c-992a-6f1b9c63e08f" data-section-level="3" data-section-text="Frictionless contact algorithm comparison"><h3 id="frictionless_table">Frictionless contact algorithm comparison</h3><div form="['center', 'center', 'center', 'center', 'center', 'center']" recursive="True" class="moose-table-div"><table><thead><tr><th style=";text-align:center">Constraint</th><th style=";text-align:center">Displacement</th><th style=";text-align:center">NCP function</th><th style=";text-align:center">Time (arbitrary units)</th><th style=";text-align:center">Time steps</th><th style=";text-align:center">Nonlinear iterations</th></tr></thead><tbody><tr><td style=";text-align:center">Nodal</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">Min</td><td style=";text-align:center">4.164</td><td style=";text-align:center">40</td><td style=";text-align:center">104</td></tr></tbody><tbody><tr><td style=";text-align:center">Nodal</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">FB</td><td style=";text-align:center">5.020</td><td style=";text-align:center">40</td><td style=";text-align:center">135</td></tr></tbody><tbody><tr><td style=";text-align:center">Nodal</td><td style=";text-align:center">Nodal</td><td style=";text-align:center">Min</td><td style=";text-align:center">3.124</td><td style=";text-align:center">41</td><td style=";text-align:center">104</td></tr></tbody><tbody><tr><td style=";text-align:center">Nodal</td><td style=";text-align:center">Nodal</td><td style=";text-align:center">FB</td><td style=";text-align:center">4.014</td><td style=";text-align:center">41</td><td style=";text-align:center">149</td></tr></tbody><tbody><tr><td style=";text-align:center">Mortar</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">Min</td><td style=";text-align:center">4.461</td><td style=";text-align:center">40</td><td style=";text-align:center">106</td></tr></tbody><tbody><tr><td style=";text-align:center">Mortar</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">FB</td><td style=";text-align:center">5.577</td><td style=";text-align:center">40</td><td style=";text-align:center">136</td></tr></tbody><tbody><tr><td style=";text-align:center">Nodal</td><td style=";text-align:center">Nodal</td><td style=";text-align:center">RANFS</td><td style=";text-align:center">2.700</td><td style=";text-align:center">40</td><td style=";text-align:center">99</td></tr></tbody></table></div><p>The first column denotes the discretization algorithm used for applying the frictionless contact constraints. Nodal denotes use of a <code>NodeFaceConstraint</code>; <code>Mortar</code> denotes use of a <code>MortarConstraint</code>. The second column denotes the discretization used for applying the contact forces to the displacement residuals. The third column denotes the type of non-linear complimentarity problem (NCP) function used to ensure that the contact constraints are satisfied. Min indicates the canonical min function (see <a href="https://en.cppreference.com/w/cpp/algorithm/min">std::min</a>); FB represents the Fischer-Burmeister function. <code>RANFS</code> denotes the Reduced Active Nonlinear Function Set scheme in which no Lagrange Multipliers are used, and instead the non-linear residual equations at the slave nodes are replaced with the gap function. The fourth column in the table is the simulation time in arbitrary units (since timings will be different across machines). The fifth column is the number of time steps required to reach the simulation end time. The final, sixth column is the cumulative number of non-linear iterations taken during the simulation (note that this does not include any non-linear iterations from failed time steps).</p><p>Notes:</p><ul class="browser-default"><li><p>Clearly having mortar mesh generation slows the simulation down, which is not surprising </p></li><li><p>The min NCP function is undeniably better for solving normal contact </p></li><li><p>For the pure nodal algorithms, the time step that did not converge featured classic ping-ponging behavior:</p></li></ul><pre class="moose-pre"><code class="language-text">
+ 5 Nonlinear |R| = 4.007951e-04
+    |residual|_2 of individual variables:
+                  disp_x:    0.000399808
+                  disp_y:    2.75599e-05
+                  normal_lm: 5.52166e-06
+
+
+The number of nodes in contact is 11
+
+      0 Linear |R| = 4.007951e-04
+      1 Linear |R| = 1.287307e-04
+      2 Linear |R| = 8.423398e-06
+      3 Linear |R| = 1.046825e-07
+      4 Linear |R| = 8.017310e-09
+      5 Linear |R| = 3.053040e-10
+  Linear solve converged due to CONVERGED_RTOL iterations 5
+ 6 Nonlinear |R| = 4.432193e-04
+    |residual|_2 of individual variables:
+                  disp_x:    0.000396694
+                  disp_y:    0.00019545
+                  normal_lm: 2.96013e-05
+
+
+The number of nodes in contact is 11
+
+      0 Linear |R| = 4.432193e-04
+      1 Linear |R| = 1.355935e-04
+      2 Linear |R| = 1.216010e-05
+      3 Linear |R| = 6.386952e-07
+      4 Linear |R| = 2.235594e-08
+      5 Linear |R| = 2.884193e-10
+  Linear solve converged due to CONVERGED_RTOL iterations 5
+ 7 Nonlinear |R| = 4.008045e-04
+    |residual|_2 of individual variables:
+                  disp_x:    0.000399816
+                  disp_y:    2.76329e-05
+                  normal_lm: 5.29313e-06
+
+
+The number of nodes in contact is 11
+
+      0 Linear |R| = 4.008045e-04
+      1 Linear |R| = 1.287272e-04
+      2 Linear |R| = 8.423081e-06
+      3 Linear |R| = 1.047782e-07
+      4 Linear |R| = 8.054781e-09
+      5 Linear |R| = 3.046073e-10
+  Linear solve converged due to CONVERGED_RTOL iterations 5
+ 8 Nonlinear |R| = 4.432194e-04
+</code></pre></section><section id="02abddb1-60de-4b0a-955e-3f1ca7ee5fef" data-section-level="3" data-section-text="Frictional contact algorithm comparison"><h3 id="frictional_table">Frictional contact algorithm comparison</h3><div form="['center', 'center', 'center', 'center', 'center', 'center', 'center', 'center', 'center']" recursive="True" class="moose-table-div"><table><thead><tr><th style=";text-align:center">LM normal</th><th style=";text-align:center">LM tangential</th><th style=";text-align:center">Displacement</th><th style=";text-align:center">NCP function normal</th><th style=";text-align:center">NCP function tangential</th><th style=";text-align:center">Time (arbitrary units)</th><th style=";text-align:center">Time steps</th><th style=";text-align:center">Nonlinear iterations</th><th style=";text-align:center">CLI PETSc options</th></tr></thead><tbody><tr><td style=";text-align:center">Mortar</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">FB</td><td style=";text-align:center">FB</td><td style=";text-align:center">8.241</td><td style=";text-align:center">40</td><td style=";text-align:center">175</td><td style=";text-align:center">None</td></tr></tbody><tbody><tr><td style=";text-align:center">Mortar</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">Min</td><td style=";text-align:center">FB</td><td style=";text-align:center">7.928</td><td style=";text-align:center">40</td><td style=";text-align:center">159</td><td style=";text-align:center">None</td></tr></tbody><tbody><tr><td style=";text-align:center">Nodal</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">Min</td><td style=";text-align:center">FB</td><td style=";text-align:center">7.459</td><td style=";text-align:center">40</td><td style=";text-align:center">152</td><td style=";text-align:center">None</td></tr></tbody><tbody><tr><td style=";text-align:center">Mortar</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">Min</td><td style=";text-align:center">Min</td><td style=";text-align:center">11.237</td><td style=";text-align:center">41</td><td style=";text-align:center">234</td><td style=";text-align:center">None</td></tr></tbody><tbody><tr><td style=";text-align:center">Nodal</td><td style=";text-align:center">Nodal</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">Min</td><td style=";text-align:center">Min</td><td style=";text-align:center">39.409</td><td style=";text-align:center">55</td><td style=";text-align:center">275</td><td style=";text-align:center"><code>-snes_ksp_ew 0</code></td></tr></tbody><tbody><tr><td style=";text-align:center">Nodal</td><td style=";text-align:center">Nodal</td><td style=";text-align:center">Mortar</td><td style=";text-align:center">FB</td><td style=";text-align:center">FB</td><td style=";text-align:center">NA</td><td style=";text-align:center">NA</td><td style=";text-align:center">NA</td><td style=";text-align:center">None</td></tr></tbody></table></div><p>Notes:</p><ul class="browser-default"><li><p>NA: solve did not converge </p></li><li><p>Timings run on a different machine than the frictionless cases </p></li><li><p>The most performant case uses a <code>NodeFaceConstraint</code> discretization for enforcing the normal contact conditions and <code>MortarConstraint</code> discretizations for enforcement of the Coulomb frictional constraints and application of forces to the displacement residuals. Interestingly, this performant case uses different NCP functions for normal and tangential constraints: <code>std::min</code> for the former and Fischer-Burmeister for the latter. This performant case is used for comparison with the node-face penalty algorithm, shown below:</p></li></ul></section><section id="1427dd54-435f-405f-a0ed-43e28a770a41" data-section-level="3" data-section-text="NCP - LM - Mortar vs Penalty - NodeFace"><h3 id="ncp-lm-mortar-vs-penalty-nodeface">NCP-LM-Mortar vs Penalty-NodeFace</h3><p>The table below compares the timing and solver performance of <a href="#45d5005a-6e68-46c0-a93f-d73cd19b196b" class="modal-trigger">NCP-LM-Mortar</a> and <a href="/frictional_04_penalty.i">Penalty-NodeFace</a> algorithms. NCP-LM refers to use of an NCP function for contact constraint enforcement on a lagrange multiplier. The &quot;Mortar&quot; designation denotes that a mortar discretization is used for enforcing the tangential Coulomb friction conditions and applying contact forces to the displacement residuals.</p><div class="modal moose-modal" id="45d5005a-6e68-46c0-a93f-d73cd19b196b"><div class="modal-content"><h4>/home/gary/projects/moose/modules/combined/test/tests/sliding_block/in_and_out/constraint/frictional_lm.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  patch_size = 80
+  [file]
+    type = FileMeshGenerator
+    file = sliding_elastic_blocks_2d.e
+  []
+  [slave]
+    input = file
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;3&#x27;
+    new_block_id = &#x27;30&#x27;
+  []
+  [master]
+    input = slave
+    type = LowerDBlockFromSidesetGenerator
+    sidesets = &#x27;2&#x27;
+    new_block_id = &#x27;20&#x27;
+  []
+[]
+
+[GlobalParams]
+  volumetric_locking_correction = false
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [normal_lm]
+    block = &#x27;30&#x27;
+  []
+  [tangential_lm]
+    block = &#x27;30&#x27;
+    family = MONOMIAL
+    order = CONSTANT
+  []
+[]
+
+[BCs]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = 1
+    value = 0.0
+  [../]
+  [./left_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = 1
+    value = 0.0
+  [../]
+  [./right_x]
+    type = FunctionPresetBC
+    variable = disp_x
+    boundary = 4
+    function = horizontal_movement
+  [../]
+  [./right_y]
+    type = FunctionPresetBC
+    variable = disp_y
+    boundary = 4
+    function = vertical_movement
+  [../]
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    add_variables = true
+    strain = FINITE
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Materials]
+  [./tensor]
+    type = ComputeIsotropicElasticityTensor
+    block = &#x27;1 2&#x27;
+    youngs_modulus = 1e6
+    poissons_ratio = 0.3
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options = &#x27;-snes_converged_reason -ksp_converged_reason -snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-pc_type -mat_mffd_err -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       1e-5          NONZERO               1e-15&#x27;
+  end_time = 15
+  dt = 0.1
+  dtmin = 0.01
+  l_max_its = 30
+  nl_max_its = 20
+  line_search = &#x27;none&#x27;
+  timestep_tolerance = 1e-6
+
+  [./Predictor]
+    type = SimplePredictor
+    scale = 1.0
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Outputs]
+  sync_times = &#x27;1 2 3 4 5 6 7 8 9 10 11 12 13 14 15&#x27;
+  [out]
+    type = Exodus
+    sync_only = true
+  []
+  [dof]
+    execute_on = &#x27;initial&#x27;
+    type = DOFMap
+  []
+  [csv]
+    type = CSV
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+[]
+
+[Functions]
+  [./vertical_movement]
+    type = ParsedFunction
+    value = -t
+  [../]
+  [./horizontal_movement]
+    type = ParsedFunction
+    value = -0.04*sin(4*t)+0.02
+  [../]
+[]
+
+[Constraints]
+  [./lm]
+    type = NormalNodalLMMechanicalContact
+    slave = 3
+    master = 2
+    variable = normal_lm
+    master_variable = disp_x
+    disp_y = disp_y
+    ncp_function_type = min
+    use_displaced_mesh = true
+    c = 1e6 # relative scale difference between pressure and gap
+  [../]
+  [normal_x]
+    type = NormalMortarMechanicalContact
+    master_boundary = &#x27;2&#x27;
+    slave_boundary = &#x27;3&#x27;
+    master_subdomain = &#x27;20&#x27;
+    slave_subdomain = &#x27;30&#x27;
+    variable = normal_lm
+    slave_variable = disp_x
+    component = x
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+  [normal_y]
+    type = NormalMortarMechanicalContact
+    master_boundary = &#x27;2&#x27;
+    slave_boundary = &#x27;3&#x27;
+    master_subdomain = &#x27;20&#x27;
+    slave_subdomain = &#x27;30&#x27;
+    variable = normal_lm
+    slave_variable = disp_y
+    component = y
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+  [tangential_lm]
+    type = TangentialMortarLMMechanicalContact
+    master_boundary = &#x27;2&#x27;
+    slave_boundary = &#x27;3&#x27;
+    master_subdomain = &#x27;20&#x27;
+    slave_subdomain = &#x27;30&#x27;
+    variable = tangential_lm
+    slave_variable = disp_x
+    slave_disp_y = disp_y
+    use_displaced_mesh = true
+    compute_primal_residuals = false
+    contact_pressure = normal_lm
+    friction_coefficient = .4
+    ncp_function_type = fb
+    c = 1000 # relative scale difference between pressure and velocity
+  []
+  [tangential_x]
+    type = TangentialMortarMechanicalContact
+    master_boundary = &#x27;2&#x27;
+    slave_boundary = &#x27;3&#x27;
+    master_subdomain = &#x27;20&#x27;
+    slave_subdomain = &#x27;30&#x27;
+    variable = tangential_lm
+    slave_variable = disp_x
+    component = x
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+  [tangential_y]
+    type = TangentialMortarMechanicalContact
+    master_boundary = &#x27;2&#x27;
+    slave_boundary = &#x27;3&#x27;
+    master_subdomain = &#x27;20&#x27;
+    slave_subdomain = &#x27;30&#x27;
+    variable = tangential_lm
+    slave_variable = disp_y
+    component = y
+    use_displaced_mesh = true
+    compute_lm_residuals = false
+  []
+[]
+
+[Postprocessors]
+  [./num_nl]
+    type = NumNonlinearIterations
+  [../]
+  [./cumulative]
+    type = CumulativeValuePostprocessor
+    postprocessor = num_nl
+  [../]
+  [lin]
+    type = NumLinearIterations
+  []
+  [cum_lin]
+    type = CumulativeValuePostprocessor
+    postprocessor = lin
+  []
+  [contact]
+    type = ContactDOFSetSize
+    variable = normal_lm
+    subdomain = &#x27;30&#x27;
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div form="['center', 'center', 'center', 'center']" recursive="True" class="moose-table-div"><table><thead><tr><th style=";text-align:center">Algorithm</th><th style=";text-align:center">Time (arb. units)</th><th style=";text-align:center">Time steps to end time</th><th style=";text-align:center">Cumulative non-linear iterations</th></tr></thead><tbody><tr><td style=";text-align:center">NCP-LM-Mortar</td><td style=";text-align:center">13.901</td><td style=";text-align:center">151</td><td style=";text-align:center">476</td></tr></tbody><tbody><tr><td style=";text-align:center">Penalty-NodeFace</td><td style=";text-align:center">20.711</td><td style=";text-align:center">151</td><td style=";text-align:center">938</td></tr></tbody></table></div><p>There&#x27;s a cost associated with generation of the mortar segment mesh that partially offsets the fact that the mortar case takes nearly half the non-linear iterations of the penalty case.</p></section></section><section class="scrollspy" id="8e5e611a-470b-4890-8575-5e3f53c68fb9" data-section-level="2" data-section-text="Petsc options for contact"><h2 id="petsc-options-for-contact">Petsc options for contact</h2><p>Recommended PETSc options for use with mortar based frictional contact are:</p><pre class="moose-pre"><code class="language-puppet">
+[Executioner]
+  petsc_options = &#x27;-snes_converged_reason -ksp_converged_reason -snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-pc_type -mat_mffd_err -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       1e-5          NONZERO               1e-15&#x27;
+[]
+</code></pre><p>Using Eisenstat-Walker is advantageous for frictional contact because time is not wasted in the linear solve in early non-linear iterations while the contact set and stick/slip conditions are being resolved. Later in the non-linear solve when the set of constraints has been resolved, more linear iterations will be used as the non-linear solver moves through the quadratic basin. Experience has shown that a choice of 1e-5 for the matrix free finite differencing parameter works well for many problems. However, the user may want to experiment with values anywhere between 1e-8 and 1e-4 depending on their multi-physics. A very small non-zero shift is used to avoid zero pivots during the LU decomposition. This may be extraneous in many cases. Note that the Jacobian entries for mortar based contact are accurate and complete enough that incomplete factorization may be used in serial or as a sub-block solver for block jacobi or additive schwarz in parallel. This may be necessary for large problems where lu does not scale.</p><p>The recommended PETSc options for use with <code>NodeFaceConstraint</code> based contact are shown below :</p><pre class="moose-pre"><code class="language-puppet">
+[Executioner]
+  ...
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -pc_asm_overlap
+                        -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm lu 20 101&#x27;
+  ...
+[../]
+</code></pre></section><section class="scrollspy" id="93a28647-b605-4579-9900-8d4a39d30701" data-section-level="2" data-section-text="Objects , Actions , and Syntax"><h2 id="objects-actions-and-syntax">Objects, Actions, and Syntax</h2><h3.0 id="auxkernels"><a href="../../syntax/AuxKernels/index.html">AuxKernels</a></h3.0><ul class="moose-syntax-list collection with-header"><li class="collection-header">Contact App</li><li class="collection-item"><a href="../../source/auxkernels/ContactPressureAux.html">ContactPressureAux</a></li></ul><h3.0 id="constraints"><a href="../../syntax/Constraints/index.html">Constraints</a></h3.0><ul class="moose-syntax-list collection with-header"><li class="collection-header">Contact App</li><li class="collection-item"><a href="../../source/constraints/GluedContactConstraint.html">GluedContactConstraint</a></li><li class="collection-item"><a href="../../source/constraints/MechanicalContactConstraint.html">MechanicalContactConstraint</a></li><li class="collection-item"><a href="../../source/constraints/MultiDContactConstraint.html">MultiDContactConstraint</a></li><li class="collection-item"><a href="../../source/constraints/NormalMortarLMMechanicalContact.html">NormalMortarLMMechanicalContact</a></li><li class="collection-item"><a href="../../source/constraints/NormalNodalMechanicalContact.html">NormalNodalMechanicalContact</a></li><li class="collection-item"><a href="../../source/constraints/OneDContactConstraint.html">OneDContactConstraint</a></li><li class="collection-item"><a href="../../source/constraints/RANFSNormalMechanicalContact.html">RANFSNormalMechanicalContact</a>Applies the Reduced Active Nonlinear Function Set scheme in which the slave node&#x27;s non-linear residual function is replaced by the zero penetration constraint equation when the constraint is active</li><li class="collection-item"><a href="../../source/constraints/SparsityBasedContactConstraint.html">SparsityBasedContactConstraint</a></li><li class="collection-item"><a href="../../source/constraints/TangentialNodalLMMechanicalContact.html">TangentialNodalLMMechanicalContact</a>Implements the KKT conditions for frictional Coulomb contact using an NCP function. Requires that either the relative tangential velocity is zero or the tangential stress is equal to the friction coefficient times the normal contact pressure.</li></ul><h3.0 id="contact"><a href="../../syntax/Contact/index.html">Contact</a></h3.0><ul class="moose-syntax-list collection with-header"><li class="collection-header">Contact App</li><li class="collection-item"><a href="../../source/actions/ContactAction.html">ContactAction</a></li><li class="collection-item"><a href="../../source/actions/ContactPenetrationAuxAction.html">ContactPenetrationAuxAction</a></li><li class="collection-item"><a href="../../source/actions/ContactPenetrationVarAction.html">ContactPenetrationVarAction</a></li><li class="collection-item"><a href="../../source/actions/ContactPressureAuxAction.html">ContactPressureAuxAction</a></li><li class="collection-item"><a href="../../source/actions/ContactPressureVarAction.html">ContactPressureVarAction</a></li><li class="collection-item"><a href="../../source/actions/NodalAreaAction.html">NodalAreaAction</a></li><li class="collection-item"><a href="../../source/actions/NodalAreaVarAction.html">NodalAreaVarAction</a></li></ul><h3.0 id="dampers"><a href="../../syntax/Dampers/index.html">Dampers</a></h3.0><ul class="moose-syntax-list collection with-header"><li class="collection-header">Contact App</li><li class="collection-item"><a href="../../source/dampers/ContactSlipDamper.html">ContactSlipDamper</a></li></ul><h3.0 id="dirackernels"><a href="../../syntax/DiracKernels/index.html">DiracKernels</a></h3.0><ul class="moose-syntax-list collection with-header"><li class="collection-header">Contact App</li><li class="collection-item"><a href="../../source/dirackernels/ContactMaster.html">ContactMaster</a></li><li class="collection-item"><a href="../../source/dirackernels/SlaveConstraint.html">SlaveConstraint</a></li></ul><h3.0 id="postprocessors"><a href="../../syntax/Postprocessors/index.html">Postprocessors</a></h3.0><ul class="moose-syntax-list collection with-header"><li class="collection-header">Contact App</li><li class="collection-item"><a href="../../source/postprocessors/ContactDOFSetSize.html">ContactDOFSetSize</a>Outputs the number of dofs greater than a tolerance threshold indicating mechanical contact</li></ul><h3.0 id="preconditioning"><a href="../../syntax/Preconditioning/index.html">Preconditioning</a></h3.0><ul class="moose-syntax-list collection with-header"><li class="collection-header">Contact App</li><li class="collection-item"><a href="../../source/splits/ContactSplit.html">ContactSplit</a></li></ul><h3.0 id="problem"><a href="../../syntax/Problem/index.html">Problem</a></h3.0><ul class="moose-syntax-list collection with-header"><li class="collection-header">Contact App</li><li class="collection-item"><a href="../../source/problems/AugmentedLagrangianContactProblem.html">AugmentedLagrangianContactProblem</a>Problem that checks for convergence relative to a user-supplied reference quantity rather than the initial residual</li></ul><h3.0 id="userobjects"><a href="../../syntax/UserObjects/index.html">UserObjects</a></h3.0><ul class="moose-syntax-list collection with-header"><li class="collection-header">Contact App</li><li class="collection-item"><a href="../../source/userobject/NodalArea.html">NodalArea</a></li></ul><div class="moose-bibliography"><ol><li id="heinstein_algorithm_1999">Martin&nbsp;W. Heinstein and Tod&nbsp;A. Laursen.
+An algorithm for the matrix-free solution of quasistatic frictional contact problems.
+<em>International Journal for Numerical Methods in Engineering</em>, 44(9):1205–1226, March 1999.<a href="#a4938874-7358-4fd8-8e65-29ecc31a8cf8" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="a4938874-7358-4fd8-8e65-29ecc31a8cf8"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{heinstein_algorithm_1999,
+    Author = "Heinstein, Martin W. and Laursen, Tod A.",
+    Journal = "International Journal for Numerical Methods in Engineering",
+    Month = "March",
+    Number = "9",
+    Pages = "1205--1226",
+    Title = "An algorithm for the matrix-free solution of quasistatic frictional contact problems",
+    Volume = "44",
+    Year = "1999"
+}
+</code></pre></div></div></li></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#4d81d807-adce-4243-81b0-ec196bb50365" class="tooltipped" data-position="left" data-tooltip="Theory">Theory</a></li><li><a href="#2bdddc89-d0e6-439d-ac58-3a45786d5f83" class="tooltipped" data-position="left" data-tooltip="Procedure for using mechanical contact">Procedure for using mechanical contact</a></li><li><a href="#98a78e48-8368-4f2f-94e4-cb394d6ba64f" class="tooltipped" data-position="left" data-tooltip="Mortar - Based Mechanical Contact">Mortar - Based Mechanical Contact</a></li><li><a href="#8e5e611a-470b-4890-8575-5e3f53c68fb9" class="tooltipped" data-position="left" data-tooltip="Petsc options for contact">Petsc options for contact</a></li><li><a href="#93a28647-b605-4579-9900-8d4a39d30701" class="tooltipped" data-position="left" data-tooltip="Objects , Actions , and Syntax">Objects , Actions , and Syntax</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

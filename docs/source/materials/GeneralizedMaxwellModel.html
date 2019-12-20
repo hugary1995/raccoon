@@ -1,0 +1,962 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>Generalized Maxwell Model|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="e2201a62-be86-48c1-ad27-cf603ad23a88"><i class="material-icons">menu</i></a><ul class="sidenav" id="e2201a62-be86-48c1-ad27-cf603ad23a88"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">materials</span><a href="#" class="breadcrumb">GeneralizedMaxwellModel</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="7b62a763-e26e-4693-97e2-d9a7ca7d68d9" data-section-level="1" data-section-text="Generalized Maxwell Model"><h1 id="generalized-maxwell-model">Generalized Maxwell Model</h1><p>Generalized Maxwell model composed of a parallel assembly of unit Maxwell modules</p><section class="scrollspy" id="537e90e1-7b70-400c-b045-bf86caeaa9ca" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The <code>GeneralizedMaxwellModel</code> class represents a generalized Maxwell model, that is, a material composed of <span tex="N" bookmark="moose-equation-a545aeae-5988-4514-9865-d0af1b923cfe" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a545aeae-5988-4514-9865-d0af1b923cfe"><script>var element = document.getElementById("moose-equation-a545aeae-5988-4514-9865-d0af1b923cfe");katex.render("N", element, {displayMode:false,throwOnError:false});</script></span> Maxwell units assembled in series.</p><section id="608500aa-cc6d-4e1c-9fe2-3268b2ecea2a" data-section-level="3" data-section-text="Constitutive Equations"><h3 id="constitutive-equations">Constitutive Equations</h3><p>The material obeys to the following constitutive equation: <span class="moose-katex-block-equation"><span tex="\sigma_{ij} = C_{ijkl} \epsilon^{mech}_{kl} - \sum\limits_{n=1}^{N} C^{n}_{ijkl} \alpha^{n}_{kl}" bookmark="moose-equation-4660470d-e32c-437c-8916-24df7b726799" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-4660470d-e32c-437c-8916-24df7b726799"></span><script>var element = document.getElementById("moose-equation-4660470d-e32c-437c-8916-24df7b726799");katex.render("\\sigma_{ij} = C_{ijkl} \\epsilon^{mech}_{kl} - \\sum\\limits_{n=1}^{N} C^{n}_{ijkl} \\alpha^{n}_{kl}", element, {displayMode:true,throwOnError:false});</script></span></p><p>The <span tex="\alpha^{n}" bookmark="moose-equation-03b7bfd2-18e7-431c-ae0f-e559640fd8a1" recursive="True" class="moose-katex-inline-equation" id="moose-equation-03b7bfd2-18e7-431c-ae0f-e559640fd8a1"><script>var element = document.getElementById("moose-equation-03b7bfd2-18e7-431c-ae0f-e559640fd8a1");katex.render("\\alpha^{n}", element, {displayMode:false,throwOnError:false});</script></span> are the internal strains associated to each Maxwell unit, and <span tex="C^{n}" bookmark="moose-equation-191c415e-0027-466d-a763-3c8b6f86ff44" recursive="True" class="moose-katex-inline-equation" id="moose-equation-191c415e-0027-466d-a763-3c8b6f86ff44"><script>var element = document.getElementById("moose-equation-191c415e-0027-466d-a763-3c8b6f86ff44");katex.render("C^{n}", element, {displayMode:false,throwOnError:false});</script></span> the stiffness of the corresponding spring (a fourth-order tensor, identical in symmetry and dimensions to a standard elasticity tensor). The <span tex="\alpha^{n}" bookmark="moose-equation-a8f8f5c5-a5f4-42c6-bd02-f37f551c50b8" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a8f8f5c5-a5f4-42c6-bd02-f37f551c50b8"><script>var element = document.getElementById("moose-equation-a8f8f5c5-a5f4-42c6-bd02-f37f551c50b8");katex.render("\\alpha^{n}", element, {displayMode:false,throwOnError:false});</script></span> obey the following time-dependent differential equation: <span class="moose-katex-block-equation"><span tex="\forall n \in [1, N]: \epsilon^{mech} - \alpha^{n} = \eta^{n} \dot{\alpha}^{n}" bookmark="moose-equation-aad7c537-1828-4e34-8475-d8ab56b8069c" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-aad7c537-1828-4e34-8475-d8ab56b8069c"></span><script>var element = document.getElementById("moose-equation-aad7c537-1828-4e34-8475-d8ab56b8069c");katex.render("\\forall n \\in [1, N]: \\epsilon^{mech} - \\alpha^{n} = \\eta^{n} \\dot{\\alpha}^{n}", element, {displayMode:true,throwOnError:false});</script></span> With <span tex="\eta^{n}" bookmark="moose-equation-1bc12c70-dca1-4709-a73e-7aee7af04486" recursive="True" class="moose-katex-inline-equation" id="moose-equation-1bc12c70-dca1-4709-a73e-7aee7af04486"><script>var element = document.getElementById("moose-equation-1bc12c70-dca1-4709-a73e-7aee7af04486");katex.render("\\eta^{n}", element, {displayMode:false,throwOnError:false});</script></span> is the viscosity of the associated dashpot (a scalar with the dimension of time).</p></section></section><section class="scrollspy" id="b86617a2-c37f-4fd4-ad5d-4daee1b03291" data-section-level="2" data-section-text="Internal Time - Stepping Scheme"><h2 id="internal-time-stepping-scheme">Internal Time-Stepping Scheme</h2><p>The constitutive equations are solved using a semi-implicit single-step first-order finite difference scheme. The internal strains at time step <span tex="t+\Delta t" bookmark="moose-equation-4912a584-53a7-4a29-bb91-28f44b894d96" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4912a584-53a7-4a29-bb91-28f44b894d96"><script>var element = document.getElementById("moose-equation-4912a584-53a7-4a29-bb91-28f44b894d96");katex.render("t+\\Delta t", element, {displayMode:false,throwOnError:false});</script></span> are computed from their values at the previous time step <span tex="t" bookmark="moose-equation-9f1bf2c8-7781-451e-b2ab-1ade37269e81" recursive="True" class="moose-katex-inline-equation" id="moose-equation-9f1bf2c8-7781-451e-b2ab-1ade37269e81"><script>var element = document.getElementById("moose-equation-9f1bf2c8-7781-451e-b2ab-1ade37269e81");katex.render("t", element, {displayMode:false,throwOnError:false});</script></span>: <span class="moose-katex-block-equation"><span tex="\alpha^{n}(t+\Delta t) = \alpha^{n}(t) + \Delta t \left[ \theta^n \dot{\alpha}^n (t+\Delta t) + \left( 1 - \theta^n \right) \dot{\alpha}^n (t)  \right]" bookmark="moose-equation-c986265c-6db7-461b-80c9-6abbcd77b8f5" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-c986265c-6db7-461b-80c9-6abbcd77b8f5"></span><script>var element = document.getElementById("moose-equation-c986265c-6db7-461b-80c9-6abbcd77b8f5");katex.render("\\alpha^{n}(t+\\Delta t) = \\alpha^{n}(t) + \\Delta t \\left[ \\theta^n \\dot{\\alpha}^n (t+\\Delta t) + \\left( 1 - \\theta^n \\right) \\dot{\\alpha}^n (t)  \\right]", element, {displayMode:true,throwOnError:false});</script></span> <span tex="\theta" bookmark="moose-equation-1d5e5523-cef6-4da7-977d-d29a77595c2a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-1d5e5523-cef6-4da7-977d-d29a77595c2a"><script>var element = document.getElementById("moose-equation-1d5e5523-cef6-4da7-977d-d29a77595c2a");katex.render("\\theta", element, {displayMode:false,throwOnError:false});</script></span> is a scalar between 0 (fully explicit) and 1 (fully implicit) that controls the time-stepping scheme (default value: 1). The value <span tex="\theta" bookmark="moose-equation-9a39cab9-fab5-4777-98c3-5acddb55bbca" recursive="True" class="moose-katex-inline-equation" id="moose-equation-9a39cab9-fab5-4777-98c3-5acddb55bbca"><script>var element = document.getElementById("moose-equation-9a39cab9-fab5-4777-98c3-5acddb55bbca");katex.render("\\theta", element, {displayMode:false,throwOnError:false});</script></span> is determined by the &quot;integration_rule&quot; input parameter, which can take one of the forms shown in <a href="#theta_formulations_gkvm">Table 1</a>.</p><div class="card moose-float"><div class="card-content"><p class="moose-caption"><span class="moose-caption-heading">Table 1: </span><span class="moose-caption-text">Integration Rule and Time-Stepping Scheme</span></p><div form="['center', 'center', 'center']" recursive="True" class="moose-table-div"><table><thead><tr><th style=";text-align:center">Integration Rule</th><th style=";text-align:center">Value of <span tex="\theta" bookmark="moose-equation-69f7dd78-7768-446b-b3d0-031515419014" recursive="True" class="moose-katex-inline-equation" id="moose-equation-69f7dd78-7768-446b-b3d0-031515419014"><script>var element = document.getElementById("moose-equation-69f7dd78-7768-446b-b3d0-031515419014");katex.render("\\theta", element, {displayMode:false,throwOnError:false});</script></span></th><th style=";text-align:center">Unconditional Convergence</th></tr></thead><tbody><tr><td style=";text-align:center">BackwardEuler</td><td style=";text-align:center">1</td><td style=";text-align:center">yes</td></tr></tbody><tbody><tr><td style=";text-align:center">MidPoint</td><td style=";text-align:center">0.5</td><td style=";text-align:center">yes</td></tr></tbody><tbody><tr><td style=";text-align:center">Newmark</td><td style=";text-align:center">user-defined</td><td style=";text-align:center"><span tex="\theta \geq 0.5" bookmark="moose-equation-ed00f84a-8764-494d-9c3d-723d7244c6de" recursive="True" class="moose-katex-inline-equation" id="moose-equation-ed00f84a-8764-494d-9c3d-723d7244c6de"><script>var element = document.getElementById("moose-equation-ed00f84a-8764-494d-9c3d-723d7244c6de");katex.render("\\theta \\geq 0.5", element, {displayMode:false,throwOnError:false});</script></span></td></tr></tbody><tbody><tr><td style=";text-align:center">Zienkiewicz</td><td style=";text-align:center"><span tex="\frac{1}{1 - e^{-\Delta t / \eta^n}} - \eta^n / \Delta t" bookmark="moose-equation-ed1de192-8c75-4d9f-957d-c423dd0838a8" recursive="True" class="moose-katex-inline-equation" id="moose-equation-ed1de192-8c75-4d9f-957d-c423dd0838a8"><script>var element = document.getElementById("moose-equation-ed1de192-8c75-4d9f-957d-c423dd0838a8");katex.render("\\frac{1}{1 - e^{-\\Delta t / \\eta^n}} - \\eta^n / \\Delta t", element, {displayMode:false,throwOnError:false});</script></span></td><td style=";text-align:center">yes</td></tr></tbody></table></div></div></div><div class="card moose-alert moose-alert-warning"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">warning:</span>Convergence</div><div class="card-content"><div class="moose-alert-content"><p><p>The scheme is not valid for <span tex="\theta = 0" bookmark="moose-equation-d52784b5-fc44-4f0a-92c7-dc14cd470f8c" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d52784b5-fc44-4f0a-92c7-dc14cd470f8c"><script>var element = document.getElementById("moose-equation-d52784b5-fc44-4f0a-92c7-dc14cd470f8c");katex.render("\\theta = 0", element, {displayMode:false,throwOnError:false});</script></span>, so this value is forbidden.</p></p></div></div></div><p>Using this formalism, the stress-strain constitutive equation, which depends on the <span tex="\alpha^{n}(t + \Delta t)" bookmark="moose-equation-adfd941f-927c-4b90-9e5f-2a750edcb040" recursive="True" class="moose-katex-inline-equation" id="moose-equation-adfd941f-927c-4b90-9e5f-2a750edcb040"><script>var element = document.getElementById("moose-equation-adfd941f-927c-4b90-9e5f-2a750edcb040");katex.render("\\alpha^{n}(t + \\Delta t)", element, {displayMode:false,throwOnError:false});</script></span> (unknown) can be rewritten so that it only depends on the <span tex="\alpha^{n}(t)" bookmark="moose-equation-bbe78c19-7447-465f-9058-0e67bfc71d8a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-bbe78c19-7447-465f-9058-0e67bfc71d8a"><script>var element = document.getElementById("moose-equation-bbe78c19-7447-465f-9058-0e67bfc71d8a");katex.render("\\alpha^{n}(t)", element, {displayMode:false,throwOnError:false});</script></span> and <span tex="\dot{\alpha}^{n}(t)" bookmark="moose-equation-d5f1f747-806d-4b84-b710-b3a16b4b1119" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d5f1f747-806d-4b84-b710-b3a16b4b1119"><script>var element = document.getElementById("moose-equation-d5f1f747-806d-4b84-b710-b3a16b4b1119");katex.render("\\dot{\\alpha}^{n}(t)", element, {displayMode:false,throwOnError:false});</script></span> (both being known).</p><p>For efficiency reasons, the <span tex="\alpha^{n}(t)" bookmark="moose-equation-6ed85e6a-5261-4660-a7fd-ca77ebc04031" recursive="True" class="moose-katex-inline-equation" id="moose-equation-6ed85e6a-5261-4660-a7fd-ca77ebc04031"><script>var element = document.getElementById("moose-equation-6ed85e6a-5261-4660-a7fd-ca77ebc04031");katex.render("\\alpha^{n}(t)", element, {displayMode:false,throwOnError:false});</script></span> and <span tex="\dot{\alpha}^{n}(t)" bookmark="moose-equation-922b3eb6-19e9-4ecd-b69a-9fca65e5191d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-922b3eb6-19e9-4ecd-b69a-9fca65e5191d"><script>var element = document.getElementById("moose-equation-922b3eb6-19e9-4ecd-b69a-9fca65e5191d");katex.render("\\dot{\\alpha}^{n}(t)", element, {displayMode:false,throwOnError:false});</script></span> are not stored separately, but as a single variable <span tex="\alpha^{n}(t) + \Delta t \theta^{n} \dot{\alpha}^{n}(t)" bookmark="moose-equation-7504daab-3647-415c-af74-b55927fda9b7" recursive="True" class="moose-katex-inline-equation" id="moose-equation-7504daab-3647-415c-af74-b55927fda9b7"><script>var element = document.getElementById("moose-equation-7504daab-3647-415c-af74-b55927fda9b7");katex.render("\\alpha^{n}(t) + \\Delta t \\theta^{n} \\dot{\\alpha}^{n}(t)", element, {displayMode:false,throwOnError:false});</script></span>.</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note:</span>Update the Scheme with a Linear Viscoelastic Manager Material</div><div class="card-content"><div class="moose-alert-content"><p><p>For the time-stepping scheme to be properly updated, a <a href="../userobjects/LinearViscoelasticityManager.html">LinearViscoelasticityManager</a> object must be included in the input file, and linked to the material</p></p></div></div></div></section><section class="scrollspy" id="0cbf4b2d-62dc-4d70-ad85-c9b409d6b99e" data-section-level="2" data-section-text="Stress - Strain Computation"><h2 id="stress-strain-computation">Stress-Strain Computation</h2><p>The material is compatible with either the total small strain approximation, or either of the incremental strain approximation (incremental small strains or finite strains). The model requires the stress calculators listed in <a href="#stress_calculators_gkvm">Table 2</a>.</p><div class="card moose-float"><div class="card-content"><p class="moose-caption"><span class="moose-caption-heading">Table 2: </span><span class="moose-caption-text">Consistent Strain and Stress Calculators</span></p><div form="['center', 'center', 'center']" recursive="True" class="moose-table-div"><table><thead><tr><th style=";text-align:center">Strain</th><th style=";text-align:center">Stress</th><th style=";text-align:center">Additional Materials</th></tr></thead><tbody><tr><td style=";text-align:center"><a href="ComputeSmallStrain.html">ComputeSmallStrain</a></td><td style=";text-align:center"><a href="ComputeLinearViscoelasticStress.html">ComputeLinearViscoelasticStress</a></td><td style=";text-align:center">none</td></tr></tbody><tbody><tr><td style=";text-align:center"><a href="ComputeIncrementalSmallStrain.html">ComputeIncrementalSmallStrain</a></td><td style=";text-align:center"><a href="ComputeMultipleInelasticStress.html">ComputeMultipleInelasticStress</a></td><td style=";text-align:center"><a href="LinearViscoelasticStressUpdate.html">LinearViscoelasticStressUpdate</a></td></tr></tbody><tbody><tr><td style=";text-align:center"><a href="ComputeFiniteStrain.html">ComputeFiniteStrain</a></td><td style=";text-align:center"><a href="ComputeMultipleInelasticStress.html">ComputeMultipleInelasticStress</a></td><td style=";text-align:center"><a href="LinearViscoelasticStressUpdate.html">LinearViscoelasticStressUpdate</a></td></tr></tbody></table></div></div></div><p>The stress calculators use the actual elasticity tensor of the material <span tex="C_{ijkl}" bookmark="moose-equation-b88ac616-ead2-4d3a-b749-a0d774d907bc" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b88ac616-ead2-4d3a-b749-a0d774d907bc"><script>var element = document.getElementById("moose-equation-b88ac616-ead2-4d3a-b749-a0d774d907bc");katex.render("C_{ijkl}", element, {displayMode:false,throwOnError:false});</script></span>, which is provided by the material itself.</p><section id="9e1ae039-55af-4baf-af8b-a66a605213a8" data-section-level="3" data-section-text="Driving Eigenstrain ( Optional )"><h3 id="driving-eigenstrain-optional">Driving Eigenstrain (Optional)</h3><p>If the user defines a driving eigenstrain, then the stress induced by this eigenstrain is added to the creep calculation. Essentially, this replaces the differential relation in each material module with: <span class="moose-katex-block-equation"><span tex="\forall n \in [1, N]: \sigma_{ij} + C_{ijkl} \epsilon^{driving}_{kl} = C^{n}_{ijkl} \left( \alpha^{n} + \eta^{n} \dot{\alpha}^{n} \right)" bookmark="moose-equation-c6b56f46-08d5-4683-9d24-8d38db8c3036" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-c6b56f46-08d5-4683-9d24-8d38db8c3036"></span><script>var element = document.getElementById("moose-equation-c6b56f46-08d5-4683-9d24-8d38db8c3036");katex.render("\\forall n \\in [1, N]: \\sigma_{ij} + C_{ijkl} \\epsilon^{driving}_{kl} = C^{n}_{ijkl} \\left( \\alpha^{n} + \\eta^{n} \\dot{\\alpha}^{n} \\right)", element, {displayMode:true,throwOnError:false});</script></span></p></section></section><section class="scrollspy" id="b5e51663-0911-4f17-854a-683bdf85e0e1" data-section-level="2" data-section-text="Example Input File Syntax"><h2 id="example-input-file-syntax">Example Input File Syntax</h2><pre class="moose-pre"><code class="language-text">[./maxwell]
+  type = GeneralizedMaxwellModel
+  creep_modulus = &#x27;10e9&#x27;
+  creep_viscosity = &#x27;10&#x27;
+  poisson_ratio = 0.2
+  young_modulus = 10e9
+  driving_eigenstrain = eigen_true
+[../]
+</code></pre><a href="#9a81419e-88f1-42e2-9d2f-d44cb4bdef30" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i)</a><div class="modal moose-modal" id="9a81419e-88f1-42e2-9d2f-d44cb4bdef30"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i</h4><pre class="moose-pre"><code class="language-text"># Represents a unique Maxwell module with E = 10GPa and eta = 10 days with an imposed eigenstrain alpha = 0.001.
+# The behavior is set up so that the creep strain is driven by both the elastic stress and the internal
+# stress induced by the eigenstrain (E * alpha).
+#
+# In this test, the specimen is free of external stress (sigma = 0) so the creep deformation only derives from
+# the eigenstrain. The total strain to be expected is:
+#     epsilon = alpha * (1 + t / eta)
+# Both the stress and the elastic strain are 0.
+#
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+  elem_type = HEX8
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./creep_strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    use_displaced_mesh = true
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_xx]
+    type = RankTwoAux
+    variable = stress_xx
+    rank_two_tensor = stress
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./strain_xx]
+    type = RankTwoAux
+    variable = strain_xx
+    rank_two_tensor = total_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./creep_strain_xx]
+    type = RankTwoAux
+    variable = creep_strain_xx
+    rank_two_tensor = creep_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = PresetBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+[]
+
+[Materials]
+  [./eigen]
+    type = ComputeEigenstrain
+    eigenstrain_name = eigen_true
+    eigen_base = &#x27;1e-3 1e-3 1e-3 0 0 0&#x27;
+  [../]
+  [./maxwell]
+    type = GeneralizedMaxwellModel
+    creep_modulus = &#x27;10e9&#x27;
+    creep_viscosity = &#x27;10&#x27;
+    poisson_ratio = 0.2
+    young_modulus = 10e9
+    driving_eigenstrain = eigen_true
+  [../]
+  [./stress]
+    type = ComputeMultipleInelasticStress
+    inelastic_models = &#x27;creep&#x27;
+  [../]
+  [./creep]
+    type = LinearViscoelasticStressUpdate
+  [../]
+  [./strain]
+    type = ComputeIncrementalSmallStrain
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    eigenstrain_names = &#x27;eigen_true&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./update]
+    type = LinearViscoelasticityManager
+    viscoelastic_model = maxwell
+  [../]
+[]
+
+[Postprocessors]
+  [./stress_xx]
+    type = ElementAverageValue
+    variable = stress_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./creep_strain_xx]
+    type = ElementAverageValue
+    variable = creep_strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  l_max_its  = 50
+  l_tol      = 1e-8
+  nl_max_its = 20
+  nl_rel_tol = 1e-11
+  nl_abs_tol = 1e-8
+
+  dtmin = 0.01
+  end_time = 100
+  [./TimeStepper]
+    type = LogConstantDT
+    first_dt = 0.1
+    log_dt = 0.1
+  [../]
+
+[]
+
+[Outputs]
+  file_base = gen_maxwell_driving_out
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>with the required strain calculator</p><pre class="moose-pre"><code class="language-text">[./strain]
+  type = ComputeIncrementalSmallStrain
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+  eigenstrain_names = &#x27;eigen_true&#x27;
+[../]
+</code></pre><a href="#f76ec0da-cbdf-4e35-b02e-90cf074413c2" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i)</a><div class="modal moose-modal" id="f76ec0da-cbdf-4e35-b02e-90cf074413c2"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i</h4><pre class="moose-pre"><code class="language-text"># Represents a unique Maxwell module with E = 10GPa and eta = 10 days with an imposed eigenstrain alpha = 0.001.
+# The behavior is set up so that the creep strain is driven by both the elastic stress and the internal
+# stress induced by the eigenstrain (E * alpha).
+#
+# In this test, the specimen is free of external stress (sigma = 0) so the creep deformation only derives from
+# the eigenstrain. The total strain to be expected is:
+#     epsilon = alpha * (1 + t / eta)
+# Both the stress and the elastic strain are 0.
+#
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+  elem_type = HEX8
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./creep_strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    use_displaced_mesh = true
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_xx]
+    type = RankTwoAux
+    variable = stress_xx
+    rank_two_tensor = stress
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./strain_xx]
+    type = RankTwoAux
+    variable = strain_xx
+    rank_two_tensor = total_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./creep_strain_xx]
+    type = RankTwoAux
+    variable = creep_strain_xx
+    rank_two_tensor = creep_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = PresetBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+[]
+
+[Materials]
+  [./eigen]
+    type = ComputeEigenstrain
+    eigenstrain_name = eigen_true
+    eigen_base = &#x27;1e-3 1e-3 1e-3 0 0 0&#x27;
+  [../]
+  [./maxwell]
+    type = GeneralizedMaxwellModel
+    creep_modulus = &#x27;10e9&#x27;
+    creep_viscosity = &#x27;10&#x27;
+    poisson_ratio = 0.2
+    young_modulus = 10e9
+    driving_eigenstrain = eigen_true
+  [../]
+  [./stress]
+    type = ComputeMultipleInelasticStress
+    inelastic_models = &#x27;creep&#x27;
+  [../]
+  [./creep]
+    type = LinearViscoelasticStressUpdate
+  [../]
+  [./strain]
+    type = ComputeIncrementalSmallStrain
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    eigenstrain_names = &#x27;eigen_true&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./update]
+    type = LinearViscoelasticityManager
+    viscoelastic_model = maxwell
+  [../]
+[]
+
+[Postprocessors]
+  [./stress_xx]
+    type = ElementAverageValue
+    variable = stress_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./creep_strain_xx]
+    type = ElementAverageValue
+    variable = creep_strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  l_max_its  = 50
+  l_tol      = 1e-8
+  nl_max_its = 20
+  nl_rel_tol = 1e-11
+  nl_abs_tol = 1e-8
+
+  dtmin = 0.01
+  end_time = 100
+  [./TimeStepper]
+    type = LogConstantDT
+    first_dt = 0.1
+    log_dt = 0.1
+  [../]
+
+[]
+
+[Outputs]
+  file_base = gen_maxwell_driving_out
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>the required stress calculator</p><pre class="moose-pre"><code class="language-text">[./stress]
+  type = ComputeMultipleInelasticStress
+  inelastic_models = &#x27;creep&#x27;
+[../]
+</code></pre><a href="#35dc1fe8-aba1-4a90-95b7-757332419ba1" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i)</a><div class="modal moose-modal" id="35dc1fe8-aba1-4a90-95b7-757332419ba1"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i</h4><pre class="moose-pre"><code class="language-text"># Represents a unique Maxwell module with E = 10GPa and eta = 10 days with an imposed eigenstrain alpha = 0.001.
+# The behavior is set up so that the creep strain is driven by both the elastic stress and the internal
+# stress induced by the eigenstrain (E * alpha).
+#
+# In this test, the specimen is free of external stress (sigma = 0) so the creep deformation only derives from
+# the eigenstrain. The total strain to be expected is:
+#     epsilon = alpha * (1 + t / eta)
+# Both the stress and the elastic strain are 0.
+#
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+  elem_type = HEX8
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./creep_strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    use_displaced_mesh = true
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_xx]
+    type = RankTwoAux
+    variable = stress_xx
+    rank_two_tensor = stress
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./strain_xx]
+    type = RankTwoAux
+    variable = strain_xx
+    rank_two_tensor = total_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./creep_strain_xx]
+    type = RankTwoAux
+    variable = creep_strain_xx
+    rank_two_tensor = creep_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = PresetBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+[]
+
+[Materials]
+  [./eigen]
+    type = ComputeEigenstrain
+    eigenstrain_name = eigen_true
+    eigen_base = &#x27;1e-3 1e-3 1e-3 0 0 0&#x27;
+  [../]
+  [./maxwell]
+    type = GeneralizedMaxwellModel
+    creep_modulus = &#x27;10e9&#x27;
+    creep_viscosity = &#x27;10&#x27;
+    poisson_ratio = 0.2
+    young_modulus = 10e9
+    driving_eigenstrain = eigen_true
+  [../]
+  [./stress]
+    type = ComputeMultipleInelasticStress
+    inelastic_models = &#x27;creep&#x27;
+  [../]
+  [./creep]
+    type = LinearViscoelasticStressUpdate
+  [../]
+  [./strain]
+    type = ComputeIncrementalSmallStrain
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    eigenstrain_names = &#x27;eigen_true&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./update]
+    type = LinearViscoelasticityManager
+    viscoelastic_model = maxwell
+  [../]
+[]
+
+[Postprocessors]
+  [./stress_xx]
+    type = ElementAverageValue
+    variable = stress_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./creep_strain_xx]
+    type = ElementAverageValue
+    variable = creep_strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  l_max_its  = 50
+  l_tol      = 1e-8
+  nl_max_its = 20
+  nl_rel_tol = 1e-11
+  nl_abs_tol = 1e-8
+
+  dtmin = 0.01
+  end_time = 100
+  [./TimeStepper]
+    type = LogConstantDT
+    first_dt = 0.1
+    log_dt = 0.1
+  [../]
+
+[]
+
+[Outputs]
+  file_base = gen_maxwell_driving_out
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>the additional material to define the viscoelastic behavior</p><pre class="moose-pre"><code class="language-text">[./creep]
+  type = LinearViscoelasticStressUpdate
+[../]
+</code></pre><a href="#055c3d43-688d-4c8c-88fc-479000646460" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i)</a><div class="modal moose-modal" id="055c3d43-688d-4c8c-88fc-479000646460"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i</h4><pre class="moose-pre"><code class="language-text"># Represents a unique Maxwell module with E = 10GPa and eta = 10 days with an imposed eigenstrain alpha = 0.001.
+# The behavior is set up so that the creep strain is driven by both the elastic stress and the internal
+# stress induced by the eigenstrain (E * alpha).
+#
+# In this test, the specimen is free of external stress (sigma = 0) so the creep deformation only derives from
+# the eigenstrain. The total strain to be expected is:
+#     epsilon = alpha * (1 + t / eta)
+# Both the stress and the elastic strain are 0.
+#
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+  elem_type = HEX8
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./creep_strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    use_displaced_mesh = true
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_xx]
+    type = RankTwoAux
+    variable = stress_xx
+    rank_two_tensor = stress
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./strain_xx]
+    type = RankTwoAux
+    variable = strain_xx
+    rank_two_tensor = total_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./creep_strain_xx]
+    type = RankTwoAux
+    variable = creep_strain_xx
+    rank_two_tensor = creep_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = PresetBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+[]
+
+[Materials]
+  [./eigen]
+    type = ComputeEigenstrain
+    eigenstrain_name = eigen_true
+    eigen_base = &#x27;1e-3 1e-3 1e-3 0 0 0&#x27;
+  [../]
+  [./maxwell]
+    type = GeneralizedMaxwellModel
+    creep_modulus = &#x27;10e9&#x27;
+    creep_viscosity = &#x27;10&#x27;
+    poisson_ratio = 0.2
+    young_modulus = 10e9
+    driving_eigenstrain = eigen_true
+  [../]
+  [./stress]
+    type = ComputeMultipleInelasticStress
+    inelastic_models = &#x27;creep&#x27;
+  [../]
+  [./creep]
+    type = LinearViscoelasticStressUpdate
+  [../]
+  [./strain]
+    type = ComputeIncrementalSmallStrain
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    eigenstrain_names = &#x27;eigen_true&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./update]
+    type = LinearViscoelasticityManager
+    viscoelastic_model = maxwell
+  [../]
+[]
+
+[Postprocessors]
+  [./stress_xx]
+    type = ElementAverageValue
+    variable = stress_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./creep_strain_xx]
+    type = ElementAverageValue
+    variable = creep_strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  l_max_its  = 50
+  l_tol      = 1e-8
+  nl_max_its = 20
+  nl_rel_tol = 1e-11
+  nl_abs_tol = 1e-8
+
+  dtmin = 0.01
+  end_time = 100
+  [./TimeStepper]
+    type = LogConstantDT
+    first_dt = 0.1
+    log_dt = 0.1
+  [../]
+
+[]
+
+[Outputs]
+  file_base = gen_maxwell_driving_out
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>and the required Linear Viscoelasticity Manager User Object:</p><pre class="moose-pre"><code class="language-text">[UserObjects]
+  [./update]
+    type = LinearViscoelasticityManager
+    viscoelastic_model = maxwell
+  [../]
+[]
+</code></pre><a href="#976448ac-e573-42c6-8850-19496163793d" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i)</a><div class="modal moose-modal" id="976448ac-e573-42c6-8850-19496163793d"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/visco/gen_maxwell_driving.i</h4><pre class="moose-pre"><code class="language-text"># Represents a unique Maxwell module with E = 10GPa and eta = 10 days with an imposed eigenstrain alpha = 0.001.
+# The behavior is set up so that the creep strain is driven by both the elastic stress and the internal
+# stress induced by the eigenstrain (E * alpha).
+#
+# In this test, the specimen is free of external stress (sigma = 0) so the creep deformation only derives from
+# the eigenstrain. The total strain to be expected is:
+#     epsilon = alpha * (1 + t / eta)
+# Both the stress and the elastic strain are 0.
+#
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 1
+  ny = 1
+  nz = 1
+  elem_type = HEX8
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./creep_strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    use_displaced_mesh = true
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_xx]
+    type = RankTwoAux
+    variable = stress_xx
+    rank_two_tensor = stress
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./strain_xx]
+    type = RankTwoAux
+    variable = strain_xx
+    rank_two_tensor = total_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+  [./creep_strain_xx]
+    type = RankTwoAux
+    variable = creep_strain_xx
+    rank_two_tensor = creep_strain
+    index_j = 0
+    index_i = 0
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = PresetBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+[]
+
+[Materials]
+  [./eigen]
+    type = ComputeEigenstrain
+    eigenstrain_name = eigen_true
+    eigen_base = &#x27;1e-3 1e-3 1e-3 0 0 0&#x27;
+  [../]
+  [./maxwell]
+    type = GeneralizedMaxwellModel
+    creep_modulus = &#x27;10e9&#x27;
+    creep_viscosity = &#x27;10&#x27;
+    poisson_ratio = 0.2
+    young_modulus = 10e9
+    driving_eigenstrain = eigen_true
+  [../]
+  [./stress]
+    type = ComputeMultipleInelasticStress
+    inelastic_models = &#x27;creep&#x27;
+  [../]
+  [./creep]
+    type = LinearViscoelasticStressUpdate
+  [../]
+  [./strain]
+    type = ComputeIncrementalSmallStrain
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    eigenstrain_names = &#x27;eigen_true&#x27;
+  [../]
+[]
+
+[UserObjects]
+  [./update]
+    type = LinearViscoelasticityManager
+    viscoelastic_model = maxwell
+  [../]
+[]
+
+[Postprocessors]
+  [./stress_xx]
+    type = ElementAverageValue
+    variable = stress_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+  [./creep_strain_xx]
+    type = ElementAverageValue
+    variable = creep_strain_xx
+    block = &#x27;ANY_BLOCK_ID 0&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  l_max_its  = 50
+  l_tol      = 1e-8
+  nl_max_its = 20
+  nl_rel_tol = 1e-11
+  nl_abs_tol = 1e-8
+
+  dtmin = 0.01
+  end_time = 100
+  [./TimeStepper]
+    type = LogConstantDT
+    first_dt = 0.1
+    log_dt = 0.1
+  [../]
+
+[]
+
+[Outputs]
+  file_base = gen_maxwell_driving_out
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="6e6812a8-3c16-4463-9cab-e7f43e412513" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="62897129-5a73-4748-9066-b473673dae70" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">creep_modulus</span><span class="moose-parameter-header-description">list of the elastic moduli of the different springs in the material</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>list of the elastic moduli of the different springs in the material</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">creep_viscosity</span><span class="moose-parameter-header-description">list of the characteristic times of the different dashpots in the material</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>list of the characteristic times of the different dashpots in the material</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">poisson_ratio</span><span class="moose-parameter-header-description">initial poisson ratio of the material</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>initial poisson ratio of the material</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">young_modulus</span><span class="moose-parameter-header-description">initial elastic modulus of the material</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>initial elastic modulus of the material</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="ed28a5dd-66d8-43fb-9ad9-5aebbc39f4d1" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">compute</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_on</span><span class="moose-parameter-header-default">NONE</span><span class="moose-parameter-header-description">When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>NONE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE ELEMENT SUBDOMAIN</p><p class="moose-parameter-description"><span>Description:</span>When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">creep_ratio</span><span class="moose-parameter-header-description">list of the poisson ratios of the different springs in the material</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>list of the poisson ratios of the different springs in the material</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">creep_strain_name</span><span class="moose-parameter-header-default">creep_strain</span><span class="moose-parameter-header-description">name of the true creep strain of the material(computed by LinearViscoelasticStressUpdate orComputeLinearViscoelasticStress)</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>creep_strain</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>name of the true creep strain of the material(computed by LinearViscoelasticStressUpdate orComputeLinearViscoelasticStress)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">driving_eigenstrain</span><span class="moose-parameter-header-description">name of the eigenstrain that increases the creep strains</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>name of the eigenstrain that increases the creep strains</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">elastic_strain_name</span><span class="moose-parameter-header-default">elastic_strain</span><span class="moose-parameter-header-description">name of the true elastic strain of the material</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>elastic_strain</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>name of the true elastic strain of the material</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">integration_rule</span><span class="moose-parameter-header-default">backward-euler</span><span class="moose-parameter-header-description">describes how the viscoelastic behavior is integrated through time</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>backward-euler</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>backward-euler mid-point newmark zienkiewicz</p><p class="moose-parameter-description"><span>Description:</span>describes how the viscoelastic behavior is integrated through time</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">need_viscoelastic_properties_inverse</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">checks whether the model requires the computation of the inverse viscoelasticproperties (default: false)</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>checks whether the model requires the computation of the inverse viscoelasticproperties (default: false)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">theta</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">coefficient for Newmark integration rule (between 0 and 1)</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>coefficient for Newmark integration rule (between 0 and 1)</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="286bd811-2040-414f-bf7f-d5daab44cd18" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="b583cd48-4662-4b22-b3ac-79f0a3343642" data-section-level="3" data-section-text="Outputs Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">output_properties</span><span class="moose-parameter-header-description">List of material properties, from this material, to output (outputs must also be defined to an output type)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of material properties, from this material, to output (outputs must also be defined to an output type)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-default">none </span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>none </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Outputs Parameters</h3></summary></details></section></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#537e90e1-7b70-400c-b045-bf86caeaa9ca" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#b86617a2-c37f-4fd4-ad5d-4daee1b03291" class="tooltipped" data-position="left" data-tooltip="Internal Time - Stepping Scheme">Internal Time - Stepping Scheme</a></li><li><a href="#0cbf4b2d-62dc-4d70-ad85-c9b409d6b99e" class="tooltipped" data-position="left" data-tooltip="Stress - Strain Computation">Stress - Strain Computation</a></li><li><a href="#b5e51663-0911-4f17-854a-683bdf85e0e1" class="tooltipped" data-position="left" data-tooltip="Example Input File Syntax">Example Input File Syntax</a></li><li><a href="#6e6812a8-3c16-4463-9cab-e7f43e412513" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

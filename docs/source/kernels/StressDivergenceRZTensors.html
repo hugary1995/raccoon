@@ -1,0 +1,608 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>Stress Divergence RZ Tensors|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="247cd5d7-41fd-4f7a-b47b-68e10e8edb9d"><i class="material-icons">menu</i></a><ul class="sidenav" id="247cd5d7-41fd-4f7a-b47b-68e10e8edb9d"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">kernels</span><a href="#" class="breadcrumb">StressDivergenceRZTensors</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="5c42b4b9-1148-418b-9e7f-d70da50be1b6" data-section-level="1" data-section-text="Stress Divergence RZ Tensors"><h1 id="stress-divergence-rz-tensors">Stress Divergence RZ Tensors</h1><p>Calculate stress divergence for an axisymmetric problem in cylindrical coordinates.</p><section class="scrollspy" id="976118ed-0732-4732-8156-30ad5837c749" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The kernel <code>StressDivergenceRZTensors</code> solves the stress divergence equation for an Axisymmetric problem in the cylindrical coordinate system on a 2D mesh.</p><div class="card moose-alert moose-alert-warning"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">warning:</span>Symmetry Assumed About the <span tex="z" bookmark="moose-equation-b6087db6-0818-46f4-b1ab-8fdd9a51c719" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b6087db6-0818-46f4-b1ab-8fdd9a51c719"><script>var element = document.getElementById("moose-equation-b6087db6-0818-46f4-b1ab-8fdd9a51c719");katex.render("z", element, {displayMode:false,throwOnError:false});</script></span>-axis</div><div class="card-content"><div class="moose-alert-content"><p><p>The axis of symmetry must lie along the <span tex="z" bookmark="moose-equation-3984581e-41e0-45f9-be60-8d24397ed33e" recursive="True" class="moose-katex-inline-equation" id="moose-equation-3984581e-41e0-45f9-be60-8d24397ed33e"><script>var element = document.getElementById("moose-equation-3984581e-41e0-45f9-be60-8d24397ed33e");katex.render("z", element, {displayMode:false,throwOnError:false});</script></span>-axis in a <span tex="\left(r, z, \theta \right)" bookmark="moose-equation-384122f0-00d7-4643-8b67-979926c91dae" recursive="True" class="moose-katex-inline-equation" id="moose-equation-384122f0-00d7-4643-8b67-979926c91dae"><script>var element = document.getElementById("moose-equation-384122f0-00d7-4643-8b67-979926c91dae");katex.render("\\left(r, z, \\theta \\right)", element, {displayMode:false,throwOnError:false});</script></span> or cylindrical coordinate system. This symmetry orientation is required for the calculation of the residual and of the jacobian, as defined in <a href="#moose-equation-e1327c11-f386-4b4c-a66d-caa395c209ed">Eq. (1)</a>.</p></p></div></div></div><p>The <code>StressDivergenceRZTensors</code> kernel can be automatically created with the <a href="../../syntax/Modules/TensorMechanics/Master/index.html">TensorMechanics Master Action</a>. Use of the tensor mechanics master action is recommended to ensure the consistent setting of the <code>use_displaced_mesh</code> parameter for the strain formulation selected.  For a detailed explanation of the settings for _use_displaced_mesh_ in mechanics problems and the TensorMechanics Master Action usage, see the <a href="../../modules/tensor_mechanics/StressDivergence.html">Introduction/Stress Divergence</a> page.</p></section><section class="scrollspy" id="85a92189-e0de-48fb-8d44-c9ab32eb4689" data-section-level="2" data-section-text="Residual Calculation"><h2 id="residual-calculation">Residual Calculation</h2><p>The stress divergence kernel handles the calculation of the residual, <span tex="\mathbb{R}" bookmark="moose-equation-b7d91391-3bda-4375-b61d-588616cbd728" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b7d91391-3bda-4375-b61d-588616cbd728"><script>var element = document.getElementById("moose-equation-b7d91391-3bda-4375-b61d-588616cbd728");katex.render("\\mathbb{R}", element, {displayMode:false,throwOnError:false});</script></span>, from the governing equation and the calculation of the Jacobian.  From the strong form of the governing equation for mechanics, neglecting body forces, <span class="moose-katex-block-equation"><span tex="\nabla \cdot \sigma = 0" bookmark="moose-equation-425a4370-4581-45f7-ae3a-86114f2866ac" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-425a4370-4581-45f7-ae3a-86114f2866ac"></span><script>var element = document.getElementById("moose-equation-425a4370-4581-45f7-ae3a-86114f2866ac");katex.render("\\nabla \\cdot \\sigma = 0", element, {displayMode:true,throwOnError:false});</script></span> the weak form, using Galerkin&#x27;s method and the Gauss divergence theorem, becomes <span class="moose-katex-block-equation"><span tex="\int_S n \cdot (\sigma \psi) dS - \int_V \sigma \cdot \nabla \psi dV = 0" bookmark="moose-equation-938044ac-e7f4-47f0-92cd-b6e08117cbab" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-938044ac-e7f4-47f0-92cd-b6e08117cbab"></span><script>var element = document.getElementById("moose-equation-938044ac-e7f4-47f0-92cd-b6e08117cbab");katex.render("\\int_S n \\cdot (\\sigma \\psi) dS - \\int_V \\sigma \\cdot \\nabla \\psi dV = 0", element, {displayMode:true,throwOnError:false});</script></span> in which <span tex="\psi" bookmark="moose-equation-f0c69623-6055-4a49-ae34-f2f2c4bd1a20" recursive="True" class="moose-katex-inline-equation" id="moose-equation-f0c69623-6055-4a49-ae34-f2f2c4bd1a20"><script>var element = document.getElementById("moose-equation-f0c69623-6055-4a49-ae34-f2f2c4bd1a20");katex.render("\\psi", element, {displayMode:false,throwOnError:false});</script></span> is the test function.  The second term of the weak form equation is the residual contribution calculated by the stress divergence kernel.</p><p>The calculation of the Jacobian can be approximated with the elasticity tensor if the simulation solve type is <strong>JFNK</strong>:</p><p><span class="moose-katex-block-equation"><span tex="\frac{d(\sigma_{ij} \cdot d(\psi) / dx_j)}{du_k} = \frac{d(C_{ijmn} \cdot du_m / dx_n \cdot d\psi /dx_j)}{du_k}" bookmark="moose-equation-63537629-2e83-49b4-b9de-558abf3c1030" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-63537629-2e83-49b4-b9de-558abf3c1030"></span><script>var element = document.getElementById("moose-equation-63537629-2e83-49b4-b9de-558abf3c1030");katex.render("\\frac{d(\\sigma_{ij} \\cdot d(\\psi) / dx_j)}{du_k} = \\frac{d(C_{ijmn} \\cdot du_m / dx_n \\cdot d\\psi /dx_j)}{du_k}", element, {displayMode:true,throwOnError:false});</script></span> which is nonzero for <span tex="m == k" bookmark="moose-equation-111fe858-7975-4332-905d-4f04b3d4ae89" recursive="True" class="moose-katex-inline-equation" id="moose-equation-111fe858-7975-4332-905d-4f04b3d4ae89"><script>var element = document.getElementById("moose-equation-111fe858-7975-4332-905d-4f04b3d4ae89");katex.render("m == k", element, {displayMode:false,throwOnError:false});</script></span>.</p><p>If the solve type for the simulation is set to <strong>NEWTON</strong> the finite deformation Jacobian will need to be calculated.  Set the parameter <code>use_finite_deform_jacobian = true</code> in this case.</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note:</span>Use of the Tensor Mechanics Master Action Recommended</div><div class="card-content"><div class="moose-alert-content"><p><p>The <code>use_displaced_mesh</code> parameter must be set correcting to ensure consistency in the equilibrium equation: if the stress is calculated with respect to the deformed mesh, the test function gradients must also be calculated with respect to the deformed mesh. The <a href="../../syntax/Modules/TensorMechanics/Master/index.html">Tensor Mechanics MasterAction</a> is designed to automatically determine and set the parameter correctly for the selected strain formulation.  We recommend that users employ the <a href="../../syntax/Modules/TensorMechanics/Master/index.html">Tensor Mechanics MasterAction</a> whenever possible to ensure consistency between the test function gradients and the strain formulation selected.</p></p></div></div></div><p>In cylindrical coordinates, the <a href="https://en.wikipedia.org/wiki/Tensor_derivative_%28continuum_mechanics%29#Cylindrical_polar_coordinates_2">divergence of a rank-2 tensor</a> includes mixed term contributions.  In the axisymmetric model we assume symmetric loading conditions, in addition to the zero out-of-plane shear strains, so that the residual computation is simplified.</p><p><span class="moose-katex-block-equation"><span tex="\begin{aligned}   \nabla \sigma  & = \left[ \frac{\partial \sigma_{rr}}{\partial r} + \frac{u_r}{X_r}\sigma_{\theta \theta} + \frac{\partial \sigma_{rz}}{\partial z} \right] \hat{e}_r \\    & + \left[ \frac{\partial \sigma_{zz}}{\partial z} + \frac{\partial \sigma_{rz}}{\partial r}    \right] \hat{e}_z   \end{aligned}" label="eq-tensor_mechanics-RZ-stress-divergence" number="1" bookmark="moose-equation-0168f8cd-d765-4998-87da-20730b099cf8" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-0168f8cd-d765-4998-87da-20730b099cf8"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-0168f8cd-d765-4998-87da-20730b099cf8");katex.render("     \\begin{aligned}   \\nabla \\sigma  & = \\left[ \\frac{\\partial \\sigma_{rr}}{\\partial r} + \\frac{u_r}{X_r}\\sigma_{\\theta \\theta} + \\frac{\\partial \\sigma_{rz}}{\\partial z} \\right] \\hat{e}_r \\\\    & + \\left[ \\frac{\\partial \\sigma_{zz}}{\\partial z} + \\frac{\\partial \\sigma_{rz}}{\\partial r}    \\right] \\hat{e}_z   \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span></p><p>The calculation of the Jacobian is similarly complex, requiring up to four terms in the calculation of the diagonal entries.</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note:</span>Notation Order Change</div><div class="card-content"><div class="moose-alert-content"><p><p>The axisymmetric system changes the order of the displacement vector from <span tex="(u_r, u_{\theta}, u_z)" bookmark="moose-equation-69ea6c13-5613-4ba6-beea-b25ae9a1e5a0" recursive="True" class="moose-katex-inline-equation" id="moose-equation-69ea6c13-5613-4ba6-beea-b25ae9a1e5a0"><script>var element = document.getElementById("moose-equation-69ea6c13-5613-4ba6-beea-b25ae9a1e5a0");katex.render("(u_r, u_{\\theta}, u_z)", element, {displayMode:false,throwOnError:false});</script></span>, usually seen in textbooks, to <span tex="(u_r, u_z, u_{\theta})" bookmark="moose-equation-2391229a-5190-49ad-82f8-cbbdcdee1920" recursive="True" class="moose-katex-inline-equation" id="moose-equation-2391229a-5190-49ad-82f8-cbbdcdee1920"><script>var element = document.getElementById("moose-equation-2391229a-5190-49ad-82f8-cbbdcdee1920");katex.render("(u_r, u_z, u_{\\theta})", element, {displayMode:false,throwOnError:false});</script></span>. Take care to follow this convention in your input files and when adding extra stresses.</p></p></div></div></div></section><section class="scrollspy" id="3cfc07df-0d6f-4f73-936b-ad1e2cf7bc43" data-section-level="2" data-section-text="Example Input File"><h2 id="example-input-file">Example Input File</h2><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note:</span>Use RZ Coordinate Type</div><div class="card-content"><div class="moose-alert-content"><p><p>The coordinate type in the Problem block of the input file must be set to <strong><code>COORD_TYPE = RZ</code></strong>.</p></p></div></div></div><p>Using the tensor mechanics master action, as shown</p><pre class="moose-pre"><code class="language-text">[Modules/TensorMechanics/Master]
+  [./all]
+    strain = FINITE
+    add_variables = true
+    block = 1
+  [../]
+[]
+</code></pre><a href="#c582ea57-0d17-490c-ab76-be1eacd0a303" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/2D_geometries/2D-RZ_finiteStrain_test.i)</a><div class="modal moose-modal" id="c582ea57-0d17-490c-ab76-be1eacd0a303"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/2D_geometries/2D-RZ_finiteStrain_test.i</h4><pre class="moose-pre"><code class="language-text"># Considers the mechanics solution for a thick spherical shell that is uniformly
+# pressurized on the inner and outer surfaces, using 2D axisymmetric geometry.
+# This test uses the strain calculator ComputeAxisymmetricRZFiniteStrain,
+# which is generated through the use of the TensorMechanics MasterAction.
+#
+# From Roark (Formulas for Stress and Strain, McGraw-Hill, 1975), the radially-dependent
+# circumferential stress in a uniformly pressurized thick spherical shell is given by:
+#
+# S(r) = [ Pi[ri^3(2r^3+ro^3)] - Po[ro^3(2r^3+ri^3)] ] / [2r^3(ro^3-ri^3)]
+#
+#   where:
+#          Pi = inner pressure
+#          Po = outer pressure
+#          ri = inner radius
+#          ro = outer radius
+#
+# The tests assume an inner and outer radii of 5 and 10, with internal and external
+# pressures of 100000 and 200000 at t = 1.0, respectively. The resulting compressive
+# tangential stress is largest at the inner wall and, from the above equation, has a
+# value of -271429.
+#
+# RESULTS are below. Since stresses are average element values, values for the
+# edge element and one-element-in are used to extrapolate the stress to the
+# inner surface. The vesrion of the tests that are checked use the coarsest meshes.
+#
+#  Mesh    Radial elem   S(edge elem)  S(one elem in)  S(extrap to surf)
+# 1D-SPH
+# 2D-RZ        12 (x10)    -265004      -254665        -270174
+#  3D          12 (6x6)    -261880      -252811        -266415
+#
+# 1D-SPH
+# 2D-RZ        48 (x10)    -269853      -266710        -271425
+#  3D          48 (10x10)  -268522      -265653        -269957
+#
+# The numerical solution converges to the analytical solution as the mesh is
+# refined.
+
+[Mesh]
+  file = 2D-RZ_mesh.e
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_r disp_z&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    strain = FINITE
+    add_variables = true
+    block = 1
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_theta]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 2
+    index_j = 2
+    variable = stress_theta
+    execute_on = timestep_end
+  [../]
+  [./strain_theta]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 2
+    index_j = 2
+    variable = strain_theta
+    execute_on = timestep_end
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e10
+    poissons_ratio = 0.345
+    block = 1
+  [../]
+
+  [./_elastic_strain]
+    type = ComputeFiniteStrainElasticStress
+    block = 1
+  [../]
+[]
+
+[BCs]
+# pin particle along symmetry planes
+  [./no_disp_r]
+    type = PresetBC
+    variable = disp_r
+    boundary = xzero
+    value = 0.0
+  [../]
+
+  [./no_disp_z]
+    type = PresetBC
+    variable = disp_z
+    boundary = yzero
+    value = 0.0
+  [../]
+
+# exterior and internal pressures
+  [./exterior_pressure_r]
+    type = Pressure
+    variable = disp_r
+    boundary = outer
+    component = 0
+    function = &#x27;200000*t&#x27;
+  [../]
+
+ [./exterior_pressure_z]
+    type = Pressure
+    variable = disp_z
+    boundary = outer
+    component = 1
+    function = &#x27;200000*t&#x27;
+  [../]
+
+  [./interior_pressure_r]
+    type = Pressure
+    variable = disp_r
+    boundary = inner
+    component = 0
+    function = &#x27;100000*t&#x27;
+  [../]
+
+  [./interior_pressure_z]
+    type = Pressure
+    variable = disp_z
+    boundary = inner
+    component = 1
+    function = &#x27;100000*t&#x27;
+  [../]
+[]
+
+[Debug]
+    show_var_residual_norms = true
+[]
+
+[Executioner]
+  type = Transient
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;  201               hypre    boomeramg      10&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  nl_rel_tol = 5e-9
+  nl_abs_tol = 1e-10
+  nl_max_its = 15
+
+  l_tol = 1e-3
+  l_max_its = 50
+
+  start_time = 0.0
+  end_time = 0.2
+  dt = 0.1
+[]
+
+[Postprocessors]
+  [./strainTheta]
+    type = ElementAverageValue
+    variable = strain_theta
+  [../]
+  [./stressTheta]
+    type = ElementAverageValue
+    variable = stress_theta
+  [../]
+  [./stressTheta_pt]
+    type = PointValue
+    point = &#x27;5.0 0.0 0.0&#x27;
+    #bottom inside edge for comparison to theory; use csv = true
+    variable = stress_theta
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>the <code>StressDivergenceRZTensors</code> kernel will be automatically built when the coordinate system in the Problem block is specified for the axisymmetric RZ system,</p><pre class="moose-pre"><code class="language-text">[Problem]
+  coord_type = RZ
+[]
+</code></pre><a href="#97090ec4-0bb3-4365-8e41-8d8b0dd32cf6" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/2D_geometries/2D-RZ_finiteStrain_test.i)</a><div class="modal moose-modal" id="97090ec4-0bb3-4365-8e41-8d8b0dd32cf6"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/2D_geometries/2D-RZ_finiteStrain_test.i</h4><pre class="moose-pre"><code class="language-text"># Considers the mechanics solution for a thick spherical shell that is uniformly
+# pressurized on the inner and outer surfaces, using 2D axisymmetric geometry.
+# This test uses the strain calculator ComputeAxisymmetricRZFiniteStrain,
+# which is generated through the use of the TensorMechanics MasterAction.
+#
+# From Roark (Formulas for Stress and Strain, McGraw-Hill, 1975), the radially-dependent
+# circumferential stress in a uniformly pressurized thick spherical shell is given by:
+#
+# S(r) = [ Pi[ri^3(2r^3+ro^3)] - Po[ro^3(2r^3+ri^3)] ] / [2r^3(ro^3-ri^3)]
+#
+#   where:
+#          Pi = inner pressure
+#          Po = outer pressure
+#          ri = inner radius
+#          ro = outer radius
+#
+# The tests assume an inner and outer radii of 5 and 10, with internal and external
+# pressures of 100000 and 200000 at t = 1.0, respectively. The resulting compressive
+# tangential stress is largest at the inner wall and, from the above equation, has a
+# value of -271429.
+#
+# RESULTS are below. Since stresses are average element values, values for the
+# edge element and one-element-in are used to extrapolate the stress to the
+# inner surface. The vesrion of the tests that are checked use the coarsest meshes.
+#
+#  Mesh    Radial elem   S(edge elem)  S(one elem in)  S(extrap to surf)
+# 1D-SPH
+# 2D-RZ        12 (x10)    -265004      -254665        -270174
+#  3D          12 (6x6)    -261880      -252811        -266415
+#
+# 1D-SPH
+# 2D-RZ        48 (x10)    -269853      -266710        -271425
+#  3D          48 (10x10)  -268522      -265653        -269957
+#
+# The numerical solution converges to the analytical solution as the mesh is
+# refined.
+
+[Mesh]
+  file = 2D-RZ_mesh.e
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_r disp_z&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    strain = FINITE
+    add_variables = true
+    block = 1
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_theta]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 2
+    index_j = 2
+    variable = stress_theta
+    execute_on = timestep_end
+  [../]
+  [./strain_theta]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 2
+    index_j = 2
+    variable = strain_theta
+    execute_on = timestep_end
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e10
+    poissons_ratio = 0.345
+    block = 1
+  [../]
+
+  [./_elastic_strain]
+    type = ComputeFiniteStrainElasticStress
+    block = 1
+  [../]
+[]
+
+[BCs]
+# pin particle along symmetry planes
+  [./no_disp_r]
+    type = PresetBC
+    variable = disp_r
+    boundary = xzero
+    value = 0.0
+  [../]
+
+  [./no_disp_z]
+    type = PresetBC
+    variable = disp_z
+    boundary = yzero
+    value = 0.0
+  [../]
+
+# exterior and internal pressures
+  [./exterior_pressure_r]
+    type = Pressure
+    variable = disp_r
+    boundary = outer
+    component = 0
+    function = &#x27;200000*t&#x27;
+  [../]
+
+ [./exterior_pressure_z]
+    type = Pressure
+    variable = disp_z
+    boundary = outer
+    component = 1
+    function = &#x27;200000*t&#x27;
+  [../]
+
+  [./interior_pressure_r]
+    type = Pressure
+    variable = disp_r
+    boundary = inner
+    component = 0
+    function = &#x27;100000*t&#x27;
+  [../]
+
+  [./interior_pressure_z]
+    type = Pressure
+    variable = disp_z
+    boundary = inner
+    component = 1
+    function = &#x27;100000*t&#x27;
+  [../]
+[]
+
+[Debug]
+    show_var_residual_norms = true
+[]
+
+[Executioner]
+  type = Transient
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;  201               hypre    boomeramg      10&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  nl_rel_tol = 5e-9
+  nl_abs_tol = 1e-10
+  nl_max_its = 15
+
+  l_tol = 1e-3
+  l_max_its = 50
+
+  start_time = 0.0
+  end_time = 0.2
+  dt = 0.1
+[]
+
+[Postprocessors]
+  [./strainTheta]
+    type = ElementAverageValue
+    variable = strain_theta
+  [../]
+  [./stressTheta]
+    type = ElementAverageValue
+    variable = stress_theta
+  [../]
+  [./stressTheta_pt]
+    type = PointValue
+    point = &#x27;5.0 0.0 0.0&#x27;
+    #bottom inside edge for comparison to theory; use csv = true
+    variable = stress_theta
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>and only two displacement variables are provided:</p><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  displacements = &#x27;disp_r disp_z&#x27;
+[]
+</code></pre><a href="#f0464147-2d0a-4ebc-9208-3bf4116b7d14" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/2D_geometries/2D-RZ_finiteStrain_test.i)</a><div class="modal moose-modal" id="f0464147-2d0a-4ebc-9208-3bf4116b7d14"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/2D_geometries/2D-RZ_finiteStrain_test.i</h4><pre class="moose-pre"><code class="language-text"># Considers the mechanics solution for a thick spherical shell that is uniformly
+# pressurized on the inner and outer surfaces, using 2D axisymmetric geometry.
+# This test uses the strain calculator ComputeAxisymmetricRZFiniteStrain,
+# which is generated through the use of the TensorMechanics MasterAction.
+#
+# From Roark (Formulas for Stress and Strain, McGraw-Hill, 1975), the radially-dependent
+# circumferential stress in a uniformly pressurized thick spherical shell is given by:
+#
+# S(r) = [ Pi[ri^3(2r^3+ro^3)] - Po[ro^3(2r^3+ri^3)] ] / [2r^3(ro^3-ri^3)]
+#
+#   where:
+#          Pi = inner pressure
+#          Po = outer pressure
+#          ri = inner radius
+#          ro = outer radius
+#
+# The tests assume an inner and outer radii of 5 and 10, with internal and external
+# pressures of 100000 and 200000 at t = 1.0, respectively. The resulting compressive
+# tangential stress is largest at the inner wall and, from the above equation, has a
+# value of -271429.
+#
+# RESULTS are below. Since stresses are average element values, values for the
+# edge element and one-element-in are used to extrapolate the stress to the
+# inner surface. The vesrion of the tests that are checked use the coarsest meshes.
+#
+#  Mesh    Radial elem   S(edge elem)  S(one elem in)  S(extrap to surf)
+# 1D-SPH
+# 2D-RZ        12 (x10)    -265004      -254665        -270174
+#  3D          12 (6x6)    -261880      -252811        -266415
+#
+# 1D-SPH
+# 2D-RZ        48 (x10)    -269853      -266710        -271425
+#  3D          48 (10x10)  -268522      -265653        -269957
+#
+# The numerical solution converges to the analytical solution as the mesh is
+# refined.
+
+[Mesh]
+  file = 2D-RZ_mesh.e
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_r disp_z&#x27;
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[Modules/TensorMechanics/Master]
+  [./all]
+    strain = FINITE
+    add_variables = true
+    block = 1
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_theta]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 2
+    index_j = 2
+    variable = stress_theta
+    execute_on = timestep_end
+  [../]
+  [./strain_theta]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 2
+    index_j = 2
+    variable = strain_theta
+    execute_on = timestep_end
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e10
+    poissons_ratio = 0.345
+    block = 1
+  [../]
+
+  [./_elastic_strain]
+    type = ComputeFiniteStrainElasticStress
+    block = 1
+  [../]
+[]
+
+[BCs]
+# pin particle along symmetry planes
+  [./no_disp_r]
+    type = PresetBC
+    variable = disp_r
+    boundary = xzero
+    value = 0.0
+  [../]
+
+  [./no_disp_z]
+    type = PresetBC
+    variable = disp_z
+    boundary = yzero
+    value = 0.0
+  [../]
+
+# exterior and internal pressures
+  [./exterior_pressure_r]
+    type = Pressure
+    variable = disp_r
+    boundary = outer
+    component = 0
+    function = &#x27;200000*t&#x27;
+  [../]
+
+ [./exterior_pressure_z]
+    type = Pressure
+    variable = disp_z
+    boundary = outer
+    component = 1
+    function = &#x27;200000*t&#x27;
+  [../]
+
+  [./interior_pressure_r]
+    type = Pressure
+    variable = disp_r
+    boundary = inner
+    component = 0
+    function = &#x27;100000*t&#x27;
+  [../]
+
+  [./interior_pressure_z]
+    type = Pressure
+    variable = disp_z
+    boundary = inner
+    component = 1
+    function = &#x27;100000*t&#x27;
+  [../]
+[]
+
+[Debug]
+    show_var_residual_norms = true
+[]
+
+[Executioner]
+  type = Transient
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;  201               hypre    boomeramg      10&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  nl_rel_tol = 5e-9
+  nl_abs_tol = 1e-10
+  nl_max_its = 15
+
+  l_tol = 1e-3
+  l_max_its = 50
+
+  start_time = 0.0
+  end_time = 0.2
+  dt = 0.1
+[]
+
+[Postprocessors]
+  [./strainTheta]
+    type = ElementAverageValue
+    variable = strain_theta
+  [../]
+  [./stressTheta]
+    type = ElementAverageValue
+    variable = stress_theta
+  [../]
+  [./stressTheta_pt]
+    type = PointValue
+    point = &#x27;5.0 0.0 0.0&#x27;
+    #bottom inside edge for comparison to theory; use csv = true
+    variable = stress_theta
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="4b7b1228-3c53-4ce8-a02c-8fe8e278705f" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="0482a131-4498-4411-840f-54abf2eadbe4" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">component</span><span class="moose-parameter-header-description">An integer corresponding to the direction the variable this kernel acts in. (0 refers to the radial and 1 to the axial displacement.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>An integer corresponding to the direction the variable this kernel acts in. (0 refers to the radial and 1 to the axial displacement.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The string of displacements suitable for the problem statement</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The string of displacements suitable for the problem statement</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this Kernel operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this Kernel operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="80efd36c-057c-4e54-b046-8b2efe8ab58e" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Material property base name</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Material property base name</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">out_of_plane_direction</span><span class="moose-parameter-header-default">z</span><span class="moose-parameter-header-description">The direction of the out_of_plane_strain variable used in the WeakPlaneStress kernel.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>z</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>x y z</p><p class="moose-parameter-description"><span>Description:</span>The direction of the out_of_plane_strain variable used in the WeakPlaneStress kernel.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">out_of_plane_strain</span><span class="moose-parameter-header-description">The name of the out_of_plane_strain variable used in the WeakPlaneStress kernel. Required only if want to provide off-diagonal Jacobian in plane stress analysis using weak formulation.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the out_of_plane_strain variable used in the WeakPlaneStress kernel. Required only if want to provide off-diagonal Jacobian in plane stress analysis using weak formulation.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">temperature</span><span class="moose-parameter-header-description">The name of the temperature variable used in the ComputeThermalExpansionEigenstrain.  (Not required for simulations without temperature coupling.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the temperature variable used in the ComputeThermalExpansionEigenstrain.  (Not required for simulations without temperature coupling.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">thermal_eigenstrain_name</span><span class="moose-parameter-header-default">thermal_eigenstrain</span><span class="moose-parameter-header-description">The eigenstrain_name used in the ComputeThermalExpansionEigenstrain.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>thermal_eigenstrain</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The eigenstrain_name used in the ComputeThermalExpansionEigenstrain.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_finite_deform_jacobian</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Jacobian for corotational finite strain</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Jacobian for corotational finite strain</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">volumetric_locking_correction</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Set to false to turn off volumetric locking correction</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set to false to turn off volumetric locking correction</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="7f5864b1-ebd2-4111-a80d-e9af5991a6c6" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="388ec35f-f5fe-44f1-ad75-39cb25937d9e" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="727fc4e2-53e4-4be6-aff1-959249617dfe" data-section-level="2" data-section-text="The stress divergence family of automatic differentiation kernels"><h2 id="the-stress-divergence-family-of-automatic-differentiation-kernels">The stress divergence family of automatic differentiation kernels</h2><ul class="browser-default"><li><p><a href="ADStressDivergenceTensors.html">ADStressDivergenceTensors</a> - Stress divergence kernel for Cartesian coordinates <code>Problem/coord_type=XYZ</code> (default) </p></li><li><p><a href="ADStressDivergenceRZTensors.html">ADStressDivergenceRZTensors</a> - Stress divergence kernel for 2D cylindrical coordinates <code>Problem/coord_type=RZ</code> </p></li><li><p><a href="ADStressDivergenceRSphericalTensors.html">ADStressDivergenceRSphericalTensors</a> - Stress divergence kernel for 1D spherical coordinates <code>Problem/coord_type=RSPHERICAL</code></p></li></ul></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#976118ed-0732-4732-8156-30ad5837c749" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#85a92189-e0de-48fb-8d44-c9ab32eb4689" class="tooltipped" data-position="left" data-tooltip="Residual Calculation">Residual Calculation</a></li><li><a href="#3cfc07df-0d6f-4f73-936b-ad1e2cf7bc43" class="tooltipped" data-position="left" data-tooltip="Example Input File">Example Input File</a></li><li><a href="#4b7b1228-3c53-4ce8-a02c-8fe8e278705f" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#727fc4e2-53e4-4be6-aff1-959249617dfe" class="tooltipped" data-position="left" data-tooltip="The stress divergence family of automatic differentiation kernels">The stress divergence family of automatic differentiation kernels</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

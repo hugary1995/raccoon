@@ -1,0 +1,277 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>Contact Action|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="a5011021-0032-4167-be48-01ff892441a7"><i class="material-icons">menu</i></a><ul class="sidenav" id="a5011021-0032-4167-be48-01ff892441a7"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">actions</span><a href="#" class="breadcrumb">ContactAction</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="f6347fa9-16bb-463d-b151-fe6c456c0aaa" data-section-level="1" data-section-text="Contact Action"><h1 id="contact-action">Contact Action</h1><section class="scrollspy" id="567ba1dd-f874-4026-bbe1-a91127789ab8" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>ContactAction</code> can be used to specify mechanical normal and tangential contact using several possible models: - frictionless - glued - coulomb (frictional) and formulations: - kinematic - penalty (normal and tangential) - augmented lagrange - mortar (normal with/without tangential)</p></section><section class="scrollspy" id="ee9ed257-a658-45dc-ae96-83215dfeb84d" data-section-level="2" data-section-text="Example Input syntax"><h2 id="example">Example Input syntax</h2><p>For normal mortar contact:</p><pre class="moose-pre"><code class="language-text">[Contact]
+  [frictionless]
+    mesh = simple_mesh
+    master = 2
+    slave = 1
+    formulation = mortar
+    system = constraint
+  []
+[]
+</code></pre><a href="#9e0da4f5-c366-4bc1-bf00-ba3c7184a42f" class="modal-trigger">(../moose/modules/contact/test/tests/mechanical-small-problem/frictionless-nodal-lm-mortar-disp-action.i)</a><div class="modal moose-modal" id="9e0da4f5-c366-4bc1-bf00-ba3c7184a42f"><div class="modal-content"><h4>/home/gary/projects/moose/modules/contact/test/tests/mechanical-small-problem/frictionless-nodal-lm-mortar-disp-action.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Mesh]
+  [./simple_mesh]
+    type = FileMeshGenerator
+    file = mesh.e
+  [../]
+[]
+
+[Problem]
+  kernel_coverage_check = false
+[]
+
+[Variables]
+  [./disp_x]
+    block = &#x27;1 2&#x27;
+  [../]
+  [./disp_y]
+    block = &#x27;1 2&#x27;
+  [../]
+[]
+
+[BCs]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;outside_left&#x27;
+    value = 0.0
+  [../]
+  [./left_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;outside_left&#x27;
+    value = 0.0
+  [../]
+  [./right_x]
+    type = FunctionPresetBC
+    variable = disp_x
+    boundary = &#x27;outside_right&#x27;
+    function = &#x27;-5e-3 * t&#x27;
+  [../]
+  [./right_y]
+    type = FunctionPresetBC
+    variable = disp_y
+    boundary = &#x27;outside_right&#x27;
+    function = 0
+  [../]
+[]
+
+[Kernels]
+  [disp_x]
+    type = Diffusion
+    variable = disp_x
+    block = &#x27;1 2&#x27;
+  []
+  [disp_y]
+    type = Diffusion
+    variable = disp_y
+    block = &#x27;1 2&#x27;
+  []
+[]
+
+[Debug]
+  show_var_residual_norms = 1
+[]
+
+[Contact]
+  [frictionless]
+    mesh = simple_mesh
+    master = 2
+    slave = 1
+    formulation = mortar
+    system = constraint
+  []
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  solve_type = PJFNK
+  type = Transient
+  num_steps = 10
+  dt = 1
+  dtmin = 1
+  petsc_options_iname = &#x27;-pc_type -snes_linesearch_type -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       basic                 NONZERO               1e-15&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  hide = &#x27;contact_pressure nodal_area_frictionless penetration&#x27;
+[]
+
+[Postprocessors]
+  [contact]
+    type = ContactDOFSetSize
+    variable = frictionless_normal_lm
+    subdomain = &#x27;4&#x27;
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>For normal and tangential (frictional) mortar contact:</p><pre class="moose-pre"><code class="language-text">[Contact]
+  [frictional]
+    mesh = revised_file_mesh
+    master = 20
+    slave = 10
+    formulation = mortar
+    system = constraint
+    model = coulomb
+    friction_coefficient = 0.1
+  []
+[]
+</code></pre><a href="#25070fed-469d-4fa7-adcc-f02dfba4dd41" class="modal-trigger">(../moose/modules/contact/test/tests/bouncing-block-contact/frictional-nodal-min-normal-lm-mortar-fb-tangential-lm-mortar-action.i)</a><div class="modal moose-modal" id="25070fed-469d-4fa7-adcc-f02dfba4dd41"><div class="modal-content"><h4>/home/gary/projects/moose/modules/contact/test/tests/bouncing-block-contact/frictional-nodal-min-normal-lm-mortar-fb-tangential-lm-mortar-action.i</h4><pre class="moose-pre"><code class="language-text">starting_point = 2e-1
+
+# We offset slightly so we avoid the case where the bottom of the slave block and the top of the
+# master block are perfectly vertically aligned which can cause the backtracking line search some
+# issues for a coarse mesh (basic line search handles that fine)
+offset = 1e-2
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+  diffusivity = 1e0
+  scaling = 1e0
+[]
+
+[Mesh]
+  [./original_file_mesh]
+    type = FileMeshGenerator
+    file = long-bottom-block-1elem-blocks-coarse.e
+  [../]
+  # These sidesets need to be deleted because the contact action adds them automatically. For this
+  # particular mesh, the new IDs will be identical to the deleted ones and will conflict if we don&#x27;t
+  # remove the original ones.
+  [./delete_3]
+    type = BlockDeletionGenerator
+    input = original_file_mesh
+    block_id = 3
+  [../]
+  [./revised_file_mesh]
+    type = BlockDeletionGenerator
+    input = delete_3
+    block_id = 4
+  [../]
+[]
+
+[Variables]
+  [./disp_x]
+    block = &#x27;1 2&#x27;
+    # order = SECOND
+  [../]
+  [./disp_y]
+    block = &#x27;1 2&#x27;
+    # order = SECOND
+  [../]
+[]
+
+[Contact]
+  [frictional]
+    mesh = revised_file_mesh
+    master = 20
+    slave = 10
+    formulation = mortar
+    system = constraint
+    model = coulomb
+    friction_coefficient = 0.1
+  []
+[]
+
+[ICs]
+  [./disp_y]
+    block = 2
+    variable = disp_y
+    value = ${fparse starting_point + offset}
+    type = ConstantIC
+  [../]
+[]
+
+[Kernels]
+  [./disp_x]
+    type = MatDiffusion
+    variable = disp_x
+  [../]
+  [./disp_y]
+    type = MatDiffusion
+    variable = disp_y
+  [../]
+[]
+
+[BCs]
+  [./botx]
+    type = DirichletBC
+    variable = disp_x
+    boundary = 40
+    value = 0.0
+  [../]
+  [./boty]
+    type = DirichletBC
+    variable = disp_y
+    boundary = 40
+    value = 0.0
+  [../]
+  [./topy]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = 30
+    function = &#x27;${starting_point} * cos(2 * pi / 40 * t) + ${offset}&#x27;
+  [../]
+  [./leftx]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = 50
+    function = &#x27;1e-2 * t&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  end_time = 200
+  dt = 5
+  dtmin = .1
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options = &#x27;-snes_converged_reason -ksp_converged_reason -pc_svd_monitor -snes_linesearch_monitor -snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_factor_shift_type -pc_factor_shift_amount -mat_mffd_err&#x27;
+  petsc_options_value = &#x27;lu       NONZERO               1e-15                   1e-5&#x27;
+  l_max_its = 30
+  nl_max_its = 20
+  line_search = &#x27;none&#x27;
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Outputs]
+  exodus = true
+  hide = &#x27;contact_pressure nodal_area_frictional penetration&#x27;
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Postprocessors]
+  [./num_nl]
+    type = NumNonlinearIterations
+  [../]
+  [./cumulative]
+    type = CumulativeValuePostprocessor
+    postprocessor = num_nl
+  [../]
+  [contact]
+    type = ContactDOFSetSize
+    variable = frictional_normal_lm
+    subdomain = frictional_slave_subdomain
+    execute_on = &#x27;nonlinear timestep_end&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="c45511ce-84e0-4705-b73e-3a4aa03dd0d9" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="e6eb46d7-1a69-45bd-8f1e-345496f750d8" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">master</span><span class="moose-parameter-header-description">The master surface</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>BoundaryName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The master surface</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">slave</span><span class="moose-parameter-header-description">The slave surface</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>BoundaryName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The slave surface</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="6ffb8be2-9f0e-4a9a-b749-0df9273ee962" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">active</span><span class="moose-parameter-header-default">__all__ </span><span class="moose-parameter-header-description">If specified only the blocks named will be visited and made active</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>__all__ </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If specified only the blocks named will be visited and made active</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">al_frictional_force_tolerance</span><span class="moose-parameter-header-description">The tolerance of the frictional force for augmented Lagrangian method.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The tolerance of the frictional force for augmented Lagrangian method.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">al_incremental_slip_tolerance</span><span class="moose-parameter-header-description">The tolerance of the incremental slip for augmented Lagrangian method.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The tolerance of the incremental slip for augmented Lagrangian method.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">al_penetration_tolerance</span><span class="moose-parameter-header-description">The tolerance of the penetration for augmented Lagrangian method.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The tolerance of the penetration for augmented Lagrangian method.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">c_normal</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">Parameter for balancing the size of the gap and contact pressure</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Parameter for balancing the size of the gap and contact pressure</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">c_tangential</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">Parameter for balancing the contact pressure and velocity</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Parameter for balancing the contact pressure and velocity</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">capture_tolerance</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">Normal distance from surface within which nodes are captured</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Normal distance from surface within which nodes are captured</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">disp_x</span><span class="moose-parameter-header-description">The x displacement</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The x displacement</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">disp_y</span><span class="moose-parameter-header-description">The y displacement</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The y displacement</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">disp_z</span><span class="moose-parameter-header-description">The z displacement</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The z displacement</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements appropriate for the simulation geometry and coordinate system</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements appropriate for the simulation geometry and coordinate system</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">formulation</span><span class="moose-parameter-header-default">kinematic</span><span class="moose-parameter-header-description">The contact formulation</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>kinematic</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>kinematic penalty augmented_lagrange tangential_penalty mortar</p><p class="moose-parameter-description"><span>Description:</span>The contact formulation</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">friction_coefficient</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The friction coefficient</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The friction coefficient</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">inactive</span><span class="moose-parameter-header-description">If specified blocks matching these identifiers will be skipped.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If specified blocks matching these identifiers will be skipped.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">master_slave_jacobian</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Whether to include Jacobian entries coupling master and slave nodes.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether to include Jacobian entries coupling master and slave nodes.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">mesh</span><span class="moose-parameter-header-description">The mesh generator for mortar method</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MeshGeneratorName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The mesh generator for mortar method</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">model</span><span class="moose-parameter-header-default">frictionless</span><span class="moose-parameter-header-description">The contact model to use</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>frictionless</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>frictionless glued coulomb</p><p class="moose-parameter-description"><span>Description:</span>The contact model to use</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">normal_smoothing_distance</span><span class="moose-parameter-header-description">Distance from edge in parametric coordinates over which to smooth contact normal</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Distance from edge in parametric coordinates over which to smooth contact normal</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">normal_smoothing_method</span><span class="moose-parameter-header-description">Method to use to smooth normals</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>edge_based nodal_normal_based</p><p class="moose-parameter-description"><span>Description:</span>Method to use to smooth normals</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">normalize_penalty</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether to normalize the penalty parameter with the nodal area.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether to normalize the penalty parameter with the nodal area.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">order</span><span class="moose-parameter-header-default">FIRST</span><span class="moose-parameter-header-description">The finite element order: FIRST, SECOND, etc.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>FIRST</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>CONSTANT FIRST SECOND THIRD FOURTH</p><p class="moose-parameter-description"><span>Description:</span>The finite element order: FIRST, SECOND, etc.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">penalty</span><span class="moose-parameter-header-default">1e+08</span><span class="moose-parameter-header-description">The penalty to apply.  This can vary depending on the stiffness of your materials</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1e+08</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The penalty to apply.  This can vary depending on the stiffness of your materials</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">system</span><span class="moose-parameter-header-default">DiracKernel</span><span class="moose-parameter-header-description">System to use for constraint enforcement</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>DiracKernel</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>DiracKernel Constraint</p><p class="moose-parameter-description"><span>Description:</span>System to use for constraint enforcement</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">tangential_tolerance</span><span class="moose-parameter-header-description">Tangential distance to extend edges of contact surfaces</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Tangential distance to extend edges of contact surfaces</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">tension_release</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">Tension release threshold.  A node in contact will not be released if its tensile load is below this value.  No tension release if negative.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Tension release threshold.  A node in contact will not be released if its tensile load is below this value.  No tension release if negative.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#567ba1dd-f874-4026-bbe1-a91127789ab8" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#ee9ed257-a658-45dc-ae96-83215dfeb84d" class="tooltipped" data-position="left" data-tooltip="Example Input syntax">Example Input syntax</a></li><li><a href="#c45511ce-84e0-4705-b73e-3a4aa03dd0d9" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

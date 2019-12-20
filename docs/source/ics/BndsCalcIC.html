@@ -1,0 +1,146 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>BndsCalcIC|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="535accd6-bb11-45de-b215-0edcb0534b0e"><i class="material-icons">menu</i></a><ul class="sidenav" id="535accd6-bb11-45de-b215-0edcb0534b0e"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">ics</span><a href="#" class="breadcrumb">BndsCalcIC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="1387c8ca-e7fa-41e6-ab3c-cc5b0b649ca5" data-section-level="1" data-section-text="BndsCalcIC"><h1 id="bndscalcic">BndsCalcIC</h1><p>Initialize the location of grain boundaries in a polycrystalline sample</p><p>BndsCalcIC initializes the location of the grain boundaries in a polycrystalline sample. This is beneficial for executing the initial adaptivity based on the grain boundary locations.</p><p>Note: This is only useful when the order parameters are initialized with a diffused interface.</p><section class="scrollspy" id="4004819f-677c-46dc-a77e-ee15263d92e2" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[./bnds]
+  type = BndsCalcIC # IC is created for activating the initial adaptivity
+  variable = bnds
+[../]
+</code></pre><a href="#60e64e8b-b8f2-4c02-9751-501f940462d9" class="modal-trigger">(../moose/modules/phase_field/test/tests/initial_conditions/polycrystal_BndsCalcIC.i)</a><div class="modal moose-modal" id="60e64e8b-b8f2-4c02-9751-501f940462d9"><div class="modal-content"><h4>/home/gary/projects/moose/modules/phase_field/test/tests/initial_conditions/polycrystal_BndsCalcIC.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 20
+  ny = 20
+  nz = 0
+  xmin = 0
+  xmax = 100
+  ymin = 0
+  ymax = 100
+  zmin = 0
+  zmax = 0
+  elem_type = QUAD4
+[]
+
+[GlobalParams]
+  op_num = 3
+  var_name_base = gr
+  int_width = 5 # int_width &gt; 0 is required for initial adaptivity to work based on Bnds
+[]
+
+[Variables]
+  [./PolycrystalVariables]
+  [../]
+[]
+
+[UserObjects]
+  [./voronoi]
+    type = PolycrystalVoronoi
+    rand_seed = 105
+    grain_num = 3
+  [../]
+[]
+
+[ICs]
+  [./PolycrystalICs]
+    [./PolycrystalColoringIC]
+      polycrystal_ic_uo = voronoi
+    [../]
+  [../]
+  [./bnds]
+    type = BndsCalcIC # IC is created for activating the initial adaptivity
+    variable = bnds
+  [../]
+[]
+
+[AuxVariables]
+  [./bnds]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./PolycrystalKernel]
+  [../]
+[]
+
+[AuxKernels]
+  [./BndsCalc]
+    type = BndsCalcAux
+    variable = bnds
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./All]
+      auto_direction = &#x27;x y&#x27;
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./Copper]
+    type = GBEvolution
+    T = 500 # K
+    wGB = 6 # nm
+    GBmob0 = 2.5e-6 #m^4/(Js) from Schoenfelder 1997
+    Q = 0.23 #Migration energy in eV
+    GBenergy = 0.708 #GB energy in J/m^2
+  [../]
+[]
+
+[Postprocessors]
+  [./ngrains]
+    type = FeatureFloodCount
+    variable = bnds
+    threshold = 0.7
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = &#x27;bdf2&#x27;
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+
+  l_tol = 1.0e-4
+  l_max_its = 30
+  nl_max_its = 20
+  nl_rel_tol = 1.0e-9
+  start_time = 0.0
+  num_steps = 2
+  dt = 1.0
+[]
+
+[Adaptivity]
+  initial_steps = 1
+  max_h_level = 1
+  marker = err_bnds
+ [./Markers]
+    [./err_bnds]
+      type = ErrorFractionMarker
+      coarsen = 0.3
+      refine = 0.9
+      indicator = ind_bnds
+    [../]
+  [../]
+  [./Indicators]
+     [./ind_bnds]
+       type = GradientJumpIndicator
+       variable = bnds
+    [../]
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="b58c04e4-62b5-4a66-866a-154a0625a11c" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="f3790101-91aa-450d-a8dc-2f41193801d1" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">v</span><span class="moose-parameter-header-description">Array of coupled variables</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Array of coupled variables</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The variable this initial condition is supposed to provide values for.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The variable this initial condition is supposed to provide values for.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="3946d16f-53d2-4f0c-95b8-59840c9d9e25" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">op_num</span><span class="moose-parameter-header-description">Array of coupled variables (num_name)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Array of coupled variables (num_name)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">var_name_base</span><span class="moose-parameter-header-description">Array of coupled variables (base_name)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Array of coupled variables (base_name)</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="2300901a-b4df-47b6-96db-366a2ff1a667" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">ignore_uo_dependency</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">When set to true, a UserObject retrieved by this IC will not be executed before the this IC</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When set to true, a UserObject retrieved by this IC will not be executed before the this IC</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section><section class="scrollspy" id="64543ba1-6279-47a5-9674-502b00a96f85" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#4004819f-677c-46dc-a77e-ee15263d92e2" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#b58c04e4-62b5-4a66-866a-154a0625a11c" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#64543ba1-6279-47a5-9674-502b00a96f85" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

@@ -1,0 +1,332 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>GrandPotentialKernelAction|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="e177ee0a-2f82-4070-aabf-aa175325b7b0"><i class="material-icons">menu</i></a><ul class="sidenav" id="e177ee0a-2f82-4070-aabf-aa175325b7b0"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">action</span><a href="#" class="breadcrumb">GrandPotentialKernelAction</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="2590d437-5232-4dda-a0d2-a1372cc763e0" data-section-level="1" data-section-text="GrandPotentialKernelAction"><h1 id="grandpotentialkernelaction">GrandPotentialKernelAction</h1><p>Automatically generate most or all of the kernels for the grand potential model</p><p>For more information on the grand potential model, see <a href="#plapp_unified_2011">Plapp (2011)</a> and <a href="#moelans_quantitative_2008">Moelans et al. (2008)</a>. The following kernels are generated for each chemical potential variable:</p><ul class="browser-default"><li><p><a href="../kernels/SusceptibilityTimeDerivative.html"><code>SusceptibilityTimeDerivative</code></a> </p></li><li><p><a href="../kernels/MatDiffusion.html"><code>MatDiffusion</code></a> or <a href="../kernels/MatAnisoDiffusion.html"><code>MatAnisoDiffusion</code></a> </p></li><li><p><a href="../kernels/CoupledSwitchingTimeDerivative.html"><code>CoupledSwitchingTimeDerivative</code></a> (multiple kernels: one that corresponds with each order parameter)</p></li></ul><p>The following kernels are generated for each order parameter:</p><ul class="browser-default"><li><p><a href="../kernels/TimeDerivative.html"><code>TimeDerivative</code></a> </p></li><li><p><a href="../kernels/ACInterface.html"><code>ACInterface</code></a> </p></li><li><p><a href="../kernels/ACSwitching.html"><code>ACSwitching</code></a> </p></li><li><p><a href="../kernels/ACGrGrMulti.html"><code>ACGrGrMulti</code></a></p></li></ul><p>Any additional kernels needed for your application will have to be entered manually into the input file. There is a large number of inputs for this action, but they can be categorized into four basic groups</p><section id="01497b60-8be6-443d-8eec-7fc71a42ee09" data-section-level="3" data-section-text="Global Inputs"><h3 id="global-inputs">Global Inputs</h3><p>These are applied throughout the kernels.</p><ul class="browser-default"><li><p><code>switching_function_names</code>: Vector of names of switching functions. These are used to distinguish between phases. </p></li><li><p><code>use_displacesd_mesh</code>: Standard option for kernels. This will be applied to all kernels generated. </p></li><li><p><code>implicit</code>: Standard option for kernels. This will be applied to all kernels generated.</p></li></ul></section><section id="a3f75a9c-7829-48dd-9f61-941bd31220a2" data-section-level="3" data-section-text="Chemical Potential Functions"><h3 id="chemical-potential-functions">Chemical Potential Functions</h3><p>These define the behavior of the chemical potential variables.</p><ul class="browser-default"><li><p><code>chemical_potentials</code>: Vector of names of chemical potential variables. </p></li><li><p><code>susceptibilities</code>: Vector of names of susceptibilities, chi. This vector should be the same length as &quot;chemical_potentials&quot; as each entry in this vector corresponds to the same entry in &quot;chemical_potentials&quot;. </p></li><li><p><code>mobilities</code>: Vector of mobilities&ndash;either scalars or tensors&ndash;that correspond to the &quot;chemical_potentials&quot; variables. The entries should consist of diffusivities multiplied by susceptibilities. </p></li><li><p><code>anisotropic</code>: If the entries in &quot;D&quot; are tensors, set this to &quot;true&quot;. </p></li><li><p><code>free_energies_w</code>: Vector of density functions that determine the densities corresponding with each &quot;chemical_potentials&quot;. The total number of entries is the number of chemical potentials times the number of switching functions.</p></li></ul></section><section id="43fa34f6-d5b5-4829-bd3a-120dda43d630" data-section-level="3" data-section-text="Primary Set of Order Parameter Functions"><h3 id="primary-set-of-order-parameter-functions">Primary Set of Order Parameter Functions</h3><p>Inputs affecting a group of auto-generated variables using the PolycrystalVarible action. These typically represent grains in a polycrystal system.</p><ul class="browser-default"><li><p><code>op_num</code>: Number of order parameters auto-generated in Variable block. </p></li><li><p><code>var_name_base</code>: Name of order parameters auto-generated in Variable block. </p></li><li><p><code>free_energies_gr</code>: Vector of chemical potential density functions used for this set of order parameters. Each entry corresponds to the phase in the same entry of &quot;switching_function_names&quot;. </p></li><li><p><code>mobility_name_gr</code>: Name of scalar mobility used with this set of order parameters. </p></li><li><p><code>energy_barrier_gr</code>: Name of energy barrier coefficient (m in <a href="#moelans_quantitative_2008">Moelans et al. (2008)</a>.) used with this set of order parameters. </p></li><li><p><code>gamma_gr</code>: Name of gamma coefficient used with this set of order parameters which controls interface energy between these order parameters. </p></li><li><p><code>kappa_gr</code>: Name of kappa coefficient to be used with this set of order parameters.</p></li></ul></section><section id="6c076c16-4777-4823-bcc7-9a88954da293" data-section-level="3" data-section-text="Second Set of Order Parameter Functions"><h3 id="second-set-of-order-parameter-functions">Second Set of Order Parameter Functions</h3><p>This optional set can include additional order parameters to distinguish phases or some other field not associated with the first set of order parameters.</p><ul class="browser-default"><li><p><code>additional_ops</code>: Vector of additional order parameters used in the model. Optional. </p></li><li><p><code>free_energies_op</code>: Vector of chemical potential density functions used for this set of order parameters. Each entry corresponds to the phase in the same entry of &quot;switching_function_names&quot;. </p></li><li><p><code>mobility_name_op</code>: Name of scalar mobility used with this set of order parameters. If &quot;additional_ops&quot; is blank then this value and the others below will not be called and their values do not matter. </p></li><li><p><code>energy_barrier_op</code>: Name of energy barrier coefficient used with this set of order parameters. </p></li><li><p><code>gamma_op</code>: Name of gamma coefficient used with this set of order parameters which controls interface energy between these order parameters. </p></li><li><p><code>gamma_grxop</code>: Cross term gamma coefficient that controls the interface energy between the primary and second set of order parameters. </p></li><li><p><code>kappa_op</code>: Name of kappa coefficient to be used with this set of order parameters.</p></li></ul></section></section><section class="scrollspy" id="699af516-111a-4164-ba3b-7f5d24b86b44" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="900deae2-25d3-4248-8ab5-ad2ead4dc9a9" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">anisotropic</span><span class="moose-parameter-header-default">false</span><span class="moose-parameter-header-description">Whether or not each mobility is anisotropic</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>false</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>false true</p><p class="moose-parameter-description"><span>Description:</span>Whether or not each mobility is anisotropic</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">chemical_potentials</span><span class="moose-parameter-header-description">List of chemical potential variables</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<NonlinearVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of chemical potential variables</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">free_energies_gr</span><span class="moose-parameter-header-description">List of free energies for each phase. Place in same order as switching_function_names.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<MaterialPropertyName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of free energies for each phase. Place in same order as switching_function_names.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">free_energies_w</span><span class="moose-parameter-header-description">List of functions for each phase. Length should be length of chemical_potentials * length of switching_function_names.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<MaterialPropertyName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of functions for each phase. Length should be length of chemical_potentials * length of switching_function_names.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">mobilities</span><span class="moose-parameter-header-description">Vector of mobilities that must match chemical_potentials</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<MaterialPropertyName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of mobilities that must match chemical_potentials</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">op_num</span><span class="moose-parameter-header-description">specifies the number of grains to create</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>specifies the number of grains to create</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">susceptibilities</span><span class="moose-parameter-header-description">List of susceptibilities that correspond to chemical_potentials</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<MaterialPropertyName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of susceptibilities that correspond to chemical_potentials</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">switching_function_names</span><span class="moose-parameter-header-description">Switching function materials that provide switching function for free_energies_*.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<MaterialPropertyName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Switching function materials that provide switching function for free_energies_*.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">var_name_base</span><span class="moose-parameter-header-description">specifies the base name of the grain variables</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>specifies the base name of the grain variables</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="3970bd74-7cb5-489d-960c-d37d3f9ffc02" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">active</span><span class="moose-parameter-header-default">__all__ </span><span class="moose-parameter-header-description">If specified only the blocks named will be visited and made active</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>__all__ </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If specified only the blocks named will be visited and made active</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">additional_ops</span><span class="moose-parameter-header-description">List of any additional order parameters which are not grains</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<NonlinearVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of any additional order parameters which are not grains</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">free_energies_op</span><span class="moose-parameter-header-description">List of free energies used by additional order parameters. Places in same order as switching_function_names.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<MaterialPropertyName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of free energies used by additional order parameters. Places in same order as switching_function_names.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">gamma_gr</span><span class="moose-parameter-header-default">gamma</span><span class="moose-parameter-header-description">Name of the gamma used with grains</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>gamma</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Name of the gamma used with grains</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">gamma_grxop</span><span class="moose-parameter-header-default">gamma</span><span class="moose-parameter-header-description">Name of the gamma used when grains interact with other order parameters</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>gamma</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Name of the gamma used when grains interact with other order parameters</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">gamma_op</span><span class="moose-parameter-header-default">gamma</span><span class="moose-parameter-header-description">Name of the gamma used with additional order parameters</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>gamma</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Name of the gamma used with additional order parameters</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Whether kernels are implicit or not</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether kernels are implicit or not</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">inactive</span><span class="moose-parameter-header-description">If specified blocks matching these identifiers will be skipped.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If specified blocks matching these identifiers will be skipped.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">kappa_gr</span><span class="moose-parameter-header-default">kappa</span><span class="moose-parameter-header-description">The kappa used with the grains</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>kappa</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The kappa used with the grains</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">kappa_op</span><span class="moose-parameter-header-default">kappa</span><span class="moose-parameter-header-description">The kappa used with additional_ops</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>kappa</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The kappa used with additional_ops</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">mobility_name_gr</span><span class="moose-parameter-header-default">L</span><span class="moose-parameter-header-description">Name of mobility to be used with grains</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>L</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Name of mobility to be used with grains</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">mobility_name_op</span><span class="moose-parameter-header-default">L</span><span class="moose-parameter-header-description">Name of mobility to be used with additional_ops</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>L</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Name of mobility to be used with additional_ops</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether to use displaced mesh in the kernels</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether to use displaced mesh in the kernels</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section></section><section class="scrollspy" id="770f3450-b249-4b41-af28-893d37cc6620" data-section-level="2" data-section-text="Example Input File Syntax"><h2 id="example-input-file-syntax">Example Input File Syntax</h2><pre class="moose-pre"><code class="language-text">[Modules]
+  [./PhaseField]
+    [./GrandPotential]
+      switching_function_names = &#x27;hb hm&#x27;
+
+      chemical_potentials = &#x27;w&#x27;
+      anisotropic = &#x27;false&#x27;
+      mobilities = &#x27;chiD&#x27;
+      susceptibilities = &#x27;chi&#x27;
+      free_energies_w = &#x27;rhob rhom&#x27;
+
+      gamma_gr = gamma
+      mobility_name_gr = L
+      kappa_gr = kappa
+      free_energies_gr = &#x27;omegab omegam&#x27;
+
+      additional_ops = &#x27;phi&#x27;
+      gamma_grxop = gamma
+      mobility_name_op = L_phi
+      kappa_op = kappa
+      free_energies_op = &#x27;omegab omegam&#x27;
+    [../]
+  [../]
+[]
+
+[Materials]
+  #REFERENCES
+  [./constants]
+    type = GenericConstantMaterial
+    prop_names =  &#x27;Va      cb_eq cm_eq kb   km  mu  gamma L      L_phi  kappa  kB&#x27;
+    prop_values = &#x27;0.04092 1.0   1e-5  1400 140 1.5 1.5   5.3e+3 2.3e+4 295.85 8.6173324e-5&#x27;
+  [../]
+  #SWITCHING FUNCTIONS
+  [./switchb]
+    type = SwitchingFunctionMultiPhaseMaterial
+    h_name = hb
+    all_etas = &#x27;phi eta0&#x27;
+    phase_etas = &#x27;phi&#x27;
+  [../]
+  [./switchm]
+    type = SwitchingFunctionMultiPhaseMaterial
+    h_name = hm
+    all_etas = &#x27;phi eta0&#x27;
+    phase_etas = &#x27;eta0&#x27;
+  [../]
+  [./omegab]
+    type = DerivativeParsedMaterial
+    f_name = omegab
+    args = &#x27;w phi&#x27;
+    material_property_names = &#x27;Va kb cb_eq&#x27;
+    function = &#x27;-0.5*w^2/Va^2/kb - w/Va*cb_eq&#x27;
+    derivative_order = 2
+  [../]
+  [./omegam]
+    type = DerivativeParsedMaterial
+    f_name = omegam
+    args = &#x27;w eta0&#x27;
+    material_property_names = &#x27;Va km cm_eq&#x27;
+    function = &#x27;-0.5*w^2/Va^2/km - w/Va*cm_eq&#x27;
+    derivative_order = 2
+  [../]
+  [./chi]
+    type = DerivativeParsedMaterial
+    f_name = chi
+    args = &#x27;w&#x27;
+    material_property_names = &#x27;Va hb hm kb km&#x27;
+    function = &#x27;(hm/km + hb/kb)/Va^2&#x27;
+    derivative_order = 2
+  [../]
+  #DENSITIES/CONCENTRATION
+  [./rhob]
+    type = DerivativeParsedMaterial
+    f_name = rhob
+    args = &#x27;w&#x27;
+    material_property_names = &#x27;Va kb cb_eq&#x27;
+    function = &#x27;w/Va^2/kb + cb_eq/Va&#x27;
+    derivative_order = 1
+  [../]
+  [./rhom]
+    type = DerivativeParsedMaterial
+    f_name = rhom
+    args = &#x27;w eta0&#x27;
+    material_property_names = &#x27;Va km cm_eq(eta0)&#x27;
+    function = &#x27;w/Va^2/km + cm_eq/Va&#x27;
+    derivative_order = 1
+  [../]
+  [./concentration]
+    type = ParsedMaterial
+    f_name = c
+    material_property_names = &#x27;rhom hm rhob hb Va&#x27;
+    function = &#x27;Va*(hm*rhom + hb*rhob)&#x27;
+    outputs = exodus
+  [../]
+  [./mobility]
+    type = DerivativeParsedMaterial
+    material_property_names = &#x27;chi kB&#x27;
+    constant_names = &#x27;T Em D0&#x27;
+    constant_expressions = &#x27;1400 2.4 1.25e2&#x27;
+    f_name = chiD
+    function = &#x27;chi*D0*exp(-Em/kB/T)&#x27;
+  [../]
+[]
+</code></pre><a href="#109c54a3-1171-403e-a3f5-2d3a427072bf" class="modal-trigger">(../moose/modules/phase_field/test/tests/actions/gpm_kernel.i)</a><div class="modal moose-modal" id="109c54a3-1171-403e-a3f5-2d3a427072bf"><div class="modal-content"><h4>/home/gary/projects/moose/modules/phase_field/test/tests/actions/gpm_kernel.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 100
+  xmin = 0
+  xmax = 300
+[]
+
+[GlobalParams]
+  op_num = 1
+  var_name_base = eta
+[]
+
+[Variables]
+  [./w]
+  [../]
+  [./phi]
+  [../]
+  [./eta0]
+  [../]
+[]
+
+[AuxVariables]
+  [./bnds]
+  [../]
+[]
+
+[ICs]
+  [./IC_w]
+    type = BoundingBoxIC
+    variable = w
+    x1 = 150
+    x2 = 300
+    y1 = 0
+    y2 = 0
+    inside = 0.1
+    outside = 0
+  [../]
+  [./IC_phi]
+    type = BoundingBoxIC
+    variable = phi
+    x1 = 0
+    x2 = 150
+    y1 = 0
+    y2 = 0
+    inside = 1
+    outside = 0
+  [../]
+  [./IC_eta0]
+    type = BoundingBoxIC
+    variable = eta0
+    x1 = 150
+    x2 = 300
+    y1 = 0
+    y2 = 0
+    inside = 1
+    outside = 0
+  [../]
+[]
+
+[AuxKernels]
+  [./bnds_aux]
+    type = BndsCalcAux
+    variable = bnds
+  [../]
+[]
+
+[Modules]
+  [./PhaseField]
+    [./GrandPotential]
+      switching_function_names = &#x27;hb hm&#x27;
+
+      chemical_potentials = &#x27;w&#x27;
+      anisotropic = &#x27;false&#x27;
+      mobilities = &#x27;chiD&#x27;
+      susceptibilities = &#x27;chi&#x27;
+      free_energies_w = &#x27;rhob rhom&#x27;
+
+      gamma_gr = gamma
+      mobility_name_gr = L
+      kappa_gr = kappa
+      free_energies_gr = &#x27;omegab omegam&#x27;
+
+      additional_ops = &#x27;phi&#x27;
+      gamma_grxop = gamma
+      mobility_name_op = L_phi
+      kappa_op = kappa
+      free_energies_op = &#x27;omegab omegam&#x27;
+    [../]
+  [../]
+[]
+
+[Materials]
+  #REFERENCES
+  [./constants]
+    type = GenericConstantMaterial
+    prop_names =  &#x27;Va      cb_eq cm_eq kb   km  mu  gamma L      L_phi  kappa  kB&#x27;
+    prop_values = &#x27;0.04092 1.0   1e-5  1400 140 1.5 1.5   5.3e+3 2.3e+4 295.85 8.6173324e-5&#x27;
+  [../]
+  #SWITCHING FUNCTIONS
+  [./switchb]
+    type = SwitchingFunctionMultiPhaseMaterial
+    h_name = hb
+    all_etas = &#x27;phi eta0&#x27;
+    phase_etas = &#x27;phi&#x27;
+  [../]
+  [./switchm]
+    type = SwitchingFunctionMultiPhaseMaterial
+    h_name = hm
+    all_etas = &#x27;phi eta0&#x27;
+    phase_etas = &#x27;eta0&#x27;
+  [../]
+  [./omegab]
+    type = DerivativeParsedMaterial
+    f_name = omegab
+    args = &#x27;w phi&#x27;
+    material_property_names = &#x27;Va kb cb_eq&#x27;
+    function = &#x27;-0.5*w^2/Va^2/kb - w/Va*cb_eq&#x27;
+    derivative_order = 2
+  [../]
+  [./omegam]
+    type = DerivativeParsedMaterial
+    f_name = omegam
+    args = &#x27;w eta0&#x27;
+    material_property_names = &#x27;Va km cm_eq&#x27;
+    function = &#x27;-0.5*w^2/Va^2/km - w/Va*cm_eq&#x27;
+    derivative_order = 2
+  [../]
+  [./chi]
+    type = DerivativeParsedMaterial
+    f_name = chi
+    args = &#x27;w&#x27;
+    material_property_names = &#x27;Va hb hm kb km&#x27;
+    function = &#x27;(hm/km + hb/kb)/Va^2&#x27;
+    derivative_order = 2
+  [../]
+  #DENSITIES/CONCENTRATION
+  [./rhob]
+    type = DerivativeParsedMaterial
+    f_name = rhob
+    args = &#x27;w&#x27;
+    material_property_names = &#x27;Va kb cb_eq&#x27;
+    function = &#x27;w/Va^2/kb + cb_eq/Va&#x27;
+    derivative_order = 1
+  [../]
+  [./rhom]
+    type = DerivativeParsedMaterial
+    f_name = rhom
+    args = &#x27;w eta0&#x27;
+    material_property_names = &#x27;Va km cm_eq(eta0)&#x27;
+    function = &#x27;w/Va^2/km + cm_eq/Va&#x27;
+    derivative_order = 1
+  [../]
+  [./concentration]
+    type = ParsedMaterial
+    f_name = c
+    material_property_names = &#x27;rhom hm rhob hb Va&#x27;
+    function = &#x27;Va*(hm*rhom + hb*rhob)&#x27;
+    outputs = exodus
+  [../]
+  [./mobility]
+    type = DerivativeParsedMaterial
+    material_property_names = &#x27;chi kB&#x27;
+    constant_names = &#x27;T Em D0&#x27;
+    constant_expressions = &#x27;1400 2.4 1.25e2&#x27;
+    f_name = chiD
+    function = &#x27;chi*D0*exp(-Em/kB/T)&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -pc_asm_overlap -ksp_gmres_restart -sub_ksp_type&#x27;
+  petsc_options_value = &#x27; asm      lu           1               31                 preonly&#x27;
+  nl_max_its = 20
+  l_max_its = 30
+  l_tol = 1e-4
+  nl_rel_tol = 1e-7
+  nl_abs_tol = 1e-7
+  start_time = 0
+  dt = 2e-5
+  num_steps = 3
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="eab7d321-5753-48a0-86c9-ce507ee40140" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol><li id="moelans_quantitative_2008">N.&nbsp;Moelans, B.&nbsp;Blanpain, and P.&nbsp;Wollants.
+Quantitative analysis of grain boundary properties in a generalized phase field model for grain growth in anisotropic systems.
+<em>Physical Review B</em>, 78(2):024113, Jul 2008.
+URL: <a href="http://link.aps.org/doi/10.1103/PhysRevB.78.024113">http://link.aps.org/doi/10.1103/PhysRevB.78.024113</a>, <a href="https://doi.org/10.1103/PhysRevB.78.024113">doi:10.1103/PhysRevB.78.024113</a>.<a href="#0c94e0c2-7992-4ca6-8bce-89c63333d349" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="0c94e0c2-7992-4ca6-8bce-89c63333d349"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{moelans_quantitative_2008,
+    author = "Moelans, N. and Blanpain, B. and Wollants, P.",
+    title = "Quantitative analysis of grain boundary properties in a generalized phase field model for grain growth in anisotropic systems",
+    volume = "78",
+    url = "http://link.aps.org/doi/10.1103/PhysRevB.78.024113",
+    doi = "10.1103/PhysRevB.78.024113",
+    number = "2",
+    urldate = "2016-06-02",
+    journal = "Physical Review B",
+    month = "Jul",
+    year = "2008",
+    pages = "024113",
+    file = "APS Snapshot:/Users/i.greenquist/Zotero/storage/Q8854BXX/PhysRevB.78.html:text/html;PhysRevB.78.024113.pdf:/Users/i.greenquist/Zotero/storage/VSMEC28A/PhysRevB.78.024113.pdf:application/pdf;PhysRevB.78.pdf:/Users/i.greenquist/Zotero/storage/VEU7AATJ/PhysRevB.78.pdf:application/pdf"
+}
+</code></pre></div></div></li><li id="plapp_unified_2011">Mathis Plapp.
+Unified derivation of phase-field models for alloy solidification from a grand-potential functional.
+<em>Physical Review E</em>, 84(3):031601, Sep 2011.
+URL: <a href="https://link.aps.org/doi/10.1103/PhysRevE.84.031601">https://link.aps.org/doi/10.1103/PhysRevE.84.031601</a>, <a href="https://doi.org/10.1103/PhysRevE.84.031601">doi:10.1103/PhysRevE.84.031601</a>.<a href="#af415d4d-dc11-4693-bdef-0ffa1d45e34c" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="af415d4d-dc11-4693-bdef-0ffa1d45e34c"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{plapp_unified_2011,
+    author = "Plapp, Mathis",
+    title = "Unified derivation of phase-field models for alloy solidification from a grand-potential functional",
+    volume = "84",
+    url = "https://link.aps.org/doi/10.1103/PhysRevE.84.031601",
+    doi = "10.1103/PhysRevE.84.031601",
+    number = "3",
+    journal = "Physical Review E",
+    month = "Sep",
+    year = "2011",
+    pages = "031601",
+    file = "APS Snapshot:/Users/i.greenquist/Zotero/storage/FND3VHH3/PhysRevE.84.html:text/html;PhysRevE.84.031601.pdf:/Users/i.greenquist/Zotero/storage/XHIR8VFZ/PhysRevE.84.031601.pdf:application/pdf"
+}
+</code></pre></div></div></li></ol></div></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#699af516-111a-4164-ba3b-7f5d24b86b44" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#770f3450-b249-4b41-af28-893d37cc6620" class="tooltipped" data-position="left" data-tooltip="Example Input File Syntax">Example Input File Syntax</a></li><li><a href="#eab7d321-5753-48a0-86c9-ce507ee40140" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

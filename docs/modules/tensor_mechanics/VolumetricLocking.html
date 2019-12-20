@@ -1,0 +1,199 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>Volumetric Locking Correction|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="9b495382-6690-46e2-8220-c74f7c51aced"><i class="material-icons">menu</i></a><ul class="sidenav" id="9b495382-6690-46e2-8220-c74f7c51aced"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><span class="breadcrumb">modules</span><a href="." class="breadcrumb">tensor_mechanics</a><a href="#" class="breadcrumb">VolumetricLocking</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="bb021ba6-7d24-42d3-b187-1f4b08062e22" data-section-level="1" data-section-text="Volumetric Locking Correction"><h1 id="volumetric-locking-correction">Volumetric Locking Correction</h1><p>Volumetric locking is the over stiffening of elements when the material is close to being incompressible (Poisson&#x27;s ratio <span tex="\nu" bookmark="moose-equation-87b2267f-064e-4d8d-9cd8-a6d1e2ca1b33" recursive="True" class="moose-katex-inline-equation" id="moose-equation-87b2267f-064e-4d8d-9cd8-a6d1e2ca1b33"><script>var element = document.getElementById("moose-equation-87b2267f-064e-4d8d-9cd8-a6d1e2ca1b33");katex.render("\\nu", element, {displayMode:false,throwOnError:false});</script></span> nearing 0.5). This stiffening happens when a fully integrated element (such as Hex8 elements with 8 quadrature points or Quad4 elements with 4 quadrature points) is used. This is a numerical artifact introduced because shape functions used in finite element analysis cannot properly approximate the incompressibility condition throughout the element. To avoid this locking of elements, B-bar correction <a href="#hughes1987finite">Hughes (1987)</a> is implemented in MOOSE.</p><section class="scrollspy" id="4d5a24c4-c801-4471-8314-1cce74eeb49f" data-section-level="2" data-section-text="Theory"><h2 id="theory">Theory</h2><p>In this method, both the strain (<span tex="\epsilon" bookmark="moose-equation-c5afe7fa-2575-4fc6-9f85-8d9c76339b46" recursive="True" class="moose-katex-inline-equation" id="moose-equation-c5afe7fa-2575-4fc6-9f85-8d9c76339b46"><script>var element = document.getElementById("moose-equation-c5afe7fa-2575-4fc6-9f85-8d9c76339b46");katex.render("\\epsilon", element, {displayMode:false,throwOnError:false});</script></span>) and the virtual strain (<span tex="\delta \epsilon" bookmark="moose-equation-90110d99-2d6c-44a7-aa67-7ab83d193ea0" recursive="True" class="moose-katex-inline-equation" id="moose-equation-90110d99-2d6c-44a7-aa67-7ab83d193ea0"><script>var element = document.getElementById("moose-equation-90110d99-2d6c-44a7-aa67-7ab83d193ea0");katex.render("\\delta \\epsilon", element, {displayMode:false,throwOnError:false});</script></span>) in an element are separated into volumetric and deviatoric components. The volumetric component is then replaced with an element averaged volumetric strain. This ensures that the volumetric strain remains constant throughout the element.</p><p>For example, in the case of small strain linear elasticity, the equation of motion is: <span class="moose-katex-block-equation"><span tex="\begin{aligned} \int_V \sigma(\epsilon)\delta \epsilon dV - \int_V b \delta v dV - \int_{\partial V} t \delta v dA = 0 \end{aligned}" bookmark="moose-equation-0de890ec-1c00-4799-9886-9230c3e00a25" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-0de890ec-1c00-4799-9886-9230c3e00a25"></span><script>var element = document.getElementById("moose-equation-0de890ec-1c00-4799-9886-9230c3e00a25");katex.render("\\begin{aligned} \\int_V \\sigma(\\epsilon)\\delta \\epsilon dV - \\int_V b \\delta v dV - \\int_{\\partial V} t \\delta v dA = 0 \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span> The element averaged volumetric strain (assuming small strain formulation) is: <span class="moose-katex-block-equation"><span tex="\begin{aligned}  w=\frac{1}{V_e} \int_{V_e} \frac{1}{3} tr(\epsilon) dV, \end{aligned}" bookmark="moose-equation-f011e677-90d6-44de-898d-24cbfb7d0b17" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-f011e677-90d6-44de-898d-24cbfb7d0b17"></span><script>var element = document.getElementById("moose-equation-f011e677-90d6-44de-898d-24cbfb7d0b17");katex.render("\\begin{aligned}  w=\\frac{1}{V_e} \\int_{V_e} \\frac{1}{3} tr(\\epsilon) dV, \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="V_e" bookmark="moose-equation-228eaf97-8685-4e1c-97fe-da8def4e450c" recursive="True" class="moose-katex-inline-equation" id="moose-equation-228eaf97-8685-4e1c-97fe-da8def4e450c"><script>var element = document.getElementById("moose-equation-228eaf97-8685-4e1c-97fe-da8def4e450c");katex.render("V_e", element, {displayMode:false,throwOnError:false});</script></span> is the volume of the element and tr(.) is the trace of the matrix.</p><p>The strain in each element is replaced by the approximation: <span class="moose-katex-block-equation"><span tex="\begin{aligned} \bar{\epsilon} = \epsilon +(w - \frac{tr(\epsilon)}{3})I \end{aligned}" bookmark="moose-equation-f204f004-a22b-4496-9bc0-3f9f30849a36" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-f204f004-a22b-4496-9bc0-3f9f30849a36"></span><script>var element = document.getElementById("moose-equation-f204f004-a22b-4496-9bc0-3f9f30849a36");katex.render("\\begin{aligned} \\bar{\\epsilon} = \\epsilon +(w - \\frac{tr(\\epsilon)}{3})I \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="I" bookmark="moose-equation-31ded245-d2b4-43d5-b7f8-c42c34a6e1d9" recursive="True" class="moose-katex-inline-equation" id="moose-equation-31ded245-d2b4-43d5-b7f8-c42c34a6e1d9"><script>var element = document.getElementById("moose-equation-31ded245-d2b4-43d5-b7f8-c42c34a6e1d9");katex.render("I", element, {displayMode:false,throwOnError:false});</script></span> is the <span tex="3 \times 3" bookmark="moose-equation-454068d7-7e52-49f0-9674-9909679bcd5e" recursive="True" class="moose-katex-inline-equation" id="moose-equation-454068d7-7e52-49f0-9674-9909679bcd5e"><script>var element = document.getElementById("moose-equation-454068d7-7e52-49f0-9674-9909679bcd5e");katex.render("3 \\times 3", element, {displayMode:false,throwOnError:false});</script></span> identity matrix. Similarly, the virtual strain is also approximated by: <span class="moose-katex-block-equation"><span tex="\begin{aligned} \bar{\delta \epsilon} = \delta \epsilon + (\delta w - \frac{tr(\delta \epsilon)}{3})I \end{aligned}" bookmark="moose-equation-b81f5616-efe8-4596-a1d0-7054cd48a745" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-b81f5616-efe8-4596-a1d0-7054cd48a745"></span><script>var element = document.getElementById("moose-equation-b81f5616-efe8-4596-a1d0-7054cd48a745");katex.render("\\begin{aligned} \\bar{\\delta \\epsilon} = \\delta \\epsilon + (\\delta w - \\frac{tr(\\delta \\epsilon)}{3})I \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span> The modified equation of motion is: <span class="moose-katex-block-equation"><span tex="\begin{aligned} \int_V \sigma(\bar{\epsilon})\bar{\delta \epsilon} dV - \int_V b \delta v dV - \int_{\partial V} t \delta v dA = 0 \end{aligned}" bookmark="moose-equation-5fe8fa5e-bf50-48ce-bcbd-04ea0dd4f705" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-5fe8fa5e-bf50-48ce-bcbd-04ea0dd4f705"></span><script>var element = document.getElementById("moose-equation-5fe8fa5e-bf50-48ce-bcbd-04ea0dd4f705");katex.render("\\begin{aligned} \\int_V \\sigma(\\bar{\\epsilon})\\bar{\\delta \\epsilon} dV - \\int_V b \\delta v dV - \\int_{\\partial V} t \\delta v dA = 0 \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span> More details about this method can be found in <a href="http://solidmechanics.org/Text/Chapter8_6/Chapter8_6.php">Section 8.6</a> of <a href="#bower2009applied">Bower (2009)</a>.</p><p>When finite strain formulation is used, the volumetric component of the strain is separated using the determinant of the deformation matrix.</p></section><section class="scrollspy" id="197c5924-b5fd-4653-9197-c97b3e18727a" data-section-level="2" data-section-text="Usage"><h2 id="usage">Usage</h2><p>Volumetric locking correction is set to false by default in tensor mechanics. When dealing with problems involving plasticity or incompressible materials, it can be turned on by setting <code>volumetric_locking_correction=true</code> in both the stress divergence kernel and the strain calculator or in the Tensor Mechanics master action.</p><p>When volumetric locking correction is turned on, using a SMP preconditioner with coupled displacement variables may help with convergence. For a 3-D problem with only displacement as unknown variables, the following pre-conditioner block may be used:</p><pre class="moose-pre"><code class="language-text">[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+</code></pre><a href="#218413f6-d906-4f48-8a10-55ce14c1b72b" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/finite_strain_elastic/elastic_rotation_test.i)</a><div class="modal moose-modal" id="218413f6-d906-4f48-8a10-55ce14c1b72b"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/finite_strain_elastic/elastic_rotation_test.i</h4><pre class="moose-pre"><code class="language-text">#
+# Rotation Test
+#
+# This test is designed to compute stress based on uniaxial strain
+# and then follow that stress as the mesh is rotated 90 degrees.
+#
+# The mesh is composed of one block with a single element.  The nodal
+# displacements in the three directions are prescribed.  Poisson&#x27;s
+# ratio is 1/3, and Young&#x27;s modulus is 1e6.
+#
+# This test is mentioned in
+# K. Kamojjala, R. Brannon, A. Sadeghirad, and J. Guilkey, &quot;Verification
+#   tests in solid mechanics,&quot; Engineering with Computers, Vol. 31, 2015.
+#   DOI: 10.1007/s00366-013-0342-x
+#
+[Mesh]
+  type = FileMesh
+  file = rotation_test.e
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Functions]
+  [./x_200]
+    type = ParsedFunction
+    vars = &#x27;delta t0&#x27;
+    vals = &#x27;1e-6 1.0&#x27;
+    value = &#x27;if(t&lt;=1.0, delta*t, (1.0+delta)*cos(pi/2*(t-t0)) - 1.0)&#x27;
+  [../]
+  [./y_200]
+    type = ParsedFunction
+    vars = &#x27;delta t0&#x27;
+    vals = &#x27;1e-6 1.0&#x27;
+    value = &#x27;if(t&lt;=1.0, 0.0, (1.0+delta)*sin(pi/2*(t-t0)))&#x27;
+  [../]
+  [./x_300]
+    type = ParsedFunction
+    vars = &#x27;delta t0&#x27;
+    vals = &#x27;1e-6 1.0&#x27;
+    value = &#x27;if(t&lt;=1.0, delta*t, (1.0+delta)*cos(pi/2.0*(t-t0)) - sin(pi/2.0*(t-t0)) - 1.0)&#x27;
+  [../]
+  [./y_300]
+    type = ParsedFunction
+    vars = &#x27;delta t0&#x27;
+    vals = &#x27;1e-6 1.0&#x27;
+    value = &#x27;if(t&lt;=1.0, 0.0, cos(pi/2.0*(t-t0)) + (1+delta)*sin(pi/2.0*(t-t0)) - 1.0)&#x27;
+  [../]
+  [./x_400]
+    type = ParsedFunction
+    vars = &#x27;delta t0&#x27;
+    vals = &#x27;1e-6 1.0&#x27;
+    value = &#x27;if(t&lt;=1.0, 0.0, -sin(pi/2.0*(t-t0)))&#x27;
+  [../]
+  [./y_400]
+    type = ParsedFunction
+    vars = &#x27;delta t0&#x27;
+    vals = &#x27;1e-6 1.0&#x27;
+    value = &#x27;if(t&lt;=1.0, 0.0, cos(pi/2.0*(t-t0)) - 1.0)&#x27;
+  [../]
+[]
+
+[Modules]
+  [./TensorMechanics]
+    [./Master]
+      [./all]
+        strain = FINITE
+        add_variables = true
+        generate_output = &#x27;stress_xx stress_yy stress_zz stress_xy stress_yz stress_zx&#x27;
+      [../]
+    [../]
+  [../]
+[]
+
+[BCs]
+  [./no_x]
+    type = PresetBC
+    variable = disp_x
+    boundary = 100
+    value = 0.0
+  [../]
+  [./no_y]
+    type = PresetBC
+    variable = disp_y
+    boundary = 100
+    value = 0.0
+  [../]
+  [./x_200]
+    type = FunctionPresetBC
+    variable = disp_x
+    boundary = 200
+    function = x_200
+  [../]
+  [./y_200]
+    type = FunctionPresetBC
+    variable = disp_y
+    boundary = 200
+    function = y_200
+  [../]
+  [./x_300]
+    type = FunctionPresetBC
+    variable = disp_x
+    boundary = 300
+    function = x_300
+  [../]
+  [./y_300]
+    type = FunctionPresetBC
+    variable = disp_y
+    boundary = 300
+    function = y_300
+  [../]
+  [./x_400]
+    type = FunctionPresetBC
+    variable = disp_x
+    boundary = 400
+    function = x_400
+  [../]
+  [./y_400]
+    type = FunctionPresetBC
+    variable = disp_y
+    boundary = 400
+    function = y_400
+  [../]
+  [./no_z]
+    type = PresetBC
+    variable = disp_z
+    boundary = &#x27;100 200 300 400&#x27;
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    fill_method = symmetric9
+    C_ijkl = &#x27;1.5e6 0.75e6 0.75e6 1.5e6 0.75e6 1.5e6 0.375e6 0.375e6 0.375e6&#x27;
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type &#x27;
+  petsc_options_value = lu
+  nl_rel_tol = 1e-30
+  nl_abs_tol = 1e-20
+  l_max_its = 20
+  start_time = 0.0
+  dt = 0.01
+  end_time = 2.0
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="7a278698-4e05-4cb6-a806-4805fd944b90" data-section-level="2" data-section-text="Verification of locking correction on Cook ' s membrane"><h2 id="verification-of-locking-correction-on-cook-s-membrane">Verification of locking correction on Cook&#x27;s membrane</h2><p>A 2D trapezoidal membrane <a href="#fig_cook">Figure 1</a> with Poisson&#x27;s ratio of 0.4999 is fixed at the left edge and sheared at the right edge. Locking behavior of the membrane is observed with the use of first order (Quad4) elements with no volumetric locking correction. This locking results in much lower vertical displacement at Point A than that observed in other scenarios, see <a href="#fig_cook_results">Figure 2</a> . Locking can be avoided with the use of Quad4 elements along with volumetric locking correction or with the use of second order elements (Quad8) with or without volumetric locking correction. These results match with that presented in Fig. 6 of <a href="#nakshatrala2008fem">Nakshatrala et al. (2008)</a>.</p><div class="row"><div class="card moose-float" style="width:45%;float:left;" id="fig_cook"><div class="card-content"><img src="../../media/tensor_mechanics/cook_problem.png" class="materialboxed moose-image"></img><p class="moose-caption"><span class="moose-caption-heading">Figure 1: </span><span class="moose-caption-text">2D problem to demonstrate volumetric locking.</span></p></div></div><div class="card moose-float" style="width:45%;float:right;" id="fig_cook_results"><div class="card-content"><img src="../../media/tensor_mechanics/cook_results.png" class="materialboxed moose-image"></img><p class="moose-caption"><span class="moose-caption-heading">Figure 2: </span><span class="moose-caption-text">Vertical displacement at Point A for different element types and mesh density. Locking behavior is observed when Quad4 elements with no volumetric locking correction are used.</span></p></div></div><p></p></div><p>Note that at least 20 nodes per edge are required to converge to the correct solution even when volumetric locking correction is used for this problem. Also, second order elements do not display locking behavior, so volumetric locking correction is not required for second order elements. Using volumetric locking correction with second order elements causes a different convergence pattern for the displacements <a href="#fig_cook_results">Figure 2</a> and it is also shown to result in noisy zigzag pattern in stress or strain profiles.</p></section><section class="scrollspy" id="eaf73bb9-da6f-49f9-b35e-18fb28792ef0" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol><li id="bower2009applied">A.&nbsp;F. Bower.
+<em>Applied Mechanics of Solids</em>.
+CRC press, 2009.<a href="#addc15ed-df8c-4794-a9ca-ea38f03f1c03" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="addc15ed-df8c-4794-a9ca-ea38f03f1c03"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@book{bower2009applied,
+    author = "Bower, A. F.",
+    title = "Applied Mechanics of Solids",
+    publisher = "CRC press",
+    year = "2009"
+}
+</code></pre></div></div></li><li id="hughes1987finite">T.&nbsp;J.&nbsp;R Hughes.
+<em>The Finite Element Method, Linear Static and Dynamic Finite Element Analysis</em>.
+New Jersey:Prentice-Hall, 1987.<a href="#f92dcb2b-1d97-4ea5-a67d-187f648c0049" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="f92dcb2b-1d97-4ea5-a67d-187f648c0049"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@book{hughes1987finite,
+    author = "Hughes, T. J. R",
+    title = "The Finite Element Method, Linear Static and Dynamic Finite Element Analysis",
+    publisher = "New Jersey:Prentice-Hall",
+    year = "1987"
+}
+</code></pre></div></div></li><li id="nakshatrala2008fem">K.&nbsp;B. Nakshatrala, A.&nbsp;Masud, and K.&nbsp;D. Hjelmstad.
+On finite element formulations for nearly incompressible linear elasticity.
+<em>Computational Mechanics</em>, 41:547&ndash;561, 2008.<a href="#532aa440-ee11-49ea-b4df-7a934e1290f8" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="532aa440-ee11-49ea-b4df-7a934e1290f8"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{nakshatrala2008fem,
+    Author = "Nakshatrala, K. B. and Masud, A. and Hjelmstad, K. D.",
+    Journal = "Computational Mechanics",
+    Title = "On finite element formulations for nearly incompressible linear elasticity",
+    Volume = "41",
+    Pages = "547-561",
+    Year = "2008"
+}
+</code></pre></div></div></li></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#4d5a24c4-c801-4471-8314-1cce74eeb49f" class="tooltipped" data-position="left" data-tooltip="Theory">Theory</a></li><li><a href="#197c5924-b5fd-4653-9197-c97b3e18727a" class="tooltipped" data-position="left" data-tooltip="Usage">Usage</a></li><li><a href="#7a278698-4e05-4cb6-a806-4805fd944b90" class="tooltipped" data-position="left" data-tooltip="Verification of locking correction on Cook ' s membrane">Verification of locking correction on Cook ' s membrane</a></li><li><a href="#eaf73bb9-da6f-49f9-b35e-18fb28792ef0" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

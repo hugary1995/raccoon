@@ -1,0 +1,1487 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>Visualization of Tensor Components|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="abd43b8a-1f0d-4213-b716-2fd69f9d600e"><i class="material-icons">menu</i></a><ul class="sidenav" id="abd43b8a-1f0d-4213-b716-2fd69f9d600e"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><span class="breadcrumb">modules</span><a href="." class="breadcrumb">tensor_mechanics</a><a href="#" class="breadcrumb">VisualizingTensors</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="3999fb6d-b36e-4620-9eda-73058c293787" data-section-level="1" data-section-text="Visualization of Tensor Components"><h1 id="visualization-of-tensor-components">Visualization of Tensor Components</h1><p>To visualize stresses, strains, and elasticity tensor components, the material objects must be outputted to auxiliary variables using auxiliary kernels available. RankTwoAux is used to output a RankTwoTensor component, and RankFourAux is used to output a RankFourTensor component.</p><section class="scrollspy" id="be184e6c-cca1-4b22-8784-2208e15966b2" data-section-level="2" data-section-text="AuxVariable Creation"><h2 id="auxvariable-creation">AuxVariable Creation</h2><p>As an example, <span tex="\sigma_{11}, \epsilon_{22}" bookmark="moose-equation-5a6f7955-18c9-4593-9f2b-d6eab5f5be66" recursive="True" class="moose-katex-inline-equation" id="moose-equation-5a6f7955-18c9-4593-9f2b-d6eab5f5be66"><script>var element = document.getElementById("moose-equation-5a6f7955-18c9-4593-9f2b-d6eab5f5be66");katex.render("\\sigma_{11}, \\epsilon_{22}", element, {displayMode:false,throwOnError:false});</script></span>, and <span tex="C_{1122}" bookmark="moose-equation-eb02d821-3168-4a4f-9d4a-afbdfbaf2c19" recursive="True" class="moose-katex-inline-equation" id="moose-equation-eb02d821-3168-4a4f-9d4a-afbdfbaf2c19"><script>var element = document.getElementById("moose-equation-eb02d821-3168-4a4f-9d4a-afbdfbaf2c19");katex.render("C_{1122}", element, {displayMode:false,throwOnError:false});</script></span> can be visualized by first declaring auxiliary variables for them in the input file.</p><p>Stress <span tex="\sigma_{xx}" bookmark="moose-equation-f8848601-e683-4d37-918c-c118c18cf381" recursive="True" class="moose-katex-inline-equation" id="moose-equation-f8848601-e683-4d37-918c-c118c18cf381"><script>var element = document.getElementById("moose-equation-f8848601-e683-4d37-918c-c118c18cf381");katex.render("\\sigma_{xx}", element, {displayMode:false,throwOnError:false});</script></span> component:</p><pre class="moose-pre"><code class="language-text">[./s11_aux]
+  order = CONSTANT
+  family = MONOMIAL
+[../]
+</code></pre><a href="#114b184a-e6dc-40b2-8234-f7a03271dbd0" class="modal-trigger">(../moose/modules/combined/test/tests/eigenstrain/inclusion.i)</a><div class="modal moose-modal" id="114b184a-e6dc-40b2-8234-f7a03271dbd0"><div class="modal-content"><h4>/home/gary/projects/moose/modules/combined/test/tests/eigenstrain/inclusion.i</h4><pre class="moose-pre"><code class="language-text"># This test allows comparison of simulation and analytical solution for a misfitting precipitate
+# using ComputeVariableEigenstrain for the simulation and the InclusionProperties material
+# for the analytical solution. Increasing mesh resolution will improve agreement.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 40
+  ny = 40
+  xmax = 1.5
+  ymax = 1.5
+  elem_type = QUAD4
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[AuxVariables]
+  [./s11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s12_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s11_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s12_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s22_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e12_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e11_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e12_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./fel_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./c]
+  [../]
+[]
+
+[AuxKernels]
+  [./matl_s11]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+    variable = s11_aux
+  [../]
+  [./matl_s12]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 1
+    variable = s12_aux
+  [../]
+  [./matl_s22]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+    variable = s22_aux
+  [../]
+  [./matl_s11_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 0
+    index_j = 0
+    variable = s11_an
+  [../]
+  [./matl_s12_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 0
+    index_j = 1
+    variable = s12_an
+  [../]
+  [./matl_s22_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 1
+    index_j = 1
+    variable = s22_an
+  [../]
+  [./matl_e11]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 0
+    index_j = 0
+    variable = e11_aux
+  [../]
+  [./matl_e12]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 0
+    index_j = 1
+    variable = e12_aux
+  [../]
+  [./matl_e22]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 1
+    index_j = 1
+    variable = e22_aux
+  [../]
+  [./matl_e11_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 0
+    index_j = 0
+    variable = e11_an
+  [../]
+  [./matl_e12_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 0
+    index_j = 1
+    variable = e12_an
+  [../]
+  [./matl_e22_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 1
+    index_j = 1
+    variable = e22_an
+  [../]
+  [./matl_fel_an]
+    type = MaterialRealAux
+    variable = fel_an
+    property = fel_an_mat
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;1 1&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = 0
+  [../]
+  [./var_dependence]
+    type = DerivativeParsedMaterial
+    block = 0
+    function = 0.005*c^2
+    args = c
+    outputs = exodus
+    output_properties = &#x27;var_dep&#x27;
+    f_name = var_dep
+    enable_jit = true
+    derivative_order = 2
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableEigenstrain
+    block = 0
+    eigen_base = &#x27;1 1 0 0 0 0&#x27;
+    prefactor = var_dep
+    args = c
+    eigenstrain_name = eigenstrain
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y&#x27;
+    eigenstrain_names = eigenstrain
+  [../]
+  [./analytical]
+    type = InclusionProperties
+    a = 0.1
+    b = 0.1
+    lambda = 1
+    mu = 1
+    misfit_strains = &#x27;0.005 0.005&#x27;
+    strain_name = strain_an
+    stress_name = stress_an
+    energy_name = fel_an_mat
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left_x bottom_y&#x27;
+  [./bottom_y]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./left_x]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+  l_max_its = 30
+  nl_max_its = 10
+  nl_rel_tol = 1.0e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./c_IC]
+    int_width = 0.075
+    x1 = 0
+    y1 = 0
+    radius = 0.1
+    outvalue = 0
+    variable = c
+    invalue = 1
+    type = SmoothCircleIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>Strain <span tex="\epsilon_{yy}" bookmark="moose-equation-b13ff5be-5f7b-4763-98e6-2a5802b65ab5" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b13ff5be-5f7b-4763-98e6-2a5802b65ab5"><script>var element = document.getElementById("moose-equation-b13ff5be-5f7b-4763-98e6-2a5802b65ab5");katex.render("\\epsilon_{yy}", element, {displayMode:false,throwOnError:false});</script></span> component:</p><pre class="moose-pre"><code class="language-text">[./e22_aux]
+  order = CONSTANT
+  family = MONOMIAL
+[../]
+</code></pre><a href="#8739de07-05bc-45c1-bcca-f5e7b216ab18" class="modal-trigger">(../moose/modules/combined/test/tests/eigenstrain/variable.i)</a><div class="modal moose-modal" id="8739de07-05bc-45c1-bcca-f5e7b216ab18"><div class="modal-content"><h4>/home/gary/projects/moose/modules/combined/test/tests/eigenstrain/variable.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 20
+  ny = 20
+  xmax = 0.5
+  ymax = 0.5
+  elem_type = QUAD4
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[AuxVariables]
+  [./e11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./c]
+  [../]
+  [./eigen_strain00]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./matl_e11]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+    variable = e11_aux
+  [../]
+  [./matl_e22]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+    variable = e22_aux
+  [../]
+  [./eigen_strain00]
+    type = RankTwoAux
+    variable = eigen_strain00
+    rank_two_tensor = eigenstrain
+    index_j = 0
+    index_i = 0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;1 1&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = 0
+  [../]
+  [./var_dependence]
+    type = DerivativeParsedMaterial
+    block = 0
+    function = 0.5*c^2
+    args = c
+    outputs = exodus
+    output_properties = &#x27;var_dep&#x27;
+    f_name = var_dep
+    enable_jit = true
+    derivative_order = 2
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableEigenstrain
+    block = 0
+    eigen_base = &#x27;1 1 1 0 0 0&#x27;
+    prefactor = var_dep
+    args = c
+    eigenstrain_name = eigenstrain
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y&#x27;
+    eigenstrain_names = eigenstrain
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left_x bottom_y&#x27;
+  [./bottom_y]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./left_x]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./right_x]
+    type = PresetBC
+    variable = disp_x
+    boundary = right
+    value = 0
+  [../]
+  [./top_y]
+    type = PresetBC
+    variable = disp_y
+    boundary = top
+    value = 0.01
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+  l_max_its = 20
+  nl_max_its = 10
+  l_tol = 1.0e-4
+  nl_rel_tol = 1.0e-10
+  nl_abs_tol = 1.0e-50
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./c_IC]
+    int_width = 0.075
+    x1 = 0
+    y1 = 0
+    radius = 0.25
+    outvalue = 0
+    variable = c
+    invalue = 1
+    type = SmoothCircleIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>Elasticity Tensor <span tex="C_{1133}" bookmark="moose-equation-4b7abdf6-3967-4333-8237-d0d63ba60dbc" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4b7abdf6-3967-4333-8237-d0d63ba60dbc"><script>var element = document.getElementById("moose-equation-4b7abdf6-3967-4333-8237-d0d63ba60dbc");katex.render("C_{1133}", element, {displayMode:false,throwOnError:false});</script></span> component:</p><pre class="moose-pre"><code class="language-text">[./C1133_aux]
+  order = CONSTANT
+  family = MONOMIAL
+[../]
+</code></pre><a href="#2673ac55-3846-4df7-9bfd-67edfd76988c" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/elasticitytensor/composite.i)</a><div class="modal moose-modal" id="2673ac55-3846-4df7-9bfd-67edfd76988c"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/elasticitytensor/composite.i</h4><pre class="moose-pre"><code class="language-text"># This input file is designed to test the RankTwoAux and RankFourAux
+# auxkernels, which report values out of the Tensors used in materials
+# properties.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 20
+  xmax = 1
+[]
+
+[AuxVariables]
+  [./c]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = FunctionIC
+      function = x
+    [../]
+  [../]
+
+  [./C1111_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./C1122_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./C1133_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./C3313_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./dC1111_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./dC1122_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./dC1133_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./dC3313_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./d2C1111_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./d2C1122_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./d2C1133_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./d2C3313_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+#[Kernels]
+#  [./diff]
+#    type = Diffusion
+#    variable = diffused
+#  [../]
+#[]
+
+[AuxKernels]
+  [./matl_C1111]
+    type = RankFourAux
+    rank_four_tensor = elasticity_tensor
+    index_i = 0
+    index_j = 0
+    index_k = 0
+    index_l = 0
+    variable = C1111_aux
+    execute_on = initial
+  [../]
+
+   [./matl_C1122]
+    type = RankFourAux
+    rank_four_tensor = elasticity_tensor
+    index_i = 0
+    index_j = 0
+    index_k = 1
+    index_l = 1
+    variable = C1122_aux
+    execute_on = initial
+  [../]
+
+  [./matl_C1133]
+    type = RankFourAux
+    rank_four_tensor = elasticity_tensor
+    index_i = 0
+    index_j = 0
+    index_k = 2
+    index_l = 2
+    variable = C1133_aux
+    execute_on = initial
+  [../]
+
+  [./matl_C3313]
+    type = RankFourAux
+    rank_four_tensor = elasticity_tensor
+    index_i = 2
+    index_j = 2
+    index_k = 0
+    index_l = 2
+    variable = C3313_aux
+    execute_on = initial
+  [../]
+
+  [./matl_dC1111]
+    type = RankFourAux
+    rank_four_tensor = delasticity_tensor/dc
+    index_i = 0
+    index_j = 0
+    index_k = 0
+    index_l = 0
+    variable = dC1111_aux
+    execute_on = initial
+  [../]
+
+   [./matl_dC1122]
+    type = RankFourAux
+    rank_four_tensor = delasticity_tensor/dc
+    index_i = 0
+    index_j = 0
+    index_k = 1
+    index_l = 1
+    variable = dC1122_aux
+    execute_on = initial
+  [../]
+
+  [./matl_dC1133]
+    type = RankFourAux
+    rank_four_tensor = delasticity_tensor/dc
+    index_i = 0
+    index_j = 0
+    index_k = 2
+    index_l = 2
+    variable = dC1133_aux
+    execute_on = initial
+  [../]
+
+  [./matl_dC3313]
+    type = RankFourAux
+    rank_four_tensor = delasticity_tensor/dc
+    index_i = 2
+    index_j = 2
+    index_k = 0
+    index_l = 2
+    variable = dC3313_aux
+    execute_on = initial
+  [../]
+
+  [./matl_d2C1111]
+    type = RankFourAux
+    rank_four_tensor = d^2elasticity_tensor/dc^2
+    index_i = 0
+    index_j = 0
+    index_k = 0
+    index_l = 0
+    variable = d2C1111_aux
+    execute_on = initial
+  [../]
+
+   [./matl_d2C1122]
+    type = RankFourAux
+    rank_four_tensor = d^2elasticity_tensor/dc^2
+    index_i = 0
+    index_j = 0
+    index_k = 1
+    index_l = 1
+    variable = d2C1122_aux
+    execute_on = initial
+  [../]
+
+  [./matl_d2C1133]
+    type = RankFourAux
+    rank_four_tensor = d^2elasticity_tensor/dc^2
+    index_i = 0
+    index_j = 0
+    index_k = 2
+    index_l = 2
+    variable = d2C1133_aux
+    execute_on = initial
+  [../]
+
+  [./matl_d2C3313]
+    type = RankFourAux
+    rank_four_tensor = d^2elasticity_tensor/dc^2
+    index_i = 2
+    index_j = 2
+    index_k = 0
+    index_l = 2
+    variable = d2C3313_aux
+    execute_on = initial
+  [../]
+[]
+
+[Materials]
+  [./Ca]
+    type = ComputeElasticityTensor
+    base_name = Ca
+    block = 0
+    fill_method = symmetric21
+    C_ijkl =&#x27;1111 .1122 1133 1123 1113 1112 2222 2233 2223 2213 2212 3333 3323 3313 3312 2323 2313 2312 1313 1312 1212&#x27;
+  [../]
+  [./Cb]
+    type = ComputeElasticityTensor
+    base_name = Cb
+    block = 0
+    fill_method = symmetric21
+    C_ijkl =&#x27;.1111 1122 .1133 .1123 .1113 .1112 .2222 .2233 .2223 .2213 .2212 .3333 .3323 .3313 .3312 .2323 .2313 .2312 .1313 .1312 .1212&#x27;
+  [../]
+  [./Fa]
+    type = DerivativeParsedMaterial
+    block = 0
+    f_name = Fa
+    function = c^2
+    args = c
+  [../]
+  [./Fb]
+    type = DerivativeParsedMaterial
+    block = 0
+    f_name = Fb
+    function = (1-c)^3
+    args = c
+  [../]
+  [./C]
+    type = CompositeElasticityTensor
+    block = 0
+    args = c
+    tensors = &#x27;Ca Cb&#x27;
+    weights = &#x27;Fa Fb&#x27;
+  [../]
+[]
+[Problem]
+  kernel_coverage_check = false
+  solve = false
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="4c9f7519-eefb-4ae8-831c-cf2b2c4fb97a" data-section-level="2" data-section-text="AuxKernel Creation"><h2 id="auxkernel-creation">AuxKernel Creation</h2><p>Next, the appropriate auxiliary kernels are used.  These elements require the name of the material property of which you wish to see the field value and the indices of the tensor value (either 0, 1, or 2) in addition to the name of the output AuxVariable.  The corresponding AuxKernels blocks for each of the AuxVariables are given below.</p><p>Stress <span tex="\sigma_{xx}" bookmark="moose-equation-a3f13885-c84a-4246-bbc3-1acf50fd37bf" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a3f13885-c84a-4246-bbc3-1acf50fd37bf"><script>var element = document.getElementById("moose-equation-a3f13885-c84a-4246-bbc3-1acf50fd37bf");katex.render("\\sigma_{xx}", element, {displayMode:false,throwOnError:false});</script></span> component:</p><pre class="moose-pre"><code class="language-text">[./matl_s11]
+  type = RankTwoAux
+  rank_two_tensor = stress
+  index_i = 0
+  index_j = 0
+  variable = s11_aux
+[../]
+</code></pre><a href="#6fcc3ab9-2188-4b22-80f0-aeae11b63d38" class="modal-trigger">(../moose/modules/combined/test/tests/eigenstrain/inclusion.i)</a><div class="modal moose-modal" id="6fcc3ab9-2188-4b22-80f0-aeae11b63d38"><div class="modal-content"><h4>/home/gary/projects/moose/modules/combined/test/tests/eigenstrain/inclusion.i</h4><pre class="moose-pre"><code class="language-text"># This test allows comparison of simulation and analytical solution for a misfitting precipitate
+# using ComputeVariableEigenstrain for the simulation and the InclusionProperties material
+# for the analytical solution. Increasing mesh resolution will improve agreement.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 40
+  ny = 40
+  xmax = 1.5
+  ymax = 1.5
+  elem_type = QUAD4
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[AuxVariables]
+  [./s11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s12_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s11_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s12_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s22_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e12_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e11_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e12_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./fel_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./c]
+  [../]
+[]
+
+[AuxKernels]
+  [./matl_s11]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+    variable = s11_aux
+  [../]
+  [./matl_s12]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 1
+    variable = s12_aux
+  [../]
+  [./matl_s22]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+    variable = s22_aux
+  [../]
+  [./matl_s11_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 0
+    index_j = 0
+    variable = s11_an
+  [../]
+  [./matl_s12_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 0
+    index_j = 1
+    variable = s12_an
+  [../]
+  [./matl_s22_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 1
+    index_j = 1
+    variable = s22_an
+  [../]
+  [./matl_e11]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 0
+    index_j = 0
+    variable = e11_aux
+  [../]
+  [./matl_e12]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 0
+    index_j = 1
+    variable = e12_aux
+  [../]
+  [./matl_e22]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 1
+    index_j = 1
+    variable = e22_aux
+  [../]
+  [./matl_e11_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 0
+    index_j = 0
+    variable = e11_an
+  [../]
+  [./matl_e12_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 0
+    index_j = 1
+    variable = e12_an
+  [../]
+  [./matl_e22_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 1
+    index_j = 1
+    variable = e22_an
+  [../]
+  [./matl_fel_an]
+    type = MaterialRealAux
+    variable = fel_an
+    property = fel_an_mat
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;1 1&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = 0
+  [../]
+  [./var_dependence]
+    type = DerivativeParsedMaterial
+    block = 0
+    function = 0.005*c^2
+    args = c
+    outputs = exodus
+    output_properties = &#x27;var_dep&#x27;
+    f_name = var_dep
+    enable_jit = true
+    derivative_order = 2
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableEigenstrain
+    block = 0
+    eigen_base = &#x27;1 1 0 0 0 0&#x27;
+    prefactor = var_dep
+    args = c
+    eigenstrain_name = eigenstrain
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y&#x27;
+    eigenstrain_names = eigenstrain
+  [../]
+  [./analytical]
+    type = InclusionProperties
+    a = 0.1
+    b = 0.1
+    lambda = 1
+    mu = 1
+    misfit_strains = &#x27;0.005 0.005&#x27;
+    strain_name = strain_an
+    stress_name = stress_an
+    energy_name = fel_an_mat
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left_x bottom_y&#x27;
+  [./bottom_y]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./left_x]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+  l_max_its = 30
+  nl_max_its = 10
+  nl_rel_tol = 1.0e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./c_IC]
+    int_width = 0.075
+    x1 = 0
+    y1 = 0
+    radius = 0.1
+    outvalue = 0
+    variable = c
+    invalue = 1
+    type = SmoothCircleIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>Strain <span tex="\epsilon_{yy}" bookmark="moose-equation-673eb356-4985-48c9-b38c-675a6a1562e2" recursive="True" class="moose-katex-inline-equation" id="moose-equation-673eb356-4985-48c9-b38c-675a6a1562e2"><script>var element = document.getElementById("moose-equation-673eb356-4985-48c9-b38c-675a6a1562e2");katex.render("\\epsilon_{yy}", element, {displayMode:false,throwOnError:false});</script></span> component:</p><pre class="moose-pre"><code class="language-text">[./matl_e22]
+  type = RankTwoAux
+  rank_two_tensor = stress
+  index_i = 1
+  index_j = 1
+  variable = e22_aux
+[../]
+</code></pre><a href="#d19093a3-6600-4483-afd7-cd8b23ff1f0d" class="modal-trigger">(../moose/modules/combined/test/tests/eigenstrain/variable.i)</a><div class="modal moose-modal" id="d19093a3-6600-4483-afd7-cd8b23ff1f0d"><div class="modal-content"><h4>/home/gary/projects/moose/modules/combined/test/tests/eigenstrain/variable.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 20
+  ny = 20
+  xmax = 0.5
+  ymax = 0.5
+  elem_type = QUAD4
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[AuxVariables]
+  [./e11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./c]
+  [../]
+  [./eigen_strain00]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./matl_e11]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+    variable = e11_aux
+  [../]
+  [./matl_e22]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+    variable = e22_aux
+  [../]
+  [./eigen_strain00]
+    type = RankTwoAux
+    variable = eigen_strain00
+    rank_two_tensor = eigenstrain
+    index_j = 0
+    index_i = 0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;1 1&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = 0
+  [../]
+  [./var_dependence]
+    type = DerivativeParsedMaterial
+    block = 0
+    function = 0.5*c^2
+    args = c
+    outputs = exodus
+    output_properties = &#x27;var_dep&#x27;
+    f_name = var_dep
+    enable_jit = true
+    derivative_order = 2
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableEigenstrain
+    block = 0
+    eigen_base = &#x27;1 1 1 0 0 0&#x27;
+    prefactor = var_dep
+    args = c
+    eigenstrain_name = eigenstrain
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y&#x27;
+    eigenstrain_names = eigenstrain
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left_x bottom_y&#x27;
+  [./bottom_y]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./left_x]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./right_x]
+    type = PresetBC
+    variable = disp_x
+    boundary = right
+    value = 0
+  [../]
+  [./top_y]
+    type = PresetBC
+    variable = disp_y
+    boundary = top
+    value = 0.01
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+  l_max_its = 20
+  nl_max_its = 10
+  l_tol = 1.0e-4
+  nl_rel_tol = 1.0e-10
+  nl_abs_tol = 1.0e-50
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./c_IC]
+    int_width = 0.075
+    x1 = 0
+    y1 = 0
+    radius = 0.25
+    outvalue = 0
+    variable = c
+    invalue = 1
+    type = SmoothCircleIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>Elasticity Tensor <span tex="C_{1133}" bookmark="moose-equation-a1f02ec1-f146-41dc-aa20-4c0271a3b598" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a1f02ec1-f146-41dc-aa20-4c0271a3b598"><script>var element = document.getElementById("moose-equation-a1f02ec1-f146-41dc-aa20-4c0271a3b598");katex.render("C_{1133}", element, {displayMode:false,throwOnError:false});</script></span> component:</p><pre class="moose-pre"><code class="language-text">[./matl_C1133]
+  type = RankFourAux
+  rank_four_tensor = elasticity_tensor
+  index_i = 0
+  index_j = 0
+  index_k = 2
+  index_l = 2
+  variable = C1133_aux
+  execute_on = initial
+[../]
+</code></pre><a href="#952ae4b2-33a1-44b8-87a8-2b50464fdf1e" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/elasticitytensor/composite.i)</a><div class="modal moose-modal" id="952ae4b2-33a1-44b8-87a8-2b50464fdf1e"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/elasticitytensor/composite.i</h4><pre class="moose-pre"><code class="language-text"># This input file is designed to test the RankTwoAux and RankFourAux
+# auxkernels, which report values out of the Tensors used in materials
+# properties.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 20
+  xmax = 1
+[]
+
+[AuxVariables]
+  [./c]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = FunctionIC
+      function = x
+    [../]
+  [../]
+
+  [./C1111_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./C1122_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./C1133_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./C3313_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./dC1111_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./dC1122_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./dC1133_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./dC3313_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./d2C1111_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./d2C1122_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./d2C1133_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./d2C3313_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+#[Kernels]
+#  [./diff]
+#    type = Diffusion
+#    variable = diffused
+#  [../]
+#[]
+
+[AuxKernels]
+  [./matl_C1111]
+    type = RankFourAux
+    rank_four_tensor = elasticity_tensor
+    index_i = 0
+    index_j = 0
+    index_k = 0
+    index_l = 0
+    variable = C1111_aux
+    execute_on = initial
+  [../]
+
+   [./matl_C1122]
+    type = RankFourAux
+    rank_four_tensor = elasticity_tensor
+    index_i = 0
+    index_j = 0
+    index_k = 1
+    index_l = 1
+    variable = C1122_aux
+    execute_on = initial
+  [../]
+
+  [./matl_C1133]
+    type = RankFourAux
+    rank_four_tensor = elasticity_tensor
+    index_i = 0
+    index_j = 0
+    index_k = 2
+    index_l = 2
+    variable = C1133_aux
+    execute_on = initial
+  [../]
+
+  [./matl_C3313]
+    type = RankFourAux
+    rank_four_tensor = elasticity_tensor
+    index_i = 2
+    index_j = 2
+    index_k = 0
+    index_l = 2
+    variable = C3313_aux
+    execute_on = initial
+  [../]
+
+  [./matl_dC1111]
+    type = RankFourAux
+    rank_four_tensor = delasticity_tensor/dc
+    index_i = 0
+    index_j = 0
+    index_k = 0
+    index_l = 0
+    variable = dC1111_aux
+    execute_on = initial
+  [../]
+
+   [./matl_dC1122]
+    type = RankFourAux
+    rank_four_tensor = delasticity_tensor/dc
+    index_i = 0
+    index_j = 0
+    index_k = 1
+    index_l = 1
+    variable = dC1122_aux
+    execute_on = initial
+  [../]
+
+  [./matl_dC1133]
+    type = RankFourAux
+    rank_four_tensor = delasticity_tensor/dc
+    index_i = 0
+    index_j = 0
+    index_k = 2
+    index_l = 2
+    variable = dC1133_aux
+    execute_on = initial
+  [../]
+
+  [./matl_dC3313]
+    type = RankFourAux
+    rank_four_tensor = delasticity_tensor/dc
+    index_i = 2
+    index_j = 2
+    index_k = 0
+    index_l = 2
+    variable = dC3313_aux
+    execute_on = initial
+  [../]
+
+  [./matl_d2C1111]
+    type = RankFourAux
+    rank_four_tensor = d^2elasticity_tensor/dc^2
+    index_i = 0
+    index_j = 0
+    index_k = 0
+    index_l = 0
+    variable = d2C1111_aux
+    execute_on = initial
+  [../]
+
+   [./matl_d2C1122]
+    type = RankFourAux
+    rank_four_tensor = d^2elasticity_tensor/dc^2
+    index_i = 0
+    index_j = 0
+    index_k = 1
+    index_l = 1
+    variable = d2C1122_aux
+    execute_on = initial
+  [../]
+
+  [./matl_d2C1133]
+    type = RankFourAux
+    rank_four_tensor = d^2elasticity_tensor/dc^2
+    index_i = 0
+    index_j = 0
+    index_k = 2
+    index_l = 2
+    variable = d2C1133_aux
+    execute_on = initial
+  [../]
+
+  [./matl_d2C3313]
+    type = RankFourAux
+    rank_four_tensor = d^2elasticity_tensor/dc^2
+    index_i = 2
+    index_j = 2
+    index_k = 0
+    index_l = 2
+    variable = d2C3313_aux
+    execute_on = initial
+  [../]
+[]
+
+[Materials]
+  [./Ca]
+    type = ComputeElasticityTensor
+    base_name = Ca
+    block = 0
+    fill_method = symmetric21
+    C_ijkl =&#x27;1111 .1122 1133 1123 1113 1112 2222 2233 2223 2213 2212 3333 3323 3313 3312 2323 2313 2312 1313 1312 1212&#x27;
+  [../]
+  [./Cb]
+    type = ComputeElasticityTensor
+    base_name = Cb
+    block = 0
+    fill_method = symmetric21
+    C_ijkl =&#x27;.1111 1122 .1133 .1123 .1113 .1112 .2222 .2233 .2223 .2213 .2212 .3333 .3323 .3313 .3312 .2323 .2313 .2312 .1313 .1312 .1212&#x27;
+  [../]
+  [./Fa]
+    type = DerivativeParsedMaterial
+    block = 0
+    f_name = Fa
+    function = c^2
+    args = c
+  [../]
+  [./Fb]
+    type = DerivativeParsedMaterial
+    block = 0
+    f_name = Fb
+    function = (1-c)^3
+    args = c
+  [../]
+  [./C]
+    type = CompositeElasticityTensor
+    block = 0
+    args = c
+    tensors = &#x27;Ca Cb&#x27;
+    weights = &#x27;Fa Fb&#x27;
+  [../]
+[]
+[Problem]
+  kernel_coverage_check = false
+  solve = false
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>See the documentation for <a href="../../source/auxkernels/RankTwoAux.html">RankTwoAux</a> and <a href="../../source/auxkernels/RankFourAux.html">RankFourAux</a> for more details about the available  options for saving quantities from these tensor types.</p></section><section class="scrollspy" id="d0635843-ea6f-4e6a-b188-d40bac65041d" data-section-level="2" data-section-text="Postprocessor Usage"><h2 id="postprocessor-usage">Postprocessor Usage</h2><p>To save these values to a CSV file or to the console for further data analysis, the auxiliary variables can be output as postprocessors. A complete list of the <a href="../../syntax/Postprocessors/index.html">Postprocessor System</a> is available in the MOOSE documentation, but the most commonly used option is <a href="../../source/postprocessors/ElementAverageValue.html">ElementAverageValue</a>. </p></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#be184e6c-cca1-4b22-8784-2208e15966b2" class="tooltipped" data-position="left" data-tooltip="AuxVariable Creation">AuxVariable Creation</a></li><li><a href="#4c9f7519-eefb-4ae8-831c-cf2b2c4fb97a" class="tooltipped" data-position="left" data-tooltip="AuxKernel Creation">AuxKernel Creation</a></li><li><a href="#d0635843-ea6f-4e6a-b188-d40bac65041d" class="tooltipped" data-position="left" data-tooltip="Postprocessor Usage">Postprocessor Usage</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

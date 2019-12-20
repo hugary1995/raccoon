@@ -1,0 +1,128 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>RANFSNormalMechanicalContact|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="9b483512-1488-4abb-a08b-11b2544f8fbc"><i class="material-icons">menu</i></a><ul class="sidenav" id="9b483512-1488-4abb-a08b-11b2544f8fbc"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">constraints</span><a href="#" class="breadcrumb">RANFSNormalMechanicalContact</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="6b9bb9ee-7047-4c17-a1ea-9f112602655d" data-section-level="1" data-section-text="RANFSNormalMechanicalContact"><h1 id="ranfsnormalmechanicalcontact">RANFSNormalMechanicalContact</h1><p>Enforces the zero penetration constraint using the Reduced Active Nonlinear Function Set (RANFS) scheme. The algorithm is as follows: do a min comparison between the penetration and the Lagrange Multiplier (LM) associated with the zero penetration constraint. If the penetration (properly signed) is less than the LM, then we replace the non-linear residual equation for the slave node with the zero-penetration constraint equation (represented simply by the gap). In this way the gap is required to be zero.</p><p>Advantages of the RANFS scheme:</p><ul class="browser-default"><li><p>No Lagrange Multipliers, e.g. no saddle-point and consequently we are free to use preconditioners like AMG </p></li><li><p>No penalty term, so no introduction of ill conditioning into the matrix </p></li><li><p>Exact satisfaction of the constraints</p></li></ul><p>The <code>RANFSNormalMechanicalContact</code> object includes ping-ponging protection. It detects when a slave node has alternated back and forth between two different element faces a sufficient number of times (currently face1-face2-face1-face2-face1) and then fixes the issue by applying more RANFS Explicitly, we apply a number of equality constraints equal to the mesh dimension tying together the locations of the slave node and the nearest master node (which we assert is a node that both master faces involved in the ping-pong share). This ping-ponging protection is necessary for solving step 19 of the <a href="#4d38c5ca-f2fc-41a0-ac32-51bd20934c12" class="modal-trigger"><code>full-bouncing-block-ranfs</code></a> test. Without the protection the solve does not converge and the time-step gets cut.</p><div class="modal moose-modal" id="4d38c5ca-f2fc-41a0-ac32-51bd20934c12"><div class="modal-content"><h4>/home/gary/projects/moose/modules/contact/test/tests/bouncing-block-contact/bouncing-block-ranfs.i</h4><pre class="moose-pre"><code class="language-text">starting_point = 2e-1
+offset = 1e-2
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+  diffusivity = 1e0
+[]
+
+[Mesh]
+  file = long-bottom-block-no-lower-d.e
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+[]
+
+[ICs]
+  [./disp_y]
+    block = 2
+    variable = disp_y
+    value = ${fparse starting_point + offset}
+    type = ConstantIC
+  [../]
+[]
+
+[Kernels]
+  [./disp_x]
+    type = MatDiffusion
+    variable = disp_x
+  [../]
+  [./disp_y]
+    type = MatDiffusion
+    variable = disp_y
+  [../]
+[]
+
+
+[Constraints]
+  [./disp_x]
+    type = RANFSNormalMechanicalContact
+    slave = 10
+    master = 20
+    variable = disp_x
+    master_variable = disp_x
+    component = x
+  [../]
+  [./disp_y]
+    type = RANFSNormalMechanicalContact
+    slave = 10
+    master = 20
+    variable = disp_y
+    master_variable = disp_y
+    component = y
+  [../]
+[]
+
+[BCs]
+  [./botx]
+    type = DirichletBC
+    variable = disp_x
+    boundary = 40
+    value = 0.0
+  [../]
+  [./boty]
+    type = DirichletBC
+    variable = disp_y
+    boundary = 40
+    value = 0.0
+  [../]
+  [./topy]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = 30
+    function = &#x27;${starting_point} * cos(2 * pi / 40 * t) + ${offset}&#x27;
+  [../]
+  [./leftx]
+    type = FunctionDirichletBC
+    variable = disp_x
+    boundary = 50
+    function = &#x27;1e-2 * t&#x27;
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  end_time = 200
+  dt = 5
+  dtmin = 5
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options = &#x27;-snes_converged_reason -ksp_converged_reason&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -mat_mffd_err&#x27;
+  petsc_options_value = &#x27;hypre    boomeramg      1e-5&#x27;
+  l_max_its = 30
+  nl_max_its = 20
+  line_search = &#x27;none&#x27;
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Outputs]
+  [exo]
+    type = Exodus
+  []
+  checkpoint = true
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Postprocessors]
+  [./num_nl]
+    type = NumNonlinearIterations
+  [../]
+  [./cumulative]
+    type = CumulativeValuePostprocessor
+    postprocessor = num_nl
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>Applies the Reduced Active Nonlinear Function Set scheme in which the slave node&#x27;s non-linear residual function is replaced by the zero penetration constraint equation when the constraint is active</p><section class="scrollspy" id="00d63a2f-0459-4be1-bbb9-c87a1720fd7e" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="ec44a053-0421-4c5b-95fe-fc33645319f6" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">component</span><span class="moose-parameter-header-description">The force component constraint that this object is supplying</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>x y z</p><p class="moose-parameter-description"><span>Description:</span>The force component constraint that this object is supplying</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements appropriate for the simulation geometry and coordinate system</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements appropriate for the simulation geometry and coordinate system</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">master</span><span class="moose-parameter-header-description">The boundary ID associated with the master side</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>BoundaryName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The boundary ID associated with the master side</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">master_variable</span><span class="moose-parameter-header-description">The variable on the master side of the domain</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The variable on the master side of the domain</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">slave</span><span class="moose-parameter-header-description">The boundary ID associated with the slave side</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>BoundaryName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The boundary ID associated with the slave side</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this constraint is applied to.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this constraint is applied to.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="6ee3f57a-eb28-4a97-b166-2aeebedb759e" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">execute_on</span><span class="moose-parameter-header-default">LINEAR</span><span class="moose-parameter-header-description">The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>LINEAR</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>ExecFlagEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE INITIAL LINEAR NONLINEAR TIMESTEP_END TIMESTEP_BEGIN FINAL CUSTOM</p><p class="moose-parameter-description"><span>Description:</span>The list of flag(s) indicating when this object should be executed, the available options include NONE, INITIAL, LINEAR, NONLINEAR, TIMESTEP_END, TIMESTEP_BEGIN, FINAL, CUSTOM.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">normal_smoothing_distance</span><span class="moose-parameter-header-description">Distance from edge in parametric coordinates over which to smooth contact normal</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Distance from edge in parametric coordinates over which to smooth contact normal</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">normal_smoothing_method</span><span class="moose-parameter-header-description">Method to use to smooth normals (edge_based|nodal_normal_based)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Method to use to smooth normals (edge_based|nodal_normal_based)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">order</span><span class="moose-parameter-header-default">FIRST</span><span class="moose-parameter-header-description">The finite element order used for projections</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>FIRST</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>FIRST SECOND THIRD FOURTH</p><p class="moose-parameter-description"><span>Description:</span>The finite element order used for projections</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">tangential_tolerance</span><span class="moose-parameter-header-description">Tangential distance to extend edges of contact surfaces</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Tangential distance to extend edges of contact surfaces</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="8e5894b4-f9e6-4a7d-92b8-7928d4644e7e" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="16b37f86-962b-4bb5-875c-9db9c1d88034" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section><section class="scrollspy" id="2b22bb28-4e64-4579-bae6-291dc473be9e" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#00d63a2f-0459-4be1-bbb9-c87a1720fd7e" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#2b22bb28-4e64-4579-bae6-291dc473be9e" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

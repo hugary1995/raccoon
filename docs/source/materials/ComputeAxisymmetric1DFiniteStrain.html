@@ -1,0 +1,400 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>Compute Axisymmetric 1 D Finite Strain|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="20fba557-378d-41ca-9494-282fbf75a2b8"><i class="material-icons">menu</i></a><ul class="sidenav" id="20fba557-378d-41ca-9494-282fbf75a2b8"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">materials</span><a href="#" class="breadcrumb">ComputeAxisymmetric1DFiniteStrain</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="49294c1b-2051-4a59-bd90-695ca4775995" data-section-level="1" data-section-text="Compute Axisymmetric 1 D Finite Strain"><h1 id="compute-axisymmetric-1-d-finite-strain">Compute Axisymmetric 1D Finite Strain</h1><p>Compute a strain increment and rotation increment for finite strains in an axisymmetric 1D problem</p><section class="scrollspy" id="d96a9d44-5b60-4d19-938e-02e2f4a3772a" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The material <code>ComputeAxisymmetric1DFiniteStrain</code> calculates the finite strain for 1D Axisymmetric systems and is intended for use with <a href="../../modules/tensor_mechanics/generalized_plane_strain.html">Generalized Plane Strain</a> simulations. This material assumes symmetry about the <span tex="z" bookmark="moose-equation-24dcf438-f8b5-4eef-9871-e6847be15a07" recursive="True" class="moose-katex-inline-equation" id="moose-equation-24dcf438-f8b5-4eef-9871-e6847be15a07"><script>var element = document.getElementById("moose-equation-24dcf438-f8b5-4eef-9871-e6847be15a07");katex.render("z", element, {displayMode:false,throwOnError:false});</script></span>-axis. This &#x27;strain calculator&#x27; material computes the strain within the cylindrical coordinate system and relies on the specialized <a href="../kernels/StressDivergenceRZTensors.html">Axisymmetric RZ kernel</a> to handle the stress divergence calcuation.</p><div class="card moose-alert moose-alert-warning"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">warning:</span>Symmetry Assumed About the <span tex="z" bookmark="moose-equation-a4c6f7ce-3213-4412-a715-fa10709a7001" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a4c6f7ce-3213-4412-a715-fa10709a7001"><script>var element = document.getElementById("moose-equation-a4c6f7ce-3213-4412-a715-fa10709a7001");katex.render("z", element, {displayMode:false,throwOnError:false});</script></span>-axis</div><div class="card-content"><div class="moose-alert-content"><p><p>The axis of symmetry must lie along the <span tex="z" bookmark="moose-equation-97769251-66ea-46af-bd57-b3b3c340f571" recursive="True" class="moose-katex-inline-equation" id="moose-equation-97769251-66ea-46af-bd57-b3b3c340f571"><script>var element = document.getElementById("moose-equation-97769251-66ea-46af-bd57-b3b3c340f571");katex.render("z", element, {displayMode:false,throwOnError:false});</script></span>-axis in a <span tex="\left(r, z, \theta \right)" bookmark="moose-equation-75e1de36-ed06-4f93-9e89-d5206363ca57" recursive="True" class="moose-katex-inline-equation" id="moose-equation-75e1de36-ed06-4f93-9e89-d5206363ca57"><script>var element = document.getElementById("moose-equation-75e1de36-ed06-4f93-9e89-d5206363ca57");katex.render("\\left(r, z, \\theta \\right)", element, {displayMode:false,throwOnError:false});</script></span> cylindrical coordinate system. This symmetry orientation is required for the calculation of the residual and of the jacobian. See <a href="../kernels/StressDivergenceRZTensors.html">StressDivergenceRZTensors</a> for the residual equation and the germane discussion.</p></p></div></div></div></section><section class="scrollspy" id="9c364bd4-cf00-4084-8360-a52ffe557123" data-section-level="2" data-section-text="1 D Axisymmetric Strain Formulation"><h2 id="1-d-axisymmetric-strain-formulation">1D Axisymmetric Strain Formulation</h2><p>The axisymmetric model uses the cylindrical coordinates, <span tex="r" bookmark="moose-equation-577ee11e-fc7a-4ab3-a82c-0f75f0daa0ea" recursive="True" class="moose-katex-inline-equation" id="moose-equation-577ee11e-fc7a-4ab3-a82c-0f75f0daa0ea"><script>var element = document.getElementById("moose-equation-577ee11e-fc7a-4ab3-a82c-0f75f0daa0ea");katex.render("r", element, {displayMode:false,throwOnError:false});</script></span>, <span tex="z" bookmark="moose-equation-7fb01de7-5756-4a76-9722-4ee078fdf25d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-7fb01de7-5756-4a76-9722-4ee078fdf25d"><script>var element = document.getElementById("moose-equation-7fb01de7-5756-4a76-9722-4ee078fdf25d");katex.render("z", element, {displayMode:false,throwOnError:false});</script></span>, and <span tex="\theta" bookmark="moose-equation-45d0aa58-340e-49c0-a466-abec4b331bab" recursive="True" class="moose-katex-inline-equation" id="moose-equation-45d0aa58-340e-49c0-a466-abec4b331bab"><script>var element = document.getElementById("moose-equation-45d0aa58-340e-49c0-a466-abec4b331bab");katex.render("\\theta", element, {displayMode:false,throwOnError:false});</script></span>, where the linear section formed by the <span tex="r" bookmark="moose-equation-642bc217-8074-4c32-be44-169e3f567814" recursive="True" class="moose-katex-inline-equation" id="moose-equation-642bc217-8074-4c32-be44-169e3f567814"><script>var element = document.getElementById("moose-equation-642bc217-8074-4c32-be44-169e3f567814");katex.render("r", element, {displayMode:false,throwOnError:false});</script></span> axis is rotated about the <span tex="z" bookmark="moose-equation-c190b107-f38e-4793-adb5-43b0b90a4e87" recursive="True" class="moose-katex-inline-equation" id="moose-equation-c190b107-f38e-4793-adb5-43b0b90a4e87"><script>var element = document.getElementById("moose-equation-c190b107-f38e-4793-adb5-43b0b90a4e87");katex.render("z", element, {displayMode:false,throwOnError:false});</script></span> axis in the <span tex="\theta" bookmark="moose-equation-0ae55679-e0a5-4366-bb3b-af28d72f5b89" recursive="True" class="moose-katex-inline-equation" id="moose-equation-0ae55679-e0a5-4366-bb3b-af28d72f5b89"><script>var element = document.getElementById("moose-equation-0ae55679-e0a5-4366-bb3b-af28d72f5b89");katex.render("\\theta", element, {displayMode:false,throwOnError:false});</script></span> direction. The incremental deformation gradient for the 1D axisymmetric system is defined as <span class="moose-katex-block-equation"><span tex="\hat{\boldsymbol{F}} = \boldsymbol{A} : \bar{\boldsymbol{F}}^{-1} + \boldsymbol{I}" label="eqn:incremental_deformation_grad" number="1" bookmark="moose-equation-4805e3c0-5d85-468d-864a-bffac0563692" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-4805e3c0-5d85-468d-864a-bffac0563692"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-4805e3c0-5d85-468d-864a-bffac0563692");katex.render("     \\hat{\\boldsymbol{F}} = \\boldsymbol{A} : \\bar{\\boldsymbol{F}}^{-1} + \\boldsymbol{I}", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="\boldsymbol{I}" bookmark="moose-equation-8a7745e4-4fd0-450c-9e57-882d3bdb85f8" recursive="True" class="moose-katex-inline-equation" id="moose-equation-8a7745e4-4fd0-450c-9e57-882d3bdb85f8"><script>var element = document.getElementById("moose-equation-8a7745e4-4fd0-450c-9e57-882d3bdb85f8");katex.render("\\boldsymbol{I}", element, {displayMode:false,throwOnError:false});</script></span> is the Rank-2 identity tensor, and the deformation gradient, <span tex="\boldsymbol{A}" bookmark="moose-equation-25a4bfe2-70f1-4cf2-8a3d-6ca36c33d44c" recursive="True" class="moose-katex-inline-equation" id="moose-equation-25a4bfe2-70f1-4cf2-8a3d-6ca36c33d44c"><script>var element = document.getElementById("moose-equation-25a4bfe2-70f1-4cf2-8a3d-6ca36c33d44c");katex.render("\\boldsymbol{A}", element, {displayMode:false,throwOnError:false});</script></span>, and the old deformation gradient, <span tex="\bar{\boldsymbol{F}}" bookmark="moose-equation-32fa07de-36df-4355-942c-9ce820b092ec" recursive="True" class="moose-katex-inline-equation" id="moose-equation-32fa07de-36df-4355-942c-9ce820b092ec"><script>var element = document.getElementById("moose-equation-32fa07de-36df-4355-942c-9ce820b092ec");katex.render("\\bar{\\boldsymbol{F}}", element, {displayMode:false,throwOnError:false});</script></span>, are given as <span class="moose-katex-block-equation"><span tex="\boldsymbol{A} = \begin{bmatrix}                 \epsilon_{rr} & 0 & 0 \\                 0 & \epsilon_{zz} & 0 \\                 0 & 0 & \epsilon_{\theta \theta}               \end{bmatrix} + \boldsymbol{I}   \qquad \text{  and  } \qquad   \bar{\boldsymbol{F}} = \begin{bmatrix}                 \epsilon_{rr}|_{old} & 0 & 0 \\                 0 & \epsilon_{zz}|_{old} & 0 \\                 0 & 0 & \epsilon_{\theta \theta}|_{old}               \end{bmatrix} + \boldsymbol{I}" label="eqn:deform_grads" number="2" bookmark="moose-equation-2e69d28e-7a18-4e99-9ce7-60459915bbe7" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-2e69d28e-7a18-4e99-9ce7-60459915bbe7"></span><span class="moose-katex-equation-number">(2)</span><script>var element = document.getElementById("moose-equation-2e69d28e-7a18-4e99-9ce7-60459915bbe7");katex.render("     \\boldsymbol{A} = \\begin{bmatrix}                 \\epsilon_{rr} & 0 & 0 \\\\                 0 & \\epsilon_{zz} & 0 \\\\                 0 & 0 & \\epsilon_{\\theta \\theta}               \\end{bmatrix} + \\boldsymbol{I}   \\qquad \\text{  and  } \\qquad   \\bar{\\boldsymbol{F}} = \\begin{bmatrix}                 \\epsilon_{rr}|_{old} & 0 & 0 \\\\                 0 & \\epsilon_{zz}|_{old} & 0 \\\\                 0 & 0 & \\epsilon_{\\theta \\theta}|_{old}               \\end{bmatrix} + \\boldsymbol{I}", element, {displayMode:true,throwOnError:false});</script></span> Note that <span tex="\bar{\boldsymbol{F}}" bookmark="moose-equation-a3b47804-b810-453a-9f45-a3be2ee947a3" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a3b47804-b810-453a-9f45-a3be2ee947a3"><script>var element = document.getElementById("moose-equation-a3b47804-b810-453a-9f45-a3be2ee947a3");katex.render("\\bar{\\boldsymbol{F}}", element, {displayMode:false,throwOnError:false});</script></span> uses the values of the strain expressions from the previous time step. The components of the tensors in <a href="#moose-equation-2e69d28e-7a18-4e99-9ce7-60459915bbe7">Eq. (2)</a> are given as <span class="moose-katex-block-equation"><span tex="\begin{aligned}   \epsilon_{rr} & = u_{r,r} \\   \epsilon_{zz} & = \exp \left[ \epsilon|^{op} - 1.0  \right] \\   \epsilon_{\theta \theta} & = \frac{u_r}{X_r}   \end{aligned}" label="eqn:strain_components" number="3" bookmark="moose-equation-ad50e857-6663-428a-bae0-2d5261717f03" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-ad50e857-6663-428a-bae0-2d5261717f03"></span><span class="moose-katex-equation-number">(3)</span><script>var element = document.getElementById("moose-equation-ad50e857-6663-428a-bae0-2d5261717f03");katex.render("     \\begin{aligned}   \\epsilon_{rr} & = u_{r,r} \\\\   \\epsilon_{zz} & = \\exp \\left[ \\epsilon|^{op} - 1.0  \\right] \\\\   \\epsilon_{\\theta \\theta} & = \\frac{u_r}{X_r}   \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="\epsilon|^{op}" bookmark="moose-equation-8711d29e-652a-4654-81e0-be0730a5ad19" recursive="True" class="moose-katex-inline-equation" id="moose-equation-8711d29e-652a-4654-81e0-be0730a5ad19"><script>var element = document.getElementById("moose-equation-8711d29e-652a-4654-81e0-be0730a5ad19");katex.render("\\epsilon|^{op}", element, {displayMode:false,throwOnError:false});</script></span> is a prescribed out-of-plane strain value: this strain value can be given either as a scalar variable or a nonlinear variable. The <a href="../../modules/tensor_mechanics/generalized_plane_strain.html">Generalized Plane Strain</a> problems use scalar variables. The value of the strain <span tex="\epsilon_{\theta \theta}" bookmark="moose-equation-4ce2fab9-8485-4b50-b6eb-bc98da23260d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4ce2fab9-8485-4b50-b6eb-bc98da23260d"><script>var element = document.getElementById("moose-equation-4ce2fab9-8485-4b50-b6eb-bc98da23260d");katex.render("\\epsilon_{\\theta \\theta}", element, {displayMode:false,throwOnError:false});</script></span> depends on the displacement and position in the radial direction.</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note:</span>Notation Order Change</div><div class="card-content"><div class="moose-alert-content"><p><p>The axisymmetric system changes the order of the displacement vector from <span tex="(u_r, u_{\theta}, u_z)" bookmark="moose-equation-14ceec23-c87e-4157-821e-bd8255e94a63" recursive="True" class="moose-katex-inline-equation" id="moose-equation-14ceec23-c87e-4157-821e-bd8255e94a63"><script>var element = document.getElementById("moose-equation-14ceec23-c87e-4157-821e-bd8255e94a63");katex.render("(u_r, u_{\\theta}, u_z)", element, {displayMode:false,throwOnError:false});</script></span>, usually seen in textbooks, to <span tex="(u_r, u_z, u_{\theta})" bookmark="moose-equation-e7611d90-61fc-47d9-a127-2faa7ce16031" recursive="True" class="moose-katex-inline-equation" id="moose-equation-e7611d90-61fc-47d9-a127-2faa7ce16031"><script>var element = document.getElementById("moose-equation-e7611d90-61fc-47d9-a127-2faa7ce16031");katex.render("(u_r, u_z, u_{\\theta})", element, {displayMode:false,throwOnError:false});</script></span>. Take care to follow this convention in your input files and when adding eigenstrains or extra stresses.</p></p></div></div></div><p>Once the incremental deformation gradient (<a href="#moose-equation-4805e3c0-5d85-468d-864a-bffac0563692">Eq. (1)</a>) is calculated for the 1D geometry, the deformation gradient is passed to the strain and rotation methods used by default 3D Cartesian simulations, as described in the <a href="ComputeFiniteStrain.html">Finite Strain Class</a> documentation.</p></section><section class="scrollspy" id="5e755431-d045-4981-99a6-27ba63a30b99" data-section-level="2" data-section-text="Example Input File"><h2 id="example-input-file">Example Input File</h2><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note:</span>Use RZ Coordinate Type</div><div class="card-content"><div class="moose-alert-content"><p><p>The coordinate type in the Problem block of the input file must be set to <strong><code>COORD_TYPE = RZ</code></strong>.</p></p></div></div></div><p>The common use of the <code>ComputeAxisymmetric1DFiniteStrain</code> class is with the <a href="../../modules/tensor_mechanics/generalized_plane_strain.html">Generalized Plane Strain</a> system; this type of simulation uses the scalar strain variables</p><pre class="moose-pre"><code class="language-text">[./strain]
+  type = ComputeAxisymmetric1DFiniteStrain
+  eigenstrain_names = eigenstrain
+  scalar_out_of_plane_strain = scalar_strain_yy
+[../]
+</code></pre><a href="#44b2a13f-4b3d-4bc0-818f-38f4d217c704" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/1D_axisymmetric/axisymm_gps_finite.i)</a><div class="modal moose-modal" id="44b2a13f-4b3d-4bc0-818f-38f4d217c704"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/1D_axisymmetric/axisymm_gps_finite.i</h4><pre class="moose-pre"><code class="language-text"># this test checks the asixymmetric 1D generalized plane strain formulation using finite strains
+
+[GlobalParams]
+  displacements = disp_x
+  scalar_out_of_plane_strain = scalar_strain_yy
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[Mesh]
+  file = line.e
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./scalar_strain_yy]
+    order = FIRST
+    family = SCALAR
+  [../]
+[]
+
+[AuxVariables]
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./temp]
+    initial_condition = 580.0
+  [../]
+[]
+
+[Functions]
+  [./temp]
+    type = PiecewiseLinear
+    x = &#x27;0   1   2&#x27;
+    y = &#x27;580 580 680&#x27;
+  [../]
+  [./disp_x]
+    type = PiecewiseLinear
+    x = &#x27;0 1&#x27;
+    y = &#x27;0 2e-3&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[Modules]
+  [./TensorMechanics]
+    [./GeneralizedPlaneStrain]
+      [./gps]
+      [../]
+    [../]
+  [../]
+[]
+
+[AuxKernels]
+  [./strain_xx]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_xx
+    index_i = 0
+    index_j = 0
+  [../]
+  [./strain_yy]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_yy
+    index_i = 1
+    index_j = 1
+  [../]
+  [./strain_zz]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_zz
+    index_i = 2
+    index_j = 2
+  [../]
+  [./stress_xx]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xx
+    index_i = 0
+    index_j = 0
+    execute_on = timestep_end
+  [../]
+  [./stress_yy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yy
+    index_i = 1
+    index_j = 1
+    execute_on = timestep_end
+  [../]
+  [./stress_zz]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_zz
+    index_i = 2
+    index_j = 2
+    execute_on = timestep_end
+  [../]
+  [./temp]
+    type = FunctionAux
+    variable = temp
+    function = temp
+    execute_on = &#x27;timestep_begin&#x27;
+  [../]
+[]
+
+[BCs]
+  [./no_x]
+    type = PresetBC
+    boundary = 1
+    value = 0
+    variable = disp_x
+  [../]
+  [./disp_x]
+    type = FunctionPresetBC
+    boundary = 2
+    function = disp_x
+    variable = disp_x
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 3600
+    poissons_ratio = 0.2
+  [../]
+
+  [./strain]
+    type = ComputeAxisymmetric1DFiniteStrain
+    eigenstrain_names = eigenstrain
+    scalar_out_of_plane_strain = scalar_strain_yy
+  [../]
+
+  [./thermal_strain]
+    type = ComputeThermalExpansionEigenstrain
+    thermal_expansion_coeff = 1e-6
+    temperature = temp
+    stress_free_temperature = 580
+    eigenstrain_name = eigenstrain
+  [../]
+
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 50
+  l_tol = 1e-6
+  nl_max_its = 15
+  nl_rel_tol = 1e-8
+  nl_abs_tol = 1e-10
+  start_time = 0
+  end_time = 2
+  num_steps = 2
+[]
+
+[Outputs]
+  exodus = true
+  console = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>which uses a scalar variable for the coupled out-of-plane strain; the arguement for the <code>scalar_out_of_plane_strain</code> parameter is the name of the scalar strain variable:</p><pre class="moose-pre"><code class="language-text">[./scalar_strain_yy]
+  order = FIRST
+  family = SCALAR
+[../]
+</code></pre><a href="#194754c3-a17b-491f-b9c1-224508e69c5f" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/1D_axisymmetric/axisymm_gps_finite.i)</a><div class="modal moose-modal" id="194754c3-a17b-491f-b9c1-224508e69c5f"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/1D_axisymmetric/axisymm_gps_finite.i</h4><pre class="moose-pre"><code class="language-text"># this test checks the asixymmetric 1D generalized plane strain formulation using finite strains
+
+[GlobalParams]
+  displacements = disp_x
+  scalar_out_of_plane_strain = scalar_strain_yy
+[]
+
+[Problem]
+  coord_type = RZ
+[]
+
+[Mesh]
+  file = line.e
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./scalar_strain_yy]
+    order = FIRST
+    family = SCALAR
+  [../]
+[]
+
+[AuxVariables]
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./temp]
+    initial_condition = 580.0
+  [../]
+[]
+
+[Functions]
+  [./temp]
+    type = PiecewiseLinear
+    x = &#x27;0   1   2&#x27;
+    y = &#x27;580 580 680&#x27;
+  [../]
+  [./disp_x]
+    type = PiecewiseLinear
+    x = &#x27;0 1&#x27;
+    y = &#x27;0 2e-3&#x27;
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[Modules]
+  [./TensorMechanics]
+    [./GeneralizedPlaneStrain]
+      [./gps]
+      [../]
+    [../]
+  [../]
+[]
+
+[AuxKernels]
+  [./strain_xx]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_xx
+    index_i = 0
+    index_j = 0
+  [../]
+  [./strain_yy]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_yy
+    index_i = 1
+    index_j = 1
+  [../]
+  [./strain_zz]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_zz
+    index_i = 2
+    index_j = 2
+  [../]
+  [./stress_xx]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xx
+    index_i = 0
+    index_j = 0
+    execute_on = timestep_end
+  [../]
+  [./stress_yy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yy
+    index_i = 1
+    index_j = 1
+    execute_on = timestep_end
+  [../]
+  [./stress_zz]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_zz
+    index_i = 2
+    index_j = 2
+    execute_on = timestep_end
+  [../]
+  [./temp]
+    type = FunctionAux
+    variable = temp
+    function = temp
+    execute_on = &#x27;timestep_begin&#x27;
+  [../]
+[]
+
+[BCs]
+  [./no_x]
+    type = PresetBC
+    boundary = 1
+    value = 0
+    variable = disp_x
+  [../]
+  [./disp_x]
+    type = FunctionPresetBC
+    boundary = 2
+    function = disp_x
+    variable = disp_x
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 3600
+    poissons_ratio = 0.2
+  [../]
+
+  [./strain]
+    type = ComputeAxisymmetric1DFiniteStrain
+    eigenstrain_names = eigenstrain
+    scalar_out_of_plane_strain = scalar_strain_yy
+  [../]
+
+  [./thermal_strain]
+    type = ComputeThermalExpansionEigenstrain
+    thermal_expansion_coeff = 1e-6
+    temperature = temp
+    stress_free_temperature = 580
+    eigenstrain_name = eigenstrain
+  [../]
+
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 50
+  l_tol = 1e-6
+  nl_max_its = 15
+  nl_rel_tol = 1e-8
+  nl_abs_tol = 1e-10
+  start_time = 0
+  end_time = 2
+  num_steps = 2
+[]
+
+[Outputs]
+  exodus = true
+  console = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="8235ca13-fc1a-496e-ab65-f391ddb11644" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="0bde93b1-d6b2-4a47-b7cb-b7805377c15d" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements appropriate for the simulation geometry and coordinate system</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements appropriate for the simulation geometry and coordinate system</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="b209d8e8-8f4d-478a-8c7e-c202c2f70d19" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">compute</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_on</span><span class="moose-parameter-header-default">NONE</span><span class="moose-parameter-header-description">When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>NONE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE ELEMENT SUBDOMAIN</p><p class="moose-parameter-description"><span>Description:</span>When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">decomposition_method</span><span class="moose-parameter-header-default">TaylorExpansion</span><span class="moose-parameter-header-description">Methods to calculate the strain and rotation increments</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TaylorExpansion</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>TaylorExpansion EigenSolution</p><p class="moose-parameter-description"><span>Description:</span>Methods to calculate the strain and rotation increments</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">eigenstrain_names</span><span class="moose-parameter-header-description">List of eigenstrains to be applied in this strain calculation</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<MaterialPropertyName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of eigenstrains to be applied in this strain calculation</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">global_strain</span><span class="moose-parameter-header-description">Optional material property holding a global strain tensor applied to the mesh as a whole</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Optional material property holding a global strain tensor applied to the mesh as a whole</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">out_of_plane_strain</span><span class="moose-parameter-header-description">Nonlinear variable for axisymmetric 1D problem</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Nonlinear variable for axisymmetric 1D problem</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">scalar_out_of_plane_strain</span><span class="moose-parameter-header-description">Scalar variable for axisymmetric 1D problem</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Scalar variable for axisymmetric 1D problem</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">subblock_index_provider</span><span class="moose-parameter-header-description">SubblockIndexProvider user object name</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>UserObjectName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>SubblockIndexProvider user object name</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">volumetric_locking_correction</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Flag to correct volumetric locking</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Flag to correct volumetric locking</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="91740c8d-04e5-4cbc-8716-b12ff1695c59" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="902b87ca-2853-46a3-be4a-f9c225e6ddf8" data-section-level="3" data-section-text="Outputs Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">output_properties</span><span class="moose-parameter-header-description">List of material properties, from this material, to output (outputs must also be defined to an output type)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of material properties, from this material, to output (outputs must also be defined to an output type)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-default">none </span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>none </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Outputs Parameters</h3></summary></details></section></section><section class="scrollspy" id="eabc2144-2518-4416-905b-917e95ad2969" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#d96a9d44-5b60-4d19-938e-02e2f4a3772a" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#9c364bd4-cf00-4084-8360-a52ffe557123" class="tooltipped" data-position="left" data-tooltip="1 D Axisymmetric Strain Formulation">1 D Axisymmetric Strain Formulation</a></li><li><a href="#5e755431-d045-4981-99a6-27ba63a30b99" class="tooltipped" data-position="left" data-tooltip="Example Input File">Example Input File</a></li><li><a href="#8235ca13-fc1a-496e-ab65-f391ddb11644" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#eabc2144-2518-4416-905b-917e95ad2969" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

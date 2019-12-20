@@ -1,0 +1,121 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../../contrib/plotly/plotly.min.js"></script><title>Inclined No Displacement Boundary Condition Action System|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../../media/framework/github-logo.png" class="github-mark"></img><img src="../../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../../install/index.html">Install</a></li><li><a href="../../../examples/index.html">Examples</a></li><li><a href="../../../theory/index.html">Theory</a></li><li><a href="../../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="e3ef44cd-c5a6-440e-9591-5dba312e6660"><i class="material-icons">menu</i></a><ul class="sidenav" id="e3ef44cd-c5a6-440e-9591-5dba312e6660"><li><a href="../../../install/index.html">Install</a></li><li><a href="../../../examples/index.html">Examples</a></li><li><a href="../../../theory/index.html">Theory</a></li><li><a href="../../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href="../.." class="breadcrumb">syntax</a><a href=".." class="breadcrumb">BCs</a><a href="." class="breadcrumb">InclinedNoDisplacementBC</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="83b0b644-eb82-4906-a381-b7e0ba7d99b1" data-section-level="1" data-section-text="Inclined No Displacement Boundary Condition Action System"><h1 id="inclined-no-displacement-boundary-condition-action-system">Inclined No Displacement Boundary Condition Action System</h1><p>Set up inclined no displacement boundary conditions</p><section class="scrollspy" id="6e6602f6-c3fe-400f-bcec-72fa7a16f55a" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The InclinedNoDisplacementBCAction Action, given in the input file as simply <code>InclinedNoDisplacementBC</code>, is designed to simplify the input file when several variables have the same inclined no displacement boundary condition <a href="../../../source/bcs/PenaltyInclinedNoDisplacementBC.html">Inclined no displacement boundary condition</a>  applied in the normal component.</p></section><section class="scrollspy" id="27e2e0a8-ec3a-4757-92c1-3c324acd30bd" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[./InclinedNoDisplacementBC]
+  [./right]
+    boundary = right
+    penalty = 1.0e8
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+  [../]
+  [./bottom]
+    boundary = bottom
+    penalty = 1.0e8
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+  [../]
+  [./back]
+    boundary = back
+    penalty = 1.0e8
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+  [../]
+[../]
+</code></pre><a href="#8b734561-91f0-4252-b8f0-28c5a1b85135" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/inclined_bc/inclined_bc_action.i)</a><div class="modal moose-modal" id="8b734561-91f0-4252-b8f0-28c5a1b85135"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/inclined_bc/inclined_bc_action.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Mesh]
+  [generated_mesh]
+    type = GeneratedMeshGenerator
+    dim = 3
+    nx = 2
+    ny = 4
+    nz = 2
+    xmin = 0.0
+    xmax = 1.0
+    ymin = 0.0
+    ymax = 2.0
+    zmin = 0.0
+    zmax = 1.0
+    elem_type = HEX8
+  []
+  [rotate]
+    type = TransformGenerator
+    transform = ROTATE
+    vector_value = &#x27;0 -20 -60&#x27;
+    input = generated_mesh
+  []
+[]
+
+[Modules/TensorMechanics/Master/All]
+  strain = FINITE
+  add_variables = true
+[]
+
+[BCs]
+  [./Pressure]
+    [./top]
+      boundary = top
+      function = &#x27;-1000*t&#x27;
+    [../]
+  [../]
+  [./InclinedNoDisplacementBC]
+    [./right]
+      boundary = right
+      penalty = 1.0e8
+      displacements = &#x27;disp_x disp_y disp_z&#x27;
+    [../]
+    [./bottom]
+      boundary = bottom
+      penalty = 1.0e8
+      displacements = &#x27;disp_x disp_y disp_z&#x27;
+    [../]
+    [./back]
+      boundary = back
+      penalty = 1.0e8
+      displacements = &#x27;disp_x disp_y disp_z&#x27;
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e6
+    poissons_ratio = 0.3
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+  petsc_options_value = &#x27;lu     superlu_dist&#x27;
+
+  # controls for linear iterations
+  l_max_its = 10
+  l_tol = 1e-4
+
+  # controls for nonlinear iterations
+  nl_max_its = 100
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-12
+
+  # time control
+  start_time = 0.0
+  dt = 1
+  end_time = 5
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Outputs]
+  file_base = &#x27;inclined_bc_3d_out&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="a17fa7d4-c5b6-40ed-8d99-c86e62d94a59" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="0c5b3441-d605-4440-9f70-3668d428a836" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where the pressure will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where the pressure will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">penalty</span><span class="moose-parameter-header-description">Penalty parameter</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Penalty parameter</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="d75e7276-b643-4035-9a16-7fab2b25bfec" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">active</span><span class="moose-parameter-header-default">__all__ </span><span class="moose-parameter-header-description">If specified only the blocks named will be visited and made active</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>__all__ </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If specified only the blocks named will be visited and made active</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements appropriate for the simulation geometry and coordinate system</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements appropriate for the simulation geometry and coordinate system</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">inactive</span><span class="moose-parameter-header-description">If specified blocks matching these identifiers will be skipped.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>If specified blocks matching these identifiers will be skipped.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The displacement residuals</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacement residuals</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section></section><section class="scrollspy" id="47b9a8f0-f67d-4e28-a995-2700e9fe1523" data-section-level="2" data-section-text="Associated Actions"><h2 id="associated-actions">Associated Actions</h2></section><section class="scrollspy" id="c900246c-7cfc-4b0c-baa7-efa5b0aed1bc" data-section-level="2" data-section-text="Available Actions"><h2 id="available-actions">Available Actions</h2><ul class="moose-syntax-list collection with-header"><li class="collection-header">Tensor Mechanics App</li><li class="collection-item"><a href="../../../source/actions/InclinedNoDisplacementBCAction.html">InclinedNoDisplacementBCAction</a>Set up inclined no displacement boundary conditions</li></ul></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#6e6602f6-c3fe-400f-bcec-72fa7a16f55a" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#27e2e0a8-ec3a-4757-92c1-3c324acd30bd" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#a17fa7d4-c5b6-40ed-8d99-c86e62d94a59" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#47b9a8f0-f67d-4e28-a995-2700e9fe1523" class="tooltipped" data-position="left" data-tooltip="Associated Actions">Associated Actions</a></li><li><a href="#c900246c-7cfc-4b0c-baa7-efa5b0aed1bc" class="tooltipped" data-position="left" data-tooltip="Available Actions">Available Actions</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../../js/init.js"></script><script type="text/javascript" src="../../../js/navigation.js"></script><script type="text/javascript" src="../../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../../js/search_index.js"></script>

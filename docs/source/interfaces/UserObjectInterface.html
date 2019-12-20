@@ -1,0 +1,189 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>UserObjectInterface|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="023c6f56-e23d-4fe2-9990-d2492f12bb09"><i class="material-icons">menu</i></a><ul class="sidenav" id="023c6f56-e23d-4fe2-9990-d2492f12bb09"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">interfaces</span><a href="#" class="breadcrumb">UserObjectInterface</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="d098b8c4-f9c9-4762-b8b3-4178bf4423b9" data-section-level="1" data-section-text="UserObjectInterface"><h1 id="userobjectinterface">UserObjectInterface</h1><p>The UserObjectInterface defines the methods used for retrieving const references to the specific types of UserObjects. This is done with templated methods so that use of the UserObject does not require a dynamic cast. Many objects in MOOSE support the retrieval of these references so that custom UserObject APIs may be used in calculations. UserObjects are generally executed after most other systems in MOOSE so these values are often lagged when being used in another calculation.</p><section class="scrollspy" id="bca1e3c2-8087-4652-86ff-0320f8e3fd44" data-section-level="2" data-section-text="End Use API"><h2 id="end-use-api">End Use API</h2><p>Most objects in MOOSE will retrieve UserObjects through special macro functions found here:</p><pre class="moose-pre"><code class="language-cpp">#define getUserObjectByName this-&gt;template getUserObjectByNameTempl
+#define getUserObject this-&gt;template getUserObjectTempl
+</code></pre><a href="#4eb686c5-f7fe-4e07-ace4-a61f344a4767" class="modal-trigger">(../moose/framework/include/utils/MemberTemplateMacros.h)</a><div class="modal moose-modal" id="4eb686c5-f7fe-4e07-ace4-a61f344a4767"><div class="modal-content"><h4>/home/gary/projects/moose/framework/include/utils/MemberTemplateMacros.h</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#pragma once
+
+// MooseObject
+
+#define adGetParam                                                                                 \
+  _Pragma(&quot;GCC warning \&quot;adGetParam is deprecated. Simply use getParam\&quot;&quot;) this                    \
+      -&gt;template getParamTempl
+
+#define getParam this-&gt;template getParamTempl
+
+// UserObjectInterface
+
+#define adGetUserObject                                                                            \
+  _Pragma(&quot;GCC warning \&quot;adGetUserObject is deprecated. Simply use getUserObject\&quot;&quot;) this          \
+      -&gt;template getUserObjectTempl
+#define adGetUserObjectByName                                                                      \
+  _Pragma(                                                                                         \
+      &quot;GCC warning \&quot;adGetUserObjectByName is deprecated. Simply use getUserObjectByName\&quot;&quot;) this  \
+      -&gt;template getUserObjectByNameTempl
+
+// doco-user-object-interface-begin
+#define getUserObjectByName this-&gt;template getUserObjectByNameTempl
+#define getUserObject this-&gt;template getUserObjectTempl
+// doco-user-object-interface-end
+
+// MaterialPropertyInterface
+
+#define adGetMaterialProperty                                                                      \
+  _Pragma(                                                                                         \
+      &quot;GCC warning \&quot;adGetMaterialProperty is deprecated. Simply use getMaterialProperty\&quot;&quot;) this  \
+      -&gt;template getMaterialPropertyTempl
+// clang-format off
+#define adGetMaterialPropertyOld \
+  _Pragma( \
+      &quot;GCC warning \&quot;adGetMaterialPropertyOld is deprecated. Simply use getMaterialPropertyOld\&quot;&quot;) \
+  this-&gt;template getMaterialPropertyOldTempl
+#define adGetMaterialPropertyOlder \
+  _Pragma( \
+      &quot;GCC warning \&quot;adGetMaterialPropertyOlder is deprecated. Simply use getMaterialPropertyOlder\&quot;&quot;) \
+  this-&gt;template getMaterialPropertyOlderTempl
+#define adGetADMaterialProperty \
+  _Pragma( \
+      &quot;GCC warning \&quot;adGetADMaterialProperty is deprecated. Simply use getADMaterialProperty\&quot;&quot;) \
+  this-&gt;template getADMaterialPropertyTempl
+#define adGetADMaterialPropertyByName \
+  _Pragma( \
+      &quot;GCC warning \&quot;adGetADMaterialPropertyByName is deprecated. Simply use getADMaterialPropertyByName\&quot;&quot;) \
+  this-&gt;template getADMaterialPropertyByNameTempl
+#define adGetMaterialPropertyByName \
+  _Pragma( \
+      &quot;GCC warning \&quot;adGetMaterialPropertyByName is deprecated. Simply use getMaterialPropertyByName\&quot;&quot;) \
+  this-&gt;template getMaterialPropertyByNameTempl
+#define adGetMaterialPropertyOldByName \
+  _Pragma( \
+      &quot;GCC warning \&quot;adGetMaterialPropertyOldByName is deprecated. Simply use getMaterialPropertyOldByName\&quot;&quot;) \
+  this-&gt;template getMaterialPropertyOldByNameTempl
+#define adGetMaterialPropertyOlderByName \
+  _Pragma( \
+      &quot;GCC warning \&quot;adGetMaterialPropertyOlderByName is deprecated. Simply use getMaterialPropertyOlderByName\&quot;&quot;) \
+  this-&gt;template getMaterialPropertyOlderByNameTempl
+#define adHasMaterialProperty \
+  _Pragma( \
+      &quot;GCC warning \&quot;adHasMaterialProperty is deprecated. Simply use hasMaterialProperty\&quot;&quot;) \
+  this-&gt;template hasMaterialPropertyTempl
+#define adHasMaterialPropertyByName \
+  _Pragma( \
+      &quot;GCC warning \&quot;adHasMaterialPropertyByName is deprecated. Simply use hasMaterialPropertyByName\&quot;&quot;) \
+  this-&gt;template hasMaterialPropertyByNameTempl
+// clang-format on
+#define adDeclareADProperty                                                                        \
+  _Pragma(&quot;GCC warning \&quot;adDeclareADProperty is deprecated. Simply use declareADProperty\&quot;&quot;) this  \
+      -&gt;template declareADPropertyTempl
+#define adDeclareProperty                                                                          \
+  _Pragma(&quot;GCC warning \&quot;adDeclareProperty is deprecated. Simply use declareProperty\&quot;&quot;) this      \
+      -&gt;template declarePropertyTempl
+
+#define getMaterialProperty this-&gt;template getMaterialPropertyTempl
+#define getMaterialPropertyOld this-&gt;template getMaterialPropertyOldTempl
+#define getMaterialPropertyOlder this-&gt;template getMaterialPropertyOlderTempl
+#define declareADProperty this-&gt;template declareADPropertyTempl
+#define declareProperty this-&gt;template declarePropertyTempl
+#define getADMaterialProperty this-&gt;template getADMaterialPropertyTempl
+#define getADMaterialPropertyByName this-&gt;template getADMaterialPropertyByNameTempl
+#define getMaterialPropertyByName this-&gt;template getMaterialPropertyByNameTempl
+#define getMaterialPropertyOldByName this-&gt;template getMaterialPropertyOldByNameTempl
+#define getMaterialPropertyOlderByName this-&gt;template getMaterialPropertyOlderByNameTempl
+#define hasMaterialProperty this-&gt;template hasMaterialPropertyTempl
+#define hasMaterialPropertyByName this-&gt;template hasMaterialPropertyByNameTempl
+
+// TwoMaterialPropertyInterface
+
+// clang-format off
+#define adGetNeighborMaterialProperty \
+  _Pragma( \
+    &quot;GCC warning \&quot;adGetNeighborMaterialProperty is deprecated. Simply use getNeighborMaterialProperty\&quot;&quot;) \
+  this-&gt;template getNeighborMaterialPropertyTempl
+#define adGetNeighborADMaterialProperty \
+  _Pragma( \
+    &quot;GCC warning \&quot;adGetNeighborADMaterialProperty is deprecated. Simply use getNeighborADMaterialProperty\&quot;&quot;) \
+  this-&gt;template getNeighborADMaterialPropertyTempl
+// clang-format on
+
+#define getNeighborMaterialProperty this-&gt;template getNeighborMaterialPropertyTempl
+#define getNeighborADMaterialProperty this-&gt;template getNeighborADMaterialPropertyTempl
+#define getNeighborMaterialPropertyByName this-&gt;template getNeighborMaterialPropertyByNameTempl
+
+// Restartable
+
+// clang-format off
+#define adDeclareRestartableData \
+  _Pragma( \
+    &quot;GCC warning \&quot;adDeclareRestartableData is deprecated. Simply use declareRestartableData\&quot;&quot;) \
+  this-&gt;template declareRestartableDataTempl
+// clang-format on
+
+#define declareRestartableData this-&gt;template declareRestartableDataTempl
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>Typical usage looks like this:</p><pre class="moose-pre"><code class="language-cpp">    _elem_uo(getUserObject&lt;ElementUOProvider&gt;(&quot;element_user_object&quot;)),
+</code></pre><a href="#c5b1b274-ceb5-44de-a4f1-26ac6934c5fd" class="modal-trigger">(../moose/test/src/auxkernels/ElementUOAux.C)</a><div class="modal moose-modal" id="c5b1b274-ceb5-44de-a4f1-26ac6934c5fd"><div class="modal-content"><h4>/home/gary/projects/moose/test/src/auxkernels/ElementUOAux.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;ElementUOAux.h&quot;
+#include &quot;ElementUOProvider.h&quot;
+
+registerMooseObject(&quot;MooseTestApp&quot;, ElementUOAux);
+
+InputParameters
+ElementUOAux::validParams()
+{
+  InputParameters params = AuxKernel::validParams();
+  params.addRequiredParam&lt;UserObjectName&gt;(&quot;element_user_object&quot;,
+                                          &quot;The ElementUOProvider where this Aux pulls values from&quot;);
+
+  params.addParam&lt;std::string&gt;(&quot;field_name&quot;,
+                               &quot;The field name to retrieve from the ElementUOProvider&quot;);
+
+  MooseEnum field_type(&quot;long Real&quot;, &quot;long&quot;);
+  params.addParam&lt;MooseEnum&gt;(&quot;field_type&quot;, field_type, &quot;The type of field to retrieve&quot;);
+
+  params.set&lt;ExecFlagEnum&gt;(&quot;execute_on&quot;) = EXEC_TIMESTEP_BEGIN;
+  params.addClassDescription(&quot;Aux Kernel to display generic spatial (elemental) information from a &quot;
+                             &quot;UserObject that satisfies the underlying ElementUOProvider &quot;
+                             &quot;interface.&quot;);
+  return params;
+}
+
+ElementUOAux::ElementUOAux(const InputParameters &amp; params)
+  : AuxKernel(params),
+    // doco-get-user-object-begin
+    _elem_uo(getUserObject&lt;ElementUOProvider&gt;(&quot;element_user_object&quot;)),
+    // doco-get-user-object-end
+    _field_name(isParamValid(&quot;field_name&quot;) ? getParam&lt;std::string&gt;(&quot;field_name&quot;) : &quot;default&quot;),
+    _field_type(getParam&lt;MooseEnum&gt;(&quot;field_type&quot;))
+{
+  if (isNodal())
+    mooseError(&quot;This AuxKernel only supports Elemental fields&quot;);
+}
+
+Real
+ElementUOAux::computeValue()
+{
+  if (_field_type == &quot;long&quot;)
+  {
+    auto value = _elem_uo.getElementalValueLong(_current_elem-&gt;id(), _field_name);
+    if (value == std::numeric_limits&lt;unsigned long&gt;::max())
+      return -1.0;
+    else
+      return value;
+  }
+  else
+    return _elem_uo.getElementalValueReal(_current_elem-&gt;id(), _field_name);
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#bca1e3c2-8087-4652-86ff-0320f8e3fd44" class="tooltipped" data-position="left" data-tooltip="End Use API">End Use API</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

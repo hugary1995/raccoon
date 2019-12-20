@@ -1,0 +1,140 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>Compute Extra Stress Constant|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="2590d3b0-2087-4bab-bee4-a2b83bdbb6ae"><i class="material-icons">menu</i></a><ul class="sidenav" id="2590d3b0-2087-4bab-bee4-a2b83bdbb6ae"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">materials</span><a href="#" class="breadcrumb">ComputeExtraStressConstant</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="c599747d-76b7-4e3c-92f0-82493e0d4749" data-section-level="1" data-section-text="Compute Extra Stress Constant"><h1 id="compute-extra-stress-constant">Compute Extra Stress Constant</h1><p>Computes a constant extra stress that is added to the stress calculated by the constitutive model</p><section class="scrollspy" id="fbd16bae-ae65-49fd-a854-91ccadd006fd" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The class <code>ComputeExtraStressConstant</code> adds an additional stress term, (<span tex="\boldsymbol{\sigma}_0" bookmark="moose-equation-c72b68e1-dbe0-440c-a28e-917d08037d31" recursive="True" class="moose-katex-inline-equation" id="moose-equation-c72b68e1-dbe0-440c-a28e-917d08037d31"><script>var element = document.getElementById("moose-equation-c72b68e1-dbe0-440c-a28e-917d08037d31");katex.render("\\boldsymbol{\\sigma}_0", element, {displayMode:false,throwOnError:false});</script></span>), to the residual calculation after the constitutive model calculation of the stress, as shown in <a href="#moose-equation-b1409af5-b0ec-4da5-8197-e240b6108221">Eq. (1)</a>.  An extra stress may be a residual stress, such as in large civil engineering simulations.</p><p>The extra stress material property, <code>extra_stress</code> stores the Rank-2 tensor values of the extra stress. <span class="moose-katex-block-equation"><span tex="\sigma_{ij} = \sigma_{ij} + \sigma^{extra}_{ij}" label="eq:extra_stress_addition" number="1" bookmark="moose-equation-b1409af5-b0ec-4da5-8197-e240b6108221" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-b1409af5-b0ec-4da5-8197-e240b6108221"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-b1409af5-b0ec-4da5-8197-e240b6108221");katex.render("     \\sigma_{ij} = \\sigma_{ij} + \\sigma^{extra}_{ij}", element, {displayMode:true,throwOnError:false});</script></span> where the value of <span tex="\boldsymbol{\sigma}^{extra}" bookmark="moose-equation-35e063bf-df2d-4bf2-b1d2-fc9d0c5c8f82" recursive="True" class="moose-katex-inline-equation" id="moose-equation-35e063bf-df2d-4bf2-b1d2-fc9d0c5c8f82"><script>var element = document.getElementById("moose-equation-35e063bf-df2d-4bf2-b1d2-fc9d0c5c8f82");katex.render("\\boldsymbol{\\sigma}^{extra}", element, {displayMode:false,throwOnError:false});</script></span> is constant across the entire mesh in this class.</p><p><code>ComputeExtraStressConstant</code> creates a symmetric stress tensor, and expects the values of the stress tensor components in the specific order specified in the input parameter description below.</p></section><section class="scrollspy" id="9f6596bb-c298-457d-a37a-d37451ab7c83" data-section-level="2" data-section-text="Example Input File Syntax"><h2 id="example-input-file-syntax">Example Input File Syntax</h2><pre class="moose-pre"><code class="language-text">[./const_stress]
+  type = ComputeExtraStressConstant
+  block = 0
+  base_name = ppt
+  extra_stress_tensor = &#x27;-0.288 -0.373 -0.2747 0 0 0&#x27;
+[../]
+</code></pre><a href="#e9236a5e-44a2-4999-b237-c2d6ef8fe59c" class="modal-trigger">(../moose/modules/combined/test/tests/linear_elasticity/extra_stress.i)</a><div class="modal moose-modal" id="e9236a5e-44a2-4999-b237-c2d6ef8fe59c"><div class="modal-content"><h4>/home/gary/projects/moose/modules/combined/test/tests/linear_elasticity/extra_stress.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 128
+  ny = 1
+  xmax = 3.2
+  ymax = 0.025
+  elem_type = QUAD4
+[]
+
+[Modules/TensorMechanics/Master/All]
+  add_variables = true
+  generate_output = &#x27;stress_xx stress_xy stress_yy stress_zz strain_xx strain_xy strain_yy&#x27;
+[]
+
+[AuxVariables]
+  [./c]
+  [../]
+[]
+
+[ICs]
+  [./c_IC]
+    type = BoundingBoxIC
+    variable = c
+    x1 = -1
+    y1 = -1
+    x2 = 1.6
+    y2 = 1
+    inside = 0
+    outside = 1
+    block = 0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;104 74 74 104 74 104 47.65 47.65 47.65&#x27;
+    fill_method = symmetric9
+    base_name = matrix
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = 0
+    base_name = matrix
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    block = 0
+    base_name = matrix
+  [../]
+  [./elasticity_tensor_ppt]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;0.104 0.074 0.074 0.104 0.074 0.104 0.04765 0.04765 0.04765&#x27;
+    fill_method = symmetric9
+    base_name = ppt
+  [../]
+  [./stress_ppt]
+    type = ComputeLinearElasticStress
+    block = 0
+    base_name = ppt
+  [../]
+  [./strain_ppt]
+    type = ComputeSmallStrain
+    block = 0
+    base_name = ppt
+  [../]
+  [./const_stress]
+    type = ComputeExtraStressConstant
+    block = 0
+    base_name = ppt
+    extra_stress_tensor = &#x27;-0.288 -0.373 -0.2747 0 0 0&#x27;
+  [../]
+  [./global_stress]
+    type = TwoPhaseStressMaterial
+    base_A = matrix
+    base_B = ppt
+  [../]
+  [./switching]
+    type = SwitchingFunctionMaterial
+    eta = c
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left_x right_x bottom_y top_y&#x27;
+  [./bottom_y]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./left_x]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./right_x]
+    type = PresetBC
+    variable = disp_x
+    boundary = right
+    value = 0
+  [../]
+  [./top_y]
+    type = PresetBC
+    variable = disp_y
+    boundary = top
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="28eee8c2-69a1-427a-91c3-47d11ecf89a4" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="b93afe29-7b56-4665-ba28-65d91666b009" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_stress_tensor</span><span class="moose-parameter-header-description">Vector of values defining the constant extra stress to add, in order 11, 22, 33, 23, 13, 12</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of values defining the constant extra stress to add, in order 11, 22, 33, 23, 13, 12</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="9c72777c-ee07-4eec-993f-3589b8317413" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">compute</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_on</span><span class="moose-parameter-header-default">NONE</span><span class="moose-parameter-header-description">When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>NONE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE ELEMENT SUBDOMAIN</p><p class="moose-parameter-description"><span>Description:</span>When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">prefactor</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">Name of material defining additional constant prefactor</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Name of material defining additional constant prefactor</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="c5588441-477e-4e19-8e06-033174bd5e5b" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="9c01d481-439c-48fb-bec9-c179a7b5965e" data-section-level="3" data-section-text="Outputs Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">output_properties</span><span class="moose-parameter-header-description">List of material properties, from this material, to output (outputs must also be defined to an output type)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of material properties, from this material, to output (outputs must also be defined to an output type)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-default">none </span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>none </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Outputs Parameters</h3></summary></details></section></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#fbd16bae-ae65-49fd-a854-91ccadd006fd" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#9f6596bb-c298-457d-a37a-d37451ab7c83" class="tooltipped" data-position="left" data-tooltip="Example Input File Syntax">Example Input File Syntax</a></li><li><a href="#28eee8c2-69a1-427a-91c3-47d11ecf89a4" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

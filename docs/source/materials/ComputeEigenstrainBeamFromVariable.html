@@ -1,0 +1,225 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>Compute Eigenstrain Beam From Variable|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="95592f71-38e0-474c-ac52-708b6b25919d"><i class="material-icons">menu</i></a><ul class="sidenav" id="95592f71-38e0-474c-ac52-708b6b25919d"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">materials</span><a href="#" class="breadcrumb">ComputeEigenstrainBeamFromVariable</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="969aa4fa-abe3-4aaf-8750-6dead9c8b668" data-section-level="1" data-section-text="Compute Eigenstrain Beam From Variable"><h1 id="compute-eigenstrain-beam-from-variable">Compute Eigenstrain Beam From Variable</h1><p>Computes an eigenstrain from a set of variables</p><section class="scrollspy" id="171e2144-c2cc-4159-9f00-5113de6c391a" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>ComputeEigenstrainBeamFromVariable</code> class takes in a set of 3 displacement or rotation variables or both and uses them to calculate the displacement and rotational beam eigenstrain in the global coordinate system. If either displacement or rotational aux variables are provided, they should be provided in all three global coordinate directions.</p></section><section class="scrollspy" id="5c3c3cf9-d8e2-4362-a092-fc14e6dd9821" data-section-level="2" data-section-text="Example Input File Syntax"><h2 id="example-input-file-syntax">Example Input File Syntax</h2><pre class="moose-pre"><code class="language-text">[./thermal]
+  type = ComputeEigenstrainBeamFromVariable
+  displacement_eigenstrain_variables = &#x27;thermal_eig zero1 zero2&#x27;
+  eigenstrain_name = thermal
+[../]
+</code></pre><a href="#b7ebebff-af33-42de-8aaa-71e278027f57" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/beam/eigenstrain/eigenstrain_from_var.i)</a><div class="modal moose-modal" id="b7ebebff-af33-42de-8aaa-71e278027f57"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/beam/eigenstrain/eigenstrain_from_var.i</h4><pre class="moose-pre"><code class="language-text"># Test for eigenstrain from variables
+
+# A constant axial eigenstrain of 0.01 is applied to a beam of length
+# 4 m. The beam is fixed at one end. The eigenstrain causes a change in
+# length of 0.04 m irrespective of the material properties of the beam.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 1
+  nx = 10
+  xmin = 0.0
+  xmax = 4.0
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./rot_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./rot_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./rot_z]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./thermal_eig]
+  [../]
+  [./zero1]
+  [../]
+  [./zero2]
+  [../]
+[]
+
+[AuxKernels]
+  [./thermal_eig]
+    type = ConstantAux
+    value = 0.01
+    variable = thermal_eig
+  [../]
+[]
+
+[BCs]
+  [./fixx1]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./fixy1]
+    type = DirichletBC
+    variable = disp_y
+    boundary = left
+    value = 0.0
+  [../]
+  [./fixz1]
+    type = DirichletBC
+    variable = disp_z
+    boundary = left
+    value = 0.0
+  [../]
+  [./fixr1]
+    type = DirichletBC
+    variable = rot_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./fixr2]
+    type = DirichletBC
+    variable = rot_y
+    boundary = left
+    value = 0.0
+  [../]
+  [./fixr3]
+    type = DirichletBC
+    variable = rot_z
+    boundary = left
+    value = 0.0
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+[Executioner]
+  type = Transient
+  solve_type = NEWTON
+  line_search = &#x27;none&#x27;
+  nl_max_its = 15
+  nl_rel_tol = 1e-10
+  nl_abs_tol = 1e-10
+
+  dt = 1
+  dtmin = 1
+  end_time = 2
+[]
+
+[Kernels]
+  [./solid_disp_x]
+    type = StressDivergenceBeam
+    block = &#x27;0&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y rot_z&#x27;
+    component = 0
+    variable = disp_x
+  [../]
+  [./solid_disp_y]
+    type = StressDivergenceBeam
+    block = &#x27;0&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y rot_z&#x27;
+    component = 1
+    variable = disp_y
+  [../]
+  [./solid_disp_z]
+    type = StressDivergenceBeam
+    block = &#x27;0&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y rot_z&#x27;
+    component = 2
+    variable = disp_z
+  [../]
+  [./solid_rot_x]
+    type = StressDivergenceBeam
+    block = &#x27;0&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y rot_z&#x27;
+    component = 3
+    variable = rot_x
+  [../]
+  [./solid_rot_y]
+    type = StressDivergenceBeam
+    block = &#x27;0&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y rot_z&#x27;
+    component = 4
+    variable = rot_y
+  [../]
+  [./solid_rot_z]
+    type = StressDivergenceBeam
+    block = &#x27;0&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y rot_z&#x27;
+    component = 5
+    variable = rot_z
+  [../]
+[]
+
+[Materials]
+  [./elasticity]
+    type = ComputeElasticityBeam
+    youngs_modulus = 1e6
+    poissons_ratio = 0.3
+    shear_coefficient = 1.0
+    block = 0
+  [../]
+  [./strain]
+    type = ComputeIncrementalBeamStrain
+    block = &#x27;0&#x27;
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    rotations = &#x27;rot_x rot_y rot_z&#x27;
+    area = 0.5
+    Ay = 0.0
+    Az = 0.0
+    Iy = 0.01
+    Iz = 0.01
+    y_orientation = &#x27;0.0 1.0 0.0&#x27;
+    eigenstrain_names = &#x27;thermal&#x27;
+  [../]
+  [./stress]
+    type = ComputeBeamResultants
+    block = 0
+  [../]
+  [./thermal]
+    type = ComputeEigenstrainBeamFromVariable
+    displacement_eigenstrain_variables = &#x27;thermal_eig zero1 zero2&#x27;
+    eigenstrain_name = thermal
+  [../]
+[]
+
+[Postprocessors]
+  [./disp_x]
+    type = PointValue
+    point = &#x27;4.0 0.0 0.0&#x27;
+    variable = disp_x
+  [../]
+  [./disp_y]
+    type = PointValue
+    point = &#x27;4.0 0.0 0.0&#x27;
+    variable = disp_y
+  [../]
+[]
+
+[Outputs]
+  [./out]
+    type = Exodus
+    hide = &#x27;thermal_eig zero1 zero2&#x27;
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="1d04e7cc-513c-4d96-9f50-60f5e7266400" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="eca91416-df2c-4eab-ac85-0cc2e4bf222b" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">eigenstrain_name</span><span class="moose-parameter-header-description">Material property name for the eigenstrain vector computed by this model. IMPORTANT: The name of this property must also be provided to the strain calculator.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Material property name for the eigenstrain vector computed by this model. IMPORTANT: The name of this property must also be provided to the strain calculator.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="985d0888-2eee-440a-a785-3479c1a61cde" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">compute</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_on</span><span class="moose-parameter-header-default">NONE</span><span class="moose-parameter-header-description">When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>NONE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE ELEMENT SUBDOMAIN</p><p class="moose-parameter-description"><span>Description:</span>When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacement_eigenstrain_variables</span><span class="moose-parameter-header-description">A list of variable names describing the displacement eigenstrain. If provided, there must be 3 entries, corresponding to the axial and shear eigenstrains in the global coordinate system.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A list of variable names describing the displacement eigenstrain. If provided, there must be 3 entries, corresponding to the axial and shear eigenstrains in the global coordinate system.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">rotational_eigenstrain_variables</span><span class="moose-parameter-header-description">A list of variable names describing the rotational eigenstrain. If provided, there must be 3 entries, corresponding to the rotational eigenstrain in the global coordinate system.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>A list of variable names describing the rotational eigenstrain. If provided, there must be 3 entries, corresponding to the rotational eigenstrain in the global coordinate system.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="a15ef2fc-0a59-4ffc-b63b-7789b06561e2" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="c83ae6a7-a0a1-42d7-9b4f-80069e4f4ff0" data-section-level="3" data-section-text="Outputs Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">output_properties</span><span class="moose-parameter-header-description">List of material properties, from this material, to output (outputs must also be defined to an output type)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of material properties, from this material, to output (outputs must also be defined to an output type)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-default">none </span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>none </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Outputs Parameters</h3></summary></details></section></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#171e2144-c2cc-4159-9f00-5113de6c391a" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#5c3c3cf9-d8e2-4362-a092-fc14e6dd9821" class="tooltipped" data-position="left" data-tooltip="Example Input File Syntax">Example Input File Syntax</a></li><li><a href="#1d04e7cc-513c-4d96-9f50-60f5e7266400" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

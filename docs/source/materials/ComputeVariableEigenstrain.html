@@ -1,0 +1,545 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>Compute Variable Eigenstrain|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="48a4a07b-6e26-48e8-b3b0-1286a154fd7d"><i class="material-icons">menu</i></a><ul class="sidenav" id="48a4a07b-6e26-48e8-b3b0-1286a154fd7d"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">materials</span><a href="#" class="breadcrumb">ComputeVariableEigenstrain</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="537d8a1b-b69f-4de1-a5b9-a8b139b33790" data-section-level="1" data-section-text="Compute Variable Eigenstrain"><h1 id="compute-variable-eigenstrain">Compute Variable Eigenstrain</h1><p>Computes an Eigenstrain and its derivatives that is a function of multiple variables, where the prefactor is defined in a derivative material</p><section class="scrollspy" id="b3caf11b-b4f1-4dfe-bf14-0df58ab4ea8f" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>ComputeVariableEigenstrain</code> calculates the eigenstrain as a function of a specified variable as well as the contributions of the eigenstrain to the first and second order derivatives of the elastic strain. This class is most often only used in phase field simulations where first and second derivatives are required and the limitation on elastic only strains is not overly restrictive.</p><p>The Rank-2 tensor eigenstrain is calculated as a function of a Rank-2 tensor base and a scalar material property. <span class="moose-katex-block-equation"><span tex="\boldsymbol{\epsilon} = p \boldsymbol{T}" label="eqn:variable_base_eigenstrain" number="1" bookmark="moose-equation-dc235ea0-3d1f-4dc0-b483-d61e9c0d2c0d" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-dc235ea0-3d1f-4dc0-b483-d61e9c0d2c0d"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-dc235ea0-3d1f-4dc0-b483-d61e9c0d2c0d");katex.render("     \\boldsymbol{\\epsilon} = p \\boldsymbol{T}", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="\boldsymbol{\epsilon}_{eigen}" bookmark="moose-equation-404291e2-b2a5-4a19-a6e9-a08784195014" recursive="True" class="moose-katex-inline-equation" id="moose-equation-404291e2-b2a5-4a19-a6e9-a08784195014"><script>var element = document.getElementById("moose-equation-404291e2-b2a5-4a19-a6e9-a08784195014");katex.render("\\boldsymbol{\\epsilon}_{eigen}", element, {displayMode:false,throwOnError:false});</script></span> is the computed eigenstrain, <span tex="p" bookmark="moose-equation-d99b5a96-95e7-46da-bb7a-294eff01532a" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d99b5a96-95e7-46da-bb7a-294eff01532a"><script>var element = document.getElementById("moose-equation-d99b5a96-95e7-46da-bb7a-294eff01532a");katex.render("p", element, {displayMode:false,throwOnError:false});</script></span> is a scalar material property, and <span tex="\boldsymbol{T}" bookmark="moose-equation-4e06aade-212a-4ec1-965b-a4101d552872" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4e06aade-212a-4ec1-965b-a4101d552872"><script>var element = document.getElementById("moose-equation-4e06aade-212a-4ec1-965b-a4101d552872");katex.render("\\boldsymbol{T}", element, {displayMode:false,throwOnError:false});</script></span> is the tensor selected by the user as the base of the eigenstrain. The material property <span tex="p" bookmark="moose-equation-06cdab78-3786-42f3-b844-8a7b54e31bdf" recursive="True" class="moose-katex-inline-equation" id="moose-equation-06cdab78-3786-42f3-b844-8a7b54e31bdf"><script>var element = document.getElementById("moose-equation-06cdab78-3786-42f3-b844-8a7b54e31bdf");katex.render("p", element, {displayMode:false,throwOnError:false});</script></span> is used to introduce dependence of the eigenstrain on the user-specified variable.</p><p>The contributions of the eigenstrain to the first and second elastic strain derivatives are calculated with use of the MOOSE <a href="DerivativeMaterialInterface.html">DerivativeMaterialInterface</a> applied to the prefactor variables. <span class="moose-katex-block-equation"><span tex="\begin{aligned}   \nabla \cdot \boldsymbol{\epsilon} & = \left( \nabla \cdot p \right) \boldsymbol{T} \\   \nabla^2 \cdot \boldsymbol{\epsilon} & = \left( \nabla^2 \cdot p \right) \boldsymbol{T}   \end{aligned}" label="eqn:derivatives" number="2" bookmark="moose-equation-c0bcdcd1-14cc-4b8a-b8da-48eae8c74240" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-c0bcdcd1-14cc-4b8a-b8da-48eae8c74240"></span><span class="moose-katex-equation-number">(2)</span><script>var element = document.getElementById("moose-equation-c0bcdcd1-14cc-4b8a-b8da-48eae8c74240");katex.render("     \\begin{aligned}   \\nabla \\cdot \\boldsymbol{\\epsilon} & = \\left( \\nabla \\cdot p \\right) \\boldsymbol{T} \\\\   \\nabla^2 \\cdot \\boldsymbol{\\epsilon} & = \\left( \\nabla^2 \\cdot p \\right) \\boldsymbol{T}   \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="\nabla \cdot \boldsymbol{\epsilon}" bookmark="moose-equation-b8fdd837-cde0-4575-94f1-b2531346894d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-b8fdd837-cde0-4575-94f1-b2531346894d"><script>var element = document.getElementById("moose-equation-b8fdd837-cde0-4575-94f1-b2531346894d");katex.render("\\nabla \\cdot \\boldsymbol{\\epsilon}", element, {displayMode:false,throwOnError:false});</script></span> and <span tex="\nabla^2 \cdot \boldsymbol{\epsilon}" bookmark="moose-equation-3776bc9f-efcc-4ec6-b7ff-b19a2675248f" recursive="True" class="moose-katex-inline-equation" id="moose-equation-3776bc9f-efcc-4ec6-b7ff-b19a2675248f"><script>var element = document.getElementById("moose-equation-3776bc9f-efcc-4ec6-b7ff-b19a2675248f");katex.render("\\nabla^2 \\cdot \\boldsymbol{\\epsilon}", element, {displayMode:false,throwOnError:false});</script></span> are the first and second derivatives of the elastic strain contributions due to the eigenstrain.</p><div class="card moose-alert moose-alert-warning"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">warning:</span>Use with Elastic Strain Only</div><div class="card-content"><div class="moose-alert-content"><p><p>This class assumes the presence of only elastic strain in the computation of the first and second derivatives.</p></p></div></div></div></section><section class="scrollspy" id="85756658-5266-4d11-89df-4e099f1711fc" data-section-level="2" data-section-text="Example Input File"><h2 id="example-input-file">Example Input File</h2><pre class="moose-pre"><code class="language-text">[./eigenstrain]
+  type = ComputeVariableEigenstrain
+  eigen_base = &#x27;1&#x27;
+  args = c
+  prefactor = prefactor
+  eigenstrain_name = eigenstrain
+[../]
+</code></pre><a href="#b78a4a60-a805-4809-b4e4-f771f1be11cd" class="modal-trigger">(../moose/modules/combined/test/tests/multiphase_mechanics/simpleeigenstrain.i)</a><div class="modal moose-modal" id="b78a4a60-a805-4809-b4e4-f771f1be11cd"><div class="modal-content"><h4>/home/gary/projects/moose/modules/combined/test/tests/multiphase_mechanics/simpleeigenstrain.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 25
+  ny = 25
+  xmax = 250
+  ymax = 250
+  elem_type = QUAD4
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./c]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = SmoothCircleIC
+      x1 = 125.0
+      y1 = 125.0
+      radius = 60.0
+      invalue = 1.0
+      outvalue = 0.1
+      int_width = 50.0
+    [../]
+  [../]
+  [./e11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_e11]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+    variable = e11_aux
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = PresetBC
+    boundary = bottom
+    variable = disp_y
+    value = 0.
+  [../]
+  [./left]
+    type = PresetBC
+    boundary = left
+    variable = disp_x
+    value = 0.
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[Materials]
+  # This deprecated material is replaced by the materials below
+  #
+  #[./eigenstrain]
+  #  type = SimpleEigenStrainMaterial
+  #  block = 0
+  #  epsilon0 = 0.05
+  #  c = c
+  #  disp_y = disp_y
+  #  disp_x = disp_x
+  #  C_ijkl = &#x27;3 1 1 3 1 3 1 1 1 &#x27;
+  #  fill_method = symmetric9
+  #[../]
+
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    fill_method = symmetric9
+    C_ijkl = &#x27;3 1 1 3 1 3 1 1 1 &#x27;
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    eigenstrain_names = eigenstrain
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+  [../]
+  [./prefactor]
+    type = DerivativeParsedMaterial
+    args = c
+    f_name = prefactor
+    constant_names       = &#x27;epsilon0 c0&#x27;
+    constant_expressions = &#x27;0.05     0&#x27;
+    function = &#x27;(c - c0) * epsilon0&#x27;
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableEigenstrain
+    eigen_base = &#x27;1&#x27;
+    args = c
+    prefactor = prefactor
+    eigenstrain_name = eigenstrain
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  nl_abs_tol = 1e-10
+  num_steps = 1
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>where the argument for the <code>args</code> parameter in the eigenstrain matches the name of the coupled variable, here shown as an auxvariable</p><pre class="moose-pre"><code class="language-text">[./c]
+  order = FIRST
+  family = LAGRANGE
+  [./InitialCondition]
+    type = SmoothCircleIC
+    x1 = 125.0
+    y1 = 125.0
+    radius = 60.0
+    invalue = 1.0
+    outvalue = 0.1
+    int_width = 50.0
+  [../]
+[../]
+</code></pre><a href="#e20514a6-f3dd-424e-81b8-b9cb3c569af8" class="modal-trigger">(../moose/modules/combined/test/tests/multiphase_mechanics/simpleeigenstrain.i)</a><div class="modal moose-modal" id="e20514a6-f3dd-424e-81b8-b9cb3c569af8"><div class="modal-content"><h4>/home/gary/projects/moose/modules/combined/test/tests/multiphase_mechanics/simpleeigenstrain.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 25
+  ny = 25
+  xmax = 250
+  ymax = 250
+  elem_type = QUAD4
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./c]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = SmoothCircleIC
+      x1 = 125.0
+      y1 = 125.0
+      radius = 60.0
+      invalue = 1.0
+      outvalue = 0.1
+      int_width = 50.0
+    [../]
+  [../]
+  [./e11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_e11]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+    variable = e11_aux
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = PresetBC
+    boundary = bottom
+    variable = disp_y
+    value = 0.
+  [../]
+  [./left]
+    type = PresetBC
+    boundary = left
+    variable = disp_x
+    value = 0.
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[Materials]
+  # This deprecated material is replaced by the materials below
+  #
+  #[./eigenstrain]
+  #  type = SimpleEigenStrainMaterial
+  #  block = 0
+  #  epsilon0 = 0.05
+  #  c = c
+  #  disp_y = disp_y
+  #  disp_x = disp_x
+  #  C_ijkl = &#x27;3 1 1 3 1 3 1 1 1 &#x27;
+  #  fill_method = symmetric9
+  #[../]
+
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    fill_method = symmetric9
+    C_ijkl = &#x27;3 1 1 3 1 3 1 1 1 &#x27;
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    eigenstrain_names = eigenstrain
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+  [../]
+  [./prefactor]
+    type = DerivativeParsedMaterial
+    args = c
+    f_name = prefactor
+    constant_names       = &#x27;epsilon0 c0&#x27;
+    constant_expressions = &#x27;0.05     0&#x27;
+    function = &#x27;(c - c0) * epsilon0&#x27;
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableEigenstrain
+    eigen_base = &#x27;1&#x27;
+    args = c
+    prefactor = prefactor
+    eigenstrain_name = eigenstrain
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  nl_abs_tol = 1e-10
+  num_steps = 1
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>and the argument for the <code>prefactor</code> parameter in the eigenstrain material matches the function name (<code>f_name</code> parameter) in the <a href="DerivativeParsedMaterial.html">DerivativeParsedMaterial</a></p><pre class="moose-pre"><code class="language-text">[./prefactor]
+  type = DerivativeParsedMaterial
+  args = c
+  f_name = prefactor
+  constant_names = &#x27;epsilon0 c0&#x27;
+  constant_expressions = &#x27;0.05     0&#x27;
+  function = &#x27;(c - c0) * epsilon0&#x27;
+[../]
+</code></pre><a href="#a2a1f7f5-8c26-44df-9b46-6d2c9c9a5e26" class="modal-trigger">(../moose/modules/combined/test/tests/multiphase_mechanics/simpleeigenstrain.i)</a><div class="modal moose-modal" id="a2a1f7f5-8c26-44df-9b46-6d2c9c9a5e26"><div class="modal-content"><h4>/home/gary/projects/moose/modules/combined/test/tests/multiphase_mechanics/simpleeigenstrain.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 25
+  ny = 25
+  xmax = 250
+  ymax = 250
+  elem_type = QUAD4
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./c]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = SmoothCircleIC
+      x1 = 125.0
+      y1 = 125.0
+      radius = 60.0
+      invalue = 1.0
+      outvalue = 0.1
+      int_width = 50.0
+    [../]
+  [../]
+  [./e11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_e11]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+    variable = e11_aux
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = PresetBC
+    boundary = bottom
+    variable = disp_y
+    value = 0.
+  [../]
+  [./left]
+    type = PresetBC
+    boundary = left
+    variable = disp_x
+    value = 0.
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[Materials]
+  # This deprecated material is replaced by the materials below
+  #
+  #[./eigenstrain]
+  #  type = SimpleEigenStrainMaterial
+  #  block = 0
+  #  epsilon0 = 0.05
+  #  c = c
+  #  disp_y = disp_y
+  #  disp_x = disp_x
+  #  C_ijkl = &#x27;3 1 1 3 1 3 1 1 1 &#x27;
+  #  fill_method = symmetric9
+  #[../]
+
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    fill_method = symmetric9
+    C_ijkl = &#x27;3 1 1 3 1 3 1 1 1 &#x27;
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    eigenstrain_names = eigenstrain
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+  [../]
+  [./prefactor]
+    type = DerivativeParsedMaterial
+    args = c
+    f_name = prefactor
+    constant_names       = &#x27;epsilon0 c0&#x27;
+    constant_expressions = &#x27;0.05     0&#x27;
+    function = &#x27;(c - c0) * epsilon0&#x27;
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableEigenstrain
+    eigen_base = &#x27;1&#x27;
+    args = c
+    prefactor = prefactor
+    eigenstrain_name = eigenstrain
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  nl_abs_tol = 1e-10
+  num_steps = 1
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>Finally, the <code>eigenstrain_name</code> parameter value must also be set for the strain calculator, and an example parameter setting is shown below:</p><pre class="moose-pre"><code class="language-text">[./strain]
+  type = ComputeSmallStrain
+  eigenstrain_names = eigenstrain
+[../]
+</code></pre><a href="#521e756d-e4fc-498c-8bcb-6089af7c8606" class="modal-trigger">(../moose/modules/combined/test/tests/multiphase_mechanics/simpleeigenstrain.i)</a><div class="modal moose-modal" id="521e756d-e4fc-498c-8bcb-6089af7c8606"><div class="modal-content"><h4>/home/gary/projects/moose/modules/combined/test/tests/multiphase_mechanics/simpleeigenstrain.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 25
+  ny = 25
+  xmax = 250
+  ymax = 250
+  elem_type = QUAD4
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[AuxVariables]
+  [./c]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = SmoothCircleIC
+      x1 = 125.0
+      y1 = 125.0
+      radius = 60.0
+      invalue = 1.0
+      outvalue = 0.1
+      int_width = 50.0
+    [../]
+  [../]
+  [./e11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_e11]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+    variable = e11_aux
+  [../]
+[]
+
+[BCs]
+  [./bottom]
+    type = PresetBC
+    boundary = bottom
+    variable = disp_y
+    value = 0.
+  [../]
+  [./left]
+    type = PresetBC
+    boundary = left
+    variable = disp_x
+    value = 0.
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[Materials]
+  # This deprecated material is replaced by the materials below
+  #
+  #[./eigenstrain]
+  #  type = SimpleEigenStrainMaterial
+  #  block = 0
+  #  epsilon0 = 0.05
+  #  c = c
+  #  disp_y = disp_y
+  #  disp_x = disp_x
+  #  C_ijkl = &#x27;3 1 1 3 1 3 1 1 1 &#x27;
+  #  fill_method = symmetric9
+  #[../]
+
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    fill_method = symmetric9
+    C_ijkl = &#x27;3 1 1 3 1 3 1 1 1 &#x27;
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    eigenstrain_names = eigenstrain
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+  [../]
+  [./prefactor]
+    type = DerivativeParsedMaterial
+    args = c
+    f_name = prefactor
+    constant_names       = &#x27;epsilon0 c0&#x27;
+    constant_expressions = &#x27;0.05     0&#x27;
+    function = &#x27;(c - c0) * epsilon0&#x27;
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableEigenstrain
+    eigen_base = &#x27;1&#x27;
+    args = c
+    prefactor = prefactor
+    eigenstrain_name = eigenstrain
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+  nl_abs_tol = 1e-10
+  num_steps = 1
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="7b0bffcd-f2d7-419b-96c7-905b06faec3a" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="1afcbb73-c555-45e9-8c1a-1356e0ec18a4" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">args</span><span class="moose-parameter-header-description">variable dependencies for the prefactor</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>variable dependencies for the prefactor</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">eigen_base</span><span class="moose-parameter-header-description">Vector of values defining the constant base tensor for the Eigenstrain</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of values defining the constant base tensor for the Eigenstrain</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">eigenstrain_name</span><span class="moose-parameter-header-description">Material property name for the eigenstrain tensor computed by this model. IMPORTANT: The name of this property must also be provided to the strain calculator.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Material property name for the eigenstrain tensor computed by this model. IMPORTANT: The name of this property must also be provided to the strain calculator.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="898ba09f-b8dd-4000-93e3-059cfb08105b" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">compute</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_on</span><span class="moose-parameter-header-default">NONE</span><span class="moose-parameter-header-description">When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>NONE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE ELEMENT SUBDOMAIN</p><p class="moose-parameter-description"><span>Description:</span>When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">prefactor</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">Name of material defining the variable dependence</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Name of material defining the variable dependence</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="ba4aa9f6-6768-4dbb-ab22-0715dc577519" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="c05cd8c4-9588-4d01-9125-ae71338fc68c" data-section-level="3" data-section-text="Outputs Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">output_properties</span><span class="moose-parameter-header-description">List of material properties, from this material, to output (outputs must also be defined to an output type)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of material properties, from this material, to output (outputs must also be defined to an output type)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-default">none </span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>none </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Outputs Parameters</h3></summary></details></section></section><section class="scrollspy" id="fe7c40f2-a9b4-47fa-8930-ad6eafb8e314" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#b3caf11b-b4f1-4dfe-bf14-0df58ab4ea8f" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#85756658-5266-4d11-89df-4e099f1711fc" class="tooltipped" data-position="left" data-tooltip="Example Input File">Example Input File</a></li><li><a href="#7b0bffcd-f2d7-419b-96c7-905b06faec3a" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#fe7c40f2-a9b4-47fa-8930-ad6eafb8e314" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

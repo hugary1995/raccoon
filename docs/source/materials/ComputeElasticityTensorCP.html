@@ -1,0 +1,225 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>Compute Elasticity Tensor CP|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="25e0601d-54eb-48e8-a96d-f5d724a46730"><i class="material-icons">menu</i></a><ul class="sidenav" id="25e0601d-54eb-48e8-a96d-f5d724a46730"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">materials</span><a href="#" class="breadcrumb">ComputeElasticityTensorCP</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="47fb0c62-971d-42ae-8ed4-7bda8c1ab05e" data-section-level="1" data-section-text="Compute Elasticity Tensor CP"><h1 id="compute-elasticity-tensor-cp">Compute Elasticity Tensor CP</h1><p>Compute an elasticity tensor for crystal plasticity.</p><section class="scrollspy" id="3dc9dfbe-040c-411b-a539-8d0396bf202e" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The material <code>ComputeElasticityTensorCP</code> is used to create an elasticity tensor for crystal plasticity simulations.  This material builds an orthotropic elasticity tensor using the fill_method <code>symmetric9</code> from <a href="ComputeElasticityTensor.html">ComputeElasticityTensor</a>. <code>ComputeElasticityTensorCP</code> rotates the elasticity tensor both during the initial setup step, if Euler angles are provided, and at the start of each timestep.</p><div class="card moose-alert moose-alert-warning"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">warning:</span>Crystal Plasticity Simulations use Active Rotation</div><div class="card-content"><div class="moose-alert-content"><p><p>The rotation matrix used in this class,<code>ComputeElasticityTensorCP</code>, is the transpose of the rotation matrix created from the Bunge Euler angles in the base class, <a href="ComputeElasticityTensor.html">ComputeElasticityTensor</a>. This difference in the rotation matrix is because of the active rotation convention used in crystal plasticity simulations.</p></p></div></div></div><p>The fill method <code>symmetric9</code> is appropriate for materials with three orthotropic planes of symmetry (<a href="#malvern1969introduction">Malvern, 1969</a>), and is used for simulations of anistropic materials such as cubic crystals.  The engineering elasticity tensor notation for an orthotropic material is given in <a href="#moose-equation-de3ca6f4-465e-45e7-a981-455381164364">Eq. (3)</a>: <span class="moose-katex-block-equation"><span tex="C_{ijkl} = \begin{bmatrix}               C_{11} & C_{12} & C_{13} &      0 &      0 &      0 \\               C_{12} & C_{22} & C_{23} &      0 &      0 &      0 \\               C_{13} & C_{23} & C_{33} &      0 &      0 &      0 \\                    0 &      0 &      0 & C_{44} &      0 &      0 \\                    0 &      0 &      0 &      0 & C_{55} &      0 \\                    0 &      0 &      0 &      0 &      0 & C_{66}               \end{bmatrix}" label="eq:symmetric9_fill_method" number="1" bookmark="moose-equation-98613bc7-2800-4c59-9324-c5003def491a" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-98613bc7-2800-4c59-9324-c5003def491a"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-98613bc7-2800-4c59-9324-c5003def491a");katex.render(" C_{ijkl} = \\begin{bmatrix}               C_{11} & C_{12} & C_{13} &      0 &      0 &      0 \\\\               C_{12} & C_{22} & C_{23} &      0 &      0 &      0 \\\\               C_{13} & C_{23} & C_{33} &      0 &      0 &      0 \\\\                    0 &      0 &      0 & C_{44} &      0 &      0 \\\\                    0 &      0 &      0 &      0 & C_{55} &      0 \\\\                    0 &      0 &      0 &      0 &      0 & C_{66}               \\end{bmatrix}", element, {displayMode:true,throwOnError:false});</script></span></p></section><section class="scrollspy" id="cedd1877-5ef7-4235-b241-993f651e29c4" data-section-level="2" data-section-text="Rotation Tensor Conventions"><h2 id="rotation-tensor-conventions">Rotation Tensor Conventions</h2><p>The <a href="http://mathworld.wolfram.com/EulerAngles.html">Euler angle convention</a> used in <code>ComputeElasticityTensorCP</code> is the <span tex="z" bookmark="moose-equation-5cc2fea2-2d99-41e1-96a0-9ae47754be88" recursive="True" class="moose-katex-inline-equation" id="moose-equation-5cc2fea2-2d99-41e1-96a0-9ae47754be88"><script>var element = document.getElementById("moose-equation-5cc2fea2-2d99-41e1-96a0-9ae47754be88");katex.render("z", element, {displayMode:false,throwOnError:false});</script></span>-<span tex="x'" bookmark="moose-equation-478b839b-12e7-4afc-a112-5d50224a0821" recursive="True" class="moose-katex-inline-equation" id="moose-equation-478b839b-12e7-4afc-a112-5d50224a0821"><script>var element = document.getElementById("moose-equation-478b839b-12e7-4afc-a112-5d50224a0821");katex.render("x'", element, {displayMode:false,throwOnError:false});</script></span>-<span tex="z'" bookmark="moose-equation-bdbe5831-fe7b-4835-b51a-1adafd651131" recursive="True" class="moose-katex-inline-equation" id="moose-equation-bdbe5831-fe7b-4835-b51a-1adafd651131"><script>var element = document.getElementById("moose-equation-bdbe5831-fe7b-4835-b51a-1adafd651131");katex.render("z'", element, {displayMode:false,throwOnError:false});</script></span> (3-1-3) convention.  The Euler angles arguments are expected in degrees, not radians, and are denoted as <span tex="\phi_1" bookmark="moose-equation-fa05b331-cec3-44e7-a766-028b14fc4df4" recursive="True" class="moose-katex-inline-equation" id="moose-equation-fa05b331-cec3-44e7-a766-028b14fc4df4"><script>var element = document.getElementById("moose-equation-fa05b331-cec3-44e7-a766-028b14fc4df4");katex.render("\\phi_1", element, {displayMode:false,throwOnError:false});</script></span>, <span tex="\Phi" bookmark="moose-equation-8e520f21-6ec4-40b9-8528-66d25c9225c7" recursive="True" class="moose-katex-inline-equation" id="moose-equation-8e520f21-6ec4-40b9-8528-66d25c9225c7"><script>var element = document.getElementById("moose-equation-8e520f21-6ec4-40b9-8528-66d25c9225c7");katex.render("\\Phi", element, {displayMode:false,throwOnError:false});</script></span>, and <span tex="\phi_2" bookmark="moose-equation-1bc78acc-485a-4f75-ba87-b9b07358379d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-1bc78acc-485a-4f75-ba87-b9b07358379d"><script>var element = document.getElementById("moose-equation-1bc78acc-485a-4f75-ba87-b9b07358379d");katex.render("\\phi_2", element, {displayMode:false,throwOnError:false});</script></span>, corresponding to the axis rotations.  The rotation tensor, <span tex="R" bookmark="moose-equation-087b4f55-1823-4d2b-aacc-96c2b3e83c57" recursive="True" class="moose-katex-inline-equation" id="moose-equation-087b4f55-1823-4d2b-aacc-96c2b3e83c57"><script>var element = document.getElementById("moose-equation-087b4f55-1823-4d2b-aacc-96c2b3e83c57");katex.render("R", element, {displayMode:false,throwOnError:false});</script></span>, is calculated from the current Euler angles at each timestep as shown in <a href="#moose-equation-033b9a89-6cd1-4c2c-a230-d669d47f46e8">Eq. (2)</a>. <span class="moose-katex-block-equation"><span tex="\begin{aligned}   R_{11} & = cos(\phi_1)cos(\phi_2) - cos(\Phi)sin(\phi_1)sin(\phi_2) \\   R_{12} & = -cos(\phi_1)sin(\phi_2) - cos(\Phi)cos(\phi_2)sin(\phi_1) \\   R_{13} & = sin(\phi_1)sin(\Phi) \\   R_{21} & = cos(\phi_2)sin(\phi_1) + cos(\phi_1)cos(\Phi)sin(\phi_2) \\   R_{22} & = -sin(\phi_1)sin(\phi_2) + cos(\phi_1)cos(\Phi)cos(\phi_2) \\   R_{23} & = -cos(\phi_1)sin(\Phi) \\   R_{31} & = sin(\Phi) sin(\phi_2) \\   R_{32} & = cos(\phi_2) sin(\Phi) \\   R_{33} & = cos(\Phi)   \end{aligned}" label="eq:rotation_tensor" number="2" bookmark="moose-equation-033b9a89-6cd1-4c2c-a230-d669d47f46e8" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-033b9a89-6cd1-4c2c-a230-d669d47f46e8"></span><span class="moose-katex-equation-number">(2)</span><script>var element = document.getElementById("moose-equation-033b9a89-6cd1-4c2c-a230-d669d47f46e8");katex.render("   \\begin{aligned}   R_{11} & = cos(\\phi_1)cos(\\phi_2) - cos(\\Phi)sin(\\phi_1)sin(\\phi_2) \\\\   R_{12} & = -cos(\\phi_1)sin(\\phi_2) - cos(\\Phi)cos(\\phi_2)sin(\\phi_1) \\\\   R_{13} & = sin(\\phi_1)sin(\\Phi) \\\\   R_{21} & = cos(\\phi_2)sin(\\phi_1) + cos(\\phi_1)cos(\\Phi)sin(\\phi_2) \\\\   R_{22} & = -sin(\\phi_1)sin(\\phi_2) + cos(\\phi_1)cos(\\Phi)cos(\\phi_2) \\\\   R_{23} & = -cos(\\phi_1)sin(\\Phi) \\\\   R_{31} & = sin(\\Phi) sin(\\phi_2) \\\\   R_{32} & = cos(\\phi_2) sin(\\Phi) \\\\   R_{33} & = cos(\\Phi)   \\end{aligned}", element, {displayMode:true,throwOnError:false});</script></span> The elasticity tensor is then rotated with <a href="#moose-equation-4eb581ab-76ec-4f5c-adc4-526345c39bc7">Eq. (3)</a> <span class="moose-katex-block-equation"><span tex="C'_{ijkl} = R^T_{im} R^T_{jn} R^T_{ko} R^T_{lp} C_{mnop}" label="eq:cp_elasticity_tensor_rotation" number="3" bookmark="moose-equation-4eb581ab-76ec-4f5c-adc4-526345c39bc7" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-4eb581ab-76ec-4f5c-adc4-526345c39bc7"></span><span class="moose-katex-equation-number">(3)</span><script>var element = document.getElementById("moose-equation-4eb581ab-76ec-4f5c-adc4-526345c39bc7");katex.render("   C'_{ijkl} = R^T_{im} R^T_{jn} R^T_{ko} R^T_{lp} C_{mnop}", element, {displayMode:true,throwOnError:false});</script></span> at the beginning of each material timestep calculation.  </p><p>The crystal plasticity materials, including <code>ComputeElasticityTensorCP</code> employ an active rotation: the crystal system is rotated into the sample (loading) coordinate system. Generally the Bunge Euler angles are used to describe a passive rotation: rotating the sample coordinate system into the crystal coordinate system. As a result, the rotation tensor applied is the transpose of the rotation tensor given in <a href="#moose-equation-033b9a89-6cd1-4c2c-a230-d669d47f46e8">Eq. (2)</a> as noted in <a href="#moose-equation-4eb581ab-76ec-4f5c-adc4-526345c39bc7">Eq. (3)</a>.</p></section><section class="scrollspy" id="0e9826f6-c14f-4d36-bb47-4dd911cc8967" data-section-level="2" data-section-text="Example Input File Syntax"><h2 id="example-input-file-syntax">Example Input File Syntax</h2><pre class="moose-pre"><code class="language-text">[./elasticity_tensor]
+  type = ComputeElasticityTensorCP
+  C_ijkl = &#x27;1.684e5 1.214e5 1.214e5 1.684e5 1.214e5 1.684e5 0.754e5 0.754e5 0.754e5&#x27;
+  fill_method = symmetric9
+[../]
+</code></pre><a href="#f7ec6437-8aa6-47ac-b48e-6131223950cf" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/cp_user_object/test.i)</a><div class="modal moose-modal" id="f7ec6437-8aa6-47ac-b48e-6131223950cf"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/cp_user_object/test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  elem_type = HEX8
+  displacements = &#x27;ux uy uz&#x27;
+[]
+
+[Variables]
+  [./ux]
+    block = 0
+  [../]
+  [./uy]
+    block = 0
+  [../]
+  [./uz]
+    block = 0
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./fp_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./gss]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Functions]
+  [./tdisp]
+    type = ParsedFunction
+    value = 0.01*t
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    displacements = &#x27;ux uy uz&#x27;
+    use_displaced_mesh = true
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_zz]
+    type = RankTwoAux
+    variable = stress_zz
+    rank_two_tensor = stress
+    index_j = 2
+    index_i = 2
+    execute_on = timestep_end
+  [../]
+  [./fp_zz]
+    type = RankTwoAux
+    variable = fp_zz
+    rank_two_tensor = fp
+    index_j = 2
+    index_i = 2
+    execute_on = timestep_end
+  [../]
+  [./e_zz]
+    type = RankTwoAux
+    variable = e_zz
+    rank_two_tensor = lage
+    index_j = 2
+    index_i = 2
+    execute_on = timestep_end
+  [../]
+  [./gss]
+    type = MaterialStdVectorAux
+    variable = gss
+    property = state_var_gss
+    index = 0
+    execute_on = timestep_end
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = PresetBC
+    variable = uy
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = PresetBC
+    variable = ux
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = PresetBC
+    variable = uz
+    boundary = back
+    value = 0
+  [../]
+  [./tdisp]
+    type = FunctionPresetBC
+    variable = uz
+    boundary = front
+    function = tdisp
+  [../]
+[]
+
+[UserObjects]
+  [./slip_rate_gss]
+    type = CrystalPlasticitySlipRateGSS
+    variable_size = 12
+    slip_sys_file_name = input_slip_sys.txt
+    num_slip_sys_flowrate_props = 2
+    flowprops = &#x27;1 4 0.001 0.1 5 8 0.001 0.1 9 12 0.001 0.1&#x27;
+    uo_state_var_name = state_var_gss
+  [../]
+  [./slip_resistance_gss]
+    type = CrystalPlasticitySlipResistanceGSS
+    variable_size = 12
+    uo_state_var_name = state_var_gss
+  [../]
+  [./state_var_gss]
+    type = CrystalPlasticityStateVariable
+    variable_size = 12
+    groups = &#x27;0 4 8 12&#x27;
+    group_values = &#x27;60.8 60.8 60.8&#x27;
+    uo_state_var_evol_rate_comp_name = state_var_evol_rate_comp_gss
+    scale_factor = 1.0
+  [../]
+  [./state_var_evol_rate_comp_gss]
+    type = CrystalPlasticityStateVarRateComponentGSS
+    variable_size = 12
+    hprops = &#x27;1.0 541.5 109.8 2.5&#x27;
+    uo_slip_rate_name = slip_rate_gss
+    uo_state_var_name = state_var_gss
+  [../]
+[]
+
+[Materials]
+  [./crysp]
+    type = FiniteStrainUObasedCP
+    stol = 1e-2
+    tan_mod_type = exact
+    uo_slip_rates = &#x27;slip_rate_gss&#x27;
+    uo_slip_resistances = &#x27;slip_resistance_gss&#x27;
+    uo_state_vars = &#x27;state_var_gss&#x27;
+    uo_state_var_evol_rate_comps = &#x27;state_var_evol_rate_comp_gss&#x27;
+  [../]
+  [./strain]
+    type = ComputeFiniteStrain
+    displacements = &#x27;ux uy uz&#x27;
+  [../]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensorCP
+    C_ijkl = &#x27;1.684e5 1.214e5 1.214e5 1.684e5 1.214e5 1.684e5 0.754e5 0.754e5 0.754e5&#x27;
+    fill_method = symmetric9
+  [../]
+[]
+
+[Postprocessors]
+  [./stress_zz]
+    type = ElementAverageValue
+    variable = stress_zz
+  [../]
+  [./fp_zz]
+    type = ElementAverageValue
+    variable = fp_zz
+  [../]
+  [./e_zz]
+    type = ElementAverageValue
+    variable = e_zz
+  [../]
+  [./gss]
+    type = ElementAverageValue
+    variable = gss
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.05
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = -pc_hypre_type
+  petsc_options_value = boomerang
+  nl_abs_tol = 1e-10
+  nl_rel_step_tol = 1e-10
+  dtmax = 10.0
+  nl_rel_tol = 1e-10
+  end_time = 1
+  dtmin = 0.05
+  num_steps = 10
+  nl_abs_step_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="9d0ff126-d24f-4360-809d-8b0f2cb08fba" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="6faae9d6-3857-45da-9300-3fbea4778d18" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">C_ijkl</span><span class="moose-parameter-header-description">Stiffness tensor for material</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<double></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Stiffness tensor for material</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="bafd739c-9b44-4016-ad43-7087e3fd2cca" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundary IDs from the mesh where this boundary condition applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<BoundaryName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of boundary IDs from the mesh where this boundary condition applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">compute</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_on</span><span class="moose-parameter-header-default">NONE</span><span class="moose-parameter-header-description">When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>NONE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE ELEMENT SUBDOMAIN</p><p class="moose-parameter-description"><span>Description:</span>When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeSubdomainProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">elasticity_tensor_prefactor</span><span class="moose-parameter-header-description">Optional function to use as a scalar prefactor on the elasticity tensor.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Optional function to use as a scalar prefactor on the elasticity tensor.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">euler_angle_1</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">Euler angle in direction 1</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Euler angle in direction 1</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">euler_angle_2</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">Euler angle in direction 2</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Euler angle in direction 2</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">euler_angle_3</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">Euler angle in direction 3</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Euler angle in direction 3</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">fill_method</span><span class="moose-parameter-header-default">symmetric9</span><span class="moose-parameter-header-description">The fill method</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>symmetric9</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>antisymmetric symmetric9 symmetric21 general_isotropic symmetric_isotropic symmetric_isotropic_E_nu antisymmetric_isotropic axisymmetric_rz general principal</p><p class="moose-parameter-description"><span>Description:</span>The fill method</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">read_prop_user_object</span><span class="moose-parameter-header-description">The ElementReadPropertyFile GeneralUserObject to read element specific property values from file</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>UserObjectName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The ElementReadPropertyFile GeneralUserObject to read element specific property values from file</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="1ed6abaf-fae2-423f-a091-50d69ec4ad6a" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="6b92f153-517c-4c35-8f57-0fa4b69c66f9" data-section-level="3" data-section-text="Outputs Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">output_properties</span><span class="moose-parameter-header-description">List of material properties, from this material, to output (outputs must also be defined to an output type)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>List of material properties, from this material, to output (outputs must also be defined to an output type)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-default">none </span><span class="moose-parameter-header-description">Vector of output names were you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>none </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<OutputName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Vector of output names were you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Outputs Parameters</h3></summary></details></section></section><section class="scrollspy" id="4d8187f0-0be1-4839-889c-c270765c9bc9" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol><li id="malvern1969introduction">Lawrence&nbsp;E Malvern.
+<em>Introduction to the Mechanics of a Continuous Medium</em>.
+Prentice-Hall, 1969.<a href="#2591d198-31b3-4ba1-a94f-379f20e648c2" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="2591d198-31b3-4ba1-a94f-379f20e648c2"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@book{malvern1969introduction,
+    author = "Malvern, Lawrence E",
+    title = "Introduction to the Mechanics of a Continuous Medium",
+    year = "1969",
+    publisher = "Prentice-Hall"
+}
+</code></pre></div></div></li></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#3dc9dfbe-040c-411b-a539-8d0396bf202e" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#cedd1877-5ef7-4235-b241-993f651e29c4" class="tooltipped" data-position="left" data-tooltip="Rotation Tensor Conventions">Rotation Tensor Conventions</a></li><li><a href="#0e9826f6-c14f-4d36-bb47-4dd911cc8967" class="tooltipped" data-position="left" data-tooltip="Example Input File Syntax">Example Input File Syntax</a></li><li><a href="#9d0ff126-d24f-4360-809d-8b0f2cb08fba" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li><li><a href="#4d8187f0-0be1-4839-889c-c270765c9bc9" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

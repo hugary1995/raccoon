@@ -1,0 +1,79 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../../contrib/plotly/plotly.min.js"></script><title>Use Maximal Poisson Disk Sampling MPS to generate grain centroids|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../../media/framework/github-logo.png" class="github-mark"></img><img src="../../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../../install/index.html">Install</a></li><li><a href="../../../examples/index.html">Examples</a></li><li><a href="../../../theory/index.html">Theory</a></li><li><a href="../../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="91d37865-9347-427f-84ff-282aba2224ee"><i class="material-icons">menu</i></a><ul class="sidenav" id="91d37865-9347-427f-84ff-282aba2224ee"><li><a href="../../../install/index.html">Install</a></li><li><a href="../../../examples/index.html">Examples</a></li><li><a href="../../../theory/index.html">Theory</a></li><li><a href="../../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><span class="breadcrumb">modules</span><a href=".." class="breadcrumb">phase_field</a><span class="breadcrumb">ICs</span><a href="#" class="breadcrumb">MPS</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="547fa45b-bf9a-4edd-9b14-01e56554b0bd" data-section-level="1" data-section-text="Use Maximal Poisson - Disk Sampling ( MPS ) to generate grain centroids"><h1 id="use-maximal-poisson-disk-sampling-mps-to-generate-grain-centroids">Use Maximal Poisson-Disk Sampling (MPS) to generate grain centroids</h1><p>Random close-packing (RCP) structure can be realized by a spatial sampling process known as Maximal Poisson-Disk Sampling (MPS). For the RCP structure, the average aspect ratio of each Voronoi cell is approximately one. The RCP Voronoi structure provides an equiaxed grain structure.</p><p>The MPS algorithm is described in <a href="#Ebeida_2012">Ebeida et al. (2012)</a> and it is implemented in <a href="https://github.com/trilinos/Trilinos/tree/master/packages/meshinggenie">MeshingGenie</a> package in <a href="https://trilinos.org">Trilinos</a>. MeshingGenie will generate a list of grain centroids as a text file that can then be read into the PolycrystalVoronoi initial condition.</p><section class="scrollspy" id="eb9e2b9a-187b-48cc-831e-962a1f18503e" data-section-level="2" data-section-text="Build instruction for standalone version of MeshingGenie"><h2 id="build-instruction-for-standalone-version-of-meshinggenie">Build instruction for standalone version of MeshingGenie</h2><ul class="browser-default"><li><p>Download release version of <a href="https://github.com/trilinos/Trilinos/releases/tag/trilinos-release-12-12-1">Trilinos</a> (Note: please do not git clone!) </p></li><li><p>Run <code>cmake .</code> in the Trilinos/packages/meshinggenie/src/standalone/ directory </p></li><li><p>Run <code>make</code>. Executable file named MeshingGenie is located in the Trilinos/packages/meshinggenie/src/standalone/app directory</p></li></ul></section><section class="scrollspy" id="adaa94c1-a1f9-489a-9a13-4af551230fe7" data-section-level="2" data-section-text="Run MeshingGenie to generate the centroids of grains"><h2 id="run-meshinggenie-to-generate-the-centroids-of-grains">Run MeshingGenie to generate the centroids of grains</h2><p>To run MeshingGenie, type <code>./MeshingGenie input.dat</code>. In the input file <code>input.dat</code>, the first line is &quot;p&quot;, which indicates MPS. The second line should be in the format of &quot;D R S N_bp N_bf&quot;, where D is the dimension, R the distribution radius, S the random seed, N_bp the number of boundary points and N_bf the number of boundary faces. The next N_bp lines are the x, y, and z of the boundary points in order. Each entry of the next N_bf lines describes a triangularized boundary face using the indices of the boundary points listed in an ordered direction (outwards normal using the right hand rule).</p><p>An example of 2d input file <code>2d.dat</code> is given below</p><pre class="moose-pre"><code class="language-text">
+p
+2 0.3 10 4 4
+0 0
+1 0
+1 1
+0 1
+0 1
+1 2
+2 3
+3 0
+</code></pre><p>and 3d input file <code>3d.dat</code> is given below</p><pre class="moose-pre"><code class="language-text">
+p
+3 0.3 10 8 12
+0 0 0
+1 0 0
+1 1 0
+0 1 0
+0 0 1
+1 0 1
+1 1 1
+0 1 1
+0 3 2
+0 2 1
+1 2 5
+2 6 5
+0 1 5
+0 5 4
+0 4 3
+3 4 7
+3 7 6
+3 6 2
+5 6 7
+5 7 4
+</code></pre><p>The output file containing centroids is stored in <code>maximal_sample.dat</code>. The first line contains the dimension, distribution radius and number of grains. An example of output file <code>maximal_sample.dat</code> is given below</p><pre class="moose-pre"><code class="language-text">
+2 0.3 5
+0.232307832746474 0.452347042281606
+0.310283982183736 0.848418291915013
+0.561253436179246 0.534434874769859
+0.665658262188368 0.214715684556803
+0.714381419175506 0.826132085262111
+</code></pre></section><section class="scrollspy" id="e066221c-f77c-4b4f-b6e6-c975c1fd2711" data-section-level="2" data-section-text="Use the centroids to generate Voronoi tessellation in Phase field"><h2 id="use-the-centroids-to-generate-voronoi-tessellation-in-phase-field">Use the centroids to generate Voronoi tessellation in Phase field</h2><p>The <a href="../../../source/userobjects/PolycrystalVoronoi.html"><code>PolycrystalVoronoi</code></a> can read grain centroids from a text file and performs a Voronoi tesslation to produce a grain structure. The syntax is</p><pre class="moose-pre"><code class="language-text">
+[UserObjects]
+  [./voronoi]
+    type = PolycrystalVoronoi
+    grain_num = 5
+    file_name = &#x27;grains.txt&#x27;
+  [../]
+[]
+</code></pre><p>The <code>grains.txt</code> contains the grain centroids that can be taken from <code>maximal_sample.dat</code>. An example of text file <code>grains.txt</code> is given below</p><pre class="moose-pre"><code class="language-text">
+x                 y
+0.232307832746474 0.452347042281606
+0.310283982183736 0.848418291915013
+0.561253436179246 0.534434874769859
+0.665658262188368 0.214715684556803
+0.714381419175506 0.826132085262111
+</code></pre></section><section class="scrollspy" id="dfab0870-dbd7-4322-bc6a-ee87ed31ac22" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol><li id="Ebeida_2012">Mohamed&nbsp;S. Ebeida, Scott&nbsp;A. Mitchell, Anjul Patney, Andrew&nbsp;A. Davidson, and John&nbsp;D. Owens.
+A simple algorithm for maximal poisson-disk sampling in high dimensions.
+<em>Comput. Graph. Forum</em>, 31(2pt4):785–794, May 2012.
+URL: <a href="http://dx.doi.org/10.1111/j.1467-8659.2012.03059.x">http://dx.doi.org/10.1111/j.1467-8659.2012.03059.x</a>, <a href="https://doi.org/10.1111/j.1467-8659.2012.03059.x">doi:10.1111/j.1467-8659.2012.03059.x</a>.<a href="#fd75894a-b1eb-40ca-8ec2-0f4ae8fdd091" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="fd75894a-b1eb-40ca-8ec2-0f4ae8fdd091"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{Ebeida_2012,
+    author = "Ebeida, Mohamed S. and Mitchell, Scott A. and Patney, Anjul and Davidson, Andrew A. and Owens, John D.",
+    title = "A Simple Algorithm for Maximal Poisson-Disk Sampling in High Dimensions",
+    journal = "Comput. Graph. Forum",
+    issue_date = "May 2012",
+    volume = "31",
+    number = "2pt4",
+    month = "May",
+    year = "2012",
+    issn = "0167-7055",
+    pages = "785--794",
+    numpages = "10",
+    url = "http://dx.doi.org/10.1111/j.1467-8659.2012.03059.x",
+    doi = "10.1111/j.1467-8659.2012.03059.x",
+    acmid = "2322144",
+    publisher = "The Eurographs Association \\&\\#38; John Wiley \\&\\#38; Sons, Ltd.",
+    address = "Chichester, UK",
+    keywords = "Computing Methodologies [I.3.5]: Computer Graphics\\&\\#x2014;Computational Geometry and Object Modeling"
+}
+</code></pre></div></div></li></ol></div><p></p></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#eb9e2b9a-187b-48cc-831e-962a1f18503e" class="tooltipped" data-position="left" data-tooltip="Build instruction for standalone version of MeshingGenie">Build instruction for standalone version of MeshingGenie</a></li><li><a href="#adaa94c1-a1f9-489a-9a13-4af551230fe7" class="tooltipped" data-position="left" data-tooltip="Run MeshingGenie to generate the centroids of grains">Run MeshingGenie to generate the centroids of grains</a></li><li><a href="#e066221c-f77c-4b4f-b6e6-c975c1fd2711" class="tooltipped" data-position="left" data-tooltip="Use the centroids to generate Voronoi tessellation in Phase field">Use the centroids to generate Voronoi tessellation in Phase field</a></li><li><a href="#dfab0870-dbd7-4322-bc6a-ee87ed31ac22" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../../js/init.js"></script><script type="text/javascript" src="../../../js/navigation.js"></script><script type="text/javascript" src="../../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../../js/search_index.js"></script>

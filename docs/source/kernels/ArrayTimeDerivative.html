@@ -1,0 +1,378 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>ArrayTimeDerivative|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="9b43ebe2-dd3b-470f-81f4-cb71f0fc76f3"><i class="material-icons">menu</i></a><ul class="sidenav" id="9b43ebe2-dd3b-470f-81f4-cb71f0fc76f3"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><a href=".." class="breadcrumb">source</a><span class="breadcrumb">kernels</span><a href="#" class="breadcrumb">ArrayTimeDerivative</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="2579dd3d-71f8-4cd0-b33a-f57d0b9568b2" data-section-level="1" data-section-text="ArrayTimeDerivative"><h1 id="arraytimederivative">ArrayTimeDerivative</h1><section class="scrollspy" id="77af0882-13a8-4eb4-b9d8-b84702ec96df" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>This array kernel implements the following piece of a weak form: <span class="moose-katex-block-equation"><span tex="(\vec{u}^\ast, \mathbf{T} \dot{\vec{u}})," bookmark="moose-equation-107890ec-2c5d-47a0-8f55-4b3111de68b6" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-107890ec-2c5d-47a0-8f55-4b3111de68b6"></span><script>var element = document.getElementById("moose-equation-107890ec-2c5d-47a0-8f55-4b3111de68b6");katex.render("(\\vec{u}^\\ast, \\mathbf{T} \\dot{\\vec{u}}),", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="\vec{u}^\ast" bookmark="moose-equation-d1dba697-f17a-40ec-b3be-10789e49b2ad" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d1dba697-f17a-40ec-b3be-10789e49b2ad"><script>var element = document.getElementById("moose-equation-d1dba697-f17a-40ec-b3be-10789e49b2ad");katex.render("\\vec{u}^\\ast", element, {displayMode:false,throwOnError:false});</script></span> is the test function, <span tex="\dot{\vec{u}}" bookmark="moose-equation-0e2ab61f-6d0d-4431-899c-88654345e60b" recursive="True" class="moose-katex-inline-equation" id="moose-equation-0e2ab61f-6d0d-4431-899c-88654345e60b"><script>var element = document.getElementById("moose-equation-0e2ab61f-6d0d-4431-899c-88654345e60b");katex.render("\\dot{\\vec{u}}", element, {displayMode:false,throwOnError:false});</script></span> is time derivative of the array of finite element solutions (<span tex="\dot{\vec{u}} = \left[\frac{\partial u_1}{\partial t},\frac{\partial u_2}{\partial t},...\right]^T" bookmark="moose-equation-995343bd-56c2-474a-b71b-09b6300135a5" recursive="True" class="moose-katex-inline-equation" id="moose-equation-995343bd-56c2-474a-b71b-09b6300135a5"><script>var element = document.getElementById("moose-equation-995343bd-56c2-474a-b71b-09b6300135a5");katex.render("\\dot{\\vec{u}} = \\left[\\frac{\\partial u_1}{\\partial t},\\frac{\\partial u_2}{\\partial t},...\\right]^T", element, {displayMode:false,throwOnError:false});</script></span>), and <span tex="\mathbf{T}" bookmark="moose-equation-a8858d0c-32bc-40ee-816d-2b4fbabd2ed0" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a8858d0c-32bc-40ee-816d-2b4fbabd2ed0"><script>var element = document.getElementById("moose-equation-a8858d0c-32bc-40ee-816d-2b4fbabd2ed0");katex.render("\\mathbf{T}", element, {displayMode:false,throwOnError:false});</script></span> is a matrix of the time derivative coefficients (<span tex="(\mathbf{T})_{n,m} = T_{n,m}" bookmark="moose-equation-4b0e3230-446c-43e8-830e-603f9bf4c33c" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4b0e3230-446c-43e8-830e-603f9bf4c33c"><script>var element = document.getElementById("moose-equation-4b0e3230-446c-43e8-830e-603f9bf4c33c");katex.render("(\\mathbf{T})_{n,m} = T_{n,m}", element, {displayMode:false,throwOnError:false});</script></span>).</p><p>Similarly as showed in <a href="ArrayDiffusion.html">ArrayDiffusion</a>, we can rearrange it into <span class="moose-katex-block-equation"><span tex="(\vec{u}^\ast, \mathbf{T} \dot{\vec{u}}) = \sum_{e} \sum_{i=1}^{N_{\text{dof}}} \sum_{\text{qp}=1}^{N_{qp}} (|J|w)_{\text{qp}} \vec{w}_p\vec{u}_i^\ast \underline{\mathbf{T}_{\text{qp}} \dot{\vec{u}}_{\text{qp}} b_{i,\text{qp}}}," bookmark="moose-equation-5a7b36e4-e189-40d8-af74-940be9610525" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-5a7b36e4-e189-40d8-af74-940be9610525"></span><script>var element = document.getElementById("moose-equation-5a7b36e4-e189-40d8-af74-940be9610525");katex.render("(\\vec{u}^\\ast, \\mathbf{T} \\dot{\\vec{u}}) = \\sum_{e} \\sum_{i=1}^{N_{\\text{dof}}} \\sum_{\\text{qp}=1}^{N_{qp}} (|J|w)_{\\text{qp}} \\vec{w}_p\\vec{u}_i^\\ast \\underline{\\mathbf{T}_{\\text{qp}} \\dot{\\vec{u}}_{\\text{qp}} b_{i,\\text{qp}}},", element, {displayMode:true,throwOnError:false});</script></span> where the underlined term is the vector provided by <a href="#30e75a87-c6a2-4d0a-9b99-5fb5ff6c556a" class="modal-trigger">ArrayTimeDerivative::computeQpResidual</a>. Detailed explanations on the notations can be found in <a href="ArrayDiffusion.html">ArrayDiffusion</a>.</p><div class="modal moose-modal" id="30e75a87-c6a2-4d0a-9b99-5fb5ff6c556a"><div class="modal-content"><h4>/home/gary/projects/moose/framework/src/kernels/ArrayTimeDerivative.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;ArrayTimeDerivative.h&quot;
+
+registerMooseObject(&quot;MooseApp&quot;, ArrayTimeDerivative);
+
+defineLegacyParams(ArrayTimeDerivative);
+
+InputParameters
+ArrayTimeDerivative::validParams()
+{
+  InputParameters params = ArrayTimeKernel::validParams();
+  params.addClassDescription(&quot;Array time derivative operator with the weak form of $(\\psi_i, &quot;
+                             &quot;\\frac{\\partial u_h}{\\partial t})$.&quot;);
+  params.addParam&lt;MaterialPropertyName&gt;(&quot;time_derivative_coefficient&quot;,
+                                        &quot;The name of the time derivative coefficient. &quot;
+                                        &quot;Can be scalar, vector, or matrix&quot;);
+  return params;
+}
+
+ArrayTimeDerivative::ArrayTimeDerivative(const InputParameters &amp; parameters)
+  : ArrayTimeKernel(parameters),
+    _coeff(hasMaterialProperty&lt;Real&gt;(&quot;time_derivative_coefficient&quot;)
+               ? &amp;getMaterialProperty&lt;Real&gt;(&quot;time_derivative_coefficient&quot;)
+               : nullptr),
+    _coeff_array(hasMaterialProperty&lt;RealEigenVector&gt;(&quot;time_derivative_coefficient&quot;)
+                     ? &amp;getMaterialProperty&lt;RealEigenVector&gt;(&quot;time_derivative_coefficient&quot;)
+                     : nullptr),
+    _coeff_2d_array(hasMaterialProperty&lt;RealEigenMatrix&gt;(&quot;time_derivative_coefficient&quot;)
+                        ? &amp;getMaterialProperty&lt;RealEigenMatrix&gt;(&quot;time_derivative_coefficient&quot;)
+                        : nullptr)
+{
+  if (!_coeff &amp;&amp; !_coeff_array &amp;&amp; !_coeff_2d_array)
+  {
+    MaterialPropertyName mat = getParam&lt;MaterialPropertyName&gt;(&quot;time_derivative_coefficient&quot;);
+    mooseError(&quot;Property &quot; + mat + &quot; is of unsupported type for ArrayTimeDerivative&quot;);
+  }
+}
+
+RealEigenVector
+ArrayTimeDerivative::computeQpResidual()
+{
+  if (_coeff)
+    return (*_coeff)[_qp] * _u_dot[_qp] * _test[_i][_qp];
+  else if (_coeff_array)
+  {
+    mooseAssert((*_coeff_array)[_qp].size() == _var.count(),
+                &quot;time_derivative_coefficient size is inconsistent with the number of components &quot;
+                &quot;in array variable&quot;);
+    return ((*_coeff_array)[_qp].array() * _u_dot[_qp].array()) * _test[_i][_qp];
+  }
+  else
+  {
+    mooseAssert((*_coeff_2d_array)[_qp].cols() == _var.count(),
+                &quot;time_derivative_coefficient size is inconsistent with the number of components &quot;
+                &quot;in array variable&quot;);
+    mooseAssert((*_coeff_2d_array)[_qp].rows() == _var.count(),
+                &quot;time_derivative_coefficient size is inconsistent with the number of components &quot;
+                &quot;in array variable&quot;);
+    return (*_coeff_2d_array)[_qp] * _u_dot[_qp] * _test[_i][_qp];
+  }
+}
+
+RealEigenVector
+ArrayTimeDerivative::computeQpJacobian()
+{
+  Real tmp = _test[_i][_qp] * _phi[_j][_qp] * _du_dot_du[_qp];
+  if (_coeff)
+    return RealEigenVector::Constant(_var.count(), tmp * (*_coeff)[_qp]);
+  else if (_coeff_array)
+    return tmp * (*_coeff_array)[_qp];
+  else
+    return tmp * (*_coeff_2d_array)[_qp].diagonal();
+}
+
+RealEigenMatrix
+ArrayTimeDerivative::computeQpOffDiagJacobian(MooseVariableFEBase &amp; jvar)
+{
+  if (jvar.number() == _var.number() &amp;&amp; _coeff_2d_array)
+    return _phi[_j][_qp] * _test[_i][_qp] * _du_dot_du[_qp] * (*_coeff_2d_array)[_qp];
+  else
+    return ArrayKernel::computeQpOffDiagJacobian(jvar);
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>In general, the reaction coefficient <span tex="\mathbf{T}" bookmark="moose-equation-c2ea06fd-df2c-4684-94e8-768cf83e64d6" recursive="True" class="moose-katex-inline-equation" id="moose-equation-c2ea06fd-df2c-4684-94e8-768cf83e64d6"><script>var element = document.getElementById("moose-equation-c2ea06fd-df2c-4684-94e8-768cf83e64d6");katex.render("\\mathbf{T}", element, {displayMode:false,throwOnError:false});</script></span> is a square matrix with the size of the number of components. When it is a diagonal matrix, it can be represented by a vector. In such a case, the components are not coupled with this array time derivative kernel. If all elements of the time derivative coefficient vector are the same, we can use a scalar reaction coefficient. Thus this kernel gives users an option to set the coefficient to a scalar, vector, or matrix material property, corresponding to scalar, diagonal matrix, and full matrix, respectively.</p><p>The local Jacobian can be found in the following equation: <span class="moose-katex-block-equation"><span tex="J_{n,m,i,j} = \sum_{e} \sum_{i=1}^{N_{\text{dof}}} \sum_{j=1}^{N_{\text{dof}}} \sum_{\text{qp}=1}^{N_{qp}} (|J|w)_{\text{qp}} \vec{w}_p u_{n,i}^\ast \underline{T_{n,m,\text{qp}} b_{j,\text{qp}} b_{i,\text{qp}} \frac{\partial \dot{u}_{m,j}}{\partial u_{m,j}}}," bookmark="moose-equation-cc9f0622-ef90-4c92-9ca8-9dc93de6a9dc" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-cc9f0622-ef90-4c92-9ca8-9dc93de6a9dc"></span><script>var element = document.getElementById("moose-equation-cc9f0622-ef90-4c92-9ca8-9dc93de6a9dc");katex.render("J_{n,m,i,j} = \\sum_{e} \\sum_{i=1}^{N_{\\text{dof}}} \\sum_{j=1}^{N_{\\text{dof}}} \\sum_{\\text{qp}=1}^{N_{qp}} (|J|w)_{\\text{qp}} \\vec{w}_p u_{n,i}^\\ast \\underline{T_{n,m,\\text{qp}} b_{j,\\text{qp}} b_{i,\\text{qp}} \\frac{\\partial \\dot{u}_{m,j}}{\\partial u_{m,j}}},", element, {displayMode:true,throwOnError:false});</script></span> where <span tex="n" bookmark="moose-equation-967b5e7f-b3e3-4f23-8ac0-a20b1751d40c" recursive="True" class="moose-katex-inline-equation" id="moose-equation-967b5e7f-b3e3-4f23-8ac0-a20b1751d40c"><script>var element = document.getElementById("moose-equation-967b5e7f-b3e3-4f23-8ac0-a20b1751d40c");katex.render("n", element, {displayMode:false,throwOnError:false});</script></span> and <span tex="m" bookmark="moose-equation-f7012dd3-f849-4ad8-8f8b-7dcc6f0879ae" recursive="True" class="moose-katex-inline-equation" id="moose-equation-f7012dd3-f849-4ad8-8f8b-7dcc6f0879ae"><script>var element = document.getElementById("moose-equation-f7012dd3-f849-4ad8-8f8b-7dcc6f0879ae");katex.render("m", element, {displayMode:false,throwOnError:false});</script></span> are the component row and column, respectively. The underlined part is the local Jacobian evaluated by <a href="#38d706a6-bbe7-47d6-af83-c93b32c09e55" class="modal-trigger">ArrayTimeDerivative::computeQpJacobian</a> and <a href="#0231bb98-6d34-49de-9f09-0aff714d7c71" class="modal-trigger">ArrayTimeDerivative::computeQpOffDiagJacobian</a>.</p><div class="modal moose-modal" id="38d706a6-bbe7-47d6-af83-c93b32c09e55"><div class="modal-content"><h4>/home/gary/projects/moose/framework/src/kernels/ArrayTimeDerivative.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;ArrayTimeDerivative.h&quot;
+
+registerMooseObject(&quot;MooseApp&quot;, ArrayTimeDerivative);
+
+defineLegacyParams(ArrayTimeDerivative);
+
+InputParameters
+ArrayTimeDerivative::validParams()
+{
+  InputParameters params = ArrayTimeKernel::validParams();
+  params.addClassDescription(&quot;Array time derivative operator with the weak form of $(\\psi_i, &quot;
+                             &quot;\\frac{\\partial u_h}{\\partial t})$.&quot;);
+  params.addParam&lt;MaterialPropertyName&gt;(&quot;time_derivative_coefficient&quot;,
+                                        &quot;The name of the time derivative coefficient. &quot;
+                                        &quot;Can be scalar, vector, or matrix&quot;);
+  return params;
+}
+
+ArrayTimeDerivative::ArrayTimeDerivative(const InputParameters &amp; parameters)
+  : ArrayTimeKernel(parameters),
+    _coeff(hasMaterialProperty&lt;Real&gt;(&quot;time_derivative_coefficient&quot;)
+               ? &amp;getMaterialProperty&lt;Real&gt;(&quot;time_derivative_coefficient&quot;)
+               : nullptr),
+    _coeff_array(hasMaterialProperty&lt;RealEigenVector&gt;(&quot;time_derivative_coefficient&quot;)
+                     ? &amp;getMaterialProperty&lt;RealEigenVector&gt;(&quot;time_derivative_coefficient&quot;)
+                     : nullptr),
+    _coeff_2d_array(hasMaterialProperty&lt;RealEigenMatrix&gt;(&quot;time_derivative_coefficient&quot;)
+                        ? &amp;getMaterialProperty&lt;RealEigenMatrix&gt;(&quot;time_derivative_coefficient&quot;)
+                        : nullptr)
+{
+  if (!_coeff &amp;&amp; !_coeff_array &amp;&amp; !_coeff_2d_array)
+  {
+    MaterialPropertyName mat = getParam&lt;MaterialPropertyName&gt;(&quot;time_derivative_coefficient&quot;);
+    mooseError(&quot;Property &quot; + mat + &quot; is of unsupported type for ArrayTimeDerivative&quot;);
+  }
+}
+
+RealEigenVector
+ArrayTimeDerivative::computeQpResidual()
+{
+  if (_coeff)
+    return (*_coeff)[_qp] * _u_dot[_qp] * _test[_i][_qp];
+  else if (_coeff_array)
+  {
+    mooseAssert((*_coeff_array)[_qp].size() == _var.count(),
+                &quot;time_derivative_coefficient size is inconsistent with the number of components &quot;
+                &quot;in array variable&quot;);
+    return ((*_coeff_array)[_qp].array() * _u_dot[_qp].array()) * _test[_i][_qp];
+  }
+  else
+  {
+    mooseAssert((*_coeff_2d_array)[_qp].cols() == _var.count(),
+                &quot;time_derivative_coefficient size is inconsistent with the number of components &quot;
+                &quot;in array variable&quot;);
+    mooseAssert((*_coeff_2d_array)[_qp].rows() == _var.count(),
+                &quot;time_derivative_coefficient size is inconsistent with the number of components &quot;
+                &quot;in array variable&quot;);
+    return (*_coeff_2d_array)[_qp] * _u_dot[_qp] * _test[_i][_qp];
+  }
+}
+
+RealEigenVector
+ArrayTimeDerivative::computeQpJacobian()
+{
+  Real tmp = _test[_i][_qp] * _phi[_j][_qp] * _du_dot_du[_qp];
+  if (_coeff)
+    return RealEigenVector::Constant(_var.count(), tmp * (*_coeff)[_qp]);
+  else if (_coeff_array)
+    return tmp * (*_coeff_array)[_qp];
+  else
+    return tmp * (*_coeff_2d_array)[_qp].diagonal();
+}
+
+RealEigenMatrix
+ArrayTimeDerivative::computeQpOffDiagJacobian(MooseVariableFEBase &amp; jvar)
+{
+  if (jvar.number() == _var.number() &amp;&amp; _coeff_2d_array)
+    return _phi[_j][_qp] * _test[_i][_qp] * _du_dot_du[_qp] * (*_coeff_2d_array)[_qp];
+  else
+    return ArrayKernel::computeQpOffDiagJacobian(jvar);
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="modal moose-modal" id="0231bb98-6d34-49de-9f09-0aff714d7c71"><div class="modal-content"><h4>/home/gary/projects/moose/framework/src/kernels/ArrayTimeDerivative.C</h4><pre class="moose-pre"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://www.mooseframework.org
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#include &quot;ArrayTimeDerivative.h&quot;
+
+registerMooseObject(&quot;MooseApp&quot;, ArrayTimeDerivative);
+
+defineLegacyParams(ArrayTimeDerivative);
+
+InputParameters
+ArrayTimeDerivative::validParams()
+{
+  InputParameters params = ArrayTimeKernel::validParams();
+  params.addClassDescription(&quot;Array time derivative operator with the weak form of $(\\psi_i, &quot;
+                             &quot;\\frac{\\partial u_h}{\\partial t})$.&quot;);
+  params.addParam&lt;MaterialPropertyName&gt;(&quot;time_derivative_coefficient&quot;,
+                                        &quot;The name of the time derivative coefficient. &quot;
+                                        &quot;Can be scalar, vector, or matrix&quot;);
+  return params;
+}
+
+ArrayTimeDerivative::ArrayTimeDerivative(const InputParameters &amp; parameters)
+  : ArrayTimeKernel(parameters),
+    _coeff(hasMaterialProperty&lt;Real&gt;(&quot;time_derivative_coefficient&quot;)
+               ? &amp;getMaterialProperty&lt;Real&gt;(&quot;time_derivative_coefficient&quot;)
+               : nullptr),
+    _coeff_array(hasMaterialProperty&lt;RealEigenVector&gt;(&quot;time_derivative_coefficient&quot;)
+                     ? &amp;getMaterialProperty&lt;RealEigenVector&gt;(&quot;time_derivative_coefficient&quot;)
+                     : nullptr),
+    _coeff_2d_array(hasMaterialProperty&lt;RealEigenMatrix&gt;(&quot;time_derivative_coefficient&quot;)
+                        ? &amp;getMaterialProperty&lt;RealEigenMatrix&gt;(&quot;time_derivative_coefficient&quot;)
+                        : nullptr)
+{
+  if (!_coeff &amp;&amp; !_coeff_array &amp;&amp; !_coeff_2d_array)
+  {
+    MaterialPropertyName mat = getParam&lt;MaterialPropertyName&gt;(&quot;time_derivative_coefficient&quot;);
+    mooseError(&quot;Property &quot; + mat + &quot; is of unsupported type for ArrayTimeDerivative&quot;);
+  }
+}
+
+RealEigenVector
+ArrayTimeDerivative::computeQpResidual()
+{
+  if (_coeff)
+    return (*_coeff)[_qp] * _u_dot[_qp] * _test[_i][_qp];
+  else if (_coeff_array)
+  {
+    mooseAssert((*_coeff_array)[_qp].size() == _var.count(),
+                &quot;time_derivative_coefficient size is inconsistent with the number of components &quot;
+                &quot;in array variable&quot;);
+    return ((*_coeff_array)[_qp].array() * _u_dot[_qp].array()) * _test[_i][_qp];
+  }
+  else
+  {
+    mooseAssert((*_coeff_2d_array)[_qp].cols() == _var.count(),
+                &quot;time_derivative_coefficient size is inconsistent with the number of components &quot;
+                &quot;in array variable&quot;);
+    mooseAssert((*_coeff_2d_array)[_qp].rows() == _var.count(),
+                &quot;time_derivative_coefficient size is inconsistent with the number of components &quot;
+                &quot;in array variable&quot;);
+    return (*_coeff_2d_array)[_qp] * _u_dot[_qp] * _test[_i][_qp];
+  }
+}
+
+RealEigenVector
+ArrayTimeDerivative::computeQpJacobian()
+{
+  Real tmp = _test[_i][_qp] * _phi[_j][_qp] * _du_dot_du[_qp];
+  if (_coeff)
+    return RealEigenVector::Constant(_var.count(), tmp * (*_coeff)[_qp]);
+  else if (_coeff_array)
+    return tmp * (*_coeff_array)[_qp];
+  else
+    return tmp * (*_coeff_2d_array)[_qp].diagonal();
+}
+
+RealEigenMatrix
+ArrayTimeDerivative::computeQpOffDiagJacobian(MooseVariableFEBase &amp; jvar)
+{
+  if (jvar.number() == _var.number() &amp;&amp; _coeff_2d_array)
+    return _phi[_j][_qp] * _test[_i][_qp] * _du_dot_du[_qp] * (*_coeff_2d_array)[_qp];
+  else
+    return ArrayKernel::computeQpOffDiagJacobian(jvar);
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="9048c276-c221-487e-b55f-af378d950a29" data-section-level="2" data-section-text="Example Input Syntax"><h2 id="example-input-syntax">Example Input Syntax</h2><pre class="moose-pre"><code class="language-text">[Kernels]
+  [dudt]
+    type = ArrayTimeDerivative
+    variable = u
+    time_derivative_coefficient = tc
+  []
+  [diff]
+    type = ArrayDiffusion
+    variable = u
+    diffusion_coefficient = dc
+  []
+  [reaction]
+    type = ArrayReaction
+    variable = u
+    reaction_coefficient = rc
+  []
+[]
+</code></pre><a href="#d296c365-7c87-464f-9a71-755edc398b85" class="modal-trigger">(../moose/test/tests/kernels/array_kernels/array_diffusion_reaction_transient.i)</a><div class="modal moose-modal" id="d296c365-7c87-464f-9a71-755edc398b85"><div class="modal-content"><h4>/home/gary/projects/moose/test/tests/kernels/array_kernels/array_diffusion_reaction_transient.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 4
+  ny = 4
+[]
+
+[Variables]
+  [u]
+    order = FIRST
+    family = LAGRANGE
+    components = 2
+  []
+[]
+
+[Kernels]
+  [dudt]
+    type = ArrayTimeDerivative
+    variable = u
+    time_derivative_coefficient = tc
+  []
+  [diff]
+    type = ArrayDiffusion
+    variable = u
+    diffusion_coefficient = dc
+  []
+  [reaction]
+    type = ArrayReaction
+    variable = u
+    reaction_coefficient = rc
+  []
+[]
+
+[BCs]
+  [left]
+    type = ArrayDirichletBC
+    variable = u
+    boundary = 1
+    values = &#x27;0 0&#x27;
+  []
+
+  [right]
+    type = ArrayDirichletBC
+    variable = u
+    boundary = 2
+    values = &#x27;1 2&#x27;
+  []
+[]
+
+[Materials]
+  [tc]
+    type = GenericConstantArray
+    prop_name = tc
+    prop_value = &#x27;1 1&#x27;
+  []
+  [dc]
+    type = GenericConstantArray
+    prop_name = dc
+    prop_value = &#x27;1 1&#x27;
+  []
+  [rc]
+    type = GenericConstant2DArray
+    prop_name = rc
+    prop_value = &#x27;1 0; -0.1 1&#x27;
+  []
+[]
+
+[Postprocessors]
+  [intu0]
+    type = ElementIntegralArrayVariablePostprocessor
+    variable = u
+    component = 0
+  []
+  [intu1]
+    type = ElementIntegralArrayVariablePostprocessor
+    variable = u
+    component = 1
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;NEWTON&#x27;
+  dt = 0.1
+  num_steps = 10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="d0ffb4c4-2d5d-4a02-bf8a-79f3c3a5cd49" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="720ce470-857d-4ee1-93fa-bdd06130eb5b" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this Kernel operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this Kernel operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="258f07e8-fee1-47b9-bd96-0b888c527837" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of block ids (SubdomainID) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<SubdomainName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The list of block ids (SubdomainID) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacements</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<VariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The displacements</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">time_derivative_coefficient</span><span class="moose-parameter-header-description">The name of the time derivative coefficient. Can be scalar, vector, or matrix</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of the time derivative coefficient. Can be scalar, vector, or matrix</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="d110f903-38b8-4318-a605-e850043f97d6" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<std::string></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<AuxVariableName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="da7c1f50-0196-4a14-a368-057b48f54d94" data-section-level="3" data-section-text="Tagging Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector<TagName></p><p class="moose-parameter-description-options"><span>Options:</span></p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system time</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system time</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime system time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">time</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>time</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime time</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Tagging Parameters</h3></summary></details></section></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#77af0882-13a8-4eb4-b9d8-b84702ec96df" class="tooltipped" data-position="left" data-tooltip="Description">Description</a></li><li><a href="#9048c276-c221-487e-b55f-af378d950a29" class="tooltipped" data-position="left" data-tooltip="Example Input Syntax">Example Input Syntax</a></li><li><a href="#d0ffb4c4-2d5d-4a02-bf8a-79f3c3a5cd49" class="tooltipped" data-position="left" data-tooltip="Input Parameters">Input Parameters</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>

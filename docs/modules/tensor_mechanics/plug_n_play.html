@@ -1,0 +1,1407 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script><script type="text/javascript" src="../../contrib/plotly/plotly.min.js"></script><title>Plug n Play System Overview in Tensor Mechanics|RACCOON</title></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="https://hugary1995.github.io/raccoon" class="left moose-logo hide-on-med-and-down">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#" class="sidenav-trigger" data-target="992257d2-66c8-4a57-ac3e-d4984c13d520"><i class="material-icons">menu</i></a><ul class="sidenav" id="992257d2-66c8-4a57-ac3e-d4984c13d520"><li><a href="../../install/index.html">Install</a></li><li><a href="../../examples/index.html">Examples</a></li><li><a href="../../theory/index.html">Theory</a></li><li><a href="../../documentation/index.html">Documentation</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="row"><div class="col l12"><div class="input-field"><input type_="text" onkeyup="mooseSearch()" placeholder="https://hugary1995.github.io/raccoon" id="moose-search-box"></input></div></div><div><div class="col s12" id="moose-search-results"></div></div></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="col hide-on-med-and-down l12"><nav class="breadcrumb-nav"><div class="nav-wrapper"><span class="breadcrumb">modules</span><a href="." class="breadcrumb">tensor_mechanics</a><a href="#" class="breadcrumb">plug_n_play</a></div></nav></div></div><div class="row"><div class="moose-content col s12 m12 l10"><section id="640416fe-ffc5-4590-95db-71d9bda4efe2" data-section-level="1" data-section-text="Plug - n - Play System Overview in Tensor Mechanics"><h1 id="plug-n-play-system-overview-in-tensor-mechanics">Plug-n-Play System Overview in Tensor Mechanics</h1><p>The tensor mechanics materials use a plug-and-play system where the main tensors used in the residual equation are defined in individual material classes in MOOSE. The plug-and-play approach used in the Tensor Mechanics module requires at least three separate classes to fully describe a material model.</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><span class="moose-alert-title-brand">note:</span>Three Tensors Are Required for a Mechanics Problem</div><div class="card-content"><div class="moose-alert-content"><p><p>The three tensors that must be defined for any mechanics problem are the the strain <span tex="\boldsymbol{\epsilon}" bookmark="moose-equation-4c8148e8-ba95-4ac2-9932-3b29f3acc8b6" recursive="True" class="moose-katex-inline-equation" id="moose-equation-4c8148e8-ba95-4ac2-9932-3b29f3acc8b6"><script>var element = document.getElementById("moose-equation-4c8148e8-ba95-4ac2-9932-3b29f3acc8b6");katex.render("\\boldsymbol{\\epsilon}", element, {displayMode:false,throwOnError:false});</script></span> or strain increment, elasticity tensor <span tex="\boldsymbol{\mathcal{C}}" bookmark="moose-equation-a343e8d5-9305-432c-9a02-f802b1abfa1e" recursive="True" class="moose-katex-inline-equation" id="moose-equation-a343e8d5-9305-432c-9a02-f802b1abfa1e"><script>var element = document.getElementById("moose-equation-a343e8d5-9305-432c-9a02-f802b1abfa1e");katex.render("\\boldsymbol{\\mathcal{C}}", element, {displayMode:false,throwOnError:false});</script></span>, and the stress <span tex="\boldsymbol{\sigma}" bookmark="moose-equation-fbc62642-c6a3-4e9c-81ba-14a8eeb8b301" recursive="True" class="moose-katex-inline-equation" id="moose-equation-fbc62642-c6a3-4e9c-81ba-14a8eeb8b301"><script>var element = document.getElementById("moose-equation-fbc62642-c6a3-4e9c-81ba-14a8eeb8b301");katex.render("\\boldsymbol{\\sigma}", element, {displayMode:false,throwOnError:false});</script></span>. Optional tensors include stress-free strain (also known as an eigenstrain) <span tex="\boldsymbol{\epsilon}_0" bookmark="moose-equation-237ba58f-6c65-4890-8cff-b6c131b71ceb" recursive="True" class="moose-katex-inline-equation" id="moose-equation-237ba58f-6c65-4890-8cff-b6c131b71ceb"><script>var element = document.getElementById("moose-equation-237ba58f-6c65-4890-8cff-b6c131b71ceb");katex.render("\\boldsymbol{\\epsilon}_0", element, {displayMode:false,throwOnError:false});</script></span> and additional stress <span tex="\boldsymbol{\sigma}_0" bookmark="moose-equation-cf0cd49d-36b8-429b-ac82-332b83097f9d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-cf0cd49d-36b8-429b-ac82-332b83097f9d"><script>var element = document.getElementById("moose-equation-cf0cd49d-36b8-429b-ac82-332b83097f9d");katex.render("\\boldsymbol{\\sigma}_0", element, {displayMode:false,throwOnError:false});</script></span>.</p></p></div></div></div><div class="card moose-float" style="width:800;float:right;"><div class="card-content"><img src="../../media/tensor_mechanics/IntroPlugNPlay.png" class="materialboxed moose-image"></img><p class="moose-caption"><span class="moose-caption-text">Figure 1: Tensors required to fully describe a mechanics material.</span></p></div></div><p>At times, a user may need to define multiple mechanics properties over a single block. For this reason, all material properties can be prepended by a name defined by the input parameter <code>base_name</code>.</p><section class="scrollspy" id="3a983204-af3e-4b09-ad9f-57cce3fcc278" data-section-level="2" data-section-text="Strain Materials"><h2 id="strain-materials">Strain Materials</h2><p>The base material class to create strains (<span tex="\boldsymbol{\epsilon}" bookmark="moose-equation-912f9ad2-d23e-4b50-982f-2ed04a9fdb3e" recursive="True" class="moose-katex-inline-equation" id="moose-equation-912f9ad2-d23e-4b50-982f-2ed04a9fdb3e"><script>var element = document.getElementById("moose-equation-912f9ad2-d23e-4b50-982f-2ed04a9fdb3e");katex.render("\\boldsymbol{\\epsilon}", element, {displayMode:false,throwOnError:false});</script></span>) or strain increments is <code>ComputeStrainBase</code>; this class is a pure virtual class, requiring that all children override the <code>computeQpProperties()</code> method.  For all strains the base class defines the property <code>total_strain</code>. For incremental strains, both finite and small, the compute strain base class defines the properties <code>strain_rate</code>, <code>strain_increment</code>, <code>rotation_increment</code>, and <code>deformation_gradient</code>. A discussion of the different types of strain formulations is available on the <a href="Strains.html">Strains</a> page.</p><p>For small strains, use <a href="../../source/materials/ComputeSmallStrain.html">ComputeSmallStrain</a> in which <span tex="\boldsymbol{\epsilon} = (\nabla \boldsymbol{u} + \nabla \boldsymbol{u}^T)/2" bookmark="moose-equation-d4f07414-5efd-496e-8186-3cbe3a95ed18" recursive="True" class="moose-katex-inline-equation" id="moose-equation-d4f07414-5efd-496e-8186-3cbe3a95ed18"><script>var element = document.getElementById("moose-equation-d4f07414-5efd-496e-8186-3cbe3a95ed18");katex.render("\\boldsymbol{\\epsilon} = (\\nabla \\boldsymbol{u} + \\nabla \\boldsymbol{u}^T)/2", element, {displayMode:false,throwOnError:false});</script></span>. For finite strains, use <a href="../../source/materials/ComputeFiniteStrain.html">ComputeFiniteStrain</a> in which an incremental form is employed such that the strain_increment and rotation_increment are calculated.</p><p>With the TensorMechanics master action, the strain formulation can be set with the <code>strain= SMALL |
+FINITE</code> parameter, as shown below.</p><pre class="moose-pre"><code class="language-text">[./TensorMechanics]
+  [./Master]
+    [./all]
+      strain = FINITE
+      add_variables = true
+    [../]
+  [../]
+[../]
+</code></pre><a href="#433368ca-0928-4a2c-929c-fde86533ef3e" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i)</a><div class="modal moose-modal" id="433368ca-0928-4a2c-929c-fde86533ef3e"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  elem_type = HEX8
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Functions]
+  [./tdisp]
+    type = ParsedFunction
+    value = &#x27;0.01 * t&#x27;
+  [../]
+[]
+
+[Modules]
+  [./TensorMechanics]
+    [./Master]
+      [./all]
+        strain = FINITE
+        add_variables = true
+      [../]
+    [../]
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = PresetBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+  [./tdisp]
+    type = FunctionPresetBC
+    variable = disp_z
+    boundary = front
+    function = tdisp
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;1.684e5 0.176e5 0.176e5 1.684e5 0.176e5 1.684e5 0.754e5 0.754e5 0.754e5&#x27;
+    fill_method = symmetric9
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.05
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = -pc_hypre_type
+  petsc_options_value = boomeramg
+  nl_abs_tol = 1e-10
+  nl_rel_step_tol = 1e-10
+  dtmax = 10.0
+  nl_rel_tol = 1e-10
+  end_time = 1
+  dtmin = 0.05
+  num_steps = 10
+  nl_abs_step_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="b762c4c9-592f-4f11-bd56-aa815eb3ec5b" data-section-level="2" data-section-text="Elasticity Tensor Materials"><h2 id="elasticity-tensor-materials">Elasticity Tensor Materials</h2><p>The primary class for creating elasticity tensors (<span tex="\boldsymbol{\mathcal{C_{ijkl}}}" bookmark="moose-equation-e3918afa-2195-45d1-92bd-be2aca762120" recursive="True" class="moose-katex-inline-equation" id="moose-equation-e3918afa-2195-45d1-92bd-be2aca762120"><script>var element = document.getElementById("moose-equation-e3918afa-2195-45d1-92bd-be2aca762120");katex.render("\\boldsymbol{\\mathcal{C_{ijkl}}}", element, {displayMode:false,throwOnError:false});</script></span>) is <a href="../../source/materials/ComputeElasticityTensor.html">ComputeElasticityTensor</a>. This class defines the property <code>_elasticity_tensor</code>. Given the elastic constants required for the applicable symmetry, such as <code>symmetric9</code>, this material calculates the elasticity tensor. If you wish to rotate the elasticity tensor, constant Euler angles can be provided. The elasticity tensor can also be scaled with a function, if desired.  <code>ComputeElasticityTensor</code> also serves as a base class for specialized elasticity tensors, including:</p><ul class="browser-default"><li><p>An elasticity tensor for crystal plasticity, <a href="../../source/materials/ComputeElasticityTensorCP.html">ComputeElasticityTensorCP</a>, </p></li><li><p>A Cosserat elasticity tensor <a href="../../source/materials/ComputeLayeredCosseratElasticityTensor.html">ComputeLayeredCosseratElasticityTensor</a>, </p></li><li><p>An isotropic elasticity tensor <a href="../../source/materials/ComputeIsotropicElasticityTensor.html">ComputeIsotropicElasticityTensor</a>.</p></li></ul><p>The input file syntax for the isotropic elasticity tensor is</p><pre class="moose-pre"><code class="language-text">[./elasticity_tensor]
+  type = ComputeIsotropicElasticityTensor
+  youngs_modulus = 2.1e5
+  poissons_ratio = 0.3
+[../]
+</code></pre><a href="#e065ed11-a9b4-4451-99c6-7e3a4eead4d2" class="modal-trigger">(../moose/modules/tensor_mechanics/tutorials/basics/part_1.1.i)</a><div class="modal moose-modal" id="e065ed11-a9b4-4451-99c6-7e3a4eead4d2"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/tutorials/basics/part_1.1.i</h4><pre class="moose-pre"><code class="language-text">#Tensor Mechanics tutorial: the basics
+#Step 1, part 1
+#2D simulation of uniaxial tension with linear elasticity
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Mesh]
+  file = necking_quad4.e
+[]
+
+[Modules/TensorMechanics/Master]
+  [./block1]
+    strain = SMALL #Small linearized strain, automatically set to XY coordinates
+    add_variables = true #Add the variables from the displacement string in GlobalParams
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 2.1e5
+    poissons_ratio = 0.3
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./bottom]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./top]
+    type = PresetBC
+    variable = disp_y
+    boundary = top
+    value = 0.05
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  petsc_options = &#x27;-snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -pc_asm_overlap -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm lu 1 101&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>and for an orthotropic material, such as a metal crystal, is</p><pre class="moose-pre"><code class="language-text">[./elasticity_tensor]
+  type = ComputeElasticityTensor
+  C_ijkl = &#x27;1.684e5 0.176e5 0.176e5 1.684e5 0.176e5 1.684e5 0.754e5 0.754e5 0.754e5&#x27;
+  fill_method = symmetric9
+[../]
+</code></pre><a href="#506067cd-1ac3-453e-b1ef-95c73c3d6604" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i)</a><div class="modal moose-modal" id="506067cd-1ac3-453e-b1ef-95c73c3d6604"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  elem_type = HEX8
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Functions]
+  [./tdisp]
+    type = ParsedFunction
+    value = &#x27;0.01 * t&#x27;
+  [../]
+[]
+
+[Modules]
+  [./TensorMechanics]
+    [./Master]
+      [./all]
+        strain = FINITE
+        add_variables = true
+      [../]
+    [../]
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = PresetBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+  [./tdisp]
+    type = FunctionPresetBC
+    variable = disp_z
+    boundary = front
+    function = tdisp
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;1.684e5 0.176e5 0.176e5 1.684e5 0.176e5 1.684e5 0.754e5 0.754e5 0.754e5&#x27;
+    fill_method = symmetric9
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.05
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = -pc_hypre_type
+  petsc_options_value = boomeramg
+  nl_abs_tol = 1e-10
+  nl_rel_step_tol = 1e-10
+  dtmax = 10.0
+  nl_rel_tol = 1e-10
+  end_time = 1
+  dtmin = 0.05
+  num_steps = 10
+  nl_abs_step_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="8ae07f6b-fcbb-403a-8f18-03f1504977da" data-section-level="2" data-section-text="Stress Materials"><h2 id="stress-materials">Stress Materials</h2><p>The base class for constitutive equations to compute a stress (<span tex="\boldsymbol{\sigma}" bookmark="moose-equation-3fda2075-c9eb-4a00-b99c-db0606e54e8d" recursive="True" class="moose-katex-inline-equation" id="moose-equation-3fda2075-c9eb-4a00-b99c-db0606e54e8d"><script>var element = document.getElementById("moose-equation-3fda2075-c9eb-4a00-b99c-db0606e54e8d");katex.render("\\boldsymbol{\\sigma}", element, {displayMode:false,throwOnError:false});</script></span>) is <code>ComputeStressBase</code>. The <code>ComputeStressBase</code> class defines the properties <code>stress</code> and <code>elastic_strain</code>. It is a pure virtual class, requiring all children to override the method <code>computeQpStress()</code>.</p><p>Two elastic constitutive models have been developed, one that assumes small strains <a href="../../source/materials/ComputeLinearElasticStress.html">ComputeLinearElasticStress</a>, and a second which assumes finite strains and rotations increments <a href="../../source/materials/ComputeFiniteStrainElasticStress.html">ComputeFiniteStrainElasticStress</a> The input file syntax for these materials is</p><pre class="moose-pre"><code class="language-text">[./stress]
+  type = ComputeFiniteStrainElasticStress
+[../]
+</code></pre><a href="#23116e94-fee2-4606-83c0-7f3afddb15db" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i)</a><div class="modal moose-modal" id="23116e94-fee2-4606-83c0-7f3afddb15db"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  elem_type = HEX8
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Functions]
+  [./tdisp]
+    type = ParsedFunction
+    value = &#x27;0.01 * t&#x27;
+  [../]
+[]
+
+[Modules]
+  [./TensorMechanics]
+    [./Master]
+      [./all]
+        strain = FINITE
+        add_variables = true
+      [../]
+    [../]
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = PresetBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+  [./tdisp]
+    type = FunctionPresetBC
+    variable = disp_z
+    boundary = front
+    function = tdisp
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;1.684e5 0.176e5 0.176e5 1.684e5 0.176e5 1.684e5 0.754e5 0.754e5 0.754e5&#x27;
+    fill_method = symmetric9
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.05
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = -pc_hypre_type
+  petsc_options_value = boomeramg
+  nl_abs_tol = 1e-10
+  nl_rel_step_tol = 1e-10
+  dtmax = 10.0
+  nl_rel_tol = 1e-10
+  end_time = 1
+  dtmin = 0.05
+  num_steps = 10
+  nl_abs_step_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>There are a number of other constitutive models that have been implemented to calculate more complex elasticity problems, plasticity, and creep.  An overview of these different materials is available on the <a href="Stresses.html">Stresses</a> page.</p></section><section class="scrollspy" id="5d3f05f2-884f-4b56-b784-d15877667124" data-section-level="2" data-section-text="Eigenstrain Materials"><h2 id="eigenstrain-materials">Eigenstrain Materials</h2><p>Eigenstrain is the term given to a strain which does not result directly from an applied force. The base class for eigenstrains is <code>ComputeEigenstrainBase</code>. It computes an eigenstrain, which is subtracted from the total strain in the Compute Strain classes. <span class="moose-katex-block-equation"><span tex="\epsilon_{mechanical} = \epsilon_{total} - \epsilon_{eigen}" bookmark="moose-equation-59e73c73-3403-4805-b7e8-ac1db00ecba8" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-59e73c73-3403-4805-b7e8-ac1db00ecba8"></span><script>var element = document.getElementById("moose-equation-59e73c73-3403-4805-b7e8-ac1db00ecba8");katex.render("\\epsilon_{mechanical} = \\epsilon_{total} - \\epsilon_{eigen}", element, {displayMode:true,throwOnError:false});</script></span> Chapter 3 of <a href="#qu2006fundamentals">Qu and Cherkaoui (2006)</a> describes the relationship between total, elastic, and eigen- strains and provides examples using thermal expansion and dislocations.</p><p>Eigenstrains are also referred to as residual strains, stress-free strains, or intrinsic strains; translated from German, <a href="http://dict.tu-chemnitz.de/deutsch-englisch/Eigen....html">Eigen</a> means own or intrinsic in English.  The term eigenstrain was introduced by <a href="#mura1982general">Mura (1982)</a>:</p><blockquote><p>Eigenstrain is a generic name given to such nonelastic strains as thermal expansion, phase transformation, initial strains, plastic, misfit strains. Eigenstress is a generic name given to self-equilibrated internal stresses caused by one or several of these eigenstrains in bodies which are free from any other external force and surface constraint.  The eigenstress fields are created by the incompatibility of the eigenstrains.  This new English terminology was adapted from the German &quot;Eigenspannungen and Eigenspannungsquellen,&quot; which is the title of H. Reissner&#x27;s paper (1931) on residual stresses.</p></blockquote><p>Thermal strains are a volumetric change resulting from a change in temperature of the material.  The change in strains can be either a simple linear function of thermal change, e.g. (<span tex="\boldsymbol{\epsilon}_T = \alpha \Delta T" bookmark="moose-equation-6dbc27d8-b0db-4edc-ae45-60d13ea8ed10" recursive="True" class="moose-katex-inline-equation" id="moose-equation-6dbc27d8-b0db-4edc-ae45-60d13ea8ed10"><script>var element = document.getElementById("moose-equation-6dbc27d8-b0db-4edc-ae45-60d13ea8ed10");katex.render("\\boldsymbol{\\epsilon}_T = \\alpha \\Delta T", element, {displayMode:false,throwOnError:false});</script></span>) or a more complex function of temperature.  The thermal expansion class, <a href="../../source/materials/ComputeThermalExpansionEigenstrain.html">ComputeThermalExpansionEigenstrain</a> computes the thermal strain as a linear function of temperature.  The input file syntax is</p><pre class="moose-pre"><code class="language-text">[./thermal_expansion_strain]
+  type = ComputeThermalExpansionEigenstrain
+  stress_free_temperature = 298
+  thermal_expansion_coeff = 1.3e-5
+  temperature = temp
+  eigenstrain_name = eigenstrain
+[../]
+</code></pre><a href="#3f1145a3-4744-4720-a93a-acf850fb651a" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_coeff.i)</a><div class="modal moose-modal" id="3f1145a3-4744-4720-a93a-acf850fb651a"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_coeff.i</h4><pre class="moose-pre"><code class="language-text"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
+# steel material.  An initial temperature of 25 degrees C is given for the material,
+# and an auxkernel is used to calculate the temperature in the entire cube to
+# raise the temperature each time step.  After the first timestep,in which the
+# temperature jumps, the temperature increases by 6.25C each timestep.
+# The thermal strain increment should therefore be
+#     6.25 C * 1.3e-5 1/C = 8.125e-5 m/m.
+
+# This test is also designed to be used to identify problems with restart files
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 2
+  ny = 2
+  nz = 2
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[AuxVariables]
+  [./temp]
+  [../]
+[]
+
+[Functions]
+  [./temperature_load]
+    type = ParsedFunction
+    value = t*(500.0)+300.0
+  [../]
+[]
+
+[Modules]
+  [./TensorMechanics]
+    [./Master]
+      [./all]
+        strain = SMALL
+        incremental = true
+        add_variables = true
+        eigenstrain_names = eigenstrain
+        generate_output = &#x27;strain_xx strain_yy strain_zz&#x27;
+      [../]
+    [../]
+  [../]
+[]
+
+[AuxKernels]
+  [./tempfuncaux]
+    type = FunctionAux
+    variable = temp
+    function = temperature_load
+  [../]
+[]
+
+[BCs]
+  [./x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 2.1e5
+    poissons_ratio = 0.3
+  [../]
+  [./small_stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+  [./thermal_expansion_strain]
+    type = ComputeThermalExpansionEigenstrain
+    stress_free_temperature = 298
+    thermal_expansion_coeff = 1.3e-5
+    temperature = temp
+    eigenstrain_name = eigenstrain
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  l_max_its = 50
+  nl_max_its = 50
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+
+  start_time = 0.0
+  end_time = 0.075
+  dt = 0.0125
+  dtmin = 0.0001
+[]
+
+[Outputs]
+  csv = true
+  exodus = true
+  checkpoint = true
+[]
+
+[Postprocessors]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+  [../]
+  [./strain_yy]
+    type = ElementAverageValue
+    variable = strain_yy
+  [../]
+  [./strain_zz]
+    type = ElementAverageValue
+    variable = strain_zz
+  [../]
+  [./temperature]
+    type = AverageNodalVariableValue
+    variable = temp
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>The eigenstrain material block name must also be added as an input parameter, <code>eigenstrain_names</code> to the strain material or TensorMechanics master action block. An example of the additional parameter in the TensorMechanics master action is shown below.</p><pre class="moose-pre"><code class="language-text">[./TensorMechanics]
+  [./Master]
+    [./all]
+      strain = SMALL
+      incremental = true
+      add_variables = true
+      eigenstrain_names = eigenstrain
+      generate_output = &#x27;strain_xx strain_yy strain_zz&#x27;
+    [../]
+  [../]
+[../]
+</code></pre><a href="#dcc0ce58-2af9-4abb-8f81-71dd1d7619a8" class="modal-trigger">(../moose/modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_coeff.i)</a><div class="modal moose-modal" id="dcc0ce58-2af9-4abb-8f81-71dd1d7619a8"><div class="modal-content"><h4>/home/gary/projects/moose/modules/tensor_mechanics/test/tests/thermal_expansion/constant_expansion_coeff.i</h4><pre class="moose-pre"><code class="language-text"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
+# steel material.  An initial temperature of 25 degrees C is given for the material,
+# and an auxkernel is used to calculate the temperature in the entire cube to
+# raise the temperature each time step.  After the first timestep,in which the
+# temperature jumps, the temperature increases by 6.25C each timestep.
+# The thermal strain increment should therefore be
+#     6.25 C * 1.3e-5 1/C = 8.125e-5 m/m.
+
+# This test is also designed to be used to identify problems with restart files
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 2
+  ny = 2
+  nz = 2
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[AuxVariables]
+  [./temp]
+  [../]
+[]
+
+[Functions]
+  [./temperature_load]
+    type = ParsedFunction
+    value = t*(500.0)+300.0
+  [../]
+[]
+
+[Modules]
+  [./TensorMechanics]
+    [./Master]
+      [./all]
+        strain = SMALL
+        incremental = true
+        add_variables = true
+        eigenstrain_names = eigenstrain
+        generate_output = &#x27;strain_xx strain_yy strain_zz&#x27;
+      [../]
+    [../]
+  [../]
+[]
+
+[AuxKernels]
+  [./tempfuncaux]
+    type = FunctionAux
+    variable = temp
+    function = temperature_load
+  [../]
+[]
+
+[BCs]
+  [./x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 2.1e5
+    poissons_ratio = 0.3
+  [../]
+  [./small_stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+  [./thermal_expansion_strain]
+    type = ComputeThermalExpansionEigenstrain
+    stress_free_temperature = 298
+    thermal_expansion_coeff = 1.3e-5
+    temperature = temp
+    eigenstrain_name = eigenstrain
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  l_max_its = 50
+  nl_max_its = 50
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+
+  start_time = 0.0
+  end_time = 0.075
+  dt = 0.0125
+  dtmin = 0.0001
+[]
+
+[Outputs]
+  csv = true
+  exodus = true
+  checkpoint = true
+[]
+
+[Postprocessors]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+  [../]
+  [./strain_yy]
+    type = ElementAverageValue
+    variable = strain_yy
+  [../]
+  [./strain_zz]
+    type = ElementAverageValue
+    variable = strain_zz
+  [../]
+  [./temperature]
+    type = AverageNodalVariableValue
+    variable = temp
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>Other eigenstrains could be caused by defects such as over-sized or under-sized second phase particles. Such an eigenstrain material is <a href="../../source/materials/ComputeVariableEigenstrain.html">ComputeVariableEigenstrain</a>. This class computes a lattice mismatch due to a secondary phase, where the form of the tensor is defined by an input vector, and the scalar dependence on a phase variable is defined in another material. The input file syntax is</p><pre class="moose-pre"><code class="language-text">[./eigenstrain]
+  type = ComputeVariableEigenstrain
+  block = 0
+  eigen_base = &#x27;1 1 0 0 0 0&#x27;
+  prefactor = var_dep
+  args = c
+  eigenstrain_name = eigenstrain
+[../]
+</code></pre><a href="#3f2bab8c-a2d2-48fd-9f97-ef34cad69825" class="modal-trigger">(../moose/modules/combined/test/tests/eigenstrain/inclusion.i)</a><div class="modal moose-modal" id="3f2bab8c-a2d2-48fd-9f97-ef34cad69825"><div class="modal-content"><h4>/home/gary/projects/moose/modules/combined/test/tests/eigenstrain/inclusion.i</h4><pre class="moose-pre"><code class="language-text"># This test allows comparison of simulation and analytical solution for a misfitting precipitate
+# using ComputeVariableEigenstrain for the simulation and the InclusionProperties material
+# for the analytical solution. Increasing mesh resolution will improve agreement.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 40
+  ny = 40
+  xmax = 1.5
+  ymax = 1.5
+  elem_type = QUAD4
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[AuxVariables]
+  [./s11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s12_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s11_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s12_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s22_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e12_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e11_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e12_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./fel_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./c]
+  [../]
+[]
+
+[AuxKernels]
+  [./matl_s11]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+    variable = s11_aux
+  [../]
+  [./matl_s12]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 1
+    variable = s12_aux
+  [../]
+  [./matl_s22]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+    variable = s22_aux
+  [../]
+  [./matl_s11_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 0
+    index_j = 0
+    variable = s11_an
+  [../]
+  [./matl_s12_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 0
+    index_j = 1
+    variable = s12_an
+  [../]
+  [./matl_s22_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 1
+    index_j = 1
+    variable = s22_an
+  [../]
+  [./matl_e11]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 0
+    index_j = 0
+    variable = e11_aux
+  [../]
+  [./matl_e12]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 0
+    index_j = 1
+    variable = e12_aux
+  [../]
+  [./matl_e22]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 1
+    index_j = 1
+    variable = e22_aux
+  [../]
+  [./matl_e11_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 0
+    index_j = 0
+    variable = e11_an
+  [../]
+  [./matl_e12_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 0
+    index_j = 1
+    variable = e12_an
+  [../]
+  [./matl_e22_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 1
+    index_j = 1
+    variable = e22_an
+  [../]
+  [./matl_fel_an]
+    type = MaterialRealAux
+    variable = fel_an
+    property = fel_an_mat
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;1 1&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = 0
+  [../]
+  [./var_dependence]
+    type = DerivativeParsedMaterial
+    block = 0
+    function = 0.005*c^2
+    args = c
+    outputs = exodus
+    output_properties = &#x27;var_dep&#x27;
+    f_name = var_dep
+    enable_jit = true
+    derivative_order = 2
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableEigenstrain
+    block = 0
+    eigen_base = &#x27;1 1 0 0 0 0&#x27;
+    prefactor = var_dep
+    args = c
+    eigenstrain_name = eigenstrain
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y&#x27;
+    eigenstrain_names = eigenstrain
+  [../]
+  [./analytical]
+    type = InclusionProperties
+    a = 0.1
+    b = 0.1
+    lambda = 1
+    mu = 1
+    misfit_strains = &#x27;0.005 0.005&#x27;
+    strain_name = strain_an
+    stress_name = stress_an
+    energy_name = fel_an_mat
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left_x bottom_y&#x27;
+  [./bottom_y]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./left_x]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+  l_max_its = 30
+  nl_max_its = 10
+  nl_rel_tol = 1.0e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./c_IC]
+    int_width = 0.075
+    x1 = 0
+    y1 = 0
+    radius = 0.1
+    outvalue = 0
+    variable = c
+    invalue = 1
+    type = SmoothCircleIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><p>Note the <code>DerivativeParsedMaterial</code>, which evaluates an expression given in the input file, and its automatically generated derivatives, at each quadrature point.</p><pre class="moose-pre"><code class="language-text">[./var_dependence]
+  type = DerivativeParsedMaterial
+  block = 0
+  function = 0.005*c^2
+  args = c
+  outputs = exodus
+  output_properties = &#x27;var_dep&#x27;
+  f_name = var_dep
+  enable_jit = true
+  derivative_order = 2
+[../]
+</code></pre><a href="#99669f2c-465a-4204-be44-bfaa5325b460" class="modal-trigger">(../moose/modules/combined/test/tests/eigenstrain/inclusion.i)</a><div class="modal moose-modal" id="99669f2c-465a-4204-be44-bfaa5325b460"><div class="modal-content"><h4>/home/gary/projects/moose/modules/combined/test/tests/eigenstrain/inclusion.i</h4><pre class="moose-pre"><code class="language-text"># This test allows comparison of simulation and analytical solution for a misfitting precipitate
+# using ComputeVariableEigenstrain for the simulation and the InclusionProperties material
+# for the analytical solution. Increasing mesh resolution will improve agreement.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 40
+  ny = 40
+  xmax = 1.5
+  ymax = 1.5
+  elem_type = QUAD4
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[AuxVariables]
+  [./s11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s12_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s11_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s12_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s22_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e12_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e11_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e12_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./fel_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./c]
+  [../]
+[]
+
+[AuxKernels]
+  [./matl_s11]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+    variable = s11_aux
+  [../]
+  [./matl_s12]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 1
+    variable = s12_aux
+  [../]
+  [./matl_s22]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+    variable = s22_aux
+  [../]
+  [./matl_s11_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 0
+    index_j = 0
+    variable = s11_an
+  [../]
+  [./matl_s12_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 0
+    index_j = 1
+    variable = s12_an
+  [../]
+  [./matl_s22_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 1
+    index_j = 1
+    variable = s22_an
+  [../]
+  [./matl_e11]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 0
+    index_j = 0
+    variable = e11_aux
+  [../]
+  [./matl_e12]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 0
+    index_j = 1
+    variable = e12_aux
+  [../]
+  [./matl_e22]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 1
+    index_j = 1
+    variable = e22_aux
+  [../]
+  [./matl_e11_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 0
+    index_j = 0
+    variable = e11_an
+  [../]
+  [./matl_e12_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 0
+    index_j = 1
+    variable = e12_an
+  [../]
+  [./matl_e22_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 1
+    index_j = 1
+    variable = e22_an
+  [../]
+  [./matl_fel_an]
+    type = MaterialRealAux
+    variable = fel_an
+    property = fel_an_mat
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;1 1&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = 0
+  [../]
+  [./var_dependence]
+    type = DerivativeParsedMaterial
+    block = 0
+    function = 0.005*c^2
+    args = c
+    outputs = exodus
+    output_properties = &#x27;var_dep&#x27;
+    f_name = var_dep
+    enable_jit = true
+    derivative_order = 2
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableEigenstrain
+    block = 0
+    eigen_base = &#x27;1 1 0 0 0 0&#x27;
+    prefactor = var_dep
+    args = c
+    eigenstrain_name = eigenstrain
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y&#x27;
+    eigenstrain_names = eigenstrain
+  [../]
+  [./analytical]
+    type = InclusionProperties
+    a = 0.1
+    b = 0.1
+    lambda = 1
+    mu = 1
+    misfit_strains = &#x27;0.005 0.005&#x27;
+    strain_name = strain_an
+    stress_name = stress_an
+    energy_name = fel_an_mat
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left_x bottom_y&#x27;
+  [./bottom_y]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./left_x]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+  l_max_its = 30
+  nl_max_its = 10
+  nl_rel_tol = 1.0e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./c_IC]
+    int_width = 0.075
+    x1 = 0
+    y1 = 0
+    radius = 0.1
+    outvalue = 0
+    variable = c
+    invalue = 1
+    type = SmoothCircleIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="c4d20f4d-3ce2-45dd-bd84-4acef3ab5fd8" data-section-level="2" data-section-text="Extra Stress Materials"><h2 id="extra-stress-materials">Extra Stress Materials</h2><p>Extra stresses (<span tex="\boldsymbol{\sigma}_0" bookmark="moose-equation-e3e8293d-2e3a-42c5-a39a-37254299c402" recursive="True" class="moose-katex-inline-equation" id="moose-equation-e3e8293d-2e3a-42c5-a39a-37254299c402"><script>var element = document.getElementById("moose-equation-e3e8293d-2e3a-42c5-a39a-37254299c402");katex.render("\\boldsymbol{\\sigma}_0", element, {displayMode:false,throwOnError:false});</script></span>) can also be pulled into the residual calculation after the constitutive model calculation of the stress. The extra stress material property, <code>extra_stress</code> is defined in the <code>ComputeExtraStressBase</code> class and is added to the stress value.</p><p><span class="moose-katex-block-equation"><span tex="\sigma_{ij} = \sigma_{ij} + \sigma^{extra}_{ij}" bookmark="moose-equation-1e2acd46-79b4-4743-b9b4-b191bd021622" recursive="True" class="moose-katex-equation table-cell" id="moose-equation-1e2acd46-79b4-4743-b9b4-b191bd021622"></span><script>var element = document.getElementById("moose-equation-1e2acd46-79b4-4743-b9b4-b191bd021622");katex.render("  \\sigma_{ij} = \\sigma_{ij} + \\sigma^{extra}_{ij}", element, {displayMode:true,throwOnError:false});</script></span></p><p>An extra stress may be a residual stress, such as in large civil engineering simulations.  An example of an extra stress material used in an input file is:</p><pre class="moose-pre"><code class="language-text">[./const_stress]
+  type = ComputeExtraStressConstant
+  block = 0
+  base_name = ppt
+  extra_stress_tensor = &#x27;-0.288 -0.373 -0.2747 0 0 0&#x27;
+[../]
+</code></pre><a href="#67b3c277-2073-4d9e-9961-86d4420956a8" class="modal-trigger">(../moose/modules/combined/test/tests/linear_elasticity/extra_stress.i)</a><div class="modal moose-modal" id="67b3c277-2073-4d9e-9961-86d4420956a8"><div class="modal-content"><h4>/home/gary/projects/moose/modules/combined/test/tests/linear_elasticity/extra_stress.i</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 128
+  ny = 1
+  xmax = 3.2
+  ymax = 0.025
+  elem_type = QUAD4
+[]
+
+[Modules/TensorMechanics/Master/All]
+  add_variables = true
+  generate_output = &#x27;stress_xx stress_xy stress_yy stress_zz strain_xx strain_xy strain_yy&#x27;
+[]
+
+[AuxVariables]
+  [./c]
+  [../]
+[]
+
+[ICs]
+  [./c_IC]
+    type = BoundingBoxIC
+    variable = c
+    x1 = -1
+    y1 = -1
+    x2 = 1.6
+    y2 = 1
+    inside = 0
+    outside = 1
+    block = 0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;104 74 74 104 74 104 47.65 47.65 47.65&#x27;
+    fill_method = symmetric9
+    base_name = matrix
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = 0
+    base_name = matrix
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    block = 0
+    base_name = matrix
+  [../]
+  [./elasticity_tensor_ppt]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;0.104 0.074 0.074 0.104 0.074 0.104 0.04765 0.04765 0.04765&#x27;
+    fill_method = symmetric9
+    base_name = ppt
+  [../]
+  [./stress_ppt]
+    type = ComputeLinearElasticStress
+    block = 0
+    base_name = ppt
+  [../]
+  [./strain_ppt]
+    type = ComputeSmallStrain
+    block = 0
+    base_name = ppt
+  [../]
+  [./const_stress]
+    type = ComputeExtraStressConstant
+    block = 0
+    base_name = ppt
+    extra_stress_tensor = &#x27;-0.288 -0.373 -0.2747 0 0 0&#x27;
+  [../]
+  [./global_stress]
+    type = TwoPhaseStressMaterial
+    base_A = matrix
+    base_B = ppt
+  [../]
+  [./switching]
+    type = SwitchingFunctionMaterial
+    eta = c
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left_x right_x bottom_y top_y&#x27;
+  [./bottom_y]
+    type = PresetBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./left_x]
+    type = PresetBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./right_x]
+    type = PresetBC
+    variable = disp_x
+    boundary = right
+    value = 0
+  [../]
+  [./top_y]
+    type = PresetBC
+    variable = disp_y
+    boundary = top
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></section><section class="scrollspy" id="0418706c-80d9-4225-80e7-500b67ba904e" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol><li id="mura1982general">Toshio Mura.
+General theory of eigenstrains.
+In <em>Micromechanics of Defects in Solids</em>, pages 1–62.
+Springer, 1982.<a href="#49ae0ada-6d39-4324-9247-601f99d0d483" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="49ae0ada-6d39-4324-9247-601f99d0d483"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@incollection{mura1982general,
+    author = "Mura, Toshio",
+    title = "General theory of eigenstrains",
+    booktitle = "Micromechanics of Defects in Solids",
+    pages = "1--62",
+    year = "1982",
+    publisher = "Springer"
+}
+</code></pre></div></div></li><li id="qu2006fundamentals">Jianmin Qu and Mohammed Cherkaoui.
+<em>Fundamentals of micromechanics of solids</em>.
+Wiley Online Library, 2006.<a href="#a2e02f8a-add8-42ec-88da-a2ae227f340c" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="a2e02f8a-add8-42ec-88da-a2ae227f340c"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@book{qu2006fundamentals,
+    author = "Qu, Jianmin and Cherkaoui, Mohammed",
+    title = "Fundamentals of micromechanics of solids",
+    year = "2006",
+    publisher = "Wiley Online Library"
+}
+</code></pre></div></div></li></ol></div></section></section></div><div class="col hide-on-med-and-down l2"><div class="toc-wrapper pin-top"><ul class="section table-of-contents"><li><a href="#3a983204-af3e-4b09-ad9f-57cce3fcc278" class="tooltipped" data-position="left" data-tooltip="Strain Materials">Strain Materials</a></li><li><a href="#b762c4c9-592f-4f11-bd56-aa815eb3ec5b" class="tooltipped" data-position="left" data-tooltip="Elasticity Tensor Materials">Elasticity Tensor Materials</a></li><li><a href="#8ae07f6b-fcbb-403a-8f18-03f1504977da" class="tooltipped" data-position="left" data-tooltip="Stress Materials">Stress Materials</a></li><li><a href="#5d3f05f2-884f-4b56-b784-d15877667124" class="tooltipped" data-position="left" data-tooltip="Eigenstrain Materials">Eigenstrain Materials</a></li><li><a href="#c4d20f4d-3ce2-45dd-bd84-4acef3ab5fd8" class="tooltipped" data-position="left" data-tooltip="Extra Stress Materials">Extra Stress Materials</a></li><li><a href="#0418706c-80d9-4225-80e7-500b67ba904e" class="tooltipped" data-position="left" data-tooltip="References">References</a></li></ul></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="../../contrib/fuse/fuse.min.js"></script><script type="text/javascript" src="../../js/search_index.js"></script>
