@@ -25,4 +25,5 @@ protected:
   unsigned _bounded_var_num;
   MooseVariable & _d_var;
   const Real _upper_bound;
+  const bool _lag;
 };

@@ -17,6 +17,8 @@ validParams<Irreversibility>()
   params.addRequiredCoupledVar("bounded_variable", "variable to be bounded");
   params.addRequiredParam<VariableName>("lower", "lower bound");
   params.addParam<Real>("upper", 1.0, "upper bound");
+  params.addParam<bool>(
+      "lag", false, "whether to use the last converged value of lower as the lower bound");
   return params;
 }
 
@@ -26,18 +28,19 @@ Irreversibility::Irreversibility(const InputParameters & parameters)
     _lower_vector(_nl_sys.getVector("lower_bound")),
     _bounded_var_num(coupled("bounded_variable")),
     _d_var(_subproblem.getStandardVariable(_tid, getParam<VariableName>("lower"))),
-    _upper_bound(getParam<Real>("upper"))
+    _upper_bound(getParam<Real>("upper")),
+    _lag(getParam<bool>("lag"))
 {
   if (!isNodal())
     mooseError("Irreversibility must be used on a nodal auxiliary variable!");
 
-  // const std::vector<std::string> & solver_options =
-  //     _app.getExecutioner()->getParamTempl<std::vector<std::string>>("petsc_options_value");
-  // if (std::find(solver_options.begin(), solver_options.end(), "vinewtonrsls") ==
-  //         solver_options.end() &&
-  //     std::find(solver_options.begin(), solver_options.end(), "vinewtonssls") ==
-  //         solver_options.end())
-  //   mooseError("A variational solver, i.e. vinewtonrsls, must be used to solve NCP");
+  const std::vector<std::string> & solver_options =
+      _app.getExecutioner()->getParamTempl<std::vector<std::string>>("petsc_options_value");
+  if (std::find(solver_options.begin(), solver_options.end(), "vinewtonrsls") ==
+          solver_options.end() &&
+      std::find(solver_options.begin(), solver_options.end(), "vinewtonssls") ==
+          solver_options.end())
+    mooseError("A variational solver, i.e. vinewtonrsls, must be used to solve NCP");
 }
 
 Real
@@ -45,7 +48,8 @@ Irreversibility::computeValue()
 {
   if (_current_node->n_dofs(_nl_sys.number(), _bounded_var_num) > 0)
   {
-    Real lower_bound = _d_var.getNodalValue(*_current_node);
+    Real lower_bound =
+        _lag ? _d_var.getNodalValueOld(*_current_node) : _d_var.getNodalValue(*_current_node);
     // The zero is for the component, this will only work for Lagrange variables!
     dof_id_type dof = _current_node->dof_number(_nl_sys.number(), _bounded_var_num, 0);
     _upper_vector.set(dof, _upper_bound);
