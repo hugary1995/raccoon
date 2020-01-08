@@ -36,12 +36,14 @@ TransientSubcycling::relativeSolutionDifferenceNorm()
   if (std::isnan(norm))
     return 0.0;
 
-  _console << COLOR_BLUE << "===============================================\n" << COLOR_DEFAULT;
+  _console << COLOR_BLUE << "\n===============================================\n" << COLOR_DEFAULT;
   _console << " relative solution change norm: " << std::scientific << COLOR_BLUE << norm
            << COLOR_DEFAULT << std::endl;
   _console << "solution change norm tolerance: " << std::scientific << COLOR_BLUE
            << _steady_state_tolerance << COLOR_DEFAULT << std::endl;
-  _console << COLOR_BLUE << "===============================================\n" << COLOR_DEFAULT;
+  _console << COLOR_BLUE << "===============================================\n"
+           << COLOR_DEFAULT << std::flush;
+  fflush(stdout);
 
   return norm * _dt;
 }

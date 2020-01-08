@@ -1,3 +1,7 @@
+[Problem]
+  type = FixedPointProblem
+[]
+
 [Mesh]
   [./square]
     type = GeneratedMeshGenerator
@@ -223,17 +227,21 @@
 []
 
 [Executioner]
-  type = Transient
+  type = FixedPointTransient
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
-  petsc_options_value = 'asm      ilu          1000        200                0                     vinewtonrsls'
+  petsc_options_value = 'asm      ilu          200        200                0                     vinewtonrsls'
   dt = 1e-3
   end_time = 0.22
 
   nl_abs_tol = 1e-12
   nl_rel_tol = 1e-08
 
+  fp_max_its = 10
+  fp_tol = 1e-03
+
   automatic_scaling = true
+  compute_scaling_once = false
 []
 
 [Outputs]
