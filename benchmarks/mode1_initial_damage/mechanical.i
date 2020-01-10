@@ -63,8 +63,8 @@
 [AuxKernels]
   [./E_el]
     type = MaterialRealAux
-    property = 'E_el'
     variable = 'E_el'
+    property = 'E_el_active'
     execute_on = 'TIMESTEP_END'
   [../]
 []
@@ -120,7 +120,6 @@
     type = SmallStrainDegradedPK2Stress_StrainSpectral
     d = 'd'
     d_crit = ${dc}
-    history = false
   [../]
   [./fracture_properties]
     type = GenericFunctionMaterial
@@ -147,8 +146,6 @@
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
   petsc_options_value = 'lu       superlu_dist'
-  # petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
-  # petsc_options_value = 'asm      ilu          1000        200                0                    '
   dt = 1e-6
 
   nl_abs_tol = 1e-08

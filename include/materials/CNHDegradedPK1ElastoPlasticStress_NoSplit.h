@@ -36,9 +36,9 @@ protected:
   ADMaterialProperty(RankTwoTensor) & _cauchy_stress;
   ADMaterialProperty(Real) & _Wp;
   const MaterialProperty<Real> & _Wp_old;
+  ADMaterialProperty(Real) & _Wp_degraded;
   const Real _W0;
   ADMaterialProperty(Real) & _E_el_degraded;
-  ADMaterialProperty(Real) & _E_el_intact;
 
   usingDegradedStressBaseMembers
 };

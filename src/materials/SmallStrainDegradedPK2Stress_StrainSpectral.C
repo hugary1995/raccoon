@@ -52,13 +52,5 @@ SmallStrainDegradedPK2Stress_StrainSpectral<compute_stage>::computeQpStress()
   _stress[_qp] = S0 - (1.0 - _g[_qp]) * S_pos;
 
   // elastic driving energy
-  ADReal E_el_pos = 0.5 * lambda * trE_pos * trE_pos + mu * E_pos.doubleContraction(E_pos);
-
-  // enforce irreversibility using history approach
-  if (_E_el_pos_old)
-    E_el_pos = computeQpHistory(E_el_pos);
-
-  // store the positive elastic energy
-  // note that it becomes the old value in the next step
-  _E_el_pos[_qp] = E_el_pos;
+  _E_el_active[_qp] = 0.5 * lambda * trE_pos * trE_pos + mu * E_pos.doubleContraction(E_pos);
 }

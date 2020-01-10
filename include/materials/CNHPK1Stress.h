@@ -35,8 +35,5 @@ protected:
   /// Elasticity tensor material property
   const ADMaterialProperty(RankTwoTensor) & _F;
 
-  /// elastic driving energy
-  ADMaterialProperty(Real) & _E_el;
-
   usingComputeStressBaseMembers;
 };

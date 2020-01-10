@@ -15,8 +15,7 @@ template <ComputeStage compute_stage>
 CNHPK1Stress<compute_stage>::CNHPK1Stress(const InputParameters & parameters)
   : ADComputeStressBase<compute_stage>(parameters),
     _elasticity_tensor(getADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
-    _F(getADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
-    _E_el(declareADProperty<Real>("elastic_energy"))
+    _F(getADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
 {
 }
 
@@ -41,10 +40,6 @@ CNHPK1Stress<compute_stage>::computeQpStress()
   I2.addIa(1.0);
   ADRankTwoTensor S =
       J * dU_dJ * C.inverse() + mu * std::pow(J, -2.0 / 3.0) * (I2 - C.trace() * C.inverse() / 3);
-
-  ADReal E_el_vol = 0.5 * K * (0.5 * (J * J - 1.0) - std::log(J));
-  ADReal E_el_dev = 0.5 * mu * (std::pow(J, -2.0 / 3.0) * C.trace() - 3.0);
-  _E_el[_qp] = E_el_vol + E_el_dev;
 
   // PK1 stress
   _stress[_qp] = F * S;

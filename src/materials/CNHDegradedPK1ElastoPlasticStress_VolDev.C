@@ -149,21 +149,10 @@ CNHDegradedPK1ElastoPlasticStress_VolDev<compute_stage>::computeQpStress()
   ADReal W = 0.5 * mu * (_be_bar[_qp].trace() - 3.0);
   ADReal E_el_pos = J >= 1 ? U + W : W;
   ADReal E_el_neg = J >= 1 ? 0 : U;
-  _E_el_degraded[_qp] = g * E_el_pos + E_el_neg;
 
-  // enforce irreversibility using history approach
-  if (_E_el_pos_old)
-    E_el_pos = computeQpHistory(E_el_pos);
+  _E_el_active[_qp] = E_el_pos;
+  _E_el_degraded[_qp] = g * E_el_pos + E_el_neg;
 
   _Wp[_qp] = _Wp_old[_qp] + plastic_increment * std::sqrt(s.doubleContraction(s));
   _Wp_degraded[_qp] = gp * _Wp[_qp];
-
-  // store the positive elastic energy
-  // note that it becomes the old value in the next step
-  _E_el_pos[_qp] = E_el_pos;
-
-  if (_degrade_plastic_work)
-    _E_driving[_qp] = _Wp[_qp] > _W0 ? E_el_pos + _Wp[_qp] - _W0 : E_el_pos;
-  else
-    _E_driving[_qp] = E_el_pos;
 }

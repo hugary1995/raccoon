@@ -7,8 +7,8 @@
     type = GeneratedMeshGenerator
     dim = 2
     elem_type = QUAD
-    nx = 300
-    ny = 300
+    nx = 200
+    ny = 200
     xmax = 100
     ymax = 100
   [../]
@@ -109,7 +109,7 @@
   [./pf_react]
     type = PhaseFieldFractureEvolutionReaction
     variable = 'd'
-    driving_energy_name = 'E_el'
+    driving_energy_name = 'E_driving'
     lag = true
   [../]
 []
@@ -200,6 +200,16 @@
     d = 'd'
     d_crit = 0.6
     history = false
+  [../]
+  [./interface_energy]
+    type = ThinFilmInterfaceEnergy
+    coef = 0.1
+    displacements = 'disp_x disp_y'
+  [../]
+  [./fracture_driving_energy]
+    type = ADSumMaterial
+    sum_prop_name = 'E_driving'
+    prop_names = 'E_el E_int'
   [../]
   [./fracture_energy_barrier]
     type = StationaryGenericFunctionMaterial

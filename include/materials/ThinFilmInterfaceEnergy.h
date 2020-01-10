@@ -8,30 +8,30 @@
 
 // Forward Declarations
 template <ComputeStage>
-class ADSumMaterial;
+class ThinFilmInterfaceEnergy;
 
-declareADValidParams(ADSumMaterial);
+declareADValidParams(ThinFilmInterfaceEnergy);
 
 template <ComputeStage compute_stage>
-class ADSumMaterial : public ADMaterial<compute_stage>
+class ThinFilmInterfaceEnergy : public ADMaterial<compute_stage>
 {
 public:
   static InputParameters validParams();
 
-  ADSumMaterial(const InputParameters & parameters);
+  ThinFilmInterfaceEnergy(const InputParameters & parameters);
 
 protected:
-  virtual void initQpStatefulProperties() override;
-
   virtual void computeQpProperties() override;
 
-  ADMaterialProperty(Real) & _sum;
+  const MaterialPropertyName _E_int_name;
 
-  std::vector<MaterialPropertyName> _prop_names;
+  ADMaterialProperty(Real) & _E_int;
 
-  unsigned int _num_props;
+  const Real _coef;
 
-  std::vector<const ADMaterialProperty(Real) *> _props;
+  const unsigned int _ndisp;
+
+  std::vector<const ADVariableValue *> _disp;
 
   usingMaterialMembers;
 };

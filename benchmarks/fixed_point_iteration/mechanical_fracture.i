@@ -55,7 +55,7 @@
   [./pff_react]
     type = PhaseFieldFractureEvolutionReaction
     variable = 'd'
-    driving_energy_name = 'E_el'
+    driving_energy_name = 'E_el_active'
     lag = true
   [../]
 []
@@ -95,7 +95,6 @@
     type = SmallStrainDegradedPK2Stress_StrainSpectral
     d = d
     d_crit = 2.0
-    history = false
   [../]
   [./bulk]
     type = GenericConstantMaterial
@@ -129,7 +128,7 @@
   type = FixedPointTransient
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
-  petsc_options_value = 'asm      ilu          1000        200                0                     vinewtonrsls'
+  petsc_options_value = 'asm      ilu          200         200                0                     vinewtonrsls'
   dt = 1e-4
   end_time = 6e-3
 

@@ -4,7 +4,7 @@
 
 #include "ADSumMaterial.h"
 
-registerADMooseObject("racconApp", ADSumMaterial);
+registerADMooseObject("raccoonApp", ADSumMaterial);
 
 defineADLegacyParams(ADSumMaterial);
 
@@ -12,7 +12,7 @@ template <ComputeStage compute_stage>
 InputParameters
 ADSumMaterial<compute_stage>::validParams()
 {
-  InputParameters params = Material::validParams();
+  InputParameters params = ADMaterial<compute_stage>::validParams();
   params.addRequiredParam<MaterialPropertyName>(
       "sum_prop_name", "The name of the property that holds the summation");
   params.addRequiredParam<std::vector<MaterialPropertyName>>(
@@ -31,6 +31,13 @@ ADSumMaterial<compute_stage>::ADSumMaterial(const InputParameters & parameters)
   _props.resize(_num_props);
   for (unsigned int i = 0; i < _num_props; i++)
     _props[i] = &getADMaterialProperty<Real>(_prop_names[i]);
+}
+
+template <ComputeStage compute_stage>
+void
+ADSumMaterial<compute_stage>::initQpStatefulProperties()
+{
+  _sum[_qp] = 0.0;
 }
 
 template <ComputeStage compute_stage>

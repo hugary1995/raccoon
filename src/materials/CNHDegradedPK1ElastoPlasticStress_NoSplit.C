@@ -36,9 +36,9 @@ CNHDegradedPK1ElastoPlasticStress_NoSplit<compute_stage>::CNHDegradedPK1ElastoPl
     _cauchy_stress(declareADProperty<RankTwoTensor>(_base_name + "cauchy_stress")),
     _Wp(declareADProperty<Real>("Wp")),
     _Wp_old(getMaterialPropertyOld<Real>("Wp")),
+    _Wp_degraded(declareADProperty<Real>("degraded_plastic_work")),
     _W0(getParam<Real>("W0")),
-    _E_el_degraded(declareADProperty<Real>("degraded_elastic_energy")),
-    _E_el_intact(declareADProperty<Real>("intact_elastic_energy"))
+    _E_el_degraded(declareADProperty<Real>("degraded_elastic_energy"))
 {
 }
 
@@ -46,7 +46,6 @@ template <ComputeStage compute_stage>
 void
 CNHDegradedPK1ElastoPlasticStress_NoSplit<compute_stage>::initQpStatefulProperties()
 {
-  ADDegradedStressBase<compute_stage>::initQpStatefulProperties();
   _be_bar[_qp].zero();
   _be_bar[_qp].addIa(1.0);
   _alpha[_qp] = 0;
@@ -146,18 +145,10 @@ CNHDegradedPK1ElastoPlasticStress_NoSplit<compute_stage>::computeQpStress()
   ADReal W = 0.5 * mu * (_be_bar[_qp].trace() - 3.0);
   ADReal E_el_pos = U + W;
   ADReal E_el_neg = 0;
-  _E_el_degraded[_qp] = g * E_el_pos + E_el_neg;
-  _E_el_intact[_qp] = E_el_pos + E_el_neg;
 
-  // enforce irreversibility using history approach
-  if (_E_el_pos_old)
-    E_el_pos = computeQpHistory(E_el_pos);
+  _E_el_active[_qp] = E_el_pos;
+  _E_el_degraded[_qp] = g * E_el_pos + E_el_neg;
 
   _Wp[_qp] = _Wp_old[_qp] + plastic_increment * std::sqrt(s.doubleContraction(s));
-
-  // store the positive elastic energy
-  // note that it becomes the old value in the next step
-  _E_el_pos[_qp] = E_el_pos;
-
-  _E_driving[_qp] = _Wp[_qp] >= _W0 ? E_el_pos + _Wp[_qp] - _W0 : E_el_pos;
+  _Wp_degraded[_qp] = gp * _Wp[_qp];
 }
