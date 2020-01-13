@@ -1,4 +1,4 @@
-RACCOON
+RACCOON [![Build Status](https://travis-ci.org/hugary1995/raccoon.svg?branch=master)](https://travis-ci.org/hugary1995/raccoon)
 =======
 
 RACCOON is built on MOOSE, a massively parallel object-oriented framework for finite element.
