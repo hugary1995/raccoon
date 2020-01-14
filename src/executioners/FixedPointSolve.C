@@ -97,7 +97,6 @@ FixedPointSolve::solve()
         {
           _fp_status = MooseFPConvergenceReason::REACH_MAX_ITS;
           converged = true;
-          break;
         }
         else
         {

@@ -17,8 +17,11 @@ PhaseFieldFractureEvolutionReaction<compute_stage>::validParams()
   params.addParam<MaterialPropertyName>("mobility_name", "mobility", "name of mobility");
   params.addParam<MaterialPropertyName>("degradation_name", "g", "name of degradation");
   params.addParam<MaterialPropertyName>("local_dissipation_name", "w", "name of local dissipation");
-  params.addParam<MaterialPropertyName>("driving_energy_name", "name of the driving energy");
+  params.addParam<MaterialPropertyName>("driving_energy_mat",
+                                        "material property name of the driving energy");
   params.addCoupledVar("driving_energy_var", "auxiliary variable that holds the driving energy");
+  params.addParam<UserObjectName>("driving_energy_uo",
+                                  "userobject that has driving energy values at qps");
   params.addParam<bool>(
       "lag", false, "whether we should use last step's driving energy to improve convergence");
   return params;
@@ -34,20 +37,31 @@ PhaseFieldFractureEvolutionReaction<compute_stage>::PhaseFieldFractureEvolutionR
     _dw_dd(getADMaterialProperty<Real>(derivativePropertyNameFirst(
         getParam<MaterialPropertyName>("local_dissipation_name"), _var.name()))),
     _lag(getParam<bool>("lag")),
-    _D_mat(nullptr),
-    _D_mat_old(nullptr),
-    _D_var(nullptr)
+    _D_mat(isParamValid("driving_energy_mat") && !_lag
+               ? &getADMaterialProperty<Real>("driving_energy_mat")
+               : nullptr),
+    _D_mat_old(isParamValid("driving_energy_mat") && _lag
+                   ? &getMaterialPropertyOld<Real>("driving_energy_mat")
+                   : nullptr),
+    _D_var(isParamValid("driving_energy_var") && !_lag ? &adCoupledValue("driving_energy_var")
+                                                       : nullptr),
+    _D_var_old(isParamValid("driving_energy_var") && _lag ? &coupledValueOld("driving_energy_var")
+                                                          : nullptr),
+    _D_uo(isParamValid("driving_energy_uo")
+              ? &getUserObject<FPIMaterialPropertyUserObject>("driving_energy_uo")
+              : nullptr)
 {
-  if (isParamValid("driving_energy_var") && !isParamValid("driving_energy_name"))
-    _D_var = &adCoupledValue("driving_energy_var");
-  else if (!isParamValid("driving_energy_var") && isParamValid("driving_energy_name"))
-    if (_lag)
-      _D_mat_old = &getMaterialPropertyOld<Real>("driving_energy_name");
-    else
-      _D_mat = &getADMaterialProperty<Real>("driving_energy_name");
-  else
-    mooseError("Driving energy should be either provided as a material property or an auxiliary "
-               "variable, not both");
+  bool provided_by_mat = _D_mat || _D_mat_old;
+  bool provided_by_var = _D_var || _D_var_old;
+  bool provided_by_uo = _D_uo;
+
+  /// driving energy should be provided
+  if ((provided_by_mat ? 1 : 0) + (provided_by_var ? 1 : 0) + (provided_by_uo ? 1 : 0) == 0)
+    mooseError("no driving energy provided.");
+
+  /// driving energy should not be multiply defined
+  if ((provided_by_mat ? 1 : 0) + (provided_by_var ? 1 : 0) + (provided_by_uo ? 1 : 0) > 1)
+    mooseError("driving energy multiply defined.");
 }
 
 template <ComputeStage compute_stage>
@@ -61,8 +75,10 @@ PhaseFieldFractureEvolutionReaction<compute_stage>::precomputeQpResidual()
     D = (*_D_mat)[_qp];
   else if (_D_mat_old)
     D = (*_D_mat_old)[_qp];
+  else if (_D_uo)
+    D = _D_uo->getData(_current_elem, _qp);
   else
-    mooseError("PhaseFieldFractureEvolutionReaction: Internal Error");
+    mooseError("Internal Error");
 
   // reaction like driving force
   return _dg_dd[_qp] * D + _dw_dd[_qp] * _M[_qp];

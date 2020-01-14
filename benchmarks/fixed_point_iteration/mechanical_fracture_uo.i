@@ -23,6 +23,14 @@
   [../]
 []
 
+[UserObjects]
+  [./E_driving]
+    type = FPIMaterialPropertyUserObject
+    mat_prop = 'E_el_active'
+    execute_on = 'INITIAL BETWEEN_FPI TIMESTEP_END'
+  [../]
+[]
+
 [Bounds]
   [./irreversibility]
     type = Irreversibility
@@ -55,27 +63,27 @@
   [./pff_react]
     type = PhaseFieldFractureEvolutionReaction
     variable = 'd'
-    driving_energy_name = 'E_el_active'
-    lag = true
+    driving_energy_uo = 'E_driving'
+    lag = false
   [../]
 []
 
 [BCs]
   [./ydisp]
     type = FunctionDirichletBC
-    variable = disp_y
+    variable = 'disp_y'
     boundary = 'top'
     function = 't'
   [../]
   [./xfix]
     type = DirichletBC
-    variable = disp_x
+    variable = 'disp_x'
     boundary = 'top bottom'
     value = 0
   [../]
   [./yfix]
     type = DirichletBC
-    variable = disp_y
+    variable = 'disp_y'
     boundary = 'bottom'
     value = 0
   [../]
@@ -93,7 +101,7 @@
   [../]
   [./stress]
     type = SmallStrainDegradedPK2Stress_StrainSpectral
-    d = d
+    d = 'd'
     d_crit = 2.0
   [../]
   [./bulk]
@@ -103,7 +111,7 @@
   [../]
   [./local_dissipation]
     type = LinearLocalDissipation
-    d = d
+    d = 'd'
   [../]
   [./fracture_properties]
     type = FractureMaterial
@@ -111,7 +119,7 @@
   [../]
   [./degradation]
     type = LorentzDegradation
-    d = d
+    d = 'd'
     residual_degradation = 1e-09
   [../]
 []
@@ -153,7 +161,6 @@
   [./exodus]
     type = Exodus
     file_base = 'visualize'
-    hide = 'bounds_dummy'
   [../]
   [./console]
     type = Console

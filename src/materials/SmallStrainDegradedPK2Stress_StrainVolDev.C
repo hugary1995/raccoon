@@ -28,16 +28,15 @@ SmallStrainDegradedPK2Stress_StrainVolDev<compute_stage>::computeQpStress()
   const Real mu = _elasticity_tensor[_qp](0, 1, 0, 1);
   const Real K = lambda + 2.0 * mu / LIBMESH_DIM;
 
+  // Identity tensor
+  ADRankTwoTensor I2(RankTwoTensorType<compute_stage>::type::initIdentity);
+
   // vol-dev decomposition
   ADRankTwoTensor E = _mechanical_strain[_qp];
   ADRankTwoTensor E_dev = E.deviatoric();
   ADReal trE = E.trace();
   ADReal trE_pos = Macaulay(trE);
   ADReal trE_neg = trE - trE_pos;
-
-  // Identity tensor
-  ADRankTwoTensor I2;
-  I2.addIa(1.0);
 
   // PK1 stress
   ADRankTwoTensor S0 = K * trE * I2 + 2.0 * mu * E_dev;

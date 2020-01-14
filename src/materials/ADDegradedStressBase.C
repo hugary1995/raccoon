@@ -84,4 +84,14 @@ ADDegradedStressBase<compute_stage>::Macaulay(ADReal x)
   return 0.5 * (x + std::abs(x));
 }
 
+template <ComputeStage compute_stage>
+std::vector<ADReal>
+ADDegradedStressBase<compute_stage>::Macaulay(std::vector<ADReal> v)
+{
+  std::vector<ADReal> m(v.size());
+  for (unsigned int i = 0; i < v.size(); i++)
+    m[i] = Macaulay(v[i]);
+  return m;
+}
+
 adBaseClass(ADDegradedStressBase);

@@ -37,8 +37,11 @@ protected:
   /// enforce traction-free boundary condition
   virtual void computeQpTractionFreeStress();
 
+  ///{@
   /// Macaulay bracket operator
   virtual ADReal Macaulay(ADReal x);
+  virtual std::vector<ADReal> Macaulay(std::vector<ADReal> x);
+  ///@}
 
   /// Elasticity tensor material property
   const MaterialProperty<RankFourTensor> & _elasticity_tensor;

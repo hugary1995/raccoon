@@ -3,6 +3,7 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "raccoonApp.h"
+#include "raccoonAppTypes.h"
 #include "Moose.h"
 #include "AppFactory.h"
 #include "ModulesApp.h"
@@ -29,14 +30,13 @@ associateSyntaxInner(Syntax & /*syntax*/, ActionFactory & /*action_factory*/)
 }
 
 void
-raccoonApp::registerAll(Factory & f, ActionFactory & af, Syntax & s)
+raccoonApp::registerAll(Factory & factory, ActionFactory & action_factory, Syntax & syntax)
 {
-  ModulesApp::registerAll(f, af, s);
-  Registry::registerObjectsTo(f, {"raccoonApp"});
-  Registry::registerActionsTo(af, {"raccoonApp"});
-  associateSyntaxInner(s, af);
-
-  /* register custom execute flags, action syntax, etc. here */
+  ModulesApp::registerAll(factory, action_factory, syntax);
+  Registry::registerObjectsTo(factory, {"raccoonApp"});
+  Registry::registerActionsTo(action_factory, {"raccoonApp"});
+  associateSyntaxInner(syntax, action_factory);
+  registerExecFlag(EXEC_BETWEEN_FPI);
 }
 
 void

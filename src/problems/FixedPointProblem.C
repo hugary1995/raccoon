@@ -3,6 +3,7 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "FixedPointProblem.h"
+#include "raccoonAppTypes.h"
 
 registerMooseObject("raccoonApp", FixedPointProblem);
 
@@ -18,12 +19,5 @@ FixedPointProblem::FixedPointProblem(const InputParameters & params) : FEProblem
 void
 FixedPointProblem::betweenIterations()
 {
-  if (_material_props.hasStatefulProperties())
-    _material_props.shift(*this);
-
-  if (_bnd_material_props.hasStatefulProperties())
-    _bnd_material_props.shift(*this);
-
-  if (_neighbor_material_props.hasStatefulProperties())
-    _neighbor_material_props.shift(*this);
+  execute(EXEC_BETWEEN_FPI);
 }

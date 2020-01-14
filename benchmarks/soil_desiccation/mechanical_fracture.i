@@ -109,7 +109,7 @@
   [./pf_react]
     type = PhaseFieldFractureEvolutionReaction
     variable = 'd'
-    driving_energy_name = 'E_driving'
+    driving_energy_mat = 'E_driving'
     lag = true
   [../]
 []

@@ -6,6 +6,7 @@
 
 #include "ADKernelValue.h"
 #include "DerivativeMaterialPropertyNameInterface.h"
+#include "FPIMaterialPropertyUserObject.h"
 
 // Forward Declarations
 template <ComputeStage>
@@ -35,6 +36,8 @@ protected:
   const ADMaterialProperty(Real) * _D_mat;
   const MaterialProperty<Real> * _D_mat_old;
   const ADVariableValue * _D_var;
+  const VariableValue * _D_var_old;
+  const FPIMaterialPropertyUserObject * _D_uo;
 
   usingKernelValueMembers;
 };

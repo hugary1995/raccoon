@@ -27,24 +27,21 @@ SmallStrainDegradedPK2Stress_StrainSpectral<compute_stage>::computeQpStress()
   const Real lambda = _elasticity_tensor[_qp](0, 0, 1, 1);
   const Real mu = _elasticity_tensor[_qp](0, 1, 0, 1);
 
+  // Identity tensor
+  ADRankTwoTensor I2(RankTwoTensorType<compute_stage>::type::initIdentity);
+
   // spectral decomposition
   ADRankTwoTensor E = _mechanical_strain[_qp];
   ADRankTwoTensor Q;
   std::vector<ADReal> d;
   E.symmetricEigenvaluesEigenvectors(d, Q);
 
-  // separate into positive and negative parts
-  ADRankTwoTensor D_pos;
-  for (unsigned int i = 0; i < LIBMESH_DIM; i++)
-    D_pos(i, i) = Macaulay(d[i]);
+  // positive part
+  D_pos.fillFromInputVector(Macaulay(d));
   ADRankTwoTensor E_pos = Q * D_pos * Q.transpose();
 
   ADReal trE = E.trace();
   ADReal trE_pos = Macaulay(trE);
-
-  // Identity tensor
-  ADRankTwoTensor I2;
-  I2.addIa(1.0);
 
   // PK1 stress
   ADRankTwoTensor S0 = lambda * trE * I2 + 2.0 * mu * E;

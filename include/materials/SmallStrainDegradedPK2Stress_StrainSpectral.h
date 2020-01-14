@@ -20,6 +20,9 @@ public:
 protected:
   virtual void computeQpStress() override;
 
+private:
+  /// positive eigenvalues
+  ADRankTwoTensor D_pos;
+
   usingDegradedStressBaseMembers
 };
-
