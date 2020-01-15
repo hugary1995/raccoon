@@ -7,14 +7,20 @@
 
 registerADMooseObject("raccoonApp", PressureBC);
 
-defineADValidParams(PressureBC,
-                    ADIntegratedBC,
-                    params.addClassDescription("Imposes the pressure boundary condition.");
-                    params.addParam<FunctionName>("function",
-                                                  0,
-                                                  "The function describing the pressure magnitude");
-                    params.set<bool>("use_displaced_mesh") = true;
-                    params.addRequiredParam<unsigned int>("component", "component of pressure"););
+defineADLegacyParams(PressureBC);
+
+template <ComputeStage compute_stage>
+InputParameters
+PressureBC<compute_stage>::validParams()
+{
+  InputParameters params = ADIntegratedBC<compute_stage>::validParams();
+  params.addClassDescription("Imposes the pressure boundary condition.");
+  params.addRequiredParam<FunctionName>("function",
+                                        "The function describing the pressure magnitude");
+  params.set<bool>("use_displaced_mesh") = true;
+  params.addRequiredParam<unsigned int>("component", "component of pressure");
+  return params;
+}
 
 template <ComputeStage compute_stage>
 PressureBC<compute_stage>::PressureBC(const InputParameters & parameters)

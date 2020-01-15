@@ -6,16 +6,21 @@
 
 registerADMooseObject("raccoonApp", GreenStrain);
 
-defineADValidParams(GreenStrain,
-                    ADComputeStrainBase,
-                    params.addClassDescription("Compute a Green strain."););
+defineADLegacyParams(GreenStrain);
+
+template <ComputeStage compute_stage>
+InputParameters
+GreenStrain<compute_stage>::validParams()
+{
+  InputParameters params = DegradationBase<compute_stage>::validParams();
+  params.addClassDescription("Compute a Green strain.");
+  return params;
+}
 
 template <ComputeStage compute_stage>
 GreenStrain<compute_stage>::GreenStrain(const InputParameters & parameters)
   : ADComputeStrainBase<compute_stage>(parameters),
-    _F(declareADProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
-    _e(declareADProperty<RankTwoTensor>(_base_name + "eulerian_almansi_strain")),
-    _b(declareADProperty<RankTwoTensor>(_base_name + "left_cauchy_green_strain"))
+    _F(declareADProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
 {
 }
 
@@ -44,11 +49,6 @@ GreenStrain<compute_stage>::computeQpProperties()
   ADRankTwoTensor E = _F[_qp].transpose() * _F[_qp];
   E.addIa(-1.0);
   E *= 0.5;
-
-  // _b[_qp] = _F[_qp] * _F[_qp].transpose();
-  // _e[_qp] = -_b[_qp].inverse();
-  // _e[_qp].addIa(1.0);
-  // _e[_qp] *= 0.5;
 
   // total strain defined in the reference configuration
   _total_strain[_qp] = E;

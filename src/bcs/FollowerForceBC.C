@@ -8,15 +8,21 @@
 
 registerADMooseObject("raccoonApp", FollowerForceBC);
 
-defineADValidParams(
-    FollowerForceBC,
-    ADIntegratedBC,
-    params.addClassDescription("Imposes the pressure boundary condition.");
-    params.addParam<FunctionName>("function_x", 0, "The x-direction forcing function");
-    params.addParam<FunctionName>("function_y", 0, "The y-direction forcing function");
-    params.addParam<FunctionName>("function_z", 0, "The z-direction forcing function");
-    params.addParam<std::string>("base_name", "base name for material properties");
-    params.addRequiredParam<unsigned int>("component", "component of the displacement variable"););
+defineADLegacyParams(FollowerForceBC);
+
+template <ComputeStage compute_stage>
+InputParameters
+FollowerForceBC<compute_stage>::validParams()
+{
+  InputParameters params = ADIntegratedBC<compute_stage>::validParams();
+  params.addClassDescription("Imposes the pressure boundary condition.");
+  params.addParam<FunctionName>("function_x", 0, "The x-direction forcing function");
+  params.addParam<FunctionName>("function_y", 0, "The y-direction forcing function");
+  params.addParam<FunctionName>("function_z", 0, "The z-direction forcing function");
+  params.addParam<std::string>("base_name", "base name for material properties");
+  params.addRequiredParam<unsigned int>("component", "component of the displacement variable");
+  return params;
+}
 
 template <ComputeStage compute_stage>
 FollowerForceBC<compute_stage>::FollowerForceBC(const InputParameters & parameters)

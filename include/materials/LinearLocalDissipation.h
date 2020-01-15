@@ -18,6 +18,8 @@ class LinearLocalDissipation : public ADMaterial<compute_stage>,
                                public DerivativeMaterialPropertyNameInterface
 {
 public:
+  static InputParameters validParams();
+
   LinearLocalDissipation(const InputParameters & parameters);
 
 protected:

@@ -27,7 +27,6 @@
   [./E_driving]
     type = FPIMaterialPropertyUserObject
     mat_prop = 'E_el_active'
-    execute_on = 'INITIAL BETWEEN_FPI TIMESTEP_END'
   [../]
 []
 

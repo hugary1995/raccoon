@@ -18,6 +18,8 @@ class QuadraticLocalDissipation : public ADMaterial<compute_stage>,
                                   public DerivativeMaterialPropertyNameInterface
 {
 public:
+  static InputParameters validParams();
+
   QuadraticLocalDissipation(const InputParameters & parameters);
 
 protected:

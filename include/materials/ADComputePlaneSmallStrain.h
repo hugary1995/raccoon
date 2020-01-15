@@ -18,6 +18,8 @@ template <ComputeStage compute_stage>
 class ADComputePlaneSmallStrain : public ADCompute2DSmallStrain<compute_stage>
 {
 public:
+  static InputParameters validParams();
+
   ADComputePlaneSmallStrain(const InputParameters & parameters);
 
 protected:

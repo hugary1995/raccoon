@@ -6,9 +6,16 @@
 
 registerADMooseObject("raccoonApp", RCGStrain);
 
-defineADValidParams(RCGStrain,
-                    ADComputeStrainBase,
-                    params.addClassDescription("Compute the right Cauchy-Green strain."););
+defineADLegacyParams(RCGStrain);
+
+template <ComputeStage compute_stage>
+InputParameters
+RCGStrain<compute_stage>::validParams()
+{
+  InputParameters params = ADComputeStrainBase<compute_stage>::validParams();
+  params.addClassDescription("Compute the right Cauchy-Green strain.");
+  return params;
+}
 
 template <ComputeStage compute_stage>
 RCGStrain<compute_stage>::RCGStrain(const InputParameters & parameters)

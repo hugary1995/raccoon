@@ -16,14 +16,12 @@ class CNHPK1Stress;
 
 declareADValidParams(CNHPK1Stress);
 
-/**
- * CNHPK1Stress computes the stress following linear elasticity theory (small
- * strains)
- */
 template <ComputeStage compute_stage>
 class CNHPK1Stress : public ADComputeStressBase<compute_stage>
 {
 public:
+  static InputParameters validParams();
+
   CNHPK1Stress(const InputParameters & parameters);
 
 protected:
@@ -32,7 +30,7 @@ protected:
   /// Elasticity tensor material property
   const ADMaterialProperty(RankFourTensor) & _elasticity_tensor;
 
-  /// Elasticity tensor material property
+  /// deformation gradient
   const ADMaterialProperty(RankTwoTensor) & _F;
 
   usingComputeStressBaseMembers;

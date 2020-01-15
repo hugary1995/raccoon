@@ -25,5 +25,6 @@ public:
 protected:
   virtual Real computeValue() override;
 
+  /// material property to project values from
   const MaterialProperty<Real> & _v;
 };

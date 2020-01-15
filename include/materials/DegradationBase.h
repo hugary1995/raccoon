@@ -28,6 +28,8 @@ class DegradationBase : public ADMaterial<compute_stage>,
                         public DerivativeMaterialPropertyNameInterface
 {
 public:
+  static InputParameters validParams();
+
   DegradationBase(const InputParameters & parameters);
 
 protected:

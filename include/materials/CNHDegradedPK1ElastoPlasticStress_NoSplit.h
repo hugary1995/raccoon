@@ -15,6 +15,8 @@ template <ComputeStage compute_stage>
 class CNHDegradedPK1ElastoPlasticStress_NoSplit : public ADDegradedStressBase<compute_stage>
 {
 public:
+  static InputParameters validParams();
+
   CNHDegradedPK1ElastoPlasticStress_NoSplit(const InputParameters & parameters);
 
 protected:

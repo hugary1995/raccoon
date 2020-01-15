@@ -4,16 +4,23 @@
 
 #include "DegradationBase.h"
 
-defineADValidParams(
-    DegradationBase, ADMaterial, params.addRequiredCoupledVar("d", "phase-field damage variable");
-    params.addCoupledVar("d_relaxed", "relaxed phase-field damage variable");
-    params.addParam<MaterialPropertyName>(
-        "degradation_name", "g", "name of the material that holds the degradation function value");
-    params.addParam<Real>("residual_degradation", 1e-6, "residual degradation");
-    params.addParam<bool>("lag_degradation",
-                          false,
-                          "whether to use the last converged damage variable to compute "
-                          "degradation (the derivative of degradation is always NOT lagged)"));
+defineADLegacyParams(DegradationBase);
+
+template <ComputeStage compute_stage>
+InputParameters
+DegradationBase<compute_stage>::validParams()
+{
+  InputParameters params = ADMaterial<compute_stage>::validParams();
+  params.addCoupledVar("d_relaxed", "relaxed phase-field damage variable");
+  params.addParam<MaterialPropertyName>(
+      "degradation_name", "g", "name of the material that holds the degradation function value");
+  params.addParam<Real>("residual_degradation", 1e-6, "residual degradation");
+  params.addParam<bool>("lag_degradation",
+                        false,
+                        "whether to use the last converged damage variable to compute "
+                        "degradation (the derivative of degradation is always NOT lagged)");
+  return params;
+}
 
 template <ComputeStage compute_stage>
 DegradationBase<compute_stage>::DegradationBase(const InputParameters & parameters)

@@ -32,15 +32,6 @@ MaterialPropertyUserObject::initialize()
 }
 
 void
-MaterialPropertyUserObject::threadJoin(const UserObject & y)
-{
-  const MaterialPropertyUserObject & mat_uo = static_cast<const MaterialPropertyUserObject &>(y);
-  for (unsigned int i = 0; i < _to.size(); i++)
-    for (_qp = 0; _qp < _to[0].size(); _qp++)
-      _to[i][_qp] += mat_uo._to[i][_qp];
-}
-
-void
 MaterialPropertyUserObject::computeProperties()
 {
   if (_to[_current_elem->id()].empty())

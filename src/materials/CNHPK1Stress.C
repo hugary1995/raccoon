@@ -6,10 +6,16 @@
 
 registerADMooseObject("raccoonApp", CNHPK1Stress);
 
-defineADValidParams(
-    CNHPK1Stress,
-    ADComputeStressBase,
-    params.addClassDescription("Compute stress using elasticity for small strains"););
+defineADLegacyParams(CNHPK1Stress);
+
+template <ComputeStage compute_stage>
+InputParameters
+CNHPK1Stress<compute_stage>::validParams()
+{
+  InputParameters params = ADComputeStressBase<compute_stage>::validParams();
+  params.addClassDescription("Compute stress using elasticity for small strains");
+  return params;
+}
 
 template <ComputeStage compute_stage>
 CNHPK1Stress<compute_stage>::CNHPK1Stress(const InputParameters & parameters)

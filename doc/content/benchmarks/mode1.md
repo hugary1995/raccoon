@@ -89,7 +89,7 @@ Instead of a "meshed-in" initial crack, sometimes we may need initial imperfecti
 
 Recently, another way to perform fixed-point iteration has made its way into RACCOON. As opposed to the old way, the new system needs only one input file. Between fixed-point iterations within one load step, stateful material properties are advanced. Therefore, by "lagging" the fracture driving energy one step, we achieve effectively fixed-point iteration.
 
-!listing benchmarks/fixed_point_iteration/mechanical_fracture.i
+!listing benchmarks/fixed_point_iteration/mechanical_fracture_uo.i
 
 ## Visualizing the outputs
 

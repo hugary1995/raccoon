@@ -15,6 +15,8 @@ template <ComputeStage compute_stage>
 class PressureBC : public ADIntegratedBC<compute_stage>
 {
 public:
+  static InputParameters validParams();
+
   PressureBC(const InputParameters & parameters);
 
 protected:

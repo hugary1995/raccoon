@@ -15,6 +15,8 @@ template <ComputeStage compute_stage>
 class SmallStrainDegradedPK2Stress_NoSplit : public ADDegradedStressBase<compute_stage>
 {
 public:
+  static InputParameters validParams();
+
   SmallStrainDegradedPK2Stress_NoSplit(const InputParameters & parameters);
 
 protected:
@@ -22,4 +24,3 @@ protected:
 
   usingDegradedStressBaseMembers
 };
-

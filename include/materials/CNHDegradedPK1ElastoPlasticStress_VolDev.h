@@ -15,6 +15,8 @@ template <ComputeStage compute_stage>
 class CNHDegradedPK1ElastoPlasticStress_VolDev : public ADDegradedStressBase<compute_stage>
 {
 public:
+  static InputParameters validParams();
+
   CNHDegradedPK1ElastoPlasticStress_VolDev(const InputParameters & parameters);
 
 protected:

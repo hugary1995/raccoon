@@ -15,15 +15,17 @@ template <ComputeStage compute_stage>
 class SVKPK1Stress : public ADComputeStressBase<compute_stage>
 {
 public:
+  static InputParameters validParams();
+
   SVKPK1Stress(const InputParameters & parameters);
 
 protected:
   virtual void computeQpStress() override;
 
-  /// Elasticity tensor material property
+  /// elasticity tensor
   const ADMaterialProperty(RankFourTensor) & _elasticity_tensor;
 
-  /// Elasticity tensor material property
+  /// deformation gradient
   const ADMaterialProperty(RankTwoTensor) & _F;
 
   /// Cauchy stress
@@ -31,4 +33,3 @@ protected:
 
   usingComputeStressBaseMembers;
 };
-

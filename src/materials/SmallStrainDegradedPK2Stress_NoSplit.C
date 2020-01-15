@@ -6,11 +6,17 @@
 
 registerADMooseObject("raccoonApp", SmallStrainDegradedPK2Stress_NoSplit);
 
-defineADValidParams(
-    SmallStrainDegradedPK2Stress_NoSplit,
-    ADDegradedStressBase,
-    params.addClassDescription("Compute degraded stress following small deformation elasticity "
-                               "without active/inactive split"););
+defineADLegacyParams(SmallStrainDegradedPK2Stress_NoSplit);
+
+template <ComputeStage compute_stage>
+InputParameters
+SmallStrainDegradedPK2Stress_NoSplit<compute_stage>::validParams()
+{
+  InputParameters params = ADDegradedStressBase<compute_stage>::validParams();
+  params.addClassDescription("Compute degraded stress following small deformation elasticity "
+                             "without active/inactive split");
+  return params;
+}
 
 template <ComputeStage compute_stage>
 SmallStrainDegradedPK2Stress_NoSplit<compute_stage>::SmallStrainDegradedPK2Stress_NoSplit(

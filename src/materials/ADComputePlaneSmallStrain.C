@@ -6,11 +6,17 @@
 
 registerADMooseObject("raccoonApp", ADComputePlaneSmallStrain);
 
-defineADValidParams(
-    ADComputePlaneSmallStrain,
-    ADCompute2DSmallStrain,
-    params.addClassDescription("Compute a small strain under plane stress assumption");
-    params.addCoupledVar("out_of_plane_strain", "Nonlinear variable for plane stress condition"););
+defineADLegacyParams(ADComputePlaneSmallStrain);
+
+template <ComputeStage compute_stage>
+InputParameters
+ADComputePlaneSmallStrain<compute_stage>::validParams()
+{
+  InputParameters params = ADCompute2DSmallStrain<compute_stage>::validParams();
+  params.addClassDescription("Compute a small strain under plane stress assumption");
+  params.addCoupledVar("out_of_plane_strain", "Nonlinear variable for plane stress condition");
+  return params;
+}
 
 template <ComputeStage compute_stage>
 ADComputePlaneSmallStrain<compute_stage>::ADComputePlaneSmallStrain(

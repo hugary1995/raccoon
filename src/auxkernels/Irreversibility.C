@@ -14,6 +14,7 @@ InputParameters
 validParams<Irreversibility>()
 {
   InputParameters params = validParams<AuxKernel>();
+  params.addClassDescription("sets upper_bound and lower_bound in PETSc.");
   params.addRequiredCoupledVar("bounded_variable", "variable to be bounded");
   params.addRequiredParam<VariableName>("lower", "lower bound");
   params.addParam<Real>("upper", 1.0, "upper bound");

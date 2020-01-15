@@ -15,6 +15,8 @@ template <ComputeStage compute_stage>
 class SmallStrainDegradedPK2Stress_StrainVolDev : public ADDegradedStressBase<compute_stage>
 {
 public:
+  static InputParameters validParams();
+
   SmallStrainDegradedPK2Stress_StrainVolDev(const InputParameters & parameters);
 
 protected:

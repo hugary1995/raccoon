@@ -28,6 +28,7 @@ template <ComputeStage compute_stage>
 class ADDegradedStressBase : public ADComputeStressBase<compute_stage>
 {
 public:
+  static InputParameters validParams();
   ADDegradedStressBase(const InputParameters & parameters);
 
 protected:

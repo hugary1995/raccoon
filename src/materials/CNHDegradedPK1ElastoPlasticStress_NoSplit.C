@@ -6,14 +6,20 @@
 
 registerADMooseObject("raccoonApp", CNHDegradedPK1ElastoPlasticStress_NoSplit);
 
-defineADValidParams(
-    CNHDegradedPK1ElastoPlasticStress_NoSplit,
-    ADDegradedStressBase,
-    params.addClassDescription("Compute degraded stress following small deformation elasticity "
-                               "with a volumetric-deviatoric active/inactive split");
-    params.addRequiredParam<Real>("W0", "plastic work threshold.");
-    params.addRequiredParam<Real>("yield_stress", "yield stress");
-    params.addRequiredParam<Real>("linear_hardening_coefficient", "linear hardening coefficient"););
+defineADLegacyParams(CNHDegradedPK1ElastoPlasticStress_NoSplit);
+
+template <ComputeStage compute_stage>
+InputParameters
+CNHDegradedPK1ElastoPlasticStress_NoSplit<compute_stage>::validParams()
+{
+  InputParameters params = ADDegradedStressBase<compute_stage>::validParams();
+  params.addClassDescription("Compute degraded stress following small deformation elasticity "
+                             "with a volumetric-deviatoric active/inactive split");
+  params.addRequiredParam<Real>("W0", "plastic work threshold.");
+  params.addRequiredParam<Real>("yield_stress", "yield stress");
+  params.addRequiredParam<Real>("linear_hardening_coefficient", "linear hardening coefficient");
+  return params;
+}
 
 template <ComputeStage compute_stage>
 CNHDegradedPK1ElastoPlasticStress_NoSplit<compute_stage>::CNHDegradedPK1ElastoPlasticStress_NoSplit(

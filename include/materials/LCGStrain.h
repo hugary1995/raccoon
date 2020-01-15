@@ -22,13 +22,14 @@ template <ComputeStage compute_stage>
 class LCGStrain : public ADComputeStrainBase<compute_stage>
 {
 public:
+  static InputParameters validParams();
   LCGStrain(const InputParameters & parameters);
 
 protected:
   virtual void computeQpProperties() override;
 
+  /// deformation gradient
   ADMaterialProperty(RankTwoTensor) & _F;
 
   usingComputeStrainBaseMembers;
 };
-

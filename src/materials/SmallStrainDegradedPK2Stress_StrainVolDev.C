@@ -6,11 +6,17 @@
 
 registerADMooseObject("raccoonApp", SmallStrainDegradedPK2Stress_StrainVolDev);
 
-defineADValidParams(
-    SmallStrainDegradedPK2Stress_StrainVolDev,
-    ADDegradedStressBase,
-    params.addClassDescription("Compute degraded stress following small deformation elasticity "
-                               "with a volumetric-deviatoric active/inactive split"););
+defineADLegacyParams(SmallStrainDegradedPK2Stress_StrainVolDev);
+
+template <ComputeStage compute_stage>
+InputParameters
+SmallStrainDegradedPK2Stress_StrainVolDev<compute_stage>::validParams()
+{
+  InputParameters params = ADDegradedStressBase<compute_stage>::validParams();
+  params.addClassDescription("Compute degraded stress following small deformation elasticity "
+                             "with a volumetric-deviatoric active/inactive split");
+  return params;
+}
 
 template <ComputeStage compute_stage>
 SmallStrainDegradedPK2Stress_StrainVolDev<compute_stage>::SmallStrainDegradedPK2Stress_StrainVolDev(

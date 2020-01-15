@@ -16,6 +16,8 @@ template <ComputeStage compute_stage>
 class LorentzDegradation : public DegradationBase<compute_stage>
 {
 public:
+  static InputParameters validParams();
+
   LorentzDegradation(const InputParameters & parameters);
 
 protected:
@@ -24,7 +26,7 @@ protected:
   /// mobility
   const MaterialProperty<Real> & _M;
 
-  /// fracture energy barrier
+  /// critical fracture energy
   const MaterialProperty<Real> & _b;
 
   /// shape parameter

@@ -18,15 +18,16 @@ template <ComputeStage compute_stage>
 class GreenStrain : public ADComputeStrainBase<compute_stage>
 {
 public:
+  static InputParameters validParams();
+
   GreenStrain(const InputParameters & parameters);
 
 protected:
   virtual void initQpStatefulProperties() override;
   virtual void computeQpProperties() override;
 
+  /// deformation gradient
   ADMaterialProperty(RankTwoTensor) & _F;
-  ADMaterialProperty(RankTwoTensor) & _e;
-  ADMaterialProperty(RankTwoTensor) & _b;
 
   usingComputeStrainBaseMembers;
 };

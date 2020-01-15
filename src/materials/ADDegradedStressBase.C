@@ -4,21 +4,25 @@
 
 #include "ADDegradedStressBase.h"
 
-defineADValidParams(
-    ADDegradedStressBase,
-    ADComputeStressBase,
-    params.addClassDescription("Base class for computing damage degraded stress");
-    params.addRequiredCoupledVar("d", "damage variable");
-    params.addParam<Real>("d_crit",
-                          2.0,
-                          "enforce the traction free boundary condition when d > d_crit");
-    params.addParam<MaterialPropertyName>(
-        "active_elastic_energy_name",
-        "E_el_active",
-        "name of the material that holds the active part of the elastic energy");
-    params.addParam<MaterialPropertyName>("degradation_name",
-                                          "g",
-                                          "name of the material that holds the degradation"););
+defineADLegacyParams(ADDegradedStressBase);
+
+template <ComputeStage compute_stage>
+InputParameters
+ADDegradedStressBase<compute_stage>::validParams()
+{
+  InputParameters params = ADComputeStressBase<compute_stage>::validParams();
+  params.addClassDescription("Base class for computing damage degraded stress");
+  params.addRequiredCoupledVar("d", "damage variable");
+  params.addParam<Real>(
+      "d_crit", 2.0, "enforce the traction free boundary condition when d > d_crit");
+  params.addParam<MaterialPropertyName>(
+      "active_elastic_energy_name",
+      "E_el_active",
+      "name of the material that holds the active part of the elastic energy");
+  params.addParam<MaterialPropertyName>(
+      "degradation_name", "g", "name of the material that holds the degradation");
+  return params;
+}
 
 template <ComputeStage compute_stage>
 ADDegradedStressBase<compute_stage>::ADDegradedStressBase(const InputParameters & parameters)

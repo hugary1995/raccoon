@@ -8,10 +8,6 @@
 
 template <ComputeStage>
 class RCGStrain;
-template <typename>
-class RankTwoTensorTempl;
-typedef RankTwoTensorTempl<Real> RankTwoTensor;
-typedef RankTwoTensorTempl<DualReal> DualRankTwoTensor;
 
 declareADValidParams(RCGStrain);
 
@@ -22,13 +18,15 @@ template <ComputeStage compute_stage>
 class RCGStrain : public ADComputeStrainBase<compute_stage>
 {
 public:
+  static InputParameters validParams();
+
   RCGStrain(const InputParameters & parameters);
 
 protected:
   virtual void computeQpProperties() override;
 
+  /// deformation gradient
   ADMaterialProperty(RankTwoTensor) & _F;
 
   usingComputeStrainBaseMembers;
 };
-

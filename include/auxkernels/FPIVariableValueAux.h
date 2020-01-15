@@ -25,5 +25,6 @@ public:
 protected:
   virtual Real computeValue() override;
 
+  /// coupeld variable to read values from
   const VariableValue & _v;
 };

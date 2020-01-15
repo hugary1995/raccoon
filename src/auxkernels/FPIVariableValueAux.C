@@ -13,6 +13,7 @@ InputParameters
 FPIVariableValueAux::validParams()
 {
   InputParameters params = AuxKernel::validParams();
+  params.addClassDescription("reads the coupled variable value into the aux variable.");
   params.addRequiredCoupledVar("from", "variable to read the value from");
 
   // add EXEC_BETWEEN_FPI to available execution flags

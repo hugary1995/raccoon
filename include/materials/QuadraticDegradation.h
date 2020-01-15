@@ -16,6 +16,8 @@ template <ComputeStage compute_stage>
 class QuadraticDegradation : public DegradationBase<compute_stage>
 {
 public:
+  static InputParameters validParams();
+
   QuadraticDegradation(const InputParameters & parameters);
 
 protected:

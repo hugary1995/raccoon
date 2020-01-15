@@ -6,13 +6,18 @@
 
 registerADMooseObject("raccoonApp", SVKPK1Stress);
 
-defineADValidParams(
-    SVKPK1Stress,
-    ADComputeStressBase,
-    params.addClassDescription("Compute stress using the St. Venant Kirchhoff hyperelastic model");
-    params.addParam<bool>("cauchy_stress",
-                          false,
-                          "whether to output the stress on current configuration"););
+defineADLegacyParams(SVKPK1Stress);
+
+template <ComputeStage compute_stage>
+InputParameters
+SVKPK1Stress<compute_stage>::validParams()
+{
+  InputParameters params = ADComputeStressBase<compute_stage>::validParams();
+  params.addClassDescription("Compute stress using the St. Venant Kirchhoff hyperelastic model");
+  params.addParam<bool>(
+      "cauchy_stress", false, "whether to output the stress on current configuration");
+  return params;
+}
 
 template <ComputeStage compute_stage>
 SVKPK1Stress<compute_stage>::SVKPK1Stress(const InputParameters & parameters)
@@ -21,7 +26,7 @@ SVKPK1Stress<compute_stage>::SVKPK1Stress(const InputParameters & parameters)
     _F(getADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
     _cauchy_stress(getParam<bool>("cauchy_stress")
                        ? &declareADProperty<RankTwoTensor>(_base_name + "cauchy_stress")
-                       : NULL)
+                       : nullptr)
 {
 }
 

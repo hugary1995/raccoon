@@ -6,16 +6,22 @@
 
 registerADMooseObject("raccoonApp", LorentzDegradation);
 
-defineADValidParams(
-    LorentzDegradation,
-    DegradationBase,
-    params.addParam<MaterialPropertyName>("mobility_name", "mobility", "name of the Mobility");
-    params.addParam<MaterialPropertyName>("critical_fracture_energy_name",
-                                          "critical_fracture_energy",
-                                          "critical fracture energy");
-    params.addParam<Real>("p",
-                          1.0,
-                          "shape parameter that controls the size of the fracture process zone"););
+defineADLegacyParams(LorentzDegradation);
+
+template <ComputeStage compute_stage>
+InputParameters
+LorentzDegradation<compute_stage>::validParams()
+{
+  InputParameters params = DegradationBase<compute_stage>::validParams();
+  params.addClassDescription("computes the Lorentz-type degradation: "
+                             "$\\frac{(1-d)^2}{(1-d)^2+\\frac{M}{\\psi_\\critical}d(1+pd)}$");
+  params.addParam<MaterialPropertyName>("mobility_name", "mobility", "name of the Mobility");
+  params.addParam<MaterialPropertyName>(
+      "critical_fracture_energy_name", "critical_fracture_energy", "critical fracture energy");
+  params.addParam<Real>(
+      "p", 1.0, "shape parameter that controls the size of the fracture process zone");
+  return params;
+}
 
 template <ComputeStage compute_stage>
 LorentzDegradation<compute_stage>::LorentzDegradation(const InputParameters & parameters)

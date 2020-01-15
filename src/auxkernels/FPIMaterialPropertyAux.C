@@ -13,6 +13,7 @@ InputParameters
 FPIMaterialPropertyAux::validParams()
 {
   InputParameters params = AuxKernel::validParams();
+  params.addClassDescription("reads a material property into a monomial.");
   params.addRequiredParam<MaterialPropertyName>("from", "material to read the value from");
 
   // add EXEC_BETWEEN_FPI to available execution flags
