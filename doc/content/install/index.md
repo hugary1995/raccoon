@@ -10,21 +10,18 @@ Therefore, it can be complicated to get RACCOON to work. Fortunately, the instal
 has been thought through and thoroughly tested. The installation process can be summarized in the following steps,
 each of which should only take a handful of commands:
 
+- Install environment packages
 - Build MOOSE
-
-  - Install prerequisite packages
-  - Clone MOOSE
-  - Build a MOOSE-compatible PETSC
-  - Compile MOOSE with PETSC
-  - Test MOOSE
 - Acquire a copy of RACCOON
 - Compile RACCOON
 - Test RACCOON
 
-## Build MOOSE
+## Install environment packages
 
 For most up-to-date package dependencies, please go to the [MOOSE](https://mooseframework.inl.gov/getting_started/index.html) website for latest instructions.
 Choose a redistributable package based on your operation system and follow rest of the instructions there.
+
+## Build MOOSE
 
 Note that RACCOON is built upon a fork of MOOSE, hence, when you are asked to obtain a copy of MOOSE, make sure to clone from the following repository instead of the upstream idaholab copy:
 
@@ -72,7 +69,7 @@ Then close all the terminals to make sure the environment variable is in effect.
 echo $MOOSE_DIR
 ```
 
-The same steps should be followed to set the enviroment variable for `RACCOON_DIR` which points to `~/projects/raccoon`.
+The same steps should be followed to set the environment variable for `RACCOON_DIR` which points to `~/projects/raccoon`.
 
 ## Compile RACCOON
 
