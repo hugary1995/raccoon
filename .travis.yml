@@ -1,5 +1,7 @@
 language: cpp
 install:
+  - RACCOON_DIR=`pwd`
+  - export RACCOON_DIR=$(RACCOON_DIR)
   - sudo apt-get install build-essential gfortran tcl git m4 freeglut3 doxygen libblas-dev liblapack-dev libx11-dev libnuma-dev libcurl4-gnutls-dev zlib1g-dev libhwloc-dev libxml2-dev libpng-dev pkg-config liblzma-dev
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
   - bash miniconda.sh -b -p $HOME/miniconda
@@ -11,9 +13,19 @@ install:
   - conda config --add channels idaholab
   - conda create --name moose moose-env
   - conda activate moose
-  - cd $HOME
+  - cd ..
   - git clone --single-branch --branch next https://github.com/hugary1995/moose.git
 script:
   - cd raccoon
   - make -j 1
   - ./run_tests -j 2
+after_success:
+  - cd doc
+  - ./moosedocs.py build --destination ../gh-pages/
+deploy:
+  provider: pages:git
+  edge: true # opt in to dpl v2
+  local_dir: gh-pages
+  cleanup: false
+  on:
+    branch: master
