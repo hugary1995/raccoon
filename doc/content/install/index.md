@@ -50,7 +50,7 @@ Be especially carful with the above commands! Verify +twice+ that what you have 
 
   ```bash
   conda config --add channels conda-forge
-  conda config --add channels idaholab
+  conda config --add channels https://mooseframework.org/conda/moose
   ```
 
 - Install the moose-env package from Idaholab and name your environment 'moose':
