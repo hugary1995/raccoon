@@ -11,6 +11,7 @@ InputParameters
 DegradationBase<compute_stage>::validParams()
 {
   InputParameters params = ADMaterial<compute_stage>::validParams();
+  params.addCoupledVar("d", "phase-field damage variable");
   params.addCoupledVar("d_relaxed", "relaxed phase-field damage variable");
   params.addParam<MaterialPropertyName>(
       "degradation_name", "g", "name of the material that holds the degradation function value");
