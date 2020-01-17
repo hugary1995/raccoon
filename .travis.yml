@@ -1,39 +1,40 @@
-language:    cpp
+language:          cpp
 jobs:
   include:
-    - name:  "TEST UBUNTU 18.04"
-      os:    linux
-      dist:  bionic
-    - name:  "TEST UBUNTU 16.04"
-      os:    linux
-      dist:  xenial
-install:
-  - export RACCOON_DIR=`pwd`
-  - sudo apt-get install build-essential gfortran tcl git m4 freeglut3 doxygen libblas-dev liblapack-dev libx11-dev libnuma-dev libcurl4-gnutls-dev zlib1g-dev libhwloc-dev libxml2-dev libpng-dev pkg-config liblzma-dev
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - source "$HOME/miniconda/etc/profile.d/conda.sh"
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
-  - conda config --add channels conda-forge
-  - conda config --add channels https://mooseframework.org/conda/moose
-  - conda create --name moose moose-env
-  - conda activate moose
-  - cd ..
-  - git clone --single-branch --branch next https://github.com/hugary1995/moose.git
-script:
-  - cd raccoon
-  - make -j 1
-  - ./run_tests -j 2
-  - echo $RACCOON_DIR
-  - mkdir gh-pages
-  - cd doc
-  - ./moosedocs.py build --destination ../gh-pages/
-deploy:
-  if:        dist=bionic
-  provider:  pages:git
-  edge:      true
-  local_dir: ../gh-pages/
-  cleanup:   false
-  token:     $travis
+    - name:        "TEST UBUNTU 18.04"
+      os:          linux
+      dist:        bionic
+      deploy:
+        provider:  pages:git
+        edge:      true
+        local_dir: ../gh-pages/
+        cleanup:   false
+        token:     $travis
+        on:
+          branch:  master
+    - name:        "TEST UBUNTU 16.04"
+      os:          linux
+      dist:        xenial
+install:           skip
+  # - export RACCOON_DIR=`pwd`
+  # - sudo apt-get install build-essential gfortran tcl git m4 freeglut3 doxygen libblas-dev liblapack-dev libx11-dev libnuma-dev libcurl4-gnutls-dev zlib1g-dev libhwloc-dev libxml2-dev libpng-dev pkg-config liblzma-dev
+  # - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+  # - bash miniconda.sh -b -p $HOME/miniconda
+  # - source "$HOME/miniconda/etc/profile.d/conda.sh"
+  # - hash -r
+  # - conda config --set always_yes yes --set changeps1 no
+  # - conda update -q conda
+  # - conda config --add channels conda-forge
+  # - conda config --add channels https://mooseframework.org/conda/moose
+  # - conda create --name moose moose-env
+  # - conda activate moose
+  # - cd ..
+  # - git clone --single-branch --branch next https://github.com/hugary1995/moose.git
+script:            skip
+  # - cd raccoon
+  # - make -j 1
+  # - ./run_tests -j 2
+  # - echo $RACCOON_DIR
+  # - mkdir gh-pages
+  # - cd doc
+  # - ./moosedocs.py build --destination ../gh-pages/
