@@ -1,1 +1,0 @@
-!template load file=stubs/moose_object.md.template name=SVKPK1Stress syntax=/Materials/SVKPK1Stress

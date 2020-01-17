@@ -7,17 +7,17 @@
 #include "ADComputeStressBase.h"
 
 template <ComputeStage>
-class SVKPK1Stress;
+class SVKElasticPK1Stress;
 
-declareADValidParams(SVKPK1Stress);
+declareADValidParams(SVKElasticPK1Stress);
 
 template <ComputeStage compute_stage>
-class SVKPK1Stress : public ADComputeStressBase<compute_stage>
+class SVKElasticPK1Stress : public ADComputeStressBase<compute_stage>
 {
 public:
   static InputParameters validParams();
 
-  SVKPK1Stress(const InputParameters & parameters);
+  SVKElasticPK1Stress(const InputParameters & parameters);
 
 protected:
   virtual void computeQpStress() override;

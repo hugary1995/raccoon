@@ -2,15 +2,15 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "SmallStrainDegradedPK2Stress_NoSplit.h"
+#include "SmallStrainDegradedElasticPK2Stress_NoSplit.h"
 
-registerADMooseObject("raccoonApp", SmallStrainDegradedPK2Stress_NoSplit);
+registerADMooseObject("raccoonApp", SmallStrainDegradedElasticPK2Stress_NoSplit);
 
-defineADLegacyParams(SmallStrainDegradedPK2Stress_NoSplit);
+defineADLegacyParams(SmallStrainDegradedElasticPK2Stress_NoSplit);
 
 template <ComputeStage compute_stage>
 InputParameters
-SmallStrainDegradedPK2Stress_NoSplit<compute_stage>::validParams()
+SmallStrainDegradedElasticPK2Stress_NoSplit<compute_stage>::validParams()
 {
   InputParameters params = ADDegradedStressBase<compute_stage>::validParams();
   params.addClassDescription("Compute degraded stress following small deformation elasticity "
@@ -19,7 +19,7 @@ SmallStrainDegradedPK2Stress_NoSplit<compute_stage>::validParams()
 }
 
 template <ComputeStage compute_stage>
-SmallStrainDegradedPK2Stress_NoSplit<compute_stage>::SmallStrainDegradedPK2Stress_NoSplit(
+SmallStrainDegradedElasticPK2Stress_NoSplit<compute_stage>::SmallStrainDegradedElasticPK2Stress_NoSplit(
     const InputParameters & parameters)
   : ADDegradedStressBase<compute_stage>(parameters)
 {
@@ -27,7 +27,7 @@ SmallStrainDegradedPK2Stress_NoSplit<compute_stage>::SmallStrainDegradedPK2Stres
 
 template <ComputeStage compute_stage>
 void
-SmallStrainDegradedPK2Stress_NoSplit<compute_stage>::computeQpStress()
+SmallStrainDegradedElasticPK2Stress_NoSplit<compute_stage>::computeQpStress()
 {
   ADRankTwoTensor E = _mechanical_strain[_qp];
 

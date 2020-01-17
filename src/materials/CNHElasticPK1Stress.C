@@ -2,15 +2,15 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "CNHPK1Stress.h"
+#include "CNHElasticPK1Stress.h"
 
-registerADMooseObject("raccoonApp", CNHPK1Stress);
+registerADMooseObject("raccoonApp", CNHElasticPK1Stress);
 
-defineADLegacyParams(CNHPK1Stress);
+defineADLegacyParams(CNHElasticPK1Stress);
 
 template <ComputeStage compute_stage>
 InputParameters
-CNHPK1Stress<compute_stage>::validParams()
+CNHElasticPK1Stress<compute_stage>::validParams()
 {
   InputParameters params = ADComputeStressBase<compute_stage>::validParams();
   params.addClassDescription("Compute stress using elasticity for small strains");
@@ -18,7 +18,7 @@ CNHPK1Stress<compute_stage>::validParams()
 }
 
 template <ComputeStage compute_stage>
-CNHPK1Stress<compute_stage>::CNHPK1Stress(const InputParameters & parameters)
+CNHElasticPK1Stress<compute_stage>::CNHElasticPK1Stress(const InputParameters & parameters)
   : ADComputeStressBase<compute_stage>(parameters),
     _elasticity_tensor(getADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
     _F(getADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
@@ -27,7 +27,7 @@ CNHPK1Stress<compute_stage>::CNHPK1Stress(const InputParameters & parameters)
 
 template <ComputeStage compute_stage>
 void
-CNHPK1Stress<compute_stage>::computeQpStress()
+CNHElasticPK1Stress<compute_stage>::computeQpStress()
 {
   // Isotropic elasticity is assumed and should be enforced
   ADReal lambda = _elasticity_tensor[_qp](0, 0, 1, 1);

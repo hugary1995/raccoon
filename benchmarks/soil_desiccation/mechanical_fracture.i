@@ -196,7 +196,7 @@
     displacements = 'disp_x disp_y'
   [../]
   [./stress]
-    type = SmallStrainDegradedPK2Stress_NoSplit
+    type = SmallStrainDegradedElasticPK2Stress_NoSplit
     d = 'd'
     d_crit = 0.6
     history = false

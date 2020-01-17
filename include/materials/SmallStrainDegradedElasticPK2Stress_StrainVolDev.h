@@ -7,24 +7,20 @@
 #include "ADDegradedStressBase.h"
 
 template <ComputeStage>
-class SmallStrainDegradedPK2Stress_StrainSpectral;
+class SmallStrainDegradedElasticPK2Stress_StrainVolDev;
 
-declareADValidParams(SmallStrainDegradedPK2Stress_StrainSpectral);
+declareADValidParams(SmallStrainDegradedElasticPK2Stress_StrainVolDev);
 
 template <ComputeStage compute_stage>
-class SmallStrainDegradedPK2Stress_StrainSpectral : public ADDegradedStressBase<compute_stage>
+class SmallStrainDegradedElasticPK2Stress_StrainVolDev : public ADDegradedStressBase<compute_stage>
 {
 public:
   static InputParameters validParams();
 
-  SmallStrainDegradedPK2Stress_StrainSpectral(const InputParameters & parameters);
+  SmallStrainDegradedElasticPK2Stress_StrainVolDev(const InputParameters & parameters);
 
 protected:
   virtual void computeQpStress() override;
-
-private:
-  /// positive eigenvalues
-  ADRankTwoTensor D_pos;
 
   usingDegradedStressBaseMembers
 };

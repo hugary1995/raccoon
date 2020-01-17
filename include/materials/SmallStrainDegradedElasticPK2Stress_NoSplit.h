@@ -7,17 +7,17 @@
 #include "ADDegradedStressBase.h"
 
 template <ComputeStage>
-class SmallStrainDegradedPK2Stress_StrainVolDev;
+class SmallStrainDegradedElasticPK2Stress_NoSplit;
 
-declareADValidParams(SmallStrainDegradedPK2Stress_StrainVolDev);
+declareADValidParams(SmallStrainDegradedElasticPK2Stress_NoSplit);
 
 template <ComputeStage compute_stage>
-class SmallStrainDegradedPK2Stress_StrainVolDev : public ADDegradedStressBase<compute_stage>
+class SmallStrainDegradedElasticPK2Stress_NoSplit : public ADDegradedStressBase<compute_stage>
 {
 public:
   static InputParameters validParams();
 
-  SmallStrainDegradedPK2Stress_StrainVolDev(const InputParameters & parameters);
+  SmallStrainDegradedElasticPK2Stress_NoSplit(const InputParameters & parameters);
 
 protected:
   virtual void computeQpStress() override;

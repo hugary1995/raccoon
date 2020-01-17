@@ -2,15 +2,15 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "SmallStrainDegradedPK2Stress_StrainVolDev.h"
+#include "SmallStrainDegradedElasticPK2Stress_StrainVolDev.h"
 
-registerADMooseObject("raccoonApp", SmallStrainDegradedPK2Stress_StrainVolDev);
+registerADMooseObject("raccoonApp", SmallStrainDegradedElasticPK2Stress_StrainVolDev);
 
-defineADLegacyParams(SmallStrainDegradedPK2Stress_StrainVolDev);
+defineADLegacyParams(SmallStrainDegradedElasticPK2Stress_StrainVolDev);
 
 template <ComputeStage compute_stage>
 InputParameters
-SmallStrainDegradedPK2Stress_StrainVolDev<compute_stage>::validParams()
+SmallStrainDegradedElasticPK2Stress_StrainVolDev<compute_stage>::validParams()
 {
   InputParameters params = ADDegradedStressBase<compute_stage>::validParams();
   params.addClassDescription("Compute degraded stress following small deformation elasticity "
@@ -19,7 +19,7 @@ SmallStrainDegradedPK2Stress_StrainVolDev<compute_stage>::validParams()
 }
 
 template <ComputeStage compute_stage>
-SmallStrainDegradedPK2Stress_StrainVolDev<compute_stage>::SmallStrainDegradedPK2Stress_StrainVolDev(
+SmallStrainDegradedElasticPK2Stress_StrainVolDev<compute_stage>::SmallStrainDegradedElasticPK2Stress_StrainVolDev(
     const InputParameters & parameters)
   : ADDegradedStressBase<compute_stage>(parameters)
 {
@@ -27,7 +27,7 @@ SmallStrainDegradedPK2Stress_StrainVolDev<compute_stage>::SmallStrainDegradedPK2
 
 template <ComputeStage compute_stage>
 void
-SmallStrainDegradedPK2Stress_StrainVolDev<compute_stage>::computeQpStress()
+SmallStrainDegradedElasticPK2Stress_StrainVolDev<compute_stage>::computeQpStress()
 {
   // Isotropic elasticity is assumed and should be enforced
   const Real lambda = _elasticity_tensor[_qp](0, 0, 1, 1);

@@ -7,17 +7,17 @@
 #include "ADDegradedStressBase.h"
 
 template <ComputeStage>
-class CNHDegradedPK1ElastoPlasticStress_NoSplit;
+class CNHDegradedElasticPlasticPK1Stress_VolDev;
 
-declareADValidParams(CNHDegradedPK1ElastoPlasticStress_NoSplit);
+declareADValidParams(CNHDegradedElasticPlasticPK1Stress_VolDev);
 
 template <ComputeStage compute_stage>
-class CNHDegradedPK1ElastoPlasticStress_NoSplit : public ADDegradedStressBase<compute_stage>
+class CNHDegradedElasticPlasticPK1Stress_VolDev : public ADDegradedStressBase<compute_stage>
 {
 public:
   static InputParameters validParams();
 
-  CNHDegradedPK1ElastoPlasticStress_NoSplit(const InputParameters & parameters);
+  CNHDegradedElasticPlasticPK1Stress_VolDev(const InputParameters & parameters);
 
 protected:
   virtual void initQpStatefulProperties() override;
@@ -31,16 +31,26 @@ protected:
   const MaterialProperty<Real> & _alpha_old;
   const Real _yield_stress;
   const Real _k;
-  ADMaterialProperty(RankTwoTensor) & _Ee;
-  ADMaterialProperty(RankTwoTensor) & _Ep;
-  ADMaterialProperty(RankTwoTensor) & _PK2;
-  ADMaterialProperty(RankTwoTensor) & _kirchhoff_stress;
+  const bool _degrade_plastic_work;
+  ADMaterialProperty(RankTwoTensor) & _plastic_strain;
   ADMaterialProperty(RankTwoTensor) & _cauchy_stress;
   ADMaterialProperty(Real) & _Wp;
   const MaterialProperty<Real> & _Wp_old;
   ADMaterialProperty(Real) & _Wp_degraded;
   const Real _W0;
   ADMaterialProperty(Real) & _E_el_degraded;
+
+private:
+  ADRankTwoTensor I2;
+  ADRankTwoTensor f;
+  ADRankTwoTensor f_bar;
+  ADRankTwoTensor be_bar_trial;
+  ADRankTwoTensor s_trial;
+  ADRankTwoTensor s;
+  ADRankTwoTensor tau;
+  ADRankTwoTensor be_bar_dev;
+  ADRankTwoTensor be;
+  ADRankTwoTensor Cp;
 
   usingDegradedStressBaseMembers
 };

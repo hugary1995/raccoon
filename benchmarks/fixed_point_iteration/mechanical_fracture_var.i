@@ -105,7 +105,7 @@
     displacements = 'disp_x disp_y'
   [../]
   [./stress]
-    type = SmallStrainDegradedPK2Stress_StrainSpectral
+    type = SmallStrainDegradedElasticPK2Stress_StrainSpectral
     d = 'd'
     d_crit = 2.0
   [../]

@@ -2,15 +2,15 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "SmallStrainDegradedPK2Stress_StrainSpectral.h"
+#include "SmallStrainDegradedElasticPK2Stress_StrainSpectral.h"
 
-registerADMooseObject("raccoonApp", SmallStrainDegradedPK2Stress_StrainSpectral);
+registerADMooseObject("raccoonApp", SmallStrainDegradedElasticPK2Stress_StrainSpectral);
 
-defineADLegacyParams(SmallStrainDegradedPK2Stress_StrainSpectral);
+defineADLegacyParams(SmallStrainDegradedElasticPK2Stress_StrainSpectral);
 
 template <ComputeStage compute_stage>
 InputParameters
-SmallStrainDegradedPK2Stress_StrainSpectral<compute_stage>::validParams()
+SmallStrainDegradedElasticPK2Stress_StrainSpectral<compute_stage>::validParams()
 {
   InputParameters params = ADDegradedStressBase<compute_stage>::validParams();
   params.addClassDescription("Compute degraded stress following small deformation elasticity "
@@ -19,15 +19,15 @@ SmallStrainDegradedPK2Stress_StrainSpectral<compute_stage>::validParams()
 }
 
 template <ComputeStage compute_stage>
-SmallStrainDegradedPK2Stress_StrainSpectral<
-    compute_stage>::SmallStrainDegradedPK2Stress_StrainSpectral(const InputParameters & parameters)
+SmallStrainDegradedElasticPK2Stress_StrainSpectral<
+    compute_stage>::SmallStrainDegradedElasticPK2Stress_StrainSpectral(const InputParameters & parameters)
   : ADDegradedStressBase<compute_stage>(parameters)
 {
 }
 
 template <ComputeStage compute_stage>
 void
-SmallStrainDegradedPK2Stress_StrainSpectral<compute_stage>::computeQpStress()
+SmallStrainDegradedElasticPK2Stress_StrainSpectral<compute_stage>::computeQpStress()
 {
   // Isotropic elasticity is assumed and should be enforced
   const Real lambda = _elasticity_tensor[_qp](0, 0, 1, 1);

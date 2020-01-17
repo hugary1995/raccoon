@@ -2,15 +2,15 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "SVKPK1Stress.h"
+#include "SVKElasticPK1Stress.h"
 
-registerADMooseObject("raccoonApp", SVKPK1Stress);
+registerADMooseObject("raccoonApp", SVKElasticPK1Stress);
 
-defineADLegacyParams(SVKPK1Stress);
+defineADLegacyParams(SVKElasticPK1Stress);
 
 template <ComputeStage compute_stage>
 InputParameters
-SVKPK1Stress<compute_stage>::validParams()
+SVKElasticPK1Stress<compute_stage>::validParams()
 {
   InputParameters params = ADComputeStressBase<compute_stage>::validParams();
   params.addClassDescription("Compute stress using the St. Venant Kirchhoff hyperelastic model");
@@ -20,7 +20,7 @@ SVKPK1Stress<compute_stage>::validParams()
 }
 
 template <ComputeStage compute_stage>
-SVKPK1Stress<compute_stage>::SVKPK1Stress(const InputParameters & parameters)
+SVKElasticPK1Stress<compute_stage>::SVKElasticPK1Stress(const InputParameters & parameters)
   : ADComputeStressBase<compute_stage>(parameters),
     _elasticity_tensor(getADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
     _F(getADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
@@ -32,7 +32,7 @@ SVKPK1Stress<compute_stage>::SVKPK1Stress(const InputParameters & parameters)
 
 template <ComputeStage compute_stage>
 void
-SVKPK1Stress<compute_stage>::computeQpStress()
+SVKElasticPK1Stress<compute_stage>::computeQpStress()
 {
   // Isotropic elasticity is assumed and should be enforced
   // P = F * S = F * (C:E)
