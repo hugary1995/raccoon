@@ -143,11 +143,11 @@ CNHDegradedPK1ElastoPlasticStress_VolDev<compute_stage>::computeQpStress()
   _be_bar[_qp] = be_bar_dev + Ie_bar * I2;
   _stress[_qp] = tau * _deformation_gradient[_qp].inverse().transpose();
 
-  // be = _be_bar[_qp] * std::pow(J, 2.0 / 3.0);
-  // Cp = _deformation_gradient[_qp].transpose() * be.inverse() * _deformation_gradient[_qp];
+  be = _be_bar[_qp] * std::pow(J, 2.0 / 3.0);
+  Cp = _deformation_gradient[_qp].transpose() * be.inverse() * _deformation_gradient[_qp];
 
-  // _plastic_strain[_qp] = 0.5 * (Cp - I2);
-  // _elastic_strain[_qp] = _mechanical_strain[_qp] - _plastic_strain[_qp];
+  _plastic_strain[_qp] = 0.5 * (Cp - I2);
+  _elastic_strain[_qp] = _mechanical_strain[_qp] - _plastic_strain[_qp];
   _cauchy_stress[_qp] = tau / J;
 
   ADReal U = 0.5 * K * (0.5 * (J * J - 1) - std::log(J));

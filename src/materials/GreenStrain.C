@@ -12,7 +12,7 @@ template <ComputeStage compute_stage>
 InputParameters
 GreenStrain<compute_stage>::validParams()
 {
-  InputParameters params = DegradationBase<compute_stage>::validParams();
+  InputParameters params = ADComputeStrainBase<compute_stage>::validParams();
   params.addClassDescription("Compute a Green strain.");
   return params;
 }
