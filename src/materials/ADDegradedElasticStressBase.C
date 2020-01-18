@@ -2,13 +2,13 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "ADDegradedStressBase.h"
+#include "ADDegradedElasticStressBase.h"
 
-defineADLegacyParams(ADDegradedStressBase);
+defineADLegacyParams(ADDegradedElasticStressBase);
 
 template <ComputeStage compute_stage>
 InputParameters
-ADDegradedStressBase<compute_stage>::validParams()
+ADDegradedElasticStressBase<compute_stage>::validParams()
 {
   InputParameters params = ADComputeStressBase<compute_stage>::validParams();
   params.addClassDescription("Base class for computing damage degraded stress");
@@ -16,16 +16,15 @@ ADDegradedStressBase<compute_stage>::validParams()
   params.addParam<Real>(
       "d_crit", 2.0, "enforce the traction free boundary condition when d > d_crit");
   params.addParam<MaterialPropertyName>(
-      "active_elastic_energy_name",
-      "E_el_active",
-      "name of the material that holds the active part of the elastic energy");
+      "elastic_energy_name", "E_el", "name of the material that holds the elastic energy");
   params.addParam<MaterialPropertyName>(
       "degradation_name", "g", "name of the material that holds the degradation");
   return params;
 }
 
 template <ComputeStage compute_stage>
-ADDegradedStressBase<compute_stage>::ADDegradedStressBase(const InputParameters & parameters)
+ADDegradedElasticStressBase<compute_stage>::ADDegradedElasticStressBase(
+    const InputParameters & parameters)
   : ADComputeStressBase<compute_stage>(parameters),
     _elasticity_tensor(getMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
     _d(adCoupledValue("d")),
@@ -33,14 +32,14 @@ ADDegradedStressBase<compute_stage>::ADDegradedStressBase(const InputParameters 
     _d_crit(getParam<Real>("d_crit")),
     _g_name(getParam<MaterialPropertyName>("degradation_name")),
     _g(getADMaterialProperty<Real>(_g_name)),
-    _E_el_name(getParam<MaterialPropertyName>("active_elastic_energy_name")),
-    _E_el_active(declareADProperty<Real>(_E_el_name))
+    _E_el_name(getParam<MaterialPropertyName>("elastic_energy_name")),
+    _E_el_active(declareADProperty<Real>(_E_el_name + "_active"))
 {
 }
 
 template <ComputeStage compute_stage>
 void
-ADDegradedStressBase<compute_stage>::computeQpProperties()
+ADDegradedElasticStressBase<compute_stage>::computeQpProperties()
 {
   if (_d[_qp] < _d_crit)
     computeQpStress();
@@ -50,7 +49,7 @@ ADDegradedStressBase<compute_stage>::computeQpProperties()
 
 template <ComputeStage compute_stage>
 void
-ADDegradedStressBase<compute_stage>::computeQpTractionFreeStress()
+ADDegradedElasticStressBase<compute_stage>::computeQpTractionFreeStress()
 {
   const Real eps = libMesh::TOLERANCE;
 
@@ -83,14 +82,14 @@ ADDegradedStressBase<compute_stage>::computeQpTractionFreeStress()
 
 template <ComputeStage compute_stage>
 ADReal
-ADDegradedStressBase<compute_stage>::Macaulay(ADReal x)
+ADDegradedElasticStressBase<compute_stage>::Macaulay(ADReal x)
 {
   return 0.5 * (x + std::abs(x));
 }
 
 template <ComputeStage compute_stage>
 std::vector<ADReal>
-ADDegradedStressBase<compute_stage>::Macaulay(std::vector<ADReal> v)
+ADDegradedElasticStressBase<compute_stage>::Macaulay(std::vector<ADReal> v)
 {
   std::vector<ADReal> m(v.size());
   for (unsigned int i = 0; i < v.size(); i++)
@@ -98,4 +97,4 @@ ADDegradedStressBase<compute_stage>::Macaulay(std::vector<ADReal> v)
   return m;
 }
 
-adBaseClass(ADDegradedStressBase);
+adBaseClass(ADDegradedElasticStressBase);

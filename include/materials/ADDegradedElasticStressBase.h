@@ -8,28 +8,28 @@
 
 #define usingDegradedStressBaseMembers                                                             \
   usingComputeStressBaseMembers;                                                                   \
-  using ADDegradedStressBase<compute_stage>::computeQpTractionFreeStress;                          \
-  using ADDegradedStressBase<compute_stage>::Macaulay;                                             \
-  using ADDegradedStressBase<compute_stage>::_elasticity_tensor;                                   \
-  using ADDegradedStressBase<compute_stage>::_d;                                                   \
-  using ADDegradedStressBase<compute_stage>::_grad_d;                                              \
-  using ADDegradedStressBase<compute_stage>::_d_crit;                                              \
-  using ADDegradedStressBase<compute_stage>::_g_name;                                              \
-  using ADDegradedStressBase<compute_stage>::_g;                                                   \
-  using ADDegradedStressBase<compute_stage>::_E_el_name;                                           \
-  using ADDegradedStressBase<compute_stage>::_E_el_active;
+  using ADDegradedElasticStressBase<compute_stage>::computeQpTractionFreeStress;                          \
+  using ADDegradedElasticStressBase<compute_stage>::Macaulay;                                             \
+  using ADDegradedElasticStressBase<compute_stage>::_elasticity_tensor;                                   \
+  using ADDegradedElasticStressBase<compute_stage>::_d;                                                   \
+  using ADDegradedElasticStressBase<compute_stage>::_grad_d;                                              \
+  using ADDegradedElasticStressBase<compute_stage>::_d_crit;                                              \
+  using ADDegradedElasticStressBase<compute_stage>::_g_name;                                              \
+  using ADDegradedElasticStressBase<compute_stage>::_g;                                                   \
+  using ADDegradedElasticStressBase<compute_stage>::_E_el_name;                                           \
+  using ADDegradedElasticStressBase<compute_stage>::_E_el_active;
 
 template <ComputeStage>
-class ADDegradedStressBase;
+class ADDegradedElasticStressBase;
 
-declareADValidParams(ADDegradedStressBase);
+declareADValidParams(ADDegradedElasticStressBase);
 
 template <ComputeStage compute_stage>
-class ADDegradedStressBase : public ADComputeStressBase<compute_stage>
+class ADDegradedElasticStressBase : public ADComputeStressBase<compute_stage>
 {
 public:
   static InputParameters validParams();
-  ADDegradedStressBase(const InputParameters & parameters);
+  ADDegradedElasticStressBase(const InputParameters & parameters);
 
 protected:
   virtual void computeQpProperties() override;

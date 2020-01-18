@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "ADDegradedStressBase.h"
+#include "ADDegradedElasticStressBase.h"
 
 template <ComputeStage>
 class CNHDegradedElasticPlasticPK1Stress_VolDev;
@@ -12,7 +12,7 @@ class CNHDegradedElasticPlasticPK1Stress_VolDev;
 declareADValidParams(CNHDegradedElasticPlasticPK1Stress_VolDev);
 
 template <ComputeStage compute_stage>
-class CNHDegradedElasticPlasticPK1Stress_VolDev : public ADDegradedStressBase<compute_stage>
+class CNHDegradedElasticPlasticPK1Stress_VolDev : public ADDegradedElasticStressBase<compute_stage>
 {
 public:
   static InputParameters validParams();
@@ -34,9 +34,11 @@ protected:
   const bool _degrade_plastic_work;
   ADMaterialProperty(RankTwoTensor) & _plastic_strain;
   ADMaterialProperty(RankTwoTensor) & _cauchy_stress;
-  ADMaterialProperty(Real) & _Wp;
-  const MaterialProperty<Real> & _Wp_old;
-  ADMaterialProperty(Real) & _Wp_degraded;
+  const MaterialPropertyName _W_pl_name;
+  ADMaterialProperty(Real) & _W_pl;
+  const MaterialProperty<Real> & _W_pl_old;
+  ADMaterialProperty(Real) & _W_pl_active;
+  ADMaterialProperty(Real) & _W_pl_degraded;
   const Real _W0;
   ADMaterialProperty(Real) & _E_el_degraded;
 

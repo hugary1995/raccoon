@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "ADDegradedStressBase.h"
+#include "ADDegradedElasticStressBase.h"
 
 template <ComputeStage>
 class SmallStrainDegradedElasticPK2Stress_NoSplit;
@@ -12,7 +12,7 @@ class SmallStrainDegradedElasticPK2Stress_NoSplit;
 declareADValidParams(SmallStrainDegradedElasticPK2Stress_NoSplit);
 
 template <ComputeStage compute_stage>
-class SmallStrainDegradedElasticPK2Stress_NoSplit : public ADDegradedStressBase<compute_stage>
+class SmallStrainDegradedElasticPK2Stress_NoSplit : public ADDegradedElasticStressBase<compute_stage>
 {
 public:
   static InputParameters validParams();

@@ -12,7 +12,7 @@ template <ComputeStage compute_stage>
 InputParameters
 SmallStrainDegradedElasticPK2Stress_StrainSpectral<compute_stage>::validParams()
 {
-  InputParameters params = ADDegradedStressBase<compute_stage>::validParams();
+  InputParameters params = ADDegradedElasticStressBase<compute_stage>::validParams();
   params.addClassDescription("Compute degraded stress following small deformation elasticity "
                              "with a spectra-based active/inactive split");
   return params;
@@ -21,7 +21,7 @@ SmallStrainDegradedElasticPK2Stress_StrainSpectral<compute_stage>::validParams()
 template <ComputeStage compute_stage>
 SmallStrainDegradedElasticPK2Stress_StrainSpectral<
     compute_stage>::SmallStrainDegradedElasticPK2Stress_StrainSpectral(const InputParameters & parameters)
-  : ADDegradedStressBase<compute_stage>(parameters)
+  : ADDegradedElasticStressBase<compute_stage>(parameters)
 {
 }
 

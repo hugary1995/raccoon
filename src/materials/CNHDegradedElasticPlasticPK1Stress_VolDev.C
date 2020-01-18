@@ -12,9 +12,11 @@ template <ComputeStage compute_stage>
 InputParameters
 CNHDegradedElasticPlasticPK1Stress_VolDev<compute_stage>::validParams()
 {
-  InputParameters params = ADDegradedStressBase<compute_stage>::validParams();
+  InputParameters params = ADDegradedElasticStressBase<compute_stage>::validParams();
   params.addClassDescription("Compute degraded stress following small deformation elasticity "
                              "with a volumetric-deviatoric active/inactive split");
+  params.addParam<MaterialPropertyName>(
+      "plastic_work_name", "W_pl", "name of the material for plastic work");
   params.addRequiredParam<Real>("W0", "plastic work threshold.");
   params.addRequiredParam<Real>("yield_stress", "yield stress");
   params.addRequiredParam<Real>("linear_hardening_coefficient", "linear hardening coefficient");
@@ -26,7 +28,7 @@ CNHDegradedElasticPlasticPK1Stress_VolDev<compute_stage>::validParams()
 template <ComputeStage compute_stage>
 CNHDegradedElasticPlasticPK1Stress_VolDev<compute_stage>::CNHDegradedElasticPlasticPK1Stress_VolDev(
     const InputParameters & parameters)
-  : ADDegradedStressBase<compute_stage>(parameters),
+  : ADDegradedElasticStressBase<compute_stage>(parameters),
     _deformation_gradient(
         getADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
     _be_bar(declareADProperty<RankTwoTensor>(_base_name + "volume_perserving_be")),
@@ -40,11 +42,13 @@ CNHDegradedElasticPlasticPK1Stress_VolDev<compute_stage>::CNHDegradedElasticPlas
     _degrade_plastic_work(getParam<bool>("degrade_plastic_work")),
     _plastic_strain(declareADProperty<RankTwoTensor>(_base_name + "plastic_strain")),
     _cauchy_stress(declareADProperty<RankTwoTensor>(_base_name + "cauchy_stress")),
-    _Wp(declareADProperty<Real>("plastic_work")),
-    _Wp_old(getMaterialPropertyOldByName<Real>("plastic_work")),
-    _Wp_degraded(declareADProperty<Real>("degraded_plastic_work")),
+    _W_pl_name(getParam<MaterialPropertyName>("plastic_work_name")),
+    _W_pl(declareADProperty<Real>(_W_pl_name)),
+    _W_pl_old(getMaterialPropertyOldByName<Real>(_W_pl_name)),
+    _W_pl_active(declareADProperty<Real>(_W_pl_name + "_active")),
+    _W_pl_degraded(declareADProperty<Real>(_W_pl_name + "_degraded")),
     _W0(getParam<Real>("W0")),
-    _E_el_degraded(declareADProperty<Real>("degraded_elastic_energy"))
+    _E_el_degraded(declareADProperty<Real>(_E_el_name + "_degraded"))
 {
   I2.zero();
   I2.addIa(1.0);
@@ -54,11 +58,11 @@ template <ComputeStage compute_stage>
 void
 CNHDegradedElasticPlasticPK1Stress_VolDev<compute_stage>::initQpStatefulProperties()
 {
-  ADDegradedStressBase<compute_stage>::initQpStatefulProperties();
+  ADDegradedElasticStressBase<compute_stage>::initQpStatefulProperties();
   _be_bar[_qp].zero();
   _be_bar[_qp].addIa(1.0);
   _alpha[_qp] = 0;
-  _Wp[_qp] = 0;
+  _W_pl[_qp] = 0;
 }
 
 template <ComputeStage compute_stage>
@@ -158,6 +162,8 @@ CNHDegradedElasticPlasticPK1Stress_VolDev<compute_stage>::computeQpStress()
   _E_el_active[_qp] = E_el_pos;
   _E_el_degraded[_qp] = g * E_el_pos + E_el_neg;
 
-  _Wp[_qp] = _Wp_old[_qp] + plastic_increment * std::sqrt(s.doubleContraction(s));
-  _Wp_degraded[_qp] = gp * _Wp[_qp];
+  // plastic work with an arbitrary threshold
+  _W_pl[_qp] = _W_pl_old[_qp] + plastic_increment * std::sqrt(s.doubleContraction(s));
+  _W_pl_active[_qp] = Macaulay(_W_pl[_qp] - _W0);
+  _W_pl_degraded[_qp] = gp * _W_pl[_qp];
 }
