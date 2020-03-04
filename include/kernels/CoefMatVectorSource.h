@@ -8,25 +8,30 @@
 
 // Forward Declarations
 template <ComputeStage>
-class PressurizedCrack;
+class CoefMatVectorSource;
 
-declareADValidParams(PressurizedCrack);
+declareADValidParams(CoefMatVectorSource);
 
 template <ComputeStage compute_stage>
-class PressurizedCrack : public ADKernelValue<compute_stage>
+class CoefMatVectorSource : public ADKernelValue<compute_stage>
 {
 public:
   static InputParameters validParams();
 
-  PressurizedCrack(const InputParameters & parameters);
+  CoefMatVectorSource(const InputParameters & parameters);
 
 protected:
   virtual ADReal precomputeQpResidual() override;
 
-  const unsigned int _comp;
-  const ADMaterialProperty(Real) * _p_mat;
-  const ADVariableValue * _p_var;
-  const ADVariableGradient & _grad_d;
+  const Real _coef;
+
+  const std::vector<MaterialPropertyName> & _prop_names;
+
+  const unsigned int _num_props;
+
+  std::vector<const ADMaterialProperty(RealVectorValue) *> _props;
+
+  const unsigned int _component;
 
   usingKernelValueMembers;
 };

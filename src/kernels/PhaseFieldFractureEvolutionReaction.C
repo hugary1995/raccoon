@@ -14,9 +14,7 @@ PhaseFieldFractureEvolutionReaction<compute_stage>::validParams()
 {
   InputParameters params = ADKernelValue<compute_stage>::validParams();
   params.addClassDescription("computes the reaction term in phase-field evolution equation");
-  params.addParam<MaterialPropertyName>("mobility_name", "mobility", "name of mobility");
   params.addParam<MaterialPropertyName>("degradation_name", "g", "name of degradation");
-  params.addParam<MaterialPropertyName>("local_dissipation_name", "w", "name of local dissipation");
   params.addParam<MaterialPropertyName>("driving_energy_mat",
                                         "material property name of the driving energy");
   params.addCoupledVar("driving_energy_var", "auxiliary variable that holds the driving energy");
@@ -31,11 +29,8 @@ template <ComputeStage compute_stage>
 PhaseFieldFractureEvolutionReaction<compute_stage>::PhaseFieldFractureEvolutionReaction(
     const InputParameters & parameters)
   : ADKernelValue<compute_stage>(parameters),
-    _M(getMaterialProperty<Real>("mobility_name")),
     _dg_dd(getADMaterialProperty<Real>(derivativePropertyNameFirst(
         getParam<MaterialPropertyName>("degradation_name"), _var.name()))),
-    _dw_dd(getADMaterialProperty<Real>(derivativePropertyNameFirst(
-        getParam<MaterialPropertyName>("local_dissipation_name"), _var.name()))),
     _lag(getParam<bool>("lag")),
     _D_mat(isParamValid("driving_energy_mat") && !_lag
                ? &getADMaterialProperty<Real>("driving_energy_mat")
@@ -56,7 +51,7 @@ PhaseFieldFractureEvolutionReaction<compute_stage>::PhaseFieldFractureEvolutionR
   bool provided_by_uo = _D_uo;
 
   /// driving energy should be provided
-  if ((provided_by_mat ? 1 : 0) + (provided_by_var ? 1 : 0) + (provided_by_uo ? 1 : 0) == 0)
+  if (!provided_by_mat && !provided_by_var && !provided_by_uo)
     mooseError("no driving energy provided.");
 
   /// driving energy should not be multiply defined
@@ -81,5 +76,5 @@ PhaseFieldFractureEvolutionReaction<compute_stage>::precomputeQpResidual()
     mooseError("Internal Error");
 
   // reaction like driving force
-  return _dg_dd[_qp] * D + _dw_dd[_qp] * _M[_qp];
+  return _dg_dd[_qp] * D;
 }

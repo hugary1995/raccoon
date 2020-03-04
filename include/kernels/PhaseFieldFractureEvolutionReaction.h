@@ -26,12 +26,8 @@ public:
 protected:
   virtual ADReal precomputeQpResidual() override;
 
-  /// Allen-Cahn mobility calculated from fracture properties
-  const MaterialProperty<Real> & _M;
-
   /// name of the degradation function
   const ADMaterialProperty(Real) & _dg_dd;
-  const ADMaterialProperty(Real) & _dw_dd;
   const bool _lag;
   const ADMaterialProperty(Real) * _D_mat;
   const MaterialProperty<Real> * _D_mat_old;

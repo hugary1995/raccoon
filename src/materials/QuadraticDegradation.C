@@ -29,6 +29,6 @@ QuadraticDegradation<compute_stage>::computeDegradation()
 {
   ADReal d = _d[_qp];
   ADReal d_old = _lag ? _d_old[_qp] : d;
-  _g[_qp] = (1.0 - d_old) * (1.0 - d_old) * (1.0 - _eta) + _eta;
-  _dg_dd[_qp] = -2.0 * (1.0 - d) * (1.0 - _eta);
+  _g[_qp] = (1.0 - d_old) * (1.0 - d_old);
+  _dg_dd[_qp] = -2.0 * (1.0 - d);
 }

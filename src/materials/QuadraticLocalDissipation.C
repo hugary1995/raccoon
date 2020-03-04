@@ -38,5 +38,5 @@ QuadraticLocalDissipation<compute_stage>::computeQpProperties()
   ADReal d = _d[_qp];
 
   _w[_qp] = d * d;
-  _dw_dd[_qp] = d;
+  _dw_dd[_qp] = 2.0 * d;
 }

@@ -12,9 +12,10 @@ template <ComputeStage compute_stage>
 InputParameters
 PhaseFieldFractureEvolutionPressure<compute_stage>::validParams()
 {
-  InputParameters params = ADKernelValue<compute_stage>::validParams();
+  InputParameters params = ADKernelGrad<compute_stage>::validParams();
   params.addClassDescription("computes the pressure term in phase-field evolution equation");
-  params.addRequiredCoupledVar("p", "coupled pressure inside the crack");
+  params.addRequiredParam<UserObjectName>("pressure_uo",
+                                          "userobject that has pressure values at qps");
   params.addRequiredCoupledVar(
       "displacements",
       "The displacements appropriate for the simulation geometry and coordinate system");
@@ -24,23 +25,24 @@ PhaseFieldFractureEvolutionPressure<compute_stage>::validParams()
 template <ComputeStage compute_stage>
 PhaseFieldFractureEvolutionPressure<compute_stage>::PhaseFieldFractureEvolutionPressure(
     const InputParameters & parameters)
-  : ADKernelValue<compute_stage>(parameters),
-    _p(adCoupledValue("p")),
+  : ADKernelGrad<compute_stage>(parameters),
+    _p_uo(getUserObject<MaterialPropertyUserObject>("pressure_uo")),
     _ndisp(coupledComponents("displacements")),
-    _grad_disp(3)
+    _disp(3)
 {
   // fetch coupled variables and gradients (as stateful properties if necessary)
   for (unsigned int i = 0; i < _ndisp; ++i)
-    _grad_disp[i] = &adCoupledGradient("displacements", i);
+    _disp[i] = &adCoupledValue("displacements", i);
   // set unused dimensions to zero
   for (unsigned i = _ndisp; i < 3; ++i)
-    _grad_disp[i] = &adZeroGradient();
+    _disp[i] = &adZeroValue();
 }
 
 template <ComputeStage compute_stage>
-ADReal
+ADRealVectorValue
 PhaseFieldFractureEvolutionPressure<compute_stage>::precomputeQpResidual()
 {
-  return -_p[_qp] *
-         ((*_grad_disp[0])[_qp](0) + (*_grad_disp[1])[_qp](1) + (*_grad_disp[2])[_qp](2));
+  ADReal p = _p_uo.getData(_current_elem, _qp);
+  ADRealVectorValue u((*_disp[0])[_qp], (*_disp[1])[_qp], (*_disp[2])[_qp]);
+  return p * u;
 }

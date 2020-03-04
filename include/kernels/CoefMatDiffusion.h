@@ -8,24 +8,24 @@
 
 // Forward Declarations
 template <ComputeStage>
-class PhaseFieldFractureEvolutionPressure;
+class CoefMatDiffusion;
 
-declareADValidParams(PhaseFieldFractureEvolutionPressure);
+declareADValidParams(CoefMatDiffusion);
 
 template <ComputeStage compute_stage>
-class PhaseFieldFractureEvolutionPressure : public ADKernelGrad<compute_stage>
+class CoefMatDiffusion : public ADKernelGrad<compute_stage>
 {
 public:
   static InputParameters validParams();
 
-  PhaseFieldFractureEvolutionPressure(const InputParameters & parameters);
+  CoefMatDiffusion(const InputParameters & parameters);
 
 protected:
   virtual ADRealVectorValue precomputeQpResidual() override;
 
-  const MaterialPropertyUserObject & _p_uo;
-  const unsigned int _ndisp;
-  std::vector<const ADVariableValue *> _disp;
+  const Real _coef;
+
+  const ADMaterialProperty(Real) * _prop;
 
   usingKernelGradMembers;
 };
