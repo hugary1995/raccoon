@@ -54,6 +54,7 @@ protected:
   virtual ADReal H(ADReal ep) = 0;
   virtual ADReal dH_dep(ADReal ep) = 0;
   virtual ADReal d2H_dep2(ADReal ep) = 0;
+  virtual ADReal plastic_dissipation(ADReal ep) = 0;
 
   const ADMaterialProperty(RankTwoTensor) & _deformation_gradient;
   const MaterialProperty<RankTwoTensor> & _deformation_gradient_old;

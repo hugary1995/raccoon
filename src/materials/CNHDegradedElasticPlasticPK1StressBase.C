@@ -111,7 +111,7 @@ void
 CNHDegradedElasticPlasticPK1StressBase<compute_stage>::returnMapping()
 {
   // check for plastic loading
-  ADReal yield_function_trial = _s_trial_norm - std::sqrt(2.0 / 3.0) * _gp * dH_dep(_ep_old[_qp]);
+  ADReal yield_function_trial = _s_trial_norm - std::sqrt(2.0 / 3.0) * dH_dep(_ep_old[_qp]);
 
   if (yield_function_trial <= 0.0)
   {
@@ -127,13 +127,13 @@ CNHDegradedElasticPlasticPK1StressBase<compute_stage>::returnMapping()
   while (std::abs(yield_function_trial) > 1E-06)
   {
     jacob = -std::sqrt(3.0 / 2.0) * _gq * _G * _be_bar_trial.trace() -
-            std::sqrt(2.0 / 3.0) * _gp * d2H_dep2(_ep_old[_qp] + _plastic_increment);
+            std::sqrt(2.0 / 3.0) * d2H_dep2(_ep_old[_qp] + _plastic_increment);
     step = -yield_function_trial / jacob;
     _plastic_increment = _plastic_increment + step;
     yield_function_trial =
         _s_trial_norm -
         std::sqrt(3.0 / 2.0) * _gq * _G * _plastic_increment * _be_bar_trial.trace() -
-        std::sqrt(2.0 / 3.0) * _gp * dH_dep(_ep_old[_qp] + _plastic_increment);
+        std::sqrt(2.0 / 3.0) * dH_dep(_ep_old[_qp] + _plastic_increment);
     iter++;
     if (iter > 20)
     {
@@ -235,7 +235,7 @@ CNHDegradedElasticPlasticPK1StressBase<compute_stage>::computeFractureDrivingEne
   else
     _W_pl[_qp] = H(_ep[_qp]);
 
-  _W_pl_degraded[_qp] = _gp * _W_pl[_qp];
+  _W_pl_degraded[_qp] = plastic_dissipation(_ep[_qp]);
 }
 
 adBaseClass(CNHDegradedElasticPlasticPK1StressBase);

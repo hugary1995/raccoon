@@ -39,11 +39,18 @@ template <ComputeStage compute_stage>
 ADReal
 CNHDegradedElasticPlasticPK1Stress_LinearHardening<compute_stage>::dH_dep(ADReal ep)
 {
-  return _yield_stress + _k * ep;
+  return _gp * (_yield_stress + _k * ep);
 }
 
 template <ComputeStage compute_stage>
 ADReal CNHDegradedElasticPlasticPK1Stress_LinearHardening<compute_stage>::d2H_dep2(ADReal /*ep*/)
 {
-  return _k;
+  return _gp * _k;
+}
+
+template <ComputeStage compute_stage>
+ADReal
+CNHDegradedElasticPlasticPK1Stress_LinearHardening<compute_stage>::plastic_dissipation(ADReal ep)
+{
+  return _gp * _yield_stress * ep;
 }

@@ -7,28 +7,29 @@
 #include "CNHDegradedElasticPlasticPK1StressBase.h"
 
 template <ComputeStage>
-class CNHDegradedElasticPlasticPK1Stress_PowerLawHardening;
+class CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative;
 
-declareADValidParams(CNHDegradedElasticPlasticPK1Stress_PowerLawHardening);
+declareADValidParams(CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative);
 
 template <ComputeStage compute_stage>
-class CNHDegradedElasticPlasticPK1Stress_PowerLawHardening
+class CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative
   : public CNHDegradedElasticPlasticPK1StressBase<compute_stage>
 {
 public:
   static InputParameters validParams();
 
-  CNHDegradedElasticPlasticPK1Stress_PowerLawHardening(const InputParameters & parameters);
+  CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative(
+      const InputParameters & parameters);
 
 protected:
   virtual ADReal H(ADReal ep) override;
   virtual ADReal dH_dep(ADReal ep) override;
   virtual ADReal d2H_dep2(ADReal ep) override;
+  virtual ADReal plastic_dissipation(ADReal ep) override;
 
 private:
   Real _yield_stress;
-  Real _m;
-  Real _n;
+  Real _k;
 
   usingCNHDegradedElasticPlasticPK1StressMembers
 };
