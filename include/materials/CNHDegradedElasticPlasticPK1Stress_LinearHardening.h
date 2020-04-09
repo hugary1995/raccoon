@@ -29,6 +29,7 @@ protected:
 private:
   Real _yield_stress;
   Real _k;
+  Real _W0;
 
   usingCNHDegradedElasticPlasticPK1StressMembers
 };
