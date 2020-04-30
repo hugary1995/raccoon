@@ -7,12 +7,6 @@
 // MOOSE includes
 #include "ElementUserObject.h"
 
-// Forward Declarations
-class MaterialPropertyUserObject;
-
-template <>
-InputParameters validParams<MaterialPropertyUserObject>();
-
 class MaterialPropertyUserObject : public ElementUserObject
 {
 public:
@@ -37,7 +31,7 @@ protected:
 
   unsigned int _qp;
 
-  const MaterialProperty<Real> & _from;
+  const ADMaterialProperty<Real> & _from;
 
   std::vector<std::vector<Real>> _to;
 };

@@ -6,13 +6,7 @@
 
 #include "ADComputeStressBase.h"
 
-template <ComputeStage>
-class SVKElasticPK1Stress;
-
-declareADValidParams(SVKElasticPK1Stress);
-
-template <ComputeStage compute_stage>
-class SVKElasticPK1Stress : public ADComputeStressBase<compute_stage>
+class SVKElasticPK1Stress : public ADComputeStressBase
 {
 public:
   static InputParameters validParams();
@@ -23,13 +17,11 @@ protected:
   virtual void computeQpStress() override;
 
   /// elasticity tensor
-  const ADMaterialProperty(RankFourTensor) & _elasticity_tensor;
+  const ADMaterialProperty<RankFourTensor> & _elasticity_tensor;
 
   /// deformation gradient
-  const ADMaterialProperty(RankTwoTensor) & _F;
+  const ADMaterialProperty<RankTwoTensor> & _F;
 
   /// Cauchy stress
-  ADMaterialProperty(RankTwoTensor) * _cauchy_stress;
-
-  usingComputeStressBaseMembers;
+  ADMaterialProperty<RankTwoTensor> * _cauchy_stress;
 };

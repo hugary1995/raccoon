@@ -6,13 +6,10 @@
 
 registerADMooseObject("raccoonApp", QuasiLinearDegradation);
 
-defineADLegacyParams(QuasiLinearDegradation);
-
-template <ComputeStage compute_stage>
 InputParameters
-QuasiLinearDegradation<compute_stage>::validParams()
+QuasiLinearDegradation::validParams()
 {
-  InputParameters params = DegradationBase<compute_stage>::validParams();
+  InputParameters params = DegradationBase::validParams();
   params.addClassDescription("computes the quasi-linear Lorentz-type degradation: "
                              "$\\frac{(1-d)}{(1-d)+\\frac{M}{\\psi_\\critical}d}$");
   params.addParam<MaterialPropertyName>("mobility_name", "mobility", "name of the Mobility");
@@ -21,17 +18,15 @@ QuasiLinearDegradation<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-QuasiLinearDegradation<compute_stage>::QuasiLinearDegradation(const InputParameters & parameters)
-  : DegradationBase<compute_stage>(parameters),
+QuasiLinearDegradation::QuasiLinearDegradation(const InputParameters & parameters)
+  : DegradationBase(parameters),
     _M(getMaterialProperty<Real>("mobility_name")),
     _b(getMaterialProperty<Real>("critical_fracture_energy_name"))
 {
 }
 
-template <ComputeStage compute_stage>
 void
-QuasiLinearDegradation<compute_stage>::computeDegradation()
+QuasiLinearDegradation::computeDegradation()
 {
   ADReal M = _M[_qp];
   ADReal b = _b[_qp];

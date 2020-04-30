@@ -6,17 +6,13 @@
 
 #include "ComputeEigenstrainFromInitialStress.h"
 
-class ComputeEigenstrainFromFunctionEigenstress;
-
-template <>
-InputParameters validParams<ComputeEigenstrainFromFunctionEigenstress>();
-
 class ComputeEigenstrainFromFunctionEigenstress : public ComputeEigenstrainFromInitialStress
 {
 public:
+  static InputParameters validParams();
+
   ComputeEigenstrainFromFunctionEigenstress(const InputParameters & parameters);
 
 protected:
   virtual void computeQpEigenstrain() override;
 };
-

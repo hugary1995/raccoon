@@ -32,12 +32,17 @@
 
 [Bounds]
   [./irreversibility]
-    type = Irreversibility
+    type = VariableOldValueBoundsAux
     variable = 'bounds_dummy'
     bounded_variable = 'd'
-    upper = 1
-    lower = 'd'
-    lag = true
+    bound_type = lower
+  [../]
+  [./upper]
+    type = ConstantBoundsAux
+    variable = 'bounds_dummy'
+    bounded_variable = 'd'
+    bound_type = upper
+    bound_value = 1
   [../]
 []
 
@@ -57,6 +62,10 @@
   [../]
   [./pff_diff]
     type = PhaseFieldFractureEvolutionDiffusion
+    variable = 'd'
+  [../]
+  [./pff_barr]
+    type = PhaseFieldFractureEvolutionBarrier
     variable = 'd'
   [../]
   [./pff_react]

@@ -6,13 +6,10 @@
 
 registerADMooseObject("raccoonApp", ADSumMaterial);
 
-defineADLegacyParams(ADSumMaterial);
-
-template <ComputeStage compute_stage>
 InputParameters
-ADSumMaterial<compute_stage>::validParams()
+ADSumMaterial::validParams()
 {
-  InputParameters params = ADMaterial<compute_stage>::validParams();
+  InputParameters params = ADMaterial::validParams();
   params.addRequiredParam<MaterialPropertyName>(
       "sum_prop_name", "The name of the property that holds the summation");
   params.addRequiredParam<std::vector<MaterialPropertyName>>(
@@ -21,9 +18,8 @@ ADSumMaterial<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-ADSumMaterial<compute_stage>::ADSumMaterial(const InputParameters & parameters)
-  : ADMaterial<compute_stage>(parameters),
+ADSumMaterial::ADSumMaterial(const InputParameters & parameters)
+  : ADMaterial(parameters),
     _sum(declareADProperty<Real>(getParam<MaterialPropertyName>("sum_prop_name"))),
     _prop_names(getParam<std::vector<MaterialPropertyName>>("prop_names")),
     _num_props(_prop_names.size())
@@ -33,16 +29,14 @@ ADSumMaterial<compute_stage>::ADSumMaterial(const InputParameters & parameters)
     _props[i] = &getADMaterialProperty<Real>(_prop_names[i]);
 }
 
-template <ComputeStage compute_stage>
 void
-ADSumMaterial<compute_stage>::initQpStatefulProperties()
+ADSumMaterial::initQpStatefulProperties()
 {
   _sum[_qp] = 0.0;
 }
 
-template <ComputeStage compute_stage>
 void
-ADSumMaterial<compute_stage>::computeQpProperties()
+ADSumMaterial::computeQpProperties()
 {
   _sum[_qp] = 0.0;
   for (unsigned int i = 0; i < _num_props; i++)

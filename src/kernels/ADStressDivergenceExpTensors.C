@@ -6,27 +6,21 @@
 
 registerADMooseObject("raccoonApp", ADStressDivergenceExpTensors);
 
-defineADLegacyParams(ADStressDivergenceExpTensors);
-
-template <ComputeStage compute_stage>
 InputParameters
-ADStressDivergenceExpTensors<compute_stage>::validParams()
+ADStressDivergenceExpTensors::validParams()
 {
-  InputParameters params = ADStressDivergenceTensors<compute_stage>::validParams();
+  InputParameters params = ADStressDivergenceTensors::validParams();
   return params;
 }
 
-template <ComputeStage compute_stage>
-ADStressDivergenceExpTensors<compute_stage>::ADStressDivergenceExpTensors(
-    const InputParameters & parameters)
-  : ADStressDivergenceTensors<compute_stage>(parameters),
+ADStressDivergenceExpTensors::ADStressDivergenceExpTensors(const InputParameters & parameters)
+  : ADStressDivergenceTensors(parameters),
     _stress_old(getMaterialPropertyOldByName<RankTwoTensor>(_base_name + "stress"))
 {
 }
 
-template <ComputeStage compute_stage>
 ADReal
-ADStressDivergenceExpTensors<compute_stage>::computeQpResidual()
+ADStressDivergenceExpTensors::computeQpResidual()
 {
   return _stress_old[_qp].row(_component) * _grad_test[_i][_qp];
 }

@@ -6,14 +6,7 @@
 
 #include "ADKernelValue.h"
 
-// Forward Declarations
-template <ComputeStage>
-class PhaseFieldFractureContactKKT;
-
-declareADValidParams(PhaseFieldFractureContactKKT);
-
-template <ComputeStage compute_stage>
-class PhaseFieldFractureContactKKT : public ADKernelValue<compute_stage>
+class PhaseFieldFractureContactKKT : public ADKernelValue
 {
 public:
   static InputParameters validParams();
@@ -23,7 +16,5 @@ public:
 protected:
   virtual ADReal precomputeQpResidual() override;
 
-  const ADMaterialProperty(Real) & _penetration;
-
-  usingKernelValueMembers;
+  const ADMaterialProperty<Real> & _penetration;
 };

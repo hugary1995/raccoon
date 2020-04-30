@@ -7,11 +7,6 @@
 #include "ComputeEigenstrainBase.h"
 #include "RankFourTensor.h"
 
-class ComputeEigenstrainFromScalarInitialStress;
-
-template <>
-InputParameters validParams<ComputeEigenstrainFromScalarInitialStress>();
-
 /**
  * ComputeEigenstrain computes an Eigenstrain that results from an initial stress
  * The initial stress is defined in terms of scalars
@@ -19,6 +14,8 @@ InputParameters validParams<ComputeEigenstrainFromScalarInitialStress>();
 class ComputeEigenstrainFromScalarInitialStress : public ComputeEigenstrainBase
 {
 public:
+  static InputParameters validParams();
+
   ComputeEigenstrainFromScalarInitialStress(const InputParameters & parameters);
 
 protected:

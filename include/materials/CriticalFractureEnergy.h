@@ -6,14 +6,11 @@
 
 #include "Material.h"
 
-class CriticalFractureEnergy;
-
-template <>
-InputParameters validParams<CriticalFractureEnergy>();
-
 class CriticalFractureEnergy : public Material
 {
 public:
+  static InputParameters validParams();
+
   CriticalFractureEnergy(const InputParameters & parameters);
 
 protected:

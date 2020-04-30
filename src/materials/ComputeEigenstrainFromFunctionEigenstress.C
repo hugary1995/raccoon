@@ -8,11 +8,10 @@
 
 registerMooseObject("raccoonApp", ComputeEigenstrainFromFunctionEigenstress);
 
-template <>
 InputParameters
-validParams<ComputeEigenstrainFromFunctionEigenstress>()
+ComputeEigenstrainFromFunctionEigenstress::validParams()
 {
-  InputParameters params = validParams<ComputeEigenstrainFromInitialStress>();
+  InputParameters params = ComputeEigenstrainFromInitialStress::validParams();
   return params;
 }
 

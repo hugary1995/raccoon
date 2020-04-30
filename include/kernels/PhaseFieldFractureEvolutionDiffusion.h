@@ -4,16 +4,9 @@
 
 #pragma once
 
-#include "ADKernelGrad.h"
+#include "ADKernel.h"
 
-// Forward Declarations
-template <ComputeStage>
-class PhaseFieldFractureEvolutionDiffusion;
-
-declareADValidParams(PhaseFieldFractureEvolutionDiffusion);
-
-template <ComputeStage compute_stage>
-class PhaseFieldFractureEvolutionDiffusion : public ADKernelGrad<compute_stage>
+class PhaseFieldFractureEvolutionDiffusion : public ADKernel
 {
 public:
   static InputParameters validParams();
@@ -21,7 +14,7 @@ public:
   PhaseFieldFractureEvolutionDiffusion(const InputParameters & parameters);
 
 protected:
-  virtual ADRealVectorValue precomputeQpResidual() override;
+  virtual ADReal computeQpResidual() override;
 
   /// Allen-Cahn interface coefficient computed from fracture properties
   const MaterialProperty<Real> & _kappa;
@@ -29,5 +22,6 @@ protected:
   /// Allen-Cahn mobility computed from fracture properties
   const MaterialProperty<Real> & _M;
 
-  usingKernelGradMembers;
+  /// the coordinate system
+  const Moose::CoordinateSystemType & _coord_sys;
 };

@@ -9,11 +9,10 @@
 #include "ModulesApp.h"
 #include "MooseSyntax.h"
 
-template <>
 InputParameters
-validParams<raccoonApp>()
+raccoonApp::validParams()
 {
-  InputParameters params = validParams<MooseApp>();
+  InputParameters params = MooseApp::validParams();
   params.set<bool>("automatic_automatic_scaling") = false;
 
   // Do not use legacy DirichletBC, that is, set DirichletBC default for preset = true

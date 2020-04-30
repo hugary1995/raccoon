@@ -6,14 +6,11 @@
 
 #include "FractureEnergy.h"
 
-class FractureSurfaceArea;
-
-template <>
-InputParameters validParams<FractureSurfaceArea>();
-
 class FractureSurfaceArea : public FractureEnergy
 {
 public:
+  static InputParameters validParams();
+
   FractureSurfaceArea(const InputParameters & parameters);
 
 protected:

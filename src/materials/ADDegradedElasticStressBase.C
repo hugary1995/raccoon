@@ -4,13 +4,10 @@
 
 #include "ADDegradedElasticStressBase.h"
 
-defineADLegacyParams(ADDegradedElasticStressBase);
-
-template <ComputeStage compute_stage>
 InputParameters
-ADDegradedElasticStressBase<compute_stage>::validParams()
+ADDegradedElasticStressBase::validParams()
 {
-  InputParameters params = ADComputeStressBase<compute_stage>::validParams();
+  InputParameters params = ADComputeStressBase::validParams();
   params.addClassDescription("Base class for computing damage degraded stress");
   params.addRequiredCoupledVar("d", "damage variable");
   params.addParam<Real>(
@@ -22,10 +19,8 @@ ADDegradedElasticStressBase<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-ADDegradedElasticStressBase<compute_stage>::ADDegradedElasticStressBase(
-    const InputParameters & parameters)
-  : ADComputeStressBase<compute_stage>(parameters),
+ADDegradedElasticStressBase::ADDegradedElasticStressBase(const InputParameters & parameters)
+  : ADComputeStressBase(parameters),
     _elasticity_tensor(getMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
     _d(adCoupledValue("d")),
     _grad_d(adCoupledGradient("d")),
@@ -37,9 +32,8 @@ ADDegradedElasticStressBase<compute_stage>::ADDegradedElasticStressBase(
 {
 }
 
-template <ComputeStage compute_stage>
 void
-ADDegradedElasticStressBase<compute_stage>::computeQpProperties()
+ADDegradedElasticStressBase::computeQpProperties()
 {
   if (_d[_qp] < _d_crit)
     computeQpStress();
@@ -47,9 +41,8 @@ ADDegradedElasticStressBase<compute_stage>::computeQpProperties()
     computeQpTractionFreeStress();
 }
 
-template <ComputeStage compute_stage>
 void
-ADDegradedElasticStressBase<compute_stage>::computeQpTractionFreeStress()
+ADDegradedElasticStressBase::computeQpTractionFreeStress()
 {
   const Real eps = libMesh::TOLERANCE;
 
@@ -80,21 +73,17 @@ ADDegradedElasticStressBase<compute_stage>::computeQpTractionFreeStress()
   _E_el_active[_qp] = 0.5 * stress_active.doubleContraction(strain);
 }
 
-template <ComputeStage compute_stage>
 ADReal
-ADDegradedElasticStressBase<compute_stage>::Macaulay(ADReal x)
+ADDegradedElasticStressBase::Macaulay(ADReal x)
 {
   return 0.5 * (x + std::abs(x));
 }
 
-template <ComputeStage compute_stage>
 std::vector<ADReal>
-ADDegradedElasticStressBase<compute_stage>::Macaulay(std::vector<ADReal> v)
+ADDegradedElasticStressBase::Macaulay(std::vector<ADReal> v)
 {
   std::vector<ADReal> m(v.size());
   for (unsigned int i = 0; i < v.size(); i++)
     m[i] = Macaulay(v[i]);
   return m;
 }
-
-adBaseClass(ADDegradedElasticStressBase);

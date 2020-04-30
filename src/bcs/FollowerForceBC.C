@@ -8,13 +8,10 @@
 
 registerADMooseObject("raccoonApp", FollowerForceBC);
 
-defineADLegacyParams(FollowerForceBC);
-
-template <ComputeStage compute_stage>
 InputParameters
-FollowerForceBC<compute_stage>::validParams()
+FollowerForceBC::validParams()
 {
-  InputParameters params = ADIntegratedBC<compute_stage>::validParams();
+  InputParameters params = ADIntegratedBC::validParams();
   params.addClassDescription("Imposes the pressure boundary condition.");
   params.addParam<FunctionName>("function_x", 0, "The x-direction forcing function");
   params.addParam<FunctionName>("function_y", 0, "The y-direction forcing function");
@@ -24,9 +21,8 @@ FollowerForceBC<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-FollowerForceBC<compute_stage>::FollowerForceBC(const InputParameters & parameters)
-  : ADIntegratedBC<compute_stage>(parameters),
+FollowerForceBC::FollowerForceBC(const InputParameters & parameters)
+  : ADIntegratedBC(parameters),
     _function_x(getFunction("function_x")),
     _function_y(getFunction("function_y")),
     _function_z(getFunction("function_z")),
@@ -36,9 +32,8 @@ FollowerForceBC<compute_stage>::FollowerForceBC(const InputParameters & paramete
 {
 }
 
-template <ComputeStage compute_stage>
 ADReal
-FollowerForceBC<compute_stage>::computeQpResidual()
+FollowerForceBC::computeQpResidual()
 {
   RealVectorValue f(_function_x.value(_t, _q_point[_qp]),
                     _function_y.value(_t, _q_point[_qp]),

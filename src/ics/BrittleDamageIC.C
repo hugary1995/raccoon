@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", BrittleDamageIC);
 
-template <>
 InputParameters
-validParams<BrittleDamageIC>()
+BrittleDamageIC::validParams()
 {
-  InputParameters params = validParams<DamageICBase>();
+  InputParameters params = DamageICBase::validParams();
   return params;
 }
 

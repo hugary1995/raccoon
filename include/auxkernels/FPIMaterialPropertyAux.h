@@ -6,12 +6,6 @@
 
 #include "AuxKernel.h"
 
-// Forward Declarations
-class FPIMaterialPropertyAux;
-
-template <>
-InputParameters validParams<FPIMaterialPropertyAux>();
-
 /**
  * Self auxiliary value
  */
@@ -26,5 +20,5 @@ protected:
   virtual Real computeValue() override;
 
   /// material property to project values from
-  const MaterialProperty<Real> & _v;
+  const ADMaterialProperty<Real> & _v;
 };

@@ -6,18 +6,13 @@
 
 #include "MooseApp.h"
 
-class raccoonTestApp;
-
-template <>
-InputParameters validParams<raccoonTestApp>();
-
 class raccoonTestApp : public MooseApp
 {
 public:
+  static InputParameters validParams();
   raccoonTestApp(InputParameters parameters);
   virtual ~raccoonTestApp();
 
   static void registerApps();
   static void registerAll(Factory & f, ActionFactory & af, Syntax & s, bool use_test_objs = false);
 };
-

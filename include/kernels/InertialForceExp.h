@@ -6,12 +6,6 @@
 
 #include "Kernel.h"
 
-// Forward Declarations
-class InertialForceExp;
-
-template <>
-InputParameters validParams<InertialForceExp>();
-
 class InertialForceExp : public Kernel
 {
 public:

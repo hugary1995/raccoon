@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", ScalarDirichletBC);
 
-template <>
 InputParameters
-validParams<ScalarDirichletBC>()
+ScalarDirichletBC::validParams()
 {
-  InputParameters params = validParams<NodalBC>();
+  InputParameters params = NodalBC::validParams();
   params.addRequiredCoupledVar("scalar_var", "scalar variable");
   params.addClassDescription("Imposes the essential boundary condition $u=s$, where $s$ "
                              "is a scalar");

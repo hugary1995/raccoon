@@ -8,11 +8,6 @@
 #include "CoupleableMooseVariableDependencyIntermediateInterface.h"
 #include "DerivativeMaterialInterface.h"
 
-class FractureMarker;
-
-template <>
-InputParameters validParams<FractureMarker>();
-
 class FractureMarker : public DerivativeMaterialInterface<FractureMarkerBase>,
                        public CoupleableMooseVariableDependencyIntermediateInterface
 {
@@ -31,4 +26,3 @@ protected:
   /// derivatives of local dissipation energy W.R.T. each damage field
   std::vector<const MaterialProperty<Real> *> _dw_dd;
 };
-

@@ -4,15 +4,13 @@
 
 #include "ComputeEigenstrainFromScalarInitialStress.h"
 #include "RankTwoTensor.h"
-#include "Conversion.h" // for stringify
 
 registerMooseObject("raccoonApp", ComputeEigenstrainFromScalarInitialStress);
 
-template <>
 InputParameters
-validParams<ComputeEigenstrainFromScalarInitialStress>()
+ComputeEigenstrainFromScalarInitialStress::validParams()
 {
-  InputParameters params = validParams<ComputeEigenstrainBase>();
+  InputParameters params = ComputeEigenstrainBase::validParams();
   params.addClassDescription("Computes an eigenstrain from an initial stress");
   params.addCoupledVar("initial_stress_xx", 0, "initial stress xx compoent");
   params.addCoupledVar("initial_stress_xy", 0, "initial stress xy compoent");

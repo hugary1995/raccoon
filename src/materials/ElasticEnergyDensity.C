@@ -7,13 +7,10 @@
 
 registerADMooseObject("raccoonApp", ElasticEnergyDensity);
 
-defineADLegacyParams(ElasticEnergyDensity);
-
-template <ComputeStage compute_stage>
 InputParameters
-ElasticEnergyDensity<compute_stage>::validParams()
+ElasticEnergyDensity::validParams()
 {
-  InputParameters params = ADMaterial<compute_stage>::validParams();
+  InputParameters params = ADMaterial::validParams();
   params.addClassDescription("computes the elastic energy density $\\stress : \\strain$");
   params.addParam<std::string>("base_name", "base name for stress and strain");
   params.addParam<MaterialPropertyName>(
@@ -22,9 +19,8 @@ ElasticEnergyDensity<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-ElasticEnergyDensity<compute_stage>::ElasticEnergyDensity(const InputParameters & parameters)
-  : ADMaterial<compute_stage>(parameters),
+ElasticEnergyDensity::ElasticEnergyDensity(const InputParameters & parameters)
+  : ADMaterial(parameters),
     _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
     _E_el(declareADProperty<Real>(_base_name +
                                   getParam<MaterialPropertyName>("elastic_energy_name"))),
@@ -33,9 +29,8 @@ ElasticEnergyDensity<compute_stage>::ElasticEnergyDensity(const InputParameters 
 {
 }
 
-template <ComputeStage compute_stage>
 void
-ElasticEnergyDensity<compute_stage>::computeQpProperties()
+ElasticEnergyDensity::computeQpProperties()
 {
   _E_el[_qp] = 0.5 * _stress[_qp].doubleContraction(_strain[_qp]);
 }

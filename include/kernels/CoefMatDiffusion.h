@@ -6,14 +6,7 @@
 
 #include "ADKernelGrad.h"
 
-// Forward Declarations
-template <ComputeStage>
-class CoefMatDiffusion;
-
-declareADValidParams(CoefMatDiffusion);
-
-template <ComputeStage compute_stage>
-class CoefMatDiffusion : public ADKernelGrad<compute_stage>
+class CoefMatDiffusion : public ADKernelGrad
 {
 public:
   static InputParameters validParams();
@@ -25,7 +18,5 @@ protected:
 
   const Real _coef;
 
-  const ADMaterialProperty(Real) * _prop;
-
-  usingKernelGradMembers;
+  const MaterialProperty<Real> * _prop;
 };

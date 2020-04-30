@@ -6,27 +6,22 @@
 
 registerADMooseObject("raccoonApp", LCGStrain);
 
-defineADLegacyParams(LCGStrain);
-
-template <ComputeStage compute_stage>
 InputParameters
-LCGStrain<compute_stage>::validParams()
+LCGStrain::validParams()
 {
-  InputParameters params = ADComputeStrainBase<compute_stage>::validParams();
+  InputParameters params = ADComputeStrainBase::validParams();
   params.addClassDescription("Compute the left Cauchy-Green strain.");
   return params;
 }
 
-template <ComputeStage compute_stage>
-LCGStrain<compute_stage>::LCGStrain(const InputParameters & parameters)
-  : ADComputeStrainBase<compute_stage>(parameters),
+LCGStrain::LCGStrain(const InputParameters & parameters)
+  : ADComputeStrainBase(parameters),
     _F(declareADProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
 {
 }
 
-template <ComputeStage compute_stage>
 void
-LCGStrain<compute_stage>::computeQpProperties()
+LCGStrain::computeQpProperties()
 {
   // deformation gradient
   // F = I + A

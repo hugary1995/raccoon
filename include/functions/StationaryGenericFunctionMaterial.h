@@ -6,15 +6,11 @@
 
 #include "GenericFunctionMaterial.h"
 
-// Forward Declarations
-class StationaryGenericFunctionMaterial;
-
-template <>
-InputParameters validParams<StationaryGenericFunctionMaterial>();
-
 class StationaryGenericFunctionMaterial : public GenericFunctionMaterial
 {
 public:
+  static InputParameters validParams();
+
   StationaryGenericFunctionMaterial(const InputParameters & parameters);
 
 protected:

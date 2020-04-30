@@ -6,14 +6,7 @@
 
 #include "ADMaterial.h"
 
-// Forward Declarations
-template <ComputeStage>
-class ThinFilmInterfaceEnergy;
-
-declareADValidParams(ThinFilmInterfaceEnergy);
-
-template <ComputeStage compute_stage>
-class ThinFilmInterfaceEnergy : public ADMaterial<compute_stage>
+class ThinFilmInterfaceEnergy : public ADMaterial
 {
 public:
   static InputParameters validParams();
@@ -25,13 +18,11 @@ protected:
 
   const MaterialPropertyName _E_int_name;
 
-  ADMaterialProperty(Real) & _E_int;
+  ADMaterialProperty<Real> & _E_int;
 
   const Real _coef;
 
   const unsigned int _ndisp;
 
   std::vector<const ADVariableValue *> _disp;
-
-  usingMaterialMembers;
 };

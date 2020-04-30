@@ -6,13 +6,10 @@
 
 registerADMooseObject("raccoonApp", CoefMatVectorSource);
 
-defineADLegacyParams(CoefMatVectorSource);
-
-template <ComputeStage compute_stage>
 InputParameters
-CoefMatVectorSource<compute_stage>::validParams()
+CoefMatVectorSource::validParams()
 {
-  InputParameters params = ADKernelValue<compute_stage>::validParams();
+  InputParameters params = ADKernelValue::validParams();
   params.addClassDescription(
       "Reaction term optionally multiplied with a coefficient and a material property");
   params.addParam<Real>("coefficient", 1.0, "Coefficient of the term");
@@ -22,9 +19,8 @@ CoefMatVectorSource<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-CoefMatVectorSource<compute_stage>::CoefMatVectorSource(const InputParameters & parameters)
-  : ADKernelValue<compute_stage>(parameters),
+CoefMatVectorSource::CoefMatVectorSource(const InputParameters & parameters)
+  : ADKernelValue(parameters),
     _coef(getParam<Real>("coefficient")),
     _prop_names(getParam<std::vector<MaterialPropertyName>>("prop_names")),
     _num_props(_prop_names.size()),
@@ -32,12 +28,11 @@ CoefMatVectorSource<compute_stage>::CoefMatVectorSource(const InputParameters & 
 {
   _props.resize(_num_props);
   for (unsigned int i = 0; i < _num_props; i++)
-    _props[i] = &getADMaterialProperty<RealVectorValue>(_prop_names[i]);
+    _props[i] = &getMaterialProperty<RealVectorValue>(_prop_names[i]);
 }
 
-template <ComputeStage compute_stage>
 ADReal
-CoefMatVectorSource<compute_stage>::precomputeQpResidual()
+CoefMatVectorSource::precomputeQpResidual()
 {
   ADReal factor = 1.0;
   for (auto prop : _props)

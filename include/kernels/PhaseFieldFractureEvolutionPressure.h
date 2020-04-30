@@ -6,14 +6,7 @@
 
 #include "ADKernelGrad.h"
 
-// Forward Declarations
-template <ComputeStage>
-class PhaseFieldFractureEvolutionPressure;
-
-declareADValidParams(PhaseFieldFractureEvolutionPressure);
-
-template <ComputeStage compute_stage>
-class PhaseFieldFractureEvolutionPressure : public ADKernelGrad<compute_stage>
+class PhaseFieldFractureEvolutionPressure : public ADKernelGrad
 {
 public:
   static InputParameters validParams();
@@ -26,6 +19,4 @@ protected:
   const MaterialPropertyUserObject & _p_uo;
   const unsigned int _ndisp;
   std::vector<const ADVariableValue *> _disp;
-
-  usingKernelGradMembers;
 };

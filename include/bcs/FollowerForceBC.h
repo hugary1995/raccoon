@@ -6,17 +6,12 @@
 
 #include "ADIntegratedBC.h"
 
-template <ComputeStage>
-class FollowerForceBC;
 template <typename>
 class RankTwoTensorTempl;
 typedef RankTwoTensorTempl<Real> RankTwoTensor;
 typedef RankTwoTensorTempl<DualReal> DualRankTwoTensor;
 
-declareADValidParams(FollowerForceBC);
-
-template <ComputeStage compute_stage>
-class FollowerForceBC : public ADIntegratedBC<compute_stage>
+class FollowerForceBC : public ADIntegratedBC
 {
 public:
   static InputParameters validParams();
@@ -40,7 +35,5 @@ protected:
   const std::string _base_name;
 
   /// the deformation gradient
-  const ADMaterialProperty(RankTwoTensor) & _F;
-
-  usingIntegratedBCMembers;
+  const ADMaterialProperty<RankTwoTensor> & _F;
 };

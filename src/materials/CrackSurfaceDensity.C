@@ -6,13 +6,10 @@
 
 registerADMooseObject("raccoonApp", CrackSurfaceDensity);
 
-defineADLegacyParams(CrackSurfaceDensity);
-
-template <ComputeStage compute_stage>
 InputParameters
-CrackSurfaceDensity<compute_stage>::validParams()
+CrackSurfaceDensity::validParams()
 {
-  InputParameters params = ADMaterial<compute_stage>::validParams();
+  InputParameters params = ADMaterial::validParams();
   params.addClassDescription("computes the crack surface density as a function of damage");
   params.addRequiredCoupledVar("d", "damage variable");
   params.addRequiredParam<FunctionName>("local_dissipation_norm",
@@ -32,9 +29,8 @@ CrackSurfaceDensity<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-CrackSurfaceDensity<compute_stage>::CrackSurfaceDensity(const InputParameters & parameters)
-  : ADMaterial<compute_stage>(parameters),
+CrackSurfaceDensity::CrackSurfaceDensity(const InputParameters & parameters)
+  : ADMaterial(parameters),
     _c0(getFunction("local_dissipation_norm")),
     _L(getMaterialProperty<Real>("phase_field_regularization_length")),
     _grad_d(adCoupledGradient("d")),
@@ -45,9 +41,8 @@ CrackSurfaceDensity<compute_stage>::CrackSurfaceDensity(const InputParameters & 
 {
 }
 
-template <ComputeStage compute_stage>
 void
-CrackSurfaceDensity<compute_stage>::computeQpProperties()
+CrackSurfaceDensity::computeQpProperties()
 {
   Real c0 = _c0.value(_t, _q_point[_qp]);
   _gamma[_qp] = 1.0 / c0 / _L[_qp] * (_w[_qp] + _L[_qp] * _L[_qp] * _grad_d[_qp] * _grad_d[_qp]);

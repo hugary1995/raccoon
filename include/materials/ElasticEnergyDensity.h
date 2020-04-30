@@ -6,17 +6,12 @@
 
 #include "ADMaterial.h"
 
-template <ComputeStage>
-class ElasticEnergyDensity;
 template <typename>
 class RankTwoTensorTempl;
 typedef RankTwoTensorTempl<Real> RankTwoTensor;
 typedef RankTwoTensorTempl<DualReal> DualRankTwoTensor;
 
-declareADValidParams(ElasticEnergyDensity);
-
-template <ComputeStage compute_stage>
-class ElasticEnergyDensity : public ADMaterial<compute_stage>
+class ElasticEnergyDensity : public ADMaterial
 {
 public:
   static InputParameters validParams();
@@ -30,13 +25,11 @@ protected:
   const std::string _base_name;
 
   /// elastic energy density
-  ADMaterialProperty(Real) & _E_el;
+  ADMaterialProperty<Real> & _E_el;
 
   /// stress
-  const ADMaterialProperty(RankTwoTensor) & _stress;
+  const ADMaterialProperty<RankTwoTensor> & _stress;
 
   /// strain
-  const ADMaterialProperty(RankTwoTensor) & _strain;
-
-  usingMaterialMembers;
+  const ADMaterialProperty<RankTwoTensor> & _strain;
 };

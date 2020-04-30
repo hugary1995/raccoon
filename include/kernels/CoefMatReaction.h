@@ -6,14 +6,7 @@
 
 #include "ADKernelValue.h"
 
-// Forward Declarations
-template <ComputeStage>
-class CoefMatReaction;
-
-declareADValidParams(CoefMatReaction);
-
-template <ComputeStage compute_stage>
-class CoefMatReaction : public ADKernelValue<compute_stage>
+class CoefMatReaction : public ADKernelValue
 {
 public:
   static InputParameters validParams();
@@ -25,7 +18,5 @@ protected:
 
   const Real _coef;
 
-  const ADMaterialProperty(Real) * _prop;
-
-  usingKernelValueMembers;
+  const MaterialProperty<Real> * _prop;
 };

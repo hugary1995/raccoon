@@ -6,15 +6,11 @@
 
 #include "NodalPostprocessor.h"
 
-// Forward Declarations
-class ExternalEnergy;
-
-template <>
-InputParameters validParams<ExternalEnergy>();
-
 class ExternalEnergy : public NodalPostprocessor
 {
 public:
+  static InputParameters validParams();
+
   ExternalEnergy(const InputParameters & parameters);
 
 protected:

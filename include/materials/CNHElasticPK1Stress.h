@@ -6,18 +6,7 @@
 
 #include "ADComputeStressBase.h"
 
-#define usingCNHElasticPK1StressMembers                                                                   \
-  usingComputeStressBaseMembers;                                                                   \
-  using CNHElasticPK1Stress<compute_stage>::_elasticity_tensor;                                           \
-  using CNHElasticPK1Stress<compute_stage>::_F;
-
-template <ComputeStage>
-class CNHElasticPK1Stress;
-
-declareADValidParams(CNHElasticPK1Stress);
-
-template <ComputeStage compute_stage>
-class CNHElasticPK1Stress : public ADComputeStressBase<compute_stage>
+class CNHElasticPK1Stress : public ADComputeStressBase
 {
 public:
   static InputParameters validParams();
@@ -28,10 +17,8 @@ protected:
   virtual void computeQpStress() override;
 
   /// Elasticity tensor material property
-  const ADMaterialProperty(RankFourTensor) & _elasticity_tensor;
+  const ADMaterialProperty<RankFourTensor> & _elasticity_tensor;
 
   /// deformation gradient
-  const ADMaterialProperty(RankTwoTensor) & _F;
-
-  usingComputeStressBaseMembers;
+  const ADMaterialProperty<RankTwoTensor> & _F;
 };

@@ -6,14 +6,7 @@
 
 #include "DegradationBase.h"
 
-// Forward Declarations
-template <ComputeStage>
-class QuadraticDegradation;
-
-declareADValidParams(QuadraticDegradation);
-
-template <ComputeStage compute_stage>
-class QuadraticDegradation : public DegradationBase<compute_stage>
+class QuadraticDegradation : public DegradationBase
 {
 public:
   static InputParameters validParams();
@@ -22,6 +15,4 @@ public:
 
 protected:
   virtual void computeDegradation() override;
-
-  usingDegradationBaseMembers
 };

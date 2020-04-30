@@ -6,13 +6,10 @@
 
 registerADMooseObject("raccoonApp", ThinFilmInterfaceEnergy);
 
-defineADLegacyParams(ThinFilmInterfaceEnergy);
-
-template <ComputeStage compute_stage>
 InputParameters
-ThinFilmInterfaceEnergy<compute_stage>::validParams()
+ThinFilmInterfaceEnergy::validParams()
 {
-  InputParameters params = ADMaterial<compute_stage>::validParams();
+  InputParameters params = ADMaterial::validParams();
   params.addRequiredParam<Real>(
       "coef", "The coefficient describing the mismatch between the film and the substrate");
   params.addRequiredCoupledVar(
@@ -24,9 +21,8 @@ ThinFilmInterfaceEnergy<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-ThinFilmInterfaceEnergy<compute_stage>::ThinFilmInterfaceEnergy(const InputParameters & parameters)
-  : ADMaterial<compute_stage>(parameters),
+ThinFilmInterfaceEnergy::ThinFilmInterfaceEnergy(const InputParameters & parameters)
+  : ADMaterial(parameters),
     _E_int_name(getParam<MaterialPropertyName>("interface_energy_name")),
     _E_int(declareADProperty<Real>(_E_int_name)),
     _coef(getParam<Real>("coef")),
@@ -41,9 +37,8 @@ ThinFilmInterfaceEnergy<compute_stage>::ThinFilmInterfaceEnergy(const InputParam
     _disp[i] = &adZeroValue();
 }
 
-template <ComputeStage compute_stage>
 void
-ThinFilmInterfaceEnergy<compute_stage>::computeQpProperties()
+ThinFilmInterfaceEnergy::computeQpProperties()
 {
   ADRealVectorValue u((*_disp[0])[_qp], (*_disp[1])[_qp], (*_disp[2])[_qp]);
   _E_int[_qp] = 0.5 * _coef * u * u;

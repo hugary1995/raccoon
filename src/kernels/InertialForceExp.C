@@ -6,8 +6,6 @@
 
 registerMooseObject("raccoonApp", InertialForceExp);
 
-defineLegacyParams(InertialForceExp);
-
 InputParameters
 InertialForceExp::validParams()
 {

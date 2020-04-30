@@ -6,14 +6,7 @@
 
 #include "ADMaterial.h"
 
-// Forward Declarations
-template <ComputeStage>
-class Penetration;
-
-declareADValidParams(Penetration);
-
-template <ComputeStage compute_stage>
-class Penetration : public ADMaterial<compute_stage>
+class Penetration : public ADMaterial
 {
 public:
   static InputParameters validParams();
@@ -26,7 +19,5 @@ protected:
   const unsigned int _ndisp;
   std::vector<const ADVariableValue *> _disp;
   const ADVariableGradient & _grad_d;
-  ADMaterialProperty(Real) & _penetration;
-
-  usingMaterialMembers;
+  ADMaterialProperty<Real> & _penetration;
 };

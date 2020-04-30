@@ -6,15 +6,11 @@
 
 #include "Transient.h"
 
-// Forward Declarations
-class TransientSubcycling;
-
-template <>
-InputParameters validParams<TransientSubcycling>();
-
 class TransientSubcycling : public Transient
 {
 public:
+  static InputParameters validParams();
+
   TransientSubcycling(const InputParameters & parameters);
   virtual Real relativeSolutionDifferenceNorm() override;
 };

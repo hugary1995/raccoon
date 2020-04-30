@@ -6,14 +6,7 @@
 
 #include "ADKernelValue.h"
 
-// Forward Declarations
-template <ComputeStage>
-class CoefMatSource;
-
-declareADValidParams(CoefMatSource);
-
-template <ComputeStage compute_stage>
-class CoefMatSource : public ADKernelValue<compute_stage>
+class CoefMatSource : public ADKernelValue
 {
 public:
   static InputParameters validParams();
@@ -29,7 +22,5 @@ protected:
 
   const unsigned int _num_props;
 
-  std::vector<const ADMaterialProperty(Real) *> _props;
-
-  usingKernelValueMembers;
+  std::vector<const MaterialProperty<Real> *> _props;
 };

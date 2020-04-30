@@ -6,36 +6,32 @@
 
 registerADMooseObject("raccoonApp", GreenStrainRZ);
 
-defineADLegacyParams(GreenStrainRZ);
-
-template <ComputeStage compute_stage>
 InputParameters
-GreenStrainRZ<compute_stage>::validParams()
+GreenStrainRZ::validParams()
 {
-  InputParameters params = ADComputeStrainBase<compute_stage>::validParams();
+  InputParameters params = ADComputeStrainBase::validParams();
   params.addClassDescription("Compute Green strain in RZ coordinate.");
   return params;
 }
 
-template <ComputeStage compute_stage>
-GreenStrainRZ<compute_stage>::GreenStrainRZ(const InputParameters & parameters)
-  : ADComputeStrainBase<compute_stage>(parameters),
-    _F(declareADProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
+GreenStrainRZ::GreenStrainRZ(const InputParameters & parameters)
+  : ADComputeStrainBase(parameters),
+    _F(declareADProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
+    _F_old(getMaterialPropertyOldByName<RankTwoTensor>(_base_name + "deformation_gradient")),
+    _f(declareADProperty<RankTwoTensor>(_base_name + "deformation_gradient_increment"))
 {
 }
 
-template <ComputeStage compute_stage>
 void
-GreenStrainRZ<compute_stage>::initQpStatefulProperties()
+GreenStrainRZ::initQpStatefulProperties()
 {
-  ADComputeStrainBase<compute_stage>::initQpStatefulProperties();
-  _F[_qp].zero();
-  _F[_qp].addIa(1.0);
+  ADComputeStrainBase::initQpStatefulProperties();
+  _F[_qp] = ADRankTwoTensor(ADRankTwoTensor::initIdentity);
+  _f[_qp] = ADRankTwoTensor(ADRankTwoTensor::initIdentity);
 }
 
-template <ComputeStage compute_stage>
 void
-GreenStrainRZ<compute_stage>::initialSetup()
+GreenStrainRZ::initialSetup()
 {
   if (getBlockCoordSystem() != Moose::COORD_RZ)
     mooseError("The coordinate system must be set to RZ for Axisymmetric geometries.");
@@ -57,9 +53,8 @@ GreenStrainRZ<compute_stage>::initialSetup()
   _grad_disp[2] = &adZeroGradient();
 }
 
-template <ComputeStage compute_stage>
 ADReal
-GreenStrainRZ<compute_stage>::computeQpOutOfPlaneGradDisp()
+GreenStrainRZ::computeQpOutOfPlaneGradDisp()
 {
   if (!MooseUtils::absoluteFuzzyEqual(_q_point[_qp](0), 0.0))
     return (*_disp[0])[_qp] / _q_point[_qp](0);
@@ -67,18 +62,39 @@ GreenStrainRZ<compute_stage>::computeQpOutOfPlaneGradDisp()
     return 0.0;
 }
 
-template <ComputeStage compute_stage>
 void
-GreenStrainRZ<compute_stage>::computeQpProperties()
+GreenStrainRZ::computeProperties()
 {
-  // deformation gradient
-  // F = I + A
-  //         A = U_{i,I}, displacement gradient in reference configuration
-  ADRankTwoTensor A((*_grad_disp[0])[_qp], (*_grad_disp[1])[_qp], (*_grad_disp[2])[_qp]);
-  A(2, 2) = computeQpOutOfPlaneGradDisp();
-  _F[_qp] = A;
-  _F[_qp].addIa(1.0);
+  ADRankTwoTensor ave_F;
 
+  for (_qp = 0; _qp < _qrule->n_points(); ++_qp)
+  {
+    // Deformation gradient calculation for 2D problems
+    ADRankTwoTensor A((*_grad_disp[0])[_qp], (*_grad_disp[1])[_qp], (*_grad_disp[2])[_qp]);
+    A(2, 2) = computeQpOutOfPlaneGradDisp();
+    _F[_qp] = A;
+    _F[_qp].addIa(1.0);
+
+    if (_volumetric_locking_correction)
+      ave_F += _F[_qp] * _JxW[_qp] * _coord[_qp];
+  }
+
+  if (_volumetric_locking_correction)
+    ave_F /= _current_elem_volume;
+
+  for (_qp = 0; _qp < _qrule->n_points(); ++_qp)
+  {
+    if (_volumetric_locking_correction)
+      _F[_qp] *= std::cbrt(ave_F.det() / _F[_qp].det());
+
+    _f[_qp] = _F[_qp] * _F_old[_qp].inverse();
+    computeQpStrain();
+  }
+}
+
+void
+GreenStrainRZ::computeQpStrain()
+{
   // Green strain defined in the reference configuration
   // E = 0.5(F^T F - I)
   ADRankTwoTensor E = _F[_qp].transpose() * _F[_qp];

@@ -6,28 +6,23 @@
 
 registerADMooseObject("raccoonApp", CNHElasticPK1Stress);
 
-defineADLegacyParams(CNHElasticPK1Stress);
-
-template <ComputeStage compute_stage>
 InputParameters
-CNHElasticPK1Stress<compute_stage>::validParams()
+CNHElasticPK1Stress::validParams()
 {
-  InputParameters params = ADComputeStressBase<compute_stage>::validParams();
+  InputParameters params = ADComputeStressBase::validParams();
   params.addClassDescription("Compute stress using elasticity for small strains");
   return params;
 }
 
-template <ComputeStage compute_stage>
-CNHElasticPK1Stress<compute_stage>::CNHElasticPK1Stress(const InputParameters & parameters)
-  : ADComputeStressBase<compute_stage>(parameters),
+CNHElasticPK1Stress::CNHElasticPK1Stress(const InputParameters & parameters)
+  : ADComputeStressBase(parameters),
     _elasticity_tensor(getADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
     _F(getADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
 {
 }
 
-template <ComputeStage compute_stage>
 void
-CNHElasticPK1Stress<compute_stage>::computeQpStress()
+CNHElasticPK1Stress::computeQpStress()
 {
   // Isotropic elasticity is assumed and should be enforced
   ADReal lambda = _elasticity_tensor[_qp](0, 0, 1, 1);

@@ -6,12 +6,6 @@
 
 #include "NodalBC.h"
 
-// Forward Declarations
-class ScalarDirichletBC;
-
-template <>
-InputParameters validParams<ScalarDirichletBC>();
-
 /**
  * Defines a boundary condition that forces the value to be a user specified
  * scalar at the boundary.
@@ -19,6 +13,8 @@ InputParameters validParams<ScalarDirichletBC>();
 class ScalarDirichletBC : public NodalBC
 {
 public:
+  static InputParameters validParams();
+
   ScalarDirichletBC(const InputParameters & parameters);
 
 protected:

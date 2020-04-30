@@ -9,11 +9,10 @@
 #include "MooseSyntax.h"
 #include "ModulesApp.h"
 
-template <>
 InputParameters
-validParams<raccoonTestApp>()
+raccoonTestApp::validParams()
 {
-  InputParameters params = validParams<raccoonApp>();
+  InputParameters params = raccoonApp::validParams();
   return params;
 }
 

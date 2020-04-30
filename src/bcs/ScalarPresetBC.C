@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", ScalarPresetBC);
 
-template <>
 InputParameters
-validParams<ScalarPresetBC>()
+ScalarPresetBC::validParams()
 {
-  InputParameters params = validParams<PresetNodalBC>();
+  InputParameters params = PresetNodalBC::validParams();
   params.addRequiredCoupledVar("scalar_var", "scalar variable");
   return params;
 }

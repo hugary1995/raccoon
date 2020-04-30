@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", CoupledNeumannBC);
 
-template <>
 InputParameters
-validParams<CoupledNeumannBC>()
+CoupledNeumannBC::validParams()
 {
-  InputParameters params = validParams<IntegratedBC>();
+  InputParameters params = IntegratedBC::validParams();
   params.addParam<Real>("coef", 1.0, "Value multiplied by the coupled value on the boundary");
   params.addRequiredCoupledVar("coupled_var", "Flux value at the boundary");
   return params;

@@ -6,13 +6,10 @@
 
 registerADMooseObject("raccoonApp", CoefMatReaction);
 
-defineADLegacyParams(CoefMatReaction);
-
-template <ComputeStage compute_stage>
 InputParameters
-CoefMatReaction<compute_stage>::validParams()
+CoefMatReaction::validParams()
 {
-  InputParameters params = ADKernelValue<compute_stage>::validParams();
+  InputParameters params = ADKernelValue::validParams();
   params.addClassDescription(
       "Reaction term optionally multiplied with a coefficient and a material property");
   params.addParam<Real>("coefficient", 1.0, "Coefficient of the term");
@@ -21,19 +18,17 @@ CoefMatReaction<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-CoefMatReaction<compute_stage>::CoefMatReaction(const InputParameters & parameters)
-  : ADKernelValue<compute_stage>(parameters),
+CoefMatReaction::CoefMatReaction(const InputParameters & parameters)
+  : ADKernelValue(parameters),
     _coef(getParam<Real>("coefficient")),
     _prop(isParamValid("material_property_name")
-              ? &getADMaterialProperty<Real>("material_property_name")
+              ? &getMaterialProperty<Real>("material_property_name")
               : NULL)
 {
 }
 
-template <ComputeStage compute_stage>
 ADReal
-CoefMatReaction<compute_stage>::precomputeQpResidual()
+CoefMatReaction::precomputeQpResidual()
 {
   ADReal factor = _coef * (_prop ? (*_prop)[_qp] : 1.0);
   return factor * _u[_qp];

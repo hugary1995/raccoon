@@ -6,13 +6,10 @@
 
 registerADMooseObject("raccoonApp", Penetration);
 
-defineADLegacyParams(Penetration);
-
-template <ComputeStage compute_stage>
 InputParameters
-Penetration<compute_stage>::validParams()
+Penetration::validParams()
 {
-  InputParameters params = ADMaterial<compute_stage>::validParams();
+  InputParameters params = ADMaterial::validParams();
   params.addRequiredCoupledVar(
       "displacements",
       "The displacements appropriate for the simulation geometry and coordinate system");
@@ -21,9 +18,8 @@ Penetration<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-Penetration<compute_stage>::Penetration(const InputParameters & parameters)
-  : ADMaterial<compute_stage>(parameters),
+Penetration::Penetration(const InputParameters & parameters)
+  : ADMaterial(parameters),
     _ndisp(coupledComponents("displacements")),
     _disp(3),
     _grad_d(adCoupledGradient("d")),
@@ -37,9 +33,8 @@ Penetration<compute_stage>::Penetration(const InputParameters & parameters)
     _disp[i] = &adZeroValue();
 }
 
-template <ComputeStage compute_stage>
 void
-Penetration<compute_stage>::computeQpProperties()
+Penetration::computeQpProperties()
 {
   ADRealVectorValue u((*_disp[0])[_qp], (*_disp[1])[_qp], (*_disp[2])[_qp]);
   _penetration[_qp] = u * _grad_d[_qp];

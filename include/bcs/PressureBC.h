@@ -6,13 +6,7 @@
 
 #include "ADIntegratedBC.h"
 
-template <ComputeStage>
-class PressureBC;
-
-declareADValidParams(PressureBC);
-
-template <ComputeStage compute_stage>
-class PressureBC : public ADIntegratedBC<compute_stage>
+class PressureBC : public ADIntegratedBC
 {
 public:
   static InputParameters validParams();
@@ -26,6 +20,4 @@ protected:
   const Function & _function;
 
   const unsigned int _component;
-
-  usingIntegratedBCMembers;
 };

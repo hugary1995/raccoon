@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", StationaryGenericFunctionMaterial);
 
-template <>
 InputParameters
-validParams<StationaryGenericFunctionMaterial>()
+StationaryGenericFunctionMaterial::validParams()
 {
-  InputParameters params = validParams<GenericFunctionMaterial>();
+  InputParameters params = GenericFunctionMaterial::validParams();
   return params;
 }
 

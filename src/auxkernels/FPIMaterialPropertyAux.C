@@ -7,8 +7,6 @@
 
 registerMooseObject("raccoonApp", FPIMaterialPropertyAux);
 
-defineLegacyParams(FPIMaterialPropertyAux);
-
 InputParameters
 FPIMaterialPropertyAux::validParams()
 {
@@ -29,12 +27,12 @@ FPIMaterialPropertyAux::validParams()
 }
 
 FPIMaterialPropertyAux::FPIMaterialPropertyAux(const InputParameters & parameters)
-  : AuxKernel(parameters), _v(getMaterialProperty<Real>("from"))
+  : AuxKernel(parameters), _v(getADMaterialProperty<Real>("from"))
 {
 }
 
 Real
 FPIMaterialPropertyAux::computeValue()
 {
-  return _v[_qp];
+  return _v[_qp].value();
 }

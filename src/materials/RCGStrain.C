@@ -6,41 +6,62 @@
 
 registerADMooseObject("raccoonApp", RCGStrain);
 
-defineADLegacyParams(RCGStrain);
-
-template <ComputeStage compute_stage>
 InputParameters
-RCGStrain<compute_stage>::validParams()
+RCGStrain::validParams()
 {
-  InputParameters params = ADComputeStrainBase<compute_stage>::validParams();
-  params.addClassDescription("Compute the right Cauchy-Green strain.");
+  InputParameters params = ADComputeStrainBase::validParams();
+  params.addClassDescription("Compute the right Cauchy-Green strain");
   return params;
 }
 
-template <ComputeStage compute_stage>
-RCGStrain<compute_stage>::RCGStrain(const InputParameters & parameters)
-  : ADComputeStrainBase<compute_stage>(parameters),
+RCGStrain::RCGStrain(const InputParameters & parameters)
+  : ADComputeStrainBase(parameters),
     _F(declareADProperty<RankTwoTensor>(_base_name + "deformation_gradient"))
 {
 }
 
-template <ComputeStage compute_stage>
 void
-RCGStrain<compute_stage>::computeQpProperties()
+RCGStrain::initQpStatefulProperties()
 {
-  // deformation gradient
-  // F = I + A
-  //         A = U_{i,I}, displacement gradient in reference configuration
-  ADRankTwoTensor A((*_grad_disp[0])[_qp], (*_grad_disp[1])[_qp], (*_grad_disp[2])[_qp]);
-  _F[_qp] = A;
-  _F[_qp].addIa(1.0);
+  ADComputeStrainBase::initQpStatefulProperties();
+  _F[_qp] = ADRankTwoTensor(ADRankTwoTensor::initIdentity);
+}
 
-  // Green strain defined in the reference configuration
-  // E = 0.5(F^T F - I)
+void
+RCGStrain::computeProperties()
+{
+  ADRankTwoTensor ave_F;
+
+  for (_qp = 0; _qp < _qrule->n_points(); ++_qp)
+  {
+    ADRankTwoTensor A((*_grad_disp[0])[_qp], (*_grad_disp[1])[_qp], (*_grad_disp[2])[_qp]);
+    _F[_qp] = A;
+    _F[_qp].addIa(1.0);
+
+    if (_volumetric_locking_correction)
+      ave_F += _F[_qp] * _JxW[_qp] * _coord[_qp];
+  }
+
+  if (_volumetric_locking_correction)
+    ave_F /= _current_elem_volume;
+
+  for (_qp = 0; _qp < _qrule->n_points(); ++_qp)
+  {
+    if (_volumetric_locking_correction)
+      _F[_qp] *= std::cbrt(ave_F.det() / _F[_qp].det());
+
+    computeQpStrain();
+  }
+}
+
+void
+RCGStrain::computeQpStrain()
+{
+  // right Cauchy-Green strain defined in the reference configuration
+  // C = F^T F
   ADRankTwoTensor C = _F[_qp].transpose() * _F[_qp];
 
-  // total strain defined in the current configuration
-  // e = F E F^T / det(F)
+  // total strain defined in the reference configuration
   _total_strain[_qp] = C;
   if (_global_strain)
     _total_strain[_qp] += (*_global_strain)[_qp];

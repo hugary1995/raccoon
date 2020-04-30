@@ -6,13 +6,7 @@
 
 #include "ADStressDivergenceTensors.h"
 
-template <ComputeStage>
-class ADStressDivergenceExpTensors;
-
-declareADValidParams(ADStressDivergenceTensors);
-
-template <ComputeStage compute_stage>
-class ADStressDivergenceExpTensors : public ADStressDivergenceTensors<compute_stage>
+class ADStressDivergenceExpTensors : public ADStressDivergenceTensors
 {
 public:
   static InputParameters validParams();
@@ -23,6 +17,4 @@ protected:
   const MaterialProperty<RankTwoTensor> & _stress_old;
 
   virtual ADReal computeQpResidual() override;
-
-  usingStressDivergenceTensorsMembers;
 };

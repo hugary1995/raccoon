@@ -6,14 +6,7 @@
 
 #include "DegradationBase.h"
 
-// Forward Declarations
-template <ComputeStage>
-class LorentzDegradation;
-
-declareADValidParams(LorentzDegradation);
-
-template <ComputeStage compute_stage>
-class LorentzDegradation : public DegradationBase<compute_stage>
+class LorentzDegradation : public DegradationBase
 {
 public:
   static InputParameters validParams();
@@ -31,6 +24,4 @@ protected:
 
   /// shape parameter
   const Real & _p;
-
-  usingDegradationBaseMembers
 };

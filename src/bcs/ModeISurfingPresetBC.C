@@ -3,15 +3,13 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "ModeISurfingPresetBC.h"
-#include <math.h>
 
 registerMooseObject("raccoonApp", ModeISurfingPresetBC);
 
-template <>
 InputParameters
-validParams<ModeISurfingPresetBC>()
+ModeISurfingPresetBC::validParams()
 {
-  InputParameters params = validParams<PresetNodalBC>();
+  InputParameters params = PresetNodalBC::validParams();
   params.addRequiredCoupledVar("crack_tip_x",
                                "scalar variable describing the x coordinate of the crack tip");
   params.addRequiredCoupledVar("crack_tip_y",

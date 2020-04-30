@@ -6,13 +6,10 @@
 
 registerADMooseObject("raccoonApp", LinearLocalDissipation);
 
-defineADLegacyParams(LinearLocalDissipation);
-
-template <ComputeStage compute_stage>
 InputParameters
-LinearLocalDissipation<compute_stage>::validParams()
+LinearLocalDissipation::validParams()
 {
-  InputParameters params = ADMaterial<compute_stage>::validParams();
+  InputParameters params = ADMaterial::validParams();
   params.addClassDescription("computes the local dissipation function of the linear form, $d$");
   params.addRequiredCoupledVar("d", "phase-field damage variable");
   params.addParam<MaterialPropertyName>(
@@ -20,9 +17,8 @@ LinearLocalDissipation<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-LinearLocalDissipation<compute_stage>::LinearLocalDissipation(const InputParameters & parameters)
-  : ADMaterial<compute_stage>(parameters),
+LinearLocalDissipation::LinearLocalDissipation(const InputParameters & parameters)
+  : ADMaterial(parameters),
     _d(adCoupledValue("d")),
     _w_name(getParam<MaterialPropertyName>("local_dissipation_name")),
     _w(declareADProperty<Real>(_w_name)),
@@ -31,9 +27,8 @@ LinearLocalDissipation<compute_stage>::LinearLocalDissipation(const InputParamet
 {
 }
 
-template <ComputeStage compute_stage>
 void
-LinearLocalDissipation<compute_stage>::computeQpProperties()
+LinearLocalDissipation::computeQpProperties()
 {
   ADReal d = _d[_qp];
 

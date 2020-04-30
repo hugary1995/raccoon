@@ -6,13 +6,10 @@
 
 registerADMooseObject("raccoonApp", PhaseFieldFractureEvolutionReaction);
 
-defineADLegacyParams(PhaseFieldFractureEvolutionReaction);
-
-template <ComputeStage compute_stage>
 InputParameters
-PhaseFieldFractureEvolutionReaction<compute_stage>::validParams()
+PhaseFieldFractureEvolutionReaction::validParams()
 {
-  InputParameters params = ADKernelValue<compute_stage>::validParams();
+  InputParameters params = ADKernelValue::validParams();
   params.addClassDescription("computes the reaction term in phase-field evolution equation");
   params.addParam<MaterialPropertyName>("degradation_name", "g", "name of degradation");
   params.addParam<MaterialPropertyName>("driving_energy_mat",
@@ -25,10 +22,9 @@ PhaseFieldFractureEvolutionReaction<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-PhaseFieldFractureEvolutionReaction<compute_stage>::PhaseFieldFractureEvolutionReaction(
+PhaseFieldFractureEvolutionReaction::PhaseFieldFractureEvolutionReaction(
     const InputParameters & parameters)
-  : ADKernelValue<compute_stage>(parameters),
+  : ADKernelValue(parameters),
     _dg_dd(getADMaterialProperty<Real>(derivativePropertyNameFirst(
         getParam<MaterialPropertyName>("degradation_name"), _var.name()))),
     _lag(getParam<bool>("lag")),
@@ -59,9 +55,8 @@ PhaseFieldFractureEvolutionReaction<compute_stage>::PhaseFieldFractureEvolutionR
     mooseError("driving energy multiply defined.");
 }
 
-template <ComputeStage compute_stage>
 ADReal
-PhaseFieldFractureEvolutionReaction<compute_stage>::precomputeQpResidual()
+PhaseFieldFractureEvolutionReaction::precomputeQpResidual()
 {
   ADReal D;
   if (_D_var)
@@ -76,5 +71,5 @@ PhaseFieldFractureEvolutionReaction<compute_stage>::precomputeQpResidual()
     mooseError("Internal Error");
 
   // reaction like driving force
-  return _dg_dd[_qp] * D;
+  return -_dg_dd[_qp] * D;
 }

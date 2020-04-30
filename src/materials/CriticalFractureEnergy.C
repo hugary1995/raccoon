@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", CriticalFractureEnergy);
 
-template <>
 InputParameters
-validParams<CriticalFractureEnergy>()
+CriticalFractureEnergy::validParams()
 {
-  InputParameters params = validParams<Material>();
+  InputParameters params = Material::validParams();
   params.addClassDescription("Compute the critical fracture energy given degradation function, "
                              "local disiipation and mobility");
   params.addRequiredParam<FunctionName>("initial_local_dissipation_slope",

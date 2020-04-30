@@ -6,29 +6,22 @@
 
 registerADMooseObject("raccoonApp", AD1DStressDivergenceTensors);
 
-defineADLegacyParams(AD1DStressDivergenceTensors);
-
-template <ComputeStage compute_stage>
 InputParameters
-AD1DStressDivergenceTensors<compute_stage>::validParams()
+AD1DStressDivergenceTensors::validParams()
 {
-  InputParameters params = ADStressDivergenceTensors<compute_stage>::validParams();
+  InputParameters params = ADStressDivergenceTensors::validParams();
   params.addRequiredParam<MaterialPropertyName>(
       "cross_sectional_area", "material property that provides the cross sectional area");
   return params;
 }
 
-template <ComputeStage compute_stage>
-AD1DStressDivergenceTensors<compute_stage>::AD1DStressDivergenceTensors(
-    const InputParameters & parameters)
-  : ADStressDivergenceTensors<compute_stage>(parameters),
-    _A(getADMaterialProperty<Real>("cross_sectional_area"))
+AD1DStressDivergenceTensors::AD1DStressDivergenceTensors(const InputParameters & parameters)
+  : ADStressDivergenceTensors(parameters), _A(getMaterialProperty<Real>("cross_sectional_area"))
 {
 }
 
-template <ComputeStage compute_stage>
 ADReal
-AD1DStressDivergenceTensors<compute_stage>::computeQpResidual()
+AD1DStressDivergenceTensors::computeQpResidual()
 {
-  return _A[_qp] * ADStressDivergenceTensors<compute_stage>::computeQpResidual();
+  return _A[_qp] * ADStressDivergenceTensors::computeQpResidual();
 }

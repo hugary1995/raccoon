@@ -7,14 +7,11 @@
 #include "Material.h"
 #include "Function.h"
 
-class FractureMaterial;
-
-template <>
-InputParameters validParams<FractureMaterial>();
-
 class FractureMaterial : public Material
 {
 public:
+  static InputParameters validParams();
+
   FractureMaterial(const InputParameters & parameters);
 
 protected:

@@ -4,13 +4,10 @@
 
 #include "DegradationBase.h"
 
-defineADLegacyParams(DegradationBase);
-
-template <ComputeStage compute_stage>
 InputParameters
-DegradationBase<compute_stage>::validParams()
+DegradationBase::validParams()
 {
-  InputParameters params = ADMaterial<compute_stage>::validParams();
+  InputParameters params = ADMaterial::validParams();
   params.addCoupledVar("d", "phase-field damage variable");
   params.addCoupledVar("d_relaxed", "relaxed phase-field damage variable");
   params.addParam<MaterialPropertyName>(
@@ -23,9 +20,8 @@ DegradationBase<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-DegradationBase<compute_stage>::DegradationBase(const InputParameters & parameters)
-  : ADMaterial<compute_stage>(parameters),
+DegradationBase::DegradationBase(const InputParameters & parameters)
+  : ADMaterial(parameters),
     _d(adCoupledValue("d")),
     _d_old(isParamValid("d_relaxed") ? coupledValue("d_relaxed") : coupledValueOld("d")),
     _g_name(getParam<MaterialPropertyName>("degradation_name")),
@@ -37,20 +33,16 @@ DegradationBase<compute_stage>::DegradationBase(const InputParameters & paramete
 {
 }
 
-template <ComputeStage compute_stage>
 void
-DegradationBase<compute_stage>::computeQpProperties()
+DegradationBase::computeQpProperties()
 {
   computeDegradation();
   postComputeDegradation();
 }
 
-template <ComputeStage compute_stage>
 void
-DegradationBase<compute_stage>::postComputeDegradation()
+DegradationBase::postComputeDegradation()
 {
   _g[_qp] = _g[_qp] * (1.0 - _eta) + _eta;
   _dg_dd[_qp] = _dg_dd[_qp] * (1.0 - _eta);
 }
-
-adBaseClass(DegradationBase);

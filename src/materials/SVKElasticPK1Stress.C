@@ -6,22 +6,18 @@
 
 registerADMooseObject("raccoonApp", SVKElasticPK1Stress);
 
-defineADLegacyParams(SVKElasticPK1Stress);
-
-template <ComputeStage compute_stage>
 InputParameters
-SVKElasticPK1Stress<compute_stage>::validParams()
+SVKElasticPK1Stress::validParams()
 {
-  InputParameters params = ADComputeStressBase<compute_stage>::validParams();
+  InputParameters params = ADComputeStressBase::validParams();
   params.addClassDescription("Compute stress using the St. Venant Kirchhoff hyperelastic model");
   params.addParam<bool>(
       "cauchy_stress", false, "whether to output the stress on current configuration");
   return params;
 }
 
-template <ComputeStage compute_stage>
-SVKElasticPK1Stress<compute_stage>::SVKElasticPK1Stress(const InputParameters & parameters)
-  : ADComputeStressBase<compute_stage>(parameters),
+SVKElasticPK1Stress::SVKElasticPK1Stress(const InputParameters & parameters)
+  : ADComputeStressBase(parameters),
     _elasticity_tensor(getADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
     _F(getADMaterialProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
     _cauchy_stress(getParam<bool>("cauchy_stress")
@@ -30,9 +26,8 @@ SVKElasticPK1Stress<compute_stage>::SVKElasticPK1Stress(const InputParameters & 
 {
 }
 
-template <ComputeStage compute_stage>
 void
-SVKElasticPK1Stress<compute_stage>::computeQpStress()
+SVKElasticPK1Stress::computeQpStress()
 {
   // Isotropic elasticity is assumed and should be enforced
   // P = F * S = F * (C:E)

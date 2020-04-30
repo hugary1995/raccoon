@@ -6,13 +6,7 @@
 
 #include "ADDegradedElasticStressBase.h"
 
-template <ComputeStage>
-class SmallStrainDegradedElasticPK2Stress_StrainVolDev;
-
-declareADValidParams(SmallStrainDegradedElasticPK2Stress_StrainVolDev);
-
-template <ComputeStage compute_stage>
-class SmallStrainDegradedElasticPK2Stress_StrainVolDev : public ADDegradedElasticStressBase<compute_stage>
+class SmallStrainDegradedElasticPK2Stress_StrainVolDev : public ADDegradedElasticStressBase
 {
 public:
   static InputParameters validParams();
@@ -21,6 +15,4 @@ public:
 
 protected:
   virtual void computeQpStress() override;
-
-  usingDegradedStressBaseMembers
 };

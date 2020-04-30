@@ -6,16 +6,10 @@
 
 #include "ADComputeStrainBase.h"
 
-template <ComputeStage>
-class GreenStrain;
-
-declareADValidParams(GreenStrain);
-
 /**
  * GreenStrain defines a non-linear Green-Lagrange strain tensor
  */
-template <ComputeStage compute_stage>
-class GreenStrain : public ADComputeStrainBase<compute_stage>
+class GreenStrain : public ADComputeStrainBase
 {
 public:
   static InputParameters validParams();
@@ -24,10 +18,11 @@ public:
 
 protected:
   virtual void initQpStatefulProperties() override;
-  virtual void computeQpProperties() override;
+  virtual void computeProperties() override;
+  virtual void computeQpStrain();
 
   /// deformation gradient
-  ADMaterialProperty(RankTwoTensor) & _F;
-
-  usingComputeStrainBaseMembers;
+  ADMaterialProperty<RankTwoTensor> & _F;
+  const MaterialProperty<RankTwoTensor> & _F_old;
+  ADMaterialProperty<RankTwoTensor> & _f;
 };

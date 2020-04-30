@@ -6,14 +6,11 @@
 
 #include "IntegratedBC.h"
 
-class CoupledNeumannBC;
-
-template <>
-InputParameters validParams<CoupledNeumannBC>();
-
 class CoupledNeumannBC : public IntegratedBC
 {
 public:
+  static InputParameters validParams();
+
   CoupledNeumannBC(const InputParameters & parameters);
 
 protected:

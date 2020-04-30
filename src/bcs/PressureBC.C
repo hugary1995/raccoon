@@ -7,13 +7,10 @@
 
 registerADMooseObject("raccoonApp", PressureBC);
 
-defineADLegacyParams(PressureBC);
-
-template <ComputeStage compute_stage>
 InputParameters
-PressureBC<compute_stage>::validParams()
+PressureBC::validParams()
 {
-  InputParameters params = ADIntegratedBC<compute_stage>::validParams();
+  InputParameters params = ADIntegratedBC::validParams();
   params.addClassDescription("Imposes the pressure boundary condition.");
   params.addRequiredParam<FunctionName>("function",
                                         "The function describing the pressure magnitude");
@@ -22,17 +19,15 @@ PressureBC<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-PressureBC<compute_stage>::PressureBC(const InputParameters & parameters)
-  : ADIntegratedBC<compute_stage>(parameters),
+PressureBC::PressureBC(const InputParameters & parameters)
+  : ADIntegratedBC(parameters),
     _function(getFunction("function")),
     _component(getParam<unsigned int>("component"))
 {
 }
 
-template <ComputeStage compute_stage>
 ADReal
-PressureBC<compute_stage>::computeQpResidual()
+PressureBC::computeQpResidual()
 {
   return _test[_i][_qp] * _function.value(_t, _q_point[_qp]) * _normals[_qp](_component);
 }

@@ -7,13 +7,7 @@
 #include "ADMaterial.h"
 #include "Function.h"
 
-template <ComputeStage>
-class CrackSurfaceDensity;
-
-declareADValidParams(CrackSurfaceDensity);
-
-template <ComputeStage compute_stage>
-class CrackSurfaceDensity : public ADMaterial<compute_stage>
+class CrackSurfaceDensity : public ADMaterial
 {
 public:
   static InputParameters validParams();
@@ -33,13 +27,11 @@ protected:
   const ADVariableGradient & _grad_d;
 
   /// local dissipation function
-  const ADMaterialProperty(Real) & _w;
+  const ADMaterialProperty<Real> & _w;
 
   /// crack surface density
-  ADMaterialProperty(Real) & _gamma;
+  ADMaterialProperty<Real> & _gamma;
 
   /// crack surface normal (if well-defined)
-  ADMaterialProperty(RealVectorValue) & _n;
-
-  usingMaterialMembers;
+  ADMaterialProperty<RealVectorValue> & _n;
 };

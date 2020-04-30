@@ -10,17 +10,12 @@
 // System includes
 #include <string>
 
-class FixedPointSolve;
-
-template <>
-InputParameters validParams<FixedPointSolve>();
-
 class FixedPointSolve : public SolveObject
 {
 public:
-  FixedPointSolve(Executioner * ex);
-
   static InputParameters validParams();
+
+  FixedPointSolve(Executioner * ex);
 
   virtual bool solve() override;
 

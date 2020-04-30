@@ -6,14 +6,11 @@
 
 #include "AuxKernel.h"
 
-class ExpAccelAux;
-
-template <>
-InputParameters validParams<ExpAccelAux>();
-
 class ExpAccelAux : public AuxKernel
 {
 public:
+  static InputParameters validParams();
+
   ExpAccelAux(const InputParameters & parameters);
 
 protected:

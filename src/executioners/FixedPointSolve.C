@@ -9,8 +9,6 @@
 #include "NonlinearSystem.h"
 #include "Console.h"
 
-defineLegacyParams(FixedPointSolve);
-
 InputParameters
 FixedPointSolve::validParams()
 {

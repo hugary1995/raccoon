@@ -6,14 +6,7 @@
 
 #include "ADMaterial.h"
 
-// Forward Declarations
-template <ComputeStage>
-class ADSumMaterial;
-
-declareADValidParams(ADSumMaterial);
-
-template <ComputeStage compute_stage>
-class ADSumMaterial : public ADMaterial<compute_stage>
+class ADSumMaterial : public ADMaterial
 {
 public:
   static InputParameters validParams();
@@ -25,13 +18,11 @@ protected:
 
   virtual void computeQpProperties() override;
 
-  ADMaterialProperty(Real) & _sum;
+  ADMaterialProperty<Real> & _sum;
 
   std::vector<MaterialPropertyName> _prop_names;
 
   unsigned int _num_props;
 
-  std::vector<const ADMaterialProperty(Real) *> _props;
-
-  usingMaterialMembers;
+  std::vector<const ADMaterialProperty<Real> *> _props;
 };

@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", FractureSurfaceArea);
 
-template <>
 InputParameters
-validParams<FractureSurfaceArea>()
+FractureSurfaceArea::validParams()
 {
-  InputParameters params = validParams<FractureEnergy>();
+  InputParameters params = FractureEnergy::validParams();
   params.addParam<MaterialPropertyName>("energy_release_rate_name",
                                         "energy_release_rate",
                                         "name of the material that holds the energy release rate");

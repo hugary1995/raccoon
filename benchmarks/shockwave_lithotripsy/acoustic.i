@@ -74,24 +74,23 @@
   [../]
 []
 
-# [DiracKernels]
-#   [./monopole_source]
-#     type = MonopoleDirac
-#      variable = p
-#      point = '0.0 2.02 0.0'
-#      dim  = 3
-#      fL = 8.33e-2
-#      t1 = 0.07
-#      tRT = 0.01
-#      tL  = 0.8
-#      tP  = 10.0
-#      p0  = 1e-6
-#      d1  = 9
-#      upcoeff = 12.2189
-#      downcoeff = 0.9404
-#      rho = 1e-3
-#   [../]
-# []
+[DiracKernels]
+  [./monopole_source]
+    type = LithotripsySource
+     variable = 'p'
+     point = '0.0 2.02 0.0'
+     fL = 8.33e-2
+     t1 = 0.07
+     tRT = 0.01
+     tL = 0.8
+     tP = 10.0
+     p0 = 1e-6
+     d1 = 9
+     upcoeff = 12.2189
+     downcoeff = 0.9404
+     diffusivity = 'Diff'
+  [../]
+[]
 
 [BCs]
   [./top]
@@ -118,7 +117,6 @@
     boundary = 'bottom2'
     coupled_var = 'accel_y'
   [../]
-
 []
 
 [Materials]
@@ -139,7 +137,8 @@
   l_max_its = 50
   nl_max_its = 20
   l_tol = 1e-9
-  nl_rel_tol = 1e-12
+  nl_rel_tol = 1e-6
+  nl_abs_tol = 1e-8
   dt = 1e-3
 
   automatic_scaling = true
@@ -148,7 +147,7 @@
 [Outputs]
   [./exodus]
     type = Exodus
-    interval = 10
+    #interval = 1
     file_base = AcousticOut
   [../]
 []

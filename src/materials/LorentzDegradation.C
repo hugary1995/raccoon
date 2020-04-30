@@ -6,13 +6,10 @@
 
 registerADMooseObject("raccoonApp", LorentzDegradation);
 
-defineADLegacyParams(LorentzDegradation);
-
-template <ComputeStage compute_stage>
 InputParameters
-LorentzDegradation<compute_stage>::validParams()
+LorentzDegradation::validParams()
 {
-  InputParameters params = DegradationBase<compute_stage>::validParams();
+  InputParameters params = DegradationBase::validParams();
   params.addClassDescription("computes the Lorentz-type degradation: "
                              "$\\frac{(1-d)^2}{(1-d)^2+\\frac{M}{\\psi_\\critical}d(1+pd)}$");
   params.addParam<MaterialPropertyName>("mobility_name", "mobility", "name of the Mobility");
@@ -23,18 +20,16 @@ LorentzDegradation<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-LorentzDegradation<compute_stage>::LorentzDegradation(const InputParameters & parameters)
-  : DegradationBase<compute_stage>(parameters),
+LorentzDegradation::LorentzDegradation(const InputParameters & parameters)
+  : DegradationBase(parameters),
     _M(getMaterialProperty<Real>("mobility_name")),
     _b(getMaterialProperty<Real>("critical_fracture_energy_name")),
     _p(getParam<Real>("p"))
 {
 }
 
-template <ComputeStage compute_stage>
 void
-LorentzDegradation<compute_stage>::computeDegradation()
+LorentzDegradation::computeDegradation()
 {
   ADReal M = _M[_qp];
   ADReal b = _b[_qp];

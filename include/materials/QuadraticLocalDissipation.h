@@ -7,15 +7,7 @@
 #include "ADMaterial.h"
 #include "DerivativeMaterialPropertyNameInterface.h"
 
-// Forward Declarations
-template <ComputeStage>
-class QuadraticLocalDissipation;
-
-declareADValidParams(QuadraticLocalDissipation);
-
-template <ComputeStage compute_stage>
-class QuadraticLocalDissipation : public ADMaterial<compute_stage>,
-                                  public DerivativeMaterialPropertyNameInterface
+class QuadraticLocalDissipation : public ADMaterial, public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
@@ -32,10 +24,8 @@ protected:
   const MaterialPropertyName _w_name;
 
   /// local dissipation
-  ADMaterialProperty(Real) & _w;
+  ADMaterialProperty<Real> & _w;
 
   /// local dissipation derivative
-  ADMaterialProperty(Real) & _dw_dd;
-
-  usingMaterialMembers;
+  ADMaterialProperty<Real> & _dw_dd;
 };

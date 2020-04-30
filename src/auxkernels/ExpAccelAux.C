@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", ExpAccelAux);
 
-template <>
 InputParameters
-validParams<ExpAccelAux>()
+ExpAccelAux::validParams()
 {
-  InputParameters params = validParams<AuxKernel>();
+  InputParameters params = AuxKernel::validParams();
   params.addRequiredCoupledVar("displacement", "displacement variable");
   return params;
 }

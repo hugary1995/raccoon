@@ -6,35 +6,30 @@
 
 registerADMooseObject("raccoonApp", SmallStrainDegradedElasticPK2Stress_StrainSpectral);
 
-defineADLegacyParams(SmallStrainDegradedElasticPK2Stress_StrainSpectral);
-
-template <ComputeStage compute_stage>
 InputParameters
-SmallStrainDegradedElasticPK2Stress_StrainSpectral<compute_stage>::validParams()
+SmallStrainDegradedElasticPK2Stress_StrainSpectral::validParams()
 {
-  InputParameters params = ADDegradedElasticStressBase<compute_stage>::validParams();
+  InputParameters params = ADDegradedElasticStressBase::validParams();
   params.addClassDescription("Compute degraded stress following small deformation elasticity "
                              "with a spectra-based active/inactive split");
   return params;
 }
 
-template <ComputeStage compute_stage>
-SmallStrainDegradedElasticPK2Stress_StrainSpectral<
-    compute_stage>::SmallStrainDegradedElasticPK2Stress_StrainSpectral(const InputParameters & parameters)
-  : ADDegradedElasticStressBase<compute_stage>(parameters)
+SmallStrainDegradedElasticPK2Stress_StrainSpectral::
+    SmallStrainDegradedElasticPK2Stress_StrainSpectral(const InputParameters & parameters)
+  : ADDegradedElasticStressBase(parameters)
 {
 }
 
-template <ComputeStage compute_stage>
 void
-SmallStrainDegradedElasticPK2Stress_StrainSpectral<compute_stage>::computeQpStress()
+SmallStrainDegradedElasticPK2Stress_StrainSpectral::computeQpStress()
 {
   // Isotropic elasticity is assumed and should be enforced
   const Real lambda = _elasticity_tensor[_qp](0, 0, 1, 1);
   const Real mu = _elasticity_tensor[_qp](0, 1, 0, 1);
 
   // Identity tensor
-  ADRankTwoTensor I2(RankTwoTensorType<compute_stage>::type::initIdentity);
+  ADRankTwoTensor I2(RankTwoTensorTempl<ADReal>::initIdentity);
 
   // spectral decomposition
   ADRankTwoTensor E = _mechanical_strain[_qp];

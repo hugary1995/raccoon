@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", PhaseFieldJIntegral);
 
-template <>
 InputParameters
-validParams<PhaseFieldJIntegral>()
+PhaseFieldJIntegral::validParams()
 {
-  InputParameters params = validParams<SideIntegralPostprocessor>();
+  InputParameters params = SideIntegralPostprocessor::validParams();
   params.addClassDescription("Compute the J integral for a phase-field model of fracture");
   params.addParam<std::string>("base_name",
                                "Optional parameter that allows the user to define "

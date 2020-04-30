@@ -6,12 +6,6 @@
 
 #include "NodalBC.h"
 
-// Forward Declarations
-class ModeISurfingDirichletBC;
-
-template <>
-InputParameters validParams<ModeISurfingDirichletBC>();
-
 /**
  * Defines a boundary condition that forces the value to be a user specified
  * scalar at the boundary.
@@ -19,6 +13,8 @@ InputParameters validParams<ModeISurfingDirichletBC>();
 class ModeISurfingDirichletBC : public NodalBC
 {
 public:
+  static InputParameters validParams();
+
   ModeISurfingDirichletBC(const InputParameters & parameters);
 
 protected:

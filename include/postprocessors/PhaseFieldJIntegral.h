@@ -7,15 +7,11 @@
 #include "SideIntegralPostprocessor.h"
 #include "RankTwoTensor.h"
 
-// Forward Declarations
-class PhaseFieldJIntegral;
-
-template <>
-InputParameters validParams<PhaseFieldJIntegral>();
-
 class PhaseFieldJIntegral : public SideIntegralPostprocessor
 {
 public:
+  static InputParameters validParams();
+
   PhaseFieldJIntegral(const InputParameters & parameters);
 
 protected:

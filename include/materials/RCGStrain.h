@@ -6,16 +6,10 @@
 
 #include "ADComputeStrainBase.h"
 
-template <ComputeStage>
-class RCGStrain;
-
-declareADValidParams(RCGStrain);
-
 /**
- * RCGStrain defines a non-linear Green-Lagrange strain tensor
+ * RCGStrain defines a non-linear right Cauchy-Green strain tensor
  */
-template <ComputeStage compute_stage>
-class RCGStrain : public ADComputeStrainBase<compute_stage>
+class RCGStrain : public ADComputeStrainBase
 {
 public:
   static InputParameters validParams();
@@ -23,10 +17,10 @@ public:
   RCGStrain(const InputParameters & parameters);
 
 protected:
-  virtual void computeQpProperties() override;
+  virtual void initQpStatefulProperties() override;
+  virtual void computeProperties() override;
+  virtual void computeQpStrain();
 
   /// deformation gradient
-  ADMaterialProperty(RankTwoTensor) & _F;
-
-  usingComputeStrainBaseMembers;
+  ADMaterialProperty<RankTwoTensor> & _F;
 };

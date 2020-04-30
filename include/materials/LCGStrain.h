@@ -6,20 +6,15 @@
 
 #include "ADComputeStrainBase.h"
 
-template <ComputeStage>
-class LCGStrain;
 template <typename>
 class RankTwoTensorTempl;
 typedef RankTwoTensorTempl<Real> RankTwoTensor;
 typedef RankTwoTensorTempl<DualReal> DualRankTwoTensor;
 
-declareADValidParams(LCGStrain);
-
 /**
  * LCGStrain defines a non-linear Green-Lagrange strain tensor
  */
-template <ComputeStage compute_stage>
-class LCGStrain : public ADComputeStrainBase<compute_stage>
+class LCGStrain : public ADComputeStrainBase
 {
 public:
   static InputParameters validParams();
@@ -29,7 +24,5 @@ protected:
   virtual void computeQpProperties() override;
 
   /// deformation gradient
-  ADMaterialProperty(RankTwoTensor) & _F;
-
-  usingComputeStrainBaseMembers;
+  ADMaterialProperty<RankTwoTensor> & _F;
 };

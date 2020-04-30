@@ -6,28 +6,23 @@
 
 registerADMooseObject("raccoonApp", SmallStrainDegradedElasticPK2Stress_StrainVolDev);
 
-defineADLegacyParams(SmallStrainDegradedElasticPK2Stress_StrainVolDev);
-
-template <ComputeStage compute_stage>
 InputParameters
-SmallStrainDegradedElasticPK2Stress_StrainVolDev<compute_stage>::validParams()
+SmallStrainDegradedElasticPK2Stress_StrainVolDev::validParams()
 {
-  InputParameters params = ADDegradedElasticStressBase<compute_stage>::validParams();
+  InputParameters params = ADDegradedElasticStressBase::validParams();
   params.addClassDescription("Compute degraded stress following small deformation elasticity "
                              "with a volumetric-deviatoric active/inactive split");
   return params;
 }
 
-template <ComputeStage compute_stage>
-SmallStrainDegradedElasticPK2Stress_StrainVolDev<compute_stage>::SmallStrainDegradedElasticPK2Stress_StrainVolDev(
+SmallStrainDegradedElasticPK2Stress_StrainVolDev::SmallStrainDegradedElasticPK2Stress_StrainVolDev(
     const InputParameters & parameters)
-  : ADDegradedElasticStressBase<compute_stage>(parameters)
+  : ADDegradedElasticStressBase(parameters)
 {
 }
 
-template <ComputeStage compute_stage>
 void
-SmallStrainDegradedElasticPK2Stress_StrainVolDev<compute_stage>::computeQpStress()
+SmallStrainDegradedElasticPK2Stress_StrainVolDev::computeQpStress()
 {
   // Isotropic elasticity is assumed and should be enforced
   const Real lambda = _elasticity_tensor[_qp](0, 0, 1, 1);
@@ -35,7 +30,7 @@ SmallStrainDegradedElasticPK2Stress_StrainVolDev<compute_stage>::computeQpStress
   const Real K = lambda + 2.0 * mu / LIBMESH_DIM;
 
   // Identity tensor
-  ADRankTwoTensor I2(RankTwoTensorType<compute_stage>::type::initIdentity);
+  ADRankTwoTensor I2(RankTwoTensorTempl<ADReal>::initIdentity);
 
   // vol-dev decomposition
   ADRankTwoTensor E = _mechanical_strain[_qp];

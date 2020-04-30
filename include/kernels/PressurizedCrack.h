@@ -6,14 +6,7 @@
 
 #include "ADKernelValue.h"
 
-// Forward Declarations
-template <ComputeStage>
-class PressurizedCrack;
-
-declareADValidParams(PressurizedCrack);
-
-template <ComputeStage compute_stage>
-class PressurizedCrack : public ADKernelValue<compute_stage>
+class PressurizedCrack : public ADKernelValue
 {
 public:
   static InputParameters validParams();
@@ -24,9 +17,7 @@ protected:
   virtual ADReal precomputeQpResidual() override;
 
   const unsigned int _comp;
-  const ADMaterialProperty(Real) * _p_mat;
-  const ADVariableValue * _p_var;
+  const MaterialProperty<Real> * _p_mat;
+  const VariableValue * _p_var;
   const ADVariableGradient & _grad_d;
-
-  usingKernelValueMembers;
 };

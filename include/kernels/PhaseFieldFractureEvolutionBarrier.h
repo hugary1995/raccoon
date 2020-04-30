@@ -7,14 +7,7 @@
 #include "ADKernelValue.h"
 #include "DerivativeMaterialPropertyNameInterface.h"
 
-// Forward Declarations
-template <ComputeStage>
-class PhaseFieldFractureEvolutionBarrier;
-
-declareADValidParams(PhaseFieldFractureEvolutionBarrier);
-
-template <ComputeStage compute_stage>
-class PhaseFieldFractureEvolutionBarrier : public ADKernelValue<compute_stage>,
+class PhaseFieldFractureEvolutionBarrier : public ADKernelValue,
                                            public DerivativeMaterialPropertyNameInterface
 {
 public:
@@ -27,7 +20,5 @@ protected:
 
   const MaterialProperty<Real> & _M;
 
-  const ADMaterialProperty(Real) & _dw_dd;
-
-  usingKernelValueMembers;
+  const ADMaterialProperty<Real> & _dw_dd;
 };

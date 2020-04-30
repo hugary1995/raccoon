@@ -6,12 +6,6 @@
 
 #include "MaterialPropertyUserObject.h"
 
-// Forward Declarations
-class FPIMaterialPropertyUserObject;
-
-template <>
-InputParameters validParams<FPIMaterialPropertyUserObject>();
-
 class FPIMaterialPropertyUserObject : public MaterialPropertyUserObject
 {
 public:

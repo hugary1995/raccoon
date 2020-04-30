@@ -2,19 +2,15 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#ifndef DamageICBase_H
-#define DamageICBase_H
+#pragma once
 
 #include "InitialCondition.h"
-
-class DamageICBase;
-
-template <>
-InputParameters validParams<DamageICBase>();
 
 class DamageICBase : public InitialCondition
 {
 public:
+  static InputParameters validParams();
+
   DamageICBase(const InputParameters & parameters);
 
 protected:
@@ -28,5 +24,3 @@ protected:
   const Real _d0;
   const Real _l;
 };
-
-#endif // DamageICBase_H

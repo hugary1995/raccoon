@@ -8,14 +8,7 @@
 #include "DerivativeMaterialPropertyNameInterface.h"
 #include "MaterialPropertyUserObject.h"
 
-// Forward Declarations
-template <ComputeStage>
-class PhaseFieldFractureEvolutionReaction;
-
-declareADValidParams(PhaseFieldFractureEvolutionReaction);
-
-template <ComputeStage compute_stage>
-class PhaseFieldFractureEvolutionReaction : public ADKernelValue<compute_stage>,
+class PhaseFieldFractureEvolutionReaction : public ADKernelValue,
                                             public DerivativeMaterialPropertyNameInterface
 {
 public:
@@ -27,13 +20,11 @@ protected:
   virtual ADReal precomputeQpResidual() override;
 
   /// name of the degradation function
-  const ADMaterialProperty(Real) & _dg_dd;
+  const ADMaterialProperty<Real> & _dg_dd;
   const bool _lag;
-  const ADMaterialProperty(Real) * _D_mat;
+  const ADMaterialProperty<Real> * _D_mat;
   const MaterialProperty<Real> * _D_mat_old;
   const ADVariableValue * _D_var;
   const VariableValue * _D_var_old;
   const MaterialPropertyUserObject * _D_uo;
-
-  usingKernelValueMembers;
 };

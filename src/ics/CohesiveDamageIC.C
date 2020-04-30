@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", CohesiveDamageIC);
 
-template <>
 InputParameters
-validParams<CohesiveDamageIC>()
+CohesiveDamageIC::validParams()
 {
-  InputParameters params = validParams<DamageICBase>();
+  InputParameters params = DamageICBase::validParams();
   return params;
 }
 

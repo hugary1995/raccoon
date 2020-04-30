@@ -6,15 +6,11 @@
 
 #include "PresetNodalBC.h"
 
-// Forward Declarations
-class ScalarPresetBC;
-
-template <>
-InputParameters validParams<ScalarPresetBC>();
-
 class ScalarPresetBC : public PresetNodalBC
 {
 public:
+  static InputParameters validParams();
+
   ScalarPresetBC(const InputParameters & parameters);
 
 protected:

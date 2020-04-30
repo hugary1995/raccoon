@@ -6,13 +6,10 @@
 
 registerADMooseObject("raccoonApp", PhaseFieldFractureEvolutionPressure);
 
-defineADLegacyParams(PhaseFieldFractureEvolutionPressure);
-
-template <ComputeStage compute_stage>
 InputParameters
-PhaseFieldFractureEvolutionPressure<compute_stage>::validParams()
+PhaseFieldFractureEvolutionPressure::validParams()
 {
-  InputParameters params = ADKernelGrad<compute_stage>::validParams();
+  InputParameters params = ADKernelGrad::validParams();
   params.addClassDescription("computes the pressure term in phase-field evolution equation");
   params.addRequiredParam<UserObjectName>("pressure_uo",
                                           "userobject that has pressure values at qps");
@@ -22,10 +19,9 @@ PhaseFieldFractureEvolutionPressure<compute_stage>::validParams()
   return params;
 }
 
-template <ComputeStage compute_stage>
-PhaseFieldFractureEvolutionPressure<compute_stage>::PhaseFieldFractureEvolutionPressure(
+PhaseFieldFractureEvolutionPressure::PhaseFieldFractureEvolutionPressure(
     const InputParameters & parameters)
-  : ADKernelGrad<compute_stage>(parameters),
+  : ADKernelGrad(parameters),
     _p_uo(getUserObject<MaterialPropertyUserObject>("pressure_uo")),
     _ndisp(coupledComponents("displacements")),
     _disp(3)
@@ -38,9 +34,8 @@ PhaseFieldFractureEvolutionPressure<compute_stage>::PhaseFieldFractureEvolutionP
     _disp[i] = &adZeroValue();
 }
 
-template <ComputeStage compute_stage>
 ADRealVectorValue
-PhaseFieldFractureEvolutionPressure<compute_stage>::precomputeQpResidual()
+PhaseFieldFractureEvolutionPressure::precomputeQpResidual()
 {
   ADReal p = _p_uo.getData(_current_elem, _qp);
   ADRealVectorValue u((*_disp[0])[_qp], (*_disp[1])[_qp], (*_disp[2])[_qp]);

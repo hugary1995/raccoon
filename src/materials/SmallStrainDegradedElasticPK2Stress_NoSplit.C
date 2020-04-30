@@ -6,28 +6,23 @@
 
 registerADMooseObject("raccoonApp", SmallStrainDegradedElasticPK2Stress_NoSplit);
 
-defineADLegacyParams(SmallStrainDegradedElasticPK2Stress_NoSplit);
-
-template <ComputeStage compute_stage>
 InputParameters
-SmallStrainDegradedElasticPK2Stress_NoSplit<compute_stage>::validParams()
+SmallStrainDegradedElasticPK2Stress_NoSplit::validParams()
 {
-  InputParameters params = ADDegradedElasticStressBase<compute_stage>::validParams();
+  InputParameters params = ADDegradedElasticStressBase::validParams();
   params.addClassDescription("Compute degraded stress following small deformation elasticity "
                              "without active/inactive split");
   return params;
 }
 
-template <ComputeStage compute_stage>
-SmallStrainDegradedElasticPK2Stress_NoSplit<compute_stage>::SmallStrainDegradedElasticPK2Stress_NoSplit(
+SmallStrainDegradedElasticPK2Stress_NoSplit::SmallStrainDegradedElasticPK2Stress_NoSplit(
     const InputParameters & parameters)
-  : ADDegradedElasticStressBase<compute_stage>(parameters)
+  : ADDegradedElasticStressBase(parameters)
 {
 }
 
-template <ComputeStage compute_stage>
 void
-SmallStrainDegradedElasticPK2Stress_NoSplit<compute_stage>::computeQpStress()
+SmallStrainDegradedElasticPK2Stress_NoSplit::computeQpStress()
 {
   ADRankTwoTensor E = _mechanical_strain[_qp];
 

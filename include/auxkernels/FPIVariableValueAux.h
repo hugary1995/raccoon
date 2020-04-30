@@ -6,12 +6,6 @@
 
 #include "AuxKernel.h"
 
-// Forward Declarations
-class FPIVariableValueAux;
-
-template <>
-InputParameters validParams<FPIVariableValueAux>();
-
 /**
  * Self auxiliary value
  */

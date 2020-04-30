@@ -6,8 +6,6 @@
 
 registerMooseObject("raccoonApp", LoadingUnloadingDirichletBC);
 
-defineLegacyParams(LoadingUnloadingDirichletBC);
-
 InputParameters
 LoadingUnloadingDirichletBC::validParams()
 {

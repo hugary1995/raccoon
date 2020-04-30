@@ -28,22 +28,26 @@
 []
 
 [AuxKernels]
-  [./lag_E_driving] # between fixed point iterations
-    type = FPIMaterialAux
+  [./lag_E_driving]
+    type = FPIMaterialPropertyAux
     variable = 'E_driving'
     from = 'E_el_active'
-    execute_on = 'BETWEEN_FPI TIMESTEP_END'
   [../]
 []
 
 [Bounds]
   [./irreversibility]
-    type = Irreversibility
+    type = VariableOldValueBoundsAux
     variable = 'bounds_dummy'
     bounded_variable = 'd'
-    upper = 1
-    lower = 'd'
-    lag = true
+    bound_type = lower
+  [../]
+  [./upper]
+    type = ConstantBoundsAux
+    variable = 'bounds_dummy'
+    bounded_variable = 'd'
+    bound_type = upper
+    bound_value = 1
   [../]
 []
 
@@ -63,6 +67,10 @@
   [../]
   [./pff_diff]
     type = PhaseFieldFractureEvolutionDiffusion
+    variable = 'd'
+  [../]
+  [./pff_barr]
+    type = PhaseFieldFractureEvolutionBarrier
     variable = 'd'
   [../]
   [./pff_react]

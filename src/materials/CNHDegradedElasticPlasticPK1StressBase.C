@@ -4,13 +4,10 @@
 
 #include "CNHDegradedElasticPlasticPK1StressBase.h"
 
-defineADLegacyParams(CNHDegradedElasticPlasticPK1StressBase);
-
-template <ComputeStage compute_stage>
 InputParameters
-CNHDegradedElasticPlasticPK1StressBase<compute_stage>::validParams()
+CNHDegradedElasticPlasticPK1StressBase::validParams()
 {
-  InputParameters params = ADDegradedElasticStressBase<compute_stage>::validParams();
+  InputParameters params = ADDegradedElasticStressBase::validParams();
   params.addClassDescription(
       "computes elastic and plastic stress for a compressible Neo-Hookean material");
   params.addParam<MaterialPropertyName>(
@@ -21,17 +18,19 @@ CNHDegradedElasticPlasticPK1StressBase<compute_stage>::validParams()
       "legacy_plastic_work", false, "whether to use the deprecated plastic work calculation");
   params.addParam<bool>(
       "enforce_isochoricity", true, "whether to enforce the isochoricity constraint");
+  params.addParam<int>("lag_steps", 0, "steps before which plastic work is set to zero");
   return params;
 }
 
-template <ComputeStage compute_stage>
-CNHDegradedElasticPlasticPK1StressBase<compute_stage>::CNHDegradedElasticPlasticPK1StressBase(
+CNHDegradedElasticPlasticPK1StressBase::CNHDegradedElasticPlasticPK1StressBase(
     const InputParameters & parameters)
-  : ADDegradedElasticStressBase<compute_stage>(parameters),
+  : ADDegradedElasticStressBase(parameters),
     _deformation_gradient(
         getADMaterialPropertyByName<RankTwoTensor>(_base_name + "deformation_gradient")),
     _deformation_gradient_old(
         getMaterialPropertyOldByName<RankTwoTensor>(_base_name + "deformation_gradient")),
+    _deformation_gradient_increment(
+        getADMaterialPropertyByName<RankTwoTensor>(_base_name + "deformation_gradient_increment")),
     _be_bar(declareADProperty<RankTwoTensor>(_base_name + "volume_perserving_be")),
     _be_bar_old(getMaterialPropertyOldByName<RankTwoTensor>(_base_name + "volume_perserving_be")),
     _ep(declareADProperty<Real>(_base_name + "effective_plastic_strain")),
@@ -46,24 +45,23 @@ CNHDegradedElasticPlasticPK1StressBase<compute_stage>::CNHDegradedElasticPlastic
     _W_pl(declareADProperty<Real>(_W_pl_name)),
     _W_pl_old(_legacy ? &getMaterialPropertyOldByName<Real>(_W_pl_name) : nullptr),
     _W_pl_degraded(declareADProperty<Real>(_W_pl_name + "_degraded")),
-    _E_el_degraded(declareADProperty<Real>(_E_el_name + "_degraded"))
+    _E_el_degraded(declareADProperty<Real>(_E_el_name + "_degraded")),
+    _lag_steps(getParam<int>("lag_steps"))
 {
 }
 
-template <ComputeStage compute_stage>
 void
-CNHDegradedElasticPlasticPK1StressBase<compute_stage>::initQpStatefulProperties()
+CNHDegradedElasticPlasticPK1StressBase::initQpStatefulProperties()
 {
-  ADDegradedElasticStressBase<compute_stage>::initQpStatefulProperties();
+  ADDegradedElasticStressBase::initQpStatefulProperties();
   _be_bar[_qp].zero();
   _be_bar[_qp].addIa(1.0);
   _ep[_qp] = 0;
   _W_pl[_qp] = 0;
 }
 
-template <ComputeStage compute_stage>
 void
-CNHDegradedElasticPlasticPK1StressBase<compute_stage>::computeQpStress()
+CNHDegradedElasticPlasticPK1StressBase::computeQpStress()
 {
   // isotropic elasticity is assumed and should be enforced
   const Real lambda = _elasticity_tensor[_qp](0, 0, 1, 1);
@@ -81,22 +79,20 @@ CNHDegradedElasticPlasticPK1StressBase<compute_stage>::computeQpStress()
   computeFractureDrivingEnergy();
 }
 
-template <ComputeStage compute_stage>
 void
-CNHDegradedElasticPlasticPK1StressBase<compute_stage>::updateDegradation()
+CNHDegradedElasticPlasticPK1StressBase::updateDegradation()
 {
   _gq = _g[_qp];
   _ge = _g[_qp];
   _gp = _g_plastic[_qp];
 }
 
-template <ComputeStage compute_stage>
 void
-CNHDegradedElasticPlasticPK1StressBase<compute_stage>::updateIntermediateConfiguration()
+CNHDegradedElasticPlasticPK1StressBase::updateIntermediateConfiguration()
 {
   // incremental deformation gradient
-  _f = _deformation_gradient[_qp] * (_deformation_gradient_old[_qp].inverse());
-  _f_bar = std::pow(_f.det(), -1.0 / 3.0) * _f;
+  _f = _deformation_gradient_increment[_qp];
+  _f_bar = _f / std::cbrt(_f.det());
 
   // compute the damage/elastic predictor
   _plastic_increment = 0;
@@ -106,9 +102,8 @@ CNHDegradedElasticPlasticPK1StressBase<compute_stage>::updateIntermediateConfigu
   _np_trial = std::sqrt(1.5) * _s_trial / _s_trial_norm;
 }
 
-template <ComputeStage compute_stage>
 void
-CNHDegradedElasticPlasticPK1StressBase<compute_stage>::returnMapping()
+CNHDegradedElasticPlasticPK1StressBase::returnMapping()
 {
   // check for plastic loading
   ADReal yield_function_trial = _s_trial_norm - std::sqrt(2.0 / 3.0) * dH_dep(_ep_old[_qp]);
@@ -135,7 +130,7 @@ CNHDegradedElasticPlasticPK1StressBase<compute_stage>::returnMapping()
         std::sqrt(3.0 / 2.0) * _gq * _G * _plastic_increment * _be_bar_trial.trace() -
         std::sqrt(2.0 / 3.0) * dH_dep(_ep_old[_qp] + _plastic_increment);
     iter++;
-    if (iter > 20)
+    if (iter > 50)
     {
       std::cout << "yield_function_trial_initial = " << yield_function_trial_initial << std::endl;
       std::cout << "yield_function_trial = " << yield_function_trial << std::endl;
@@ -148,12 +143,11 @@ CNHDegradedElasticPlasticPK1StressBase<compute_stage>::returnMapping()
   _ep[_qp] = _ep_old[_qp] + _plastic_increment;
 }
 
-template <ComputeStage compute_stage>
 void
-CNHDegradedElasticPlasticPK1StressBase<compute_stage>::updateCurrentConfiguration()
+CNHDegradedElasticPlasticPK1StressBase::updateCurrentConfiguration()
 {
   // Identity tensor
-  ADRankTwoTensor I2(RankTwoTensorType<compute_stage>::type::initIdentity);
+  ADRankTwoTensor I2(RankTwoTensorTempl<ADReal>::initIdentity);
 
   // update the Kirchhoff stress
   _J = _deformation_gradient[_qp].det();
@@ -174,12 +168,11 @@ CNHDegradedElasticPlasticPK1StressBase<compute_stage>::updateCurrentConfiguratio
   _cauchy_stress[_qp] = _tau / _J;
 }
 
-template <ComputeStage compute_stage>
 void
-CNHDegradedElasticPlasticPK1StressBase<compute_stage>::enforceIsochoricity()
+CNHDegradedElasticPlasticPK1StressBase::enforceIsochoricity()
 {
   // Identity tensor
-  ADRankTwoTensor I2(RankTwoTensorType<compute_stage>::type::initIdentity);
+  ADRankTwoTensor I2(RankTwoTensorTempl<ADReal>::initIdentity);
 
   ADReal Ie_bar = _be_bar_trial.trace() / 3.0;
   _be_bar_dev = _s / _gq / _G;
@@ -205,7 +198,7 @@ CNHDegradedElasticPlasticPK1StressBase<compute_stage>::enforceIsochoricity()
     Ie_bar = Ie_bar + delta_I;
     resid = Ie_bar * Ie_bar * Ie_bar + C2 * Ie_bar * Ie_bar + C1 * Ie_bar + C0;
     iter++;
-    if (iter > 20)
+    if (iter > 50)
     {
       std::cout << "resid0 = " << resid0 << std::endl;
       std::cout << "resid = " << resid << std::endl;
@@ -216,9 +209,8 @@ CNHDegradedElasticPlasticPK1StressBase<compute_stage>::enforceIsochoricity()
   _be_bar[_qp] = _be_bar_dev + Ie_bar * I2;
 }
 
-template <ComputeStage compute_stage>
 void
-CNHDegradedElasticPlasticPK1StressBase<compute_stage>::computeFractureDrivingEnergy()
+CNHDegradedElasticPlasticPK1StressBase::computeFractureDrivingEnergy()
 {
   ADReal U = 0.5 * _K * (0.5 * (_J * _J - 1) - std::log(_J));
   ADReal W = 0.5 * _G * (_be_bar[_qp].trace() - 3.0);
@@ -226,6 +218,8 @@ CNHDegradedElasticPlasticPK1StressBase<compute_stage>::computeFractureDrivingEne
   ADReal E_el_neg = _J >= 1.0 ? 0.0 : U;
 
   _E_el_active[_qp] = E_el_pos;
+  if (_t_step < _lag_steps)
+    _E_el_active[_qp] = 0;
   _E_el_degraded[_qp] = _gq * E_el_pos + E_el_neg;
 
   // plastic work
@@ -235,7 +229,8 @@ CNHDegradedElasticPlasticPK1StressBase<compute_stage>::computeFractureDrivingEne
   else
     _W_pl[_qp] = H(_ep[_qp]);
 
+  if (_t_step < _lag_steps)
+    _W_pl[_qp] = 0;
+
   _W_pl_degraded[_qp] = plastic_dissipation(_ep[_qp]);
 }
-
-adBaseClass(CNHDegradedElasticPlasticPK1StressBase);

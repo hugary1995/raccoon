@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", ExternalEnergy);
 
-template <>
 InputParameters
-validParams<ExternalEnergy>()
+ExternalEnergy::validParams()
 {
-  InputParameters params = validParams<NodalPostprocessor>();
+  InputParameters params = NodalPostprocessor::validParams();
   params.addClassDescription("Compute the increase in external energy during the current step");
   params.addRequiredCoupledVar("forces",
                                "The reaction forces associated with each of the displacement");

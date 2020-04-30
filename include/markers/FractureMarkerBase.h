@@ -8,11 +8,6 @@
 #include "Coupleable.h"
 #include "MaterialPropertyInterface.h"
 
-class FractureMarkerBase;
-
-template <>
-InputParameters validParams<FractureMarkerBase>();
-
 class FractureMarkerBase : public Marker, public MaterialPropertyInterface
 {
 public:
@@ -40,4 +35,3 @@ protected:
   /// The current quadrature point
   unsigned int _qp;
 };
-

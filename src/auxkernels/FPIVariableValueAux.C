@@ -7,8 +7,6 @@
 
 registerMooseObject("raccoonApp", FPIVariableValueAux);
 
-defineLegacyParams(FPIVariableValueAux);
-
 InputParameters
 FPIVariableValueAux::validParams()
 {

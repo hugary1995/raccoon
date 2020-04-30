@@ -6,13 +6,7 @@
 
 #include "ADDegradedElasticStressBase.h"
 
-template <ComputeStage>
-class SmallStrainDegradedElasticPK2Stress_StrainSpectral;
-
-declareADValidParams(SmallStrainDegradedElasticPK2Stress_StrainSpectral);
-
-template <ComputeStage compute_stage>
-class SmallStrainDegradedElasticPK2Stress_StrainSpectral : public ADDegradedElasticStressBase<compute_stage>
+class SmallStrainDegradedElasticPK2Stress_StrainSpectral : public ADDegradedElasticStressBase
 {
 public:
   static InputParameters validParams();
@@ -25,6 +19,4 @@ protected:
 private:
   /// positive eigenvalues
   ADRankTwoTensor D_pos;
-
-  usingDegradedStressBaseMembers
 };

@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", ModeISurfingDirichletBC);
 
-template <>
 InputParameters
-validParams<ModeISurfingDirichletBC>()
+ModeISurfingDirichletBC::validParams()
 {
-  InputParameters params = validParams<NodalBC>();
+  InputParameters params = NodalBC::validParams();
   params.addRequiredCoupledVar("crack_tip_x",
                                "scalar variable describing the x coordinate of the crack tip");
   params.addRequiredCoupledVar("crack_tip_y",

@@ -6,14 +6,7 @@
 
 #include "DegradationBase.h"
 
-// Forward Declarations
-template <ComputeStage>
-class QuasiLinearDegradation;
-
-declareADValidParams(QuasiLinearDegradation);
-
-template <ComputeStage compute_stage>
-class QuasiLinearDegradation : public DegradationBase<compute_stage>
+class QuasiLinearDegradation : public DegradationBase
 {
 public:
   static InputParameters validParams();
@@ -28,6 +21,4 @@ protected:
 
   /// critical fracture energy
   const MaterialProperty<Real> & _b;
-
-  usingDegradationBaseMembers
 };

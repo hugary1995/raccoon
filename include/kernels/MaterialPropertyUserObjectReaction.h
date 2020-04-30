@@ -7,14 +7,7 @@
 #include "ADKernelValue.h"
 #include "MaterialPropertyUserObject.h"
 
-// Forward Declarations
-template <ComputeStage>
-class MaterialPropertyUserObjectReaction;
-
-declareADValidParams(MaterialPropertyUserObjectReaction);
-
-template <ComputeStage compute_stage>
-class MaterialPropertyUserObjectReaction : public ADKernelValue<compute_stage>
+class MaterialPropertyUserObjectReaction : public ADKernelValue
 {
 public:
   static InputParameters validParams();
@@ -25,6 +18,4 @@ protected:
   virtual ADReal precomputeQpResidual() override;
 
   const MaterialPropertyUserObject & _uo;
-
-  usingKernelValueMembers;
 };

@@ -50,12 +50,16 @@
 
 [Bounds]
   [./irreversibility]
-    type = Irreversibility
+    type = VariableOldValueBoundsAux
     variable = 'bounds_dummy'
     bounded_variable = 'd'
-    upper = 1
-    lower = 'd'
-    lag = true
+    bound_type = lower
+  [../]
+  [./upper_bound]
+    type = ConstantBoundsAux
+    variable = 'bounds_dummy'
+    bounded_variable = 'd'
+    bound_value = 1
   [../]
 []
 
@@ -109,20 +113,20 @@
     displacement = 'disp_y'
     execute_on = 'TIMESTEP_END'
   [../]
-  [./stress_h]
-    type = RankTwoScalarAux
-    rank_two_tensor = 'stress'
-    variable = 'stress_h'
-    scalar_type = Hydrostatic
-    execute_on = 'TIMESTEP_END'
-  [../]
-  [./stress_VonMises]
-    type = RankTwoScalarAux
-    rank_two_tensor = 'stress'
-    variable = 'stress_VonMises'
-    scalar_type = VonMisesStress
-    execute_on = 'TIMESTEP_END'
-  [../]
+  # [./stress_h]
+  #   type = RankTwoScalarAux
+  #   rank_two_tensor = 'stress'
+  #   variable = 'stress_h'
+  #   scalar_type = Hydrostatic
+  #   execute_on = 'TIMESTEP_END'
+  # [../]
+  # [./stress_VonMises]
+  #   type = RankTwoScalarAux
+  #   rank_two_tensor = 'stress'
+  #   variable = 'stress_VonMises'
+  #   scalar_type = VonMisesStress
+  #   execute_on = 'TIMESTEP_END'
+  # [../]
 []
 
 [BCs]
@@ -204,7 +208,8 @@
   nl_max_its = 20
 
   l_tol = 1e-12
-  nl_rel_tol = 1e-12
+  nl_rel_tol = 1e-6
+  nl_abs_tol = 1e-8
   dt = 1e-3
 
   fp_max_its = 2
@@ -217,7 +222,6 @@
 [Outputs]
   [./exodus]
     type = Exodus
-    interval = 10
     file_base = DispOut
   [../]
 []

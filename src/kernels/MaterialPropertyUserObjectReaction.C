@@ -6,30 +6,24 @@
 
 registerADMooseObject("raccoonApp", MaterialPropertyUserObjectReaction);
 
-defineADLegacyParams(MaterialPropertyUserObjectReaction);
-
-template <ComputeStage compute_stage>
 InputParameters
-MaterialPropertyUserObjectReaction<compute_stage>::validParams()
+MaterialPropertyUserObjectReaction::validParams()
 {
-  InputParameters params = ADKernelValue<compute_stage>::validParams();
+  InputParameters params = ADKernelValue::validParams();
   params.addClassDescription(
       "Reaction term optionally multiplied with a material property stored in a user object");
   params.addRequiredParam<UserObjectName>("uo_name", "userobject that has values at qps");
   return params;
 }
 
-template <ComputeStage compute_stage>
-MaterialPropertyUserObjectReaction<compute_stage>::MaterialPropertyUserObjectReaction(
+MaterialPropertyUserObjectReaction::MaterialPropertyUserObjectReaction(
     const InputParameters & parameters)
-  : ADKernelValue<compute_stage>(parameters),
-    _uo(getUserObject<MaterialPropertyUserObject>("uo_name"))
+  : ADKernelValue(parameters), _uo(getUserObject<MaterialPropertyUserObject>("uo_name"))
 {
 }
 
-template <ComputeStage compute_stage>
 ADReal
-MaterialPropertyUserObjectReaction<compute_stage>::precomputeQpResidual()
+MaterialPropertyUserObjectReaction::precomputeQpResidual()
 {
   ADReal factor = _uo.getData(_current_elem, _qp);
   return factor * _u[_qp];

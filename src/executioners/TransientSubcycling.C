@@ -3,17 +3,14 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "TransientSubcycling.h"
-
-// MOOSE includes
 #include "NonlinearSystem.h"
 
 registerMooseObject("raccoonApp", TransientSubcycling);
 
-template <>
 InputParameters
-validParams<TransientSubcycling>()
+TransientSubcycling::validParams()
 {
-  InputParameters params = validParams<Transient>();
+  InputParameters params = Transient::validParams();
   return params;
 }
 

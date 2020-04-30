@@ -7,8 +7,6 @@
 
 registerMooseObject("raccoonApp", MaterialPropertyUserObject);
 
-defineLegacyParams(MaterialPropertyUserObject);
-
 InputParameters
 MaterialPropertyUserObject::validParams()
 {
@@ -20,7 +18,7 @@ MaterialPropertyUserObject::validParams()
 }
 
 MaterialPropertyUserObject::MaterialPropertyUserObject(const InputParameters & parameters)
-  : ElementUserObject(parameters), _qp(0), _from(getMaterialProperty<Real>("mat_prop"))
+  : ElementUserObject(parameters), _qp(0), _from(getADMaterialProperty<Real>("mat_prop"))
 {
 }
 
@@ -38,5 +36,7 @@ MaterialPropertyUserObject::computeProperties()
     _to[_current_elem->id()].resize(_qrule->n_points());
 
   for (_qp = 0; _qp < _qrule->n_points(); _qp++)
-    _to[_current_elem->id()][_qp] = _from[_qp];
+  {
+    _to[_current_elem->id()][_qp] = _from[_qp].value();
+  }
 }

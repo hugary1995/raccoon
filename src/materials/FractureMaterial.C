@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", FractureMaterial);
 
-template <>
 InputParameters
-validParams<FractureMaterial>()
+FractureMaterial::validParams()
 {
-  InputParameters params = validParams<Material>();
+  InputParameters params = Material::validParams();
   params.addClassDescription(
       "Compute interface coefficient kappa and mobility for a damage field based on provided "
       "energy release rate Gc and crack length scale L");

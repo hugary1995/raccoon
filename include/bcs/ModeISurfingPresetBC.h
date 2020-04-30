@@ -7,15 +7,11 @@
 #include "PresetNodalBC.h"
 #include "RankFourTensor.h"
 
-// Forward Declarations
-class ModeISurfingPresetBC;
-
-template <>
-InputParameters validParams<ModeISurfingPresetBC>();
-
 class ModeISurfingPresetBC : public PresetNodalBC
 {
 public:
+  static InputParameters validParams();
+
   ModeISurfingPresetBC(const InputParameters & parameters);
 
 protected:

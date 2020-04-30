@@ -6,14 +6,8 @@
 
 #include "CNHDegradedElasticPlasticPK1StressBase.h"
 
-template <ComputeStage>
-class CNHDegradedElasticPlasticPK1Stress_LinearHardening;
-
-declareADValidParams(CNHDegradedElasticPlasticPK1Stress_LinearHardening);
-
-template <ComputeStage compute_stage>
 class CNHDegradedElasticPlasticPK1Stress_LinearHardening
-  : public CNHDegradedElasticPlasticPK1StressBase<compute_stage>
+  : public CNHDegradedElasticPlasticPK1StressBase
 {
 public:
   static InputParameters validParams();
@@ -30,6 +24,4 @@ private:
   Real _yield_stress;
   Real _k;
   Real _W0;
-
-  usingCNHDegradedElasticPlasticPK1StressMembers
 };

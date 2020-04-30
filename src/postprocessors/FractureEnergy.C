@@ -6,11 +6,10 @@
 
 registerMooseObject("raccoonApp", FractureEnergy);
 
-template <>
 InputParameters
-validParams<FractureEnergy>()
+FractureEnergy::validParams()
 {
-  InputParameters params = validParams<ElementIntegralPostprocessor>();
+  InputParameters params = ElementIntegralPostprocessor::validParams();
   params.addRequiredCoupledVar("d", "damage variable");
   params.addParam<MaterialPropertyName>(
       "kappa_name", "kappa", "name of the material that holds the interface coefficient");

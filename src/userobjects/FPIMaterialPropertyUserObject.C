@@ -7,8 +7,6 @@
 
 registerMooseObject("raccoonApp", FPIMaterialPropertyUserObject);
 
-defineLegacyParams(FPIMaterialPropertyUserObject);
-
 InputParameters
 FPIMaterialPropertyUserObject::validParams()
 {

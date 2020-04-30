@@ -6,14 +6,11 @@
 
 #include "ElementIntegralPostprocessor.h"
 
-class FractureEnergy;
-
-template <>
-InputParameters validParams<FractureEnergy>();
-
 class FractureEnergy : public ElementIntegralPostprocessor
 {
 public:
+  static InputParameters validParams();
+
   FractureEnergy(const InputParameters & parameters);
 
 protected:
