@@ -41,8 +41,7 @@ MooneyRivlinElasticPK1Stress::computeQpProperties()
   ADRankTwoTensor I2(ADRankTwoTensor::initIdentity);
   ADRankTwoTensor Cinv = _C[_qp].inverse();
 
-  ADRankTwoTensor S = 2 * _eta1[_qp] * I2 +
-                      2 * _eta2[_qp] * (_C[_qp].trace() * I2 - _C[_qp].transpose()) +
+  ADRankTwoTensor S = 2 * _eta1[_qp] * I2 + 2 * _eta2[_qp] * (_C[_qp].trace() * I2 - _C[_qp]) +
                       2 * _eta3[_qp] * _C[_qp].det() * Cinv - delta * Cinv;
 
   _stress[_qp] = _F[_qp] * S;

@@ -1,7 +1,3 @@
-[GlobalParams]
-  displacements = 'disp_x disp_y disp_z'
-[]
-
 [Mesh]
   [./fmg]
     type = FileMeshGenerator
@@ -49,28 +45,32 @@
     type = ADStressDivergenceTensors
     variable = 'disp_x'
     component = 0
+    displacements = 'disp_x disp_y disp_z'
   [../]
   [./solid_y]
     type = ADStressDivergenceTensors
     variable = 'disp_y'
     component = 1
+    displacements = 'disp_x disp_y disp_z'
   [../]
   [./solid_z]
     type = ADStressDivergenceTensors
     variable = 'disp_z'
     component = 2
+    displacements = 'disp_x disp_y disp_z'
   [../]
 []
 
 [Materials]
   [./RCG]
     type = RCGStrain
+    displacements = 'disp_x disp_y disp_z'
   [../]
 
   [./bulk]
     type = GenericConstantMaterial
     prop_names = 'eta1 eta2 eta3 k1 k2'
-    prop_values = '141 160 3100 1e6 0.04'
+    prop_values = '141 160 300 1e6 0.04'
   [../]
   [./tissue_orientation_1]
     type = GenericConstantRankTwoTensor
@@ -173,6 +173,8 @@
 [Executioner]
   type = Transient
   solve_type = 'NEWTON'
+
+  line_search = none
 
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
   petsc_options_value = 'asm      ilu          1000        200                0                    '

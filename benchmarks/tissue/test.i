@@ -99,12 +99,12 @@
 
   [./PK1_stress]
     type = SumStress
-    base_names = 'MR tissue1 tissue2'
+    base_names = 'MR'
   [../]
 
   [./cauchy_stress]
     type = SumStress
-    base_names = 'MR tissue1 tissue2'
+    base_names = 'MR'
     stress_name = 'cauchy_stress'
   [../]
 []
@@ -139,6 +139,8 @@
 [Executioner]
   type = Transient
   solve_type = 'NEWTON'
+
+  line_search = none
 
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
   petsc_options_value = 'asm      ilu          1000        200                0                    '
