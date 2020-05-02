@@ -1,13 +1,11 @@
+[GlobalParams]
+  displacements = 'disp_x disp_y disp_z'
+[]
+
 [Mesh]
   [./fmg]
     type = FileMeshGenerator
     file = 'media_flatboundaries.msh'
-  [../]
-  [./pin]
-    type = ExtraNodesetGenerator
-    input = 'fmg'
-    nodes = '39871'
-    new_boundary = 'pin'
   [../]
   second_order = true
 []
@@ -45,32 +43,28 @@
     type = ADStressDivergenceTensors
     variable = 'disp_x'
     component = 0
-    displacements = 'disp_x disp_y disp_z'
   [../]
   [./solid_y]
     type = ADStressDivergenceTensors
     variable = 'disp_y'
     component = 1
-    displacements = 'disp_x disp_y disp_z'
   [../]
   [./solid_z]
     type = ADStressDivergenceTensors
     variable = 'disp_z'
     component = 2
-    displacements = 'disp_x disp_y disp_z'
   [../]
 []
 
 [Materials]
   [./RCG]
     type = RCGStrain
-    displacements = 'disp_x disp_y disp_z'
   [../]
 
   [./bulk]
     type = GenericConstantMaterial
     prop_names = 'eta1 eta2 eta3 k1 k2'
-    prop_values = '141 160 300 1e6 0.04'
+    prop_values = '141 160 3100 1e6 0.04'
   [../]
   [./tissue_orientation_1]
     type = GenericConstantRankTwoTensor
@@ -105,70 +99,24 @@
 
   [./PK1_stress]
     type = SumStress
-    base_names = 'MR'
+    base_names = 'MR tissue1 tissue2'
   [../]
 
   [./cauchy_stress]
     type = SumStress
-    base_names = 'MR'
+    base_names = 'MR tissue1 tissue2'
     stress_name = 'cauchy_stress'
   [../]
 []
 
 [BCs]
-  [./xfix]
-    type = DirichletBC
-    variable = 'disp_x'
-    boundary = '7'
-    value = 0
-  [../]
-  [./yfix]
-    type = DirichletBC
-    variable = 'disp_y'
-    boundary = '7 8'
-    value = 0
-  [../]
-  [./zfix]
-    type = DirichletBC
-    variable = 'disp_z'
-    boundary = '7 8'
-    value = 0
-  [../]
-  [./xdisp]
-    type = FunctionDirichletBC
-    variable = 'disp_x'
-    boundary = '8'
-    function = 't'
+  [./Pressure]
+    [./inner]
+      boundary = 'inner'
+      function = '10'
+    [../]
   [../]
 []
-
-# [BCs]
-#   [./Pressure]
-#     [./inner]
-#       boundary = '1'
-#       function = 't'
-#       use_automatic_differentiation = true
-#     [../]
-#   [../]
-#   [./xfix]
-#     type = DirichletBC
-#     variable = 'disp_x'
-#     boundary = '8'
-#     value = 0
-#   [../]
-#   [./yfix]
-#     type = DirichletBC
-#     variable = 'disp_y'
-#     boundary = 'pin'
-#     value = 0
-#   [../]
-#   [./zfix]
-#     type = DirichletBC
-#     variable = 'disp_z'
-#     boundary = 'pin'
-#     value = 0
-#   [../]
-# []
 
 [Executioner]
   type = Transient
@@ -176,17 +124,16 @@
 
   line_search = none
 
-  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
-  petsc_options_value = 'asm      ilu          1000        200                0                    '
+  # petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -sub_pc_factor_shift_type -sub_pc_factor_shift_amount'
+  # petsc_options_value = 'asm      lu           1000        200                0                     NONZERO                   1e-10'
 
-  # petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
-  # petsc_options_value = 'lu superlu_dist'
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
+  petsc_options_value = 'asm      lu           1000        200                0                    '
 
   nl_rel_tol = 1e-06
   nl_abs_tol = 1e-08
   nl_max_its = 100
-  dt = 0.1
-  end_time = 10
+  num_steps = 1
 
   automatic_scaling = true
   compute_scaling_once = false
@@ -194,5 +141,5 @@
 
 [Outputs]
   exodus = true
-  print_linear_residuals = false
+  print_linear_residuals = true
 []

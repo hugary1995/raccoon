@@ -5,7 +5,7 @@
 [Mesh]
   [./fmg]
     type = FileMeshGenerator
-    file = 'gold/geo.msh'
+    file = 'gold/geo3.msh'
   [../]
   second_order = true
 []
@@ -110,30 +110,30 @@
 []
 
 [BCs]
-  [./xfix]
-    type = DirichletBC
-    variable = 'disp_x'
-    boundary = 'top bottom'
-    value = 0
+  [./Pressure]
+    [./inner]
+      boundary = 'inner'
+      function = 't'
+    [../]
   [../]
-  [./yfix]
-    type = DirichletBC
-    variable = 'disp_y'
-    boundary = 'bottom'
-    value = 0
-  [../]
-  [./zfix]
-    type = DirichletBC
-    variable = 'disp_z'
-    boundary = 'top bottom'
-    value = 0
-  [../]
-  [./xdisp]
-    type = FunctionDirichletBC
-    variable = 'disp_y'
-    boundary = 'top'
-    function = 't'
-  [../]
+  # [./zfix]
+  #   type = DirichletBC
+  #   variable = 'disp_z'
+  #   boundary = 'top bottom'
+  #   value = 0
+  # [../]
+  # [./yfix]
+  #   type = DirichletBC
+  #   variable = 'disp_y'
+  #   boundary = 'pin'
+  #   value = 0
+  # [../]
+  # [./xfix]
+  #   type = DirichletBC
+  #   variable = 'disp_x'
+  #   boundary = 'pin'
+  #   value = 0
+  # [../]
 []
 
 [Executioner]
@@ -143,10 +143,10 @@
   line_search = none
 
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
-  petsc_options_value = 'asm      ilu          1000        200                0                    '
+  petsc_options_value = 'asm      lu          1000        200                0                    '
 
-  # petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
-  # petsc_options_value = 'lu superlu_dist'
+  # petsc_options_iname = '-pc_type'
+  # petsc_options_value = 'lu'
 
   nl_rel_tol = 1e-06
   nl_abs_tol = 1e-08
@@ -154,8 +154,8 @@
   dt = 1e-2
   end_time = 0.25
 
-  automatic_scaling = true
-  compute_scaling_once = false
+  # automatic_scaling = true
+  # compute_scaling_once = false
 []
 
 [Outputs]
