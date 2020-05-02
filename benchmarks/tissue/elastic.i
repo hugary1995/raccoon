@@ -126,10 +126,7 @@
   line_search = none
 
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -sub_pc_factor_shift_type -sub_pc_factor_shift_amount'
-  petsc_options_value = 'asm      lu           1000        200                0                     NONZERO                   1e-10'
-
-  # petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
-  # petsc_options_value = 'asm      lu           1000        200                0                    '
+  petsc_options_value = 'asm      lu           200         200                0                     NONZERO                   1e-6'
 
   nl_rel_tol = 1e-06
   nl_abs_tol = 1e-08

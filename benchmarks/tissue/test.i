@@ -99,12 +99,12 @@
 
   [./PK1_stress]
     type = SumStress
-    base_names = 'MR'
+    base_names = 'MR tissue1 tissue2'
   [../]
 
   [./cauchy_stress]
     type = SumStress
-    base_names = 'MR'
+    base_names = 'MR tissue1 tissue2'
     stress_name = 'cauchy_stress'
   [../]
 []
@@ -113,27 +113,9 @@
   [./Pressure]
     [./inner]
       boundary = 'inner'
-      function = 't'
+      function = '10'
     [../]
   [../]
-  # [./zfix]
-  #   type = DirichletBC
-  #   variable = 'disp_z'
-  #   boundary = 'top bottom'
-  #   value = 0
-  # [../]
-  # [./yfix]
-  #   type = DirichletBC
-  #   variable = 'disp_y'
-  #   boundary = 'pin'
-  #   value = 0
-  # [../]
-  # [./xfix]
-  #   type = DirichletBC
-  #   variable = 'disp_x'
-  #   boundary = 'pin'
-  #   value = 0
-  # [../]
 []
 
 [Executioner]
@@ -142,23 +124,19 @@
 
   line_search = none
 
-  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
-  petsc_options_value = 'asm      lu          1000        200                0                    '
-
-  # petsc_options_iname = '-pc_type'
-  # petsc_options_value = 'lu'
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -sub_pc_factor_shift_type -sub_pc_factor_shift_amount'
+  petsc_options_value = 'asm      lu           200         200                0                     NONZERO                   1e-6'
 
   nl_rel_tol = 1e-06
   nl_abs_tol = 1e-08
   nl_max_its = 100
-  dt = 1e-2
-  end_time = 0.25
+  num_steps = 1
 
-  # automatic_scaling = true
-  # compute_scaling_once = false
+  automatic_scaling = true
+  compute_scaling_once = false
 []
 
 [Outputs]
   exodus = true
-  print_linear_residuals = false
+  print_linear_residuals = true
 []
