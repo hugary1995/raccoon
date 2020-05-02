@@ -1,7 +1,3 @@
-[GlobalParams]
-  displacements = 'disp_x disp_y disp_z'
-[]
-
 [Mesh]
   [./fmg]
     type = FileMeshGenerator
@@ -43,22 +39,26 @@
     type = ADStressDivergenceTensors
     variable = 'disp_x'
     component = 0
+    displacements = 'disp_x disp_y disp_z'
   [../]
   [./solid_y]
     type = ADStressDivergenceTensors
     variable = 'disp_y'
     component = 1
+    displacements = 'disp_x disp_y disp_z'
   [../]
   [./solid_z]
     type = ADStressDivergenceTensors
     variable = 'disp_z'
     component = 2
+    displacements = 'disp_x disp_y disp_z'
   [../]
 []
 
 [Materials]
   [./RCG]
     type = RCGStrain
+    displacements = 'disp_x disp_y disp_z'
   [../]
 
   [./bulk]
@@ -114,6 +114,7 @@
     [./inner]
       boundary = 'inner'
       function = '10'
+      displacements = 'disp_x disp_y disp_z'
     [../]
   [../]
 []
@@ -122,10 +123,8 @@
   type = Transient
   solve_type = 'NEWTON'
 
-  line_search = none
-
-  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -sub_pc_factor_shift_type -sub_pc_factor_shift_amount'
-  petsc_options_value = 'asm      lu           200         200                0                     NONZERO                   1e-6'
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
+  petsc_options_value = 'asm      lu           90          31                 0                    '
 
   nl_rel_tol = 1e-06
   nl_abs_tol = 1e-08
@@ -133,10 +132,10 @@
   num_steps = 1
 
   automatic_scaling = true
-  compute_scaling_once = false
 []
 
 [Outputs]
   exodus = true
+  perf_graph = true
   print_linear_residuals = true
 []
