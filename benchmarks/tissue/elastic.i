@@ -1,7 +1,3 @@
-[GlobalParams]
-  displacements = 'disp_x disp_y disp_z'
-[]
-
 [Mesh]
   [./fmg]
     type = FileMeshGenerator
@@ -43,22 +39,26 @@
     type = ADStressDivergenceTensors
     variable = 'disp_x'
     component = 0
+    displacements = 'disp_x disp_y disp_z'
   [../]
   [./solid_y]
     type = ADStressDivergenceTensors
     variable = 'disp_y'
     component = 1
+    displacements = 'disp_x disp_y disp_z'
   [../]
   [./solid_z]
     type = ADStressDivergenceTensors
     variable = 'disp_z'
     component = 2
+    displacements = 'disp_x disp_y disp_z'
   [../]
 []
 
 [Materials]
   [./RCG]
     type = RCGStrain
+    displacements = 'disp_x disp_y disp_z'
   [../]
 
   [./bulk]
@@ -114,6 +114,7 @@
     [./inner]
       boundary = '1'
       function = '10'
+      displacements = 'disp_x disp_y disp_z'
     [../]
   [../]
 []
@@ -124,11 +125,11 @@
 
   line_search = none
 
-  # petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -sub_pc_factor_shift_type -sub_pc_factor_shift_amount'
-  # petsc_options_value = 'asm      lu           1000        200                0                     NONZERO                   1e-10'
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -sub_pc_factor_shift_type -sub_pc_factor_shift_amount'
+  petsc_options_value = 'asm      lu           1000        200                0                     NONZERO                   1e-10'
 
-  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
-  petsc_options_value = 'asm      lu           1000        200                0                    '
+  # petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
+  # petsc_options_value = 'asm      lu           1000        200                0                    '
 
   nl_rel_tol = 1e-06
   nl_abs_tol = 1e-08
@@ -140,6 +141,7 @@
 []
 
 [Outputs]
+  perf_graph = true
   exodus = true
   print_linear_residuals = true
 []
