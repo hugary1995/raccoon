@@ -112,7 +112,7 @@
 [BCs]
   [./Pressure]
     [./inner]
-      boundary = 'inner'
+      boundary = '1'
       function = '10'
     [../]
   [../]
