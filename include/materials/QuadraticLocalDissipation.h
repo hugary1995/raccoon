@@ -28,4 +28,7 @@ protected:
 
   /// local dissipation derivative
   ADMaterialProperty<Real> & _dw_dd;
+
+  /// parameter xi
+  const Real & _xi;
 };
