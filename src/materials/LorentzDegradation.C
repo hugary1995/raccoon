@@ -24,7 +24,7 @@ LorentzDegradation::validParams()
 
 LorentzDegradation::LorentzDegradation(const InputParameters & parameters)
   : DegradationBase(parameters),
-    _M(getMaterialProperty<Real>("mobility_name")),
+    _M(getADMaterialProperty<Real>("mobility_name")),
     _b(getMaterialProperty<Real>("critical_fracture_energy_name")),
     _p(getParam<Real>("p")),
     _xi(getParam<Real>("xi"))

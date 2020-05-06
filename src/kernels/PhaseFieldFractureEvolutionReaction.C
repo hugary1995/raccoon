@@ -71,5 +71,5 @@ PhaseFieldFractureEvolutionReaction::precomputeQpResidual()
     mooseError("Internal Error");
 
   // reaction like driving force
-  return -_dg_dd[_qp] * D;
+  return _dg_dd[_qp] * D;
 }

@@ -20,8 +20,7 @@ protected:
   virtual ADReal d2H_dep2(ADReal ep) override;
   virtual ADReal plastic_dissipation(ADReal ep) override;
 
-private:
-  Real _yield_stress;
-  Real _k;
-  Real _W0;
+  const Real _yield_stress;
+  const Real _k;
+  const Real _W0;
 };

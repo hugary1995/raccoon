@@ -18,6 +18,10 @@ CNHDegradedElasticPlasticPK1StressBase::validParams()
       "legacy_plastic_work", false, "whether to use the deprecated plastic work calculation");
   params.addParam<bool>(
       "enforce_isochoricity", true, "whether to enforce the isochoricity constraint");
+  params.addParam<bool>("use_cauchy_stress",
+                        false,
+                        "use PK1 stress by default, use cauchy stress if set to true in the stress "
+                        "divergence kernel");
   params.addParam<int>("lag_steps", 0, "steps before which plastic work is set to zero");
   return params;
 }
@@ -39,6 +43,7 @@ CNHDegradedElasticPlasticPK1StressBase::CNHDegradedElasticPlasticPK1StressBase(
     _cauchy_stress(declareADProperty<RankTwoTensor>(_base_name + "cauchy_stress")),
     _legacy(getParam<bool>("legacy_plastic_work")),
     _isochoricity(getParam<bool>("enforce_isochoricity")),
+    _use_cauchy_stress(getParam<bool>("use_cauchy_stress")),
     _g_plastic_name(getParam<MaterialPropertyName>("plastic_degradation_name")),
     _g_plastic(getADMaterialProperty<Real>(_g_plastic_name)),
     _W_pl_name(getParam<MaterialPropertyName>("plastic_work_name")),
@@ -153,7 +158,9 @@ CNHDegradedElasticPlasticPK1StressBase::updateCurrentConfiguration()
   _J = _deformation_gradient[_qp].det();
   ADReal p = 0.5 * _K * (_J * _J - 1.0);
   _tau = _J >= 1.0 ? _gq * p * I2 + _s : p * I2 + _s;
-  _stress[_qp] = _tau * _deformation_gradient[_qp].inverse().transpose();
+  _cauchy_stress[_qp] = _tau / _J;
+  _stress[_qp] = _use_cauchy_stress ? _cauchy_stress[_qp]
+                                    : _tau * _deformation_gradient[_qp].inverse().transpose();
 
   if (_isochoricity)
     enforceIsochoricity();
@@ -165,7 +172,6 @@ CNHDegradedElasticPlasticPK1StressBase::updateCurrentConfiguration()
 
   _plastic_strain[_qp] = 0.5 * (_Cp - I2);
   _elastic_strain[_qp] = _mechanical_strain[_qp] - _plastic_strain[_qp];
-  _cauchy_stress[_qp] = _tau / _J;
 }
 
 void

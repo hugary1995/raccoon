@@ -9,7 +9,7 @@ registerMooseObject("raccoonApp", FractureMaterial);
 InputParameters
 FractureMaterial::validParams()
 {
-  InputParameters params = Material::validParams();
+  InputParameters params = ADMaterial::validParams();
   params.addClassDescription(
       "Compute interface coefficient kappa and mobility for a damage field based on provided "
       "energy release rate Gc and crack length scale L");
@@ -25,13 +25,13 @@ FractureMaterial::validParams()
 }
 
 FractureMaterial::FractureMaterial(const InputParameters & parameters)
-  : Material(parameters),
+  : ADMaterial(parameters),
     _Gc(getMaterialPropertyByName<Real>("energy_release_rate")),
     _L(getMaterialPropertyByName<Real>("phase_field_regularization_length")),
     _w_norm(getFunction("local_dissipation_norm")),
     _kappa(declareProperty<Real>(getParam<MaterialPropertyName>("kappa_name"))),
     _kappa_old(getMaterialPropertyOldByName<Real>(getParam<MaterialPropertyName>("kappa_name"))),
-    _M(declareProperty<Real>(getParam<MaterialPropertyName>("mobility_name"))),
+    _M(declareADProperty<Real>(getParam<MaterialPropertyName>("mobility_name"))),
     _M_old(getMaterialPropertyOldByName<Real>(getParam<MaterialPropertyName>("mobility_name")))
 {
 }

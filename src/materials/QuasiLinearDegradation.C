@@ -15,13 +15,16 @@ QuasiLinearDegradation::validParams()
   params.addParam<MaterialPropertyName>("mobility_name", "mobility", "name of the Mobility");
   params.addParam<MaterialPropertyName>(
       "critical_fracture_energy_name", "critical_fracture_energy", "critical fracture energy");
+  params.addRangeCheckedParam<Real>(
+      "xi", 1.0, "xi > 0 & xi <= 2", "derivative of te local dissipation function at d = 0");
   return params;
 }
 
 QuasiLinearDegradation::QuasiLinearDegradation(const InputParameters & parameters)
   : DegradationBase(parameters),
-    _M(getMaterialProperty<Real>("mobility_name")),
-    _b(getMaterialProperty<Real>("critical_fracture_energy_name"))
+    _M(getADMaterialProperty<Real>("mobility_name")),
+    _b(getMaterialProperty<Real>("critical_fracture_energy_name")),
+    _xi(getParam<Real>("xi"))
 {
 }
 
@@ -34,14 +37,14 @@ QuasiLinearDegradation::computeDegradation()
   // g
   ADReal d = _lag ? _d_old[_qp] : _d[_qp];
   ADReal num = 1.0 - d;
-  ADReal denom = num + M / b * d;
+  ADReal denom = num + M * _xi / b * d;
   _g[_qp] = num / denom;
 
   // dg_dd
   d = _d[_qp];
   num = 1.0 - d;
-  denom = num + M / b * d;
+  denom = num + M * _xi / b * d;
   ADReal dnum_dd = -d;
-  ADReal ddenom_dd = dnum_dd + M / b;
+  ADReal ddenom_dd = dnum_dd + M * _xi / b;
   _dg_dd[_qp] = (dnum_dd * denom - num * ddenom_dd) / denom / denom;
 }

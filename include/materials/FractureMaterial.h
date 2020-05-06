@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "Material.h"
+#include "ADMaterial.h"
 #include "Function.h"
 
-class FractureMaterial : public Material
+class FractureMaterial : public ADMaterial
 {
 public:
   static InputParameters validParams();
@@ -34,7 +34,7 @@ protected:
   const MaterialProperty<Real> & _kappa_old;
 
   /// Mobility in Allen-Cahn equation
-  MaterialProperty<Real> & _M;
+  ADMaterialProperty<Real> & _M;
 
   /// Mobility at the previous time step
   const MaterialProperty<Real> & _M_old;

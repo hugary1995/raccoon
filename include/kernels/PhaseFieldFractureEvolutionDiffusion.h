@@ -20,7 +20,7 @@ protected:
   const MaterialProperty<Real> & _kappa;
 
   /// Allen-Cahn mobility computed from fracture properties
-  const MaterialProperty<Real> & _M;
+  const ADMaterialProperty<Real> & _M;
 
   /// the coordinate system
   const Moose::CoordinateSystemType & _coord_sys;

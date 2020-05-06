@@ -18,7 +18,7 @@ public:
 protected:
   virtual ADReal precomputeQpResidual() override;
 
-  const MaterialProperty<Real> & _M;
+  const ADMaterialProperty<Real> & _M;
 
   const ADMaterialProperty<Real> & _dw_dd;
 };

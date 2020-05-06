@@ -19,7 +19,7 @@ PhaseFieldFractureEvolutionBarrier::validParams()
 PhaseFieldFractureEvolutionBarrier::PhaseFieldFractureEvolutionBarrier(
     const InputParameters & parameters)
   : ADKernelValue(parameters),
-    _M(getMaterialProperty<Real>("mobility_name")),
+    _M(getADMaterialProperty<Real>("mobility_name")),
     _dw_dd(getADMaterialProperty<Real>(derivativePropertyNameFirst(
         getParam<MaterialPropertyName>("local_dissipation_name"), _var.name())))
 {
@@ -28,5 +28,5 @@ PhaseFieldFractureEvolutionBarrier::PhaseFieldFractureEvolutionBarrier(
 ADReal
 PhaseFieldFractureEvolutionBarrier::precomputeQpResidual()
 {
-  return -_dw_dd[_qp] * _M[_qp];
+  return _dw_dd[_qp] * _M[_qp];
 }

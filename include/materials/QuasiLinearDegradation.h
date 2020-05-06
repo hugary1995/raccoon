@@ -17,8 +17,11 @@ protected:
   virtual void computeDegradation() override;
 
   /// mobility
-  const MaterialProperty<Real> & _M;
+  const ADMaterialProperty<Real> & _M;
 
   /// critical fracture energy
   const MaterialProperty<Real> & _b;
+
+  /// derivative of local dissipation function at d = 0
+  const Real & _xi;
 };

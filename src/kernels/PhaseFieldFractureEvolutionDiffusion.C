@@ -21,7 +21,7 @@ PhaseFieldFractureEvolutionDiffusion::PhaseFieldFractureEvolutionDiffusion(
     const InputParameters & parameters)
   : ADKernel(parameters),
     _kappa(getMaterialProperty<Real>("kappa_name")),
-    _M(getMaterialProperty<Real>("mobility_name")),
+    _M(getADMaterialProperty<Real>("mobility_name")),
     _coord_sys(_assembly.coordSystem())
 {
 }
@@ -29,8 +29,12 @@ PhaseFieldFractureEvolutionDiffusion::PhaseFieldFractureEvolutionDiffusion(
 ADReal
 PhaseFieldFractureEvolutionDiffusion::computeQpResidual()
 {
-  ADReal residual = _grad_test[_i][_qp] * _grad_u[_qp];
+  ADReal residual =
+      _grad_test[_i][_qp](0) * _grad_u[_qp](0) + _grad_test[_i][_qp](1) * _grad_u[_qp](1);
   if (_coord_sys == Moose::COORD_RZ)
-    residual += _test[_i][_qp] / _ad_q_point[_qp](0) * _grad_u[_qp](0);
-  return -_M[_qp] * _kappa[_qp] * residual;
+    residual -= _test[_i][_qp] / _ad_q_point[_qp](0) * _grad_u[_qp](0);
+  else
+    residual += _grad_test[_i][_qp](2) * _grad_u[_qp](2);
+
+  return _M[_qp] * _kappa[_qp] * residual;
 }

@@ -41,6 +41,7 @@ protected:
   ADMaterialProperty<RankTwoTensor> & _cauchy_stress;
   const bool _legacy;
   const bool _isochoricity;
+  const bool _use_cauchy_stress;
   const MaterialPropertyName _g_plastic_name;
   const ADMaterialProperty<Real> & _g_plastic;
   const MaterialPropertyName _W_pl_name;
