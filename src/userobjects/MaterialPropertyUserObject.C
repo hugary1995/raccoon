@@ -5,38 +5,49 @@
 #include "MaterialPropertyUserObject.h"
 #include "libmesh/quadrature.h"
 
-registerMooseObject("raccoonApp", MaterialPropertyUserObject);
+#include "metaphysicl/raw_type.h"
 
+registerMooseObject("raccoonApp", MaterialPropertyUserObject);
+registerMooseObject("raccoonApp", ADMaterialPropertyUserObject);
+
+template <bool is_ad>
 InputParameters
-MaterialPropertyUserObject::validParams()
+MaterialPropertyUserObjectTempl<is_ad>::validParams()
 {
   InputParameters params = ElementUserObject::validParams();
+  params.addClassDescription("store a material property");
   params.addRequiredParam<MaterialPropertyName>(
       "mat_prop", "the name of the material property we are going to read from");
-
   return params;
 }
 
-MaterialPropertyUserObject::MaterialPropertyUserObject(const InputParameters & parameters)
-  : ElementUserObject(parameters), _qp(0), _from(getADMaterialProperty<Real>("mat_prop"))
+template <bool is_ad>
+MaterialPropertyUserObjectTempl<is_ad>::MaterialPropertyUserObjectTempl(
+    const InputParameters & parameters)
+  : ElementUserObject(parameters),
+    _qp(0),
+    _from(getGenericMaterialProperty<Real, is_ad>("mat_prop"))
 {
 }
 
+template <bool is_ad>
 void
-MaterialPropertyUserObject::initialize()
+MaterialPropertyUserObjectTempl<is_ad>::initialize()
 {
   _to.clear();
   _to.resize(_subproblem.mesh().getMesh().max_elem_id());
 }
 
+template <bool is_ad>
 void
-MaterialPropertyUserObject::computeProperties()
+MaterialPropertyUserObjectTempl<is_ad>::computeProperties()
 {
   if (_to[_current_elem->id()].empty())
     _to[_current_elem->id()].resize(_qrule->n_points());
 
   for (_qp = 0; _qp < _qrule->n_points(); _qp++)
-  {
-    _to[_current_elem->id()][_qp] = _from[_qp].value();
-  }
+    _to[_current_elem->id()][_qp] = MetaPhysicL::raw_value(_from[_qp]);
 }
+
+template class MaterialPropertyUserObjectTempl<false>;
+template class MaterialPropertyUserObjectTempl<true>;
