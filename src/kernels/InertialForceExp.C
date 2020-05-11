@@ -12,7 +12,7 @@ InertialForceExp::validParams()
   InputParameters params = Kernel::validParams();
   params.addClassDescription("Calculates the residual for the interial force (M*accel) and the "
                              "contribution of mass dependent Rayleigh damping and HHT time "
-                             "integration scheme [eta*M*((1+alpha)vel-alpha*vel_old)]");
+                             "integration scheme $eta*M*((1+alpha)vel-alpha*vel_old)$");
   params.set<bool>("use_displaced_mesh") = true;
   return params;
 }

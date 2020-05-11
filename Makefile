@@ -30,12 +30,12 @@ ADDITIONAL_CPPFLAGS=-Wall -Wextra -Werror
 ALL_MODULES         := no
 
 CHEMICAL_REACTIONS  := no
-CONTACT             := yes
+CONTACT             := no
 FLUID_PROPERTIES    := no
 HEAT_CONDUCTION     := yes
 MISC                := no
 NAVIER_STOKES       := no
-PHASE_FIELD         := yes
+PHASE_FIELD         := no
 RDG                 := no
 RICHARDS            := no
 SOLID_MECHANICS     := no
