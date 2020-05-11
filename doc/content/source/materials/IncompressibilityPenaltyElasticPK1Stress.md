@@ -1,0 +1,1 @@
+!template load file=stubs/moose_object.md.template name=IncompressibilityPenaltyElasticPK1Stress syntax=/Materials/IncompressibilityPenaltyElasticPK1Stress

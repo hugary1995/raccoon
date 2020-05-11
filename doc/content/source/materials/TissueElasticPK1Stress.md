@@ -1,0 +1,1 @@
+!template load file=stubs/moose_object.md.template name=TissueElasticPK1Stress syntax=/Materials/TissueElasticPK1Stress
