@@ -17,16 +17,12 @@ jobs:
       dist:        xenial
 install:
   - export RACCOON_DIR=`pwd`
-  - sudo apt-get install build-essential gfortran tcl git m4 freeglut3 doxygen libblas-dev liblapack-dev libx11-dev libnuma-dev libcurl4-gnutls-dev zlib1g-dev libhwloc-dev libxml2-dev libpng-dev pkg-config liblzma-dev
-  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - source "$HOME/miniconda/etc/profile.d/conda.sh"
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
+  - curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+  - bash Miniconda3-latest-Linux-x86_64.sh -b -p ~/miniconda3
+  - export PATH=$HOME/miniconda3/bin:$PATH
   - conda config --add channels conda-forge
   - conda config --add channels https://mooseframework.org/conda/moose
-  - conda create --name moose moose-env
+  - conda create --name moose moose-libmesh moose-tools
   - conda activate moose
   - cd ..
   - git clone --single-branch --branch next https://github.com/hugary1995/moose.git
