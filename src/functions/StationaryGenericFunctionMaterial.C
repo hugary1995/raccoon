@@ -10,6 +10,9 @@ InputParameters
 StationaryGenericFunctionMaterial::validParams()
 {
   InputParameters params = GenericFunctionMaterial::validParams();
+  params.addClassDescription(
+      "parses function material properties that are stationary in time. Computational cost is "
+      "minimized by storing the stationary data but more memory is consumed in turn.");
   return params;
 }
 

@@ -10,6 +10,8 @@ InputParameters
 Penetration::validParams()
 {
   InputParameters params = ADMaterial::validParams();
+  params.addClassDescription(
+      "computes the penetration density for a phase-field regularized crack.");
   params.addRequiredCoupledVar(
       "displacements",
       "The displacements appropriate for the simulation geometry and coordinate system");
