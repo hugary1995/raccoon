@@ -10,6 +10,9 @@ InputParameters
 FractureSurfaceArea::validParams()
 {
   InputParameters params = FractureEnergy::validParams();
+  params.addClassDescription("computes the total fracture surface area using the formula "
+                             "$\\int_\\body \\frac{M}{\\Gc} (w(d) "
+                             "+ 0.5 \\kappa \\grad d \\cdot \\grad d) \\dVolume$");
   params.addParam<MaterialPropertyName>("energy_release_rate_name",
                                         "energy_release_rate",
                                         "name of the material that holds the energy release rate");

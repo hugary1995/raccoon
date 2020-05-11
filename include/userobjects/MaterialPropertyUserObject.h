@@ -7,12 +7,13 @@
 // MOOSE includes
 #include "ElementUserObject.h"
 
-class MaterialPropertyUserObject : public ElementUserObject
+template <bool is_ad>
+class MaterialPropertyUserObjectTempl : public ElementUserObject
 {
 public:
   static InputParameters validParams();
 
-  MaterialPropertyUserObject(const InputParameters & parameters);
+  MaterialPropertyUserObjectTempl(const InputParameters & parameters);
 
   virtual void initialize() override;
   virtual void execute() override { computeProperties(); }
@@ -31,7 +32,10 @@ protected:
 
   unsigned int _qp;
 
-  const ADMaterialProperty<Real> & _from;
+  const GenericMaterialProperty<Real, is_ad> & _from;
 
   std::vector<std::vector<Real>> _to;
 };
+
+typedef MaterialPropertyUserObjectTempl<false> MaterialPropertyUserObject;
+typedef MaterialPropertyUserObjectTempl<true> ADMaterialPropertyUserObject;

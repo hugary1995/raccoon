@@ -10,6 +10,8 @@ InputParameters
 QuadraticLocalDissipation::validParams()
 {
   InputParameters params = ADMaterial::validParams();
+  params.addClassDescription(
+      "computes the local dissipation potential of the form $\\xi d + (1 - \\xi) d$.");
   params.addRequiredCoupledVar("d", "phase-field damage variable");
   params.addParam<MaterialPropertyName>(
       "local_dissipation_name", "w", "name of the material that holds the local dissipation");
