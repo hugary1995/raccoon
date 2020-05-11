@@ -25,6 +25,7 @@ protected:
 
   /// Mobility in Allen-Cahn equation
   ADMaterialProperty<Real> & _M;
+  const ADMaterialProperty<Real> & _M0;
 
   /// coalescence energy
   ADMaterialProperty<Real> & _E_coalesce;

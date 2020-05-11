@@ -22,7 +22,6 @@ CNHDegradedElasticPlasticPK1StressBase::validParams()
                         false,
                         "use PK1 stress by default, use cauchy stress if set to true in the stress "
                         "divergence kernel");
-  params.addParam<int>("lag_steps", 0, "steps before which plastic work is set to zero");
   return params;
 }
 
@@ -41,6 +40,7 @@ CNHDegradedElasticPlasticPK1StressBase::CNHDegradedElasticPlasticPK1StressBase(
     _ep_old(getMaterialPropertyOldByName<Real>(_base_name + "effective_plastic_strain")),
     _plastic_strain(declareADProperty<RankTwoTensor>(_base_name + "plastic_strain")),
     _cauchy_stress(declareADProperty<RankTwoTensor>(_base_name + "cauchy_stress")),
+    _pk1_stress(declareADProperty<RankTwoTensor>(_base_name + "pk1_stress")),
     _legacy(getParam<bool>("legacy_plastic_work")),
     _isochoricity(getParam<bool>("enforce_isochoricity")),
     _use_cauchy_stress(getParam<bool>("use_cauchy_stress")),
@@ -50,8 +50,7 @@ CNHDegradedElasticPlasticPK1StressBase::CNHDegradedElasticPlasticPK1StressBase(
     _W_pl(declareADProperty<Real>(_W_pl_name)),
     _W_pl_old(_legacy ? &getMaterialPropertyOldByName<Real>(_W_pl_name) : nullptr),
     _W_pl_degraded(declareADProperty<Real>(_W_pl_name + "_degraded")),
-    _E_el_degraded(declareADProperty<Real>(_E_el_name + "_degraded")),
-    _lag_steps(getParam<int>("lag_steps"))
+    _E_el_degraded(declareADProperty<Real>(_E_el_name + "_degraded"))
 {
 }
 
@@ -159,8 +158,8 @@ CNHDegradedElasticPlasticPK1StressBase::updateCurrentConfiguration()
   ADReal p = 0.5 * _K * (_J * _J - 1.0);
   _tau = _J >= 1.0 ? _gq * p * I2 + _s : p * I2 + _s;
   _cauchy_stress[_qp] = _tau / _J;
-  _stress[_qp] = _use_cauchy_stress ? _cauchy_stress[_qp]
-                                    : _tau * _deformation_gradient[_qp].inverse().transpose();
+  _pk1_stress[_qp] = _tau * _deformation_gradient[_qp].inverse().transpose();
+  _stress[_qp] = _use_cauchy_stress ? _cauchy_stress[_qp] : _pk1_stress[_qp];
 
   if (_isochoricity)
     enforceIsochoricity();
@@ -224,8 +223,6 @@ CNHDegradedElasticPlasticPK1StressBase::computeFractureDrivingEnergy()
   ADReal E_el_neg = _J >= 1.0 ? 0.0 : U;
 
   _E_el_active[_qp] = E_el_pos;
-  if (_t_step < _lag_steps)
-    _E_el_active[_qp] = 0;
   _E_el_degraded[_qp] = _gq * E_el_pos + E_el_neg;
 
   // plastic work
@@ -234,9 +231,6 @@ CNHDegradedElasticPlasticPK1StressBase::computeFractureDrivingEnergy()
         (*_W_pl_old)[_qp] + _plastic_increment * std::sqrt(_s.doubleContraction(_s) + 1e-12);
   else
     _W_pl[_qp] = H(_ep[_qp]);
-
-  if (_t_step < _lag_steps)
-    _W_pl[_qp] = 0;
 
   _W_pl_degraded[_qp] = plastic_dissipation(_ep[_qp]);
 }

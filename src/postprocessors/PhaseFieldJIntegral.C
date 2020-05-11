@@ -27,8 +27,8 @@ PhaseFieldJIntegral::validParams()
 PhaseFieldJIntegral::PhaseFieldJIntegral(const InputParameters & parameters)
   : SideIntegralPostprocessor(parameters),
     _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
-    _stress(getMaterialPropertyByName<RankTwoTensor>(_base_name + "cauchy_stress")),
-    _E_elastic(getMaterialProperty<Real>("elastic_energy_name")),
+    _stress(getADMaterialPropertyByName<RankTwoTensor>(_base_name + "pk1_stress")),
+    _E_elastic(getADMaterialProperty<Real>("elastic_energy_name")),
     _ndisp(coupledComponents("displacements")),
     _grad_disp_0(coupledGradient("displacements", 0)),
     _grad_disp_1(_ndisp >= 2 ? coupledGradient("displacements", 1) : _grad_zero),
@@ -40,7 +40,10 @@ PhaseFieldJIntegral::PhaseFieldJIntegral(const InputParameters & parameters)
 Real
 PhaseFieldJIntegral::computeQpIntegral()
 {
-  RankTwoTensor grad_tensor(_grad_disp_0[_qp], _grad_disp_1[_qp], _grad_disp_2[_qp]);
+  RankTwoTensor H(_grad_disp_0[_qp], _grad_disp_1[_qp], _grad_disp_2[_qp]);
+  RankTwoTensor I2(RankTwoTensor::initIdentity);
+  ADRankTwoTensor Sigma = _E_elastic[_qp] * I2 - H.transpose() * _stress[_qp];
   RealVectorValue n = _normals[_qp];
-  return _E_elastic[_qp] * _t * n - _t * grad_tensor.transpose() * _stress[_qp] * n;
+  ADReal value = _t * Sigma * n;
+  return value.value();
 }

@@ -20,10 +20,12 @@ public:
 protected:
   virtual Real computeQpResidual() override;
 
-  const VariableValue & _xc;
-  const VariableValue & _yc;
+  const RealVectorValue & _c;
+  const RealVectorValue & _v;
   const unsigned int _component;
   const Real _Gc;
   const Real _E;
   const Real _nu;
+  const Real _K;
+  const Real _mu;
 };

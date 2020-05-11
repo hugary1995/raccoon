@@ -25,14 +25,14 @@ FractureEnergy::validParams()
 FractureEnergy::FractureEnergy(const InputParameters & parameters)
   : ElementIntegralPostprocessor(parameters),
     _kappa(getMaterialProperty<Real>("kappa_name")),
-    _M(getMaterialProperty<Real>("mobility_name")),
+    _M(getADMaterialProperty<Real>("mobility_name")),
     _grad_d(coupledGradient("d")),
-    _w(getMaterialProperty<Real>("local_dissipation_name"))
+    _w(getADMaterialProperty<Real>("local_dissipation_name"))
 {
 }
 
 Real
 FractureEnergy::computeQpIntegral()
 {
-  return _M[_qp] * (_w[_qp] + 0.5 * _kappa[_qp] * _grad_d[_qp] * _grad_d[_qp]);
+  return _M[_qp].value() * (_w[_qp].value() + 0.5 * _kappa[_qp] * _grad_d[_qp] * _grad_d[_qp]);
 }

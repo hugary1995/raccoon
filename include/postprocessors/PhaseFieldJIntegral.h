@@ -20,9 +20,9 @@ protected:
   /// base name of stress
   const std::string _base_name;
   /// stress tensor
-  const MaterialProperty<RankTwoTensor> & _stress;
+  const ADMaterialProperty<RankTwoTensor> & _stress;
   /// degraded eleastic energy
-  const MaterialProperty<Real> & _E_elastic;
+  const ADMaterialProperty<Real> & _E_elastic;
   /// number of displacement variables provided
   const unsigned int _ndisp;
   /// du_dx

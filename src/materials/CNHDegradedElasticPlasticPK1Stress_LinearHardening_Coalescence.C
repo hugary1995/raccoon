@@ -14,6 +14,8 @@ CNHDegradedElasticPlasticPK1Stress_LinearHardening_Coalescence::validParams()
   params.addParam<MaterialPropertyName>(
       "local_dissipation_name", "w", "name of the local dissipation function");
   params.addRequiredParam<Real>("coalescence_coefficient", "coalescence coefficient");
+  params.addParam<MaterialPropertyName>(
+      "base_mobility_name", "mobility", "name of the material that holds the base mobility");
   return params;
 }
 
@@ -22,12 +24,13 @@ CNHDegradedElasticPlasticPK1Stress_LinearHardening_Coalescence::
         const InputParameters & parameters)
   : CNHDegradedElasticPlasticPK1Stress_LinearHardening(parameters),
     _w(getADMaterialProperty<Real>("local_dissipation_name")),
-    _c(getParam<Real>("coalescence_coefficient"))
+    _c(getParam<Real>("coalescence_coefficient")),
+    _M0(getADMaterialProperty<Real>("base_mobility_name"))
 {
 }
 
 ADReal
 CNHDegradedElasticPlasticPK1Stress_LinearHardening_Coalescence::dH_dep(ADReal ep)
 {
-  return _gp * (_yield_stress + _c * _w[_qp] + _k * ep);
+  return _gp * (_yield_stress + _c * _M0[_qp] * _w[_qp] + _k * ep);
 }

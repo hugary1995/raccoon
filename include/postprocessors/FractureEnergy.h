@@ -16,7 +16,7 @@ public:
 protected:
   virtual Real computeQpIntegral() override;
   const MaterialProperty<Real> & _kappa;
-  const MaterialProperty<Real> & _M;
+  const ADMaterialProperty<Real> & _M;
   const VariableGradient & _grad_d;
-  const MaterialProperty<Real> & _w;
+  const ADMaterialProperty<Real> & _w;
 };

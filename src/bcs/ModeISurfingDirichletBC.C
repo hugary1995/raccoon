@@ -10,10 +10,11 @@ InputParameters
 ModeISurfingDirichletBC::validParams()
 {
   InputParameters params = NodalBC::validParams();
-  params.addRequiredCoupledVar("crack_tip_x",
-                               "scalar variable describing the x coordinate of the crack tip");
-  params.addRequiredCoupledVar("crack_tip_y",
-                               "scalar variable describing the y coordinate of the crack tip");
+  params.addParam<RealVectorValue>(
+      "initial_crack_tip_position", RealVectorValue(0, 0, 0), "initial crack tip position");
+  params.addParam<RealVectorValue>("crack_propagation_velocity",
+                                   RealVectorValue(1, 0, 0),
+                                   "velocity of the crack tip, crack starts to propagate at t = 1");
   params.addRequiredParam<unsigned int>("component", "0 for x, 1 for y");
   params.addRequiredParam<Real>("Gc", "energy release rate");
   params.addRequiredParam<Real>("E", "Young's modulus");
@@ -23,25 +24,34 @@ ModeISurfingDirichletBC::validParams()
 
 ModeISurfingDirichletBC::ModeISurfingDirichletBC(const InputParameters & parameters)
   : NodalBC(parameters),
-    _xc(coupledScalarValue("crack_tip_x")),
-    _yc(coupledScalarValue("crack_tip_y")),
+    _c(getParam<RealVectorValue>("initial_crack_tip_position")),
+    _v(getParam<RealVectorValue>("crack_propagation_velocity")),
     _component(getParam<unsigned int>("component")),
     _Gc(getParam<Real>("Gc")),
     _E(getParam<Real>("E")),
-    _nu(getParam<Real>("nu"))
+    _nu(getParam<Real>("nu")),
+    _K(3 - 4 * _nu),
+    _mu(_E / 2 / (1 + _nu))
 {
 }
 
 Real
 ModeISurfingDirichletBC::computeQpResidual()
 {
-  Real x = (*_current_node)(0) - _xc[0];
-  Real y = (*_current_node)(1) - _yc[0];
+  RealVectorValue c = _c;
+  if (_t > 1)
+    c += _v * (_t - 1);
+  Real x = (*_current_node)(0) - c(0);
+  Real y = (*_current_node)(1) - c(1);
   Real theta = std::atan2(y, x);
   Real r = std::sqrt(x * x + y * y);
+  Real K1 = std::sqrt(_E * _Gc / (1 - _nu * _nu));
+  K1 *= _t < 1 ? _t : 1;
 
-  Real u = std::sqrt(r * _Gc / 2.0 / M_PI / _E) * (3.0 - _nu - (1.0 + _nu) * std::cos(theta));
-  u *= _component == 0 ? std::cos(theta / 2.0) : std::sin(theta / 2.0);
-
+  Real u = K1 / 2 / _mu * std::sqrt(r / 2 / M_PI) * (_K - std::cos(theta));
+  if (_component == 0)
+    u *= std::cos(theta / 2);
+  if (_component == 1)
+    u *= std::sin(theta / 2);
   return _u[_qp] - u;
 }

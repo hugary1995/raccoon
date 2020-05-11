@@ -39,6 +39,7 @@ protected:
   const ADVariableValue * _p;
   ADMaterialProperty<RankTwoTensor> & _plastic_strain;
   ADMaterialProperty<RankTwoTensor> & _cauchy_stress;
+  ADMaterialProperty<RankTwoTensor> & _pk1_stress;
   const bool _legacy;
   const bool _isochoricity;
   const bool _use_cauchy_stress;
@@ -49,7 +50,6 @@ protected:
   const MaterialProperty<Real> * _W_pl_old;
   ADMaterialProperty<Real> & _W_pl_degraded;
   ADMaterialProperty<Real> & _E_el_degraded;
-  const int _lag_steps;
 
   Real _G;
   Real _K;

@@ -20,4 +20,5 @@ protected:
 
   const ADMaterialProperty<Real> & _w;
   const Real _c;
+  const ADMaterialProperty<Real> & _M0;
 };
