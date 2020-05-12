@@ -10,6 +10,8 @@ InputParameters
 ExpAccelAux::validParams()
 {
   InputParameters params = AuxKernel::validParams();
+  params.addClassDescription("computes the implicit version of a central-difference operator, i.e. "
+                             "the consistent mass matrix is still being inverted.");
   params.addRequiredCoupledVar("displacement", "displacement variable");
   return params;
 }

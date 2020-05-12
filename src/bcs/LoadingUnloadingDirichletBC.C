@@ -10,6 +10,11 @@ InputParameters
 LoadingUnloadingDirichletBC::validParams()
 {
   InputParameters params = DirichletBCBase::validParams();
+  params.addClassDescription(
+      "applies a loading/unloading BC. The load ramps up linearly until it reaches the load cap. "
+      "Once the load cap is reached, the load cap is incremented and unlading begins. Once the "
+      "unloaded indicator becomes negative, loading starts. If the load cap exceeds the ultimate "
+      "load, the entire loading/unloading terminates, and the current simulation is terminated.");
   params.addRequiredParam<Real>(
       "initial_load_cap",
       "initial cap of the loading. The load is decreased once it reaches the cap, the cap is "

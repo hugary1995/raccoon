@@ -17,6 +17,8 @@ InputParameters
 LithotripsySource::validParams()
 {
   InputParameters params = DiracKernel::validParams();
+  params.addClassDescription("adds a point source in the domain according to the experimental "
+                             "paramters of a shockwave lithotripsy test.");
   params.addRequiredParam<Point>("point", "The x,y,z coordinates of the point");
   params.addRequiredParam<Real>("fL", "some coefficient");
   params.addRequiredParam<Real>("t1", "some coefficient");
