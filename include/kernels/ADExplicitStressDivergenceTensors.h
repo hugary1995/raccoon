@@ -6,12 +6,12 @@
 
 #include "ADStressDivergenceTensors.h"
 
-class ADStressDivergenceExpTensors : public ADStressDivergenceTensors
+class ADExplicitStressDivergenceTensors : public ADStressDivergenceTensors
 {
 public:
   static InputParameters validParams();
 
-  ADStressDivergenceExpTensors(const InputParameters & parameters);
+  ADExplicitStressDivergenceTensors(const InputParameters & parameters);
 
 protected:
   const MaterialProperty<RankTwoTensor> & _stress_old;

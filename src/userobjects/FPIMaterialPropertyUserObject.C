@@ -6,11 +6,13 @@
 #include "FPIMaterialPropertyUserObject.h"
 
 registerMooseObject("raccoonApp", FPIMaterialPropertyUserObject);
+registerMooseObject("raccoonApp", ADFPIMaterialPropertyUserObject);
 
+template <bool is_ad>
 InputParameters
-FPIMaterialPropertyUserObject::validParams()
+FPIMaterialPropertyUserObjectTempl<is_ad>::validParams()
 {
-  InputParameters params = MaterialPropertyUserObject::validParams();
+  InputParameters params = MaterialPropertyUserObjectTempl<is_ad>::validParams();
 
   // add EXEC_BETWEEN_FPI to available execution flags
   ExecFlagEnum & exec = params.set<ExecFlagEnum>("execute_on");
@@ -24,7 +26,12 @@ FPIMaterialPropertyUserObject::validParams()
   return params;
 }
 
-FPIMaterialPropertyUserObject::FPIMaterialPropertyUserObject(const InputParameters & parameters)
-  : MaterialPropertyUserObject(parameters)
+template <bool is_ad>
+FPIMaterialPropertyUserObjectTempl<is_ad>::FPIMaterialPropertyUserObjectTempl(
+    const InputParameters & parameters)
+  : MaterialPropertyUserObjectTempl<is_ad>(parameters)
 {
 }
+
+template class FPIMaterialPropertyUserObjectTempl<false>;
+template class FPIMaterialPropertyUserObjectTempl<true>;
