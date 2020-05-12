@@ -4,25 +4,29 @@
 
 #pragma once
 
-#include "ADMaterial.h"
+#include "Material.h"
 
-class ADSumMaterial : public ADMaterial
+template <bool is_ad>
+class SumRealMaterialTempl : public Material
 {
 public:
   static InputParameters validParams();
 
-  ADSumMaterial(const InputParameters & parameters);
+  SumRealMaterialTempl(const InputParameters & parameters);
 
 protected:
   virtual void initQpStatefulProperties() override;
 
   virtual void computeQpProperties() override;
 
-  ADMaterialProperty<Real> & _sum;
+  GenericMaterialProperty<Real, is_ad> & _sum;
 
   std::vector<MaterialPropertyName> _prop_names;
 
   unsigned int _num_props;
 
-  std::vector<const ADMaterialProperty<Real> *> _props;
+  std::vector<const GenericMaterialProperty<Real, is_ad> *> _props;
 };
+
+typedef SumRealMaterialTempl<false> SumRealMaterial;
+typedef SumRealMaterialTempl<true> ADSumRealMaterial;

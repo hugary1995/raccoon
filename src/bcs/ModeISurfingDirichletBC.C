@@ -10,6 +10,11 @@ InputParameters
 ModeISurfingDirichletBC::validParams()
 {
   InputParameters params = NodalBC::validParams();
+  params.addClassDescription(
+      "applies the Dirichlet BC conforming with the analytical solution of a Mode-I crack. The "
+      "crack is assumed to be emanating from the origin. For $t \\in [0, 1]$ the BC ramps up "
+      "linearly to match the initial crack tip position, and for $t \\in [1, \\infty)$, the crack "
+      "tip advances to the right with a velocity of v");
   params.addParam<RealVectorValue>(
       "initial_crack_tip_position", RealVectorValue(0, 0, 0), "initial crack tip position");
   params.addParam<RealVectorValue>("crack_propagation_velocity",

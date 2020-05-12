@@ -207,7 +207,7 @@
     displacements = 'disp_x disp_y'
   [../]
   [./fracture_driving_energy]
-    type = ADSumMaterial
+    type = SumRealMaterial
     sum_prop_name = 'E_driving'
     prop_names = 'E_el E_int'
   [../]

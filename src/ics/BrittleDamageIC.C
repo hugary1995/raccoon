@@ -10,6 +10,8 @@ InputParameters
 BrittleDamageIC::validParams()
 {
   InputParameters params = DamageICBase::validParams();
+  params.addClassDescription("initializes the phase-field with the closed-form solution associated "
+                             "with $w(d) = d^2$, i.e. $d(\\tau) = \\exp(-\\tau / l)$.");
   return params;
 }
 
