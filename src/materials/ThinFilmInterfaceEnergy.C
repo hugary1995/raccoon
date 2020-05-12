@@ -10,6 +10,8 @@ InputParameters
 ThinFilmInterfaceEnergy::validParams()
 {
   InputParameters params = ADMaterial::validParams();
+  params.addClassDescription("computes the interface energy corresponding to a shear-lag model, "
+                             "i.e. $\\psi = 0.5 c \\bs{u} \\cdot \\bs{u}$.");
   params.addRequiredParam<Real>(
       "coef", "The coefficient describing the mismatch between the film and the substrate");
   params.addRequiredCoupledVar(
