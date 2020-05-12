@@ -3,17 +3,12 @@
 RACCOON is a perfect example of integration of multiple open source projects.
 
 - RACCOON is built upon [MOOSE](https://mooseframework.inl.gov/), an object oriented parallel FEM framework.
-- MOOSE is built upon [Libmesh](http://libmesh.github.io/), a C++ FEM library, to utilize its FEM basics.
-- Both MOOSE and Libmesh rely on many other tools, such as [PETSC](https://www.mcs.anl.gov/petsc/).
+- MOOSE is built upon [libMesh](http://libmesh.github.io/), a C++ FEM library, to utilize its FEM basics.
+- Both MOOSE and libMesh rely on many other tools, such as [PETSc](https://www.mcs.anl.gov/petsc/).
 
 Therefore, it can be complicated to get RACCOON to work. Fortunately, the installation process
 has been thought through and thoroughly tested. The installation process can be summarized in the following steps,
-each of which should only take a handful of commands:
-
-- Install environment packages
-- Clone RACCOON
-- Compile RACCOON
-- Test RACCOON
+each of which should only take a handful of commands.
 
 ## 1. Install environment packages
 
@@ -51,3 +46,20 @@ To make sure RACCOON is working properly, run the script `run_tests` to automati
 ```
 
 Optionally, you may try [benchmark problems](benchmarks/index.md).
+
+## 5. Update RACCOON (Optional)
+
+RACCOON is under rapid development right now. To make sure you get the most out of RACCOON, update your local repository frequently to keep up-to-date with the remote:
+
+```bash
+git pull
+make -j N
+```
+
+## 6. Set up Atom for development (Optional)
+
+We recommend Atom as the IDE for RACCOON (or in general any MOOSE-based applications). Follow [these instructions](install/ide.md) to set up Atom for rapid development.
+
+## 7. Install ParaView for visualization (Optional)
+
+The standard output file of RACCOON is Exodus, a file format developed by the Sandia National Laboratory. [ParaView](https://www.paraview.org/) is a powerful visualization toolkit and complies with the Exodus file format.
