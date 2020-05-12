@@ -39,7 +39,7 @@ PhaseFieldFractureEvolutionReaction::PhaseFieldFractureEvolutionReaction(
     _D_var_old(isParamValid("driving_energy_var") && _lag ? &coupledValueOld("driving_energy_var")
                                                           : nullptr),
     _D_uo(isParamValid("driving_energy_uo")
-              ? &getUserObject<MaterialPropertyUserObject>("driving_energy_uo")
+              ? &getUserObject<ADFPIMaterialPropertyUserObject>("driving_energy_uo")
               : nullptr)
 {
   bool provided_by_mat = _D_mat || _D_mat_old;

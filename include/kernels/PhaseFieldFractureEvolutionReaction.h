@@ -6,7 +6,7 @@
 
 #include "ADKernelValue.h"
 #include "DerivativeMaterialPropertyNameInterface.h"
-#include "MaterialPropertyUserObject.h"
+#include "FPIMaterialPropertyUserObject.h"
 
 class PhaseFieldFractureEvolutionReaction : public ADKernelValue,
                                             public DerivativeMaterialPropertyNameInterface
@@ -26,5 +26,5 @@ protected:
   const MaterialProperty<Real> * _D_mat_old;
   const ADVariableValue * _D_var;
   const VariableValue * _D_var_old;
-  const MaterialPropertyUserObject * _D_uo;
+  const ADFPIMaterialPropertyUserObject * _D_uo;
 };

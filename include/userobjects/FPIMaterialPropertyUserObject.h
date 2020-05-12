@@ -6,10 +6,14 @@
 
 #include "MaterialPropertyUserObject.h"
 
-class FPIMaterialPropertyUserObject : public MaterialPropertyUserObject
+template <bool is_ad>
+class FPIMaterialPropertyUserObjectTempl : public MaterialPropertyUserObjectTempl<is_ad>
 {
 public:
   static InputParameters validParams();
 
-  FPIMaterialPropertyUserObject(const InputParameters & parameters);
+  FPIMaterialPropertyUserObjectTempl(const InputParameters & parameters);
 };
+
+typedef FPIMaterialPropertyUserObjectTempl<false> FPIMaterialPropertyUserObject;
+typedef FPIMaterialPropertyUserObjectTempl<true> ADFPIMaterialPropertyUserObject;
