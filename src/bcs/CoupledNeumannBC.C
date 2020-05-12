@@ -10,6 +10,9 @@ InputParameters
 CoupledNeumannBC::validParams()
 {
   InputParameters params = IntegratedBC::validParams();
+  params.addClassDescription(
+      "computes the weak form $\\int_\\bodyboundary - w c v \\dArea$, where $w$ is the test "
+      "function, $c$ is a coefficient, $v$ is a coupled variable.");
   params.addParam<Real>("coef", 1.0, "Value multiplied by the coupled value on the boundary");
   params.addRequiredCoupledVar("coupled_var", "Flux value at the boundary");
   return params;
