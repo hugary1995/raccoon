@@ -51,8 +51,8 @@ protected:
   ADMaterialProperty<Real> & _W_pl_degraded;
   ADMaterialProperty<Real> & _E_el_degraded;
 
-  Real _G;
-  Real _K;
+  ADReal _G;
+  ADReal _K;
   ADReal _gq;
   ADReal _ge;
   ADReal _gp;

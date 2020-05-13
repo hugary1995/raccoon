@@ -27,7 +27,7 @@ protected:
   ///@}
 
   /// Elasticity tensor material property
-  const MaterialProperty<RankFourTensor> & _elasticity_tensor;
+  const ADMaterialProperty<RankFourTensor> & _elasticity_tensor;
 
   /// damage value
   const ADVariableValue & _d;

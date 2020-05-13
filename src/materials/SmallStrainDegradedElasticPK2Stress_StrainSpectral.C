@@ -25,8 +25,8 @@ void
 SmallStrainDegradedElasticPK2Stress_StrainSpectral::computeQpStress()
 {
   // Isotropic elasticity is assumed and should be enforced
-  const Real lambda = _elasticity_tensor[_qp](0, 0, 1, 1);
-  const Real mu = _elasticity_tensor[_qp](0, 1, 0, 1);
+  const ADReal lambda = _elasticity_tensor[_qp](0, 0, 1, 1);
+  const ADReal mu = _elasticity_tensor[_qp](0, 1, 0, 1);
 
   // Identity tensor
   ADRankTwoTensor I2(RankTwoTensorTempl<ADReal>::initIdentity);

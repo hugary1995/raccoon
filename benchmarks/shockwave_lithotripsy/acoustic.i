@@ -64,11 +64,11 @@
 
 [Kernels]
   [./inertia_p]
-    type = InertialForceExp
+    type = ExplicitInertialForce
     variable = 'p'
   [../]
   [./diff_p]
-    type = CoefMatDiffusion
+    type = ADCoefMatDiffusion
     variable = 'p'
     material_property_name = 'Diff'
   [../]

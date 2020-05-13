@@ -44,8 +44,8 @@ RACCOON is designed bottom-up to make the implementation of this weak form modul
 
 | Term                                                                                    | Kernel                                                                             |
 | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| $(M \nabla q, \kappa \nabla d_{n,a+1})_\Omega$                                          | [`PhaseFieldFractureEvolutionDiffusion`](/PhaseFieldFractureEvolutionDiffusion.md) |
-| $\left( q, g'(d_{n,a+1}) \psi_\elastic^\activeenergy (\bs{u}_{n,a+1})+M \right)_\Omega$ | [`PhaseFieldFractureEvolutionReaction`](/PhaseFieldFractureEvolutionReaction.md)   |
+| $(M \nabla q, \kappa \nabla d_{n,a+1})_\Omega$                                          | [`ADPFFDiffusion`](/ADPFFDiffusion.md) |
+| $\left( q, g'(d_{n,a+1}) \psi_\elastic^\activeenergy (\bs{u}_{n,a+1})+M \right)_\Omega$ | [`ADPFFReaction`](/ADPFFReaction.md)   |
 
 Below is a table listing the materials:
 

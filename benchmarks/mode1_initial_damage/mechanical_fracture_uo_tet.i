@@ -89,15 +89,15 @@ dc = 0.6
     save_in = 'fy'
   [../]
   [./pff_diff]
-    type = PhaseFieldFractureEvolutionDiffusion
+    type = ADPFFDiffusion
     variable = 'd'
   [../]
   [./pff_barrier]
-    type = PhaseFieldFractureEvolutionBarrier
+    type = ADPFFBarrier
     variable = 'd'
   [../]
   [./pff_react]
-    type = PhaseFieldFractureEvolutionReaction
+    type = ADPFFReaction
     variable = 'd'
     driving_energy_uo = 'E_driving'
     lag = false
