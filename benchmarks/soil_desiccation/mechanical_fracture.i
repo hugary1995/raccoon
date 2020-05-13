@@ -2,6 +2,13 @@
   type = FixedPointProblem
 []
 
+[UserObjects]
+  [./E_driving]
+    type = ADFPIMaterialPropertyUserObject
+    mat_prop = 'E_driving'
+  [../]
+[]
+
 [Mesh]
   [./square]
     type = GeneratedMeshGenerator
@@ -91,26 +98,29 @@
     displacements = 'disp_x disp_y'
   [../]
   [./react_x]
-    type = CoefMatReaction
+    type = ADCoefMatReaction
     variable = 'disp_x'
     coefficient = 0.1
-    material_property_name = 'g'
+    prop_names = 'g'
   [../]
   [./react_y]
-    type = CoefMatReaction
+    type = ADCoefMatReaction
     variable = 'disp_y'
     coefficient = 0.1
-    material_property_name = 'g'
+    prop_names = 'g'
   [../]
   [./pf_diff]
-    type = PhaseFieldFractureEvolutionDiffusion
+    type = ADPFFDiffusion
+    variable = 'd'
+  [../]
+  [./pf_barr]
+    type = ADPFFBarrier
     variable = 'd'
   [../]
   [./pf_react]
-    type = PhaseFieldFractureEvolutionReaction
+    type = ADPFFReaction
     variable = 'd'
-    driving_energy_mat = 'E_driving'
-    lag = true
+    driving_energy_uo = 'E_driving'
   [../]
 []
 
@@ -169,23 +179,28 @@
 
 [Bounds]
   [./irr]
-    type = Irreversibility
+    type = VariableOldValueBoundsAux
     variable = 'bounds_dummy'
+    bound_type = lower
     bounded_variable = 'd'
-    lower = 'd'
-    upper = 1
-    lag = true
+  [../]
+  [./upper]
+    type = ConstantBoundsAux
+    variable = 'bounds_dummy'
+    bound_type = upper
+    bounded_variable = 'd'
+    bound_value = 1
   [../]
 []
 
 [Materials]
   [./eigen_strain]
-    type = ComputeEigenstrainFromFunctionEigenstress
-    initial_stress = 't 0 0 0 t 0 0 0 0'
+    type = ADComputeEigenstrainFromFunctionEigenstress
+    eigen_stress = 't 0 0 0 t 0 0 0 0'
     eigenstrain_name = 'is'
   [../]
   [./elasticity_tensor]
-    type = ComputeIsotropicElasticityTensor
+    type = ADComputeIsotropicElasticityTensor
     poissons_ratio = 0.2
     youngs_modulus = 4
   [../]
@@ -199,7 +214,6 @@
     type = SmallStrainDegradedElasticPK2Stress_NoSplit
     d = 'd'
     d_crit = 0.6
-    history = false
   [../]
   [./interface_energy]
     type = ThinFilmInterfaceEnergy
@@ -207,9 +221,9 @@
     displacements = 'disp_x disp_y'
   [../]
   [./fracture_driving_energy]
-    type = SumRealMaterial
+    type = ADSumRealMaterial
     sum_prop_name = 'E_driving'
-    prop_names = 'E_el E_int'
+    prop_names = 'E_el_active E_int'
   [../]
   [./fracture_energy_barrier]
     type = StationaryGenericFunctionMaterial
@@ -240,7 +254,7 @@
   type = FixedPointTransient
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
-  petsc_options_value = 'asm      ilu          200        200                0                     vinewtonrsls'
+  petsc_options_value = 'asm      lu           1000        200                0                     vinewtonrsls'
   dt = 1e-3
   end_time = 0.22
 
@@ -251,7 +265,6 @@
   fp_tol = 1e-03
 
   automatic_scaling = true
-  compute_scaling_once = false
 []
 
 [Outputs]

@@ -11,7 +11,8 @@ InputParameters
 ElasticEnergyDensity::validParams()
 {
   InputParameters params = ADMaterial::validParams();
-  params.addClassDescription("computes the elastic energy density $\\stress : \\strain$");
+  params.addClassDescription(
+      "computes the elastic energy density $\\frac{1}{2} \\stress : \\strain$");
   params.addParam<std::string>("base_name", "base name for stress and strain");
   params.addParam<MaterialPropertyName>(
       "elastic_energy_name", "E_el", "name of the elastic energy density material");

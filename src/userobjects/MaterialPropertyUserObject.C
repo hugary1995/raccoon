@@ -46,7 +46,7 @@ MaterialPropertyUserObjectTempl<is_ad>::computeProperties()
     _to[_current_elem->id()].resize(_qrule->n_points());
 
   for (_qp = 0; _qp < _qrule->n_points(); _qp++)
-    _to[_current_elem->id()][_qp] = MetaPhysicL::raw_value(_from[_qp]);
+    _to[_current_elem->id()][_qp] = _from[_qp];
 }
 
 template class MaterialPropertyUserObjectTempl<false>;

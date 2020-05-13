@@ -34,12 +34,12 @@
 
 [Kernels]
   [./react]
-    type = PhaseFieldFractureEvolutionReaction
+    type = ADPFFReaction
     variable = 'd'
     driving_energy_var = 'E_el'
   [../]
   [./diff]
-    type = PhaseFieldFractureEvolutionDiffusion
+    type = ADPFFDiffusion
     variable = 'd'
   [../]
 []

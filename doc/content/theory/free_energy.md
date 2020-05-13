@@ -34,12 +34,12 @@ Now suppose the local response at certain material points exceeds the fracture s
 
 where $\Psi_\fracture$ is the fracture energy associated with the crack set $\Gamma$, which is governed by a well-established material-dependent fracture toughness $\Gc$:
 \begin{equation}\label{eq.strong_fracture_energy}
-    \Psi_\fracture := \int\limits_\Gamma \Gc \dArea~.
+    \Psi_\fracture := \int\limits_\Gamma \Gc \diff{A}~.
 \end{equation}
 
 With a view towards discretization, treating such a boundary integral requires an explicit crack surface tracking algorithm as well as a method to handle the resulting discontinuities in the displacement field.  The phase-field approach circumvents these issues by regularizing the strong discontinuity across the crack surfaces using a crack surface density function ([potato_diffuse]), and thereby approximating the surface integral [eq.strong_fracture_energy] with a volume integral:
 \begin{equation}\label{eq.weak_fracture_energy}
-    \Psi_\fracture \approx \widetilde{\Psi}_\fracture = \int\limits_\Omega \Gc \gamma \dVolume~,
+    \Psi_\fracture \approx \widetilde{\Psi}_\fracture = \int\limits_\Omega \Gc \gamma \diff{V}~,
 \end{equation}
 where $\gamma$ is the crack-density function to be defined.
 Substituting the approximation to the fracture energy into the total energy balance [eq.total_energy] yields
@@ -59,7 +59,7 @@ We use the Allen-Cahn approximation to the crack surface, assuming a smooth tran
 \end{equation}
 where $w(d) \in C^2([0,1])$ is the local dissipation function and $l$ is a regularization parameter carrying units of length. The normalization constant $c_0$ is chosen such that, for $d \in [0,1]$,
 \begin{equation}
-    \lim_{l \rightarrow 0} \int\limits_\Omega \Gc\gamma(d;l) \dVolume = \int\limits_\Gamma \Gc \dArea .
+    \lim_{l \rightarrow 0} \int\limits_\Omega \Gc\gamma(d;l) \diff{V} = \int\limits_\Gamma \Gc \diff{A} .
 \end{equation}
 
 ## Degradation of the internal energy
@@ -67,8 +67,8 @@ where $w(d) \in C^2([0,1])$ is the local dissipation function and $l$ is a regul
 The phase-field variable $d$ is often interpreted as the "damage" because it is employed both within a geometric context, i.e. [eq.AC_crack_surface_density], and also to couple the fracture energy and the degraded internal energy, via
 \begin{equation}\label{eq.general_energy_split}
   \begin{aligned}
-    \Psi_\internal             & = \int\limits_\Omega \psi_\internal \dVolume = \int\limits_\Omega \psi_\internal^\activeenergy \dVolume + \int\limits_\Omega \psi_\internal^\inactiveenergy \dVolume,\\
-    \widetilde{\Psi}_\internal & = \int\limits_\Omega g(d)\psi_\internal^\activeenergy \dVolume + \int\limits_\Omega \psi_\internal^\inactiveenergy \dVolume~,
+    \Psi_\internal             & = \int\limits_\Omega \psi_\internal \diff{V} = \int\limits_\Omega \psi_\internal^\activeenergy \diff{V} + \int\limits_\Omega \psi_\internal^\inactiveenergy \diff{V},\\
+    \widetilde{\Psi}_\internal & = \int\limits_\Omega g(d)\psi_\internal^\activeenergy \diff{V} + \int\limits_\Omega \psi_\internal^\inactiveenergy \diff{V}~,
   \end{aligned}
 \end{equation}
 where $g(d) \in C^2([0,1])$ is the degradation function. Intuitively, $g(1) = 0$ for fully damaged material, and $g(0) = 1$ for intact material. The internal energy density is split into active and inactive parts [eq.general_energy_split], such that only the active internal energy is associated with fracture, and the degraded internal energy is the sum of degraded active internal energy and intact inactive internal energy.

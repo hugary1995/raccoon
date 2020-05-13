@@ -11,7 +11,7 @@ FractureEnergy::validParams()
 {
   InputParameters params = ElementIntegralPostprocessor::validParams();
   params.addClassDescription("computes the total fracture energy of the form $\\int_\\body M (w(d) "
-                             "+ 0.5 \\kappa \\grad d \\cdot \\grad d) \\dVolume$.");
+                             "+ 0.5 \\kappa \\grad d \\cdot \\grad d) \\diff{V}$.");
   params.addRequiredCoupledVar("d", "damage variable");
   params.addParam<MaterialPropertyName>(
       "kappa_name", "kappa", "name of the material that holds the interface coefficient");

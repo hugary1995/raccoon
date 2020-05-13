@@ -19,7 +19,7 @@ For the quasi-static fracture problems, the total energy can be written in terms
 
 \begin{equation}\label{eq.instantiated_free_energy}
     \begin{aligned}
-        \Psi_\total = & \underbrace{\int\limits_{\partial\Omega} \bs{\tau} \cdot \bs{u} \dArea}_{\text{external energy}} + \underbrace{\int\limits_\Omega g(d)\psi_\elastic^\activeenergy \dVolume + \int\limits_\Omega \psi_\elastic^\inactiveenergy \dVolume}_{\text{degraded elastic energy}} - \underbrace{\int\limits_\Omega \bs{b} \cdot \bs{u} \dVolume}_{\text{potential energy}} \\ & + \underbrace{\int\limits_\Omega \dfrac{3\mathcal{G}_c}{8l} \left( w(d) + l^2 \norm{\nabla d}^2 \right) \dVolume}_{\text{approx. fracture energy}},
+        \Psi_\total = & \underbrace{\int\limits_{\partial\Omega} \bs{\tau} \cdot \bs{u} \diff{A}}_{\text{external energy}} + \underbrace{\int\limits_\Omega g(d)\psi_\elastic^\activeenergy \diff{V} + \int\limits_\Omega \psi_\elastic^\inactiveenergy \diff{V}}_{\text{degraded elastic energy}} - \underbrace{\int\limits_\Omega \bs{b} \cdot \bs{u} \diff{V}}_{\text{potential energy}} \\ & + \underbrace{\int\limits_\Omega \dfrac{3\mathcal{G}_c}{8l} \left( w(d) + l^2 \norm{\nabla d}^2 \right) \diff{V}}_{\text{approx. fracture energy}},
     \end{aligned}
 \end{equation}
 

@@ -21,7 +21,7 @@ ADDegradedElasticStressBase::validParams()
 
 ADDegradedElasticStressBase::ADDegradedElasticStressBase(const InputParameters & parameters)
   : ADComputeStressBase(parameters),
-    _elasticity_tensor(getMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
+    _elasticity_tensor(getADMaterialProperty<RankFourTensor>(_base_name + "elasticity_tensor")),
     _d(adCoupledValue("d")),
     _grad_d(adCoupledGradient("d")),
     _d_crit(getParam<Real>("d_crit")),

@@ -68,7 +68,7 @@ void
 CNHDegradedElasticPlasticPK1StressBase::computeQpStress()
 {
   // isotropic elasticity is assumed and should be enforced
-  const Real lambda = _elasticity_tensor[_qp](0, 0, 1, 1);
+  const ADReal lambda = _elasticity_tensor[_qp](0, 0, 1, 1);
   _G = _elasticity_tensor[_qp](0, 1, 0, 1);
   _K = lambda + 2.0 * _G / LIBMESH_DIM;
 

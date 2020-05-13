@@ -25,7 +25,7 @@ public:
     return 0;
   }
 
-  Real getData(const Elem * e, unsigned int qp) const { return _to[e->id()][qp]; }
+  GenericReal<is_ad> getData(const Elem * e, unsigned int qp) const { return _to[e->id()][qp]; }
 
 protected:
   virtual void computeProperties();
@@ -34,7 +34,7 @@ protected:
 
   const GenericMaterialProperty<Real, is_ad> & _from;
 
-  std::vector<std::vector<Real>> _to;
+  std::vector<std::vector<GenericReal<is_ad>>> _to;
 };
 
 typedef MaterialPropertyUserObjectTempl<false> MaterialPropertyUserObject;
