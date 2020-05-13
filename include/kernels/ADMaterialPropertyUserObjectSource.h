@@ -7,12 +7,12 @@
 #include "ADKernelValue.h"
 #include "MaterialPropertyUserObject.h"
 
-class ADMaterialPropertyUserObjectReaction : public ADKernelValue
+class ADMaterialPropertyUserObjectSource : public ADKernelValue
 {
 public:
   static InputParameters validParams();
 
-  ADMaterialPropertyUserObjectReaction(const InputParameters & parameters);
+  ADMaterialPropertyUserObjectSource(const InputParameters & parameters);
 
 protected:
   virtual ADReal precomputeQpResidual() override;

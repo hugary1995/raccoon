@@ -25,5 +25,5 @@ protected:
   const MaterialProperty<Real> * _D_mat_old;
   const ADVariableValue * _D_var;
   const VariableValue * _D_var_old;
-  const ADFPIMaterialPropertyUserObject * _D_uo;
+  const ADMaterialPropertyUserObject * _D_uo;
 };

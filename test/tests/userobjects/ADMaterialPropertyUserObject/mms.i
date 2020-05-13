@@ -1,3 +1,10 @@
+# This input file defines a quasi-1D equation:
+# - u,xx + 4 * u = 0
+# u(0) = 1, u(1) = e ^ 2
+# u = e ^ (2 * x)
+# Each step the mesh is uniformly refined once.
+# The manufactured solution should have a convergence order of 2.
+
 [Mesh]
   type = GeneratedMesh
   dim = 2

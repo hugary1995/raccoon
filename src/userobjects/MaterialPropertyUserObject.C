@@ -34,7 +34,13 @@ template <bool is_ad>
 void
 MaterialPropertyUserObjectTempl<is_ad>::initialize()
 {
-  _to.clear();
+  timestepSetup();
+}
+
+template <bool is_ad>
+void
+MaterialPropertyUserObjectTempl<is_ad>::timestepSetup()
+{
   _to.resize(_subproblem.mesh().getMesh().max_elem_id());
 }
 
@@ -42,9 +48,7 @@ template <bool is_ad>
 void
 MaterialPropertyUserObjectTempl<is_ad>::computeProperties()
 {
-  if (_to[_current_elem->id()].empty())
-    _to[_current_elem->id()].resize(_qrule->n_points());
-
+  _to[_current_elem->id()].resize(_qrule->n_points());
   for (_qp = 0; _qp < _qrule->n_points(); _qp++)
     _to[_current_elem->id()][_qp] = _from[_qp];
 }

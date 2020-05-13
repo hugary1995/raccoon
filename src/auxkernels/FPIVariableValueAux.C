@@ -20,7 +20,7 @@ FPIVariableValueAux::validParams()
   params.setDocString("execute_on", exec.getDocString());
 
   // set execution flags and prevent users from modifying them
-  params.set<ExecFlagEnum>("execute_on") = {EXEC_BETWEEN_FPI, EXEC_TIMESTEP_END};
+  params.set<ExecFlagEnum>("execute_on") = {EXEC_BETWEEN_FPI, EXEC_TIMESTEP_BEGIN};
   params.suppressParameter<ExecFlagEnum>("execute_on");
 
   return params;
