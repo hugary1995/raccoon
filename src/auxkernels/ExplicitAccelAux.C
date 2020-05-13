@@ -2,21 +2,21 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "ExpAccelAux.h"
+#include "ExplicitAccelAux.h"
 
-registerMooseObject("raccoonApp", ExpAccelAux);
+registerMooseObject("raccoonApp", ExplicitAccelAux);
 
 InputParameters
-ExpAccelAux::validParams()
+ExplicitAccelAux::validParams()
 {
   InputParameters params = AuxKernel::validParams();
-  params.addClassDescription("computes the implicit version of a central-difference operator, i.e. "
-                             "the consistent mass matrix is still being inverted.");
+  params.addClassDescription(
+      "computes the second time derivative using a central-difference time-integrator");
   params.addRequiredCoupledVar("displacement", "displacement variable");
   return params;
 }
 
-ExpAccelAux::ExpAccelAux(const InputParameters & parameters)
+ExplicitAccelAux::ExplicitAccelAux(const InputParameters & parameters)
   : AuxKernel(parameters),
     _disp_older(coupledValueOlder("displacement")),
     _disp_old(coupledValueOld("displacement")),
@@ -25,7 +25,7 @@ ExpAccelAux::ExpAccelAux(const InputParameters & parameters)
 }
 
 Real
-ExpAccelAux::computeValue()
+ExplicitAccelAux::computeValue()
 {
   return (_disp[_qp] - _disp_old[_qp] * 2.0 + _disp_older[_qp]) / (_dt * _dt);
 }

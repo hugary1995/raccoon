@@ -102,13 +102,13 @@
 
 [AuxKernels]
   [./accel_x]
-    type = ExpAccelAux
+    type = ExplicitAccelAux
     variable = 'accel_x'
     displacement = 'disp_x'
     execute_on = 'TIMESTEP_END'
   [../]
   [./accel_y]
-    type = ExpAccelAux
+    type = ExplicitAccelAux
     variable = 'accel_y'
     displacement = 'disp_y'
     execute_on = 'TIMESTEP_END'

@@ -14,8 +14,8 @@ ADCoefMatDiffusion::validParams()
   params.addClassDescription(
       "Reaction term optionally multiplied with a coefficient and a material property");
   params.addParam<Real>("coefficient", 1.0, "Coefficient of the term");
-  params.addParam<MaterialPropertyName>("material_property_name",
-                                        "name of the material property to provide the multiplier");
+  params.addParam<std::vector<MaterialPropertyName>>(
+      "prop_names", "names of the material properties to provide the multiplier");
   return params;
 }
 

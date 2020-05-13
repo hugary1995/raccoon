@@ -4,20 +4,23 @@
 
 #pragma once
 
-#include "ADKernelValue.h"
+#include "ADKernel.h"
 #include "MaterialPropertyUserObject.h"
 
-class ADMaterialPropertyUserObjectReaction : public ADKernelValue
+class ADMaterialPropertyUserObjectDiffusion : public ADKernel
 {
 public:
   static InputParameters validParams();
 
-  ADMaterialPropertyUserObjectReaction(const InputParameters & parameters);
+  ADMaterialPropertyUserObjectDiffusion(const InputParameters & parameters);
 
 protected:
-  virtual ADReal precomputeQpResidual() override;
+  virtual ADReal computeQpResidual() override;
 
   const ADMaterialPropertyUserObject & _uo;
 
   const Real _coef;
+
+  /// the coordinate system
+  const Moose::CoordinateSystemType & _coord_sys;
 };

@@ -6,12 +6,12 @@
 
 #include "AuxKernel.h"
 
-class ExpAccelAux : public AuxKernel
+class ExplicitAccelAux : public AuxKernel
 {
 public:
   static InputParameters validParams();
 
-  ExpAccelAux(const InputParameters & parameters);
+  ExplicitAccelAux(const InputParameters & parameters);
 
 protected:
   virtual Real computeValue() override;
