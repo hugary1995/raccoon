@@ -32,5 +32,5 @@ CNHDegradedElasticPlasticPK1Stress_LinearHardening_Coalescence::
 ADReal
 CNHDegradedElasticPlasticPK1Stress_LinearHardening_Coalescence::dH_dep(ADReal ep)
 {
-  return _gp * (_yield_stress + _c * _M0[_qp] * _w[_qp] + _k * ep);
+  return _gp * (_yield_stress + _k * ep + _c * _M0[_qp] * _w[_qp]);
 }
