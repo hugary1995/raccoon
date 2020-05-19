@@ -220,10 +220,6 @@
     type = LinearLocalDissipation
     d = 'd'
   [../]
-  [./coal_local_dissipation]
-    type = CoalescenceLocalDissipation
-    d = 'd'
-  [../]
   [./fracture_properties]
     type = FractureMaterial
     local_dissipation_norm = 8/3
@@ -243,7 +239,6 @@
     type = CoalescenceEnergy
     coalescence_coefficient = ${c}
     degradation_name = 'gp'
-    local_dissipation_name = 'c'
     mobility_name = 'coalescence_mobility'
     coalescence_energy_name = 'E_coalesce'
   [../]
