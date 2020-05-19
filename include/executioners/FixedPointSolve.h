@@ -58,8 +58,6 @@ protected:
 private:
   /// Fixed point iteration counter
   unsigned int _fp_it;
-  /// Initial residual norm
-  Real _fp_initial_norm;
   /// Full history of residual norm
   std::vector<Real> _fp_norm;
   /// Status of Fixed Point solve
