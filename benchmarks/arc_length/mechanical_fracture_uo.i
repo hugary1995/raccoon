@@ -21,6 +21,13 @@
   [../]
   [./fy]
   [../]
+  [./arc_length_fy]
+    [./InitialCondition]
+      type = ConstantIC
+      boundary = 'top'
+      value = 1
+    [../]
+  [../]
 []
 
 [UserObjects]
@@ -78,10 +85,9 @@
 
 [BCs]
   [./ydisp]
-    type = FunctionDirichletBC
+    type = PostprocessorNeumannBC
     variable = 'disp_y'
     boundary = 'top'
-    function = 't'
   [../]
   [./xfix]
     type = DirichletBC
@@ -137,6 +143,13 @@
     type = NodalSum
     variable = 'fy'
     boundary = 'top'
+  [../]
+  [./lambda]
+    type = ArcLengthStep
+    displacements = 'disp_y'
+    forces = 'arc_length_fy'
+    delta_D = 0.01
+    delta_U = 1
   [../]
 []
 
