@@ -17,16 +17,21 @@
 []
 
 [AuxVariables]
+  [./E_driving]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
   [./bounds_dummy]
   [../]
   [./fy]
   [../]
 []
 
-[UserObjects]
-  [./E_driving]
-    type = ADFPIMaterialPropertyUserObject
-    mat_prop = 'E_el_active'
+[AuxKernels]
+  [./lag_E_driving]
+    type = FPIMaterialPropertyAux
+    variable = 'E_driving'
+    from = 'E_el_active'
   [../]
 []
 
@@ -71,7 +76,7 @@
   [./pff_react]
     type = ADPFFReaction
     variable = 'd'
-    driving_energy_uo = 'E_driving'
+    driving_energy_var = 'E_driving'
     lag = false
   [../]
 []
@@ -99,7 +104,7 @@
 
 [Materials]
   [./elasticity_tensor]
-    type = ADComputeIsotropicElasticityTensor
+    type = ComputeIsotropicElasticityTensor
     youngs_modulus = 2.1e5
     poissons_ratio = 0.3
   [../]
@@ -169,6 +174,7 @@
   [./exodus]
     type = Exodus
     file_base = 'visualize'
+    hide = 'E_driving'
   [../]
   [./console]
     type = Console
