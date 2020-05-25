@@ -62,9 +62,9 @@ DiracSource::addPoints()
 Real
 DiracSource::computeQpResidual()
 {
-  // Yingjie's paper
+  // Positive source
   Real _pressure_source = 1/_tP*4*M_PI/_rho*_upcoeff/_downcoeff*_p0*_d1*(std::max((1+tanh((_t-_t1)/_tRT))*std::exp(-(_t-_t1)/_tL)*cos(2*M_PI*_fL*(_t-_t1)+M_PI/3),0.0)); 
-  // Zhang's thesis
+  // Positive and negative source
   //Real _pressure_source = 1/_tP*4*M_PI/_rho*_upcoeff/_downcoeff*_p0*_d1*(1+tanh((_t-_t1)/_tRT))*std::exp(-(_t-_t1)/_tL)*cos(2*M_PI*_fL*(_t-_t1)+M_PI/3); 
   
   std::ofstream outfile;
