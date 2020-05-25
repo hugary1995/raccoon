@@ -62,7 +62,7 @@
 
 [AuxKernels]
   [./E_el]
-    type = MaterialRealAux
+    type = ADMaterialRealAux
     variable = 'E_el'
     property = 'E_el_active'
     execute_on = 'TIMESTEP_END'
@@ -108,7 +108,7 @@
 
 [Materials]
   [./elasticity_tensor]
-    type = ComputeIsotropicElasticityTensor
+    type = ADComputeIsotropicElasticityTensor
     youngs_modulus = ${E}
     poissons_ratio = ${nu}
   [../]
