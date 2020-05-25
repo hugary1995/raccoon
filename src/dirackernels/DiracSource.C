@@ -18,8 +18,10 @@ InputParameters
 validParams<DiracSource>()
 {
   InputParameters params = validParams<DiracKernel>();
-  params.addRequiredParam<Point>("point", "The x,y,z coordinates of the point");
-  params.addRequiredParam<int>("dim", "The dimension of the problem");
+  params.addClassDescription("adds a source term at a point. The source is first ramped up from "
+                             "zero and then decays to zero at specified rates. This term "
+                             "approximates the experimental acoustic source of the form: $$");
+  params.addRequiredParam<Point>("point", "The x, y, z coordinates of the source location");
   params.addRequiredParam<Real>("fL", "some coefficient");
   params.addRequiredParam<Real>("t1", "some coefficient");
   params.addRequiredParam<Real>("tRT", "some coefficient");
@@ -30,14 +32,12 @@ validParams<DiracSource>()
   params.addRequiredParam<Real>("upcoeff", "some coefficient");
   params.addRequiredParam<Real>("downcoeff", "some coefficient");
   params.addRequiredParam<Real>("rho", "some coefficient");
-  //params.addParam<MaterialPropertyName>("density_name","density", "name of the density material");
   return params;
 }
 
 DiracSource::DiracSource(const InputParameters & parameters)
   : DiracKernel(parameters),
     _point(getParam<Point>("point")),
-    _dim(getParam<int>("dim")),
     _fL(getParam<Real>("fL")),
     _t1(getParam<Real>("t1")),
     _tRT(getParam<Real>("tRT")),
@@ -48,7 +48,6 @@ DiracSource::DiracSource(const InputParameters & parameters)
     _upcoeff(getParam<Real>("upcoeff")),
     _downcoeff(getParam<Real>("downcoeff")),
     _rho(getParam<Real>("rho"))
-    //_mat(getMaterialProperty<Real>("density_name"))
 {
 }
 
@@ -63,17 +62,20 @@ Real
 DiracSource::computeQpResidual()
 {
   // Positive source
-  Real _pressure_source = 1/_tP*4*M_PI/_rho*_upcoeff/_downcoeff*_p0*_d1*(std::max((1+tanh((_t-_t1)/_tRT))*std::exp(-(_t-_t1)/_tL)*cos(2*M_PI*_fL*(_t-_t1)+M_PI/3),0.0)); 
+  Real _pressure_source = 1 / _tP * 4 * M_PI / _rho * _upcoeff / _downcoeff * _p0 * _d1 *
+                          (std::max((1 + tanh((_t - _t1) / _tRT)) * std::exp(-(_t - _t1) / _tL) *
+                                        cos(2 * M_PI * _fL * (_t - _t1) + M_PI / 3),
+                                    0.0));
   // Positive and negative source
-  //Real _pressure_source = 1/_tP*4*M_PI/_rho*_upcoeff/_downcoeff*_p0*_d1*(1+tanh((_t-_t1)/_tRT))*std::exp(-(_t-_t1)/_tL)*cos(2*M_PI*_fL*(_t-_t1)+M_PI/3); 
-  
+  // Real _pressure_source =
+  // 1/_tP*4*M_PI/_rho*_upcoeff/_downcoeff*_p0*_d1*(1+tanh((_t-_t1)/_tRT))*std::exp(-(_t-_t1)/_tL)*cos(2*M_PI*_fL*(_t-_t1)+M_PI/3);
+
   std::ofstream outfile;
   outfile.open("pressure_source.csv", std::ios_base::app);
   outfile.precision(5);
   outfile << _t << ", " << _pressure_source << std::endl;
   outfile.close();
-  
+
   // source pressure is returned
   return _pressure_source;
 }
-
