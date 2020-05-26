@@ -1,43 +1,18 @@
-E = 2.1e5
-nu = 0.3
-Gc = 2.7
-l = 0.015
-psic = 14.88
+E = 1
+nu = 0.2
+Gc = 1
+l = 0.1
+psic = 0
 k = 1e-6
-dc = 0.6
+dc = 0
 
 [Problem]
   type = FixedPointProblem
 []
 
 [Mesh]
-  [./square]
-    type = GeneratedMeshGenerator
-    dim = 2
-    xmin = -0.5
-    xmax = 0.5
-    ymin = -0.5
-    ymax = 0.5
-    nx = 26
-    ny = 26
-  [../]
-[]
-
-[Adaptivity]
-  steps = 1
-  marker = 'box'
-  max_h_level = 3
-  initial_steps = 3
-  stop_time = 1.0e-10
-  [./Markers]
-    [./box]
-      type = BoxMarker
-      bottom_left = '-0.5 -0.04 0'
-      inside = refine
-      top_right = '0.5 0.04 0'
-      outside = do_nothing
-    [../]
-  [../]
+  type = FileMesh
+  file = 'gold/geo.msh'
 []
 
 [Variables]
@@ -61,6 +36,10 @@ dc = 0.6
     type = ADFPIMaterialPropertyUserObject
     mat_prop = 'E_el_active'
   [../]
+  [./pressure_uo]
+    type = ADFPIMaterialPropertyUserObject
+    mat_prop = 'p'
+  [../]
 []
 
 [Bounds]
@@ -68,6 +47,7 @@ dc = 0.6
     type = VariableOldValueBoundsAux
     variable = 'bounds_dummy'
     bounded_variable = 'd'
+    bound_type = lower
   [../]
   [./upper]
     type = ConstantBoundsAux
@@ -92,6 +72,20 @@ dc = 0.6
     displacements = 'disp_x disp_y'
     save_in = 'fy'
   [../]
+  [./pressure_body_force_x]
+    type = ADPressurizedCrack
+    variable = 'disp_x'
+    d = 'd'
+    pressure_mat = 'p'
+    component = 0
+  [../]
+  [./pressure_body_force_y]
+    type = ADPressurizedCrack
+    variable = 'disp_y'
+    d = 'd'
+    pressure_mat = 'p'
+    component = 1
+  [../]
   [./pff_diff]
     type = ADPFFDiffusion
     variable = 'd'
@@ -106,45 +100,50 @@ dc = 0.6
     driving_energy_uo = 'E_driving'
     lag = false
   [../]
+  [./pff_pressure]
+    type = ADPFFPressure
+    variable = 'd'
+    pressure_uo = 'pressure_uo'
+    displacements = 'disp_x disp_y'
+  [../]
 []
 
 [BCs]
-  [./ydisp]
-    type = FunctionDirichletBC
-    variable = 'disp_y'
-    boundary = 'top'
-    function = 't'
-  [../]
   [./xfix]
     type = DirichletBC
     variable = 'disp_x'
-    boundary = 'top bottom'
+    boundary = 'top bottom left right'
     value = 0
   [../]
   [./yfix]
     type = DirichletBC
     variable = 'disp_y'
-    boundary = 'bottom'
+    boundary = 'top bottom left right'
     value = 0
   [../]
 []
 
 [ICs]
   [./d]
-    type = CohesiveDamageIC
+    type = BrittleDamageIC
     variable = d
     d0 = 1.0
     l = ${l}
-    x1 = -0.5
+    x1 = -0.2
     y1 = 0
     z1 = 0
-    x2 = 0
+    x2 = 0.2
     y2 = 0
     z2 = 0
   [../]
 []
 
 [Materials]
+  [./pressure]
+    type = ADGenericFunctionMaterial
+    prop_names = 'p'
+    prop_values = '1e-3'
+  [../]
   [./elasticity_tensor]
     type = ADComputeIsotropicElasticityTensor
     youngs_modulus = ${E}
@@ -155,7 +154,7 @@ dc = 0.6
     displacements = 'disp_x disp_y'
   [../]
   [./stress]
-    type = SmallStrainDegradedElasticPK2Stress_StrainSpectral
+    type = SmallStrainDegradedElasticPK2Stress_NoSplit
     d = 'd'
     d_crit = ${dc}
   [../]
@@ -165,15 +164,15 @@ dc = 0.6
     prop_values = '${l} ${Gc} ${psic}'
   [../]
   [./local_dissipation]
-    type = LinearLocalDissipation
+    type = QuadraticLocalDissipation
     d = 'd'
   [../]
   [./fracture_properties]
     type = FractureMaterial
-    local_dissipation_norm = 8/3
+    local_dissipation_norm = 2
   [../]
   [./degradation]
-    type = LorentzDegradation
+    type = QuadraticDegradation
     d = 'd'
     residual_degradation = ${k}
   [../]
@@ -193,7 +192,7 @@ dc = 0.6
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
   petsc_options_value = 'asm      ilu          200         200                0                     vinewtonrsls'
   dt = 1e-4
-  end_time = 6e-3
+  end_time = 2e-4
 
   nl_abs_tol = 1e-08
   nl_rel_tol = 1e-06
@@ -215,7 +214,7 @@ dc = 0.6
   [../]
   [./exodus]
     type = Exodus
-    file_base = 'visualize_tet2'
+    file_base = 'visualize'
   [../]
   [./console]
     type = Console
