@@ -53,6 +53,8 @@ RACCOON is under rapid development right now. To make sure you get the most out 
 
 ```bash
 git pull
+git submodule update
+conda update --all
 make -j N
 ```
 
