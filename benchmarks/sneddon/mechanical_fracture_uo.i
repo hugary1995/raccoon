@@ -4,7 +4,7 @@ Gc = 1
 l = 0.1
 psic = 0
 k = 1e-6
-dc = 0
+dc = 1
 
 [Problem]
   type = FixedPointProblem
@@ -26,8 +26,6 @@ dc = 0
 
 [AuxVariables]
   [./bounds_dummy]
-  [../]
-  [./fy]
   [../]
 []
 
@@ -70,7 +68,6 @@ dc = 0
     variable = 'disp_y'
     component = 1
     displacements = 'disp_x disp_y'
-    save_in = 'fy'
   [../]
   [./pressure_body_force_x]
     type = ADPressurizedCrack
@@ -109,12 +106,6 @@ dc = 0
 []
 
 [BCs]
-  # [./ydisp]
-  #   type = FunctionDirichletBC
-  #   variable = 'disp_y'
-  #   boundary = 'top'
-  #   function = 't'
-  # [../]
   [./xfix]
     type = DirichletBC
     variable = 'disp_x'
@@ -184,14 +175,6 @@ dc = 0
   [../]
 []
 
-[Postprocessors]
-  [./Fy]
-    type = NodalSum
-    variable = 'fy'
-    boundary = 'top'
-  [../]
-[]
-
 [Executioner]
   type = FixedPointTransient
   solve_type = 'NEWTON'
@@ -213,11 +196,6 @@ dc = 0
 
 [Outputs]
   print_linear_residuals = false
-  [./csv]
-    type = CSV
-    delimiter = ' '
-    file_base = 'force_displacement'
-  [../]
   [./exodus]
     type = Exodus
     file_base = 'visualize'
