@@ -19,10 +19,9 @@ ADPFFPressure::validParams()
   return params;
 }
 
-ADPFFPressure::ADPFFPressure(
-    const InputParameters & parameters)
+ADPFFPressure::ADPFFPressure(const InputParameters & parameters)
   : ADKernelGrad(parameters),
-    _p_uo(getUserObject<MaterialPropertyUserObject>("pressure_uo")),
+    _p_uo(getUserObject<ADMaterialPropertyUserObject>("pressure_uo")),
     _ndisp(coupledComponents("displacements")),
     _disp(3)
 {

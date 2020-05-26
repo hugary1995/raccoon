@@ -16,7 +16,7 @@ public:
 protected:
   virtual ADRealVectorValue precomputeQpResidual() override;
 
-  const MaterialPropertyUserObject & _p_uo;
+  const ADMaterialPropertyUserObject & _p_uo;
   const unsigned int _ndisp;
   std::vector<const ADVariableValue *> _disp;
 };
