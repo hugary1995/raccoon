@@ -33,4 +33,8 @@ Row 2: Two dimensional crack morphologies obtained with different constructions 
 !card! media/kalthoff.gif title=[The Kalthoff-Winkler experiment [!icon!link]](benchmarks/kalthoff.md)
 The Kalthoff-Winkler experiment simulated using the phase-field cohesive fracture model. The elastodynamics problem is solved using an explicit central-difference operator. The phase-field is shown on the left, and the field of maximum principal stress is shown on the right.
 !card-end!
+
+!card! media/stochastic.gif title=[Non-intrusive stochastic FEM [!icon!link]](benchmarks/klexpansion.md)
+The stochastic random field is decomposed using the Karhunen-Loeve expansion. The first 10 eigenvectors with the largest eigenvalues are shown on the left. The crack propagation with random fracture properties constructed using the KL-expansion is shown on the right.
+!card-end!
 !gallery-end!

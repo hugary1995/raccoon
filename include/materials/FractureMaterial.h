@@ -18,6 +18,9 @@ protected:
   virtual void initQpStatefulProperties() override;
   virtual void computeQpProperties() override;
 
+  /// constant in time
+  const bool _stationary;
+
   /// energy release rate
   const MaterialProperty<Real> & _Gc;
 
@@ -31,11 +34,11 @@ protected:
   MaterialProperty<Real> & _kappa;
 
   /// interface coefficient at the previous time step
-  const MaterialProperty<Real> & _kappa_old;
+  const MaterialProperty<Real> * _kappa_old;
 
   /// Mobility in Allen-Cahn equation
   ADMaterialProperty<Real> & _M;
 
   /// Mobility at the previous time step
-  const MaterialProperty<Real> & _M_old;
+  const MaterialProperty<Real> * _M_old;
 };

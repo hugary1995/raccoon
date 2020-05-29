@@ -10,38 +10,9 @@
 []
 
 [Mesh]
-  [./square]
-    type = GeneratedMeshGenerator
-    dim = 2
-    elem_type = QUAD
-    nx = 200
-    ny = 200
-    xmax = 100
-    ymax = 100
-  [../]
-  [./center]
-    type = ExtraNodesetGenerator
-    input = 'square'
-    coord = '50 50'
-    new_boundary = 'center'
-  [../]
-  [./pin]
-    type = ExtraNodesetGenerator
-    input = 'center'
-    coord = '55 50'
-    new_boundary = 'pin'
-  [../]
-[]
-
-[Functions]
-  [./Gc]
-    type = PiecewiseMultilinear
-    data_file = 'gold/Gc.txt'
-  [../]
-  [./psic]
-    type = PiecewiseMultilinear
-    data_file = 'gold/psic.txt'
-  [../]
+  type = FileMesh
+  file = 'gold/fields.e'
+  uniform_refine = 2
 []
 
 [Variables]
@@ -57,25 +28,12 @@
 
 [AuxVariables]
   [./Gc]
+    initial_from_file_var = 'Gc'
   [../]
   [./psic]
+    initial_from_file_var = 'psic'
   [../]
   [./bounds_dummy]
-  [../]
-[]
-
-[AuxKernels]
-  [./Gc]
-    type = FunctionAux
-    variable = 'Gc'
-    function = 'Gc'
-    execute_on = 'INITIAL'
-  [../]
-  [./psic]
-    type = FunctionAux
-    variable = 'psic'
-    function = 'psic'
-    execute_on = 'INITIAL'
   [../]
 []
 
@@ -163,18 +121,6 @@
       translation = '0 -100 0'
     [../]
   [../]
-  [./x_pin]
-    type = DirichletBC
-    variable = 'disp_x'
-    value = 0
-    boundary = 'center'
-  [../]
-  [./y_pin]
-    type = DirichletBC
-    variable = 'disp_y'
-    value = 0
-    boundary = 'center pin'
-  [../]
 []
 
 [Bounds]
@@ -225,10 +171,17 @@
     sum_prop_name = 'E_driving'
     prop_names = 'E_el_active E_int'
   [../]
-  [./fracture_energy_barrier]
-    type = StationaryGenericFunctionMaterial
-    prop_names = 'energy_release_rate critical_fracture_energy'
-    prop_values = 'Gc psic'
+  [./energy_release_rate]
+    type = ParsedMaterial
+    f_name = 'energy_release_rate'
+    args = 'Gc'
+    function = 'Gc'
+  [../]
+  [./critial_fracture_energy]
+    type = ParsedMaterial
+    f_name = 'critical_fracture_energy'
+    args = 'psic'
+    function = 'psic'
   [../]
   [./length_scale]
     type = GenericConstantMaterial
@@ -242,6 +195,7 @@
   [./fracture_properties]
     type = FractureMaterial
     local_dissipation_norm = 8/3
+    constant_in_time = false
   [../]
   [./degradation]
     type = LorentzDegradation
@@ -254,12 +208,12 @@
   type = FixedPointTransient
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
-  petsc_options_value = 'asm      lu           1000        200                0                     vinewtonrsls'
+  petsc_options_value = 'asm      ilu          200         200                0                     vinewtonrsls'
   dt = 1e-3
-  end_time = 0.22
+  end_time = 0.04
 
-  nl_abs_tol = 1e-12
-  nl_rel_tol = 1e-08
+  nl_abs_tol = 1e-8
+  nl_rel_tol = 1e-6
 
   fp_max_its = 10
   fp_tol = 1e-03
