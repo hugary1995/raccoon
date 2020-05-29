@@ -29,7 +29,17 @@ git submodule update --init
 
 These commands should download a copy of RACCOON and a copy of MOOSE (as a submodule) to your local projects directory.
 
-## 3. Compile RACCOON
+## 3. Compile libMesh (Optional)
+
+This step is only necessary if you didn't choose to include moose-libmesh in your Conda environment.
+For example, if you want to compile libMesh with boost, simply do
+
+```bash
+cd moose
+./update_and_rebuild_libmesh.sh --with-boost
+```
+
+## 4. Compile RACCOON
 
 ```bash
 make -j N
@@ -37,7 +47,7 @@ make -j N
 
 where `N` is the number of processors you want to use to compile RACCOON in parallel.
 
-## 4. Test RACCOON
+## 5. Test RACCOON
 
 To make sure RACCOON is working properly, run the script `run_tests` to automatically run all regression tests:
 
@@ -47,7 +57,7 @@ To make sure RACCOON is working properly, run the script `run_tests` to automati
 
 Optionally, you may try [benchmark problems](benchmarks/index.md).
 
-## 5. Update RACCOON (Optional)
+## 6. Update RACCOON (Optional)
 
 RACCOON is under rapid development right now. To make sure you get the most out of RACCOON, update your local repository frequently to keep up-to-date with the remote:
 
@@ -58,10 +68,10 @@ conda update --all
 make -j N
 ```
 
-## 6. Set up Atom for development (Optional)
+## 7. Set up Atom for development (Optional)
 
 We recommend Atom as the IDE for RACCOON (or in general any MOOSE-based applications). Follow [these instructions](install/ide.md) to set up Atom for rapid development.
 
-## 7. Install ParaView for visualization (Optional)
+## 8. Install ParaView for visualization (Optional)
 
 The standard output file of RACCOON is Exodus, a file format developed by the Sandia National Laboratory. [ParaView](https://www.paraview.org/) is a powerful visualization toolkit and complies with the Exodus file format.
