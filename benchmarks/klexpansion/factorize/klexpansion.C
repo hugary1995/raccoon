@@ -75,9 +75,8 @@ main(int argc, char ** argv)
   // of basis vectors ncv used in the solution algorithm. Note that
   // ncv >= nev must hold and ncv >= 2*nev is recommended.
   // Here we guess 1/10 eigenvalues will give us a good spectrum.
-  equation_systems.parameters.set<unsigned int>("eigenpairs") = std::floor(mesh.n_nodes() / 10);
-  equation_systems.parameters.set<unsigned int>("basis vectors") =
-      std::floor(mesh.n_nodes() / 10) + 1;
+  equation_systems.parameters.set<unsigned int>("eigenpairs") = mesh.n_nodes();
+  equation_systems.parameters.set<unsigned int>("basis vectors") = mesh.n_nodes();
 
   // You may optionally change the default eigensolver used by SLEPc.
   // The Krylov-Schur method is mathematically equivalent to implicitly
@@ -204,8 +203,8 @@ assembly(EquationSystems & es)
   const std::vector<Point> & q_points_remote = fe_remote->get_xyz();
 
   // Before we do the element loop, construct a covariance kernel
-  PSE * psex = new PSE(5, 100);
-  PSE * psey = new PSE(5, 100);
+  PSE covariance_x(5, 100);
+  PSE covariance_y(5, 100);
 
   // Now we will loop over all the elements in the mesh that
   // live on the local processor. We will compute the element
@@ -263,7 +262,8 @@ assembly(EquationSystems & es)
           for (unsigned int qp_remote = 0; qp_remote < qrule.n_points(); qp_remote++)
           {
             Point lag = q_points[qp] - q_points_remote[qp_remote];
-            Real R = psex->covariance(std::abs(lag(0))) * psey->covariance(std::abs(lag(1)));
+            Real R = covariance_x.covariance(std::abs(lag(0))) *
+                     covariance_y.covariance(std::abs(lag(1)));
             for (unsigned int j = 0; j < n_dofs_remote; j++)
               Ke(i, j) +=
                   R * phi[i][qp] * JxW[qp] * phi_remote[j][qp_remote] * JxW_remote[qp_remote];
@@ -280,9 +280,6 @@ assembly(EquationSystems & es)
       progress_prev += 0.1;
     }
   }
-
-  delete psex;
-  delete psey;
 
   libMesh::out << "Assemblying the eigen system complete.\n" << std::endl;
 }

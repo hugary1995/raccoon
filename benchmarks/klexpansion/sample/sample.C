@@ -44,14 +44,14 @@ main(int argc, char ** argv)
 
   // Read the mesh
   Mesh mesh(init.comm());
-  mesh.read("gold/basis.e");
+  mesh.read("basis.e");
 
   // Read the eigenpairs
   std::vector<Real> eigvals;
   std::vector<std::vector<Real>> eigvecs;
 
   ExodusII_IO basis(mesh);
-  basis.read("gold/basis.e");
+  basis.read("basis.e");
   ExodusII_IO_Helper & basis_helper = basis.get_exio_helper();
   for (int i = 1; i < basis.get_num_time_steps(); i++)
   {

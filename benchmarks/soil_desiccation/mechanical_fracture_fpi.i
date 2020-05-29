@@ -210,7 +210,7 @@
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
   petsc_options_value = 'asm      ilu          200         200                0                     vinewtonrsls'
   dt = 1e-3
-  end_time = 0.22
+  end_time = 0.04
 
   nl_abs_tol = 1e-8
   nl_rel_tol = 1e-6
