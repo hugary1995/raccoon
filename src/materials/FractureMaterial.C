@@ -21,18 +21,26 @@ FractureMaterial::validParams()
   params.addParam<MaterialPropertyName>(
       "mobility_name", "mobility", "name of the material that holds the mobility");
 
+  params.addParam<bool>(
+      "constant_in_time", true, "whether the fracture properties are stationary in time");
+
   return params;
 }
 
 FractureMaterial::FractureMaterial(const InputParameters & parameters)
   : ADMaterial(parameters),
+    _stationary(getParam<bool>("constant_in_time")),
     _Gc(getMaterialPropertyByName<Real>("energy_release_rate")),
     _L(getMaterialPropertyByName<Real>("phase_field_regularization_length")),
     _w_norm(getFunction("local_dissipation_norm")),
     _kappa(declareProperty<Real>(getParam<MaterialPropertyName>("kappa_name"))),
-    _kappa_old(getMaterialPropertyOldByName<Real>(getParam<MaterialPropertyName>("kappa_name"))),
+    _kappa_old(_stationary ? &getMaterialPropertyOldByName<Real>(
+                                 getParam<MaterialPropertyName>("kappa_name"))
+                           : nullptr),
     _M(declareADProperty<Real>(getParam<MaterialPropertyName>("mobility_name"))),
-    _M_old(getMaterialPropertyOldByName<Real>(getParam<MaterialPropertyName>("mobility_name")))
+    _M_old(_stationary ? &getMaterialPropertyOldByName<Real>(
+                             getParam<MaterialPropertyName>("mobility_name"))
+                       : nullptr)
 {
 }
 
@@ -51,6 +59,18 @@ FractureMaterial::initQpStatefulProperties()
 void
 FractureMaterial::computeQpProperties()
 {
-  _kappa[_qp] = _kappa_old[_qp];
-  _M[_qp] = _M_old[_qp];
+  if (_stationary)
+  {
+    _kappa[_qp] = (*_kappa_old)[_qp];
+    _M[_qp] = (*_M_old)[_qp];
+  }
+  else
+  {
+    Real L = _L[_qp];
+    Real Gc = _Gc[_qp];
+    Real c0 = _w_norm.value(_t, _q_point[_qp]);
+
+    _kappa[_qp] = 2.0 * L * L;
+    _M[_qp] = Gc / c0 / L;
+  }
 }
