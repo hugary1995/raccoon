@@ -22,8 +22,8 @@ BetterCriticalTimeStep::validParams()
 
 BetterCriticalTimeStep::BetterCriticalTimeStep(const InputParameters & parameters)
   : ElementPostprocessor(parameters),
-    _material_density(getMaterialProperty("density_name")),
-    _effective_stiffness(getMaterialProperty("E_name")),
+    _material_density(getMaterialProperty<Real>("density_name")),
+    _effective_stiffness(getMaterialProperty<Real>("E_name")),
     _factor(getParam<Real>("factor")),
     _critical_time(std::numeric_limits<Real>::max())
 {
