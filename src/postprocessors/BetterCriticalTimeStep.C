@@ -1,11 +1,6 @@
-//* This file is part of the MOOSE framework
-//* https://www.mooseframework.org
-//*
-//* All rights reserved, see COPYRIGHT for full restrictions
-//* https://github.com/idaholab/moose/blob/master/COPYRIGHT
-//*
-//* Licensed under LGPL 2.1, please see LICENSE for details
-//* https://www.gnu.org/licenses/lgpl-2.1.html
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
 
 #include "BetterCriticalTimeStep.h"
 
@@ -27,10 +22,8 @@ BetterCriticalTimeStep::validParams()
 
 BetterCriticalTimeStep::BetterCriticalTimeStep(const InputParameters & parameters)
   : ElementPostprocessor(parameters),
-    _rho_name(getParam<MaterialPropertyName>("density_name")),
-    _material_density(getMaterialPropertyByName<Real>(_rho_name)),
-    _E_name(getParam<MaterialPropertyName>("E_name")),
-    _effective_stiffness(getMaterialPropertyByName<Real>(_E_name)),
+    _material_density(getMaterialProperty("density_name")),
+    _effective_stiffness(getMaterialProperty("E_name")),
     _factor(getParam<Real>("factor")),
     _critical_time(std::numeric_limits<Real>::max())
 {
@@ -39,13 +32,11 @@ BetterCriticalTimeStep::BetterCriticalTimeStep(const InputParameters & parameter
 void
 BetterCriticalTimeStep::execute()
 {
-  // Real dens = _material_density[0];
   _c = std::numeric_limits<Real>::min();
   for (unsigned qp = 0; qp < _q_point.size(); ++qp)
   {
     _c = std::max(_c, _effective_stiffness[qp] / std::sqrt(_material_density[qp]));
   }
-  // std::cout << _c << std::endl;
   _critical_time = std::min(_factor * _current_elem->hmin() / _c, _critical_time);
 }
 

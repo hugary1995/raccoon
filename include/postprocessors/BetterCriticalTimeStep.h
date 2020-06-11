@@ -1,22 +1,10 @@
-//* This file is part of the MOOSE framework
-//* https://www.mooseframework.org
-//*
-//* All rights reserved, see COPYRIGHT for full restrictions
-//* https://github.com/idaholab/moose/blob/master/COPYRIGHT
-//*
-//* Licensed under LGPL 2.1, please see LICENSE for details
-//* https://www.gnu.org/licenses/lgpl-2.1.html
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
 
 #pragma once
 
 #include "ElementPostprocessor.h"
-
-/**
- * Compute the critical time step for an explicit integration scheme by inferring an
- * effective_stiffness from element classes and density from the user.
- */
-
-// Forward Declarations
 
 class BetterCriticalTimeStep : public ElementPostprocessor
 {
@@ -34,11 +22,9 @@ public:
 
 protected:
   /// Density of the material
-  const MaterialPropertyName _rho_name;
   const MaterialProperty<Real> & _material_density;
 
-  /// Effective stiffness of element: function of material properties and element size
-  const MaterialPropertyName _E_name;
+  /// Effective stiffness of element
   const MaterialProperty<Real> & _effective_stiffness;
 
   /// User defined factor to be multiplied to the critical time step
@@ -46,5 +32,6 @@ protected:
 
   /// Critical time step for explicit solver
   Real _critical_time;
+  /// Material wave speed
   Real _c;
 };
