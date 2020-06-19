@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ADMaterial.h"
+#include "MaterialPropertyUserObject.h"
 
 class CoalescenceEnergy : public ADMaterial
 {
@@ -14,6 +15,7 @@ public:
   CoalescenceEnergy(const InputParameters & parameters);
 
 protected:
+  virtual ADReal g();
   virtual void initQpStatefulProperties() override;
   virtual void computeQpProperties() override;
 
@@ -30,8 +32,11 @@ protected:
   /// coalescence energy
   ADMaterialProperty<Real> & _E_coalesce;
 
-  /// degradation function
-  const ADMaterialProperty<Real> & _g;
+  /// degradation
+  const ADMaterialProperty<Real> * _g_mat;
+
+  /// degradation userobject
+  const ADMaterialPropertyUserObject * _g_uo;
 
   /// degradation function
   const ADMaterialProperty<Real> & _w;

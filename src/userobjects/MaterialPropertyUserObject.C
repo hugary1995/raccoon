@@ -32,23 +32,24 @@ MaterialPropertyUserObjectTempl<is_ad>::MaterialPropertyUserObjectTempl(
 
 template <bool is_ad>
 void
-MaterialPropertyUserObjectTempl<is_ad>::initialize()
+MaterialPropertyUserObjectTempl<is_ad>::initialSetup()
 {
-  timestepSetup();
+  meshChanged();
 }
 
 template <bool is_ad>
 void
-MaterialPropertyUserObjectTempl<is_ad>::timestepSetup()
+MaterialPropertyUserObjectTempl<is_ad>::meshChanged()
 {
   _to.resize(_subproblem.mesh().getMesh().max_elem_id());
+  for (unsigned int i = 0; i < _to.size(); i++)
+    _to[i].resize(_fe_problem.getMaxQps());
 }
 
 template <bool is_ad>
 void
 MaterialPropertyUserObjectTempl<is_ad>::computeProperties()
 {
-  _to[_current_elem->id()].resize(_qrule->n_points());
   for (_qp = 0; _qp < _qrule->n_points(); _qp++)
     _to[_current_elem->id()][_qp] = _from[_qp];
 }

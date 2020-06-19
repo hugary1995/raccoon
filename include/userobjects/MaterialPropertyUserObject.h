@@ -15,8 +15,9 @@ public:
 
   MaterialPropertyUserObjectTempl(const InputParameters & parameters);
 
-  virtual void initialize() override;
-  virtual void timestepSetup() override;
+  virtual void initialSetup() override;
+  virtual void meshChanged() override;
+  virtual void initialize() override {}
   virtual void execute() override { computeProperties(); }
   virtual void threadJoin(const UserObject & /*y*/) override {}
   virtual void finalize() override {}
@@ -26,7 +27,10 @@ public:
     return 0;
   }
 
-  GenericReal<is_ad> getData(const Elem * e, unsigned int qp) const { return _to[e->id()][qp]; }
+  Real getData(const Elem * e, unsigned int qp) const
+  {
+    return MetaPhysicL::raw_value(_to[e->id()][qp]);
+  }
 
 protected:
   virtual void computeProperties();

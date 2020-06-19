@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ADDegradedElasticStressBase.h"
+#include "MaterialPropertyUserObject.h"
 
 class CNHDegradedElasticPlasticPK1StressBase : public ADDegradedElasticStressBase
 {
@@ -14,10 +15,11 @@ public:
   CNHDegradedElasticPlasticPK1StressBase(const InputParameters & parameters);
 
 protected:
+  virtual ADReal gp();
   virtual void initQpStatefulProperties() override;
   virtual void computeQpStress() override;
 
-  virtual void updateDegradation();
+  virtual void computeQpDegradation();
   virtual void updateIntermediateConfiguration();
   virtual void returnMapping();
   virtual void updateCurrentConfiguration();
@@ -43,8 +45,8 @@ protected:
   const bool _legacy;
   const bool _isochoricity;
   const bool _use_cauchy_stress;
-  const MaterialPropertyName _g_plastic_name;
-  const ADMaterialProperty<Real> & _g_plastic;
+  const ADMaterialProperty<Real> * _g_plastic_mat;
+  const ADMaterialPropertyUserObject * _g_plastic_uo;
   const MaterialPropertyName _W_pl_name;
   ADMaterialProperty<Real> & _W_pl;
   const MaterialProperty<Real> * _W_pl_old;
@@ -53,7 +55,6 @@ protected:
 
   ADReal _G;
   ADReal _K;
-  ADReal _gq;
   ADReal _ge;
   ADReal _gp;
   ADRankTwoTensor _f;
