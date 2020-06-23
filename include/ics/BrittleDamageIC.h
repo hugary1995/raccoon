@@ -15,4 +15,6 @@ public:
 
 protected:
   virtual Real value(const Point & p);
+
+  const Real _m;
 };
