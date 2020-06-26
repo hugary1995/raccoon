@@ -14,6 +14,8 @@ ADDegradedElasticStressBase::validParams()
       "d_crit", 2.0, "enforce the traction free boundary condition when d > d_crit");
   params.addParam<MaterialPropertyName>(
       "elastic_energy_name", "E_el", "name of the material that holds the elastic energy");
+  params.addParam<MaterialPropertyName>(
+      "degradation_name", "g", "name of the degradation material. Use degradation_mat instead.");
   params.addParam<MaterialPropertyName>("degradation_mat",
                                         "name of the material that holds the degradation");
   params.addParam<UserObjectName>("degradation_uo",
@@ -28,13 +30,18 @@ ADDegradedElasticStressBase::ADDegradedElasticStressBase(const InputParameters &
     _grad_d(adCoupledGradient("d")),
     _d_crit(getParam<Real>("d_crit")),
     _g_mat(isParamValid("degradation_mat") ? &getADMaterialProperty<Real>("degradation_mat")
-                                           : nullptr),
+                                           : &getADMaterialProperty<Real>("degradation_name")),
     _g_uo(isParamValid("degradation_uo")
               ? &getUserObject<ADMaterialPropertyUserObject>("degradation_uo")
               : nullptr),
     _E_el_name(getParam<MaterialPropertyName>("elastic_energy_name")),
     _E_el_active(declareADProperty<Real>(_E_el_name + "_active"))
 {
+  if (parameters.isParamSetByUser("degradation_name"))
+    mooseDeprecated("degradation_name is deprecated in favor of degradation_mat.");
+  if (!_g_uo && parameters.isParamSetByAddParam("degradation_name"))
+    mooseDeprecated("degradation_name is deprecated in favor of degradation_mat.");
+
   bool provided_by_mat = _g_mat;
   bool provided_by_uo = _g_uo;
 

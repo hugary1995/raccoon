@@ -15,7 +15,6 @@ public:
   CoalescenceEnergy(const InputParameters & parameters);
 
 protected:
-  virtual ADReal g();
   virtual void initQpStatefulProperties() override;
   virtual void computeQpProperties() override;
 
@@ -33,10 +32,7 @@ protected:
   ADMaterialProperty<Real> & _E_coalesce;
 
   /// degradation
-  const ADMaterialProperty<Real> * _g_mat;
-
-  /// degradation userobject
-  const ADMaterialPropertyUserObject * _g_uo;
+  const ADMaterialProperty<Real> & _g;
 
   /// degradation function
   const ADMaterialProperty<Real> & _w;

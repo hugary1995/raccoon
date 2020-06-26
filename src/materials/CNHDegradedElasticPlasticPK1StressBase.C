@@ -10,6 +10,10 @@ CNHDegradedElasticPlasticPK1StressBase::validParams()
   InputParameters params = ADDegradedElasticStressBase::validParams();
   params.addClassDescription(
       "computes elastic and plastic stress for a compressible Neo-Hookean material");
+  params.addParam<MaterialPropertyName>(
+      "plastic_degradation_name",
+      "gp",
+      "name of the plastic degradation material. Use plastic_degradation_mat instead.");
   params.addParam<MaterialPropertyName>("plastic_degradation_mat",
                                         "name of the material that holds the plastic degradation");
   params.addParam<UserObjectName>("plastic_degradation_uo",
@@ -48,7 +52,7 @@ CNHDegradedElasticPlasticPK1StressBase::CNHDegradedElasticPlasticPK1StressBase(
     _use_cauchy_stress(getParam<bool>("use_cauchy_stress")),
     _g_plastic_mat(isParamValid("plastic_degradation_mat")
                        ? &getADMaterialProperty<Real>("plastic_degradation_mat")
-                       : nullptr),
+                       : &getADMaterialProperty<Real>("plastic_degradation_name")),
     _g_plastic_uo(isParamValid("plastic_degradation_uo")
                       ? &getUserObject<ADMaterialPropertyUserObject>("plastic_degradation_uo")
                       : nullptr),
@@ -58,6 +62,11 @@ CNHDegradedElasticPlasticPK1StressBase::CNHDegradedElasticPlasticPK1StressBase(
     _W_pl_degraded(declareADProperty<Real>(_W_pl_name + "_degraded")),
     _E_el_degraded(declareADProperty<Real>(_E_el_name + "_degraded"))
 {
+  if (parameters.isParamSetByUser("plastic_degradation_name"))
+    mooseDeprecated("plastic_degradation_name is deprecated in favor of plastic_degradation_mat.");
+  if (!_g_plastic_uo && parameters.isParamSetByAddParam("plastic_degradation_name"))
+    mooseDeprecated("plastic_degradation_name is deprecated in favor of plastic_degradation_mat.");
+
   bool provided_by_mat = _g_plastic_mat;
   bool provided_by_uo = _g_plastic_uo;
 
