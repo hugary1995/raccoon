@@ -28,7 +28,7 @@ SmallStrainDegradedElasticPK2Stress_NoSplit::computeQpStress()
 
   // PK2 stress
   ADRankTwoTensor S = _elasticity_tensor[_qp] * E;
-  _stress[_qp] = _g[_qp] * S;
+  _stress[_qp] = g() * S;
 
   // elastic driving energy
   _E_el_active[_qp] = 0.5 * S.doubleContraction(E);

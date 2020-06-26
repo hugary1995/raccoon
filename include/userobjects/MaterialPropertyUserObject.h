@@ -15,8 +15,9 @@ public:
 
   MaterialPropertyUserObjectTempl(const InputParameters & parameters);
 
-  virtual void initialize() override;
-  virtual void timestepSetup() override;
+  virtual void initialSetup() override;
+  virtual void meshChanged() override;
+  virtual void initialize() override {}
   virtual void execute() override { computeProperties(); }
   virtual void threadJoin(const UserObject & /*y*/) override {}
   virtual void finalize() override {}

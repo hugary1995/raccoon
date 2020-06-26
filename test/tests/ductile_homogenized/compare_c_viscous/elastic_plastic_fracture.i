@@ -208,7 +208,6 @@
     yield_stress = 320
     slope = 688
     coalescence_coefficient = ${c}
-    W0 = 0
   [../]
 
   [./bulk]

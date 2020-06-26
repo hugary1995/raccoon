@@ -11,7 +11,13 @@ CNHDegradedElasticPlasticPK1StressBase::validParams()
   params.addClassDescription(
       "computes elastic and plastic stress for a compressible Neo-Hookean material");
   params.addParam<MaterialPropertyName>(
-      "plastic_degradation_name", "gp", "name of the material that holds the plastic degradation");
+      "plastic_degradation_name",
+      "gp",
+      "name of the plastic degradation material. Use plastic_degradation_mat instead.");
+  params.addParam<MaterialPropertyName>("plastic_degradation_mat",
+                                        "name of the material that holds the plastic degradation");
+  params.addParam<UserObjectName>("plastic_degradation_uo",
+                                  "name of the userobject that holds the plastic degradation");
   params.addParam<MaterialPropertyName>(
       "plastic_work_name", "W_pl", "name of the material for plastic work");
   params.addParam<bool>(
@@ -44,14 +50,46 @@ CNHDegradedElasticPlasticPK1StressBase::CNHDegradedElasticPlasticPK1StressBase(
     _legacy(getParam<bool>("legacy_plastic_work")),
     _isochoricity(getParam<bool>("enforce_isochoricity")),
     _use_cauchy_stress(getParam<bool>("use_cauchy_stress")),
-    _g_plastic_name(getParam<MaterialPropertyName>("plastic_degradation_name")),
-    _g_plastic(getADMaterialProperty<Real>(_g_plastic_name)),
+    _g_plastic_mat(isParamValid("plastic_degradation_mat")
+                       ? &getADMaterialProperty<Real>("plastic_degradation_mat")
+                       : &getADMaterialProperty<Real>("plastic_degradation_name")),
+    _g_plastic_uo(isParamValid("plastic_degradation_uo")
+                      ? &getUserObject<ADMaterialPropertyUserObject>("plastic_degradation_uo")
+                      : nullptr),
     _W_pl_name(getParam<MaterialPropertyName>("plastic_work_name")),
     _W_pl(declareADProperty<Real>(_W_pl_name)),
     _W_pl_old(_legacy ? &getMaterialPropertyOldByName<Real>(_W_pl_name) : nullptr),
     _W_pl_degraded(declareADProperty<Real>(_W_pl_name + "_degraded")),
     _E_el_degraded(declareADProperty<Real>(_E_el_name + "_degraded"))
 {
+  if (parameters.isParamSetByUser("plastic_degradation_name"))
+    mooseDeprecated("plastic_degradation_name is deprecated in favor of plastic_degradation_mat.");
+  if (!_g_plastic_uo && parameters.isParamSetByAddParam("plastic_degradation_name"))
+    mooseDeprecated("plastic_degradation_name is deprecated in favor of plastic_degradation_mat.");
+
+  bool provided_by_mat = _g_plastic_mat;
+  bool provided_by_uo = _g_plastic_uo;
+
+  /// degradation should be provided
+  if (!provided_by_mat && !provided_by_uo)
+    mooseError("no degradation provided.");
+
+  /// degradation should not be multiply defined
+  if ((provided_by_mat ? 1 : 0) + (provided_by_uo ? 1 : 0) > 1)
+    mooseError("degradation multiply defined.");
+}
+
+ADReal
+CNHDegradedElasticPlasticPK1StressBase::gp()
+{
+  if (_g_plastic_mat)
+    return (*_g_plastic_mat)[_qp];
+  else if (_g_plastic_uo)
+    return _g_plastic_uo->getData(_current_elem, _qp);
+  else
+    mooseError("Internal Error");
+
+  return 0;
 }
 
 void
@@ -72,7 +110,7 @@ CNHDegradedElasticPlasticPK1StressBase::computeQpStress()
   _G = _elasticity_tensor[_qp](0, 1, 0, 1);
   _K = lambda + 2.0 * _G / LIBMESH_DIM;
 
-  updateDegradation();
+  computeQpDegradation();
 
   updateIntermediateConfiguration();
 
@@ -84,11 +122,10 @@ CNHDegradedElasticPlasticPK1StressBase::computeQpStress()
 }
 
 void
-CNHDegradedElasticPlasticPK1StressBase::updateDegradation()
+CNHDegradedElasticPlasticPK1StressBase::computeQpDegradation()
 {
-  _gq = _g[_qp];
-  _ge = _g[_qp];
-  _gp = _g_plastic[_qp];
+  _ge = g();
+  _gp = gp();
 }
 
 void
@@ -101,7 +138,7 @@ CNHDegradedElasticPlasticPK1StressBase::updateIntermediateConfiguration()
   // compute the damage/elastic predictor
   _plastic_increment = 0;
   _be_bar_trial = _f_bar * _be_bar_old[_qp] * (_f_bar.transpose());
-  _s_trial = _gq * _G * _be_bar_trial.deviatoric();
+  _s_trial = _ge * _G * _be_bar_trial.deviatoric();
   _s_trial_norm = std::sqrt(_s_trial.doubleContraction(_s_trial));
   _np_trial = std::sqrt(1.5) * _s_trial / _s_trial_norm;
 }
@@ -125,13 +162,13 @@ CNHDegradedElasticPlasticPK1StressBase::returnMapping()
   int iter = 0;
   while (std::abs(yield_function_trial) > 1E-06)
   {
-    jacob = -std::sqrt(3.0 / 2.0) * _gq * _G * _be_bar_trial.trace() -
+    jacob = -std::sqrt(3.0 / 2.0) * _ge * _G * _be_bar_trial.trace() -
             std::sqrt(2.0 / 3.0) * d2H_dep2(_ep_old[_qp] + _plastic_increment);
     step = -yield_function_trial / jacob;
     _plastic_increment = _plastic_increment + step;
     yield_function_trial =
         _s_trial_norm -
-        std::sqrt(3.0 / 2.0) * _gq * _G * _plastic_increment * _be_bar_trial.trace() -
+        std::sqrt(3.0 / 2.0) * _ge * _G * _plastic_increment * _be_bar_trial.trace() -
         std::sqrt(2.0 / 3.0) * dH_dep(_ep_old[_qp] + _plastic_increment);
     iter++;
     if (iter > 50)
@@ -143,7 +180,7 @@ CNHDegradedElasticPlasticPK1StressBase::returnMapping()
     }
   }
 
-  _s = _s_trial - _gq * _G * _plastic_increment * _be_bar_trial.trace() * _np_trial;
+  _s = _s_trial - _ge * _G * _plastic_increment * _be_bar_trial.trace() * _np_trial;
   _ep[_qp] = _ep_old[_qp] + _plastic_increment;
 }
 
@@ -156,7 +193,7 @@ CNHDegradedElasticPlasticPK1StressBase::updateCurrentConfiguration()
   // update the Kirchhoff stress
   _J = _deformation_gradient[_qp].det();
   ADReal p = 0.5 * _K * (_J * _J - 1.0);
-  _tau = _J >= 1.0 ? _gq * p * I2 + _s : p * I2 + _s;
+  _tau = _J >= 1.0 ? _ge * p * I2 + _s : p * I2 + _s;
   _cauchy_stress[_qp] = _tau / _J;
   _pk1_stress[_qp] = _tau * _deformation_gradient[_qp].inverse().transpose();
   _stress[_qp] = _use_cauchy_stress ? _cauchy_stress[_qp] : _pk1_stress[_qp];
@@ -180,7 +217,7 @@ CNHDegradedElasticPlasticPK1StressBase::enforceIsochoricity()
   ADRankTwoTensor I2(RankTwoTensorTempl<ADReal>::initIdentity);
 
   ADReal Ie_bar = _be_bar_trial.trace() / 3.0;
-  _be_bar_dev = _s / _gq / _G;
+  _be_bar_dev = _s / _ge / _G;
   ADReal a = _be_bar_dev(0, 0);
   ADReal b = _be_bar_dev(1, 1);
   ADReal c = _be_bar_dev(2, 2);
@@ -223,7 +260,7 @@ CNHDegradedElasticPlasticPK1StressBase::computeFractureDrivingEnergy()
   ADReal E_el_neg = _J >= 1.0 ? 0.0 : U;
 
   _E_el_active[_qp] = E_el_pos;
-  _E_el_degraded[_qp] = _gq * E_el_pos + E_el_neg;
+  _E_el_degraded[_qp] = _ge * E_el_pos + E_el_neg;
 
   // plastic work
   if (_legacy)

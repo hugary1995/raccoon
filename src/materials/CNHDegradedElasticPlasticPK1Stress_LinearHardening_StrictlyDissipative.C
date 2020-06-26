@@ -26,27 +26,26 @@ CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative::
 {
 }
 
-ADReal
-CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative::H(ADReal ep)
+ADReal CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative::H(ADReal /*ep*/)
 {
-  return 0.5 * _k * ep * ep;
+  return 0;
 }
 
 ADReal
 CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative::dH_dep(ADReal ep)
 {
-  return _yield_stress + _gp * _k * ep;
+  return _yield_stress + _k * ep;
 }
 
 ADReal
     CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative::d2H_dep2(ADReal /*ep*/)
 {
-  return _gp * _k;
+  return _k;
 }
 
 ADReal
 CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative::plastic_dissipation(
     ADReal ep)
 {
-  return _yield_stress * ep;
+  return _yield_stress * ep + 0.5 * _k * ep * ep;
 }

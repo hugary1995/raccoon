@@ -47,7 +47,7 @@ SmallStrainDegradedElasticPK2Stress_StrainSpectral::computeQpStress()
   // PK1 stress
   ADRankTwoTensor S0 = lambda * trE * I2 + 2.0 * mu * E;
   ADRankTwoTensor S_pos = lambda * trE_pos * I2 + 2.0 * mu * E_pos;
-  _stress[_qp] = S0 - (1.0 - _g[_qp]) * S_pos;
+  _stress[_qp] = S0 - (1.0 - g()) * S_pos;
 
   // elastic driving energy
   _E_el_active[_qp] = 0.5 * lambda * trE_pos * trE_pos + mu * E_pos.doubleContraction(E_pos);
