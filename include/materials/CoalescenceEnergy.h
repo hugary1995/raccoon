@@ -21,18 +21,13 @@ protected:
   /// base name
   const std::string _base_name;
 
-  /// coalescence mobility
-  const Real & _c;
+  /// coalescence coefficients
+  const Real & _beta;
+  const Real & _e0;
 
   /// Mobility in Allen-Cahn equation
   ADMaterialProperty<Real> & _M;
   const ADMaterialProperty<Real> & _M0;
-
-  /// coalescence energy
-  ADMaterialProperty<Real> & _E_coalesce;
-
-  /// degradation
-  const ADMaterialProperty<Real> & _g;
 
   /// degradation function
   const ADMaterialProperty<Real> & _w;

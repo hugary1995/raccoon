@@ -86,7 +86,7 @@ CNHDegradedElasticPlasticPK1StressBase::gp()
   if (_g_plastic_mat)
     return (*_g_plastic_mat)[_qp];
   else if (_g_plastic_uo)
-    return _g_plastic_uo->getData(_current_elem, _qp);
+    return _g_plastic_uo->getRawData(_current_elem, _qp);
   else
     mooseError("Internal Error");
 

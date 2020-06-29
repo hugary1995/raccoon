@@ -29,6 +29,11 @@ public:
 
   GenericReal<is_ad> getData(const Elem * e, unsigned int qp) const { return _to[e->id()][qp]; }
 
+  Real getRawData(const Elem * e, unsigned int qp) const
+  {
+    return MetaPhysicL::raw_value(_to[e->id()][qp]);
+  }
+
 protected:
   virtual void computeProperties();
 

@@ -19,6 +19,7 @@ LorentzDegradation::validParams()
       "p", 1.0, "p >= 1", "shape parameter that controls the size of the fracture process zone");
   params.addRangeCheckedParam<Real>(
       "xi", 1.0, "xi > 0 & xi <= 2", "derivative of te local dissipation function at d = 0");
+  params.addRangeCheckedParam<Real>("beta", 1, "beta > 0 & beta <= 1", "coalescence coefficient");
   return params;
 }
 
@@ -27,7 +28,8 @@ LorentzDegradation::LorentzDegradation(const InputParameters & parameters)
     _M(getADMaterialProperty<Real>("mobility_name")),
     _b(getMaterialProperty<Real>("critical_fracture_energy_name")),
     _p(getParam<Real>("p")),
-    _xi(getParam<Real>("xi"))
+    _xi(getParam<Real>("xi")),
+    _beta(getParam<Real>("beta"))
 {
 }
 
