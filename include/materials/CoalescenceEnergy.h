@@ -34,4 +34,10 @@ protected:
 
   /// effective plastic strain
   const ADMaterialProperty<Real> & _ep;
+
+  /// old effective plastic strain
+  const MaterialProperty<Real> & _ep_old;
+
+  /// whether to lag the effective plastic strain
+  const bool _lag;
 };

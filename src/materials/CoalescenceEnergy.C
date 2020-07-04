@@ -21,6 +21,10 @@ CoalescenceEnergy::validParams()
   params.addRequiredParam<Real>("beta", "coalescence coefficient");
   params.addRequiredParam<Real>("e0", "characteristic plastic strain");
   params.addParam<std::string>("base_name", "base name of the effective plastic strain");
+  params.addParam<bool>(
+      "lag",
+      false,
+      "whether we should use last step's effective plastic strain to improve convergence");
 
   return params;
 }
@@ -33,7 +37,9 @@ CoalescenceEnergy::CoalescenceEnergy(const InputParameters & parameters)
     _M(declareADProperty<Real>(getParam<MaterialPropertyName>("mobility_name"))),
     _M0(getADMaterialProperty<Real>("base_mobility_name")),
     _w(getADMaterialProperty<Real>("local_dissipation_name")),
-    _ep(getADMaterialProperty<Real>(_base_name + "effective_plastic_strain"))
+    _ep(getADMaterialProperty<Real>(_base_name + "effective_plastic_strain")),
+    _ep_old(getMaterialPropertyOld<Real>(_base_name + "effective_plastic_strain")),
+    _lag(getParam<bool>("lag"))
 {
 }
 
@@ -46,5 +52,6 @@ CoalescenceEnergy::initQpStatefulProperties()
 void
 CoalescenceEnergy::computeQpProperties()
 {
-  _M[_qp] = _M0[_qp] * (1 + (1 - _beta) * (std::exp(-_ep[_qp] / _e0) - 1));
+  ADReal ep = _lag ? _ep_old[_qp] : _ep[_qp];
+  _M[_qp] = _M0[_qp] * (1 + (1 - _beta) * (std::exp(-ep / _e0) - 1));
 }
