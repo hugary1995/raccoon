@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ADMaterial.h"
+#include "MaterialPropertyUserObject.h"
 
 class CoalescenceEnergy : public ADMaterial
 {
@@ -30,7 +31,7 @@ protected:
   /// coalescence energy
   ADMaterialProperty<Real> & _E_coalesce;
 
-  /// degradation function
+  /// degradation
   const ADMaterialProperty<Real> & _g;
 
   /// degradation function

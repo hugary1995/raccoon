@@ -12,7 +12,7 @@ CoalescenceEnergy::validParams()
   InputParameters params = ADMaterial::validParams();
   params.addClassDescription("computes coalescence mobility of the form $g^p(d) c M e^p w(d)$");
   params.addParam<MaterialPropertyName>(
-      "degradation_name", "g", "name of the degradation function");
+      "degradation_name", "g", "name of the degradation material");
   params.addParam<MaterialPropertyName>(
       "local_dissipation_name", "w", "name of the local dissipation function");
   params.addParam<MaterialPropertyName>(

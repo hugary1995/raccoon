@@ -4,17 +4,15 @@
 
 #pragma once
 
-#include "DamageICBase.h"
+#include "DegradationBase.h"
 
-class BrittleDamageIC : public DamageICBase
+class NoDegradation : public DegradationBase
 {
 public:
   static InputParameters validParams();
 
-  BrittleDamageIC(const InputParameters & parameters);
+  NoDegradation(const InputParameters & parameters);
 
 protected:
-  virtual Real value(const Point & p);
-
-  const Real _m;
+  virtual void computeDegradation() override;
 };

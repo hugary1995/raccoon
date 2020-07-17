@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ADComputeStressBase.h"
+#include "MaterialPropertyUserObject.h"
 
 class ADDegradedElasticStressBase : public ADComputeStressBase
 {
@@ -14,6 +15,7 @@ public:
   ADDegradedElasticStressBase(const InputParameters & parameters);
 
 protected:
+  virtual ADReal g();
   virtual void computeQpProperties() override;
   virtual void computeQpStress() override {}
 
@@ -38,11 +40,11 @@ protected:
   /// critical damage value for enforcing the traction-free boundary condition
   const Real _d_crit;
 
-  /// degradation name
-  const MaterialPropertyName _g_name;
-
   /// degradation
-  const ADMaterialProperty<Real> & _g;
+  const ADMaterialProperty<Real> * _g_mat;
+
+  /// degradation userobject
+  const ADMaterialPropertyUserObject * _g_uo;
 
   /// elastic energy name
   const MaterialPropertyName _E_el_name;
