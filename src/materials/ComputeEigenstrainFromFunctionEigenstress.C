@@ -72,7 +72,7 @@ ComputeEigenstrainFromFunctionEigenstressTempl<is_ad>::computeQpProperties()
   const GenericReal<is_ad> G = _elasticity_tensor[_qp](0, 1, 0, 1);
   const GenericReal<is_ad> K = lambda + 2.0 * G / LIBMESH_DIM;
   const GenericRankTwoTensor<is_ad> I2(GenericRankTwoTensor<is_ad>::initIdentity);
-  _eigenstrain[_qp] = -eigen_stress.trace() / K * I2 - eigen_stress.deviatoric() / 2 / G;
+  _eigenstrain[_qp] = -eigen_stress.trace() / 9 / K * I2 - eigen_stress.deviatoric() / 2 / G;
 }
 
 template class ComputeEigenstrainFromFunctionEigenstressTempl<false>;
