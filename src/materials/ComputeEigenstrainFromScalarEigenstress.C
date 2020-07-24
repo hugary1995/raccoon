@@ -25,11 +25,6 @@ ComputeEigenstrainFromScalarEigenstressTempl<is_ad>::validParams()
       "eigen_stress",
       "A list of scalars describing the eigen stress.  There must be 9 of these, corresponding "
       "to the xx, yx, zx, xy, yy, zy, xz, yz, zz components respectively.");
-  params.addParam<std::string>("base_name",
-                               "The base_name for the elasticity tensor that will be "
-                               "used to compute strain from stress.  Do not provide "
-                               "any base_name if your elasticity tensor does not use "
-                               "one.");
   return params;
 }
 
@@ -53,7 +48,7 @@ ComputeEigenstrainFromScalarEigenstressTempl<is_ad>::ComputeEigenstrainFromScala
 
   _eigen_stress_scalar.resize(num);
   for (unsigned i = 0; i < num; ++i)
-    _eigen_stress_scalar[i] = &coupledGenericScalarValue<is_ad>("eigen_stress", i);
+    _eigen_stress_scalar[i] = &coupledScalarValue("eigen_stress", i);
 }
 
 template <bool is_ad>

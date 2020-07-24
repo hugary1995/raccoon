@@ -5,14 +5,14 @@
 [UserObjects]
   [solution]
     type = SolutionUserObject
-    mesh = 'visualize.e'
+    mesh = 'out.e'
   []
 []
 
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'visualize.e'
+    file = 'out.e'
   []
 []
 
@@ -85,10 +85,13 @@
 [Executioner]
   type = Transient
   dt = 1e-3
-  end_time = 0.04
+  end_time = 0.22
 []
 
 [Outputs]
   exodus = true
-  csv = true
+  [csv]
+    type = CSV
+    file_base = 'count/out'
+  []
 []

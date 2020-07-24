@@ -1,18 +1,6 @@
-[Problem]
-  type = FixedPointProblem
-[]
-
-[UserObjects]
-  [E_driving]
-    type = ADFPIMaterialPropertyUserObject
-    mat_prop = 'E_driving'
-  []
-[]
-
 [Mesh]
   type = FileMesh
-  file = 'gold/fields.e'
-  uniform_refine = 2
+  file = 'gold/fields_refined.e'
 []
 
 [Variables]
@@ -22,18 +10,35 @@
   []
   [strain_zz]
   []
-  [d]
-  []
 []
 
 [AuxVariables]
+  [d]
+  []
+  [load]
+    family = SCALAR
+  []
+  [zero]
+    family = SCALAR
+  []
+  [E_el_active]
+    order = CONSTANT
+    family = MONOMIAL
+  []
   [Gc]
     initial_from_file_var = 'Gc'
   []
   [psic]
     initial_from_file_var = 'psic'
   []
-  [bounds_dummy]
+[]
+
+[AuxKernels]
+  [E_driving]
+    type = ADMaterialRealAux
+    variable = 'E_el_active'
+    property = 'E_el_active'
+    execute_on = 'TIMESTEP_END'
   []
 []
 
@@ -67,82 +72,41 @@
     coefficient = 0.1
     prop_names = 'g'
   []
-  [pf_diff]
-    type = ADPFFDiffusion
-    variable = 'd'
-  []
-  [pf_barr]
-    type = ADPFFBarrier
-    variable = 'd'
-  []
-  [pf_react]
-    type = ADPFFReaction
-    variable = 'd'
-    driving_energy_uo = 'E_driving'
-  []
 []
 
 [BCs]
   [Periodic]
     [x_left_right]
-      variable = 'disp_x'
+      variable = disp_x
       primary = 'left'
       secondary = 'right'
       translation = '100 0 0'
     []
     [y_left_right]
-      variable = 'disp_y'
-      primary = 'left'
-      secondary = 'right'
-      translation = '100 0 0'
-    []
-    [d_left_right]
-      variable = 'd'
+      variable = disp_y
       primary = 'left'
       secondary = 'right'
       translation = '100 0 0'
     []
     [x_top_bottom]
-      variable = 'disp_x'
+      variable = disp_x
       primary = 'top'
       secondary = 'bottom'
       translation = '0 -100 0'
     []
     [y_top_bottom]
-      variable = 'disp_y'
+      variable = disp_y
       primary = 'top'
       secondary = 'bottom'
       translation = '0 -100 0'
     []
-    [d_top_bottom]
-      variable = 'd'
-      primary = 'top'
-      secondary = 'bottom'
-      translation = '0 -100 0'
-    []
-  []
-[]
-
-[Bounds]
-  [irr]
-    type = VariableOldValueBoundsAux
-    variable = 'bounds_dummy'
-    bound_type = lower
-    bounded_variable = 'd'
-  []
-  [upper]
-    type = ConstantBoundsAux
-    variable = 'bounds_dummy'
-    bound_type = upper
-    bounded_variable = 'd'
-    bound_value = 1
   []
 []
 
 [Materials]
   [eigen_strain]
-    type = ADComputeEigenstrainFromFunctionEigenstress
-    eigen_stress = 't 0 0 0 t 0 0 0 0'
+    type = ADComputeEigenstrainFromScalarEigenstress
+    eigen_stress = 'load zero zero zero load zero zero zero zero'
     eigenstrain_name = 'is'
   []
   [elasticity_tensor]
@@ -160,16 +124,6 @@
     type = SmallStrainDegradedElasticPK2Stress_NoSplit
     d = 'd'
     d_crit = 0.6
-  []
-  [interface_energy]
-    type = ThinFilmInterfaceEnergy
-    coef = 0.1
-    displacements = 'disp_x disp_y'
-  []
-  [fracture_driving_energy]
-    type = ADSumRealMaterial
-    sum_prop_name = 'E_driving'
-    prop_names = 'E_el_active E_int'
   []
   [energy_release_rate]
     type = ParsedMaterial
@@ -205,33 +159,19 @@
 []
 
 [Executioner]
-  type = FixedPointTransient
+  type = Transient
   solve_type = 'NEWTON'
-  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels '
-                        '-snes_type'
-  petsc_options_value = 'asm      ilu          200         200                0                     '
-                        'vinewtonrsls'
-  dt = 1e-3
-  end_time = 0.22
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels'
+  petsc_options_value = 'asm      ilu          200         200                0                    '
+  dt = 1e-4
 
-  nl_abs_tol = 1e-8
-  nl_rel_tol = 1e-6
+  nl_abs_tol = 1e-10
+  nl_rel_tol = 1e-06
 
-  fp_max_its = 10
-  fp_tol = 1e-01
-
-  automatic_scaling = true
+  # automatic_scaling = true
 []
 
 [Outputs]
+  hide = 'load'
   print_linear_residuals = false
-  [exodus]
-    type = Exodus
-    file_base = 'visualize'
-    hide = 'bounds_dummy'
-  []
-  [console]
-    type = Console
-    outlier_variable_norms = false
-  []
 []

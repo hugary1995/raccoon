@@ -33,7 +33,7 @@ protected:
   const GenericMaterialProperty<RankFourTensor, is_ad> & _elasticity_tensor;
 
   /// initial stress components
-  std::vector<const GenericVariableValue<is_ad> *> _eigen_stress_scalar;
+  std::vector<const VariableValue *> _eigen_stress_scalar;
 };
 
 typedef ComputeEigenstrainFromScalarEigenstressTempl<false> ComputeEigenstrainFromScalarEigenstress;
