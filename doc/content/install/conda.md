@@ -45,23 +45,9 @@ conda config --add channels https://mooseframework.org/conda/moose
   ```bash
   conda activate moose
   ```
-
-  Some folks may receive additional instructions when attempting to activate a profile. Follow those instructions, and try to activate the moose environment again.
-
-  You will have successfully activated the moose environment when you see 'moose' within your prompt.
-
-  If you close, and re-open this terminal window, know that you will need to `conda activate moose` again. You will need to do this for each terminal you open. If you wish to make this automatic, you may append `conda activate moose` to your bash or zsh profiles.
-
-  The MOOSE team will make periodic updates to the conda packages. To stay up-to-date, activate the moose environment, and perform an update:
-
-  ```bash
-  conda activate moose
-  conda update --all
-  ```
-
 - +\[Option 2\] Configure your own Conda+
 
-  In case you want to do developments with libMesh as well, if may be convenient to compile your own libMesh.
+  In case you want to do developments with libMesh as well, it may be convenient to compile your own libMesh.
 
   As a demonstration, we show how to configure your own libMesh with Boost.
   In this case, install the moose-tools and moose-petsc packages from mooseframework.org, install boost package from conda-forge, and name your environment 'moose-boost':
@@ -76,21 +62,11 @@ conda config --add channels https://mooseframework.org/conda/moose
   conda activate moose-boost
   ```
 
-  Some folks may receive additional instructions when attempting to activate a profile. Follow those instructions, and try to activate the moose environment again.
+!alert note title= first time using conda
+Some folks may receive additional instructions when attempting to activate a profile. Follow those instructions, and try to activate the moose environment again. You will have successfully activated the moose environment when you see 'moose-boost' within your prompt.
 
-  You will have successfully activated the moose environment when you see 'moose-boost' within your prompt.
-
-  If you close, and re-open this terminal window, know that you will need to `conda activate moose-boost` again. You will need to do this for each terminal you open. If you wish to make this automatic, you may append `conda activate moose-boost` to your bash or zsh profiles.
-
-  The MOOSE team will make periodic updates to the conda packages. To stay up-to-date, activate the moose environment, and perform an update:
-
-  ```bash
-  conda activate moose-boost
-  conda update --all
-  ```
-
-
-
+!alert note title= activate conda environment for every ner terminal
+If you close, and re-open the terminal window, know that you will need to `conda activate moose` or `conda activate moose-boost` again. You will need to do this for each terminal you open. If you wish to make this automatic, you may append `conda activate moose` or `conda activate moose-boost` to your bash or zsh profiles.
 
 !alert note title= sudo is not necessary
 If you find yourself applying the use of `sudo` for any of the above conda commands... something's not right. The most common reason for needing sudo, is due to an improper installation. Conda *should* be installed to your home directory, and without any use of `sudo`.
