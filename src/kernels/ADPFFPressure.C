@@ -36,7 +36,7 @@ ADPFFPressure::ADPFFPressure(const InputParameters & parameters)
 ADRealVectorValue
 ADPFFPressure::precomputeQpResidual()
 {
-  ADReal p = _p_uo.getData(_current_elem, _qp);
+  ADReal p = _p_uo.getRawData(_current_elem, _qp);
   ADRealVectorValue u((*_disp[0])[_qp], (*_disp[1])[_qp], (*_disp[2])[_qp]);
   return p * u;
 }

@@ -21,22 +21,23 @@ protected:
   /// base name
   const std::string _base_name;
 
-  /// coalescence mobility
-  const Real & _c;
+  /// coalescence coefficients
+  const Real & _beta;
+  const Real & _e0;
 
   /// Mobility in Allen-Cahn equation
   ADMaterialProperty<Real> & _M;
   const ADMaterialProperty<Real> & _M0;
-
-  /// coalescence energy
-  ADMaterialProperty<Real> & _E_coalesce;
-
-  /// degradation
-  const ADMaterialProperty<Real> & _g;
 
   /// degradation function
   const ADMaterialProperty<Real> & _w;
 
   /// effective plastic strain
   const ADMaterialProperty<Real> & _ep;
+
+  /// old effective plastic strain
+  const MaterialProperty<Real> & _ep_old;
+
+  /// whether to lag the effective plastic strain
+  const bool _lag;
 };
