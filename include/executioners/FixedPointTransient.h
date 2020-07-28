@@ -17,6 +17,8 @@ public:
 
   virtual void init() override;
 
+  const FixedPointSolve & getSolveObj() { return _fp_solve; }
+
 protected:
   FixedPointSolve _fp_solve;
 };
