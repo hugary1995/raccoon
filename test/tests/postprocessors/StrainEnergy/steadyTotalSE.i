@@ -1,3 +1,12 @@
+# Solves the problem:
+#   div(stress) = 0 ,   x in [-1, 1]*[-1, 1]
+# with boundary conditions
+#   u_x = u_y = 0   , on y = -1
+#   sigma . n = 0.1 , on y = 1
+# Without Poisson effects, this is a quasi-1D problem, with u_x = 0,
+# u_y = 0.1*(y+1). The total strain energy is then 4*0.5*(0.1)^2 = 0.02,
+# with the factor of 4 representing the area of the domain.
+
 [Mesh]
   type = GeneratedMesh
   dim = 2

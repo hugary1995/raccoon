@@ -1,28 +1,25 @@
-E = 1
-rho = 1
-nu = 0
+E = 1e-6
+rho = 1e-12
+nu = 0.3
 
-# sigmac = 1.5
-psic = 1.125
-Gc = 0.45
-l = 0.05
-
-[Mesh]
-  [gmg]
-    type = GeneratedMeshGenerator
-    dim = 1
-    xmin = -1
-    xmax = 1
-    nx = 400
-  []
-[]
+# sigmac = 1.5e-6
+psic = 1.125e-6
+Gc = 0.45e-3
+l = 30
 
 [Problem]
   type = FixedPointProblem
 []
 
 [GlobalParams]
-  displacements = 'disp_x'
+  displacements = 'disp_x disp_y'
+[]
+
+[Mesh]
+  [gmg]
+    type = FileMeshGenerator
+    file = 'geo.msh'
+  []
 []
 
 [UserObjects]
@@ -35,16 +32,42 @@ l = 0.05
 [Variables]
   [disp_x]
   []
+  [disp_y]
+  []
   [d]
   []
 []
 
 [AuxVariables]
-  [stress]
+  [stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [stress_xy]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [hmin]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [hmax]
     order = CONSTANT
     family = MONOMIAL
   []
   [bounds_dummy]
+  []
+  [accel_x]
+  []
+  [accel_y]
+  []
+  [vel_x]
+  []
+  [vel_y]
   []
 []
 
@@ -70,9 +93,18 @@ l = 0.05
     variable = disp_x
     component = 0
   []
+  [solid_y]
+    type = ADStressDivergenceTensors
+    variable = disp_y
+    component = 1
+  []
   [inertia_x]
     type = InertialForce
     variable = disp_x
+  []
+  [inertia_y]
+    type = InertialForce
+    variable = disp_y
   []
 
   [pff_diff]
@@ -91,12 +123,71 @@ l = 0.05
 []
 
 [AuxKernels]
-  [stress]
+  [stressxx]
     type = ADRankTwoAux
     rank_two_tensor = stress
-    variable = stress
+    variable = stress_xx
     index_i = 0
     index_j = 0
+    execute_on = TIMESTEP_END
+  []
+  [stressxy]
+    type = ADRankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xy
+    index_i = 0
+    index_j = 1
+    execute_on = TIMESTEP_END
+  []
+  [stressyy]
+    type = ADRankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yy
+    index_i = 1
+    index_j = 1
+    execute_on = TIMESTEP_END
+  []
+  [min_h]
+    type = ElementLengthAux
+    variable = 'hmin'
+    method = min
+    execute_on = 'INITIAL'
+  []
+  [max_h]
+    type = ElementLengthAux
+    variable = 'hmax'
+    method = max
+    execute_on = 'INITIAL'
+  []
+  [ax]
+    type = NewmarkAccelAux
+    variable = 'accel_x'
+    displacement = 'disp_x'
+    velocity = 'vel_x'
+    beta = 0.25
+    execute_on = 'TIMESTEP_END'
+  []
+  [ay]
+    type = NewmarkAccelAux
+    variable = 'accel_y'
+    displacement = 'disp_y'
+    velocity = 'vel_y'
+    beta = 0.25
+    execute_on = 'TIMESTEP_END'
+  []
+  [vx]
+    type = NewmarkVelAux
+    variable = 'vel_x'
+    acceleration = 'accel_x'
+    gamma = 0.5
+    execute_on = 'TIMESTEP_END'
+  []
+  [yx]
+    type = NewmarkVelAux
+    variable = 'vel_y'
+    acceleration = 'accel_y'
+    gamma = 0.5
+    execute_on = 'TIMESTEP_END'
   []
 []
 
@@ -112,7 +203,7 @@ l = 0.05
     poissons_ratio = '${nu}'
   []
   [stress]
-    type = SmallStrainDegradedElasticPK2Stress_NoSplit
+    type = SmallStrainDegradedElasticPK2Stress_StrainSpectral
     d = 'd'
   []
   [strain]
@@ -144,14 +235,20 @@ l = 0.05
     boundary = left
     variable = 'disp_x'
     component = 0
-    constant = '-1'
+    function = 'if(t < 1, -1e-6, 0)'
   []
   [right]
     type = ADPressure
     boundary = right
     variable = 'disp_x'
     component = 0
-    constant = '-1'
+    function = 'if(t < 1, -1e-6, 0)'
+  []
+  [fix_y]
+    type = ADDirichletBC
+    variable = 'disp_y'
+    boundary = 'center left right'
+    value = 0.0
   []
 []
 
@@ -184,8 +281,8 @@ l = 0.05
 [Executioner]
   type = FixedPointTransient
   # dt = 1e-3 #CFL condition
-  dt = 0.005
-  num_steps = 1000
+  dt = 50e-3
+  num_steps = 400
   solve_type = 'NEWTON'
 
   petsc_options_iname = '-pc_type -pc_factor_mat_solver_package -snes_type'
@@ -196,8 +293,9 @@ l = 0.05
   l_max_its = 50
   nl_max_its = 100
 
-  fp_max_its = 10
-  fp_tol = 1e-2
+  accept_on_max_fp_iteration = false
+  fp_max_its = 1000
+  fp_tol = 1e-6
 
   [TimeIntegrator]
     type = NewmarkBeta
@@ -208,18 +306,20 @@ l = 0.05
   print_linear_residuals = false
   [Exodus]
     type = Exodus
-    file_base = 'mechanical_fracture1d'
+    file_base = 'mechanical_fracture2d'
     output_material_properties = true
     show_material_properties = 'E_el_active'
   []
   [Console]
     type = Console
+    # file_base = 'mechanical_fracture_log'
+    # output_file = true
     outlier_variable_norms = false
     interval = 10
   []
-  [csv]
+  [CSV]
     type = CSV
-    file_base = 'mechanical_fracture1d_energies'
+    file_base = 'mechanical_fracture2d_energies'
   []
 []
 
