@@ -45,6 +45,5 @@
   print_linear_residuals = false
   [CSV]
     type = CSV
-
   []
 []
