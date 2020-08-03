@@ -1,10 +1,10 @@
 # Solves the problem:
-#   div(stress) = rho u,tt ,   x in [-1, 1]*[-1, 1]
+#   div(stress) = 0 ,   x in [-1, 1]*[-1, 1]
 # with boundary conditions
-#   u_x = u_y = 0     , on y = -1
-#   sigma . n = 0.1*t , on y = 1
+#   u_x = u_y = 0   , on y = -1
+#   sigma . n = 0.1 , on y = 1
 # Without Poisson effects, this is a quasi-1D problem, with u_x = 0,
-# u_y = 0.1*(y+1). The total strain energy is then 4*0.5*(0.1*t)^2 = 0.02*t^2,
+# u_y = 0.1*(y+1). The total strain energy is then 4*0.5*(0.1)^2 = 0.02,
 # with the factor of 4 representing the area of the domain.
 
 [Mesh]
@@ -31,12 +31,12 @@
 
 [Kernels]
   [ux]
-    type = StressDivergenceTensors
+    type = ADStressDivergenceTensors
     variable = 'disp_x'
     component = 0
   []
   [uy]
-    type = StressDivergenceTensors
+    type = ADStressDivergenceTensors
     variable = 'disp_y'
     component = 1
   []
@@ -44,58 +44,56 @@
 
 [Materials]
   [elasticity_tensor]
-    type = ComputeIsotropicElasticityTensor
+    type = ADComputeIsotropicElasticityTensor
     youngs_modulus = 1
     poissons_ratio = 0
   []
   [strain]
-    type = ComputeSmallStrain
+    type = ADComputeSmallStrain
   []
   [stress]
-    type = ComputeLinearElasticStress
+    type = ADComputeLinearElasticStress
   []
 []
 
 [BCs]
   [fix_x]
-    type = DirichletBC
+    type = ADDirichletBC
     variable = 'disp_x'
     boundary = 'bottom'
     value = 0.0
   []
   [fix_y]
-    type = DirichletBC
+    type = ADDirichletBC
     variable = 'disp_y'
     boundary = 'bottom'
     value = 0.0
   []
   [traction]
-    type = Pressure
+    type = ADPressure
     variable = 'disp_y'
     boundary = 'top'
-    function = '0.1*t'
+    function = '0.1'
     component = 1
   []
 []
 
 [Postprocessors]
   [strain_energy]
-    type = StrainEnergy
+    type = ADStrainEnergy
   []
 []
 
 [Executioner]
-  type = Transient
+  type = Steady
   solve_type = 'NEWTON'
-  dt = 1
-  num_steps = 4
 []
 
 [Outputs]
   print_linear_residuals = false
   [csv]
     type = CSV
-    file_base = 'transientstrainenergy'
+    file_base = 'adSteadystrainenergy'
     delimiter = ','
   []
 []

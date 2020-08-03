@@ -31,12 +31,12 @@
 
 [Kernels]
   [ux]
-    type = StressDivergenceTensors
+    type = ADStressDivergenceTensors
     variable = 'disp_x'
     component = 0
   []
   [uy]
-    type = StressDivergenceTensors
+    type = ADStressDivergenceTensors
     variable = 'disp_y'
     component = 1
   []
@@ -44,33 +44,33 @@
 
 [Materials]
   [elasticity_tensor]
-    type = ComputeIsotropicElasticityTensor
+    type = ADComputeIsotropicElasticityTensor
     youngs_modulus = 1
     poissons_ratio = 0
   []
   [strain]
-    type = ComputeSmallStrain
+    type = ADComputeSmallStrain
   []
   [stress]
-    type = ComputeLinearElasticStress
+    type = ADComputeLinearElasticStress
   []
 []
 
 [BCs]
   [fix_x]
-    type = DirichletBC
+    type = ADDirichletBC
     variable = 'disp_x'
     boundary = 'bottom'
     value = 0.0
   []
   [fix_y]
-    type = DirichletBC
+    type = ADDirichletBC
     variable = 'disp_y'
     boundary = 'bottom'
     value = 0.0
   []
   [traction]
-    type = Pressure
+    type = ADPressure
     variable = 'disp_y'
     boundary = 'top'
     function = '0.1*t'
@@ -80,7 +80,7 @@
 
 [Postprocessors]
   [strain_energy]
-    type = StrainEnergy
+    type = ADStrainEnergy
   []
 []
 
@@ -95,7 +95,7 @@
   print_linear_residuals = false
   [csv]
     type = CSV
-    file_base = 'transientstrainenergy'
+    file_base = 'adTransientstrainenergy'
     delimiter = ','
   []
 []

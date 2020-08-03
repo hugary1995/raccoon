@@ -6,16 +6,20 @@
 
 #include "ElementIntegralPostprocessor.h"
 
-class KineticEnergy : public ElementIntegralPostprocessor
+template <bool is_ad>
+class KineticEnergyTempl : public ElementIntegralPostprocessor
 {
 public:
   static InputParameters validParams();
 
-  KineticEnergy(const InputParameters & parameters);
+  KineticEnergyTempl(const InputParameters & parameters);
 
 protected:
   virtual Real computeQpIntegral() override;
-  const MaterialProperty<Real> & _rho;
+  const GenericMaterialProperty<Real, is_ad> & _rho;
   const unsigned _ndisp;
-  std::vector<const ADVariableValue *> _vel_var;
+  std::vector<const VariableValue *> _vel_var;
 };
+
+typedef KineticEnergyTempl<false> KineticEnergy;
+typedef KineticEnergyTempl<true> ADKineticEnergy;

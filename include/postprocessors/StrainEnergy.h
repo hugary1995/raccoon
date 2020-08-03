@@ -6,16 +6,20 @@
 
 #include "ElementIntegralPostprocessor.h"
 
-class StrainEnergy : public ElementIntegralPostprocessor
+template <bool is_ad>
+class StrainEnergyTempl : public ElementIntegralPostprocessor
 {
 public:
   static InputParameters validParams();
 
-  StrainEnergy(const InputParameters & parameters);
+  StrainEnergyTempl(const InputParameters & parameters);
 
 protected:
   virtual Real computeQpIntegral() override;
   const std::string _base_name;
-  const ADMaterialProperty<RankTwoTensor> & _stress;
-  const ADMaterialProperty<RankTwoTensor> & _strain;
+  const GenericMaterialProperty<RankTwoTensor, is_ad> & _stress;
+  const GenericMaterialProperty<RankTwoTensor, is_ad> & _strain;
 };
+
+typedef StrainEnergyTempl<false> StrainEnergy;
+typedef StrainEnergyTempl<true> ADStrainEnergy;

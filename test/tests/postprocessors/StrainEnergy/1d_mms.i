@@ -84,7 +84,7 @@
     function = solution_u
   []
   [SE]
-    type = StrainEnergy
+    type = ADStrainEnergy
   []
 []
 

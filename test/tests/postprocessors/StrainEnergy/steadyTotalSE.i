@@ -31,12 +31,12 @@
 
 [Kernels]
   [ux]
-    type = ADStressDivergenceTensors
+    type = StressDivergenceTensors
     variable = 'disp_x'
     component = 0
   []
   [uy]
-    type = ADStressDivergenceTensors
+    type = StressDivergenceTensors
     variable = 'disp_y'
     component = 1
   []
@@ -44,33 +44,33 @@
 
 [Materials]
   [elasticity_tensor]
-    type = ADComputeIsotropicElasticityTensor
+    type = ComputeIsotropicElasticityTensor
     youngs_modulus = 1
     poissons_ratio = 0
   []
   [strain]
-    type = ADComputeSmallStrain
+    type = ComputeSmallStrain
   []
   [stress]
-    type = ADComputeLinearElasticStress
+    type = ComputeLinearElasticStress
   []
 []
 
 [BCs]
   [fix_x]
-    type = ADDirichletBC
+    type = DirichletBC
     variable = 'disp_x'
     boundary = 'bottom'
     value = 0.0
   []
   [fix_y]
-    type = ADDirichletBC
+    type = DirichletBC
     variable = 'disp_y'
     boundary = 'bottom'
     value = 0.0
   []
   [traction]
-    type = ADPressure
+    type = Pressure
     variable = 'disp_y'
     boundary = 'top'
     function = '0.1'

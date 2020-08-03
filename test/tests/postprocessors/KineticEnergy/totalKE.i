@@ -4,7 +4,7 @@
 #   u_x = t , on x = -1
 #   u_y = 0 , on x = 1
 # This amounts to a rightward rigid body translation with unit velocity
-# The kinetic energy is then always exactly 4*0.5*1^2 = 2. 
+# The kinetic energy is then always exactly 4*0.5*1^2 = 2.
 
 [Mesh]
   type = GeneratedMesh
