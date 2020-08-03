@@ -61,7 +61,7 @@ ADDegradedElasticStressBase::g()
   if (_g_mat)
     return (*_g_mat)[_qp];
   else if (_g_uo)
-    return _g_uo->getData(_current_elem, _qp);
+    return _g_uo->getRawData(_current_elem, _qp);
   else
     mooseError("Internal Error");
 

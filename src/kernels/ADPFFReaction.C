@@ -65,7 +65,7 @@ ADPFFReaction::precomputeQpResidual()
   else if (_D_mat_old)
     D = (*_D_mat_old)[_qp];
   else if (_D_uo)
-    D = _D_uo->getData(_current_elem, _qp);
+    D = _D_uo->getRawData(_current_elem, _qp);
   else
     mooseError("Internal Error");
 

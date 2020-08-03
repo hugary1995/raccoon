@@ -27,8 +27,8 @@ TransientSubcycling::relativeSolutionDifferenceNorm()
   _sln_diff = current_solution;
   _sln_diff -= old_solution;
 
-  // Real norm = _sln_diff.linfty_norm() / old_solution.linfty_norm();
-  Real norm = _sln_diff.l2_norm() / old_solution.l2_norm();
+  Real norm = _sln_diff.linfty_norm() / old_solution.linfty_norm();
+  // Real norm = _sln_diff.l2_norm() / old_solution.l2_norm();
 
   if (std::isnan(norm))
     return 0.0;
