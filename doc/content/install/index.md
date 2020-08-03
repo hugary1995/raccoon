@@ -10,6 +10,9 @@ Therefore, it can be complicated to get RACCOON to work. Fortunately, the instal
 has been thought through and thoroughly tested. The installation process can be summarized in the following steps,
 each of which should only take a handful of commands.
 
+!alert note title= Install RACCOON on DCC
+Instead of the instructions below, refer to [these instructions](https://github.com/casperversteeg/fuzzy-pancake-eureka/blob/master/DCCmoose.pdf) for setting up RACCOON on the Duke Computing Cluster. Contact [Casper Versteeg](mailto:casper.versteeg@duke.edu) if you need access to these instructions. Contact Professor [John Dolbow](mailto:jdolbow@duke.edu) if you are our group member and need access to DCC.
+
 ## 1. Install environment packages
 
 First, follow [these instructions](install/conda.md) to install environment packages required for MOOSE and RACCOON.
@@ -35,8 +38,8 @@ This step is only necessary if you didn't choose to include moose-libmesh in you
 For example, if you want to compile libMesh with boost, simply do
 
 ```bash
-cd moose
-./update_and_rebuild_libmesh.sh --with-boost
+cd ~/projects/raccoon
+./moose/scripts/update_and_rebuild_libmesh.sh --with-boost
 ```
 
 ## 4. Compile RACCOON
@@ -63,10 +66,19 @@ RACCOON is under rapid development right now. To make sure you get the most out 
 
 ```bash
 git pull
-git submodule update
-conda update --all
 make -j N
 ```
+
+Since MOOSE is included as a submodule of RACCOON, you will receive a notification when a new version of MOOSE is available for use. To update MOOSE, simply do
+
+```bash
+git submodule update
+conda activate moose
+conda update --all
+```
+
+!alert note title= updating the conda environment
+Since MOOSE is built upon libMesh, updating the conda environment packages including `moose-libmesh` without updating MOOSE may break dependencies.
 
 ## 7. Set up Atom for development (Optional)
 

@@ -27,4 +27,7 @@ protected:
 
   /// initial slope of the local dissipation function
   const Real & _xi;
+
+  /// coalescence coefficient
+  const Real & _beta;
 };

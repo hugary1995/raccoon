@@ -1,36 +1,7 @@
-Gc = 22.2
-l = 0.35
-psic = 7.9
-
-[MultiApps]
-  [fracture]
-    type = TransientMultiApp
-    input_files = 'fracture.i'
-    cli_args = 'Gc=${Gc};l=${l};psic=${psic}'
-  []
-[]
-
-[Transfers]
-  [from_d]
-    type = MultiAppCopyTransfer
-    multi_app = 'fracture'
-    direction = from_multiapp
-    source_variable = 'd'
-    variable = 'd'
-  []
-  [to_E_el_active]
-    type = MultiAppCopyTransfer
-    multi_app = 'fracture'
-    direction = to_multiapp
-    source_variable = 'E_el_active'
-    variable = 'E_el_active'
-  []
-[]
-
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/half_notched_plate.msh'
+    file = 'gold/half_notched_plate_65.msh'
   []
 []
 
@@ -39,6 +10,8 @@ psic = 7.9
   []
   [disp_y]
   []
+  [d]
+  []
 []
 
 [AuxVariables]
@@ -46,10 +19,7 @@ psic = 7.9
     order = CONSTANT
     family = MONOMIAL
   []
-  [d]
-  []
-  [E_el_active]
-    family = MONOMIAL
+  [bounds_dummy]
   []
 []
 
@@ -61,10 +31,21 @@ psic = 7.9
     scalar_type = 'MaxPrincipal'
     execute_on = 'TIMESTEP_END'
   []
-  [E_el_active]
-    type = ADMaterialRealAux
-    variable = 'E_el_active'
-    property = 'E_el_active'
+[]
+
+[Bounds]
+  [irreversibility]
+    type = VariableOldValueBoundsAux
+    variable = 'bounds_dummy'
+    bounded_variable = 'd'
+    bound_type = lower
+  []
+  [upper]
+    type = ConstantBoundsAux
+    variable = 'bounds_dummy'
+    bounded_variable = 'd'
+    bound_type = upper
+    bound_value = 1
   []
 []
 
@@ -88,6 +69,20 @@ psic = 7.9
     variable = 'disp_y'
     component = 1
     displacements = 'disp_x disp_y'
+  []
+  [pff_diff]
+    type = ADPFFDiffusion
+    variable = 'd'
+  []
+  [pff_barr]
+    type = ADPFFBarrier
+    variable = 'd'
+  []
+  [pff_react]
+    type = ADPFFReaction
+    variable = 'd'
+    driving_energy_mat = 'E_el_active'
+    lag = true
   []
 []
 
@@ -127,6 +122,10 @@ psic = 7.9
     type = SmallStrainDegradedElasticPK2Stress_StrainSpectral
     d = 'd'
   []
+  [local_dissipation]
+    type = LinearLocalDissipation
+    d = 'd'
+  []
   [fracture_properties]
     type = FractureMaterial
     local_dissipation_norm = 8/3
@@ -140,17 +139,24 @@ psic = 7.9
 
 [Executioner]
   type = Transient
+  solve_type = NEWTON
+  petsc_options_iname = '-pc_type -pc_factor_mat_solver_package -snes_type'
+  petsc_options_value = 'lu       superlu_dist                  vinewtonrsls'
+  nl_abs_tol = 1e-08
+  nl_rel_tol = 1e-06
+  automatic_scaling = true
   dt = 5e-9
   end_time = 9e-5
-
   [TimeIntegrator]
-    type = CentralDifference
-    solve_type = lumped
+    type = NewmarkBeta
   []
 []
 
 [Outputs]
-  file_base = 'visualize_explicit'
-  exodus = true
-  interval = 20
+  print_linear_residuals = false
+  [exodus]
+    type = Exodus
+    file_base = 'visualize_implicit2'
+    interval = 20
+  []
 []

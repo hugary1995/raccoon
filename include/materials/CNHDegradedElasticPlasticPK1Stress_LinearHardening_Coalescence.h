@@ -17,8 +17,10 @@ public:
 
 protected:
   virtual ADReal dH_dep(ADReal ep) override;
+  virtual ADReal d2H_dep2(ADReal ep) override;
 
   const ADMaterialProperty<Real> & _w;
-  const Real _c;
+  const Real _beta;
+  const Real _e0;
   const ADMaterialProperty<Real> & _M0;
 };
