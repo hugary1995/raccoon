@@ -6,21 +6,22 @@
 
 #include "DegradationBase.h"
 
-class WuDegradation : public DegradationBase
+template <bool is_ad>
+class WuDegradationTempl : public DegradationBaseTempl<true>
 {
 public:
   static InputParameters validParams();
 
-  WuDegradation(const InputParameters & parameters);
+  WuDegradationTempl(const InputParameters & parameters);
 
 protected:
   virtual void computeDegradation() override;
 
   /// mobility
-  const ADMaterialProperty<Real> & _M;
+  const GenericMaterialProperty<Real, is_ad> & _M;
 
   /// critical fracture energy
-  const MaterialProperty<Real> & _b;
+  const GenericMaterialProperty<Real, is_ad> & _b;
 
   /// shape parameters
   const Real & _a2;
@@ -29,3 +30,5 @@ protected:
   /// initial slope of the local dissipation function
   const Real & _xi;
 };
+
+typedef WuDegradationTempl<true> WuDegradation;

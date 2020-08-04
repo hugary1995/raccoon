@@ -16,8 +16,7 @@ ADPFFBarrier::validParams()
   return params;
 }
 
-ADPFFBarrier::ADPFFBarrier(
-    const InputParameters & parameters)
+ADPFFBarrier::ADPFFBarrier(const InputParameters & parameters)
   : ADKernelValue(parameters),
     _M(getADMaterialProperty<Real>("mobility_name")),
     _dw_dd(getADMaterialProperty<Real>(derivativePropertyNameFirst(

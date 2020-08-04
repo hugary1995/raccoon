@@ -17,7 +17,9 @@ SmallStrainDegradedElasticPK2Stress_StrainSpectral::validParams()
 
 SmallStrainDegradedElasticPK2Stress_StrainSpectral::
     SmallStrainDegradedElasticPK2Stress_StrainSpectral(const InputParameters & parameters)
-  : ADDegradedElasticStressBase(parameters)
+  : ADDegradedElasticStressBase(parameters),
+    _D(declareADProperty<RealVectorValue>("principal_strain")),
+    _Q(declareADProperty<RankTwoTensor>("principal_strain_dir"))
 {
 }
 
@@ -33,13 +35,15 @@ SmallStrainDegradedElasticPK2Stress_StrainSpectral::computeQpStress()
 
   // spectral decomposition
   ADRankTwoTensor E = _mechanical_strain[_qp];
-  ADRankTwoTensor Q;
+  // ADRankTwoTensor Q;
   std::vector<ADReal> d;
-  E.symmetricEigenvaluesEigenvectors(d, Q);
+  E.symmetricEigenvaluesEigenvectors(d, _Q[_qp]);
+  RealVectorValue v(d[0].value(), d[1].value(), d[2].value());
+  _D[_qp] = v;
 
   // positive part
   D_pos.fillFromInputVector(Macaulay(d));
-  ADRankTwoTensor E_pos = Q * D_pos * Q.transpose();
+  ADRankTwoTensor E_pos = _Q[_qp] * D_pos * _Q[_qp].transpose();
 
   ADReal trE = E.trace();
   ADReal trE_pos = Macaulay(trE);

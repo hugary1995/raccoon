@@ -7,8 +7,7 @@
 #include "ADKernelValue.h"
 #include "DerivativeMaterialPropertyNameInterface.h"
 
-class ADPFFBarrier : public ADKernelValue,
-                                           public DerivativeMaterialPropertyNameInterface
+class ADPFFBarrier : public ADKernelValue, public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();

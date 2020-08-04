@@ -17,10 +17,9 @@ ADPFFDiffusion::validParams()
   return params;
 }
 
-ADPFFDiffusion::ADPFFDiffusion(
-    const InputParameters & parameters)
+ADPFFDiffusion::ADPFFDiffusion(const InputParameters & parameters)
   : ADKernel(parameters),
-    _kappa(getMaterialProperty<Real>("kappa_name")),
+    _kappa(getADMaterialProperty<Real>("kappa_name")),
     _M(getADMaterialProperty<Real>("mobility_name")),
     _coord_sys(_assembly.coordSystem())
 {

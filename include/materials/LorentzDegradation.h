@@ -6,21 +6,22 @@
 
 #include "DegradationBase.h"
 
-class LorentzDegradation : public DegradationBase
+template <bool is_ad>
+class LorentzDegradationTempl : public DegradationBaseTempl<true>
 {
 public:
   static InputParameters validParams();
 
-  LorentzDegradation(const InputParameters & parameters);
+  LorentzDegradationTempl(const InputParameters & parameters);
 
 protected:
   virtual void computeDegradation() override;
 
   /// mobility
-  const ADMaterialProperty<Real> & _M;
+  const GenericMaterialProperty<Real, is_ad> & _M;
 
   /// critical fracture energy
-  const MaterialProperty<Real> & _b;
+  const GenericMaterialProperty<Real, is_ad> & _b;
 
   /// shape parameter
   const Real & _p;
@@ -31,3 +32,5 @@ protected:
   /// coalescence coefficient
   const Real & _beta;
 };
+
+typedef LorentzDegradationTempl<true> LorentzDegradation;

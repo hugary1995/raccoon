@@ -6,13 +6,16 @@
 
 #include "DegradationBase.h"
 
-class QuadraticDegradation : public DegradationBase
+template <bool is_ad>
+class QuadraticDegradationTempl : public DegradationBaseTempl<true>
 {
 public:
   static InputParameters validParams();
 
-  QuadraticDegradation(const InputParameters & parameters);
+  QuadraticDegradationTempl(const InputParameters & parameters);
 
 protected:
   virtual void computeDegradation() override;
 };
+
+typedef QuadraticDegradationTempl<true> QuadraticDegradation;

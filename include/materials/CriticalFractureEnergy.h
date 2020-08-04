@@ -6,12 +6,13 @@
 
 #include "Material.h"
 
-class CriticalFractureEnergy : public Material
+template <bool is_ad>
+class CriticalFractureEnergyTempl : public Material
 {
 public:
   static InputParameters validParams();
 
-  CriticalFractureEnergy(const InputParameters & parameters);
+  CriticalFractureEnergyTempl(const InputParameters & parameters);
 
 protected:
   virtual void computeQpProperties() override;
@@ -23,8 +24,11 @@ protected:
   const Function & _dg_dd;
 
   /// Mobility
-  const MaterialProperty<Real> & _M;
+  const GenericMaterialProperty<Real, is_ad> & _M;
 
   /// computed fracture energy barrier
-  MaterialProperty<Real> & _psi_critical;
+  GenericMaterialProperty<Real, is_ad> & _psi_critical;
 };
+
+typedef CriticalFractureEnergyTempl<false> CriticalFractureEnergy;
+typedef CriticalFractureEnergyTempl<true> ADCriticalFractureEnergy;

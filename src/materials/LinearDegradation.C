@@ -6,24 +6,29 @@
 
 registerADMooseObject("raccoonApp", LinearDegradation);
 
+template <bool is_ad>
 InputParameters
-LinearDegradation::validParams()
+LinearDegradationTempl<is_ad>::validParams()
 {
-  InputParameters params = DegradationBase::validParams();
+  InputParameters params = DegradationBaseTempl<is_ad>::validParams();
   params.addClassDescription("computes the degradation function of quadratic form, $(1 - d)$.");
   return params;
 }
 
-LinearDegradation::LinearDegradation(const InputParameters & parameters)
-  : DegradationBase(parameters)
+template <bool is_ad>
+LinearDegradationTempl<is_ad>::LinearDegradationTempl(const InputParameters & parameters)
+  : DegradationBaseTempl<is_ad>(parameters)
 {
 }
 
+template <bool is_ad>
 void
-LinearDegradation::computeDegradation()
+LinearDegradationTempl<is_ad>::computeDegradation()
 {
-  ADReal d = _d[_qp];
-  ADReal d_old = _lag ? _d_old[_qp] : d;
+  GenericReal<is_ad> d = _d[_qp];
+  GenericReal<is_ad> d_old = _lag ? _d_old[_qp] : d;
   _g[_qp] = 1.0 - d_old;
   _dg_dd[_qp] = -1.0;
 }
+
+template class LinearDegradationTempl<true>;

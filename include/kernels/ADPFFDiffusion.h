@@ -17,7 +17,7 @@ protected:
   virtual ADReal computeQpResidual() override;
 
   /// Allen-Cahn interface coefficient computed from fracture properties
-  const MaterialProperty<Real> & _kappa;
+  const ADMaterialProperty<Real> & _kappa;
 
   /// Allen-Cahn mobility computed from fracture properties
   const ADMaterialProperty<Real> & _M;
