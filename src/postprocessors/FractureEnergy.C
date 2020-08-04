@@ -3,11 +3,14 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "FractureEnergy.h"
+#include "metaphysicl/raw_type.h"
 
 registerMooseObject("raccoonApp", FractureEnergy);
+registerMooseObject("raccoonApp", ADFractureEnergy);
 
+template <bool is_ad>
 InputParameters
-FractureEnergy::validParams()
+FractureEnergyTempl<is_ad>::validParams()
 {
   InputParameters params = ElementIntegralPostprocessor::validParams();
   params.addClassDescription("computes the total fracture energy of the form $\\int_\\body M (w(d) "
@@ -23,18 +26,24 @@ FractureEnergy::validParams()
       "name of the material that holds the local dissipation function");
   return params;
 }
-
-FractureEnergy::FractureEnergy(const InputParameters & parameters)
+template <bool is_ad>
+FractureEnergyTempl<is_ad>::FractureEnergyTempl(const InputParameters & parameters)
   : ElementIntegralPostprocessor(parameters),
-    _kappa(getMaterialProperty<Real>("kappa_name")),
-    _M(getADMaterialProperty<Real>("mobility_name")),
-    _grad_d(coupledGradient("d")),
-    _w(getADMaterialProperty<Real>("local_dissipation_name"))
+    _kappa(getGenericMaterialProperty<Real, is_ad>(getParam<MaterialPropertyName>("kappa_name"))),
+    _M(getGenericMaterialProperty<Real, is_ad>(getParam<MaterialPropertyName>("mobility_name"))),
+    _grad_d(coupledGenericGradient<is_ad>("d")),
+    _w(getGenericMaterialProperty<Real, is_ad>(
+        getParam<MaterialPropertyName>("local_dissipation_name")))
 {
 }
 
+template <bool is_ad>
 Real
-FractureEnergy::computeQpIntegral()
+FractureEnergyTempl<is_ad>::computeQpIntegral()
 {
-  return _M[_qp].value() * (_w[_qp].value() + 0.5 * _kappa[_qp] * _grad_d[_qp] * _grad_d[_qp]);
+  return MetaPhysicL::raw_value(_M[_qp] *
+                                (_w[_qp] + 0.5 * _kappa[_qp] * _grad_d[_qp] * _grad_d[_qp]));
 }
+
+template class FractureEnergyTempl<false>;
+template class FractureEnergyTempl<true>;

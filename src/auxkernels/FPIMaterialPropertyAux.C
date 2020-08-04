@@ -3,12 +3,15 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "FPIMaterialPropertyAux.h"
+#include "metaphysicl/raw_type.h"
 #include "raccoonAppTypes.h"
 
 registerMooseObject("raccoonApp", FPIMaterialPropertyAux);
+registerMooseObject("raccoonApp", ADFPIMaterialPropertyAux);
 
+template <bool is_ad>
 InputParameters
-FPIMaterialPropertyAux::validParams()
+FPIMaterialPropertyAuxTempl<is_ad>::validParams()
 {
   InputParameters params = AuxKernel::validParams();
   params.addClassDescription("reads a material property into a monomial.");
@@ -25,14 +28,18 @@ FPIMaterialPropertyAux::validParams()
 
   return params;
 }
-
-FPIMaterialPropertyAux::FPIMaterialPropertyAux(const InputParameters & parameters)
-  : AuxKernel(parameters), _v(getADMaterialProperty<Real>("from"))
+template <bool is_ad>
+FPIMaterialPropertyAuxTempl<is_ad>::FPIMaterialPropertyAuxTempl(const InputParameters & parameters)
+  : AuxKernel(parameters), _v(getGenericMaterialProperty<Real, is_ad>("from"))
 {
 }
 
+template <bool is_ad>
 Real
-FPIMaterialPropertyAux::computeValue()
+FPIMaterialPropertyAuxTempl<is_ad>::computeValue()
 {
-  return _v[_qp].value();
+  return MetaPhysicL::raw_value(_v[_qp]);
 }
+
+template class FPIMaterialPropertyAuxTempl<false>;
+template class FPIMaterialPropertyAuxTempl<true>;

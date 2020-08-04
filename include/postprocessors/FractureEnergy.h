@@ -6,17 +6,21 @@
 
 #include "ElementIntegralPostprocessor.h"
 
-class FractureEnergy : public ElementIntegralPostprocessor
+template <bool is_ad>
+class FractureEnergyTempl : public ElementIntegralPostprocessor
 {
 public:
   static InputParameters validParams();
 
-  FractureEnergy(const InputParameters & parameters);
+  FractureEnergyTempl(const InputParameters & parameters);
 
 protected:
   virtual Real computeQpIntegral() override;
-  const MaterialProperty<Real> & _kappa;
-  const ADMaterialProperty<Real> & _M;
-  const VariableGradient & _grad_d;
-  const ADMaterialProperty<Real> & _w;
+  const GenericMaterialProperty<Real, is_ad> & _kappa;
+  const GenericMaterialProperty<Real, is_ad> & _M;
+  const GenericVariableGradient<is_ad> & _grad_d;
+  const GenericMaterialProperty<Real, is_ad> & _w;
 };
+
+typedef FractureEnergyTempl<false> FractureEnergy;
+typedef FractureEnergyTempl<true> ADFractureEnergy;
