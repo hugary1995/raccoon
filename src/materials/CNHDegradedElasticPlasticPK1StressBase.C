@@ -217,7 +217,6 @@ CNHDegradedElasticPlasticPK1StressBase::enforceIsochoricity()
   // Identity tensor
   ADRankTwoTensor I2(RankTwoTensorTempl<ADReal>::initIdentity);
 
-  // ADReal Ie_bar = _be_bar_trial.trace() / 3.0;
   _be_bar_dev = _s / _ge / _G;
   Real a = MetaPhysicL::raw_value(_be_bar_dev(0, 0));
   Real b = MetaPhysicL::raw_value(_be_bar_dev(1, 1));
@@ -238,20 +237,17 @@ CNHDegradedElasticPlasticPK1StressBase::enforceIsochoricity()
 
   ADReal Ie_bar = D / 3 / std::cbrt(2) - std::cbrt(2) * (3 * B - A * A) / 3 / D - A / 3;
 
-  // ADReal C2 = a + b + c;
-  // ADReal C1 = a * b + a * c + b * c - d * d - e * e - h * h;
-  // ADReal C0 = a * b * c + 2.0 * d * e * h - a * d * d - b * e * e - c * h * h - 1.0;
-
-  // ADReal resid = Ie_bar * Ie_bar * Ie_bar + C2 * Ie_bar * Ie_bar + C1 * Ie_bar + C0;
-  // ADReal resid0 = resid;
-  // ADReal jacob, delta_I;
+  // Real Ie_bar = MetaPhysicL::raw_value(_be_bar_trial.trace() / 3.0);
+  // Real resid = Ie_bar * Ie_bar * Ie_bar + A * Ie_bar * Ie_bar + B * Ie_bar + C;
+  // Real resid0 = resid;
+  // Real jacob, delta_I;
   // int iter = 0;
   // while (std::abs(resid) > 1E-10 * std::abs(resid0) && std::abs(resid) > 1e-12)
   // {
-  //   jacob = 3.0 * Ie_bar * Ie_bar + 2.0 * C2 * Ie_bar + C1;
+  //   jacob = 3.0 * Ie_bar * Ie_bar + 2.0 * A * Ie_bar + B;
   //   delta_I = -resid / jacob;
   //   Ie_bar = Ie_bar + delta_I;
-  //   resid = Ie_bar * Ie_bar * Ie_bar + C2 * Ie_bar * Ie_bar + C1 * Ie_bar + C0;
+  //   resid = Ie_bar * Ie_bar * Ie_bar + A * Ie_bar * Ie_bar + B * Ie_bar + C;
   //   iter++;
   //   if (iter > 50)
   //   {
@@ -262,6 +258,16 @@ CNHDegradedElasticPlasticPK1StressBase::enforceIsochoricity()
   //   }
   // }
   _be_bar[_qp] = _be_bar_dev + Ie_bar * I2;
+
+  std::cout << "===========================================\n";
+  std::cout << "_s = " << _s << std::endl;
+  std::cout << "_ge = " << _ge << std::endl;
+  std::cout << "a = " << a << std::endl;
+  std::cout << "b = " << b << std::endl;
+  std::cout << "c = " << c << std::endl;
+  std::cout << "d = " << d << std::endl;
+  std::cout << "e = " << e << std::endl;
+  std::cout << "h = " << h << std::endl;
 }
 
 void
