@@ -5,9 +5,11 @@
 #include "CriticalFractureEnergy.h"
 
 registerMooseObject("raccoonApp", CriticalFractureEnergy);
+registerMooseObject("raccoonApp", ADCriticalFractureEnergy);
 
+template <bool is_ad>
 InputParameters
-CriticalFractureEnergy::validParams()
+CriticalFractureEnergyTempl<is_ad>::validParams()
 {
   InputParameters params = Material::validParams();
   params.addClassDescription("Compute the critical fracture energy given degradation function, "
@@ -23,19 +25,20 @@ CriticalFractureEnergy::validParams()
 
   return params;
 }
-
-CriticalFractureEnergy::CriticalFractureEnergy(const InputParameters & parameters)
+template <bool is_ad>
+CriticalFractureEnergyTempl<is_ad>::CriticalFractureEnergyTempl(const InputParameters & parameters)
   : Material(parameters),
     _dw_dd(getFunction("initial_local_dissipation_slope")),
     _dg_dd(getFunction("initial_degradation_slope")),
-    _M(getMaterialPropertyByName<Real>(getParam<MaterialPropertyName>("mobility_name"))),
-    _psi_critical(
-        declareProperty<Real>(getParam<MaterialPropertyName>("critical_fracture_energy_name")))
+    _M(getGenericMaterialProperty<Real, is_ad>(getParam<MaterialPropertyName>("mobility_name"))),
+    _psi_critical(declareGenericProperty<Real, is_ad>(
+        getParam<MaterialPropertyName>("critical_fracture_energy_name")))
 {
 }
 
+template <bool is_ad>
 void
-CriticalFractureEnergy::computeQpProperties()
+CriticalFractureEnergyTempl<is_ad>::computeQpProperties()
 {
   Real dw_dd = _dw_dd.value(0.0, _q_point[_qp]);
   Real dg_dd = _dg_dd.value(0.0, _q_point[_qp]);
@@ -45,3 +48,6 @@ CriticalFractureEnergy::computeQpProperties()
 
   _psi_critical[_qp] = -_M[_qp] * dw_dd / dg_dd;
 }
+
+template class CriticalFractureEnergyTempl<false>;
+template class CriticalFractureEnergyTempl<true>;

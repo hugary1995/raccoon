@@ -6,10 +6,11 @@
 
 registerADMooseObject("raccoonApp", QuadraticLocalDissipation);
 
+template <bool is_ad>
 InputParameters
-QuadraticLocalDissipation::validParams()
+QuadraticLocalDissipationTempl<is_ad>::validParams()
 {
-  InputParameters params = ADMaterial::validParams();
+  InputParameters params = Material::validParams();
   params.addClassDescription(
       "computes the local dissipation potential of the form $\\xi d + (1 - \\xi) d$.");
   params.addRequiredCoupledVar("d", "phase-field damage variable");
@@ -20,22 +21,28 @@ QuadraticLocalDissipation::validParams()
   return params;
 }
 
-QuadraticLocalDissipation::QuadraticLocalDissipation(const InputParameters & parameters)
-  : ADMaterial(parameters),
-    _d(adCoupledValue("d")),
+template <bool is_ad>
+QuadraticLocalDissipationTempl<is_ad>::QuadraticLocalDissipationTempl(
+    const InputParameters & parameters)
+  : Material(parameters),
+    _d(coupledGenericValue<is_ad>("d")),
     _w_name(getParam<MaterialPropertyName>("local_dissipation_name")),
-    _w(declareADProperty<Real>(_w_name)),
-    _dw_dd(declareADProperty<Real>(
+    _w(declareGenericProperty<Real, is_ad>(_w_name)),
+    _dw_dd(declareGenericProperty<Real, is_ad>(
         derivativePropertyNameFirst(_w_name, this->getVar("d", 0)->name()))),
     _xi(getParam<Real>("xi"))
 {
 }
 
+template <bool is_ad>
 void
-QuadraticLocalDissipation::computeQpProperties()
+QuadraticLocalDissipationTempl<is_ad>::computeQpProperties()
 {
-  ADReal d = _d[_qp];
+  GenericReal<is_ad> d = _d[_qp];
 
   _w[_qp] = (1.0 - _xi) * d * d + _xi * d;
   _dw_dd[_qp] = 2.0 * (1.0 - _xi) * d + _xi;
 }
+
+// template class QuadraticLocalDissipationTempl<false>;
+template class QuadraticLocalDissipationTempl<true>;

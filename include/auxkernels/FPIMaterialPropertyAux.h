@@ -9,16 +9,20 @@
 /**
  * Self auxiliary value
  */
-class FPIMaterialPropertyAux : public AuxKernel
+template <bool is_ad>
+class FPIMaterialPropertyAuxTempl : public AuxKernel
 {
 public:
   static InputParameters validParams();
 
-  FPIMaterialPropertyAux(const InputParameters & parameters);
+  FPIMaterialPropertyAuxTempl(const InputParameters & parameters);
 
 protected:
   virtual Real computeValue() override;
 
   /// material property to project values from
-  const ADMaterialProperty<Real> & _v;
+  const GenericMaterialProperty<Real, is_ad> & _v;
 };
+
+typedef FPIMaterialPropertyAuxTempl<false> FPIMaterialPropertyAux;
+typedef FPIMaterialPropertyAuxTempl<true> ADFPIMaterialPropertyAux;

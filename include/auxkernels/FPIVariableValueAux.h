@@ -9,16 +9,20 @@
 /**
  * Self auxiliary value
  */
-class FPIVariableValueAux : public AuxKernel
+template <bool is_ad>
+class FPIVariableValueAuxTempl : public AuxKernel
 {
 public:
   static InputParameters validParams();
 
-  FPIVariableValueAux(const InputParameters & parameters);
+  FPIVariableValueAuxTempl(const InputParameters & parameters);
 
 protected:
   virtual Real computeValue() override;
 
   /// coupeld variable to read values from
-  const VariableValue & _v;
+  const GenericVariableValue<is_ad> & _v;
 };
+
+typedef FPIVariableValueAuxTempl<false> FPIVariableValueAux;
+typedef FPIVariableValueAuxTempl<true> ADFPIVariableValueAux;

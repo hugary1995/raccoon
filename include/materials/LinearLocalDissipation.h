@@ -4,28 +4,32 @@
 
 #pragma once
 
-#include "ADMaterial.h"
+#include "Material.h"
 #include "DerivativeMaterialPropertyNameInterface.h"
 
-class LinearLocalDissipation : public ADMaterial, public DerivativeMaterialPropertyNameInterface
+template <bool is_ad>
+class LinearLocalDissipationTempl : public Material, public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
 
-  LinearLocalDissipation(const InputParameters & parameters);
+  LinearLocalDissipationTempl(const InputParameters & parameters);
 
 protected:
   virtual void computeQpProperties() override;
 
   /// coupled damage variable
-  const ADVariableValue & _d;
+  const GenericVariableValue<is_ad> & _d;
 
   /// name of local dissipation
   const MaterialPropertyName _w_name;
 
   /// local dissipation
-  ADMaterialProperty<Real> & _w;
+  GenericMaterialProperty<Real, is_ad> & _w;
 
   /// local dissipation derivative
-  ADMaterialProperty<Real> & _dw_dd;
+  GenericMaterialProperty<Real, is_ad> & _dw_dd;
 };
+
+// typedef LinearLocalDissipationTempl<false> LinearLocalDissipation;
+typedef LinearLocalDissipationTempl<true> LinearLocalDissipation;

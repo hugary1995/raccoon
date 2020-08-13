@@ -17,6 +17,11 @@ protected:
   virtual void computeQpStress() override;
 
 private:
+  /// Eigendecomposition results
+  ADMaterialProperty<RealVectorValue> & _D;
+
+  ADMaterialProperty<RankTwoTensor> & _Q;
+
   /// positive eigenvalues
   ADRankTwoTensor D_pos;
 };

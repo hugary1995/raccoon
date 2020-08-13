@@ -134,7 +134,7 @@
     degradation_uo = 'g'
   [../]
   [./bulk]
-    type = GenericConstantMaterial
+    type = ADGenericConstantMaterial
     prop_names = 'phase_field_regularization_length energy_release_rate'
     prop_values = '0.2 2.7'
   [../]
@@ -143,7 +143,7 @@
     d = 'd'
   [../]
   [./fracture_properties]
-    type = FractureMaterial
+    type = ADFractureMaterial
     local_dissipation_norm = 2
   [../]
   [./degradation]

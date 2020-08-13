@@ -6,10 +6,11 @@
 
 registerADMooseObject("raccoonApp", LorentzDegradation);
 
+template <bool is_ad>
 InputParameters
-LorentzDegradation::validParams()
+LorentzDegradationTempl<is_ad>::validParams()
 {
-  InputParameters params = DegradationBase::validParams();
+  InputParameters params = DegradationBaseTempl<is_ad>::validParams();
   params.addClassDescription("computes the Lorentz-type degradation: "
                              "$\\frac{(1-d)^2}{(1-d)^2+\\frac{M}{\\psi_\\critical}d(1+pd)}$");
   params.addParam<MaterialPropertyName>("mobility_name", "mobility", "name of the Mobility");
@@ -23,33 +24,38 @@ LorentzDegradation::validParams()
   return params;
 }
 
-LorentzDegradation::LorentzDegradation(const InputParameters & parameters)
-  : DegradationBase(parameters),
-    _M(getADMaterialProperty<Real>("mobility_name")),
-    _b(getMaterialProperty<Real>("critical_fracture_energy_name")),
+template <bool is_ad>
+LorentzDegradationTempl<is_ad>::LorentzDegradationTempl(const InputParameters & parameters)
+  : DegradationBaseTempl<is_ad>(parameters),
+    _M(getGenericMaterialProperty<Real, is_ad>(getParam<MaterialPropertyName>("mobility_name"))),
+    _b(getGenericMaterialProperty<Real, is_ad>(
+        getParam<MaterialPropertyName>("critical_fracture_energy_name"))),
     _p(getParam<Real>("p")),
     _xi(getParam<Real>("xi")),
     _beta(getParam<Real>("beta"))
 {
 }
 
+template <bool is_ad>
 void
-LorentzDegradation::computeDegradation()
+LorentzDegradationTempl<is_ad>::computeDegradation()
 {
-  ADReal M = _M[_qp];
-  ADReal b = _b[_qp];
+  GenericReal<is_ad> M = _M[_qp];
+  GenericReal<is_ad> b = _b[_qp];
 
   // g
-  ADReal d = _lag ? _d_old[_qp] : _d[_qp];
-  ADReal num = (1.0 - d) * (1.0 - d);
-  ADReal denom = num + M * _xi / b * d * (1.0 + _p * d);
+  GenericReal<is_ad> d = _lag ? _d_old[_qp] : _d[_qp];
+  GenericReal<is_ad> num = (1.0 - d) * (1.0 - d);
+  GenericReal<is_ad> denom = num + M * _xi / b * d * (1.0 + _p * d);
   _g[_qp] = num / denom;
 
   // dg_dd
   d = _d[_qp];
   num = (1.0 - d) * (1.0 - d);
   denom = num + M * _xi / b * d * (1.0 + _p * d);
-  ADReal dnum_dd = -2.0 * (1.0 - d);
-  ADReal ddenom_dd = dnum_dd + M * _xi / b * (1.0 + 2.0 * _p * d);
+  GenericReal<is_ad> dnum_dd = -2.0 * (1.0 - d);
+  GenericReal<is_ad> ddenom_dd = dnum_dd + M * _xi / b * (1.0 + 2.0 * _p * d);
   _dg_dd[_qp] = (dnum_dd * denom - num * ddenom_dd) / denom / denom;
 }
+
+template class LorentzDegradationTempl<true>;

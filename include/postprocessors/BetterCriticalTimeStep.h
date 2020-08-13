@@ -6,12 +6,13 @@
 
 #include "ElementPostprocessor.h"
 
-class BetterCriticalTimeStep : public ElementPostprocessor
+template <bool is_ad>
+class BetterCriticalTimeStepTempl : public ElementPostprocessor
 {
 public:
   static InputParameters validParams();
 
-  BetterCriticalTimeStep(const InputParameters & parameters);
+  BetterCriticalTimeStepTempl(const InputParameters & parameters);
 
   virtual void initialize() override {}
   virtual void execute() override;
@@ -22,10 +23,10 @@ public:
 
 protected:
   /// Density of the material
-  const MaterialProperty<Real> & _material_density;
+  const GenericMaterialProperty<Real, is_ad> & _material_density;
 
   /// Effective stiffness of element
-  const MaterialProperty<Real> & _effective_stiffness;
+  const GenericMaterialProperty<Real, is_ad> & _effective_stiffness;
 
   /// User defined factor to be multiplied to the critical time step
   const Real & _factor;
@@ -35,3 +36,6 @@ protected:
   /// Material wave speed
   Real _c;
 };
+
+typedef BetterCriticalTimeStepTempl<false> BetterCriticalTimeStep;
+typedef BetterCriticalTimeStepTempl<true> ADBetterCriticalTimeStep;

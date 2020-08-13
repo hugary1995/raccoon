@@ -6,10 +6,11 @@
 
 registerADMooseObject("raccoonApp", QuasiLinearDegradation);
 
+template <bool is_ad>
 InputParameters
-QuasiLinearDegradation::validParams()
+QuasiLinearDegradationTempl<is_ad>::validParams()
 {
-  InputParameters params = DegradationBase::validParams();
+  InputParameters params = DegradationBaseTempl<is_ad>::validParams();
   params.addClassDescription("computes the quasi-linear Lorentz-type degradation: "
                              "$\\frac{(1-d)}{(1-d)+\\frac{M}{\\psi_\\critical}d}$");
   params.addParam<MaterialPropertyName>("mobility_name", "mobility", "name of the Mobility");
@@ -20,31 +21,36 @@ QuasiLinearDegradation::validParams()
   return params;
 }
 
-QuasiLinearDegradation::QuasiLinearDegradation(const InputParameters & parameters)
-  : DegradationBase(parameters),
-    _M(getADMaterialProperty<Real>("mobility_name")),
-    _b(getMaterialProperty<Real>("critical_fracture_energy_name")),
+template <bool is_ad>
+QuasiLinearDegradationTempl<is_ad>::QuasiLinearDegradationTempl(const InputParameters & parameters)
+  : DegradationBaseTempl<is_ad>(parameters),
+    _M(getGenericMaterialProperty<Real, is_ad>(getParam<MaterialPropertyName>("mobility_name"))),
+    _b(getGenericMaterialProperty<Real, is_ad>(
+        getParam<MaterialPropertyName>("critical_fracture_energy_name"))),
     _xi(getParam<Real>("xi"))
 {
 }
 
+template <bool is_ad>
 void
-QuasiLinearDegradation::computeDegradation()
+QuasiLinearDegradationTempl<is_ad>::computeDegradation()
 {
-  ADReal M = _M[_qp];
-  ADReal b = _b[_qp];
+  GenericReal<is_ad> M = _M[_qp];
+  GenericReal<is_ad> b = _b[_qp];
 
   // g
-  ADReal d = _lag ? _d_old[_qp] : _d[_qp];
-  ADReal num = 1.0 - d;
-  ADReal denom = num + M * _xi / b * d;
+  GenericReal<is_ad> d = _lag ? _d_old[_qp] : _d[_qp];
+  GenericReal<is_ad> num = 1.0 - d;
+  GenericReal<is_ad> denom = num + M * _xi / b * d;
   _g[_qp] = num / denom;
 
   // dg_dd
   d = _d[_qp];
   num = 1.0 - d;
   denom = num + M * _xi / b * d;
-  ADReal dnum_dd = -d;
-  ADReal ddenom_dd = dnum_dd + M * _xi / b;
+  GenericReal<is_ad> dnum_dd = -d;
+  GenericReal<is_ad> ddenom_dd = dnum_dd + M * _xi / b;
   _dg_dd[_qp] = (dnum_dd * denom - num * ddenom_dd) / denom / denom;
 }
+
+template class QuasiLinearDegradationTempl<true>;

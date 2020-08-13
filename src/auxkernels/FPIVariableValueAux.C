@@ -3,12 +3,15 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "FPIVariableValueAux.h"
+#include "metaphysicl/raw_type.h"
 #include "raccoonAppTypes.h"
 
 registerMooseObject("raccoonApp", FPIVariableValueAux);
+registerMooseObject("raccoonApp", ADFPIVariableValueAux);
 
+template <bool is_ad>
 InputParameters
-FPIVariableValueAux::validParams()
+FPIVariableValueAuxTempl<is_ad>::validParams()
 {
   InputParameters params = AuxKernel::validParams();
   params.addClassDescription("reads the coupled variable value into the aux variable.");
@@ -26,13 +29,18 @@ FPIVariableValueAux::validParams()
   return params;
 }
 
-FPIVariableValueAux::FPIVariableValueAux(const InputParameters & parameters)
-  : AuxKernel(parameters), _v(coupledValue("from"))
+template <bool is_ad>
+FPIVariableValueAuxTempl<is_ad>::FPIVariableValueAuxTempl(const InputParameters & parameters)
+  : AuxKernel(parameters), _v(coupledGenericValue<is_ad>("from"))
 {
 }
 
+template <bool is_ad>
 Real
-FPIVariableValueAux::computeValue()
+FPIVariableValueAuxTempl<is_ad>::computeValue()
 {
-  return _v[_qp];
+  return MetaPhysicL::raw_value(_v[_qp]);
 }
+
+template class FPIVariableValueAuxTempl<false>;
+template class FPIVariableValueAuxTempl<true>;

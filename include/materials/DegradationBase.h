@@ -4,15 +4,16 @@
 
 #pragma once
 
-#include "ADMaterial.h"
+#include "Material.h"
 #include "DerivativeMaterialPropertyNameInterface.h"
 
-class DegradationBase : public ADMaterial, public DerivativeMaterialPropertyNameInterface
+template <bool is_ad>
+class DegradationBaseTempl : public Material, public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
 
-  DegradationBase(const InputParameters & parameters);
+  DegradationBaseTempl(const InputParameters & parameters);
 
 protected:
   virtual void computeQpProperties() override;
@@ -20,7 +21,7 @@ protected:
   virtual void postComputeDegradation();
 
   /// coupled damage variable
-  const ADVariableValue & _d;
+  const GenericVariableValue<is_ad> & _d;
 
   /// last converged damage variable
   const VariableValue & _d_old;
@@ -29,10 +30,10 @@ protected:
   const MaterialPropertyName _g_name;
 
   /// degradation
-  ADMaterialProperty<Real> & _g;
+  GenericMaterialProperty<Real, is_ad> & _g;
 
   /// degradation derivative
-  ADMaterialProperty<Real> & _dg_dd;
+  GenericMaterialProperty<Real, is_ad> & _dg_dd;
 
   /// residual degradation
   const Real & _eta;
@@ -40,3 +41,6 @@ protected:
   /// whether to lag the degradation
   const bool _lag;
 };
+
+typedef DegradationBaseTempl<false> DegradationBase;
+typedef DegradationBaseTempl<true> ADDegradationBase;

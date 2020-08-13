@@ -6,13 +6,16 @@
 
 #include "DegradationBase.h"
 
-class LinearDegradation : public DegradationBase
+template <bool is_ad>
+class LinearDegradationTempl : public DegradationBaseTempl<true>
 {
 public:
   static InputParameters validParams();
 
-  LinearDegradation(const InputParameters & parameters);
+  LinearDegradationTempl(const InputParameters & parameters);
 
 protected:
   virtual void computeDegradation() override;
 };
+
+typedef LinearDegradationTempl<true> LinearDegradation;
