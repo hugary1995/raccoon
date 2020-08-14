@@ -259,20 +259,6 @@ CNHDegradedElasticPlasticPK1StressBase::enforceIsochoricity()
   }
 
   _be_bar[_qp] = _be_bar_dev + Ie_bar * I2;
-
-  // std::cout << "===========================================\n";
-  // std::cout << "_be_bar[_qp] = \n";
-  // _be_bar[_qp].printReal();
-  // std::cout << "_s = \n";
-  // _s.printReal();
-  // std::cout << "_ge = " << _ge << std::endl;
-  // std::cout << "_G = " << _G << std::endl;
-  // std::cout << "a = " << a << std::endl;
-  // std::cout << "b = " << b << std::endl;
-  // std::cout << "c = " << c << std::endl;
-  // std::cout << "d = " << d << std::endl;
-  // std::cout << "e = " << e << std::endl;
-  // std::cout << "h = " << h << std::endl;
 }
 
 void
