@@ -49,8 +49,8 @@ GreenStrainRZ::initialSetup()
   }
 
   // set unused dimensions to zero
-  _disp[2] = &adZeroValue();
-  _grad_disp[2] = &adZeroGradient();
+  _disp[2] = &_ad_zero;
+  _grad_disp[2] = &_ad_grad_zero;
 }
 
 ADReal

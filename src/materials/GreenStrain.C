@@ -54,6 +54,7 @@ GreenStrain::computeProperties()
       _F[_qp] *= std::cbrt(ave_F.det() / _F[_qp].det());
 
     _f[_qp] = _F[_qp] * _F_old[_qp].inverse();
+
     computeQpStrain();
   }
 }
