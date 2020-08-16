@@ -19,6 +19,7 @@ PFFCrackOpening::validParams()
   params.addRequiredCoupledVar("displacements",
                                "The string of displacements suitable for the problem statement");
   params.addRequiredCoupledVar("d", "Order parameter for damage.");
+  params.addParam<Real>("xi", 1, "initial slope of the crack indicator function");
   return params;
 }
 
@@ -26,7 +27,9 @@ PFFCrackOpening::PFFCrackOpening(const InputParameters & parameters)
   : AuxKernel(parameters),
     _ndisp(coupledComponents("displacements")),
     _disp(_ndisp),
-    _grad_c(coupledGradient("d"))
+    _c(coupledValue("d")),
+    _grad_c(coupledGradient("d")),
+    _xi(getParam<Real>("xi"))
 {
   for (unsigned int i = 0; i < _ndisp; ++i)
     _disp[i] = &coupledValue("displacements", i);
@@ -39,5 +42,5 @@ PFFCrackOpening::computeValue()
   if (_ndisp == 3)
     disp(2) = (*_disp[2])[_qp];
 
-  return disp * _grad_c[_qp];
+  return disp * _grad_c[_qp] * (_xi + 2 * (1 - _xi) * _c[_qp]);
 }

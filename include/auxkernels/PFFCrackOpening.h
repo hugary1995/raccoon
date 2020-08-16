@@ -26,5 +26,7 @@ protected:
 
   unsigned int _ndisp;
   std::vector<const VariableValue *> _disp;
+  const VariableValue & _c;
   const VariableGradient & _grad_c;
+  const Real _xi;
 };

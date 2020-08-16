@@ -19,5 +19,7 @@ protected:
   const unsigned int _comp;
   const ADMaterialProperty<Real> * _p_mat;
   const ADVariableValue * _p_var;
+  const ADVariableValue & _d;
   const ADVariableGradient & _grad_d;
+  const Real _xi;
 };

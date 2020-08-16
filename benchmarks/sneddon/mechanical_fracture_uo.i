@@ -3,8 +3,9 @@ E = 1
 nu = 0.2
 Gc = 1
 l = 0.1
-psic = 0
+psic = 1
 k = 1e-12
+xi = 1
 
 [GlobalParams]
   out_of_plane_strain = 'strain_zz'
@@ -70,6 +71,7 @@ k = 1e-12
     variable = 'cod'
     displacements = 'disp_x disp_y'
     d = 'd'
+    xi = ${xi}
   []
 []
 
@@ -123,6 +125,7 @@ k = 1e-12
     d = 'd'
     pressure_mat = 'p'
     component = 0
+    xi = ${xi}
   []
   [pressure_body_force_y]
     type = ADPressurizedCrack
@@ -130,6 +133,7 @@ k = 1e-12
     d = 'd'
     pressure_mat = 'p'
     component = 1
+    xi = ${xi}
   []
   [pff_diff]
     type = ADPFFDiffusion
@@ -150,6 +154,7 @@ k = 1e-12
     variable = 'd'
     pressure_uo = 'pressure_uo'
     displacements = 'disp_x disp_y'
+    xi = ${xi}
   []
 []
 
@@ -217,15 +222,15 @@ k = 1e-12
     prop_values = '${l} ${Gc} ${psic}'
   []
   [local_dissipation]
-    type = QuadraticLocalDissipation
+    type = LinearLocalDissipation
     d = 'd'
   []
   [fracture_properties]
     type = FractureMaterial
-    local_dissipation_norm = 2
+    local_dissipation_norm = 8/3
   []
   [degradation]
-    type = QuadraticDegradation
+    type = LorentzDegradation
     d = 'd'
     residual_degradation = ${k}
   []
@@ -253,12 +258,12 @@ k = 1e-12
   print_linear_residuals = false
   [csv]
     type = CSV
-    file_base = 'l_${l}_r_${r}/cod'
+    file_base = 'l_${l}_xi_${xi}_r_${r}/cod'
     execute_on = 'TIMESTEP_END'
   []
   [exodus]
     type = Exodus
-    file_base = 'l_${l}_r_${r}/visualize'
+    file_base = 'l_${l}_xi_${xi}_r_${r}/visualize'
   []
   [console]
     type = Console

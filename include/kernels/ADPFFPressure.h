@@ -19,4 +19,5 @@ protected:
   const ADMaterialPropertyUserObject & _p_uo;
   const unsigned int _ndisp;
   std::vector<const ADVariableValue *> _disp;
+  const Real _xi;
 };
