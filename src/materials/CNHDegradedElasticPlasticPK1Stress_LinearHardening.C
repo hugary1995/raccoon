@@ -46,5 +46,5 @@ ADReal CNHDegradedElasticPlasticPK1Stress_LinearHardening::d2H_dep2(ADReal /*ep*
 ADReal
 CNHDegradedElasticPlasticPK1Stress_LinearHardening::plastic_dissipation(ADReal ep)
 {
-  return _gp * _yield_stress * ep;
+  return _gp * (_yield_stress * ep + 0.5 * _k * ep * ep);
 }
