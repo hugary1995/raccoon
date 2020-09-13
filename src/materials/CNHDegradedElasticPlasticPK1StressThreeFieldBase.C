@@ -166,7 +166,7 @@ CNHDegradedElasticPlasticPK1StressThreeFieldBase::updateIntermediateConfiguratio
   _be_bar_trial = _f_bar * _be_bar_old[_qp] * (_f_bar.transpose());
   _s_trial = _ge * _G * _be_bar_trial.deviatoric();
   _s_trial_norm = std::sqrt(_s_trial.doubleContraction(_s_trial));
-  _np_trial = std::sqrt(1.5) * _s_trial / _s_trial_norm;
+  _np_trial = std::sqrt(2.0 / 3.0) * _s_trial / _s_trial_norm;
 }
 
 void
@@ -189,13 +189,13 @@ CNHDegradedElasticPlasticPK1StressThreeFieldBase::returnMapping()
   while (std::abs(yield_function_trial) > 1E-06 &&
          std::abs(yield_function_trial) > 1e-06 * std::abs(yield_function_trial_initial))
   {
-    jacob = -std::sqrt(3.0 / 2.0) * _ge * _G * _be_bar_trial.trace() -
+    jacob = -std::sqrt(2.0 / 3.0) * _ge * _G * _be_bar_trial.trace() -
             std::sqrt(2.0 / 3.0) * d2H_dep2(_ep_old[_qp] + _plastic_increment);
     step = -yield_function_trial / jacob;
     _plastic_increment = _plastic_increment + step;
     yield_function_trial =
         _s_trial_norm -
-        std::sqrt(3.0 / 2.0) * _ge * _G * _plastic_increment * _be_bar_trial.trace() -
+        std::sqrt(2.0 / 3.0) * _ge * _G * _plastic_increment * _be_bar_trial.trace() -
         std::sqrt(2.0 / 3.0) * dH_dep(_ep_old[_qp] + _plastic_increment);
     iter++;
     if (iter > 50)
