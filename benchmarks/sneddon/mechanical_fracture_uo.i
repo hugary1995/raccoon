@@ -29,17 +29,14 @@ xi = 1
 []
 
 [Adaptivity]
-  steps = 1
   marker = box
-  max_h_level = ${r}
   initial_steps = ${r}
-  stop_time = 1.0e-10
   [Markers]
     [box]
       type = BoxMarker
       bottom_left = '1.6 1.8 0'
-      inside = refine
       top_right = '2.4 2.2 0'
+      inside = refine
       outside = do_nothing
     []
   []
@@ -222,15 +219,15 @@ xi = 1
     prop_values = '${l} ${Gc} ${psic}'
   []
   [local_dissipation]
-    type = LinearLocalDissipation
+    type = QuadraticLocalDissipation
     d = 'd'
   []
   [fracture_properties]
     type = FractureMaterial
-    local_dissipation_norm = 8/3
+    local_dissipation_norm = 2
   []
   [degradation]
-    type = LorentzDegradation
+    type = QuadraticDegradation
     d = 'd'
     residual_degradation = ${k}
   []
