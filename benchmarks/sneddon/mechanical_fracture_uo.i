@@ -1,15 +1,11 @@
-r = 2
+r = 5
 E = 1
 nu = 0.2
 Gc = 1
-l = 0.1
+l = 0.04
 psic = 1
 k = 1e-12
 xi = 1
-
-[GlobalParams]
-  out_of_plane_strain = 'strain_zz'
-[]
 
 [Problem]
   type = FixedPointProblem
@@ -31,6 +27,7 @@ xi = 1
 [Adaptivity]
   marker = box
   initial_steps = ${r}
+  max_h_level = ${r}
   [Markers]
     [box]
       type = BoxMarker
@@ -47,8 +44,6 @@ xi = 1
   []
   [disp_y]
   []
-  [strain_zz]
-  []
   [d]
   []
 []
@@ -56,21 +51,21 @@ xi = 1
 [AuxVariables]
   [bounds_dummy]
   []
-  [cod]
-    order = FIRST
-    family = MONOMIAL
-  []
+  # [cod]
+  #   order = FIRST
+  #   family = MONOMIAL
+  # []
 []
 
-[AuxKernels]
-  [cod]
-    type = PFFCrackOpening
-    variable = 'cod'
-    displacements = 'disp_x disp_y'
-    d = 'd'
-    xi = ${xi}
-  []
-[]
+# [AuxKernels]
+#   [cod]
+#     type = PFFCrackOpening
+#     variable = 'cod'
+#     displacements = 'disp_x disp_y'
+#     d = 'd'
+#     xi = ${xi}
+#   []
+# []
 
 [UserObjects]
   [E_driving]
@@ -111,10 +106,6 @@ xi = 1
     variable = 'disp_y'
     component = 1
     displacements = 'disp_x disp_y'
-  []
-  [strain_zz]
-    type = ADWeakPlaneStress
-    variable = 'strain_zz'
   []
   [pressure_body_force_x]
     type = ADPressurizedCrack
@@ -159,7 +150,7 @@ xi = 1
   [xfix]
     type = DirichletBC
     variable = 'disp_x'
-    boundary = 'top left right'
+    boundary = 'top bottom left right'
     value = 0
   []
   [yfix]
@@ -198,7 +189,7 @@ xi = 1
   [pressure]
     type = ADGenericFunctionMaterial
     prop_names = 'p'
-    prop_values = '1e-3'
+    prop_values = 't'
   []
   [elasticity_tensor]
     type = ADComputeIsotropicElasticityTensor
@@ -206,7 +197,7 @@ xi = 1
     poissons_ratio = ${nu}
   []
   [strain]
-    type = ADComputePlaneSmallStrain
+    type = ADComputeSmallStrain
     displacements = 'disp_x disp_y'
   []
   [stress]
@@ -239,7 +230,7 @@ xi = 1
   petsc_options_iname = '-pc_type -pc_type_mat_solver_package -snes_type'
   petsc_options_value = 'lu       superlu_dist                vinewtonrsls'
 
-  num_steps = 1
+  dt = 5e-2
 
   nl_abs_tol = 1e-08
   nl_rel_tol = 1e-06
@@ -253,11 +244,8 @@ xi = 1
 
 [Outputs]
   print_linear_residuals = false
-  [csv]
-    type = CSV
-    file_base = 'l_${l}_xi_${xi}_r_${r}/cod'
-    execute_on = 'TIMESTEP_END'
-  []
+  print_linear_converged_reason = false
+  print_nonlinear_converged_reason = false
   [exodus]
     type = Exodus
     file_base = 'l_${l}_xi_${xi}_r_${r}/visualize'
@@ -265,528 +253,5 @@ xi = 1
   [console]
     type = Console
     outlier_variable_norms = false
-  []
-[]
-
-[VectorPostprocessors]
-  [cod1]
-    type = LineValueSampler
-    start_point = '1.6 4 0'
-    end_point = '1.6 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod2]
-    type = LineValueSampler
-    start_point = '1.65 4 0'
-    end_point = '1.65 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod3]
-    type = LineValueSampler
-    start_point = '1.7 4 0'
-    end_point = '1.7 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod4]
-    type = LineValueSampler
-    start_point = '1.71 4 0'
-    end_point = '1.71 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod5]
-    type = LineValueSampler
-    start_point = '1.72 4 0'
-    end_point = '1.72 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod6]
-    type = LineValueSampler
-    start_point = '1.73 4 0'
-    end_point = '1.73 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod7]
-    type = LineValueSampler
-    start_point = '1.74 4 0'
-    end_point = '1.74 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod8]
-    type = LineValueSampler
-    start_point = '1.75 4 0'
-    end_point = '1.75 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod9]
-    type = LineValueSampler
-    start_point = '1.76 4 0'
-    end_point = '1.76 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod10]
-    type = LineValueSampler
-    start_point = '1.77 4 0'
-    end_point = '1.77 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod11]
-    type = LineValueSampler
-    start_point = '1.78 4 0'
-    end_point = '1.78 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod12]
-    type = LineValueSampler
-    start_point = '1.79 4 0'
-    end_point = '1.79 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod13]
-    type = LineValueSampler
-    start_point = '1.8 4 0'
-    end_point = '1.8 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod14]
-    type = LineValueSampler
-    start_point = '1.81 4 0'
-    end_point = '1.81 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod15]
-    type = LineValueSampler
-    start_point = '1.82 4 0'
-    end_point = '1.82 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod16]
-    type = LineValueSampler
-    start_point = '1.83 4 0'
-    end_point = '1.83 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod17]
-    type = LineValueSampler
-    start_point = '1.84 4 0'
-    end_point = '1.84 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod18]
-    type = LineValueSampler
-    start_point = '1.85 4 0'
-    end_point = '1.85 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod19]
-    type = LineValueSampler
-    start_point = '1.86 4 0'
-    end_point = '1.86 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod20]
-    type = LineValueSampler
-    start_point = '1.87 4 0'
-    end_point = '1.87 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod21]
-    type = LineValueSampler
-    start_point = '1.88 4 0'
-    end_point = '1.88 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod22]
-    type = LineValueSampler
-    start_point = '1.89 4 0'
-    end_point = '1.89 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod23]
-    type = LineValueSampler
-    start_point = '1.9 4 0'
-    end_point = '1.9 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod24]
-    type = LineValueSampler
-    start_point = '1.91 4 0'
-    end_point = '1.91 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod25]
-    type = LineValueSampler
-    start_point = '1.92 4 0'
-    end_point = '1.92 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod26]
-    type = LineValueSampler
-    start_point = '1.93 4 0'
-    end_point = '1.93 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod27]
-    type = LineValueSampler
-    start_point = '1.94 4 0'
-    end_point = '1.94 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod28]
-    type = LineValueSampler
-    start_point = '1.95 4 0'
-    end_point = '1.95 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod29]
-    type = LineValueSampler
-    start_point = '1.96 4 0'
-    end_point = '1.96 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod30]
-    type = LineValueSampler
-    start_point = '1.97 4 0'
-    end_point = '1.97 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod31]
-    type = LineValueSampler
-    start_point = '1.98 4 0'
-    end_point = '1.98 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod32]
-    type = LineValueSampler
-    start_point = '1.99 4 0'
-    end_point = '1.99 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod33]
-    type = LineValueSampler
-    start_point = '2.0 4 0'
-    end_point = '2.0 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod34]
-    type = LineValueSampler
-    start_point = '2.01 4 0'
-    end_point = '2.01 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod35]
-    type = LineValueSampler
-    start_point = '2.02 4 0'
-    end_point = '2.02 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod36]
-    type = LineValueSampler
-    start_point = '2.03 4 0'
-    end_point = '2.03 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod37]
-    type = LineValueSampler
-    start_point = '2.04 4 0'
-    end_point = '2.04 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod38]
-    type = LineValueSampler
-    start_point = '2.05 4 0'
-    end_point = '2.05 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod39]
-    type = LineValueSampler
-    start_point = '2.06 4 0'
-    end_point = '2.06 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod40]
-    type = LineValueSampler
-    start_point = '2.07 4 0'
-    end_point = '2.07 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod41]
-    type = LineValueSampler
-    start_point = '2.08 4 0'
-    end_point = '2.08 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod42]
-    type = LineValueSampler
-    start_point = '2.09 4 0'
-    end_point = '2.09 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod43]
-    type = LineValueSampler
-    start_point = '2.1 4 0'
-    end_point = '2.1 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod44]
-    type = LineValueSampler
-    start_point = '2.11 4 0'
-    end_point = '2.11 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod45]
-    type = LineValueSampler
-    start_point = '2.12 4 0'
-    end_point = '2.12 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod46]
-    type = LineValueSampler
-    start_point = '2.13 4 0'
-    end_point = '2.13 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod47]
-    type = LineValueSampler
-    start_point = '2.14 4 0'
-    end_point = '2.14 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod48]
-    type = LineValueSampler
-    start_point = '2.15 4 0'
-    end_point = '2.15 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod49]
-    type = LineValueSampler
-    start_point = '2.16 4 0'
-    end_point = '2.16 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod50]
-    type = LineValueSampler
-    start_point = '2.17 4 0'
-    end_point = '2.17 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod51]
-    type = LineValueSampler
-    start_point = '2.18 4 0'
-    end_point = '2.18 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod52]
-    type = LineValueSampler
-    start_point = '2.19 4 0'
-    end_point = '2.19 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod53]
-    type = LineValueSampler
-    start_point = '2.20 4 0'
-    end_point = '2.20 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod54]
-    type = LineValueSampler
-    start_point = '2.21 4 0'
-    end_point = '2.21 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod55]
-    type = LineValueSampler
-    start_point = '2.22 4 0'
-    end_point = '2.22 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod56]
-    type = LineValueSampler
-    start_point = '2.23 4 0'
-    end_point = '2.23 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod57]
-    type = LineValueSampler
-    start_point = '2.24 4 0'
-    end_point = '2.24 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod58]
-    type = LineValueSampler
-    start_point = '2.25 4 0'
-    end_point = '2.25 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod59]
-    type = LineValueSampler
-    start_point = '2.26 4 0'
-    end_point = '2.26 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod60]
-    type = LineValueSampler
-    start_point = '2.27 4 0'
-    end_point = '2.27 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod61]
-    type = LineValueSampler
-    start_point = '2.28 4 0'
-    end_point = '2.28 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod62]
-    type = LineValueSampler
-    start_point = '2.29 4 0'
-    end_point = '2.29 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod63]
-    type = LineValueSampler
-    start_point = '2.3 4 0'
-    end_point = '2.3 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod64]
-    type = LineValueSampler
-    start_point = '2.35 4 0'
-    end_point = '2.35 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
-  []
-  [cod65]
-    type = LineValueSampler
-    start_point = '2.4 4 0'
-    end_point = '2.4 2 0'
-    variable = 'cod'
-    num_points = 1000
-    sort_by = 'y'
   []
 []
