@@ -67,6 +67,21 @@ private:
   Real _c;
 };
 
+class SE : public NewtonRaphson
+{
+public:
+  SE(Real L) : _L(L) {}
+
+  Real covariance(Real tau) { return std::exp(-M_PI * tau * tau / 4 / _L / _L); }
+
+protected:
+  virtual Real residual(Real /*x*/) { return 0.0; }
+  virtual Real jacobian(Real /*x*/) { return 0.0; }
+
+private:
+  Real _L;
+};
+
 Real
 covariance_sqexp(const Point & p1, const Point & p2, Real L)
 {

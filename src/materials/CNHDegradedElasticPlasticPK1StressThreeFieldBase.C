@@ -267,7 +267,7 @@ CNHDegradedElasticPlasticPK1StressThreeFieldBase::enforceIsochoricity()
   Real resid0 = resid;
   Real jacob, delta_I;
   int iter = 0;
-  while (std::abs(resid) > 1E-10 * std::abs(resid0) && std::abs(resid) > 1e-12)
+  while (std::abs(resid) > 1E-06 * std::abs(resid0) && std::abs(resid) > 1e-08)
   {
     jacob = 3.0 * Ie_bar * Ie_bar + 2.0 * A * Ie_bar + B;
     delta_I = -resid / jacob;

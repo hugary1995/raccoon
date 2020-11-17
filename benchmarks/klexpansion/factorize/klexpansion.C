@@ -49,7 +49,8 @@ main(int argc, char ** argv)
   // Use the internal mesh generator to create a uniform
   // 2D grid on a square.
   Mesh mesh(init.comm());
-  MeshTools::Generation::build_square(mesh, 50, 50, 0, 100, 0, 100, QUAD4);
+  mesh.read("mesh.msh");
+  // MeshTools::Generation::build_square(mesh, 50, 50, 0, 100, 0, 100, QUAD4);
   mesh.print_info();
 
   // Create an equation systems object.
@@ -203,8 +204,8 @@ assembly(EquationSystems & es)
   const std::vector<Point> & q_points_remote = fe_remote->get_xyz();
 
   // Before we do the element loop, construct a covariance kernel
-  PSE covariance_x(5, 100);
-  PSE covariance_y(5, 100);
+  SE covariance_x(5);
+  SE covariance_y(5);
 
   // Now we will loop over all the elements in the mesh that
   // live on the local processor. We will compute the element

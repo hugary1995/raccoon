@@ -1,8 +1,8 @@
 r = 5
 E = 1
 nu = 0.2
-Gc = 1
-l = 0.04
+Gc = 1e-3
+l = 0.02
 psic = 1
 k = 1e-12
 xi = 1
@@ -20,7 +20,7 @@ xi = 1
     ymin = 2
     ymax = 4
     nx = 16
-    ny = 8
+    ny = 16
   []
 []
 
@@ -32,7 +32,7 @@ xi = 1
     [box]
       type = BoxMarker
       bottom_left = '1.6 1.8 0'
-      top_right = '2.4 2.2 0'
+      top_right = '2.4 2.1 0'
       inside = refine
       outside = do_nothing
     []
@@ -51,21 +51,7 @@ xi = 1
 [AuxVariables]
   [bounds_dummy]
   []
-  # [cod]
-  #   order = FIRST
-  #   family = MONOMIAL
-  # []
 []
-
-# [AuxKernels]
-#   [cod]
-#     type = PFFCrackOpening
-#     variable = 'cod'
-#     displacements = 'disp_x disp_y'
-#     d = 'd'
-#     xi = ${xi}
-#   []
-# []
 
 [UserObjects]
   [E_driving]
@@ -162,25 +148,13 @@ xi = 1
 []
 
 [ICs]
-  # [d]
-  #   type = BrittleDamageIC
-  #   variable = d
-  #   d0 = 1.0
-  #   l = ${l}
-  #   x1 = 1.8
-  #   y1 = 2
-  #   z1 = 0
-  #   x2 = 2.2
-  #   y2 = 2
-  #   z2 = 0
-  # []
   [initial_crack]
     type = BoundingBoxIC
     variable = 'd'
     inside = 1
-    x1 = 1.799999
+    x1 = 1.819999
     y1 = 1.999999
-    x2 = 2.200001
+    x2 = 2.180001
     y2 = 2.000001
   []
 []
@@ -224,13 +198,20 @@ xi = 1
   []
 []
 
+[Postprocessors]
+  [fracture_energy]
+    type = FractureEnergy
+    d = 'd'
+  []
+[]
+
 [Executioner]
   type = FixedPointTransient
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -pc_type_mat_solver_package -snes_type'
   petsc_options_value = 'lu       superlu_dist                vinewtonrsls'
 
-  dt = 5e-2
+  dt = 1e-3
 
   nl_abs_tol = 1e-08
   nl_rel_tol = 1e-06
@@ -238,7 +219,7 @@ xi = 1
   automatic_scaling = true
 
   fp_max_its = 100
-  fp_tol = 1e-06
+  fp_tol = 1e-03
   accept_on_max_fp_iteration = true
 []
 
