@@ -16,117 +16,97 @@ dc = 0.6
 []
 
 [Variables]
-  [./disp_x]
-  [../]
-  [./disp_y]
-  [../]
-  [./d]
-  [../]
+  [disp_x]
+  []
+  [disp_y]
+  []
+  [d]
+  []
 []
 
 [AuxVariables]
-  [./bounds_dummy]
-  [../]
-  [./fx]
-  [../]
-  [./grad_d_x]
-    order = 
-    family = MONOMIAL
-  [../]
-  [./grad_d_y]
-    order = CONSTANT
-    family = MONOMIAL
-  [../]
+  [bounds_dummy]
+  []
+  [fy]
+  []
 []
 
 [UserObjects]
-  [./E_driving]
-    type = FPIMaterialPropertyUserObject
+  [E_driving]
+    type = ADFPIMaterialPropertyUserObject
     mat_prop = 'E_el_active'
-  [../]
+  []
 []
 
 [Bounds]
-  [./irreversibility]
-    type = Irreversibility
+  [irreversibility]
+    type = VariableOldValueBoundsAux
     variable = 'bounds_dummy'
     bounded_variable = 'd'
-    upper = 1
-    lower = 'd'
-    lag = true
-  [../]
-[]
-
-[AuxKernels]
-  [./grad_d_x]
-    type = VariableGradientComponent
-    variable = 'grad_d_x'
-    component = 'x'
-    gradient_variable = 'd'
-    execute_on = 'TIMESTEP_END'
-  [../]
-  [./grad_d_y]
-    type = VariableGradientComponent
-    variable = 'grad_d_y'
-    component ='y'
-    gradient_variable = 'd'
-    execute_on = 'TIMESTEP_END'
-  [../]
+    bound_type = lower
+  []
+  [upper]
+    type = ConstantBoundsAux
+    variable = 'bounds_dummy'
+    bounded_variable = 'd'
+    bound_type = upper
+    bound_value = 1
+  []
 []
 
 [Kernels]
-  [./solid_x]
+  [solid_x]
     type = ADStressDivergenceTensors
     variable = 'disp_x'
     component = 0
     displacements = 'disp_x disp_y'
-    save_in = 'fx'
-  [../]
-  [./solid_y]
+  []
+  [solid_y]
     type = ADStressDivergenceTensors
     variable = 'disp_y'
     component = 1
     displacements = 'disp_x disp_y'
-  [../]
-  [./pff_diff]
+    save_in = 'fy'
+  []
+  [pff_diff]
     type = ADPFFDiffusion
     variable = 'd'
-  [../]
-  [./pff_barrier]
+  []
+  [pff_barrier]
     type = ADPFFBarrier
     variable = 'd'
-  [../]
-  [./pff_react]
+  []
+  [pff_react]
     type = ADPFFReaction
     variable = 'd'
     driving_energy_uo = 'E_driving'
     lag = false
-  [../]
+  []
 []
 
 [BCs]
-  [./xdisp]
+  [ydisp]
     type = FunctionDirichletBC
-    variable = 'disp_x'
+    variable = 'disp_y'
     boundary = 'top'
     function = 't'
-  [../]
-  [./yfix]
-    type = DirichletBC
-    variable = 'disp_y'
-    boundary = 'top bottom left right'
-    value = 0
-  [../]
-  [./xfix]
+  []
+  [xfix]
     type = DirichletBC
     variable = 'disp_x'
+    boundary = 'top bottom'
+    value = 0
+  []
+  [yfix]
+    type = DirichletBC
+    variable = 'disp_y'
     boundary = 'bottom'
     value = 0
-  [../]
+  []
 []
 
 [ICs]
-  [./d]
+  [d]
     type = CohesiveDamageIC
     variable = d
     d0 = 1.0
@@ -137,59 +117,61 @@ dc = 0.6
     x2 = 0
     y2 = 0
     z2 = 0
-  [../]
+  []
 []
 
 [Materials]
-  [./elasticity_tensor]
-    type = ComputeIsotropicElasticityTensor
+  [elasticity_tensor]
+    type = ADComputeIsotropicElasticityTensor
     youngs_modulus = ${E}
     poissons_ratio = ${nu}
-  [../]
-  [./strain]
+  []
+  [strain]
     type = ADComputeSmallStrain
     displacements = 'disp_x disp_y'
-  [../]
-  [./stress]
+  []
+  [stress]
     type = SmallStrainDegradedElasticPK2Stress_StrainSpectral
     d = 'd'
     d_crit = ${dc}
-  [../]
-  [./bulk]
-    type = GenericConstantMaterial
+  []
+  [bulk]
+    type = ADGenericConstantMaterial
     prop_names = 'phase_field_regularization_length energy_release_rate critical_fracture_energy'
     prop_values = '${l} ${Gc} ${psic}'
-  [../]
-  [./local_dissipation]
+  []
+  [local_dissipation]
     type = LinearLocalDissipation
     d = 'd'
-  [../]
-  [./fracture_properties]
-    type = FractureMaterial
+  []
+  [fracture_properties]
+    type = ADFractureMaterial
     local_dissipation_norm = 8/3
-  [../]
-  [./degradation]
+  []
+  [degradation]
     type = LorentzDegradation
     d = 'd'
     residual_degradation = ${k}
-  [../]
+  []
 []
 
 [Postprocessors]
-  [./Fx]
+  [Fy]
     type = NodalSum
-    variable = 'fx'
+    variable = 'fy'
     boundary = 'top'
-  [../]
+  []
 []
 
 [Executioner]
   type = FixedPointTransient
   solve_type = 'NEWTON'
-  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
-  petsc_options_value = 'asm      ilu          200         200                0                     vinewtonrsls'
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels '
+                        '-snes_type'
+  petsc_options_value = 'asm      ilu          200         200                0                     '
+                        'vinewtonrsls'
   dt = 1e-4
-  end_time = 2e-2
+  end_time = 6e-3
 
   nl_abs_tol = 1e-08
   nl_rel_tol = 1e-06
@@ -204,17 +186,19 @@ dc = 0.6
 
 [Outputs]
   print_linear_residuals = false
-  [./csv]
+  print_linear_converged_reason = false
+  print_nonlinear_converged_reason = false
+  [csv]
     type = CSV
     delimiter = ' '
     file_base = 'force_displacement'
-  [../]
-  [./exodus]
+  []
+  [exodus]
     type = Exodus
     file_base = 'visualize'
-  [../]
-  [./console]
+  []
+  [console]
     type = Console
     outlier_variable_norms = false
-  [../]
+  []
 []

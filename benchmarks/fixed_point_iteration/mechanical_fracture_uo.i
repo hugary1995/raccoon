@@ -8,143 +8,145 @@
 []
 
 [Variables]
-  [./disp_x]
-  [../]
-  [./disp_y]
-  [../]
-  [./d]
-  [../]
+  [disp_x]
+  []
+  [disp_y]
+  []
+  [d]
+  []
 []
 
 [AuxVariables]
-  [./bounds_dummy]
-  [../]
-  [./fy]
-  [../]
+  [bounds_dummy]
+  []
+  [fy]
+  []
 []
 
 [UserObjects]
-  [./E_driving]
+  [E_driving]
     type = ADFPIMaterialPropertyUserObject
     mat_prop = 'E_el_active'
-  [../]
+  []
 []
 
 [Bounds]
-  [./irreversibility]
+  [irreversibility]
     type = VariableOldValueBoundsAux
     variable = 'bounds_dummy'
     bounded_variable = 'd'
     bound_type = lower
-  [../]
-  [./upper]
+  []
+  [upper]
     type = ConstantBoundsAux
     variable = 'bounds_dummy'
     bounded_variable = 'd'
     bound_type = upper
     bound_value = 1
-  [../]
+  []
 []
 
 [Kernels]
-  [./solid_x]
+  [solid_x]
     type = ADStressDivergenceTensors
     variable = 'disp_x'
     component = 0
     displacements = 'disp_x disp_y'
-  [../]
-  [./solid_y]
+  []
+  [solid_y]
     type = ADStressDivergenceTensors
     variable = 'disp_y'
     component = 1
     displacements = 'disp_x disp_y'
     save_in = 'fy'
-  [../]
-  [./pff_diff]
+  []
+  [pff_diff]
     type = ADPFFDiffusion
     variable = 'd'
-  [../]
-  [./pff_barr]
+  []
+  [pff_barr]
     type = ADPFFBarrier
     variable = 'd'
-  [../]
-  [./pff_react]
+  []
+  [pff_react]
     type = ADPFFReaction
     variable = 'd'
     driving_energy_uo = 'E_driving'
     lag = false
-  [../]
+  []
 []
 
 [BCs]
-  [./ydisp]
+  [ydisp]
     type = FunctionDirichletBC
     variable = 'disp_y'
     boundary = 'top'
     function = 't'
-  [../]
-  [./xfix]
+  []
+  [xfix]
     type = DirichletBC
     variable = 'disp_x'
     boundary = 'top bottom'
     value = 0
-  [../]
-  [./yfix]
+  []
+  [yfix]
     type = DirichletBC
     variable = 'disp_y'
     boundary = 'bottom'
     value = 0
-  [../]
+  []
 []
 
 [Materials]
-  [./elasticity_tensor]
+  [elasticity_tensor]
     type = ADComputeIsotropicElasticityTensor
     youngs_modulus = 2.1e5
     poissons_ratio = 0.3
-  [../]
-  [./strain]
+  []
+  [strain]
     type = ADComputeSmallStrain
     displacements = 'disp_x disp_y'
-  [../]
-  [./stress]
+  []
+  [stress]
     type = SmallStrainDegradedElasticPK2Stress_StrainSpectral
     d = 'd'
     d_crit = 2.0
-  [../]
-  [./bulk]
-    type = GenericConstantMaterial
+  []
+  [bulk]
+    type = ADGenericConstantMaterial
     prop_names = 'phase_field_regularization_length energy_release_rate critical_fracture_energy'
     prop_values = '0.015 2.7 14.88'
-  [../]
-  [./local_dissipation]
+  []
+  [local_dissipation]
     type = LinearLocalDissipation
     d = 'd'
-  [../]
-  [./fracture_properties]
-    type = FractureMaterial
+  []
+  [fracture_properties]
+    type = ADFractureMaterial
     local_dissipation_norm = 8/3
-  [../]
-  [./degradation]
+  []
+  [degradation]
     type = LorentzDegradation
     d = 'd'
     residual_degradation = 1e-09
-  [../]
+  []
 []
 
 [Postprocessors]
-  [./Fy]
+  [Fy]
     type = NodalSum
     variable = 'fy'
     boundary = 'top'
-  [../]
+  []
 []
 
 [Executioner]
   type = FixedPointTransient
   solve_type = 'NEWTON'
-  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
-  petsc_options_value = 'asm      ilu          200         200                0                     vinewtonrsls'
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels '
+                        '-snes_type'
+  petsc_options_value = 'asm      ilu          200         200                0                     '
+                        'vinewtonrsls'
   dt = 1e-4
   end_time = 6e-3
 
@@ -161,17 +163,19 @@
 
 [Outputs]
   print_linear_residuals = false
-  [./csv]
+  print_linear_converged_reason = false
+  print_nonlinear_converged_reason = false
+  [csv]
     type = CSV
     delimiter = ' '
     file_base = 'force_displacement'
-  [../]
-  [./exodus]
+  []
+  [exodus]
     type = Exodus
     file_base = 'visualize'
-  [../]
-  [./console]
+  []
+  [console]
     type = Console
     outlier_variable_norms = false
-  [../]
+  []
 []

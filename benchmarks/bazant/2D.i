@@ -2,7 +2,6 @@ E = 1e-6
 rho = 1e-12
 nu = 0.3
 
-# sigmac = 1.5e-6
 psic = 1.125e-6
 Gc = 0.45e-3
 l = 30
@@ -18,7 +17,7 @@ l = 30
 [Mesh]
   [gmg]
     type = FileMeshGenerator
-    file = 'geo.msh'
+    file = 'mesh/geo.msh'
   []
 []
 
@@ -101,10 +100,12 @@ l = 30
   [inertia_x]
     type = InertialForce
     variable = disp_x
+    density = 'reg_density'
   []
   [inertia_y]
     type = InertialForce
     variable = disp_y
+    density = 'reg_density'
   []
 
   [pff_diff]
@@ -116,7 +117,7 @@ l = 30
     variable = 'd'
   []
   [pff_react]
-    type= ADPFFReaction
+    type = ADPFFReaction
     variable = 'd'
     driving_energy_uo = 'E_el_active'
   []
@@ -193,8 +194,9 @@ l = 30
 
 [Materials]
   [const]
-    type = GenericConstantMaterial
-    prop_names = 'density phase_field_regularization_length energy_release_rate critical_fracture_energy'
+    type = ADGenericConstantMaterial
+    prop_names = 'density phase_field_regularization_length energy_release_rate '
+                 'critical_fracture_energy'
     prop_values = '${rho} ${l} ${Gc} ${psic}'
   []
   [elasticity_tensor]
@@ -214,7 +216,7 @@ l = 30
     d = 'd'
   []
   [fracture_properties]
-    type = FractureMaterial
+    type = ADFractureMaterial
     local_dissipation_norm = 8/3
   []
   [degradation]
@@ -222,10 +224,10 @@ l = 30
     d = 'd'
     residual_degradation = 0
   []
-  [reg_elasticity_tensor]
+  [reg_density]
     type = MaterialConverter
-    ad_props_in = 'effective_stiffness'
-    reg_props_out = 'reg_effective_stiffness'
+    ad_props_in = 'density'
+    reg_props_out = 'reg_density'
   []
 []
 
@@ -253,34 +255,32 @@ l = 30
 []
 
 [Postprocessors]
-  [elastic_energy] # The degraded energy
-    type = StrainEnergy
+  [strain_energy]
+    type = ADStrainEnergy
   []
-  [strain_energy] # The in-tact energy
+  [active_strain_energy]
     type = ADElementIntegralMaterialProperty
     mat_prop = 'E_el_active'
   []
   [kinetic_energy]
-    type = KineticEnergy
+    type = ADKineticEnergy
   []
   [fracture_energy]
-    type = FractureEnergy
+    type = ADFractureEnergy
     d = 'd'
   []
   [fpi]
     type = FPIterations
   []
   [explicit_dt]
-    type = BetterCriticalTimeStep
+    type = ADBetterCriticalTimeStep
     density_name = 'density'
-    E_name = 'reg_effective_stiffness'
     execute_on = 'INITIAL TIMESTEP_BEGIN TIMESTEP_END'
   []
 []
 
 [Executioner]
   type = FixedPointTransient
-  # dt = 1e-3 #CFL condition
   dt = 50e-3
   num_steps = 400
   solve_type = 'NEWTON'
@@ -304,27 +304,21 @@ l = 30
 
 [Outputs]
   print_linear_residuals = false
+  print_linear_converged_reason = false
+  print_nonlinear_converged_reason = false
   [Exodus]
     type = Exodus
-    file_base = 'mechanical_fracture2d'
+    file_base = 'mechanical_fracture_2d'
     output_material_properties = true
     show_material_properties = 'E_el_active'
   []
   [Console]
     type = Console
-    # file_base = 'mechanical_fracture_log'
-    # output_file = true
     outlier_variable_norms = false
     interval = 10
   []
   [CSV]
     type = CSV
-    file_base = 'mechanical_fracture2d_energies'
+    file_base = 'mechanical_fracture_2d_energies'
   []
-[]
-
-[Debug]
-  # show_var_residual_norms = true
-  # show_parser = true
-  # show_actions = true
 []

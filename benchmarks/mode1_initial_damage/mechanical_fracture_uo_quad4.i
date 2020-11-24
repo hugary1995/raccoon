@@ -11,97 +11,127 @@ dc = 0.6
 []
 
 [Mesh]
-  type = FileMesh
-  file = 'gold/geo.msh'
+  [square]
+    type = GeneratedMeshGenerator
+    dim = 2
+    xmin = -0.5
+    xmax = 0.5
+    ymin = -0.5
+    ymax = 0.5
+    nx = 26
+    ny = 26
+  []
+[]
+
+[Adaptivity]
+  steps = 1
+  marker = 'box'
+  max_h_level = 3
+  initial_steps = 3
+  stop_time = 1.0e-10
+  [Markers]
+    [box]
+      type = BoxMarker
+      bottom_left = '-0.5 -0.04 0'
+      inside = refine
+      top_right = '0.5 0.04 0'
+      outside = do_nothing
+    []
+  []
 []
 
 [Variables]
-  [./disp_x]
-  [../]
-  [./disp_y]
-  [../]
-  [./d]
-  [../]
+  [disp_x]
+  []
+  [disp_y]
+  []
+  [d]
+  []
 []
 
 [AuxVariables]
-  [./bounds_dummy]
-  [../]
-  [./fy]
-  [../]
+  [bounds_dummy]
+  []
+  [fy]
+  []
 []
 
 [UserObjects]
-  [./E_driving]
-    type = FPIMaterialPropertyUserObject
+  [E_driving]
+    type = ADFPIMaterialPropertyUserObject
     mat_prop = 'E_el_active'
-  [../]
+  []
 []
 
 [Bounds]
-  [./irreversibility]
-    type = Irreversibility
+  [irreversibility]
+    type = VariableOldValueBoundsAux
     variable = 'bounds_dummy'
     bounded_variable = 'd'
-    upper = 1
-    lower = 'd'
-    lag = true
-  [../]
+    bound_type = lower
+  []
+  [upper]
+    type = ConstantBoundsAux
+    variable = 'bounds_dummy'
+    bounded_variable = 'd'
+    bound_type = upper
+    bound_value = 1
+  []
 []
 
 [Kernels]
-  [./solid_x]
+  [solid_x]
     type = ADStressDivergenceTensors
     variable = 'disp_x'
     component = 0
     displacements = 'disp_x disp_y'
-  [../]
-  [./solid_y]
+  []
+  [solid_y]
     type = ADStressDivergenceTensors
     variable = 'disp_y'
     component = 1
     displacements = 'disp_x disp_y'
     save_in = 'fy'
-  [../]
-  [./pff_diff]
+  []
+  [pff_diff]
     type = ADPFFDiffusion
     variable = 'd'
-  [../]
-  [./pff_barrier]
+  []
+  [pff_barrier]
     type = ADPFFBarrier
     variable = 'd'
-  [../]
-  [./pff_react]
+  []
+  [pff_react]
     type = ADPFFReaction
     variable = 'd'
     driving_energy_uo = 'E_driving'
     lag = false
-  [../]
+  []
 []
 
 [BCs]
-  [./ydisp]
+  [ydisp]
     type = FunctionDirichletBC
     variable = 'disp_y'
     boundary = 'top'
     function = 't'
-  [../]
-  [./xfix]
+  []
+  [xfix]
     type = DirichletBC
     variable = 'disp_x'
     boundary = 'top bottom'
     value = 0
-  [../]
-  [./yfix]
+  []
+  [yfix]
     type = DirichletBC
     variable = 'disp_y'
     boundary = 'bottom'
     value = 0
-  [../]
+  []
 []
 
 [ICs]
-  [./d]
+  [d]
     type = CohesiveDamageIC
     variable = d
     d0 = 1.0
@@ -112,57 +142,59 @@ dc = 0.6
     x2 = 0
     y2 = 0
     z2 = 0
-  [../]
+  []
 []
 
 [Materials]
-  [./elasticity_tensor]
-    type = ComputeIsotropicElasticityTensor
+  [elasticity_tensor]
+    type = ADComputeIsotropicElasticityTensor
     youngs_modulus = ${E}
     poissons_ratio = ${nu}
-  [../]
-  [./strain]
+  []
+  [strain]
     type = ADComputeSmallStrain
     displacements = 'disp_x disp_y'
-  [../]
-  [./stress]
+  []
+  [stress]
     type = SmallStrainDegradedElasticPK2Stress_StrainSpectral
     d = 'd'
     d_crit = ${dc}
-  [../]
-  [./bulk]
-    type = GenericConstantMaterial
+  []
+  [bulk]
+    type = ADGenericConstantMaterial
     prop_names = 'phase_field_regularization_length energy_release_rate critical_fracture_energy'
     prop_values = '${l} ${Gc} ${psic}'
-  [../]
-  [./local_dissipation]
+  []
+  [local_dissipation]
     type = LinearLocalDissipation
     d = 'd'
-  [../]
-  [./fracture_properties]
-    type = FractureMaterial
+  []
+  [fracture_properties]
+    type = ADFractureMaterial
     local_dissipation_norm = 8/3
-  [../]
-  [./degradation]
+  []
+  [degradation]
     type = LorentzDegradation
     d = 'd'
     residual_degradation = ${k}
-  [../]
+  []
 []
 
 [Postprocessors]
-  [./Fy]
+  [Fy]
     type = NodalSum
     variable = 'fy'
     boundary = 'top'
-  [../]
+  []
 []
 
 [Executioner]
   type = FixedPointTransient
   solve_type = 'NEWTON'
-  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
-  petsc_options_value = 'asm      ilu          200         200                0                     vinewtonrsls'
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels '
+                        '-snes_type'
+  petsc_options_value = 'asm      ilu          200         200                0                     '
+                        'vinewtonrsls'
   dt = 1e-4
   end_time = 6e-3
 
@@ -179,17 +211,19 @@ dc = 0.6
 
 [Outputs]
   print_linear_residuals = false
-  [./csv]
+  print_linear_converged_reason = false
+  print_nonlinear_converged_reason = false
+  [csv]
     type = CSV
     delimiter = ' '
     file_base = 'force_displacement'
-  [../]
-  [./exodus]
+  []
+  [exodus]
     type = Exodus
-    file_base = 'visualize'
-  [../]
-  [./console]
+    file_base = 'visualize_tet2'
+  []
+  [console]
     type = Console
     outlier_variable_norms = false
-  [../]
+  []
 []
