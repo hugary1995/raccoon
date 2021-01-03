@@ -11,8 +11,8 @@ ADPFFPressure::validParams()
 {
   InputParameters params = ADKernelGrad::validParams();
   params.addClassDescription("computes the pressure term in phase-field evolution equation");
-  params.addRequiredParam<UserObjectName>("pressure_uo",
-                                          "userobject that has pressure values at qps");
+  params.addParam<UserObjectName>("pressure_uo", "userobject that has pressure values at qps");
+  params.addParam<MaterialPropertyName>("pressure_mat", "material property that holds pressure.");
   params.addRequiredCoupledVar(
       "displacements",
       "The displacements appropriate for the simulation geometry and coordinate system");
@@ -22,7 +22,9 @@ ADPFFPressure::validParams()
 
 ADPFFPressure::ADPFFPressure(const InputParameters & parameters)
   : ADKernelGrad(parameters),
-    _p_uo(getUserObject<ADMaterialPropertyUserObject>("pressure_uo")),
+    _p_uo(isParamValid("pressure_uo") ? &getUserObject<ADMaterialPropertyUserObject>("pressure_uo")
+                                      : nullptr),
+    _p_mat(isParamValid("pressure_mat") ? &getADMaterialProperty<Real>("pressure_mat") : nullptr),
     _ndisp(coupledComponents("displacements")),
     _disp(3),
     _xi(getParam<Real>("xi"))
@@ -38,7 +40,11 @@ ADPFFPressure::ADPFFPressure(const InputParameters & parameters)
 ADRealVectorValue
 ADPFFPressure::precomputeQpResidual()
 {
-  ADReal p = _p_uo.getRawData(_current_elem, _qp);
+  ADReal p = 0;
+  if (_p_uo)
+    p = _p_uo->getRawData(_current_elem, _qp);
+  if (_p_mat)
+    p = (*_p_mat)[_qp];
   ADRealVectorValue u((*_disp[0])[_qp], (*_disp[1])[_qp], (*_disp[2])[_qp]);
   return p * u * (_xi + 2 * (1 - _xi) * _u[_qp]);
 }
