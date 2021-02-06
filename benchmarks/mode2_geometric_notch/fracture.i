@@ -1,68 +1,73 @@
 [Mesh]
   type = FileMesh
-  file = 'gold/geo.msh'
+  file = 'gold/geo0.msh'
 []
 
 [Variables]
-  [./d]
-  [../]
+  [d]
+  []
 []
 
 [AuxVariables]
-  [./load]
-    family = SCALAR
-  [../]
-  [./E_el]
+  [E_el_active]
     order = CONSTANT
     family = MONOMIAL
-  [../]
-  [./d_ref]
-  [../]
-  [./bounds_dummy]
-  [../]
+  []
+  [bounds_dummy]
+  []
 []
 
 [Bounds]
-  [./irreversibility]
-    type = Irreversibility
+  [irreversibility]
+    type = VariableOldValueBoundsAux
     variable = 'bounds_dummy'
     bounded_variable = 'd'
-    upper = 1
-    lower = 'd_ref'
-  [../]
+    bound_type = lower
+  []
+  [upper]
+    type = ConstantBoundsAux
+    variable = 'bounds_dummy'
+    bounded_variable = 'd'
+    bound_type = upper
+    bound_value = 1
+  []
 []
 
 [Kernels]
-  [./react]
-    type = ADPFFReaction
-    variable = 'd'
-    driving_energy_var = 'E_el'
-  [../]
-  [./diff]
+  [pff_diff]
     type = ADPFFDiffusion
     variable = 'd'
-  [../]
+  []
+  [pff_barr_coalesce]
+    type = ADPFFBarrier
+    variable = 'd'
+  []
+  [pff_react_elastic]
+    type = ADPFFReaction
+    variable = 'd'
+    driving_energy_var = 'E_el_active'
+  []
 []
 
 [Materials]
-  [./fracture_energy_barrier]
+  [fracture_energy_barrier]
     type = GenericFunctionMaterial
     prop_names = 'energy_release_rate phase_field_regularization_length critical_fracture_energy'
     prop_values = '${Gc} ${l} ${psic}'
-  [../]
-  [./local_dissipation]
-    type = LinearLocalDissipation
+  []
+  [local_dissipation]
+    type = QuadraticLocalDissipation
     d = d
-  [../]
-  [./fracture_properties]
+  []
+  [fracture_properties]
     type = FractureMaterial
-    local_dissipation_norm = 8/3
-  [../]
-  [./degradation]
-    type = LorentzDegradation
+    local_dissipation_norm = 2
+  []
+  [degradation]
+    type = QuadraticDegradation
     d = d
     residual_degradation = ${k}
-  [../]
+  []
 []
 
 [Executioner]
@@ -70,7 +75,7 @@
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -snes_type'
   petsc_options_value = 'lu vinewtonrsls'
-  dt = 1e-6
+  automatic_scaling = true
 
   nl_abs_tol = 1e-08
   nl_rel_tol = 1e-06
@@ -78,9 +83,10 @@
 
 [Outputs]
   print_linear_residuals = false
-  [./console]
+  print_linear_converged_reason = false
+  print_nonlinear_converged_reason = false
+  [console]
     type = Console
-    hide = 'load'
     outlier_variable_norms = false
-  [../]
+  []
 []
