@@ -74,8 +74,8 @@ density = 2.7e-3
   []
   [disp_y]
   []
-#  [strain_zz]
-#  []
+  [strain_zz]
+  []
 []
 
 [AuxVariables]
@@ -98,11 +98,13 @@ density = 2.7e-3
     # zeta = 0.5
     use_displaced_mesh = true
   []
-#  [plane_stress]
-#    type = ADWeakPlaneStress
-#    variable = 'strain_zz'
-#    displacements = 'disp_x disp_y'
-#  []
+  [plane_stress]
+    type = ADWeakPlaneStress
+    variable = 'strain_zz'
+    displacements = 'disp_x disp_y'
+    use_displaced_mesh = true
+
+  []
 []
 
 [Materials]
@@ -112,7 +114,8 @@ density = 2.7e-3
     poissons_ratio = 0.33
   []
   [strain]
-    type = GreenStrain
+    type = PlaneGreenStrain
+    out_of_plane_strain = 'strain_zz'
   []
   [elastic_plastic]
     # stress calculator, which is also responsible for return mapping
@@ -223,7 +226,7 @@ density = 2.7e-3
   nl_abs_tol = 1e-08
 
   dt = 0.90
-  end_time = 1000
+  end_time = 150
 
   automatic_scaling = true
 []
