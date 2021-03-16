@@ -6,7 +6,7 @@ Gc = 20
 psic = 3.7
 # beta epsilon_0 are paramters of the coalescence dissipation, see paper
 # basically we use a function of beta, e0, ep to scale Gc
-beta = 0.5
+beta = 0.01
 e0 = 0.1
 # plastic yield stress
 sigmay = 345
