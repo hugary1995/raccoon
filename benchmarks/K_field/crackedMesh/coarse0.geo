@@ -1,6 +1,6 @@
 // Gmsh project created on Wed Nov 11 14:32:31 2020
 ta = 1.0; 
-l = 1.0;
+l = 0.5;
 Point(1) = {-l,-l,0.0,ta};
 Point(2) = {0, -l, 0.0, ta};
 Point(3) = {l, -l, 0.0, ta};
@@ -27,7 +27,7 @@ Line(11) = {6, 9};
 Line(12) = {8, 9};
 Line(13) = {9, 10};
 
-Transfinite Line {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13} = 15 Using Progression 1;
+Transfinite Line {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13} = 61 Using Progression 1;
 
 Line Loop(5) = {1, 9, 13, 8};
 Ruled Surface(6) = {5};
