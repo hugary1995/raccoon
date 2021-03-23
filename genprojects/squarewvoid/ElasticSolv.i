@@ -6,7 +6,7 @@ psic = 0.4498
 [MultiApps]
   [fracture]
     type = TransientMultiApp
-    input_files = 'domain.msh'
+    input_files = 'fracture.i'
     cli_args = 'Gc=${Gc};l=${l};psic=${psic}'
   []
 []
@@ -31,7 +31,7 @@ psic = 0.4498
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/QuarterHairline.msh'
+    file = 'gold/domain.msh'
   []
 []
 
