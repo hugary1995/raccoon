@@ -1,13 +1,18 @@
-Gc = 20
-l = 0.16
-psic = 0.4498
+E = 2.7e5
+nu = 0.25
+Gc = 270
+l = 0.1
+#psic = 0.154e6
+k = 1e-04
 
 
 [MultiApps]
   [fracture]
     type = TransientMultiApp
     input_files = 'fracture.i'
-    cli_args = 'Gc=${Gc};l=${l};psic=${psic}'
+    app_type = raccoonApp
+    execute_on = 'TIMESTEP_BEGIN'
+    cli_args = 'Gc=${Gc};l=${l};k=${k}' #psic=${psic}
   []
 []
 
@@ -31,7 +36,7 @@ psic = 0.4498
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/domain.msh'
+    file = 'gold/domain05.msh'
   []
 []
 
@@ -43,43 +48,48 @@ psic = 0.4498
 []
 
 [AuxVariables]
-  [stress]
-    order = CONSTANT
-    family = MONOMIAL
-  []
   [d]
   []
   [E_el_active]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [stress_yy]
+    order = CONSTANT
     family = MONOMIAL
   []
 []
 
 [AuxKernels]
-  [stress]
-    type = ADRankTwoScalarAux
-    variable = 'stress'
-    rank_two_tensor = 'stress'
-    scalar_type = 'MaxPrincipal'
-    execute_on = 'TIMESTEP_END'
-  []
-  [E_el_active]
+  [E_el]
     type = ADMaterialRealAux
     variable = 'E_el_active'
     property = 'E_el_active'
+    execute_on = 'TIMESTEP_END'
+  []
+  [stress_xx]
+    type = ADRankTwoAux
+    variable = 'stress_xx'
+    rank_two_tensor = 'stress'
+    index_i = 0
+    index_j = 0
+    execute_on = 'TIMESTEP_END'
+  []
+  [stress_yy]
+    type = ADRankTwoAux
+    variable = 'stress_yy'
+    rank_two_tensor = 'stress'
+    index_i = 0
+    index_j = 0
+    execute_on = 'TIMESTEP_END'
   []
 []
 
 [Kernels]
-  [inertia_x]
-    type = InertialForce
-    variable = 'disp_x'
-    density = 'reg_density'
-  []
-  [inertia_y]
-    type = InertialForce
-    variable = 'disp_y'
-    density = 'reg_density'
-  []
   [solid_x]
     type = ADStressDivergenceTensors
     variable = 'disp_x'
@@ -94,16 +104,17 @@ psic = 0.4498
   []
 []
 
+
 [BCs]
   [forcing]
     type = FunctionDirichletBC
     variable = 'disp_y'
     boundary = 'Top'
     #//function = '-t/50'
-    function = '-0.01*t'
-    #//'if(t<1e-6, 0.5*1.65e10*t*t, 1.65e4*t-0.5*1.65e-2)'
-    preset = false
-    use_displaced_mesh = true
+    #function = 'if(t<4.0, 0.0175*t, 0.005*t )'
+    function = '0.05*t'
+    #preset = false
+    #use_displaced_mesh = true
   []
 
   [FixedHole_x]
@@ -111,82 +122,83 @@ psic = 0.4498
     variable = 'disp_x'
     boundary = 'Hole'
     value = 0
-    use_displaced_mesh = true
+    #use_displaced_mesh = true
   []
   [FixedHole_y]
     type = DirichletBC
     variable = 'disp_y'
     boundary = 'Hole'
     value = 0
-    use_displaced_mesh = true
+    #use_displaced_mesh = true
   []
 []
-[Materials]
-#[density]
-#  type = GenericConstantMaterial
-#  prop_names = 'density'
-  #prop_values = 7850
-#[]
-  [bulk]
-    type = ADGenericConstantMaterial
-   prop_names = 'density phase_field_regularization_length energy_release_rate '
-                 'critical_fracture_energy'
-    prop_values = '0.2 0.16 20 0.4498'
 
-    #type = ADGenericConstantMaterial
-  #  prop_names = 'phase_field_regularization_length energy_release_rate '
-  #               'critical_fracture_energy'
-  #  prop_values = '0.002 20000 2.381e6'
-  []
+[Materials]
+
   [elasticity_tensor]
     type = ADComputeIsotropicElasticityTensor
-    youngs_modulus = 7.25e4
-    poissons_ratio = 0.25
+    youngs_modulus = ${E}
+    poissons_ratio = ${nu}
   []
   [strain]
     type = ADComputeSmallStrain
     displacements = 'disp_x disp_y'
   []
   [stress]
-    type = SmallStrainDegradedElasticPK2Stress_StrainSpectral
+    type = SmallStrainDegradedElasticPK2Stress_StrainVolDev
     d = 'd'
   []
   [fracture_properties]
+    type = ADGenericFunctionMaterial
+    prop_names = 'energy_release_rate phase_field_regularization_length' #critical_fracture_energy'
+    prop_values = '${Gc} ${l}'
+     #${psic}'
+  []
+  [local_dissipation]
+    #type = LinearLocalDissipation
+    type = QuadraticLocalDissipation
+    d = d
+  []
+  [phase_field_properties]
     type = ADFractureMaterial
-    local_dissipation_norm = 8/3
+    #local_dissipation_norm = 8/3
+    local_dissipation_norm = 2
   []
   [degradation]
-    type = LorentzDegradation
-    d = 'd'
-    residual_degradation = 1e-09
-  []
-  [reg_density]
-    type = MaterialConverter
-    ad_props_in = 'density'
-    reg_props_out = 'reg_density'
+    type = QuadraticDegradation
+    #type = LorentzDegradation
+    d = d
+    residual_degradation = ${k}
   []
 []
 
 [Executioner]
-
-dt = 0.90
-end_time = 150
-
-
   type = Transient
+  solve_type = 'NEWTON'
+#  petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
+  #petsc_options_value = 'lu       superlu_dist'
+  petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
+  petsc_options_value = 'lu      ilu          200         200                0                     vinewtonrsls'
+  dt = 1
+  end_time = 8
+  nl_abs_tol = 1e-06
+  nl_rel_tol = 1e-06
+  automatic_scaling = true
+  compute_scaling_once = false
+  fp_max_its = 0
+  fp_tol = 1e-06
+  accept_on_max_fp_iteration = true
+#  picard_max_its = 100
+  #picard_abs_tol = 1e-50
+  #picard_rel_tol = 1e-03
+  #accept_on_max_picard_iteration = false
 
-
-  [TimeIntegrator]
-    type = CentralDifference
-    solve_type = lumped
-
-  []
 
 
 []
 
 [Outputs]
-  file_base = 'hairline'
+  file_base = 'Elastic_squarewvoidsmallstep_quad_Traction_Brittle_VolDev_Res_Traction_BC_cor'
   exodus = true
   interval = 1
 []

@@ -1,7 +1,7 @@
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/domain.msh'
+    file = 'gold/domain05.msh'
   []
 []
 
@@ -12,6 +12,7 @@
 
 [AuxVariables]
   [E_el_active]
+    order = CONSTANT
     family = MONOMIAL
   []
   [bounds_dummy]
@@ -31,6 +32,18 @@
     bounded_variable = 'd'
     bound_type = upper
     bound_value = 1
+  []
+[]
+
+[BCs]
+  [damageBC]
+    type = DirichletBC
+    variable = 'd'
+    boundary = 'Hole Top Bottom Right Left'
+
+    value = 0
+    #use_displaced_mesh = true
+
   []
 []
 
@@ -54,21 +67,24 @@
 [Materials]
   [bulk]
     type = ADGenericConstantMaterial
-    prop_names = 'phase_field_regularization_length energy_release_rate critical_fracture_energy'
-    prop_values = '${l} ${Gc} ${psic}'
+    prop_names = 'phase_field_regularization_length energy_release_rate' #critical_fracture_energy'
+    prop_values = '${l} ${Gc}' #${psic}'
   []
   [local_dissipation]
-    type = LinearLocalDissipation
-    d = 'd'
+    #type = LinearLocalDissipation
+    type = QuadraticLocalDissipation
+    d = d
   []
-  [fracture_properties]
+  [phase_field_properties]
     type = ADFractureMaterial
-    local_dissipation_norm = 8/3
+    #local_dissipation_norm = 8/3
+    local_dissipation_norm = 2
   []
   [degradation]
-    type = LorentzDegradation
-    d = 'd'
-    residual_degradation = 1e-09
+    type = QuadraticDegradation
+    #type = LorentzDegradation
+    d = d
+    residual_degradation = ${k}
   []
 []
 
