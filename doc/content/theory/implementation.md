@@ -39,21 +39,3 @@ Using the Galerkin method, with finite dimensional function spaces $\widetilde{\
         \quad \text{subject to } \norm{\macaulay{d_{n,a+1} - d_n}_-} = 0 .
     \end{cases}
 \end{equation}
-
-RACCOON is designed bottom-up to make the implementation of this weak form modular and general. Each material or kernel definition is designated for a small portion of the entire equation, and they are coupled together to solve the entire evolution equation. Below is a table listing the terms and the corresponding kernels:
-
-| Term                                                                                    | Kernel                                                                             |
-| --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| $(M \nabla q, \kappa \nabla d_{n,a+1})_\Omega$                                          | [`ADPFFDiffusion`](/ADPFFDiffusion.md) |
-| $\left( q, g'(d_{n,a+1}) \psi_\elastic^\activeenergy (\bs{u}_{n,a+1})+M \right)_\Omega$ | [`ADPFFReaction`](/ADPFFReaction.md)   |
-
-Below is a table listing the materials:
-
-| Term     | Parameters        | Material                                                     |
-| -------- | ----------------- | ------------------------------------------------------------ |
-| $M$      | $\Gc$, $l$, $c_0$ | [`FractureMaterial`](/FractureMaterial.md)                   |
-| $\kappa$ | $l$               | [`FractureMaterial`](/FractureMaterial.md)                   |
-| $g(d)$   | $d$               | [`QuadraticDegradation`](/QuadraticDegradation.md)           |
-| $g(d)$   | $d$, $M$          | [`LorentzDegradation`](/LorentzDegradation.md)               |
-| $w(d)$   | $d$               | [`LinearLocalDissipation`](/LinearLocalDissipation.md)       |
-| $w(d)$   | $d$               | [`QuadraticLocalDissipation`](/QuadraticLocalDissipation.md) |
