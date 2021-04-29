@@ -5,7 +5,6 @@
 #pragma once
 
 #include "ADMaterial.h"
-#include "MaterialPropertyUserObject.h"
 
 class CoalescenceEnergy : public ADMaterial
 {

@@ -5,7 +5,6 @@
 #pragma once
 
 #include "ADComputeStressBase.h"
-#include "MaterialPropertyUserObject.h"
 
 class ADDegradedElasticStressBase : public ADComputeStressBase
 {
@@ -42,9 +41,6 @@ protected:
 
   /// degradation
   const ADMaterialProperty<Real> * _g_mat;
-
-  /// degradation userobject
-  const ADMaterialPropertyUserObject * _g_uo;
 
   /// elastic energy name
   const MaterialPropertyName _E_el_name;

@@ -5,7 +5,6 @@
 #pragma once
 
 #include "ADDegradedElasticStressBase.h"
-#include "MaterialPropertyUserObject.h"
 
 class CNHDegradedElasticPlasticPK1StressBase : public ADDegradedElasticStressBase
 {
@@ -46,7 +45,6 @@ protected:
   const bool _isochoricity;
   const bool _use_cauchy_stress;
   const ADMaterialProperty<Real> * _g_plastic_mat;
-  const ADMaterialPropertyUserObject * _g_plastic_uo;
   const MaterialPropertyName _W_pl_name;
   ADMaterialProperty<Real> & _W_pl;
   const MaterialProperty<Real> * _W_pl_old;

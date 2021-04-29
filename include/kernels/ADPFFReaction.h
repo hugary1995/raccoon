@@ -6,7 +6,6 @@
 
 #include "ADKernelValue.h"
 #include "DerivativeMaterialPropertyNameInterface.h"
-#include "FPIMaterialPropertyUserObject.h"
 
 class ADPFFReaction : public ADKernelValue, public DerivativeMaterialPropertyNameInterface
 {
@@ -25,5 +24,4 @@ protected:
   const MaterialProperty<Real> * _D_mat_old;
   const ADVariableValue * _D_var;
   const VariableValue * _D_var_old;
-  const ADMaterialPropertyUserObject * _D_uo;
 };
