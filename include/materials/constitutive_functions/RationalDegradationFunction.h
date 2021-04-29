@@ -4,15 +4,15 @@
 
 #pragma once
 
-#include "REFACTOR_DegradationFunctionBase.h"
+#include "DegradationFunctionBase.h"
 
 /**
  * Predefined rational degradation function
  */
-class REFACTOR_RationalDegradationFunction : public REFACTOR_DegradationFunctionBase
+class RationalDegradationFunction : public DegradationFunctionBase
 {
 public:
   static InputParameters validParams();
 
-  REFACTOR_RationalDegradationFunction(const InputParameters & parameters);
+  RationalDegradationFunction(const InputParameters & parameters);
 };

@@ -4,15 +4,15 @@
 
 #pragma once
 
-#include "REFACTOR_DegradationFunctionBase.h"
+#include "DegradationFunctionBase.h"
 
 /**
  * Predefined power degradation function
  */
-class REFACTOR_PowerDegradationFunction : public REFACTOR_DegradationFunctionBase
+class PowerDegradationFunction : public DegradationFunctionBase
 {
 public:
   static InputParameters validParams();
 
-  REFACTOR_PowerDegradationFunction(const InputParameters & parameters);
+  PowerDegradationFunction(const InputParameters & parameters);
 };

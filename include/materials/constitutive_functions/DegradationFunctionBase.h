@@ -4,15 +4,15 @@
 
 #pragma once
 
-#include "REFACTOR_CustomParsedFunctionBase.h"
+#include "CustomParsedFunctionBase.h"
 
 /**
  * Class to evaluate the degradation function and automatically provide all derivatives.
  */
-class REFACTOR_DegradationFunctionBase : public REFACTOR_CustomParsedFunctionBase
+class DegradationFunctionBase : public CustomParsedFunctionBase
 {
 public:
   static InputParameters validParams();
 
-  REFACTOR_DegradationFunctionBase(const InputParameters & parameters);
+  DegradationFunctionBase(const InputParameters & parameters);
 };

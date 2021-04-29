@@ -24,7 +24,7 @@
 
 [Materials]
   [crack_geometric]
-    type = REFACTOR_CrackGeometricFunction
+    type = CrackGeometricFunction
     f_name = alpha
     function = 'xi*d+(1-xi)*d^2'
     d = d

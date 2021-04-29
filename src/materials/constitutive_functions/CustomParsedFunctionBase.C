@@ -2,10 +2,10 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "REFACTOR_CustomParsedFunctionBase.h"
+#include "CustomParsedFunctionBase.h"
 
 InputParameters
-REFACTOR_CustomParsedFunctionBase::validParams()
+CustomParsedFunctionBase::validParams()
 {
   InputParameters params = DerivativeParsedMaterialHelperTempl<true>::validParams();
   params.addRequiredParam<std::string>("function", "Function to parse");
@@ -21,7 +21,7 @@ REFACTOR_CustomParsedFunctionBase::validParams()
   return params;
 }
 
-REFACTOR_CustomParsedFunctionBase::REFACTOR_CustomParsedFunctionBase(
+CustomParsedFunctionBase::CustomParsedFunctionBase(
     const InputParameters & parameters)
   : DerivativeParsedMaterialHelperTempl<true>(parameters, VariableNameMappingMode::USE_MOOSE_NAMES),
     _function(getParam<std::string>("function")),

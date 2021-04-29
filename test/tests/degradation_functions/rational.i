@@ -29,7 +29,7 @@
     prop_values = '1 1 2 3.14159 1'
   []
   [degradation]
-    type = REFACTOR_RationalDegradationFunction
+    type = RationalDegradationFunction
     f_name = g
     d = d
     parameter_names = 'p a2 a3 eta '

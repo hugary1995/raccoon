@@ -9,12 +9,12 @@
 /**
  * Class to evaluate the custom function and automatically provide all derivatives.
  */
-class REFACTOR_CustomParsedFunctionBase : public DerivativeParsedMaterialHelperTempl<true>
+class CustomParsedFunctionBase : public DerivativeParsedMaterialHelperTempl<true>
 {
 public:
   static InputParameters validParams();
 
-  REFACTOR_CustomParsedFunctionBase(const InputParameters & parameters);
+  CustomParsedFunctionBase(const InputParameters & parameters);
 
   usingDerivativeParsedMaterialHelperMembers(true);
 

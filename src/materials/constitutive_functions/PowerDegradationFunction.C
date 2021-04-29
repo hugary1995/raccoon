@@ -2,14 +2,14 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "REFACTOR_PowerDegradationFunction.h"
+#include "PowerDegradationFunction.h"
 
-registerMooseObject("raccoonApp", REFACTOR_PowerDegradationFunction);
+registerMooseObject("raccoonApp", PowerDegradationFunction);
 
 InputParameters
-REFACTOR_PowerDegradationFunction::validParams()
+PowerDegradationFunction::validParams()
 {
-  InputParameters params = REFACTOR_DegradationFunctionBase::validParams();
+  InputParameters params = DegradationFunctionBase::validParams();
   params.addClassDescription(
       "defines the power degradation function $g(d) = (1-d)^p (1-\\eta) + \\eta$.");
 
@@ -20,8 +20,8 @@ REFACTOR_PowerDegradationFunction::validParams()
   return params;
 }
 
-REFACTOR_PowerDegradationFunction::REFACTOR_PowerDegradationFunction(
+PowerDegradationFunction::PowerDegradationFunction(
     const InputParameters & parameters)
-  : REFACTOR_DegradationFunctionBase(parameters)
+  : DegradationFunctionBase(parameters)
 {
 }

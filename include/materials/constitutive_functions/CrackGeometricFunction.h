@@ -4,17 +4,17 @@
 
 #pragma once
 
-#include "REFACTOR_CustomParsedFunctionBase.h"
+#include "CustomParsedFunctionBase.h"
 
 /**
  * Class to evaluate the crack geometric function and automatically provide all derivatives.
  */
-class REFACTOR_CrackGeometricFunction : public REFACTOR_CustomParsedFunctionBase
+class CrackGeometricFunction : public CustomParsedFunctionBase
 {
 public:
   static InputParameters validParams();
 
-  REFACTOR_CrackGeometricFunction(const InputParameters & parameters);
+  CrackGeometricFunction(const InputParameters & parameters);
 
 protected:
   void computeQpProperties() override;

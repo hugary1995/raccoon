@@ -2,14 +2,14 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "REFACTOR_CrackGeometricFunction.h"
+#include "CrackGeometricFunction.h"
 
-registerMooseObject("raccoonApp", REFACTOR_CrackGeometricFunction);
+registerMooseObject("raccoonApp", CrackGeometricFunction);
 
 InputParameters
-REFACTOR_CrackGeometricFunction::validParams()
+CrackGeometricFunction::validParams()
 {
-  InputParameters params = REFACTOR_CustomParsedFunctionBase::validParams();
+  InputParameters params = CustomParsedFunctionBase::validParams();
 
   params.set<std::string>("f_name") = "alpha";
   params.addRequiredCoupledVar("d", "the phase-field variable");
@@ -36,8 +36,8 @@ REFACTOR_CrackGeometricFunction::validParams()
   return params;
 }
 
-REFACTOR_CrackGeometricFunction::REFACTOR_CrackGeometricFunction(const InputParameters & parameters)
-  : REFACTOR_CustomParsedFunctionBase(parameters),
+CrackGeometricFunction::CrackGeometricFunction(const InputParameters & parameters)
+  : CustomParsedFunctionBase(parameters),
     _d_idx(argIndex(coupled("d"))),
     _xi(declareADProperty<Real>(getParam<MaterialPropertyName>("initial_derivative_name"))),
     _c0(declareADProperty<Real>(getParam<MaterialPropertyName>("normalization_constant_name"))),
@@ -51,7 +51,7 @@ REFACTOR_CrackGeometricFunction::REFACTOR_CrackGeometricFunction(const InputPara
 }
 
 ADReal
-REFACTOR_CrackGeometricFunction::computeNormalizationConstant()
+CrackGeometricFunction::computeNormalizationConstant()
 {
   // We use an adaptive trapezoidal rule to integrate the normalization constant to a target
   // precision
@@ -88,17 +88,17 @@ REFACTOR_CrackGeometricFunction::computeNormalizationConstant()
 }
 
 ADReal
-REFACTOR_CrackGeometricFunction::normalizationIntegrand(ADReal d)
+CrackGeometricFunction::normalizationIntegrand(ADReal d)
 {
   _func_params[_d_idx] = d;
   return 4.0 * std::sqrt(evaluate(_func_F, _name));
 }
 
 void
-REFACTOR_CrackGeometricFunction::computeQpProperties()
+CrackGeometricFunction::computeQpProperties()
 {
   _xi[_qp] = _xi_0;
   _c0[_qp] = _c0_0;
 
-  REFACTOR_CustomParsedFunctionBase::computeQpProperties();
+  CustomParsedFunctionBase::computeQpProperties();
 }

@@ -24,7 +24,7 @@
 
 [Materials]
   [degradation]
-    type = REFACTOR_PowerDegradationFunction
+    type = PowerDegradationFunction
     f_name = g
     d = d
     parameter_names = 'p eta '

@@ -24,7 +24,7 @@
 
 [Materials]
   [crack_geometric]
-    type = REFACTOR_CrackGeometricFunction
+    type = CrackGeometricFunction
     f_name = alpha
     function = 'd'
     d = d

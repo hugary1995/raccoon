@@ -2,14 +2,14 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "REFACTOR_RationalDegradationFunction.h"
+#include "RationalDegradationFunction.h"
 
-registerMooseObject("raccoonApp", REFACTOR_RationalDegradationFunction);
+registerMooseObject("raccoonApp", RationalDegradationFunction);
 
 InputParameters
-REFACTOR_RationalDegradationFunction::validParams()
+RationalDegradationFunction::validParams()
 {
-  InputParameters params = REFACTOR_DegradationFunctionBase::validParams();
+  InputParameters params = DegradationFunctionBase::validParams();
   params.addClassDescription(
       "Defines the rational degradation function $g(d) = "
       "\\frac{(1-d)^p}{(1-d)^p+a_1d(1+a_2d+a_2a_3d^2)} (1-\\eta) + \\eta$ where $a_1 = "
@@ -26,8 +26,8 @@ REFACTOR_RationalDegradationFunction::validParams()
   return params;
 }
 
-REFACTOR_RationalDegradationFunction::REFACTOR_RationalDegradationFunction(
+RationalDegradationFunction::RationalDegradationFunction(
     const InputParameters & parameters)
-  : REFACTOR_DegradationFunctionBase(parameters)
+  : DegradationFunctionBase(parameters)
 {
 }

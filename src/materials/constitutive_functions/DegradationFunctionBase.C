@@ -2,12 +2,12 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "REFACTOR_DegradationFunctionBase.h"
+#include "DegradationFunctionBase.h"
 
 InputParameters
-REFACTOR_DegradationFunctionBase::validParams()
+DegradationFunctionBase::validParams()
 {
-  InputParameters params = REFACTOR_CustomParsedFunctionBase::validParams();
+  InputParameters params = CustomParsedFunctionBase::validParams();
 
   params.set<std::string>("f_name") = "g";
   params.addRequiredCoupledVar("d", "the phase-field variable");
@@ -17,8 +17,8 @@ REFACTOR_DegradationFunctionBase::validParams()
   return params;
 }
 
-REFACTOR_DegradationFunctionBase::REFACTOR_DegradationFunctionBase(
+DegradationFunctionBase::DegradationFunctionBase(
     const InputParameters & parameters)
-  : REFACTOR_CustomParsedFunctionBase(parameters)
+  : CustomParsedFunctionBase(parameters)
 {
 }
