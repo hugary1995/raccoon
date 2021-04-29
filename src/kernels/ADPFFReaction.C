@@ -15,8 +15,6 @@ ADPFFReaction::validParams()
   params.addParam<MaterialPropertyName>("driving_energy_mat",
                                         "material property name of the driving energy");
   params.addCoupledVar("driving_energy_var", "auxiliary variable that holds the driving energy");
-  params.addParam<UserObjectName>("driving_energy_uo",
-                                  "userobject that has driving energy values at qps");
   params.addParam<bool>(
       "lag", false, "whether we should use last step's driving energy to improve convergence");
   return params;
@@ -36,21 +34,17 @@ ADPFFReaction::ADPFFReaction(const InputParameters & parameters)
     _D_var(isParamValid("driving_energy_var") && !_lag ? &adCoupledValue("driving_energy_var")
                                                        : nullptr),
     _D_var_old(isParamValid("driving_energy_var") && _lag ? &coupledValueOld("driving_energy_var")
-                                                          : nullptr),
-    _D_uo(isParamValid("driving_energy_uo")
-              ? &getUserObject<ADMaterialPropertyUserObject>("driving_energy_uo")
-              : nullptr)
+                                                          : nullptr)
 {
   bool provided_by_mat = _D_mat || _D_mat_old;
   bool provided_by_var = _D_var || _D_var_old;
-  bool provided_by_uo = _D_uo;
 
   /// driving energy should be provided
-  if (!provided_by_mat && !provided_by_var && !provided_by_uo)
+  if (!provided_by_mat && !provided_by_var)
     mooseError("no driving energy provided.");
 
   /// driving energy should not be multiply defined
-  if ((provided_by_mat ? 1 : 0) + (provided_by_var ? 1 : 0) + (provided_by_uo ? 1 : 0) > 1)
+  if ((provided_by_mat ? 1 : 0) + (provided_by_var ? 1 : 0) > 1)
     mooseError("driving energy multiply defined.");
 }
 
@@ -64,8 +58,6 @@ ADPFFReaction::precomputeQpResidual()
     D = (*_D_mat)[_qp];
   else if (_D_mat_old)
     D = (*_D_mat_old)[_qp];
-  else if (_D_uo)
-    D = _D_uo->getRawData(_current_elem, _qp);
   else
     mooseError("Internal Error");
 
