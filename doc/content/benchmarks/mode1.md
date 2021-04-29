@@ -59,12 +59,6 @@ Instead of a "meshed-in" initial crack, sometimes we may need initial imperfecti
 
 [CohesiveDamageIC](CohesiveDamageIC.md) and [BrittleDamageIC](BrittleDamageIC.md) are predefined initial conditions based on closed-form solutions.
 
-## Fixed-point iteration: the other way
-
-Recently, another way to perform fixed-point iteration has made its way into RACCOON. As opposed to the old way, the new system needs only one input file. Between fixed-point iterations within one load step, stateful material properties are advanced. Therefore, by "lagging" the fracture driving energy one step, we achieve effectively the fixed-point iteration.
-
-!listing benchmarks/fixed_point_iteration/mechanical_fracture_uo.i
-
 ## Visualizing the outputs
 
 The following animations are generated using Paraview.
