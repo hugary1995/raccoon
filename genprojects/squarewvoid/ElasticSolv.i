@@ -12,7 +12,7 @@ k = 1e-06
     input_files = 'fracture.i'
     app_type = raccoonApp
     execute_on = 'TIMESTEP_BEGIN'
-    cli_args = 'Gc=${Gc};l=${l};k=${k} psic=${psic}'
+    cli_args = 'Gc=${Gc};l=${l};psic=${psic}'#k=${k};
   []
 []
 
@@ -165,7 +165,7 @@ k = 1e-06
     type = ADGenericFunctionMaterial
     prop_names = 'energy_release_rate phase_field_regularization_length critical_fracture_energy'
     prop_values = '${Gc} ${l} ${psic}'
-    
+
   []
   [local_dissipation]
     type = LinearLocalDissipation
