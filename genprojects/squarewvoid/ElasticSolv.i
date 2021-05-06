@@ -120,7 +120,7 @@ k = 1e-06
     boundary = 'Top'
     #//function = '-t/50'
     #function = 'if(t<4.0, 0.0175*t, 0.005*t )'
-    function = '-0.1*t'
+    function = '0.1*t'
     #preset = false
     #use_displaced_mesh = true
   []
@@ -216,7 +216,7 @@ k = 1e-06
 []
 
 [Outputs]
-  file_base = 'Elastic_squarewvoidsmallstep_quad_Traction_Brittle_VolDev_Res_Comp_BC'
+  file_base = 'Elastic_squarewvoidsmallstep_quad_Traction_Brittle_VolDev_Res_BC_Lorenz'
   exodus = true
   interval = 1
 []
