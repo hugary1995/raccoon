@@ -67,8 +67,8 @@
 [Materials]
   [bulk]
     type = ADGenericConstantMaterial
-    prop_names = 'phase_field_regularization_length energy_release_rate' #critical_fracture_energy'
-    prop_values = '${l} ${Gc}' #${psic}'
+    prop_names = 'phase_field_regularization_length energy_release_rate critical_fracture_energy'
+    prop_values = '${l} ${Gc} ${psic}'
   []
   [local_dissipation]
     type = LinearLocalDissipation
