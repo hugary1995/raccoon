@@ -77,14 +77,15 @@
   []
   [phase_field_properties]
     type = ADFractureMaterial
-    #local_dissipation_norm = 8/3
-    local_dissipation_norm = 2
+    local_dissipation_norm = 8/3
+  #  local_dissipation_norm = 2
   []
   [degradation]
-    type = QuadraticDegradation
-    #type = LorentzDegradation
+    #type = QuadraticDegradation
+    type = LorentzDegradation
     d = d
-    residual_degradation = ${k}
+    #residual_degradation = ${k}
+    residual_degradation = 1e-09
   []
 []
 
