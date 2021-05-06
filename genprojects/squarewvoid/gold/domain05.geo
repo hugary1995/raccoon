@@ -1,7 +1,7 @@
 Mesh.MshFileVersion = 2.2;
 Mesh.Smoothing = 100;
 //Mesh.Algorithm = 8; // Delaunay for quads
-e = 75;
+e = 250;
 
 Point(1) = {-1.5, -1.5, 0};
 Point(2) = {-1.5, 1.5, 0};

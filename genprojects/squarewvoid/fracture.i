@@ -20,12 +20,12 @@
 []
 
 [Bounds]
-  [irreversibility]
-    type = VariableOldValueBoundsAux
-    variable = 'bounds_dummy'
-    bounded_variable = 'd'
-    bound_type = lower
-  []
+  #[irreversibility]
+  #  type = VariableOldValueBoundsAux
+  #  variable = 'bounds_dummy'
+  #  bounded_variable = 'd'
+  #  bound_type = lower
+  #[]
   [upper]
     type = ConstantBoundsAux
     variable = 'bounds_dummy'
@@ -39,7 +39,7 @@
   [damageBC]
     type = DirichletBC
     variable = 'd'
-    boundary = 'Hole Top Bottom Right Left'
+    boundary = 'Hole'
 
     value = 0
     #use_displaced_mesh = true
@@ -93,9 +93,9 @@
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels '
                         '-snes_type'
-  petsc_options_value = 'asm      ilu          200         200                0                     '
+  petsc_options_value = 'asm      lu          200         200                0                     '
                         'vinewtonrsls'
-  nl_abs_tol = 1e-08
+  nl_abs_tol = 1e-06
   nl_rel_tol = 1e-06
   automatic_scaling = true
 []

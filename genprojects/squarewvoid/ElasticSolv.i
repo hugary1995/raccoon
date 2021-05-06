@@ -1,9 +1,9 @@
-E = 2.7e5
-nu = 0.25
-Gc = 270
-l = 0.1
+E = 4000
+nu = 0.2
+Gc = 100
+l = 0.02
 #psic = 0.154e6
-k = 1e-04
+k = 1e-06
 
 
 [MultiApps]
@@ -45,6 +45,8 @@ k = 1e-04
   []
   [disp_y]
   []
+  [strain_zz]
+  []
 []
 
 [AuxVariables]
@@ -65,6 +67,7 @@ k = 1e-04
 []
 
 [AuxKernels]
+
   [E_el]
     type = ADMaterialRealAux
     variable = 'E_el_active'
@@ -102,6 +105,11 @@ k = 1e-04
     component = 1
     displacements = 'disp_x disp_y'
   []
+  [plane_stress]
+    type = ADWeakPlaneStress
+    variable = 'strain_zz'
+    displacements = 'disp_x disp_y'
+  []
 []
 
 
@@ -112,7 +120,7 @@ k = 1e-04
     boundary = 'Top'
     #//function = '-t/50'
     #function = 'if(t<4.0, 0.0175*t, 0.005*t )'
-    function = '0.05*t'
+    function = '-0.1*t'
     #preset = false
     #use_displaced_mesh = true
   []
@@ -140,8 +148,13 @@ k = 1e-04
     youngs_modulus = ${E}
     poissons_ratio = ${nu}
   []
+  #[strain]
+  #  type = ADComputeSmallStrain
+  #  displacements = 'disp_x disp_y'
+  #]
   [strain]
-    type = ADComputeSmallStrain
+    type = ADComputePlaneSmallStrain
+    out_of_plane_strain = 'strain_zz'
     displacements = 'disp_x disp_y'
   []
   [stress]
@@ -179,8 +192,8 @@ k = 1e-04
   #petsc_options_value = 'lu       superlu_dist'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
   petsc_options_value = 'lu      ilu          200         200                0                     vinewtonrsls'
-  dt = 1
-  end_time = 8
+  dt = 0.00492
+  end_time =20
   nl_abs_tol = 1e-06
   nl_rel_tol = 1e-06
   automatic_scaling = true
@@ -198,7 +211,7 @@ k = 1e-04
 []
 
 [Outputs]
-  file_base = 'Elastic_squarewvoidsmallstep_quad_Traction_Brittle_VolDev_Res_Traction_BC_cor'
+  file_base = 'Elastic_squarewvoidsmallstep_quad_Traction_Brittle_VolDev_Res_Comp_BC'
   exodus = true
   interval = 1
 []

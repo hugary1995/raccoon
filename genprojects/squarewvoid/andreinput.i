@@ -13,7 +13,7 @@ dc = 2
    parallel_type = distributed
   [./mesh]
    type = FileMeshGenerator
-   file = 'gold3/geo.msh'
+   file = 'gold/domain05.msh'
   [../]
   [./all_nodes]
    type = BoundingBoxNodeSetGenerator

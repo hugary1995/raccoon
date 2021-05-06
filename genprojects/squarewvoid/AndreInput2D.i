@@ -5,12 +5,12 @@ l = 0.1
 psic = 0
 k = 1e-4
 dc = 2
-[Problem]
-  type = FixedPointProblem
-[]
+#[Problem]#
+#  type = FixedPointProblem
+#[]
 [Mesh]
-   construct_side_list_from_node_list = true
-   parallel_type = distributed
+  # construct_side_list_from_node_list = true
+  # parallel_type = distributed
   [./mesh]
    type = FileMeshGenerator
    file = 'gold/domain05.msh'
@@ -182,8 +182,8 @@ dc = 2
     type = Exodus
     file_base = 'volDevDecomposition'
   [../]
-  [./console]
-    type = Console
-    outlier_variable_norms = false
-  [../]
+  #[./console]
+#    type = Console
+    #outlier_variable_norms = false
+  #[../]
 []
