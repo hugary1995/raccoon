@@ -71,8 +71,8 @@
     prop_values = '${l} ${Gc}' #${psic}'
   []
   [local_dissipation]
-    #type = LinearLocalDissipation
-    type = QuadraticLocalDissipation
+    type = LinearLocalDissipation
+    #type = QuadraticLocalDissipation
     d = d
   []
   [phase_field_properties]
