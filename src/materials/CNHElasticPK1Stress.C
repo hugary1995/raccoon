@@ -4,7 +4,7 @@
 
 #include "CNHElasticPK1Stress.h"
 
-registerADMooseObject("raccoonApp", CNHElasticPK1Stress);
+registerMooseObject("raccoonApp", CNHElasticPK1Stress);
 
 InputParameters
 CNHElasticPK1Stress::validParams()

@@ -4,7 +4,7 @@
 
 #include "SmallStrainDegradedElasticPK2Stress_StrainSpectral.h"
 
-registerADMooseObject("raccoonApp", SmallStrainDegradedElasticPK2Stress_StrainSpectral);
+registerMooseObject("raccoonApp", SmallStrainDegradedElasticPK2Stress_StrainSpectral);
 
 InputParameters
 SmallStrainDegradedElasticPK2Stress_StrainSpectral::validParams()

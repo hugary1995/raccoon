@@ -5,7 +5,7 @@
 #include "PressureBC.h"
 #include "Function.h"
 
-registerADMooseObject("raccoonApp", PressureBC);
+registerMooseObject("raccoonApp", PressureBC);
 
 InputParameters
 PressureBC::validParams()

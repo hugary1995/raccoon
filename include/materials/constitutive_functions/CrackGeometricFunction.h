@@ -21,15 +21,15 @@ protected:
 
 private:
   ADReal computeNormalizationConstant();
-  ADReal normalizationIntegrand(ADReal d);
+  Real normalizationIntegrand(const ADReal & d);
 
-  unsigned int _d_idx;
+  const unsigned int _d_idx;
 
   ADMaterialProperty<Real> & _xi;
   ADMaterialProperty<Real> & _c0;
 
-  Real _tolerance;
-  unsigned int _max_its;
+  const Real _tolerance;
+  const unsigned int _max_its;
 
   ADReal _xi_0;
   ADReal _c0_0;

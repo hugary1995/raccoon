@@ -4,7 +4,7 @@
 
 #include "CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative.h"
 
-registerADMooseObject("raccoonApp",
+registerMooseObject("raccoonApp",
                       CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative);
 
 InputParameters

@@ -5,7 +5,7 @@
 #include "ElasticEnergyDensity.h"
 #include "RankTwoTensor.h"
 
-registerADMooseObject("raccoonApp", ElasticEnergyDensity);
+registerMooseObject("raccoonApp", ElasticEnergyDensity);
 
 InputParameters
 ElasticEnergyDensity::validParams()

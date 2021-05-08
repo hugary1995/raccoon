@@ -7,17 +7,19 @@
 #include "ADKernelValue.h"
 #include "DerivativeMaterialPropertyNameInterface.h"
 
-class ADPFFBarrier : public ADKernelValue, public DerivativeMaterialPropertyNameInterface
+class ADPFFSource : public ADKernelValue, public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
 
-  ADPFFBarrier(const InputParameters & parameters);
+  ADPFFSource(const InputParameters & parameters);
 
 protected:
   virtual ADReal precomputeQpResidual() override;
 
-  const ADMaterialProperty<Real> & _M;
+  /// Name of the Helmholtz free energy
+  const MaterialPropertyName _psi_name;
 
-  const ADMaterialProperty<Real> & _dw_dd;
+  /// The derivative of Helmholtz free energy w.r.t. the phase field
+  const ADMaterialProperty<Real> & _dpsi_dd;
 };

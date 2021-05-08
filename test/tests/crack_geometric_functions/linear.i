@@ -49,7 +49,7 @@
   []
   [dalpha_dd_0]
     type = ADElementAverageMaterialProperty
-    mat_prop = dalpha/dd(0)
+    mat_prop = xi
     execute_on = 'INITIAL TIMESTEP_END'
   []
   [c0]

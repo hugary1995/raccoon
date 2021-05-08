@@ -4,7 +4,7 @@
 
 #include "ThinFilmInterfaceEnergy.h"
 
-registerADMooseObject("raccoonApp", ThinFilmInterfaceEnergy);
+registerMooseObject("raccoonApp", ThinFilmInterfaceEnergy);
 
 InputParameters
 ThinFilmInterfaceEnergy::validParams()

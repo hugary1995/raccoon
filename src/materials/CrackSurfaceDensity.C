@@ -4,7 +4,7 @@
 
 #include "CrackSurfaceDensity.h"
 
-registerADMooseObject("raccoonApp", CrackSurfaceDensity);
+registerMooseObject("raccoonApp", CrackSurfaceDensity);
 
 InputParameters
 CrackSurfaceDensity::validParams()

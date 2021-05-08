@@ -18,7 +18,7 @@ CrackGeometricFunction::validParams()
   params.suppressParameter<unsigned int>("derivative_order");
 
   params.addParam<MaterialPropertyName>("initial_derivative_name",
-                                        "dalpha/dd(0)",
+                                        "xi",
                                         "Name of the material to store the initial slope of the "
                                         "crack geometric function, $\\alpha(d=0)$");
 
@@ -59,7 +59,7 @@ CrackGeometricFunction::computeNormalizationConstant()
   S.emplace(0, 1);
   ADReal I = 0;
   unsigned int its = 0;
-  while (!S.empty() && its < _max_its)
+  while (!S.empty())
   {
     auto interval = S.top();
     S.pop();
@@ -68,10 +68,11 @@ CrackGeometricFunction::computeNormalizationConstant()
     Real b = interval.second;
     Real m = (a + b) / 2;
 
-    ADReal I1 = (normalizationIntegrand(a) + normalizationIntegrand(b)) * (b - a) / 2;
-    ADReal I2 =
+    Real I1 = (normalizationIntegrand(a) + normalizationIntegrand(b)) * (b - a) / 2;
+    Real I2 =
         (normalizationIntegrand(a) + 2 * normalizationIntegrand(m) + normalizationIntegrand(b)) *
         (b - a) / 4;
+
     if (std::abs(I1 - I2) < 3 * (b - a) * _tolerance)
       I += I2;
     else
@@ -80,18 +81,19 @@ CrackGeometricFunction::computeNormalizationConstant()
       S.emplace(m, b);
       its++;
     }
+
+    if (its >= _max_its)
+      mooseError("Maximum number of iterations reached, but the crack geometric function still "
+                 "hasn't converge.");
   }
-  if (its == _max_its)
-    mooseError("Maximum number of iterations reached, but the crack geometric function still "
-               "hasn't converge.");
   return I;
 }
 
-ADReal
-CrackGeometricFunction::normalizationIntegrand(ADReal d)
+Real
+CrackGeometricFunction::normalizationIntegrand(const ADReal & d)
 {
   _func_params[_d_idx] = d;
-  return 4.0 * std::sqrt(evaluate(_func_F, _name));
+  return 4.0 * std::sqrt(raw_value(evaluate(_func_F, _name)));
 }
 
 void

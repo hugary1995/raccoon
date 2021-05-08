@@ -4,7 +4,7 @@
 
 #include "TissueElasticPK1Stress.h"
 
-registerADMooseObject("raccoonApp", TissueElasticPK1Stress);
+registerMooseObject("raccoonApp", TissueElasticPK1Stress);
 
 InputParameters
 TissueElasticPK1Stress::validParams()
