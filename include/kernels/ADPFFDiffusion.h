@@ -16,11 +16,8 @@ public:
 protected:
   virtual ADReal computeQpResidual() override;
 
-  /// The fracture toughness
-  const ADMaterialProperty<Real> & _Gc;
-
   /// The normalization constant
-  const MaterialProperty<Real> & _c0;
+  const ADMaterialProperty<Real> & _c0;
 
   /// The regularization length
   const ADMaterialProperty<Real> & _l;

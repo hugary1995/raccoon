@@ -13,7 +13,7 @@ ADDegradedElasticStressBase::validParams()
   params.addParam<Real>(
       "d_crit", 2.0, "enforce the traction free boundary condition when d > d_crit");
   params.addParam<MaterialPropertyName>(
-      "elastic_energy_name", "E_el", "name of the material that holds the elastic energy");
+      "elastic_energy_name", "we", "name of the material that holds the elastic energy");
   params.addParam<MaterialPropertyName>(
       "degradation_name", "g", "name of the degradation material. Use degradation_mat instead.");
   params.addParam<MaterialPropertyName>("degradation_mat",

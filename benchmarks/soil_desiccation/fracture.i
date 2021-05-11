@@ -7,12 +7,12 @@
 []
 
 [Transfers]
-  [get_E_el_active]
+  [get_we_active]
     type = MultiAppMeshFunctionTransfer
     multi_app = 'mechanical'
     direction = from_multiapp
-    source_variable = 'E_el_active'
-    variable = 'E_el_active'
+    source_variable = 'we_active'
+    variable = 'we_active'
   []
   [send_d]
     type = MultiAppMeshFunctionTransfer
@@ -37,7 +37,7 @@
 []
 
 [AuxVariables]
-  [E_el_active]
+  [we_active]
     order = CONSTANT
     family = MONOMIAL
   []
@@ -74,16 +74,10 @@
     mobility_name = L
     kappa_name = kappa
   []
-  [pff_barr]
-    type = ADPFFBarrier
-    variable = d
-    mobility_name = L
-    local_dissipation_name = alpha
-  []
   [pff_react]
-    type = ADPFFReaction
+    type = ADPFFSource
     variable = d
-    driving_energy_var = 'E_el_active'
+    free_energy = psi
   []
 []
 
@@ -105,25 +99,11 @@
     prop_names = 'l'
     prop_values = '1'
   []
-  [mobility]
-    type = ADParsedMaterial
-    f_name = L
-    material_property_names = 'Gc c0 l'
-    function = 'Gc/c0/l'
-  []
-  [kappa]
-    type = ADParsedMaterial
-    f_name = kappa
-    material_property_names = 'l'
-    function = '2*l^2'
-  []
   [crack_geometric]
     type = CrackGeometricFunction
     f_name = alpha
     function = 'd'
     d = d
-    initial_derivative_name = xi
-    normalization_constant_name = c0
   []
   [degradation]
     type = RationalDegradationFunction
@@ -133,18 +113,30 @@
     parameter_values = '2 1 0 1e-6'
     material_property_names = 'Gc psic xi c0 l '
   []
+  [active_elastic_energy]
+    type = ADParsedMaterial
+    f_name = we_active
+    function = 'we_active'
+    args = we_active
+  []
+  [psi]
+    type = ADDerivativeParsedMaterial
+    f_name = psi
+    function = 'alpha/c0/l+g*we_active/Gc'
+    args = d
+    material_property_names = 'alpha(d) c0 l g(d) we_active Gc'
+    derivative_order = 1
+  []
 []
 
-# There is an issue with periodic BC due to ghosting functors.
-# This issue should be fixed pretty soon.
-# [BCs]
-#   [Periodic]
-#     [all]
-#       variable = u
-#       auto_direction = 'x y'
-#     []
-#   []
-# []
+[BCs]
+  [Periodic]
+    [all]
+      variable = d
+      auto_direction = 'x y'
+    []
+  []
+[]
 
 [Postprocessors]
   [d_norm]

@@ -18,7 +18,7 @@
 [AuxVariables]
   [d]
   []
-  [E_el_active]
+  [we_active]
     order = CONSTANT
     family = MONOMIAL
   []
@@ -31,10 +31,10 @@
 []
 
 [AuxKernels]
-  [E_driving]
+  [we_active]
     type = ADMaterialRealAux
-    variable = 'E_el_active'
-    property = 'E_el_active'
+    variable = 'we_active'
+    property = 'we_active'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -72,30 +72,16 @@
 []
 
 [BCs]
-  [disp_x_fix]
-    type = DirichletBC
-    variable = disp_x
-    value = 0
-    boundary = 'top bottom left right'
+  [Periodic]
+    [x]
+      variable = disp_x
+      auto_direction = 'x y'
+    []
+    [y]
+      variable = disp_y
+      auto_direction = 'x y'
+    []
   []
-  [disp_y_fix]
-    type = DirichletBC
-    variable = disp_y
-    value = 0
-    boundary = 'top bottom left right'
-  []
-  # There is an issue with periodic BC due to ghosting functors.
-  # This issue should be fixed pretty soon.
-  # [Periodic]
-  #   [x]
-  #     variable = disp_x
-  #     auto_direction = 'x y'
-  #   []
-  #   [y]
-  #     variable = disp_y
-  #     auto_direction = 'x y'
-  #   []
-  # []
 []
 
 [Materials]
@@ -133,18 +119,6 @@
     args = 'psic'
     function = 'psic'
   []
-  [mobility]
-    type = ADParsedMaterial
-    f_name = L
-    material_property_names = 'Gc c0 l'
-    function = 'Gc/c0/l'
-  []
-  [kappa]
-    type = ADParsedMaterial
-    f_name = kappa
-    material_property_names = 'l'
-    function = '2*l^2'
-  []
   [length_scale]
     type = ADGenericConstantMaterial
     prop_names = 'l'
@@ -155,8 +129,6 @@
     f_name = alpha
     function = 'd'
     d = d
-    initial_derivative_name = xi
-    normalization_constant_name = c0
   []
   [degradation]
     type = RationalDegradationFunction
