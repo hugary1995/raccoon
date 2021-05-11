@@ -16,11 +16,11 @@ public:
 protected:
   virtual ADReal computeQpResidual() override;
 
-  /// Allen-Cahn interface coefficient computed from fracture properties
-  const ADMaterialProperty<Real> & _kappa;
+  /// The normalization constant
+  const ADMaterialProperty<Real> & _c0;
 
-  /// Allen-Cahn mobility computed from fracture properties
-  const ADMaterialProperty<Real> & _M;
+  /// The regularization length
+  const ADMaterialProperty<Real> & _l;
 
   /// the coordinate system
   const Moose::CoordinateSystemType & _coord_sys;

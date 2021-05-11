@@ -6,7 +6,7 @@
 #include "Function.h"
 #include "RankTwoTensor.h"
 
-registerADMooseObject("raccoonApp", FollowerForceBC);
+registerMooseObject("raccoonApp", FollowerForceBC);
 
 InputParameters
 FollowerForceBC::validParams()

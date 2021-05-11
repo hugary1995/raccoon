@@ -4,7 +4,7 @@
 
 #include "ADPFFPressure.h"
 
-registerADMooseObject("raccoonApp", ADPFFPressure);
+registerMooseObject("raccoonApp", ADPFFPressure);
 
 InputParameters
 ADPFFPressure::validParams()

@@ -4,7 +4,7 @@
 
 #include "AD1DStressDivergenceTensors.h"
 
-registerADMooseObject("raccoonApp", AD1DStressDivergenceTensors);
+registerMooseObject("raccoonApp", AD1DStressDivergenceTensors);
 
 InputParameters
 AD1DStressDivergenceTensors::validParams()

@@ -4,7 +4,7 @@
 
 #include "ADCoefMatReaction.h"
 
-registerADMooseObject("raccoonApp", ADCoefMatReaction);
+registerMooseObject("raccoonApp", ADCoefMatReaction);
 
 InputParameters
 ADCoefMatReaction::validParams()

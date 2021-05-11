@@ -4,8 +4,8 @@
 
 #include "SumRankTwoMaterial.h"
 
-registerADMooseObject("raccoonApp", SumRankTwoMaterial);
-registerADMooseObject("raccoonApp", ADSumRankTwoMaterial);
+registerMooseObject("raccoonApp", SumRankTwoMaterial);
+registerMooseObject("raccoonApp", ADSumRankTwoMaterial);
 
 template <bool is_ad>
 InputParameters

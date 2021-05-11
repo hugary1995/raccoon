@@ -4,7 +4,7 @@
 
 #include "LCGStrain.h"
 
-registerADMooseObject("raccoonApp", LCGStrain);
+registerMooseObject("raccoonApp", LCGStrain);
 
 InputParameters
 LCGStrain::validParams()

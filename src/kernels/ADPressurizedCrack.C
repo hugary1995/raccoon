@@ -4,7 +4,7 @@
 
 #include "ADPressurizedCrack.h"
 
-registerADMooseObject("raccoonApp", ADPressurizedCrack);
+registerMooseObject("raccoonApp", ADPressurizedCrack);
 
 InputParameters
 ADPressurizedCrack::validParams()
