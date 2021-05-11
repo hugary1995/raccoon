@@ -1,7 +1,6 @@
 E = 4000
 nu = 0.2
-#Gc = 100
-Gc = 60
+Gc = 100
 l = 0.02
 #psic = 0.154e6
 k = 1e-06
@@ -180,8 +179,6 @@ k = 1e-06
 [Executioner]
   type = Transient
   solve_type = 'NEWTON'
-#  petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
-  #petsc_options_value = 'lu       superlu_dist'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
   petsc_options_value = 'lu      ilu          200         200                0                     vinewtonrsls'
   dt = 0.00492

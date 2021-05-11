@@ -2,7 +2,7 @@ E = 4000
 nu = 0.2
 Gc = 100
 l = 0.02
-psic = 3
+psic = 0.4
 k = 1e-06
 
 
@@ -36,7 +36,7 @@ k = 1e-06
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/domain05Coarse.msh'
+    file = 'gold/domain05.msh'
   []
 []
 
@@ -198,6 +198,7 @@ k = 1e-06
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
   petsc_options_value = 'lu      ilu          200         200                0                     vinewtonrsls'
   dt = 0.00492
+  #dt = 0.1
   end_time =20
   nl_abs_tol = 1e-06
   nl_rel_tol = 1e-06
