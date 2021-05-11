@@ -1,7 +1,7 @@
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/domain05.msh'
+    file = 'gold/domain05Coarse.msh'
   []
 []
 
@@ -20,12 +20,13 @@
 []
 
 [Bounds]
-  #[irreversibility]
-  #  type = VariableOldValueBoundsAux
-  #  variable = 'bounds_dummy'
-  #  bounded_variable = 'd'
-  #  bound_type = lower
-  #[]
+  #Testing with irreversibiility
+  [irreversibility]
+    type = VariableOldValueBoundsAux
+    variable = 'bounds_dummy'
+    bounded_variable = 'd'
+    bound_type = lower
+  []
   [upper]
     type = ConstantBoundsAux
     variable = 'bounds_dummy'

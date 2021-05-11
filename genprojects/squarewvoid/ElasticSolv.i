@@ -2,7 +2,7 @@ E = 4000
 nu = 0.2
 Gc = 100
 l = 0.02
-psic = 700
+psic = 3
 k = 1e-06
 
 
@@ -36,7 +36,7 @@ k = 1e-06
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/domain05.msh'
+    file = 'gold/domain05Coarse.msh'
   []
 []
 
