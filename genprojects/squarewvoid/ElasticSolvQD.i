@@ -2,7 +2,7 @@ E = 4000
 nu = 0.2
 Gc = 100
 l = 0.02
-#psic = 0.154e6
+#psic = 0.4
 k = 1e-06
 
 
@@ -12,7 +12,7 @@ k = 1e-06
     input_files = 'fracture.i'
     app_type = raccoonApp
     execute_on = 'TIMESTEP_BEGIN'
-    cli_args = 'Gc=${Gc};l=${l};k=${k}' #psic=${psic}
+    cli_args = 'Gc=${Gc};l=${l};k=${k}'
   []
 []
 
@@ -45,7 +45,8 @@ k = 1e-06
   []
   [disp_y]
   []
-
+  [strain_zz]
+  []
 []
 
 [AuxVariables]
@@ -104,7 +105,11 @@ k = 1e-06
     component = 1
     displacements = 'disp_x disp_y'
   []
-
+  [plane_stress]
+    type = ADWeakPlaneStress
+    variable = 'strain_zz'
+    displacements = 'disp_x disp_y'
+  []
 []
 
 
@@ -115,7 +120,7 @@ k = 1e-06
     boundary = 'Top'
     #//function = '-t/50'
     #function = 'if(t<4.0, 0.0175*t, 0.005*t )'
-    function = '-0.1*t'
+    function = '0.1*t'
     #preset = false
     #use_displaced_mesh = true
   []
@@ -143,24 +148,28 @@ k = 1e-06
     youngs_modulus = ${E}
     poissons_ratio = ${nu}
   []
+  #[strain]
+  #  type = ADComputeSmallStrain
+  #  displacements = 'disp_x disp_y'
+  #]
   [strain]
-   type = ADComputeSmallStrain
+    type = ADComputePlaneSmallStrain
+    out_of_plane_strain = 'strain_zz'
     displacements = 'disp_x disp_y'
   []
-
   [stress]
     type = SmallStrainDegradedElasticPK2Stress_StrainVolDev
     d = 'd'
   []
   [fracture_properties]
     type = ADGenericFunctionMaterial
-    prop_names = 'energy_release_rate phase_field_regularization_length' #critical_fracture_energy'
-    prop_values = '${Gc} ${l}'
-     #${psic}'
+    prop_names = 'energy_release_rate phase_field_regularization_length critical_fracture_energy'
+    prop_values = '${Gc} ${l} ${psic}'
+
   []
   [local_dissipation]
-    #type = LinearLocalDissipation
-    type = QuadraticLocalDissipation
+    type = LinearLocalDissipation
+    #type = QuadraticLocalDissipation
     d = d
   []
   [phase_field_properties]
@@ -169,20 +178,23 @@ k = 1e-06
     local_dissipation_norm = 2
   []
   [degradation]
-    type = QuadraticDegradation
-    #type = LorentzDegradation
+#    type = QuadraticDegradation
+    type = LorentzDegradation
     d = d
     residual_degradation = ${k}
   []
+
 []
 
 [Executioner]
   type = Transient
   solve_type = 'NEWTON'
+#  petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
+  #petsc_options_value = 'lu       superlu_dist'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
   petsc_options_value = 'lu      ilu          200         200                0                     vinewtonrsls'
-  #dt = 0.00492
-  dt = 0.01
+  dt = 0.00492
+  #dt = 0.1
   end_time =20
   nl_abs_tol = 1e-06
   nl_rel_tol = 1e-06
@@ -201,7 +213,7 @@ k = 1e-06
 []
 
 [Outputs]
-  file_base = 'Elastic_squarewvoidsmallstep_quad_Traction_Brittle_VolDev_Res_Comp_BC_planestress_RedGc_dt'
+  file_base = 'Elastic_squarewvoidsmallstep_quad_Traction_Brittle_VolDev_Res_BC_LD'
   exodus = true
   interval = 1
 []
