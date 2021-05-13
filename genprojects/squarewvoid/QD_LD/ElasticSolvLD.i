@@ -9,7 +9,7 @@ k = 1e-06
 [MultiApps]
   [fracture]
     type = TransientMultiApp
-    input_files = 'fracture.i'
+    input_files = 'fractureLD.i'
     app_type = raccoonApp
     execute_on = 'TIMESTEP_BEGIN'
     cli_args = 'Gc=${Gc};l=${l};k=${k}'
@@ -36,7 +36,7 @@ k = 1e-06
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/domain05.msh'
+    file = '../gold/domain05Coarse.msh'
   []
 []
 
@@ -150,7 +150,7 @@ k = 1e-06
   []
   #[strain]
   #  type = ADComputeSmallStrain
-  #  displacements = 'disp_x disp_y'
+  #  displacements = 'disp_x disp_y'fractureLD
   #]
   [strain]
     type = ADComputePlaneSmallStrain
@@ -163,8 +163,8 @@ k = 1e-06
   []
   [fracture_properties]
     type = ADGenericFunctionMaterial
-    prop_names = 'energy_release_rate phase_field_regularization_length critical_fracture_energy'
-    prop_values = '${Gc} ${l} ${psic}'
+    prop_names = 'energy_release_rate phase_field_regularization_length'
+    prop_values = '${Gc} ${l}' #${psic}'
 
   []
   [local_dissipation]
@@ -174,12 +174,12 @@ k = 1e-06
   []
   [phase_field_properties]
     type = ADFractureMaterial
-    #local_dissipation_norm = 8/3
-    local_dissipation_norm = 2
+    local_dissipation_norm = 8/3
+    #local_dissipation_norm = 2
   []
   [degradation]
-#    type = QuadraticDegradation
-    type = LorentzDegradation
+    type = QuadraticDegradation
+    #type = LorentzDegradation
     d = d
     residual_degradation = ${k}
   []
@@ -193,8 +193,8 @@ k = 1e-06
   #petsc_options_value = 'lu       superlu_dist'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
   petsc_options_value = 'lu      ilu          200         200                0                     vinewtonrsls'
-  dt = 0.00492
-  #dt = 0.1
+  #dt = 0.00492
+  dt = 0.01
   end_time =20
   nl_abs_tol = 1e-06
   nl_rel_tol = 1e-06

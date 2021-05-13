@@ -1,7 +1,7 @@
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/domain05.msh'
+    file = '../gold/domain05Coarse.msh'
   []
 []
 
@@ -68,18 +68,18 @@
 [Materials]
   [bulk]
     type = ADGenericConstantMaterial
-    prop_names = 'phase_field_regularization_length energy_release_rate critical_fracture_energy'
-    prop_values = '${l} ${Gc} ${psic}'
+    prop_names = 'phase_field_regularization_length energy_release_rate'
+    prop_values = '${l} ${Gc}'
   []
   [local_dissipation]
-    type = LinearLocalDissipation
-    #type = QuadraticLocalDissipation
+    #type = LinearLocalDissipation
+    type = QuadraticLocalDissipation
     d = d
   []
   [phase_field_properties]
     type = ADFractureMaterial
   #local_dissipation_norm = 8/3
-   local_dissipation_norm = 2
+  local_dissipation_norm = 2
   []
   [degradation]
     type = QuadraticDegradation
