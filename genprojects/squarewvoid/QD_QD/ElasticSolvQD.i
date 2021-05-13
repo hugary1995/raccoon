@@ -213,7 +213,7 @@ k = 1e-06
 []
 
 [Outputs]
-  file_base = 'Elastic_squarewvoidsmallstep_quad_Traction_Brittle_VolDev_Res_BC_QD'
+  file_base = 'Elastic_squarewvoidsmallstep_quad_Traction_Brittle_VolDev_Res_BC_QD_NoIrr'
   exodus = true
   interval = 1
 []

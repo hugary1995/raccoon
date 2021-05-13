@@ -2,9 +2,8 @@ E = 4000
 nu = 0.2
 Gc = 100
 l = 0.02
-psic = 0.4
+psic = 131
 k = 1e-06
-
 
 [MultiApps]
   [fracture]
