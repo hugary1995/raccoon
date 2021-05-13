@@ -22,9 +22,18 @@ SmallDeformationElasticityModel::validParams()
 
 SmallDeformationElasticityModel::SmallDeformationElasticityModel(const InputParameters & parameters)
   : Material(parameters),
+    _plasticity_model(nullptr),
     _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
     _elastic_strain(declareADProperty<RankTwoTensor>(_base_name + "elastic_strain"))
 {
+}
+
+void
+SmallDeformationElasticityModel::setQp(unsigned int qp)
+{
+  _qp = qp;
+  if (_plasticity_model)
+    _plasticity_model->setQp(qp);
 }
 
 void
@@ -32,7 +41,7 @@ SmallDeformationElasticityModel::setPlasticityModel(
     SmallDeformationPlasticityModel * plasticity_model)
 {
   _plasticity_model = plasticity_model;
-  plasticity_model->setElasticityModel(this);
+  _plasticity_model->setElasticityModel(this);
 }
 
 void
@@ -47,11 +56,8 @@ SmallDeformationElasticityModel::updateState(const ADRankTwoTensor & mechanical_
 {
   _elastic_strain[_qp] = mechanical_strain;
 
-  stress = computeStress(_elastic_strain[_qp]);
-
   if (_plasticity_model)
-  {
-    _plasticity_model->setQp(_qp);
-    _plasticity_model->updateState(stress, _elastic_strain[_qp])
-  }
+    _plasticity_model->updateState(stress, _elastic_strain[_qp]);
+  else
+    stress = computeStress(_elastic_strain[_qp]);
 }

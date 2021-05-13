@@ -17,10 +17,10 @@ public:
   SmallDeformationElasticityModel(const InputParameters & parameters);
 
   /// Set the current quadrature point
-  void setQp(unsigned int qp) { _qp = qp; }
+  virtual void setQp(unsigned int qp);
 
   /// Set the associated plasticity model
-  void setPlasticityModel(SmallDeformationPlasticityModel * plasticity_model);
+  virtual void setPlasticityModel(SmallDeformationPlasticityModel * plasticity_model);
 
   /**
    * Compute the stress given the mechanical strain. Also performs the plasticity update, if any.

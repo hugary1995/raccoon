@@ -4,6 +4,8 @@
 
 #include "SmallDeformationIsotropicElasticity.h"
 
+registerMooseObject("raccoonApp", SmallDeformationIsotropicElasticity);
+
 InputParameters
 SmallDeformationIsotropicElasticity::validParams()
 {

@@ -6,21 +6,26 @@
 
 #include "Material.h"
 #include "ADRankTwoTensorForward.h"
+#include "ADSingleVariableReturnMappingSolution.h"
+#include "PlasticHardeningModel.h"
 
 class SmallDeformationElasticityModel;
 
-class SmallDeformationPlasticityModel : public Material
+class SmallDeformationPlasticityModel : public Material,
+                                        public ADSingleVariableReturnMappingSolution
 {
 public:
   static InputParameters validParams();
 
   SmallDeformationPlasticityModel(const InputParameters & parameters);
 
+  virtual void initialSetup() override;
+
   /// Set the current quadrature point
-  void setQp(unsigned int qp) { _qp = qp; }
+  virtual void setQp(unsigned int qp);
 
   /// Set the associated plasticity model
-  void setElasticityModel(SmallDeformationElasticityModel * elasticity_model);
+  virtual void setElasticityModel(SmallDeformationElasticityModel * elasticity_model);
 
   /**
    * Update the stress and elastic strain if need to following the specified plastic flow
@@ -44,6 +49,17 @@ protected:
   /// Base name optionally used as prefix to material tensor names
   const std::string _base_name;
 
-  /// The elastic strain
+  /// The plastic strain
   ADMaterialProperty<RankTwoTensor> & _plastic_strain;
+  const MaterialProperty<RankTwoTensor> & _plastic_strain_old;
+
+  /// The (scalar) effective plastic strain
+  ADMaterialProperty<Real> & _ep;
+  const MaterialProperty<Real> & _ep_old;
+
+  /// The flow direction
+  ADMaterialProperty<RankTwoTensor> & _Np;
+
+  /// The plastic hardening model
+  PlasticHardeningModel * _hardening_model;
 };

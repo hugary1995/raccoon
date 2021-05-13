@@ -8,6 +8,7 @@
 #include "ADRankTwoTensorForward.h"
 
 class SmallDeformationElasticityModel;
+class SmallDeformationPlasticityModel;
 
 /**
  * ComputeSmallDeformationStress computes the stress under small-strain assumptions
@@ -27,6 +28,9 @@ protected:
 
   /// The elasticity model
   SmallDeformationElasticityModel * _elasticity_model;
+
+  /// The elasticity model
+  SmallDeformationPlasticityModel * _plasticity_model;
 
   /// Base name of the material system
   const std::string _base_name;
