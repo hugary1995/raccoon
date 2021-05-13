@@ -24,11 +24,15 @@
   max_h_level = 2
   [Markers]
     [marker]
-      type = BoxMarker
-      bottom_left = '0.4 0 0'
-      top_right = '1 0.05 0'
-      outside = DO_NOTHING
+      type = OrientedBoxMarker
+      center = '0.75 0.25 0'
+      length = 0.8
+      width = 0.1
+      height = 1
+      length_direction = '1 1 0'
+      width_direction = '-1 1 0'
       inside = REFINE
+      outside = DO_NOTHING
     []
   []
 []
@@ -42,6 +46,10 @@
   [bounds_dummy]
   []
   [we_active]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [wp_active]
     order = CONSTANT
     family = MONOMIAL
   []
@@ -101,8 +109,8 @@
   [psi]
     type = ADDerivativeParsedMaterial
     f_name = psi
-    function = 'alpha/c0/l+g*we_active/Gc'
-    args = 'd we_active'
+    function = 'alpha/c0/l+g*(we_active+wp_active)/Gc'
+    args = 'd we_active wp_active'
     material_property_names = 'alpha(d) g(d) Gc c0 l'
     derivative_order = 1
   []

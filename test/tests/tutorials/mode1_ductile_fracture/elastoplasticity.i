@@ -9,7 +9,7 @@ l = 0.02
 
 sigma_y = 1000
 n = 5
-ep0 = 0.05
+ep0 = 0.005
 
 [MultiApps]
   [fracture]
