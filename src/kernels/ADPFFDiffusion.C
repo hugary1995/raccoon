@@ -35,5 +35,5 @@ ADPFFDiffusion::computeQpResidual()
   if (_coord_sys == Moose::COORD_RZ)
     value -= _test[_i][_qp] / _ad_q_point[_qp](0) * _grad_u[_qp](0);
 
-  return 2 / _c0[_qp] / _l[_qp] * value;
+  return 2 / _c0[_qp] * _l[_qp] * value;
 }
