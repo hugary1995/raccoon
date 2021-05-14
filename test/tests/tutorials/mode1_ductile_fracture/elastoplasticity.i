@@ -183,7 +183,7 @@ ep0 = 0.005
     type = ADComputeSmallStrain
   []
   [elasticity]
-    type = PFFSmallDeformationIsotropicElasticity
+    type = SmallDeformationIsotropicElasticity
     bulk_modulus = ${K}
     shear_modulus = ${G}
     phase_field = d
@@ -199,7 +199,7 @@ ep0 = 0.005
     outputs = exodus
   []
   [power_law_hardening]
-    type = PFFPowerLawHardening
+    type = PowerLawHardening
     degradation_function = g
     yield_stress = ${sigma_y}
     exponent = ${n}

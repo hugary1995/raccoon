@@ -39,6 +39,8 @@ ep0 = 0.001
 [AuxVariables]
   [fy]
   []
+  [d]
+  []
 []
 
 [Kernels]
@@ -79,6 +81,12 @@ ep0 = 0.001
 []
 
 [Materials]
+  [no_degradation]
+    type = NoDegradation
+    f_name = g
+    function = 1
+    phase_field = d
+  []
   [defgrad]
     type = ComputeDeformationGradient
   []
@@ -86,12 +94,16 @@ ep0 = 0.001
     type = HenckyIsotropicElasticity
     bulk_modulus = ${K}
     shear_modulus = ${G}
+    phase_field = d
+    degradation_function = g
   []
   [power_law_hardening]
     type = PowerLawHardening
     yield_stress = ${sigma_y}
     exponent = ${n}
     reference_plastic_strain = ${ep0}
+    phase_field = d
+    degradation_function = g
   []
   [J2]
     type = LargeDeformationJ2Plasticity

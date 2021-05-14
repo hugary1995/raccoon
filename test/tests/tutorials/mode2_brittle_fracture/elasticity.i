@@ -175,7 +175,7 @@ l = 0.02
     type = ADComputeSmallStrain
   []
   [elasticity]
-    type = PFFSmallDeformationIsotropicElasticity
+    type = SmallDeformationIsotropicElasticity
     bulk_modulus = ${K}
     shear_modulus = ${G}
     phase_field = d

@@ -15,33 +15,81 @@ HenckyIsotropicElasticity::validParams()
   params.addRequiredParam<MaterialPropertyName>("bulk_modulus", "The bulk modulus $\\K$");
   params.addRequiredParam<MaterialPropertyName>("shear_modulus", "The shear modulus $\\G$");
 
+  params.addRequiredCoupledVar("phase_field", "Name of the phase-field (damage) variable");
+  params.addParam<MaterialPropertyName>(
+      "strain_energy_density",
+      "we",
+      "Name of the strain energy density computed by this material model");
+  params.addParam<MaterialPropertyName>("degradation_function", "g", "The degradation function");
+  params.addParam<MooseEnum>(
+      "decomposition", MooseEnum("NONE SPECTRAL VOLDEV", "NONE"), "The decomposition method");
+
   return params;
 }
 
 HenckyIsotropicElasticity::HenckyIsotropicElasticity(const InputParameters & parameters)
   : LargeDeformationElasticityModel(parameters),
+    DerivativeMaterialPropertyNameInterface(),
     _K(getADMaterialProperty<Real>("bulk_modulus")),
-    _G(getADMaterialProperty<Real>("shear_modulus"))
+    _G(getADMaterialProperty<Real>("shear_modulus")),
+
+    _d_name(getVar("phase_field", 0)->name()),
+
+    // The strain energy density and its derivatives
+    _we_name(_base_name + getParam<MaterialPropertyName>("strain_energy_density")),
+    _we(declareADProperty<Real>(_we_name)),
+    _we_active(declareADProperty<Real>(_we_name + "_active")),
+    _dwe_dd(declareADProperty<Real>(derivativePropertyName(_we_name, {_d_name}))),
+
+    // The degradation function and its derivatives
+    _g_name(_base_name + getParam<MaterialPropertyName>("degradation_function")),
+    _g(getADMaterialProperty<Real>(_g_name)),
+    _dg_dd(getADMaterialProperty<Real>(derivativePropertyName(_g_name, {_d_name}))),
+
+    _decomposition(getParam<MooseEnum>("decomposition").getEnum<Decomposition>())
 {
 }
 
 ADRankTwoTensor
-HenckyIsotropicElasticity::computeMandelStress(const ADRankTwoTensor & Fe)
+HenckyIsotropicElasticity::computeMandelStress(const ADRankTwoTensor & Fe,
+                                               const bool plasticity_update)
 {
-  const ADRankTwoTensor I2(ADRankTwoTensor::initIdentity);
-  ADRankTwoTensor Ce = Fe.transpose() * Fe;
-  ADRankTwoTensor ee = 0.5 * RaccoonUtils::log(Ce);
-  ADRankTwoTensor stress = _K[_qp] * ee.trace() * I2 + 2 * _G[_qp] * ee.deviatoric();
+  ADRankTwoTensor stress;
+
+  if (_decomposition == Decomposition::none)
+    stress = computeMandelStressNoDecomposition(Fe, plasticity_update);
+  else
+    paramError("decomposition", "Unsupported decomposition type.");
+
   return stress;
 }
 
 ADRankTwoTensor
-HenckyIsotropicElasticity::computeMandelStressExponentialUpdate(const ADRankTwoTensor & Fe)
+HenckyIsotropicElasticity::computeMandelStressNoDecomposition(const ADRankTwoTensor & Fe,
+                                                              const bool plasticity_update)
 {
+  ADRankTwoTensor strain = Fe;
+  // If this is called during a plasticity update, we need to first exponentiate Fe, where Fe should
+  // be some plastic flow. The foolowing operations cancel out with an exponentiation of Fe, so we
+  // only do this in the case of exponentiate == false
+  if (!plasticity_update)
+    strain = 0.5 * RaccoonUtils::log(Fe.transpose() * Fe);
+
   const ADRankTwoTensor I2(ADRankTwoTensor::initIdentity);
-  // The following operations cancel out with an exponentiation of Fe:
-  // ADRankTwoTensor Ce = Fe.transpose() * Fe;
-  // ADRankTwoTensor ee = 0.5 * RaccoonUtils::log(Ce);
-  ADRankTwoTensor stress = _K[_qp] * Fe.trace() * I2 + 2 * _G[_qp] * Fe.deviatoric();
+  // Here, we keep the volumetric part no matter what. But ideally, in the case of J2 plasticity,
+  // the volumetric part of the flow should be zero, and we could save some operations.
+  ADRankTwoTensor stress_intact = _K[_qp] * strain.trace() * I2 + 2 * _G[_qp] * strain.deviatoric();
+  ADRankTwoTensor stress = _g[_qp] * stress_intact;
+
+  // If plasticity_update == false, then we are not in the middle of a plasticity update, hence we
+  // compute the strain energy density
+  if (!plasticity_update)
+  {
+    // It is convenient that the Mandel stress is conjugate to the log strain
+    _we_active[_qp] = 0.5 * stress_intact.doubleContraction(strain);
+    _we[_qp] = _g[_qp] * _we_active[_qp];
+    _dwe_dd[_qp] = _dg_dd[_qp] * _we_active[_qp];
+  }
+
   return stress;
 }

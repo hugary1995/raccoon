@@ -39,6 +39,8 @@ ep0 = 0.001
 [AuxVariables]
   [fy]
   []
+  [d]
+  []
 []
 
 [Kernels]
@@ -77,6 +79,12 @@ ep0 = 0.001
 []
 
 [Materials]
+  [no_degradation]
+    type = NoDegradation
+    f_name = g
+    function = 1
+    phase_field = d
+  []
   [strain]
     type = ADComputeSmallStrain
   []
@@ -84,6 +92,8 @@ ep0 = 0.001
     type = SmallDeformationIsotropicElasticity
     bulk_modulus = ${K}
     shear_modulus = ${G}
+    phase_field = d
+    degradation_function = g
     output_properties = 'elastic_strain'
     outputs = exodus
   []
@@ -92,6 +102,8 @@ ep0 = 0.001
     yield_stress = ${sigma_y}
     exponent = ${n}
     reference_plastic_strain = ${ep0}
+    phase_field = d
+    degradation_function = g
   []
   [plasticity]
     type = SmallDeformationJ2Plasticity
