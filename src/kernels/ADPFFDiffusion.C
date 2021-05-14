@@ -13,14 +13,17 @@ ADPFFDiffusion::validParams()
   InputParameters params = ADKernel::validParams();
   params.addClassDescription("Compute the diffusion term in phase-field evolution equation");
   params.addParam<MaterialPropertyName>(
-      "normalization_constant", "c0", "Name of the normalization constant");
+      "fracture_toughness", "Gc", "The fracture toughness $\\Gc$");
   params.addParam<MaterialPropertyName>(
-      "regularization_length", "l", "Name of the regularization length");
+      "normalization_constant", "c0", "The normalization constant $c_0$");
+  params.addParam<MaterialPropertyName>(
+      "regularization_length", "l", "The phase-field regularization length");
   return params;
 }
 
 ADPFFDiffusion::ADPFFDiffusion(const InputParameters & parameters)
   : ADKernel(parameters),
+    _Gc(getADMaterialProperty<Real>("fracture_toughness")),
     _c0(getADMaterialProperty<Real>("normalization_constant")),
     _l(getADMaterialProperty<Real>("regularization_length")),
     _coord_sys(_assembly.coordSystem())
@@ -35,5 +38,5 @@ ADPFFDiffusion::computeQpResidual()
   if (_coord_sys == Moose::COORD_RZ)
     value -= _test[_i][_qp] / _ad_q_point[_qp](0) * _grad_u[_qp](0);
 
-  return 2 / _c0[_qp] * _l[_qp] * value;
+  return 2 * _Gc[_qp] * _l[_qp] / _c0[_qp] * value;
 }
