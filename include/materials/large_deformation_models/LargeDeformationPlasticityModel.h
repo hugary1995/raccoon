@@ -9,15 +9,15 @@
 #include "ADSingleVariableReturnMappingSolution.h"
 #include "PlasticHardeningModel.h"
 
-class SmallDeformationElasticityModel;
+class LargeDeformationElasticityModel;
 
-class SmallDeformationPlasticityModel : public Material,
+class LargeDeformationPlasticityModel : public Material,
                                         public ADSingleVariableReturnMappingSolution
 {
 public:
   static InputParameters validParams();
 
-  SmallDeformationPlasticityModel(const InputParameters & parameters);
+  LargeDeformationPlasticityModel(const InputParameters & parameters);
 
   virtual void initialSetup() override;
 
@@ -25,14 +25,15 @@ public:
   virtual void setQp(unsigned int qp);
 
   /// Set the associated elasticity model
-  virtual void setElasticityModel(SmallDeformationElasticityModel * elasticity_model);
+  virtual void setElasticityModel(LargeDeformationElasticityModel * elasticity_model);
 
   /**
-   * Update the stress and elastic strain if need to following the specified plastic flow
-   * @param stress         The stress
-   * @param elastic_strain The elastic strain
+   * Update the stress and elastic deformation gradient if need to following the specified plastic
+   * flow
+   * @param stress  The stress
+   * @param Fe      The elastic deformation gradient
    */
-  virtual void updateState(ADRankTwoTensor & stress, ADRankTwoTensor & elastic_strain) = 0;
+  virtual void updateState(ADRankTwoTensor & stress, ADRankTwoTensor & Fe) = 0;
 
   // @{ Retained as empty methods to avoid a warning from Material.C in framework. These methods are
   // unused in all inheriting classes and should not be overwritten.
@@ -44,14 +45,14 @@ protected:
   virtual void initQpStatefulProperties() override;
 
   /// The elasticity model
-  SmallDeformationElasticityModel * _elasticity_model;
+  LargeDeformationElasticityModel * _elasticity_model;
 
   /// Base name optionally used as prefix to material tensor names
   const std::string _base_name;
 
-  /// The plastic strain
-  ADMaterialProperty<RankTwoTensor> & _plastic_strain;
-  const MaterialProperty<RankTwoTensor> & _plastic_strain_old;
+  /// The plastic deformation gradient
+  ADMaterialProperty<RankTwoTensor> & _Fp;
+  const MaterialProperty<RankTwoTensor> & _Fp_old;
 
   /// The (scalar) effective plastic strain
   ADMaterialProperty<Real> & _ep;
