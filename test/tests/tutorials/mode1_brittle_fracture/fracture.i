@@ -67,6 +67,7 @@
   [diff]
     type = ADPFFDiffusion
     variable = d
+    fracture_toughness = Gc
     regularization_length = l
     normalization_constant = c0
   []
@@ -100,7 +101,7 @@
   [psi]
     type = ADDerivativeParsedMaterial
     f_name = psi
-    function = 'alpha/c0/l+g*we_active/Gc'
+    function = 'alpha*Gc/c0/l+g*we_active'
     args = 'd we_active'
     material_property_names = 'alpha(d) g(d) Gc c0 l'
     derivative_order = 1
