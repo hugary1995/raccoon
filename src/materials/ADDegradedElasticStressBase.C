@@ -13,13 +13,11 @@ ADDegradedElasticStressBase::validParams()
   params.addParam<Real>(
       "d_crit", 2.0, "enforce the traction free boundary condition when d > d_crit");
   params.addParam<MaterialPropertyName>(
-      "elastic_energy_name", "E_el", "name of the material that holds the elastic energy");
+      "elastic_energy_name", "we", "name of the material that holds the elastic energy");
   params.addParam<MaterialPropertyName>(
       "degradation_name", "g", "name of the degradation material. Use degradation_mat instead.");
   params.addParam<MaterialPropertyName>("degradation_mat",
                                         "name of the material that holds the degradation");
-  params.addParam<UserObjectName>("degradation_uo",
-                                  "name of the userobject that holds the degradation");
   return params;
 }
 
@@ -31,28 +29,20 @@ ADDegradedElasticStressBase::ADDegradedElasticStressBase(const InputParameters &
     _d_crit(getParam<Real>("d_crit")),
     _g_mat(isParamValid("degradation_mat") ? &getADMaterialProperty<Real>("degradation_mat")
                                            : nullptr),
-    _g_uo(isParamValid("degradation_uo")
-              ? &getUserObject<ADMaterialPropertyUserObject>("degradation_uo")
-              : nullptr),
     _E_el_name(getParam<MaterialPropertyName>("elastic_energy_name")),
     _E_el_active(declareADProperty<Real>(_E_el_name + "_active"))
 {
-  if (!_g_mat && !_g_uo)
+  if (!_g_mat)
   {
     _g_mat = &getADMaterialProperty<Real>("degradation_name");
     mooseDeprecated("degradation_name is deprecated in favor of degradation_mat.");
   }
 
   bool provided_by_mat = _g_mat;
-  bool provided_by_uo = _g_uo;
 
   /// degradation should be provided
-  if (!provided_by_mat && !provided_by_uo)
+  if (!provided_by_mat)
     mooseError("no degradation provided.");
-
-  /// degradation should not be multiply defined
-  if ((provided_by_mat ? 1 : 0) + (provided_by_uo ? 1 : 0) > 1)
-    mooseError("degradation multiply defined.");
 }
 
 ADReal
@@ -60,8 +50,6 @@ ADDegradedElasticStressBase::g()
 {
   if (_g_mat)
     return (*_g_mat)[_qp];
-  else if (_g_uo)
-    return _g_uo->getRawData(_current_elem, _qp);
   else
     mooseError("Internal Error");
 

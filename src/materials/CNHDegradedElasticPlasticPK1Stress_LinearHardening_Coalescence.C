@@ -4,7 +4,7 @@
 
 #include "CNHDegradedElasticPlasticPK1Stress_LinearHardening_Coalescence.h"
 
-registerADMooseObject("raccoonApp", CNHDegradedElasticPlasticPK1Stress_LinearHardening_Coalescence);
+registerMooseObject("raccoonApp", CNHDegradedElasticPlasticPK1Stress_LinearHardening_Coalescence);
 
 InputParameters
 CNHDegradedElasticPlasticPK1Stress_LinearHardening_Coalescence::validParams()

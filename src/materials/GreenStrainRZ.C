@@ -4,7 +4,7 @@
 
 #include "GreenStrainRZ.h"
 
-registerADMooseObject("raccoonApp", GreenStrainRZ);
+registerMooseObject("raccoonApp", GreenStrainRZ);
 
 InputParameters
 GreenStrainRZ::validParams()

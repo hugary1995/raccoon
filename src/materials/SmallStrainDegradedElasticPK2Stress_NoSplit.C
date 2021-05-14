@@ -4,7 +4,7 @@
 
 #include "SmallStrainDegradedElasticPK2Stress_NoSplit.h"
 
-registerADMooseObject("raccoonApp", SmallStrainDegradedElasticPK2Stress_NoSplit);
+registerMooseObject("raccoonApp", SmallStrainDegradedElasticPK2Stress_NoSplit);
 
 InputParameters
 SmallStrainDegradedElasticPK2Stress_NoSplit::validParams()

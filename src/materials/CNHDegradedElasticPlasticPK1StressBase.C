@@ -16,8 +16,6 @@ CNHDegradedElasticPlasticPK1StressBase::validParams()
       "name of the plastic degradation material. Use plastic_degradation_mat instead.");
   params.addParam<MaterialPropertyName>("plastic_degradation_mat",
                                         "name of the material that holds the plastic degradation");
-  params.addParam<UserObjectName>("plastic_degradation_uo",
-                                  "name of the userobject that holds the plastic degradation");
   params.addParam<MaterialPropertyName>(
       "plastic_work_name", "W_pl", "name of the material for plastic work");
   params.addParam<bool>(
@@ -53,31 +51,23 @@ CNHDegradedElasticPlasticPK1StressBase::CNHDegradedElasticPlasticPK1StressBase(
     _g_plastic_mat(isParamValid("plastic_degradation_mat")
                        ? &getADMaterialProperty<Real>("plastic_degradation_mat")
                        : nullptr),
-    _g_plastic_uo(isParamValid("plastic_degradation_uo")
-                      ? &getUserObject<ADMaterialPropertyUserObject>("plastic_degradation_uo")
-                      : nullptr),
     _W_pl_name(getParam<MaterialPropertyName>("plastic_work_name")),
     _W_pl(declareADProperty<Real>(_W_pl_name)),
     _W_pl_old(_legacy ? &getMaterialPropertyOldByName<Real>(_W_pl_name) : nullptr),
     _W_pl_degraded(declareADProperty<Real>(_W_pl_name + "_degraded")),
     _E_el_degraded(declareADProperty<Real>(_E_el_name + "_degraded"))
 {
-  if (!_g_plastic_mat && !_g_plastic_uo)
+  if (!_g_plastic_mat)
   {
     _g_plastic_mat = &getADMaterialProperty<Real>("plastic_degradation_name");
     mooseDeprecated("plastic_degradation_name is deprecated in favor of plastic_degradation_mat.");
   }
 
   bool provided_by_mat = _g_plastic_mat;
-  bool provided_by_uo = _g_plastic_uo;
 
   /// degradation should be provided
-  if (!provided_by_mat && !provided_by_uo)
+  if (!provided_by_mat)
     mooseError("no degradation provided.");
-
-  /// degradation should not be multiply defined
-  if ((provided_by_mat ? 1 : 0) + (provided_by_uo ? 1 : 0) > 1)
-    mooseError("degradation multiply defined.");
 }
 
 ADReal
@@ -85,8 +75,6 @@ CNHDegradedElasticPlasticPK1StressBase::gp()
 {
   if (_g_plastic_mat)
     return (*_g_plastic_mat)[_qp];
-  else if (_g_plastic_uo)
-    return _g_plastic_uo->getRawData(_current_elem, _qp);
   else
     mooseError("Internal Error");
 

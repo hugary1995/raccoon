@@ -4,7 +4,7 @@
 
 #include "IncompressibilityPenaltyElasticPK1Stress.h"
 
-registerADMooseObject("raccoonApp", IncompressibilityPenaltyElasticPK1Stress);
+registerMooseObject("raccoonApp", IncompressibilityPenaltyElasticPK1Stress);
 
 InputParameters
 IncompressibilityPenaltyElasticPK1Stress::validParams()

@@ -4,15 +4,15 @@
 
 #include "ADPFFPressure.h"
 
-registerADMooseObject("raccoonApp", ADPFFPressure);
+registerMooseObject("raccoonApp", ADPFFPressure);
 
 InputParameters
 ADPFFPressure::validParams()
 {
   InputParameters params = ADKernelGrad::validParams();
   params.addClassDescription("computes the pressure term in phase-field evolution equation");
-  params.addRequiredParam<UserObjectName>("pressure_uo",
-                                          "userobject that has pressure values at qps");
+  params.addRequiredParam<MaterialPropertyName>("pressure_mat",
+                                                "Material property name for pressure");
   params.addRequiredCoupledVar(
       "displacements",
       "The displacements appropriate for the simulation geometry and coordinate system");
@@ -21,7 +21,7 @@ ADPFFPressure::validParams()
 
 ADPFFPressure::ADPFFPressure(const InputParameters & parameters)
   : ADKernelGrad(parameters),
-    _p_uo(getUserObject<ADMaterialPropertyUserObject>("pressure_uo")),
+    _p_mat(getADMaterialProperty<Real>("pressure_mat")),
     _ndisp(coupledComponents("displacements")),
     _disp(3)
 {
@@ -36,7 +36,6 @@ ADPFFPressure::ADPFFPressure(const InputParameters & parameters)
 ADRealVectorValue
 ADPFFPressure::precomputeQpResidual()
 {
-  ADReal p = _p_uo.getRawData(_current_elem, _qp);
   ADRealVectorValue u((*_disp[0])[_qp], (*_disp[1])[_qp], (*_disp[2])[_qp]);
-  return p * u;
+  return _p_mat[_qp] * u;
 }

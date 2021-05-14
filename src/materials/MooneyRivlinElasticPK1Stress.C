@@ -4,7 +4,7 @@
 
 #include "MooneyRivlinElasticPK1Stress.h"
 
-registerADMooseObject("raccoonApp", MooneyRivlinElasticPK1Stress);
+registerMooseObject("raccoonApp", MooneyRivlinElasticPK1Stress);
 
 InputParameters
 MooneyRivlinElasticPK1Stress::validParams()

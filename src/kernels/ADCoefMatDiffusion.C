@@ -5,7 +5,7 @@
 #include "ADCoefMatDiffusion.h"
 #include "Assembly.h"
 
-registerADMooseObject("raccoonApp", ADCoefMatDiffusion);
+registerMooseObject("raccoonApp", ADCoefMatDiffusion);
 
 InputParameters
 ADCoefMatDiffusion::validParams()
