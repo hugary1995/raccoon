@@ -32,20 +32,14 @@ public:
 
   /**
    * Compute the Mandel stress
-   * @param Fe The given elastic deformation gradient
+   * @param Fe             The given elastic deformation gradient
+   * @param exponentiate   Whether to compute the stress based on an exponentiated Fe. This is used
+   *                       in the exponential plasticity constitutive update, and can provide
+   *                       potential speed optimizations if a logarithmic strain measure is used.
    * @return The computed stress given the deformation gradient and the constitutive relation
    */
-  virtual ADRankTwoTensor computeMandelStress(const ADRankTwoTensor & Fe) = 0;
-
-  /**
-   * Exponentiate the deformation gradient and then compute the Mandel stress
-   * @param Fe The given elastic deformation gradient to be exponentiated
-   * @return The computed stress given the deformation gradient and the constitutive relation
-   */
-  virtual ADRankTwoTensor computeMandelStressExponentialUpdate(const ADRankTwoTensor & /*Fe*/)
-  {
-    mooseError("Exponential plasticity update is not supported for this model.");
-  };
+  virtual ADRankTwoTensor computeMandelStress(const ADRankTwoTensor & Fe,
+                                              const bool plasticity_update = false) = 0;
 
   /**
    * Compute the Cauchy stress given the elastic deformation gradient

@@ -12,7 +12,7 @@ CrackGeometricFunction::validParams()
   InputParameters params = CustomParsedFunctionBase::validParams();
 
   params.set<std::string>("f_name") = "alpha";
-  params.addRequiredCoupledVar("d", "the phase-field variable");
+  params.addRequiredCoupledVar("phase_field", "The phase-field variable");
 
   params.set<unsigned int>("derivative_order") = 1;
   params.suppressParameter<unsigned int>("derivative_order");

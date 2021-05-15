@@ -1,7 +1,7 @@
 E = 2.1e5
 nu = 0.3
-K = ${fparse E/3/(1-2*nu)}
-G = ${fparse E/2/(1+nu)}
+K = '${fparse E/3/(1-2*nu)}'
+G = '${fparse E/2/(1+nu)}'
 
 [GlobalParams]
   displacements = 'disp_x disp_y'
@@ -34,6 +34,8 @@ G = ${fparse E/2/(1+nu)}
 
 [AuxVariables]
   [fy]
+  []
+  [d]
   []
 []
 
@@ -73,6 +75,12 @@ G = ${fparse E/2/(1+nu)}
 []
 
 [Materials]
+  [no_degradation]
+    type = NoDegradation
+    f_name = g
+    function = 1
+    phase_field = d
+  []
   [strain]
     type = ADComputeSmallStrain
   []
@@ -80,6 +88,8 @@ G = ${fparse E/2/(1+nu)}
     type = SmallDeformationIsotropicElasticity
     bulk_modulus = ${K}
     shear_modulus = ${G}
+    phase_field = d
+    degradation_function = g
     output_properties = 'elastic_strain'
     outputs = exodus
   []

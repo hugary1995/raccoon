@@ -5,8 +5,10 @@
 #pragma once
 
 #include "SmallDeformationElasticityModel.h"
+#include "DerivativeMaterialPropertyNameInterface.h"
 
-class SmallDeformationIsotropicElasticity : public SmallDeformationElasticityModel
+class SmallDeformationIsotropicElasticity : public SmallDeformationElasticityModel,
+                                            public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
@@ -16,9 +18,35 @@ public:
   virtual ADRankTwoTensor computeStress(const ADRankTwoTensor & strain) override;
 
 protected:
+private:
+  // @{ Decomposition methods
+  virtual ADRankTwoTensor computeStressNoDecomposition(const ADRankTwoTensor & strain);
+  virtual ADRankTwoTensor computeStressSpectralDecomposition(const ADRankTwoTensor & strain);
+  virtual ADRankTwoTensor computeStressVolDevDecomposition(const ADRankTwoTensor & strain);
+  // @}
+
   /// The bulk modulus
   const ADMaterialProperty<Real> & _K;
 
   /// The shear modulus
   const ADMaterialProperty<Real> & _G;
+
+  /// Name of the phase-field variable
+  const VariableName _d_name;
+
+  // @{ Strain energy density and its derivative w/r/t damage
+  const MaterialPropertyName _we_name;
+  ADMaterialProperty<Real> & _we;
+  ADMaterialProperty<Real> & _we_active;
+  ADMaterialProperty<Real> & _dwe_dd;
+  // @}
+
+  // @{ The degradation function and its derivative w/r/t damage
+  const MaterialPropertyName _g_name;
+  const ADMaterialProperty<Real> & _g;
+  const ADMaterialProperty<Real> & _dg_dd;
+  // @}
+
+  /// Decomposittion types
+  const enum class Decomposition { none, spectral, voldev } _decomposition;
 };

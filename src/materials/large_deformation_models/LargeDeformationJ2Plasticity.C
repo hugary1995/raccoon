@@ -54,9 +54,10 @@ Real
 LargeDeformationJ2Plasticity::computeReferenceResidual(const ADReal & effective_trial_stress,
                                                        const ADReal & delta_ep)
 {
-  return raw_value(effective_trial_stress -
-                   _elasticity_model->computeMandelStressExponentialUpdate(delta_ep * _Np[_qp])
-                       .doubleContraction(_Np[_qp]));
+  return raw_value(
+      effective_trial_stress -
+      _elasticity_model->computeMandelStress(delta_ep * _Np[_qp], /*plasticity_update = */ true)
+          .doubleContraction(_Np[_qp]));
 }
 
 ADReal
@@ -64,7 +65,7 @@ LargeDeformationJ2Plasticity::computeResidual(const ADReal & effective_trial_str
                                               const ADReal & delta_ep)
 {
   return effective_trial_stress -
-         _elasticity_model->computeMandelStressExponentialUpdate(delta_ep * _Np[_qp])
+         _elasticity_model->computeMandelStress(delta_ep * _Np[_qp], /*plasticity_update = */ true)
              .doubleContraction(_Np[_qp]) -
          _hardening_model->plasticEnergy(_ep_old[_qp] + delta_ep, 1);
 }
@@ -73,7 +74,7 @@ ADReal
 LargeDeformationJ2Plasticity::computeDerivative(const ADReal & /*effective_trial_stress*/,
                                                 const ADReal & delta_ep)
 {
-  return -_elasticity_model->computeMandelStressExponentialUpdate(_Np[_qp]).doubleContraction(
-             _Np[_qp]) -
+  return -_elasticity_model->computeMandelStress(_Np[_qp], /*plasticity_update = */ true)
+              .doubleContraction(_Np[_qp]) -
          _hardening_model->plasticEnergy(_ep_old[_qp] + delta_ep, 2);
 }
