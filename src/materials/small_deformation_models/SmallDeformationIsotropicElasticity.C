@@ -95,7 +95,7 @@ SmallDeformationIsotropicElasticity::computeStressSpectralDecomposition(
   ADRankTwoTensor strain_pos = RaccoonUtils::spectralDecomposition(strain);
 
   // Stress
-  ADRankTwoTensor stress_intact = SmallDeformationIsotropicElasticity::computeStress(strain);
+  ADRankTwoTensor stress_intact = _K[_qp] * strain.trace() * I2 + 2 * _G[_qp] * strain.deviatoric();
   ADRankTwoTensor stress_pos = lambda * strain_tr_pos * I2 + 2 * _G[_qp] * strain_pos;
   ADRankTwoTensor stress_neg = stress_intact - stress_pos;
   ADRankTwoTensor stress = _g[_qp] * stress_pos + stress_neg;
@@ -125,7 +125,7 @@ SmallDeformationIsotropicElasticity::computeStressVolDevDecomposition(
   ADRankTwoTensor strain_dev = strain.deviatoric();
 
   // Stress
-  ADRankTwoTensor stress_intact = SmallDeformationIsotropicElasticity::computeStress(strain);
+  ADRankTwoTensor stress_intact = _K[_qp] * strain.trace() * I2 + 2 * _G[_qp] * strain.deviatoric();
   ADRankTwoTensor stress_neg = _K[_qp] * strain_tr_neg * I2;
   ADRankTwoTensor stress_pos = stress_intact - stress_neg;
   ADRankTwoTensor stress = _g[_qp] * stress_pos + stress_neg;

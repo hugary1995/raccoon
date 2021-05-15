@@ -88,13 +88,13 @@
     type = CrackGeometricFunction
     f_name = alpha
     function = 'd'
-    d = d
+    phase_field = d
   []
   [degradation]
     type = RationalDegradationFunction
     f_name = g
     function = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
-    d = d
+    phase_field = d
     material_property_names = 'Gc psic xi c0 l '
     parameter_names = 'p a2 a3 eta '
     parameter_values = '2 -0.5 0 1e-6'
