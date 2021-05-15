@@ -27,7 +27,7 @@
     type = CrackGeometricFunction
     f_name = alpha
     function = 'xi*d+(1-xi)*d^2'
-    d = d
+    phase_field = d
     parameter_names = 'xi'
     parameter_values = '2'
     tolerance = 1e-8

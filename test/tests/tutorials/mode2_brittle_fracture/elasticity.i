@@ -167,7 +167,7 @@ l = 0.02
     type = PowerDegradationFunction
     f_name = g
     function = (1-d)^p*(1-eta)+eta
-    d = d
+    phase_field = d
     parameter_names = 'p eta '
     parameter_values = '2 1e-6'
   []

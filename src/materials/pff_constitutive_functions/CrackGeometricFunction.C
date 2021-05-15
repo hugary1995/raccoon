@@ -38,7 +38,7 @@ CrackGeometricFunction::validParams()
 
 CrackGeometricFunction::CrackGeometricFunction(const InputParameters & parameters)
   : CustomParsedFunctionBase(parameters),
-    _d_idx(argIndex(coupled("d"))),
+    _d_idx(argIndex(coupled("phase_field"))),
     _xi(declareADProperty<Real>(getParam<MaterialPropertyName>("initial_derivative_name"))),
     _c0(declareADProperty<Real>(getParam<MaterialPropertyName>("normalization_constant_name"))),
     _tolerance(getParam<Real>("tolerance")),
