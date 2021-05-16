@@ -22,6 +22,8 @@ protected:
   // @{ Decomposition methods
   virtual ADRankTwoTensor computeMandelStressNoDecomposition(const ADRankTwoTensor & Fe,
                                                              const bool plasticity_update);
+  virtual ADRankTwoTensor computeMandelStressVolDevDecomposition(const ADRankTwoTensor & Fe,
+                                                                 const bool plasticity_update);
   // @}
 
   /// The bulk modulus

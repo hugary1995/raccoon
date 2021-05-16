@@ -60,6 +60,8 @@ CNHIsotropicElasticity::computeMandelStress(const ADRankTwoTensor & Fe,
 
   if (_decomposition == Decomposition::none)
     stress = computeMandelStressNoDecomposition(Fe, plasticity_update);
+  else if (_decomposition == Decomposition::voldev)
+    stress = computeMandelStressVolDevDecomposition(Fe, plasticity_update);
   else
     paramError("decomposition", "Unsupported decomposition type.");
 
@@ -96,6 +98,45 @@ CNHIsotropicElasticity::computeMandelStressNoDecomposition(const ADRankTwoTensor
     ADReal U = 0.5 * _K[_qp] * (0.5 * (J * J - 1) - std::log(J));
     ADReal W = 0.5 * _G[_qp] * (strain_bar.trace() - 3.0);
     _we_active[_qp] = U + W;
+    _we[_qp] = _g[_qp] * _we_active[_qp];
+    _dwe_dd[_qp] = _dg_dd[_qp] * _we_active[_qp];
+  }
+
+  return stress;
+}
+
+ADRankTwoTensor
+CNHIsotropicElasticity::computeMandelStressVolDevDecomposition(const ADRankTwoTensor & Fe,
+                                                               const bool plasticity_update)
+{
+  // We use the left Cauchy-Green strain
+  ADRankTwoTensor strain;
+  if (plasticity_update)
+  {
+    ADRankTwoTensor expFe = RaccoonUtils::exp(Fe);
+    strain = expFe * expFe.transpose();
+  }
+  else
+    strain = Fe * Fe.transpose();
+
+  ADReal J = std::sqrt(strain.det());
+
+  const ADRankTwoTensor I2(ADRankTwoTensor::initIdentity);
+  // Here, we keep the volumetric part no matter what. But ideally, in the case of J2 plasticity,
+  // the volumetric part of the flow should be zero, and we could save some operations.
+  ADRankTwoTensor stress_vol = 0.5 * _K[_qp] * (J * J - 1) * I2;
+  ADRankTwoTensor stress_dev = _G[_qp] * strain.deviatoric();
+  ADRankTwoTensor stress =
+      J > 1 ? _g[_qp] * (stress_vol + stress_dev) : stress_vol + _g[_qp] * stress_dev;
+
+  // If plasticity_update == false, then we are not in the middle of a plasticity update, hence we
+  // compute the strain energy density
+  if (!plasticity_update)
+  {
+    ADRankTwoTensor strain_bar = std::pow(J, -2. / 3.) * strain;
+    ADReal U = 0.5 * _K[_qp] * (0.5 * (J * J - 1) - std::log(J));
+    ADReal W = 0.5 * _G[_qp] * (strain_bar.trace() - 3.0);
+    _we_active[_qp] = J > 1 ? U + W : W;
     _we[_qp] = _g[_qp] * _we_active[_qp];
     _dwe_dd[_qp] = _dg_dd[_qp] * _we_active[_qp];
   }
