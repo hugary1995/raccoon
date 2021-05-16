@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "MooseUtils.h"
 #include "ADRankTwoTensorForward.h"
 
 namespace RaccoonUtils
