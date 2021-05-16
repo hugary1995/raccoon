@@ -6,12 +6,12 @@
 
 #include "NodalPostprocessor.h"
 
-class ExternalEnergy : public NodalPostprocessor
+class ExternalWork : public NodalPostprocessor
 {
 public:
   static InputParameters validParams();
 
-  ExternalEnergy(const InputParameters & parameters);
+  ExternalWork(const InputParameters & parameters);
 
 protected:
   virtual void initialize() override;
