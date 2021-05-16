@@ -6,7 +6,7 @@ documenting the class, which includes the typical automatic documentation associ
 MooseObject; however, what is contained is ultimately determined by what is necessary to make the
 documentation clear for users.
 
-!syntax description /Variables/InitialCondition/CohesiveDamageIC
+!syntax description /ICs/CohesiveDamageIC
 
 ## Overview
 
@@ -16,8 +16,8 @@ documentation clear for users.
 
 !! Describe and include an example of how to use the CohesiveDamageIC object.
 
-!syntax parameters /Variables/InitialCondition/CohesiveDamageIC
+!syntax parameters /ICs/CohesiveDamageIC
 
-!syntax inputs /Variables/InitialCondition/CohesiveDamageIC
+!syntax inputs /ICs/CohesiveDamageIC
 
-!syntax children /Variables/InitialCondition/CohesiveDamageIC
+!syntax children /ICs/CohesiveDamageIC
