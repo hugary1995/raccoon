@@ -81,6 +81,11 @@ ep0 = 0.001
 []
 
 [Materials]
+  [bulk]
+    type = ADGenericConstantMaterial
+    prop_names = 'K G'
+    prop_values = '${K} ${G}'
+  []
   [no_degradation]
     type = NoDegradation
     f_name = g
@@ -92,8 +97,8 @@ ep0 = 0.001
   []
   [hencky]
     type = HenckyIsotropicElasticity
-    bulk_modulus = ${K}
-    shear_modulus = ${G}
+    bulk_modulus = K
+    shear_modulus = G
     phase_field = d
     degradation_function = g
   []

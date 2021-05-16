@@ -117,10 +117,10 @@ ep0 = 0.01
 []
 
 [Materials]
-  [fracture_properties]
+  [bulk_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'l Gc psic'
-    prop_values = '${l} ${Gc} ${psic}'
+    prop_names = 'K G l Gc psic'
+    prop_values = '${K} ${G} ${l} ${Gc} ${psic}'
   []
   [degradation]
     type = RationalDegradationFunction
@@ -142,8 +142,8 @@ ep0 = 0.01
   []
   [hencky]
     type = HenckyIsotropicElasticity
-    bulk_modulus = ${K}
-    shear_modulus = ${G}
+    bulk_modulus = K
+    shear_modulus = G
     phase_field = d
     degradation_function = g
   []
