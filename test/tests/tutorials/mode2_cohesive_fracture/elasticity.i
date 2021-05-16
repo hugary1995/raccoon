@@ -165,10 +165,10 @@ l = 0.02
 []
 
 [Materials]
-  [fracture_properties]
+  [bulk_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'Gc psic l'
-    prop_values = '${Gc} ${psic} ${l}'
+    prop_names = 'K G l Gc psic'
+    prop_values = '${K} ${G} ${l} ${Gc} ${psic}'
   []
   [crack_geometric]
     type = CrackGeometricFunction
@@ -190,8 +190,8 @@ l = 0.02
   []
   [elasticity]
     type = SmallDeformationIsotropicElasticity
-    bulk_modulus = ${K}
-    shear_modulus = ${G}
+    bulk_modulus = K
+    shear_modulus = G
     phase_field = d
     degradation_function = g
     decomposition = SPECTRAL

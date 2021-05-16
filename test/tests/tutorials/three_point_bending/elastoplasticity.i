@@ -137,8 +137,8 @@ ep0 = 0.345
 [Materials]
   [fracture_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'l Gc psic viscosity'
-    prop_values = '${l} ${Gc} ${psic} ${eta}'
+    prop_names = 'K G l Gc psic viscosity'
+    prop_values = '${K} ${G} ${l} ${Gc} ${psic} ${eta}'
     block = 0
   []
   [degradation]
@@ -165,8 +165,8 @@ ep0 = 0.345
   []
   [hencky]
     type = HenckyIsotropicElasticity
-    bulk_modulus = ${K}
-    shear_modulus = ${G}
+    bulk_modulus = K
+    shear_modulus = G
     phase_field = d
     degradation_function = g
     output_properties = 'we_active'

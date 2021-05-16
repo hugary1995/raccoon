@@ -163,6 +163,11 @@ l = 0.02
 []
 
 [Materials]
+  [bulk]
+    type = ADGenericConstantMaterial
+    prop_names = 'K G'
+    prop_values = '${K} ${G}'
+  []
   [degradation]
     type = PowerDegradationFunction
     f_name = g
@@ -176,8 +181,8 @@ l = 0.02
   []
   [elasticity]
     type = SmallDeformationIsotropicElasticity
-    bulk_modulus = ${K}
-    shear_modulus = ${G}
+    bulk_modulus = K
+    shear_modulus = G
     phase_field = d
     degradation_function = g
     decomposition = SPECTRAL

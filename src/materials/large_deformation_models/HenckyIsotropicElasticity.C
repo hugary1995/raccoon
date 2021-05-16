@@ -30,8 +30,10 @@ HenckyIsotropicElasticity::validParams()
 HenckyIsotropicElasticity::HenckyIsotropicElasticity(const InputParameters & parameters)
   : LargeDeformationElasticityModel(parameters),
     DerivativeMaterialPropertyNameInterface(),
-    _K(getADMaterialProperty<Real>("bulk_modulus")),
-    _G(getADMaterialProperty<Real>("shear_modulus")),
+    _K(getADMaterialPropertyByName<Real>(_base_name +
+                                         getParam<MaterialPropertyName>("bulk_modulus"))),
+    _G(getADMaterialPropertyByName<Real>(_base_name +
+                                         getParam<MaterialPropertyName>("shear_modulus"))),
 
     _d_name(getVar("phase_field", 0)->name()),
 
