@@ -2,12 +2,12 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "ExternalEnergy.h"
+#include "ExternalWork.h"
 
-registerMooseObject("raccoonApp", ExternalEnergy);
+registerMooseObject("raccoonApp", ExternalWork);
 
 InputParameters
-ExternalEnergy::validParams()
+ExternalWork::validParams()
 {
   InputParameters params = NodalPostprocessor::validParams();
   params.addClassDescription("Compute the increase in external energy during the current step");
@@ -19,7 +19,7 @@ ExternalEnergy::validParams()
   return params;
 }
 
-ExternalEnergy::ExternalEnergy(const InputParameters & parameters)
+ExternalWork::ExternalWork(const InputParameters & parameters)
   : NodalPostprocessor(parameters),
     _sum(0),
     _ndisp(coupledComponents("displacements")),
@@ -43,19 +43,19 @@ ExternalEnergy::ExternalEnergy(const InputParameters & parameters)
 }
 
 void
-ExternalEnergy::initialize()
+ExternalWork::initialize()
 {
   _sum = 0;
 }
 
 void
-ExternalEnergy::execute()
+ExternalWork::execute()
 {
   _sum += computeQpValue();
 }
 
 Real
-ExternalEnergy::computeQpValue()
+ExternalWork::computeQpValue()
 {
   RealVectorValue u(_disp_0[_qp], _disp_1[_qp], _disp_2[_qp]);
   RealVectorValue u_old(_disp_0_old[_qp], _disp_1_old[_qp], _disp_2_old[_qp]);
@@ -67,15 +67,15 @@ ExternalEnergy::computeQpValue()
 }
 
 Real
-ExternalEnergy::getValue()
+ExternalWork::getValue()
 {
   gatherSum(_sum);
   return _sum + _sum_old;
 }
 
 void
-ExternalEnergy::threadJoin(const UserObject & y)
+ExternalWork::threadJoin(const UserObject & y)
 {
-  const ExternalEnergy & pps = static_cast<const ExternalEnergy &>(y);
+  const ExternalWork & pps = static_cast<const ExternalWork &>(y);
   _sum += pps._sum;
 }
