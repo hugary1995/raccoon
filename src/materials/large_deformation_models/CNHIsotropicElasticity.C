@@ -1,0 +1,102 @@
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#include "CNHIsotropicElasticity.h"
+#include "RaccoonUtils.h"
+
+registerMooseObject("raccoonApp", CNHIsotropicElasticity);
+
+InputParameters
+CNHIsotropicElasticity::validParams()
+{
+  InputParameters params = LargeDeformationElasticityModel::validParams();
+
+  params.addRequiredParam<MaterialPropertyName>("bulk_modulus", "The bulk modulus $\\K$");
+  params.addRequiredParam<MaterialPropertyName>("shear_modulus", "The shear modulus $\\G$");
+
+  params.addRequiredCoupledVar("phase_field", "Name of the phase-field (damage) variable");
+  params.addParam<MaterialPropertyName>(
+      "strain_energy_density",
+      "we",
+      "Name of the strain energy density computed by this material model");
+  params.addParam<MaterialPropertyName>("degradation_function", "g", "The degradation function");
+  params.addParam<MooseEnum>(
+      "decomposition", MooseEnum("NONE SPECTRAL VOLDEV", "NONE"), "The decomposition method");
+
+  return params;
+}
+
+CNHIsotropicElasticity::CNHIsotropicElasticity(const InputParameters & parameters)
+  : LargeDeformationElasticityModel(parameters),
+    DerivativeMaterialPropertyNameInterface(),
+    _K(getADMaterialProperty<Real>("bulk_modulus")),
+    _G(getADMaterialProperty<Real>("shear_modulus")),
+
+    _d_name(getVar("phase_field", 0)->name()),
+
+    // The strain energy density and its derivatives
+    _we_name(_base_name + getParam<MaterialPropertyName>("strain_energy_density")),
+    _we(declareADProperty<Real>(_we_name)),
+    _we_active(declareADProperty<Real>(_we_name + "_active")),
+    _dwe_dd(declareADProperty<Real>(derivativePropertyName(_we_name, {_d_name}))),
+
+    // The degradation function and its derivatives
+    _g_name(_base_name + getParam<MaterialPropertyName>("degradation_function")),
+    _g(getADMaterialProperty<Real>(_g_name)),
+    _dg_dd(getADMaterialProperty<Real>(derivativePropertyName(_g_name, {_d_name}))),
+
+    _decomposition(getParam<MooseEnum>("decomposition").getEnum<Decomposition>())
+{
+}
+
+ADRankTwoTensor
+CNHIsotropicElasticity::computeMandelStress(const ADRankTwoTensor & Fe,
+                                            const bool plasticity_update)
+{
+  ADRankTwoTensor stress;
+
+  if (_decomposition == Decomposition::none)
+    stress = computeMandelStressNoDecomposition(Fe, plasticity_update);
+  else
+    paramError("decomposition", "Unsupported decomposition type.");
+
+  return stress;
+}
+
+ADRankTwoTensor
+CNHIsotropicElasticity::computeMandelStressNoDecomposition(const ADRankTwoTensor & Fe,
+                                                           const bool plasticity_update)
+{
+  // We use the left Cauchy-Green strain
+  ADRankTwoTensor strain;
+  if (plasticity_update)
+  {
+    ADRankTwoTensor expFe = RaccoonUtils::exp(Fe);
+    strain = expFe * expFe.transpose();
+  }
+  else
+    strain = Fe * Fe.transpose();
+
+  ADReal J = std::sqrt(strain.det());
+
+  const ADRankTwoTensor I2(ADRankTwoTensor::initIdentity);
+  // Here, we keep the volumetric part no matter what. But ideally, in the case of J2 plasticity,
+  // the volumetric part of the flow should be zero, and we could save some operations.
+  ADRankTwoTensor stress_intact = 0.5 * _K[_qp] * (J * J - 1) * I2 + _G[_qp] * strain.deviatoric();
+  ADRankTwoTensor stress = _g[_qp] * stress_intact;
+
+  // If plasticity_update == false, then we are not in the middle of a plasticity update, hence we
+  // compute the strain energy density
+  if (!plasticity_update)
+  {
+    ADRankTwoTensor strain_bar = std::pow(J, -2. / 3.) * strain;
+    ADReal U = 0.5 * _K[_qp] * (0.5 * (J * J - 1) - std::log(J));
+    ADReal W = 0.5 * _G[_qp] * (strain_bar.trace() - 3.0);
+    _we_active[_qp] = U + W;
+    _we[_qp] = _g[_qp] * _we_active[_qp];
+    _dwe_dd[_qp] = _dg_dd[_qp] * _we_active[_qp];
+  }
+
+  return stress;
+}
