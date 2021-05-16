@@ -6,7 +6,7 @@ documenting the class, which includes the typical automatic documentation associ
 MooseObject; however, what is contained is ultimately determined by what is necessary to make the
 documentation clear for users.
 
-!syntax description /Variables/InitialCondition/BrittleDamageIC
+!syntax description /ICs/BrittleDamageIC
 
 ## Overview
 
@@ -16,8 +16,8 @@ documentation clear for users.
 
 !! Describe and include an example of how to use the BrittleDamageIC object.
 
-!syntax parameters /Variables/InitialCondition/BrittleDamageIC
+!syntax parameters /ICs/BrittleDamageIC
 
-!syntax inputs /Variables/InitialCondition/BrittleDamageIC
+!syntax inputs /ICs/BrittleDamageIC
 
-!syntax children /Variables/InitialCondition/BrittleDamageIC
+!syntax children /ICs/BrittleDamageIC
