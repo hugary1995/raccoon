@@ -4,6 +4,7 @@
 
 #include "RaccoonUtils.h"
 #include "DualRealOps.h"
+#include "MooseUtils.h"
 #include "RankTwoTensorImplementation.h"
 
 namespace RaccoonUtils
