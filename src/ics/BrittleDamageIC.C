@@ -10,8 +10,10 @@ InputParameters
 BrittleDamageIC::validParams()
 {
   InputParameters params = DamageICBase::validParams();
-  params.addClassDescription("initializes the phase-field with the closed-form solution associated "
-                             "with $w(d) = d^2$, i.e. $d(\\tau) = \\exp(-\\tau / l)$.");
+  params.addClassDescription(
+      "This class initializes the phase-field with the closed-form solution associated "
+      "with the quadratic crack geometric function $\\alpha(d) = d^2$, i.e. $d(\\tau) = "
+      "\\exp(-\\tau / l)$.");
   params.addParam<Real>(
       "bandwidth_multiplier", 1, "impose the initial condition within bandwidth_multiplier*l");
   return params;

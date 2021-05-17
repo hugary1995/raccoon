@@ -12,6 +12,9 @@ InputParameters
 ComputeSmallDeformationStress::validParams()
 {
   InputParameters params = Material::validParams();
+  params.addClassDescription("The stress calculator given an elasticity model and a plasticity "
+                             "model. Small deformation is assumed.");
+
   params.addRequiredParam<MaterialName>("elasticity_model",
                                         "Name of the elastic stress-strain constitutive model");
   params.addParam<MaterialName>("plasticity_model", "Name of the plasticity model");

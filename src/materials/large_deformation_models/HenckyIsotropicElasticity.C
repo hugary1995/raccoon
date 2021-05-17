@@ -11,9 +11,11 @@ InputParameters
 HenckyIsotropicElasticity::validParams()
 {
   InputParameters params = LargeDeformationElasticityModel::validParams();
+  params.addClassDescription("Isotropic Hencky-type hyperelasticity model. The logarithmic right "
+                             "Cauchy-Green strain tensor is used as the strain measure.");
 
-  params.addRequiredParam<MaterialPropertyName>("bulk_modulus", "The bulk modulus $\\K$");
-  params.addRequiredParam<MaterialPropertyName>("shear_modulus", "The shear modulus $\\G$");
+  params.addRequiredParam<MaterialPropertyName>("bulk_modulus", "The bulk modulus $K$");
+  params.addRequiredParam<MaterialPropertyName>("shear_modulus", "The shear modulus $G$");
 
   params.addRequiredCoupledVar("phase_field", "Name of the phase-field (damage) variable");
   params.addParam<MaterialPropertyName>(

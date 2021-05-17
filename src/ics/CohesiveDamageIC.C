@@ -11,8 +11,9 @@ CohesiveDamageIC::validParams()
 {
   InputParameters params = DamageICBase::validParams();
   params.addClassDescription(
-      "initializes the phase-field with the closed-form solution associated with a linear local "
-      "dissipation potential, i.e. $d(\\tau) = (1 - \\frac{\\tau}{2l})^2$.");
+      "This class initializes the phase-field with the closed-form solution "
+      "associated with a linear crack geometric function $\\alpha(d) = d$, i.e. $d(\\tau) "
+      "= (1 - \\frac{\\tau}{2l})^2$.");
   return params;
 }
 

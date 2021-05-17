@@ -174,7 +174,7 @@ c = 0.1
     elasticity_model = elasticity
   []
   [interfacial_energy]
-    type = ThinFilmInterfaceEnergy
+    type = ThinFilmInterfaceEnergyDensity
     phase_field = d
     shear_lag_coef = ${c}
     output_properties = 'psii_active'

@@ -11,7 +11,8 @@ InputParameters
 SolutionChangeNorm::validParams()
 {
   InputParameters params = ElementIntegralPostprocessor::validParams();
-  params.addClassDescription("computes the solution change (L2) norm of selected variables");
+  params.addClassDescription(
+      "This class computes the solution change (L2) norm of selected variables.");
   params.addRequiredCoupledVar("variable",
                                "The names of the variables that this object operates on");
   return params;

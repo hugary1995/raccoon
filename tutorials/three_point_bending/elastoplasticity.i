@@ -120,18 +120,6 @@ ep0 = 0.345
     save_in = fy
     block = 0
   []
-  [visco_x]
-    type = ADNewtonianViscosity
-    variable = disp_x
-    component = 0
-    block = 0
-  []
-  [visco_y]
-    type = ADNewtonianViscosity
-    variable = disp_y
-    component = 1
-    block = 0
-  []
 []
 
 [Materials]
@@ -191,10 +179,15 @@ ep0 = 0.345
     outputs = exodus
     block = 0
   []
+  [newtonian_viscosity]
+    type = LargeDeformationNewtonianViscosity
+    block = 0
+  []
   [stress]
     type = ComputeLargeDeformationStress
     elasticity_model = hencky
     plasticity_model = J2
+    viscoelasticity_model = newtonian_viscosity
     block = 0
   []
 []

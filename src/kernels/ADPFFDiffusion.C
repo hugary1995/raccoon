@@ -11,7 +11,8 @@ InputParameters
 ADPFFDiffusion::validParams()
 {
   InputParameters params = ADKernel::validParams();
-  params.addClassDescription("Compute the diffusion term in phase-field evolution equation");
+  params.addClassDescription("The diffusion term in the phase-field evolution equation. The weak "
+                             "form is $(\\grad w, \\dfrac{2\\Gc l}{c_0} \\grad d)$.");
   params.addParam<MaterialPropertyName>(
       "fracture_toughness", "Gc", "The fracture toughness $\\Gc$");
   params.addParam<MaterialPropertyName>(

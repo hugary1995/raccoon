@@ -10,6 +10,10 @@ InputParameters
 CrackGeometricFunction::validParams()
 {
   InputParameters params = CustomParsedFunctionBase::validParams();
+  params.addClassDescription(
+      "This is a wrapper of ADDerivativeParsedMaterial to conveniently define a crack geometric "
+      "function. The initial derivative as well as the normalization constant are automatically "
+      "populated given the function definition.");
 
   params.set<std::string>("f_name") = "alpha";
   params.addRequiredCoupledVar("phase_field", "The phase-field variable");

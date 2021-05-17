@@ -1,20 +1,18 @@
 # ComputeLargeDeformationStress
 
-!alert construction title=Undocumented Class
-The ComputeLargeDeformationStress has not been documented. The content listed below should be used as a starting point for
-documenting the class, which includes the typical automatic documentation associated with a
-MooseObject; however, what is contained is ultimately determined by what is necessary to make the
-documentation clear for users.
-
 !syntax description /Materials/ComputeLargeDeformationStress
 
 ## Overview
 
-!! Replace these lines with information regarding the ComputeLargeDeformationStress object.
+The input of this stress calculator are the mechanical deformation gradient $\bfF^m$ and optionally its old value $\bfF^m_{n-1}$. An elasticity model must be provided. A plasticity model and a viscoelasticity model can be optionally provided.
+
+The stress calculator calls the elasticity model to compute the Cauchy stress given the mechanical deformation gradient.
+
+If a plasticity model is provided, plastic deformation will be updated to bring the stress state back onto the yield surface.
+
+If a viscoelasticity model is provided, the stress calculator will call the viscoelasticity model to compute the viscous stress. The viscous stress will be added to the equilibrium stress returned by the elasticity model.
 
 ## Example Input File Syntax
-
-!! Describe and include an example of how to use the ComputeLargeDeformationStress object.
 
 !syntax parameters /Materials/ComputeLargeDeformationStress
 
