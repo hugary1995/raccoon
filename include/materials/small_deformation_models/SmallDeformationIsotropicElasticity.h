@@ -35,10 +35,10 @@ private:
   const VariableName _d_name;
 
   // @{ Strain energy density and its derivative w/r/t damage
-  const MaterialPropertyName _we_name;
-  ADMaterialProperty<Real> & _we;
-  ADMaterialProperty<Real> & _we_active;
-  ADMaterialProperty<Real> & _dwe_dd;
+  const MaterialPropertyName _psie_name;
+  ADMaterialProperty<Real> & _psie;
+  ADMaterialProperty<Real> & _psie_active;
+  ADMaterialProperty<Real> & _dpsie_dd;
   // @}
 
   // @{ The degradation function and its derivative w/r/t damage

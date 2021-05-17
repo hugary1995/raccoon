@@ -28,10 +28,10 @@ protected:
   const VariableName _d_name;
 
   // @{ Plastic energy density and its derivative w/r/t damage
-  const MaterialPropertyName _wp_name;
-  ADMaterialProperty<Real> & _wp;
-  ADMaterialProperty<Real> & _wp_active;
-  ADMaterialProperty<Real> & _dwp_dd;
+  const MaterialPropertyName _psip_name;
+  ADMaterialProperty<Real> & _psip;
+  ADMaterialProperty<Real> & _psip_active;
+  ADMaterialProperty<Real> & _dpsip_dd;
   // @}
 
   // @{ The degradation function and its derivative w/r/t damage

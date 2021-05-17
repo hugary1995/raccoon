@@ -19,19 +19,19 @@ c = 0.1
 []
 
 [Transfers]
-  [send_we_active]
+  [send_psie_active]
     type = MultiAppMeshFunctionTransfer
     multi_app = fracture
     direction = to_multiapp
-    source_variable = we_active
-    variable = we_active
+    source_variable = psie_active
+    variable = psie_active
   []
-  [send_wi_active]
+  [send_psii_active]
     type = MultiAppMeshFunctionTransfer
     multi_app = fracture
     direction = to_multiapp
-    source_variable = wi_active
-    variable = wi_active
+    source_variable = psii_active
+    variable = psii_active
   []
   [get_d]
     type = MultiAppMeshFunctionTransfer
@@ -166,7 +166,7 @@ c = 0.1
     phase_field = d
     degradation_function = g
     decomposition = NONE
-    output_properties = 'we_active'
+    output_properties = 'psie_active'
     outputs = exodus
   []
   [stress]
@@ -177,7 +177,7 @@ c = 0.1
     type = ThinFilmInterfaceEnergy
     phase_field = d
     shear_lag_coef = ${c}
-    output_properties = 'wi_active'
+    output_properties = 'psii_active'
     outputs = exodus
   []
 []

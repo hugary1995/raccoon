@@ -25,7 +25,7 @@ ThinFilmInterfaceEnergy::validParams()
 
   params.addRequiredCoupledVar("phase_field", "Name of the phase-field (damage) variable");
   params.addParam<MaterialPropertyName>(
-      "interface_energy_density", "wi", "Name of the interfacial energy density");
+      "interface_energy_density", "psii", "Name of the interfacial energy density");
   params.addParam<MaterialPropertyName>("degradation_function", "g", "The degradation function");
 
   return params;
@@ -43,10 +43,10 @@ ThinFilmInterfaceEnergy::ThinFilmInterfaceEnergy(const InputParameters & paramet
     _d_name(getVar("phase_field", 0)->name()),
 
     // The strain energy density and its derivatives
-    _wi_name(_base_name + getParam<MaterialPropertyName>("interface_energy_density")),
-    _wi(declareADProperty<Real>(_wi_name)),
-    _wi_active(declareADProperty<Real>(_wi_name + "_active")),
-    _dwi_dd(declareADProperty<Real>(derivativePropertyName(_wi_name, {_d_name}))),
+    _psii_name(_base_name + getParam<MaterialPropertyName>("interface_energy_density")),
+    _psii(declareADProperty<Real>(_psii_name)),
+    _psii_active(declareADProperty<Real>(_psii_name + "_active")),
+    _dpsii_dd(declareADProperty<Real>(derivativePropertyName(_psii_name, {_d_name}))),
 
     // The degradation function and its derivatives
     _g_name(_base_name + getParam<MaterialPropertyName>("degradation_function")),
@@ -65,7 +65,7 @@ void
 ThinFilmInterfaceEnergy::computeQpProperties()
 {
   ADRealVectorValue u((*_disp[0])[_qp], (*_disp[1])[_qp], (*_disp[2])[_qp]);
-  _wi_active[_qp] = 0.5 * _coef[_qp] * u * u;
-  _wi[_qp] = _g[_qp] * _wi_active[_qp];
-  _dwi_dd[_qp] = _dg_dd[_qp] * _wi_active[_qp];
+  _psii_active[_qp] = 0.5 * _coef[_qp] * u * u;
+  _psii[_qp] = _g[_qp] * _psii_active[_qp];
+  _dpsii_dd[_qp] = _dg_dd[_qp] * _psii_active[_qp];
 }

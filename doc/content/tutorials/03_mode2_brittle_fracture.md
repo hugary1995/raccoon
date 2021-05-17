@@ -1,7 +1,6 @@
-!include tutorials/warning.md
+!include tutorials/tutorial_header.md
 
 # Tutorial 3: Mode-II crack propagation
 
-!content pagination use_title=True
-                    previous=tutorials/02_mode1_brittle_fracture.md
+!content pagination previous=tutorials/02_mode1_brittle_fracture.md
                     next=tutorials/04_soil_desiccation.md

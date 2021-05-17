@@ -28,19 +28,19 @@ ep0 = 0.005
     variable = d
     source_variable = d
   []
-  [to_we_active]
+  [to_psie_active]
     type = MultiAppMeshFunctionTransfer
     multi_app = fracture
     direction = to_multiapp
-    variable = we_active
-    source_variable = we_active
+    variable = psie_active
+    source_variable = psie_active
   []
-  [to_wp_active]
+  [to_psip_active]
     type = MultiAppMeshFunctionTransfer
     multi_app = fracture
     direction = to_multiapp
-    variable = wp_active
-    source_variable = wp_active
+    variable = psip_active
+    source_variable = psip_active
   []
 []
 
@@ -99,27 +99,6 @@ ep0 = 0.005
   [fy]
   []
   [d]
-  []
-  [we_active]
-    order = CONSTANT
-    family = MONOMIAL
-  []
-  [wp_active]
-    order = CONSTANT
-    family = MONOMIAL
-  []
-[]
-
-[AuxKernels]
-  [we_active]
-    type = ADMaterialRealAux
-    variable = we_active
-    property = we_active
-  []
-  [wp_active]
-    type = ADMaterialRealAux
-    variable = wp_active
-    property = wp_active
   []
 []
 
@@ -189,7 +168,7 @@ ep0 = 0.005
     phase_field = d
     degradation_function = g
     decomposition = NONE
-    output_properties = 'elastic_strain'
+    output_properties = 'elastic_strain psie_active'
     outputs = exodus
   []
   [plasticity]
@@ -205,6 +184,8 @@ ep0 = 0.005
     exponent = ${n}
     reference_plastic_strain = ${ep0}
     phase_field = d
+    output_properties = 'psip_active'
+    outputs = exodus
   []
   [stress]
     type = ComputeSmallDeformationStress

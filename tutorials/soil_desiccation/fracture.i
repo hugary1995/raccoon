@@ -12,11 +12,11 @@
 []
 
 [AuxVariables]
-  [we_active]
+  [psie_active]
     order = CONSTANT
     family = MONOMIAL
   []
-  [wi_active]
+  [psii_active]
     order = CONSTANT
     family = MONOMIAL
   []
@@ -94,8 +94,8 @@
   [psi]
     type = ADDerivativeParsedMaterial
     f_name = psi
-    function = 'alpha*Gc/c0/l+g*(we_active+wi_active)'
-    args = 'd we_active wi_active'
+    function = 'alpha*Gc/c0/l+g*(psie_active+psii_active)'
+    args = 'd psie_active psii_active'
     material_property_names = 'alpha(d) g(d) Gc c0 l'
     derivative_order = 1
   []
