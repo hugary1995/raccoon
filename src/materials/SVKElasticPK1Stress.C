@@ -4,7 +4,7 @@
 
 #include "SVKElasticPK1Stress.h"
 
-registerADMooseObject("raccoonApp", SVKElasticPK1Stress);
+registerMooseObject("raccoonApp", SVKElasticPK1Stress);
 
 InputParameters
 SVKElasticPK1Stress::validParams()

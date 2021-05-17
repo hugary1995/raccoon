@@ -5,22 +5,27 @@
 #include "ADPFFDiffusion.h"
 #include "Assembly.h"
 
-registerADMooseObject("raccoonApp", ADPFFDiffusion);
+registerMooseObject("raccoonApp", ADPFFDiffusion);
 
 InputParameters
 ADPFFDiffusion::validParams()
 {
   InputParameters params = ADKernel::validParams();
-  params.addClassDescription("computes the diffusion term in phase-field evolution equation");
-  params.addParam<MaterialPropertyName>("kappa_name", "kappa", "kappa name");
-  params.addParam<MaterialPropertyName>("mobility_name", "mobility", "name of mobility");
+  params.addClassDescription("Compute the diffusion term in phase-field evolution equation");
+  params.addParam<MaterialPropertyName>(
+      "fracture_toughness", "Gc", "The fracture toughness $\\Gc$");
+  params.addParam<MaterialPropertyName>(
+      "normalization_constant", "c0", "The normalization constant $c_0$");
+  params.addParam<MaterialPropertyName>(
+      "regularization_length", "l", "The phase-field regularization length");
   return params;
 }
 
 ADPFFDiffusion::ADPFFDiffusion(const InputParameters & parameters)
   : ADKernel(parameters),
-    _kappa(getADMaterialProperty<Real>("kappa_name")),
-    _M(getADMaterialProperty<Real>("mobility_name")),
+    _Gc(getADMaterialProperty<Real>("fracture_toughness")),
+    _c0(getADMaterialProperty<Real>("normalization_constant")),
+    _l(getADMaterialProperty<Real>("regularization_length")),
     _coord_sys(_assembly.coordSystem())
 {
 }
@@ -28,12 +33,10 @@ ADPFFDiffusion::ADPFFDiffusion(const InputParameters & parameters)
 ADReal
 ADPFFDiffusion::computeQpResidual()
 {
-  ADReal residual =
-      _grad_test[_i][_qp](0) * _grad_u[_qp](0) + _grad_test[_i][_qp](1) * _grad_u[_qp](1);
-  if (_coord_sys == Moose::COORD_RZ)
-    residual -= _test[_i][_qp] / _ad_q_point[_qp](0) * _grad_u[_qp](0);
-  else
-    residual += _grad_test[_i][_qp](2) * _grad_u[_qp](2);
+  ADReal value = _grad_test[_i][_qp] * _grad_u[_qp];
 
-  return _M[_qp] * _kappa[_qp] * residual;
+  if (_coord_sys == Moose::COORD_RZ)
+    value -= _test[_i][_qp] / _ad_q_point[_qp](0) * _grad_u[_qp](0);
+
+  return 2 * _Gc[_qp] * _l[_qp] / _c0[_qp] * value;
 }

@@ -1,9 +1,11 @@
 Content:
   - ${ROOT_DIR}/doc/content
-  - ${ROOT_DIR}/moose/framework/doc/content
-  - ${ROOT_DIR}/moose/modules/heat_conduction/doc/content
-  - ${ROOT_DIR}/moose/modules/tensor_mechanics/doc/content
-  - ${ROOT_DIR}/moose/modules/phase_field/doc/content
+  - ${MOOSE_DIR}/framework/doc/content
+  - ${MOOSE_DIR}/modules/heat_conduction/doc/content
+  - ${MOOSE_DIR}/modules/ray_tracing/doc/content
+  - ${MOOSE_DIR}/modules/tensor_mechanics/doc/content
+  - ${MOOSE_DIR}/modules/phase_field/doc/content
+
 Renderer:
   type:                            MooseDocs.base.MaterializeRenderer
   favicon:                         media/raccoon_icon.png
@@ -13,49 +15,24 @@ Extensions:
     name:                          "RACCOON"
     repo:                          https://github.com/hugary1995/raccoon
     home:                          https://hugary1995.github.io/raccoon/index.html
-    menu:
-      Install:                     install/index.md
-      Theory:                      theory/index.md
-      Modules:                     modules/index.md
-      Syntax:                      syntax/index.md
-      Contribute:                  contribute/index.md
+    breadcrumbs:                   False
+    scrollspy:                     False
+    menu:                          !include ${ROOT_DIR}/doc/menu.yml
+  MooseDocs.extensions.bibtex:
+    duplicates:
+      - kim_phase-field_1999 # referenced in both Tensor Mechanics and Phase Field
+      - hales15homogenization # referenced in both Tensor Mechanics and Heat Conduction
   MooseDocs.extensions.katex:
-    macros:
-      \bs:                         "\\boldsymbol{#1}"
-      \normal:                     "\\bs{n}"
-      \divergence:                 "\\nabla \\cdot"
-      \norm:                       "\\left\\lVert#1\\right\\rVert"
-      \diff:                       "\\text{ d}#1"
-      \total:                      "\\text{total}"
-      \internal:                   "\\text{internal}"
-      \external:                   "\\text{external}"
-      \elastic:                    "\\text{elastic}"
-      \fracture:                   "\\text{fracture}"
-      \critical:                   "\\text{critical}"
-      \activeenergy:               "{\\left< A \\right>}"
-      \inactiveenergy:             "{\\left< I \\right>}"
-      \Gc:                         "{\\mathcal{G}_c}"
-      \strain:                     "\\bs{\\varepsilon}"
-      \stress:                     "\\bs{\\sigma}"
-      \xstress:                    "\\widetilde{\\stress}"
-      \macaulay:                   "\\left<#1\\right>"
-      \body:                       "\\Omega"
-      \bodyboundary:               "{\\partial\\body}"
-      \grad:                       "\\bs{\\nabla}"
+    macros:                        !include ${ROOT_DIR}/doc/katex.macros.yml
   MooseDocs.extensions.appsyntax:
     executable:                    ${ROOT_DIR}
     remove:
-      framework:                   !include ${ROOT_DIR}/moose/framework/doc/remove.yml
+      framework:                   !include ${MOOSE_DIR}/framework/doc/remove.yml
   MooseDocs.extensions.common:
-    shortcuts:                     !include ${ROOT_DIR}/moose/framework/doc/globals.yml
+    shortcuts:                     !include ${MOOSE_DIR}/framework/doc/globals.yml
   MooseDocs.extensions.acronym:
-    acronyms:                      !include ${ROOT_DIR}/moose/framework/doc/acronyms.yml
+    acronyms:                      !include ${MOOSE_DIR}/framework/doc/acronyms.yml
   MooseDocs.extensions.template:
     active:                        True
   MooseDocs.extensions.sqa:
-    active:                        True
-    categories:
-      framework:                   !include ${ROOT_DIR}/moose/framework/doc/sqa_framework.yml
-      tensor_mechanics:            !include ${ROOT_DIR}/moose/modules/tensor_mechanics/doc/sqa_tensor_mechanics.yml
-      heat_conduction:             !include ${ROOT_DIR}/moose/modules/heat_conduction/doc/sqa_heat_conduction.yml
-      phase_field:                 !include ${ROOT_DIR}/moose/modules/phase_field/doc/sqa_phase_field.yml
+      active:                      False
