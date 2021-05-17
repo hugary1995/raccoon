@@ -1,4 +1,4 @@
-!include tutorials/warning.md
+!include tutorials/tutorial_header.md
 
 # Tutorial 1: Small deformation elasticity
 
@@ -132,5 +132,4 @@ Finally, we add a postprocessor to sum the nodal values of `fy` along the top bo
 
 ## [The complete input file](tutorials/small_deformation/elasticity.i)
 
-!content pagination use_title=True
-                    next=tutorials/02_mode1_brittle_fracture.md
+!content pagination next=tutorials/02_mode1_brittle_fracture.md

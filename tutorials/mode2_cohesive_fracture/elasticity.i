@@ -24,12 +24,12 @@ l = 0.02
     variable = d
     source_variable = d
   []
-  [to_we_active]
+  [to_psie_active]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = to_multiapp
-    variable = we_active
-    source_variable = we_active
+    variable = psie_active
+    source_variable = psie_active
   []
 []
 
@@ -113,18 +113,6 @@ l = 0.02
   []
   [d]
   []
-  [we_active]
-    order = CONSTANT
-    family = MONOMIAL
-  []
-[]
-
-[AuxKernels]
-  [we_active]
-    type = ADMaterialRealAux
-    variable = we_active
-    property = we_active
-  []
 []
 
 [Kernels]
@@ -195,7 +183,7 @@ l = 0.02
     phase_field = d
     degradation_function = g
     decomposition = SPECTRAL
-    output_properties = 'elastic_strain'
+    output_properties = 'elastic_strain psie_active'
     outputs = exodus
   []
   [stress]

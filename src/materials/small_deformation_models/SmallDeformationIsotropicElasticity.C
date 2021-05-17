@@ -18,7 +18,7 @@ SmallDeformationIsotropicElasticity::validParams()
   params.addRequiredCoupledVar("phase_field", "Name of the phase-field (damage) variable");
   params.addParam<MaterialPropertyName>(
       "strain_energy_density",
-      "we",
+      "psie",
       "Name of the strain energy density computed by this material model");
   params.addParam<MaterialPropertyName>("degradation_function", "g", "The degradation function");
   params.addParam<MooseEnum>(
@@ -39,10 +39,10 @@ SmallDeformationIsotropicElasticity::SmallDeformationIsotropicElasticity(
     _d_name(getVar("phase_field", 0)->name()),
 
     // The strain energy density and its derivatives
-    _we_name(_base_name + getParam<MaterialPropertyName>("strain_energy_density")),
-    _we(declareADProperty<Real>(_we_name)),
-    _we_active(declareADProperty<Real>(_we_name + "_active")),
-    _dwe_dd(declareADProperty<Real>(derivativePropertyName(_we_name, {_d_name}))),
+    _psie_name(_base_name + getParam<MaterialPropertyName>("strain_energy_density")),
+    _psie(declareADProperty<Real>(_psie_name)),
+    _psie_active(declareADProperty<Real>(_psie_name + "_active")),
+    _dpsie_dd(declareADProperty<Real>(derivativePropertyName(_psie_name, {_d_name}))),
 
     // The degradation function and its derivatives
     _g_name(_base_name + getParam<MaterialPropertyName>("degradation_function")),
@@ -77,9 +77,9 @@ SmallDeformationIsotropicElasticity::computeStressNoDecomposition(const ADRankTw
   ADRankTwoTensor stress_intact = _K[_qp] * strain.trace() * I2 + 2 * _G[_qp] * strain.deviatoric();
   ADRankTwoTensor stress = _g[_qp] * stress_intact;
 
-  _we_active[_qp] = 0.5 * stress_intact.doubleContraction(strain);
-  _we[_qp] = _g[_qp] * _we_active[_qp];
-  _dwe_dd[_qp] = _dg_dd[_qp] * _we_active[_qp];
+  _psie_active[_qp] = 0.5 * stress_intact.doubleContraction(strain);
+  _psie[_qp] = _g[_qp] * _psie_active[_qp];
+  _dpsie_dd[_qp] = _dg_dd[_qp] * _psie_active[_qp];
 
   return stress;
 }
@@ -105,11 +105,11 @@ SmallDeformationIsotropicElasticity::computeStressSpectralDecomposition(
   // Strain energy density
   ADReal we_intact =
       0.5 * lambda * strain_tr * strain_tr + _G[_qp] * strain.doubleContraction(strain);
-  _we_active[_qp] = 0.5 * lambda * strain_tr_pos * strain_tr_pos +
-                    _G[_qp] * strain_pos.doubleContraction(strain_pos);
-  ADReal we_inactive = we_intact - _we_active[_qp];
-  _we[_qp] = _g[_qp] * _we_active[_qp] + we_inactive;
-  _dwe_dd[_qp] = _dg_dd[_qp] * _we_active[_qp];
+  _psie_active[_qp] = 0.5 * lambda * strain_tr_pos * strain_tr_pos +
+                      _G[_qp] * strain_pos.doubleContraction(strain_pos);
+  ADReal we_inactive = we_intact - _psie_active[_qp];
+  _psie[_qp] = _g[_qp] * _psie_active[_qp] + we_inactive;
+  _dpsie_dd[_qp] = _dg_dd[_qp] * _psie_active[_qp];
 
   return stress;
 }
@@ -136,9 +136,9 @@ SmallDeformationIsotropicElasticity::computeStressVolDevDecomposition(
   ADReal we_intact =
       0.5 * _K[_qp] * strain_tr * strain_tr + _G[_qp] * strain_dev.doubleContraction(strain_dev);
   ADReal we_inactive = 0.5 * _K[_qp] * strain_tr_neg * strain_tr_neg;
-  _we_active[_qp] = we_intact - we_inactive;
-  _we[_qp] = _g[_qp] * _we_active[_qp] + we_inactive;
-  _dwe_dd[_qp] = _dg_dd[_qp] * _we_active[_qp];
+  _psie_active[_qp] = we_intact - we_inactive;
+  _psie[_qp] = _g[_qp] * _psie_active[_qp] + we_inactive;
+  _dpsie_dd[_qp] = _dg_dd[_qp] * _psie_active[_qp];
 
   return stress;
 }

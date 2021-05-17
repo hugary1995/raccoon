@@ -33,10 +33,10 @@ protected:
   const VariableName _d_name;
 
   // @{ Interfacial energy density and its derivative w/r/t damage
-  const MaterialPropertyName _wi_name;
-  ADMaterialProperty<Real> & _wi;
-  ADMaterialProperty<Real> & _wi_active;
-  ADMaterialProperty<Real> & _dwi_dd;
+  const MaterialPropertyName _psii_name;
+  ADMaterialProperty<Real> & _psii;
+  ADMaterialProperty<Real> & _psii_active;
+  ADMaterialProperty<Real> & _dpsii_dd;
   // @}
 
   // @{ The degradation function and its derivative w/r/t damage

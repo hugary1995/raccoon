@@ -1,6 +1,5 @@
-!include tutorials/warning.md
+!include tutorials/tutorial_header.md
 
 # Tutorial 8: Three-point bending simulation
 
-!content pagination use_title=True
-                    previous=tutorials/07_ductile_fracture.md
+!content pagination previous=tutorials/07_ductile_fracture.md

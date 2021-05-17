@@ -18,7 +18,7 @@ CNHIsotropicElasticity::validParams()
   params.addRequiredCoupledVar("phase_field", "Name of the phase-field (damage) variable");
   params.addParam<MaterialPropertyName>(
       "strain_energy_density",
-      "we",
+      "psie",
       "Name of the strain energy density computed by this material model");
   params.addParam<MaterialPropertyName>("degradation_function", "g", "The degradation function");
   params.addParam<MooseEnum>(
@@ -38,10 +38,10 @@ CNHIsotropicElasticity::CNHIsotropicElasticity(const InputParameters & parameter
     _d_name(getVar("phase_field", 0)->name()),
 
     // The strain energy density and its derivatives
-    _we_name(_base_name + getParam<MaterialPropertyName>("strain_energy_density")),
-    _we(declareADProperty<Real>(_we_name)),
-    _we_active(declareADProperty<Real>(_we_name + "_active")),
-    _dwe_dd(declareADProperty<Real>(derivativePropertyName(_we_name, {_d_name}))),
+    _psie_name(_base_name + getParam<MaterialPropertyName>("strain_energy_density")),
+    _psie(declareADProperty<Real>(_psie_name)),
+    _psie_active(declareADProperty<Real>(_psie_name + "_active")),
+    _dpsie_dd(declareADProperty<Real>(derivativePropertyName(_psie_name, {_d_name}))),
 
     // The degradation function and its derivatives
     _g_name(_base_name + getParam<MaterialPropertyName>("degradation_function")),
@@ -97,9 +97,9 @@ CNHIsotropicElasticity::computeMandelStressNoDecomposition(const ADRankTwoTensor
     ADRankTwoTensor strain_bar = std::pow(J, -2. / 3.) * strain;
     ADReal U = 0.5 * _K[_qp] * (0.5 * (J * J - 1) - std::log(J));
     ADReal W = 0.5 * _G[_qp] * (strain_bar.trace() - 3.0);
-    _we_active[_qp] = U + W;
-    _we[_qp] = _g[_qp] * _we_active[_qp];
-    _dwe_dd[_qp] = _dg_dd[_qp] * _we_active[_qp];
+    _psie_active[_qp] = U + W;
+    _psie[_qp] = _g[_qp] * _psie_active[_qp];
+    _dpsie_dd[_qp] = _dg_dd[_qp] * _psie_active[_qp];
   }
 
   return stress;
@@ -136,9 +136,9 @@ CNHIsotropicElasticity::computeMandelStressVolDevDecomposition(const ADRankTwoTe
     ADRankTwoTensor strain_bar = std::pow(J, -2. / 3.) * strain;
     ADReal U = 0.5 * _K[_qp] * (0.5 * (J * J - 1) - std::log(J));
     ADReal W = 0.5 * _G[_qp] * (strain_bar.trace() - 3.0);
-    _we_active[_qp] = J > 1 ? U + W : W;
-    _we[_qp] = _g[_qp] * _we_active[_qp];
-    _dwe_dd[_qp] = _dg_dd[_qp] * _we_active[_qp];
+    _psie_active[_qp] = J > 1 ? U + W : W;
+    _psie[_qp] = _g[_qp] * _psie_active[_qp];
+    _dpsie_dd[_qp] = _dg_dd[_qp] * _psie_active[_qp];
   }
 
   return stress;

@@ -19,7 +19,7 @@ PowerLawHardening::validParams()
   params.addRequiredCoupledVar("phase_field", "Name of the phase-field (damage) variable");
   params.addParam<MaterialPropertyName>(
       "plastic_energy_density",
-      "wp",
+      "psip",
       "Name of the plastic energy density computed by this material model");
   params.addParam<MaterialPropertyName>("degradation_function", "gp", "The degradation function");
 
@@ -36,10 +36,10 @@ PowerLawHardening::PowerLawHardening(const InputParameters & parameters)
     _d_name(getVar("phase_field", 0)->name()),
 
     // The strain energy density and its derivatives
-    _wp_name(_base_name + getParam<MaterialPropertyName>("plastic_energy_density")),
-    _wp(declareADProperty<Real>(_wp_name)),
-    _wp_active(declareADProperty<Real>(_wp_name + "_active")),
-    _dwp_dd(declareADProperty<Real>(derivativePropertyName(_wp_name, {_d_name}))),
+    _psip_name(_base_name + getParam<MaterialPropertyName>("plastic_energy_density")),
+    _psip(declareADProperty<Real>(_psip_name)),
+    _psip_active(declareADProperty<Real>(_psip_name + "_active")),
+    _dpsip_dd(declareADProperty<Real>(derivativePropertyName(_psip_name, {_d_name}))),
 
     // The degradation function and its derivatives
     _gp_name(_base_name + getParam<MaterialPropertyName>("degradation_function")),
@@ -53,11 +53,11 @@ PowerLawHardening::plasticEnergy(const ADReal & ep, const unsigned int derivativ
 {
   if (derivative == 0)
   {
-    _wp_active[_qp] = _n[_qp] * _sigma_y[_qp] * _ep0[_qp] / (_n[_qp] + 1) *
-                      (std::pow(1 + ep / _ep0[_qp], 1 / _n[_qp] + 1) - 1);
-    _wp[_qp] = _gp[_qp] * _wp_active[_qp];
-    _dwp_dd[_qp] = _dgp_dd[_qp] * _wp_active[_qp];
-    return _wp[_qp];
+    _psip_active[_qp] = _n[_qp] * _sigma_y[_qp] * _ep0[_qp] / (_n[_qp] + 1) *
+                        (std::pow(1 + ep / _ep0[_qp], 1 / _n[_qp] + 1) - 1);
+    _psip[_qp] = _gp[_qp] * _psip_active[_qp];
+    _dpsip_dd[_qp] = _dgp_dd[_qp] * _psip_active[_qp];
+    return _psip[_qp];
   }
 
   if (derivative == 1)
