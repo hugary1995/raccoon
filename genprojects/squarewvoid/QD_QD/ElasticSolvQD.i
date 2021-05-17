@@ -36,7 +36,7 @@ k = 1e-06
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = '../gold/domain05Coarse.msh'
+    file = '../gold/domain05.msh'
   []
 []
 
@@ -193,8 +193,8 @@ k = 1e-06
   #petsc_options_value = 'lu       superlu_dist'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
   petsc_options_value = 'lu      ilu          200         200                0                     vinewtonrsls'
-  #dt = 0.00492
-  dt = 0.01
+  dt = 0.00492
+  #dt = 0.01
   end_time =20
   nl_abs_tol = 1e-06
   nl_rel_tol = 1e-06
@@ -213,7 +213,7 @@ k = 1e-06
 []
 
 [Outputs]
-  file_base = 'Elastic_squarewvoidsmallstep_quad_Traction_Brittle_VolDev_Res_BC_QD_NoIrr'
+  file_base = 'Elastic_squarewvoidsmallstep_quad_Traction_Brittle_VolDev_Res_BC_QD_Irr'
   exodus = true
   interval = 1
 []
