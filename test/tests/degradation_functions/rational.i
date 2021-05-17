@@ -31,7 +31,7 @@
   [degradation]
     type = RationalDegradationFunction
     f_name = g
-    d = d
+    phase_field = d
     parameter_names = 'p a2 a3 eta '
     parameter_values = '2 -0.5 0 1e-6'
     material_property_names = 'Gc psic xi c0 l '

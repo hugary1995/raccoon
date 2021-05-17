@@ -1,1 +1,13 @@
-!template load file=stubs/moose_object.md.template name=CohesiveDamageIC syntax=/ICs/CohesiveDamageIC
+# CohesiveDamageIC
+
+!syntax description /ICs/CohesiveDamageIC
+
+## Overview
+
+## Example Input File Syntax
+
+!syntax parameters /ICs/CohesiveDamageIC
+
+!syntax inputs /ICs/CohesiveDamageIC
+
+!syntax children /ICs/CohesiveDamageIC

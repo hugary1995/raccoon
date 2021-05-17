@@ -12,17 +12,17 @@ CrackGeometricFunction::validParams()
   InputParameters params = CustomParsedFunctionBase::validParams();
 
   params.set<std::string>("f_name") = "alpha";
-  params.addRequiredCoupledVar("d", "the phase-field variable");
+  params.addRequiredCoupledVar("phase_field", "The phase-field variable");
 
   params.set<unsigned int>("derivative_order") = 1;
   params.suppressParameter<unsigned int>("derivative_order");
 
-  params.addParam<MaterialPropertyName>("initial_derivative_name",
+  params.addParam<MaterialPropertyName>("initial_derivative",
                                         "xi",
                                         "Name of the material to store the initial slope of the "
                                         "crack geometric function, $\\alpha(d=0)$");
 
-  params.addParam<MaterialPropertyName>("normalization_constant_name",
+  params.addParam<MaterialPropertyName>("normalization_constant",
                                         "c0",
                                         "Name of the material to store the normalization constant, "
                                         "$4\\int_0^1 \\sqrt{\\alpha(s)} \\diff{s}$");
@@ -38,9 +38,9 @@ CrackGeometricFunction::validParams()
 
 CrackGeometricFunction::CrackGeometricFunction(const InputParameters & parameters)
   : CustomParsedFunctionBase(parameters),
-    _d_idx(argIndex(coupled("d"))),
-    _xi(declareADProperty<Real>(getParam<MaterialPropertyName>("initial_derivative_name"))),
-    _c0(declareADProperty<Real>(getParam<MaterialPropertyName>("normalization_constant_name"))),
+    _d_idx(argIndex(coupled("phase_field"))),
+    _xi(declareADProperty<Real>(getParam<MaterialPropertyName>("initial_derivative"))),
+    _c0(declareADProperty<Real>(getParam<MaterialPropertyName>("normalization_constant"))),
     _tolerance(getParam<Real>("tolerance")),
     _max_its(getParam<unsigned int>("maximum_iterations"))
 {

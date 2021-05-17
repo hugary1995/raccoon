@@ -5,8 +5,10 @@
 #pragma once
 
 #include "PlasticHardeningModel.h"
+#include "DerivativeMaterialPropertyNameInterface.h"
 
-class PowerLawHardening : public PlasticHardeningModel
+class PowerLawHardening : public PlasticHardeningModel,
+                          public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
@@ -20,5 +22,21 @@ protected:
   const ADMaterialProperty<Real> & _sigma_y;
   const ADMaterialProperty<Real> & _n;
   const ADMaterialProperty<Real> & _ep0;
+  // @}
+
+  /// Name of the phase-field variable
+  const VariableName _d_name;
+
+  // @{ Plastic energy density and its derivative w/r/t damage
+  const MaterialPropertyName _psip_name;
+  ADMaterialProperty<Real> & _psip;
+  ADMaterialProperty<Real> & _psip_active;
+  ADMaterialProperty<Real> & _dpsip_dd;
+  // @}
+
+  // @{ The degradation function and its derivative w/r/t damage
+  const MaterialPropertyName _gp_name;
+  const ADMaterialProperty<Real> & _gp;
+  const ADMaterialProperty<Real> & _dgp_dd;
   // @}
 };
