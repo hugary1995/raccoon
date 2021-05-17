@@ -10,7 +10,8 @@ InputParameters
 ADPressurizedCrack::validParams()
 {
   InputParameters params = ADKernelValue::validParams();
-  params.addClassDescription("computes the body force term from pressurized phase-field fracture");
+  params.addClassDescription("This class computes the body force term from pressurized phase-field "
+                             "fracture. The weak form is $(w, p \\grad d)$.");
   params.addParam<MaterialPropertyName>("pressure_mat", "pressure inside the crack");
   params.addCoupledVar("pressure_var", "pressure inside the crack");
   params.addRequiredCoupledVar("d", "coupled damage variable");

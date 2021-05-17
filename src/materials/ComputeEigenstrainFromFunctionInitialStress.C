@@ -10,7 +10,10 @@ InputParameters
 ComputeEigenstrainFromFunctionInitialStress::validParams()
 {
   InputParameters params = Material::validParams();
-  params.addClassDescription("Computes an eigenstrain from an eigen stress defined by a function");
+  params.addClassDescription(
+      "This class computes the eigenstrain given a predefined intial stress. The eigenstrain is "
+      "defined as $\\strain_0 = - \\mathbb{C} : \\stress_0$. Isotropic linear elasticity is "
+      "assumed.");
   params.addParam<std::string>("base_name",
                                "Optional parameter that allows the user to define "
                                "multiple mechanics material systems on the same "

@@ -10,7 +10,8 @@ InputParameters
 ADPFFSource::validParams()
 {
   InputParameters params = ADKernelValue::validParams();
-  params.addClassDescription("Compute the source term in phase-field evolution equation");
+  params.addClassDescription("The source term in the phase-field evolution equation. The weak form "
+                             "is $(w, \\dfrac{\\partial \\psi}{\\partial d})$.");
   params.addParam<MaterialPropertyName>("free_energy",
                                         "psi"
                                         "The Helmholtz free energy");

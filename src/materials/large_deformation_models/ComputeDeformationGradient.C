@@ -10,7 +10,10 @@ InputParameters
 ComputeDeformationGradient::validParams()
 {
   InputParameters params = Material::validParams();
-  params.addClassDescription("Compute the deformation gradient.");
+  params.addClassDescription(
+      "This class computes the deformation gradient. Eigen deformation gradients are extracted "
+      "from the total deformation gradient. The F-bar approach can optionally be used to correct "
+      "volumetric locking.");
   params.addRequiredCoupledVar(
       "displacements",
       "The displacements appropriate for the simulation geometry and coordinate system");

@@ -6,6 +6,7 @@ The constitutive models can be roughly categorized as
 
 - Elasticity models
 - Plasticity models
+- Viscoelasticity models
 - Plastic hardening models
 - Phase-field fracture models
 
@@ -22,6 +23,10 @@ We support both small deformation and large deformation. Several hyperelastic mo
 
 - [Small deformation $J_2$ plasticity](SmallDeformationJ2Plasticity.md)
 - [Large deformation $J_2$ plasticity](LargeDeformationJ2Plasticity.md)
+
+## Viscoelasticity models
+
+- [Large deformation Newtonian viscosity](LargeDeformationNewtonianViscosity.md)
 
 ## Plastic hardening models
 

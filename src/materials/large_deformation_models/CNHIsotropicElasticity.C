@@ -11,9 +11,10 @@ InputParameters
 CNHIsotropicElasticity::validParams()
 {
   InputParameters params = LargeDeformationElasticityModel::validParams();
+  params.addClassDescription("Isotropic Compressible Neo-Hookean hyperelasticity model.");
 
-  params.addRequiredParam<MaterialPropertyName>("bulk_modulus", "The bulk modulus $\\K$");
-  params.addRequiredParam<MaterialPropertyName>("shear_modulus", "The shear modulus $\\G$");
+  params.addRequiredParam<MaterialPropertyName>("bulk_modulus", "The bulk modulus $K$");
+  params.addRequiredParam<MaterialPropertyName>("shear_modulus", "The shear modulus $G$");
 
   params.addRequiredCoupledVar("phase_field", "Name of the phase-field (damage) variable");
   params.addParam<MaterialPropertyName>(

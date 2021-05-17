@@ -7,12 +7,13 @@
 #include "Material.h"
 #include "DerivativeMaterialPropertyNameInterface.h"
 
-class ThinFilmInterfaceEnergy : public Material, public DerivativeMaterialPropertyNameInterface
+class ThinFilmInterfaceEnergyDensity : public Material,
+                                       public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
 
-  ThinFilmInterfaceEnergy(const InputParameters & parameters);
+  ThinFilmInterfaceEnergyDensity(const InputParameters & parameters);
 
 protected:
   virtual void computeQpProperties() override;

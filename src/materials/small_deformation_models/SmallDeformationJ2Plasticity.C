@@ -10,6 +10,8 @@ InputParameters
 SmallDeformationJ2Plasticity::validParams()
 {
   InputParameters params = SmallDeformationPlasticityModel::validParams();
+  params.addClassDescription("Small deformation $J_2$ plasticity. The plastic deformation is "
+                             "updated using the additive decompsition of strain.");
   return params;
 }
 

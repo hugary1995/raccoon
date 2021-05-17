@@ -21,24 +21,21 @@ protected:
 
   void threadJoin(const UserObject & y) override;
 
+  /// Cumulative sum of the post-processor value
   Real _sum;
 
+  /// The number of displacements
   const unsigned int _ndisp;
-  const VariableValue & _disp_0;
-  const VariableValue & _disp_1;
-  const VariableValue & _disp_2;
-  const VariableValue & _disp_0_old;
-  const VariableValue & _disp_1_old;
-  const VariableValue & _disp_2_old;
 
+  /// Vector of velocities
+  std::vector<const VariableValue *> _u_dots;
+
+  /// The number of forces
   const unsigned int _nforce;
-  const VariableValue & _f_0;
-  const VariableValue & _f_1;
-  const VariableValue & _f_2;
-  const VariableValue & _f_0_old;
-  const VariableValue & _f_1_old;
-  const VariableValue & _f_2_old;
 
-  /// cumulative sum of the post-processor value from the old time step */
+  /// Vector of forces
+  std::vector<const VariableValue *> _forces;
+
+  /// Cumulative sum of the post-processor value from the old time step */
   const PostprocessorValue & _sum_old;
 };

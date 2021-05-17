@@ -2,16 +2,17 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "ThinFilmInterfaceEnergy.h"
+#include "ThinFilmInterfaceEnergyDensity.h"
 
-registerMooseObject("raccoonApp", ThinFilmInterfaceEnergy);
+registerMooseObject("raccoonApp", ThinFilmInterfaceEnergyDensity);
 
 InputParameters
-ThinFilmInterfaceEnergy::validParams()
+ThinFilmInterfaceEnergyDensity::validParams()
 {
   InputParameters params = Material::validParams();
-  params.addClassDescription("Compute the interface energy corresponding to a shear-lag model, "
-                             "i.e. $\\psi = 0.5 c \\bs{u} \\cdot \\bs{u}$.");
+  params.addClassDescription(
+      "This class compute the interface energy density corresponding to a shear-lag model, "
+      "i.e. $\\psi^i = 0.5 c \\bs{u} \\cdot \\bs{u}$.");
   params.addParam<std::string>("base_name",
                                "Optional parameter that allows the user to define "
                                "multiple mechanics material systems on the same "
@@ -31,7 +32,7 @@ ThinFilmInterfaceEnergy::validParams()
   return params;
 }
 
-ThinFilmInterfaceEnergy::ThinFilmInterfaceEnergy(const InputParameters & parameters)
+ThinFilmInterfaceEnergyDensity::ThinFilmInterfaceEnergyDensity(const InputParameters & parameters)
   : Material(parameters),
     DerivativeMaterialPropertyNameInterface(),
     _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
@@ -62,7 +63,7 @@ ThinFilmInterfaceEnergy::ThinFilmInterfaceEnergy(const InputParameters & paramet
 }
 
 void
-ThinFilmInterfaceEnergy::computeQpProperties()
+ThinFilmInterfaceEnergyDensity::computeQpProperties()
 {
   ADRealVectorValue u((*_disp[0])[_qp], (*_disp[1])[_qp], (*_disp[2])[_qp]);
   _psii_active[_qp] = 0.5 * _coef[_qp] * u * u;

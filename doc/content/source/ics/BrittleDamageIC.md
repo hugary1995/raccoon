@@ -2,8 +2,6 @@
 
 !syntax description /ICs/BrittleDamageIC
 
-## Overview
-
 ## Example Input File Syntax
 
 !syntax parameters /ICs/BrittleDamageIC

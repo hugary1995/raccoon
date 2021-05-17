@@ -11,22 +11,23 @@ LoadingUnloadingDirichletBC::validParams()
 {
   InputParameters params = DirichletBCBase::validParams();
   params.addClassDescription(
-      "applies a loading/unloading BC. The load ramps up linearly until it reaches the load cap. "
-      "Once the load cap is reached, the load cap is incremented and unlading begins. Once the "
-      "unloaded indicator becomes negative, loading starts. If the load cap exceeds the ultimate "
-      "load, the entire loading/unloading terminates, and the current simulation is terminated.");
+      "This class applies a loading/unloading BC. The load ramps up linearly until it reaches the "
+      "load cap. Once the load cap is reached, the load cap is incremented and unlading begins. "
+      "Once the unloaded indicator becomes negative, loading starts. If the load cap exceeds the "
+      "ultimate load, the entire loading/unloading terminates, and the current simulation is "
+      "terminated.");
   params.addRequiredParam<Real>(
       "initial_load_cap",
-      "initial cap of the loading. The load is decreased once it reaches the cap, the cap is "
+      "Initial cap of the loading. The load is decreased once it reaches the cap, the cap is "
       "then increased according to the load cap increment.");
   params.addRequiredParam<Real>("load_cap_increment",
-                                "the amount to increase the load cap everytime it is reached.");
-  params.addRequiredParam<Real>("load_step", "the amount to increase the load every step.");
+                                "The amount to increase the load cap everytime it is reached.");
+  params.addRequiredParam<Real>("load_step", "The amount to increase the load every step.");
   params.addRequiredParam<Real>("ultimate_load",
-                                "the load, upon reached, to terminate the simulation.");
+                                "The load, upon reached, to terminate the simulation.");
   params.addRequiredParam<PostprocessorName>(
       "unloaded_indicator",
-      "a postprocessor whose value serves as an indicator for unloaded status. Once its value is "
+      "A postprocessor whose value serves as an indicator for unloaded status. Once its value is "
       "below zero, the system is completely unloaded, and loading starts again.");
   return params;
 }

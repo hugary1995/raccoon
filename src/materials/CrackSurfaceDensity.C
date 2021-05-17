@@ -10,7 +10,10 @@ InputParameters
 CrackSurfaceDensity::validParams()
 {
   InputParameters params = Material::validParams();
-  params.addClassDescription("computes the crack surface density");
+  params.addClassDescription(
+      "This class computes the crack surface density $\\gamma = \\dfrac{1}{c_0 l} (\\alpha + l^2 "
+      "\\grad d \\cdot \\grad d)$, where $\\alpha$ is the crack geometric function, $c_0$ is the "
+      "normalization constant, and $l$ is the phase-field regularization length.");
   params.addParam<std::string>("base_name",
                                "Optional parameter that allows the user to define "
                                "multiple mechanics material systems on the same "

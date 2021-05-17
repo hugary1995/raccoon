@@ -10,6 +10,8 @@ InputParameters
 PowerLawHardening::validParams()
 {
   InputParameters params = PlasticHardeningModel::validParams();
+  params.addClassDescription("Plastic hardening following a power law.");
+
   params.addRequiredParam<MaterialPropertyName>("yield_stress", "The yield stress $\\sigma_y$");
   params.addRequiredParam<MaterialPropertyName>("exponent",
                                                 "The exponent n in the power law hardening $n$");
