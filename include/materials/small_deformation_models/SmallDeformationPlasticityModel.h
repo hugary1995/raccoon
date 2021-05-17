@@ -24,7 +24,7 @@ public:
   /// Set the current quadrature point
   virtual void setQp(unsigned int qp);
 
-  /// Set the associated plasticity model
+  /// Set the associated elasticity model
   virtual void setElasticityModel(SmallDeformationElasticityModel * elasticity_model);
 
   /**
@@ -43,7 +43,7 @@ public:
 protected:
   virtual void initQpStatefulProperties() override;
 
-  /// The optional plasticity model
+  /// The elasticity model
   SmallDeformationElasticityModel * _elasticity_model;
 
   /// Base name optionally used as prefix to material tensor names

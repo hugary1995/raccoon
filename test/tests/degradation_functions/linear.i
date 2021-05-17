@@ -26,7 +26,7 @@
   [degradation]
     type = PowerDegradationFunction
     f_name = g
-    d = d
+    phase_field = d
     parameter_names = 'p eta '
     parameter_values = '1 1e-6'
   []

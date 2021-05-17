@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "MooseUtils.h"
 #include "ADRankTwoTensorForward.h"
 
 namespace RaccoonUtils
@@ -14,4 +13,8 @@ ADReal Macaulay(const ADReal x, const bool deriv = false);
 std::vector<ADReal> Macaulay(const std::vector<ADReal> & v, const bool deriv = false);
 
 ADRankTwoTensor spectralDecomposition(const ADRankTwoTensor & r2t);
+
+ADRankTwoTensor log(const ADRankTwoTensor & r2t);
+
+ADRankTwoTensor exp(const ADRankTwoTensor & r2t);
 }

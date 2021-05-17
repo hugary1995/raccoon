@@ -27,7 +27,7 @@
     type = CrackGeometricFunction
     f_name = alpha
     function = 'd^2'
-    d = d
+    phase_field = d
   []
 []
 

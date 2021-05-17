@@ -4,6 +4,7 @@
 
 #include "RaccoonUtils.h"
 #include "DualRealOps.h"
+#include "MooseUtils.h"
 #include "RankTwoTensorImplementation.h"
 
 namespace RaccoonUtils
@@ -36,6 +37,30 @@ spectralDecomposition(const ADRankTwoTensor & r2t)
   ADRankTwoTensor eigvals_pos;
   eigvals_pos.fillFromInputVector(Macaulay(eigvals));
   return eigvecs * eigvals_pos * eigvecs.transpose();
+}
+
+ADRankTwoTensor
+log(const ADRankTwoTensor & r2t)
+{
+  std::vector<ADReal> d;
+  ADRankTwoTensor V, D;
+  r2t.symmetricEigenvaluesEigenvectors(d, V);
+  for (auto & di : d)
+    di = std::log(di);
+  D.fillFromInputVector(d);
+  return V * D * V.transpose();
+}
+
+ADRankTwoTensor
+exp(const ADRankTwoTensor & r2t)
+{
+  std::vector<ADReal> d;
+  ADRankTwoTensor V, D;
+  r2t.symmetricEigenvaluesEigenvectors(d, V);
+  for (auto & di : d)
+    di = std::exp(di);
+  D.fillFromInputVector(d);
+  return V * D * V.transpose();
 }
 
 } // end namespace MooseUtils
