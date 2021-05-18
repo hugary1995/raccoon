@@ -6,10 +6,11 @@
 
 #include "Material.h"
 #include "ADRankTwoTensorForward.h"
+#include "BaseNameInterface.h"
 
 class SmallDeformationPlasticityModel;
 
-class SmallDeformationElasticityModel : public Material
+class SmallDeformationElasticityModel : public Material, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -47,9 +48,6 @@ protected:
 
   /// The optional plasticity model
   SmallDeformationPlasticityModel * _plasticity_model;
-
-  /// Base name optionally used as prefix to material tensor names
-  const std::string _base_name;
 
   /// The elastic strain
   ADMaterialProperty<RankTwoTensor> & _elastic_strain;

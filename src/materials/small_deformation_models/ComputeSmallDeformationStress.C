@@ -12,25 +12,23 @@ InputParameters
 ComputeSmallDeformationStress::validParams()
 {
   InputParameters params = Material::validParams();
+  params += BaseNameInterface::validParams();
   params.addClassDescription("The stress calculator given an elasticity model and a plasticity "
                              "model. Small deformation is assumed.");
 
   params.addRequiredParam<MaterialName>("elasticity_model",
                                         "Name of the elastic stress-strain constitutive model");
   params.addParam<MaterialName>("plasticity_model", "Name of the plasticity model");
-  params.addParam<std::string>("base_name",
-                               "Optional parameter that allows the user to define "
-                               "multiple mechanics material systems on the same "
-                               "block, i.e. for multiple phases");
+
   params.suppressParameter<bool>("use_displaced_mesh");
   return params;
 }
 
 ComputeSmallDeformationStress::ComputeSmallDeformationStress(const InputParameters & parameters)
   : Material(parameters),
-    _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
-    _mechanical_strain(getADMaterialProperty<RankTwoTensor>(_base_name + "mechanical_strain")),
-    _stress(declareADProperty<RankTwoTensor>(_base_name + "stress"))
+    BaseNameInterface(parameters),
+    _mechanical_strain(getADMaterialProperty<RankTwoTensor>(prependBaseName("mechanical_strain"))),
+    _stress(declareADProperty<RankTwoTensor>(prependBaseName("stress")))
 {
   if (getParam<bool>("use_displaced_mesh"))
     mooseError("The stress calculator needs to run on the undisplaced mesh.");

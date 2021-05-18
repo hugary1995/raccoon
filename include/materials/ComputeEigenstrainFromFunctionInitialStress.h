@@ -5,10 +5,11 @@
 #pragma once
 
 #include "Material.h"
+#include "BaseNameInterface.h"
 #include "ADRankTwoTensorForward.h"
 #include "Function.h"
 
-class ComputeEigenstrainFromFunctionInitialStress : public Material
+class ComputeEigenstrainFromFunctionInitialStress : public Material, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -18,9 +19,6 @@ public:
 protected:
   virtual void initQpStatefulProperties() override;
   virtual void computeQpProperties() override;
-
-  ///Base name prepended to material property name
-  const std::string _base_name;
 
   /// The bulk modulus
   const ADMaterialProperty<Real> & _K;

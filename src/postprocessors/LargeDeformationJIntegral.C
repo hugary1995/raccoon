@@ -10,12 +10,10 @@ InputParameters
 LargeDeformationJIntegral::validParams()
 {
   InputParameters params = SideIntegralPostprocessor::validParams();
+  params += BaseNameInterface::validParams();
   params.addClassDescription(
       "This class computes the J integral for a phase-field model of fracture");
-  params.addParam<std::string>("base_name",
-                               "Optional parameter that allows the user to define "
-                               "multiple mechanics material systems on the same "
-                               "block, i.e. for multiple phases");
+
   params.addRequiredParam<RealVectorValue>("J_direction", "direction of J integral");
   params.addRequiredParam<MaterialPropertyName>("strain_energy_density",
                                                 "The strain energy density");
@@ -24,11 +22,11 @@ LargeDeformationJIntegral::validParams()
 
 LargeDeformationJIntegral::LargeDeformationJIntegral(const InputParameters & parameters)
   : SideIntegralPostprocessor(parameters),
-    _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
-    _stress(getADMaterialPropertyByName<RankTwoTensor>(_base_name + "stress")),
-    _psie(getADMaterialPropertyByName<Real>(
-        _base_name + getParam<MaterialPropertyName>("strain_energy_density"))),
-    _Fm(getADMaterialPropertyByName<RankTwoTensor>(_base_name + "mechanical_deformation_gradient")),
+    BaseNameInterface(parameters),
+    _stress(getADMaterialPropertyByName<RankTwoTensor>(prependBaseName("stress"))),
+    _psie(getADMaterialPropertyByName<Real>(prependBaseName("strain_energy_density", true))),
+    _Fm(getADMaterialPropertyByName<RankTwoTensor>(
+        prependBaseName("mechanical_deformation_gradient"))),
     _t(getParam<RealVectorValue>("J_direction"))
 {
 }

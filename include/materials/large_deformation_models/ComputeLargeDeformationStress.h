@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Material.h"
+#include "BaseNameInterface.h"
 #include "ADRankTwoTensorForward.h"
 
 class LargeDeformationElasticityModel;
@@ -15,7 +16,7 @@ class LargeDeformationViscoelasticityModel;
  * ComputeLargeDeformationStress computes the stress given certain hyperelasticity and optionally a
  * plasticity model and a viscoelasticity model
  */
-class ComputeLargeDeformationStress : public Material
+class ComputeLargeDeformationStress : public Material, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -36,9 +37,6 @@ protected:
 
   /// The viscoelasticity model
   LargeDeformationViscoelasticityModel * _viscoelasticity_model;
-
-  /// Base name of the material system
-  const std::string _base_name;
 
   // @{ The mechanical strain excluding eigen strains from the total strain
   const ADMaterialProperty<RankTwoTensor> & _Fm;

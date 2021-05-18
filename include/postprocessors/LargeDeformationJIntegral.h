@@ -5,9 +5,10 @@
 #pragma once
 
 #include "SideIntegralPostprocessor.h"
+#include "BaseNameInterface.h"
 #include "ADRankTwoTensorForward.h"
 
-class LargeDeformationJIntegral : public SideIntegralPostprocessor
+class LargeDeformationJIntegral : public SideIntegralPostprocessor, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -16,9 +17,6 @@ public:
 
 protected:
   virtual Real computeQpIntegral() override;
-
-  /// The base name
-  const std::string _base_name;
 
   /// The Cauchy stress
   const ADMaterialProperty<RankTwoTensor> & _stress;

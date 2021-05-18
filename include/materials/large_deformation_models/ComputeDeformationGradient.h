@@ -5,12 +5,13 @@
 #pragma once
 
 #include "Material.h"
+#include "BaseNameInterface.h"
 #include "ADRankTwoTensorForward.h"
 
 /**
  * This class computes the deformation gradient
  */
-class ComputeDeformationGradient : public Material
+class ComputeDeformationGradient : public Material, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -39,9 +40,6 @@ protected:
 
   /// Gradient of displacements
   std::vector<const ADVariableGradient *> _grad_disp;
-
-  /// Base name of the material system
-  const std::string _base_name;
 
   /// Whether to apply volumetric locaking correction
   const bool _volumetric_locking_correction;

@@ -5,8 +5,9 @@
 #pragma once
 
 #include "ElementIntegralPostprocessor.h"
+#include "BaseNameInterface.h"
 
-class KineticEnergy : public ElementIntegralPostprocessor
+class KineticEnergy : public ElementIntegralPostprocessor, public BaseNameInterface
 {
 public:
   static InputParameters validParams();

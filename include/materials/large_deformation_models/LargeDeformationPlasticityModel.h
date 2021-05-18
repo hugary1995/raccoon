@@ -7,12 +7,14 @@
 #include "Material.h"
 #include "ADRankTwoTensorForward.h"
 #include "ADSingleVariableReturnMappingSolution.h"
+#include "BaseNameInterface.h"
 #include "PlasticHardeningModel.h"
 
 class LargeDeformationElasticityModel;
 
 class LargeDeformationPlasticityModel : public Material,
-                                        public ADSingleVariableReturnMappingSolution
+                                        public ADSingleVariableReturnMappingSolution,
+                                        public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -46,9 +48,6 @@ protected:
 
   /// The elasticity model
   LargeDeformationElasticityModel * _elasticity_model;
-
-  /// Base name optionally used as prefix to material tensor names
-  const std::string _base_name;
 
   /// The plastic deformation gradient
   ADMaterialProperty<RankTwoTensor> & _Fp;

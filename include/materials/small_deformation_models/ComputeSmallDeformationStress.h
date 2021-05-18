@@ -6,6 +6,7 @@
 
 #include "Material.h"
 #include "ADRankTwoTensorForward.h"
+#include "BaseNameInterface.h"
 
 class SmallDeformationElasticityModel;
 class SmallDeformationPlasticityModel;
@@ -13,7 +14,7 @@ class SmallDeformationPlasticityModel;
 /**
  * ComputeSmallDeformationStress computes the stress under small-strain assumptions
  */
-class ComputeSmallDeformationStress : public Material
+class ComputeSmallDeformationStress : public Material, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -31,9 +32,6 @@ protected:
 
   /// The elasticity model
   SmallDeformationPlasticityModel * _plasticity_model;
-
-  /// Base name of the material system
-  const std::string _base_name;
 
   /// The mechanical strain excluding eigen strains from the total strain
   const ADMaterialProperty<RankTwoTensor> & _mechanical_strain;

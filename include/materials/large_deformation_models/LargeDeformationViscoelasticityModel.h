@@ -5,9 +5,10 @@
 #pragma once
 
 #include "Material.h"
+#include "BaseNameInterface.h"
 #include "ADRankTwoTensorForward.h"
 
-class LargeDeformationViscoelasticityModel : public Material
+class LargeDeformationViscoelasticityModel : public Material, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -30,8 +31,4 @@ public:
   void resetQpProperties() final {}
   void resetProperties() final {}
   // @}
-
-protected:
-  /// Base name optionally used as prefix to material tensor names
-  const std::string _base_name;
 };

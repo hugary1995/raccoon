@@ -5,8 +5,9 @@
 #pragma once
 
 #include "ADKernelGrad.h"
+#include "BaseNameInterface.h"
 
-class ADPFFPressure : public ADKernelGrad
+class ADPFFPressure : public ADKernelGrad, public BaseNameInterface
 {
 public:
   static InputParameters validParams();

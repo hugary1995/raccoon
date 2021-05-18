@@ -10,14 +10,12 @@ InputParameters
 ComputeEigenstrainFromFunctionInitialStress::validParams()
 {
   InputParameters params = Material::validParams();
+  params += BaseNameInterface::validParams();
   params.addClassDescription(
       "This class computes the eigenstrain given a predefined intial stress. The eigenstrain is "
       "defined as $\\strain_0 = - \\mathbb{C} : \\stress_0$. Isotropic linear elasticity is "
       "assumed.");
-  params.addParam<std::string>("base_name",
-                               "Optional parameter that allows the user to define "
-                               "multiple mechanics material systems on the same "
-                               "block, i.e. for multiple phases");
+
   params.addRequiredParam<MaterialPropertyName>("bulk_modulus", "The bulk modulus $\\K$");
   params.addRequiredParam<MaterialPropertyName>("shear_modulus", "The shear modulus $\\G$");
   params.addRequiredParam<MaterialPropertyName>(
@@ -33,12 +31,10 @@ ComputeEigenstrainFromFunctionInitialStress::validParams()
 ComputeEigenstrainFromFunctionInitialStress::ComputeEigenstrainFromFunctionInitialStress(
     const InputParameters & parameters)
   : Material(parameters),
-    _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
-    _K(getADMaterialPropertyByName<Real>(_base_name +
-                                         getParam<MaterialPropertyName>("bulk_modulus"))),
-    _G(getADMaterialPropertyByName<Real>(_base_name +
-                                         getParam<MaterialPropertyName>("shear_modulus"))),
-    _eigenstrain_name(_base_name + getParam<MaterialPropertyName>("eigenstrain_name")),
+    BaseNameInterface(parameters),
+    _K(getADMaterialPropertyByName<Real>(prependBaseName("bulk_modulus", true))),
+    _G(getADMaterialPropertyByName<Real>(prependBaseName("shear_modulus", true))),
+    _eigenstrain_name(prependBaseName("eigenstrain_name", true)),
     _eigenstrain(declareADProperty<RankTwoTensor>(_eigenstrain_name))
 {
   const std::vector<FunctionName> & fcn_names(

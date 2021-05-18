@@ -10,13 +10,11 @@ InputParameters
 ThinFilmInterfaceEnergyDensity::validParams()
 {
   InputParameters params = Material::validParams();
+  params += BaseNameInterface::validParams();
   params.addClassDescription(
       "This class compute the interface energy density corresponding to a shear-lag model, "
       "i.e. $\\psi^i = 0.5 c \\bs{u} \\cdot \\bs{u}$.");
-  params.addParam<std::string>("base_name",
-                               "Optional parameter that allows the user to define "
-                               "multiple mechanics material systems on the same "
-                               "block, i.e. for multiple phases");
+
   params.addRequiredParam<MaterialPropertyName>(
       "shear_lag_coef",
       "The coefficient describing the mismatch between the film and the substrate");
@@ -35,22 +33,21 @@ ThinFilmInterfaceEnergyDensity::validParams()
 ThinFilmInterfaceEnergyDensity::ThinFilmInterfaceEnergyDensity(const InputParameters & parameters)
   : Material(parameters),
     DerivativeMaterialPropertyNameInterface(),
-    _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
-    _coef(
-        getADMaterialProperty<Real>(_base_name + getParam<MaterialPropertyName>("shear_lag_coef"))),
+    BaseNameInterface(parameters),
+    _coef(getADMaterialProperty<Real>(prependBaseName("shear_lag_coef", true))),
     _ndisp(coupledComponents("displacements")),
     _disp(3),
 
     _d_name(getVar("phase_field", 0)->name()),
 
     // The strain energy density and its derivatives
-    _psii_name(_base_name + getParam<MaterialPropertyName>("interface_energy_density")),
+    _psii_name(prependBaseName("interface_energy_density", true)),
     _psii(declareADProperty<Real>(_psii_name)),
     _psii_active(declareADProperty<Real>(_psii_name + "_active")),
     _dpsii_dd(declareADProperty<Real>(derivativePropertyName(_psii_name, {_d_name}))),
 
     // The degradation function and its derivatives
-    _g_name(_base_name + getParam<MaterialPropertyName>("degradation_function")),
+    _g_name(prependBaseName("degradation_function", true)),
     _g(getADMaterialProperty<Real>(_g_name)),
     _dg_dd(getADMaterialProperty<Real>(derivativePropertyName(_g_name, {_d_name})))
 {
