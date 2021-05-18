@@ -2,8 +2,6 @@
 
 !syntax description /ICs/CohesiveDamageIC
 
-## Overview
-
 ## Example Input File Syntax
 
 !syntax parameters /ICs/CohesiveDamageIC

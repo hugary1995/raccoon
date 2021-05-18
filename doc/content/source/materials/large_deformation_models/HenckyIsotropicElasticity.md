@@ -1,20 +1,28 @@
 # HenckyIsotropicElasticity
 
-!alert construction title=Undocumented Class
-The HenckyIsotropicElasticity has not been documented. The content listed below should be used as a starting point for
-documenting the class, which includes the typical automatic documentation associated with a
-MooseObject; however, what is contained is ultimately determined by what is necessary to make the
-documentation clear for users.
-
 !syntax description /Materials/HenckyIsotropicElasticity
 
 ## Overview
 
-!! Replace these lines with information regarding the HenckyIsotropicElasticity object.
+The Hencky-type hyperelastic material assumes the following strain energy density:
+
+\begin{equation}
+  \psi^e = \dfrac{1}{2} K \tr(\bs{\varepsilon}^e)^2 + G \dev(\bs{\varepsilon}^e) : \dev(\bs{\varepsilon}^e),
+\end{equation}
+
+where $\bs{\varepsilon}^e$ is a logarithmic strain measure based on the right Cauchy-green strain defined as
+
+\begin{equation}
+  \bs{\varepsilon}^e = \dfrac{1}{2} \log (\bfC^e).
+\end{equation}
+
+The stress conjugate follows from the variational principles.
+
+\begin{equation}
+  \bs{\Sigma} = K \tr(\bs{\varepsilon}^e) \bfI + 2 G \dev(\bs{\varepsilon}^e).
+\end{equation}
 
 ## Example Input File Syntax
-
-!! Describe and include an example of how to use the HenckyIsotropicElasticity object.
 
 !syntax parameters /Materials/HenckyIsotropicElasticity
 

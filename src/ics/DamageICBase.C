@@ -8,7 +8,7 @@ InputParameters
 DamageICBase::validParams()
 {
   InputParameters params = InitialCondition::validParams();
-  params.addRequiredParam<Real>("l", "Length scale");
+  params.addRequiredParam<Real>("l", "The phase-field regularization length");
   params.addRequiredParam<std::vector<Real>>("x1", "The abscissa values of crack starting points");
   params.addRequiredParam<std::vector<Real>>("y1", "The ordinate values of crack starting points");
   params.addRequiredParam<std::vector<Real>>("z1", "The applicate values of crack starting points");

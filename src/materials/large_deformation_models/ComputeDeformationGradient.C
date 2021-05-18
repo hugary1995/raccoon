@@ -10,14 +10,15 @@ InputParameters
 ComputeDeformationGradient::validParams()
 {
   InputParameters params = Material::validParams();
-  params.addClassDescription("Compute the deformation gradient.");
+  params += BaseNameInterface::validParams();
+  params.addClassDescription(
+      "This class computes the deformation gradient. Eigen deformation gradients are extracted "
+      "from the total deformation gradient. The F-bar approach can optionally be used to correct "
+      "volumetric locking.");
+
   params.addRequiredCoupledVar(
       "displacements",
       "The displacements appropriate for the simulation geometry and coordinate system");
-  params.addParam<std::string>("base_name",
-                               "Optional parameter that allows the user to define "
-                               "multiple mechanics material systems on the same "
-                               "block, i.e. for multiple phases");
   params.addParam<bool>(
       "volumetric_locking_correction", false, "Flag to correct volumetric locking");
   params.addParam<std::vector<MaterialPropertyName>>(
@@ -29,24 +30,22 @@ ComputeDeformationGradient::validParams()
 
 ComputeDeformationGradient::ComputeDeformationGradient(const InputParameters & parameters)
   : Material(parameters),
+    BaseNameInterface(parameters),
     _coord_sys(_assembly.coordSystem()),
     _ndisp(coupledComponents("displacements")),
     _disp(adCoupledValues("displacements")),
     _grad_disp(adCoupledGradients("displacements")),
-    _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
     _volumetric_locking_correction(getParam<bool>("volumetric_locking_correction") &&
                                    !this->isBoundaryMaterial()),
     _current_elem_volume(_assembly.elemVolume()),
-    _F(declareADProperty<RankTwoTensor>(_base_name + "deformation_gradient")),
-    _Fm(declareADProperty<RankTwoTensor>(_base_name + "mechanical_deformation_gradient")),
-    _Fg_names(getParam<std::vector<MaterialPropertyName>>("eigen_deformation_gradient_names")),
+    _F(declareADProperty<RankTwoTensor>(prependBaseName("deformation_gradient"))),
+    _Fm(declareADProperty<RankTwoTensor>(prependBaseName("mechanical_deformation_gradient"))),
+    _Fg_names(prependBaseName(
+        getParam<std::vector<MaterialPropertyName>>("eigen_deformation_gradient_names"))),
     _Fgs(_Fg_names.size())
 {
   for (unsigned int i = 0; i < _Fgs.size(); ++i)
-  {
-    _Fg_names[i] = _base_name + _Fg_names[i];
     _Fgs[i] = &getADMaterialProperty<RankTwoTensor>(_Fg_names[i]);
-  }
 
   if (getParam<bool>("use_displaced_mesh"))
     paramError("use_displaced_mesh", "The strain calculator needs to run on the undisplaced mesh.");

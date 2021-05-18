@@ -5,11 +5,12 @@
 #pragma once
 
 #include "Material.h"
+#include "BaseNameInterface.h"
 #include "ADRankTwoTensorForward.h"
 
 class LargeDeformationPlasticityModel;
 
-class LargeDeformationElasticityModel : public Material
+class LargeDeformationElasticityModel : public Material, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -59,9 +60,6 @@ protected:
 
   /// The optional plasticity model
   LargeDeformationPlasticityModel * _plasticity_model;
-
-  /// Base name optionally used as prefix to material tensor names
-  const std::string _base_name;
 
   /// The elastic strain
   ADMaterialProperty<RankTwoTensor> & _Fe;

@@ -5,8 +5,9 @@
 #pragma once
 
 #include "ADKernel.h"
+#include "BaseNameInterface.h"
 
-class ADPFFDiffusion : public ADKernel
+class ADPFFDiffusion : public ADKernel, public BaseNameInterface
 {
 public:
   static InputParameters validParams();

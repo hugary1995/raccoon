@@ -5,6 +5,7 @@
 #include "ComputeLargeDeformationStress.h"
 #include "LargeDeformationElasticityModel.h"
 #include "LargeDeformationPlasticityModel.h"
+#include "LargeDeformationViscoelasticityModel.h"
 
 registerMooseObject("raccoonApp", ComputeLargeDeformationStress);
 
@@ -12,22 +13,28 @@ InputParameters
 ComputeLargeDeformationStress::validParams()
 {
   InputParameters params = Material::validParams();
+  params += BaseNameInterface::validParams();
+  params.addClassDescription("Stress calculator given an elasticity model, a plasticity model and "
+                             "a viscoelasticity model. Large deformation is assumed.");
+
   params.addRequiredParam<MaterialName>("elasticity_model",
                                         "Name of the elastic stress-strain constitutive model");
   params.addParam<MaterialName>("plasticity_model", "Name of the plasticity model");
-  params.addParam<std::string>("base_name",
-                               "Optional parameter that allows the user to define "
-                               "multiple mechanics material systems on the same "
-                               "block, i.e. for multiple phases");
+  params.addParam<MaterialName>("viscoelasticity_model", "Name of the viscoelasticity model");
+
   params.suppressParameter<bool>("use_displaced_mesh");
   return params;
 }
 
 ComputeLargeDeformationStress::ComputeLargeDeformationStress(const InputParameters & parameters)
   : Material(parameters),
-    _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
-    _Fm(getADMaterialProperty<RankTwoTensor>(_base_name + "mechanical_deformation_gradient")),
-    _stress(declareADProperty<RankTwoTensor>(_base_name + "stress"))
+    BaseNameInterface(parameters),
+    _Fm(getADMaterialProperty<RankTwoTensor>(prependBaseName("mechanical_deformation_gradient"))),
+    _Fm_old(isParamValid("viscoelasticity_model")
+                ? &getMaterialPropertyOld<RankTwoTensor>(
+                      prependBaseName("mechanical_deformation_gradient"))
+                : nullptr),
+    _stress(declareADProperty<RankTwoTensor>(prependBaseName("stress")))
 {
   if (getParam<bool>("use_displaced_mesh"))
     mooseError("The stress calculator needs to run on the undisplaced mesh.");
@@ -49,6 +56,11 @@ ComputeLargeDeformationStress::initialSetup()
           : nullptr;
   if (_plasticity_model)
     _elasticity_model->setPlasticityModel(_plasticity_model);
+
+  _viscoelasticity_model = isParamValid("viscoelasticity_model")
+                               ? dynamic_cast<LargeDeformationViscoelasticityModel *>(
+                                     &getMaterial("viscoelasticity_model"))
+                               : nullptr;
 }
 
 void
@@ -62,4 +74,10 @@ ComputeLargeDeformationStress::computeQpProperties()
 {
   _elasticity_model->setQp(_qp);
   _elasticity_model->updateState(_Fm[_qp], _stress[_qp]);
+
+  if (_viscoelasticity_model)
+  {
+    _viscoelasticity_model->setQp(_qp);
+    _stress[_qp] += _viscoelasticity_model->computeCauchyStress(_Fm[_qp], (*_Fm_old)[_qp]);
+  }
 }

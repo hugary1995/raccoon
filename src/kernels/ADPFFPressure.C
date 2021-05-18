@@ -10,9 +10,12 @@ InputParameters
 ADPFFPressure::validParams()
 {
   InputParameters params = ADKernelGrad::validParams();
-  params.addClassDescription("computes the pressure term in phase-field evolution equation");
-  params.addRequiredParam<MaterialPropertyName>("pressure_mat",
-                                                "Material property name for pressure");
+  params += BaseNameInterface::validParams();
+  params.addClassDescription(
+      "This class computes the pressure term in the phase-field evolution equation for pressurized "
+      "crack. The weak form is $\\grad w, p \\bfu$.");
+
+  params.addRequiredParam<MaterialPropertyName>("pressure", "Material property name for pressure");
   params.addRequiredCoupledVar(
       "displacements",
       "The displacements appropriate for the simulation geometry and coordinate system");
@@ -21,7 +24,8 @@ ADPFFPressure::validParams()
 
 ADPFFPressure::ADPFFPressure(const InputParameters & parameters)
   : ADKernelGrad(parameters),
-    _p_mat(getADMaterialProperty<Real>("pressure_mat")),
+    BaseNameInterface(parameters),
+    _p(getADMaterialProperty<Real>(prependBaseName("pressure", true))),
     _ndisp(coupledComponents("displacements")),
     _disp(3)
 {
@@ -37,5 +41,5 @@ ADRealVectorValue
 ADPFFPressure::precomputeQpResidual()
 {
   ADRealVectorValue u((*_disp[0])[_qp], (*_disp[1])[_qp], (*_disp[2])[_qp]);
-  return _p_mat[_qp] * u;
+  return _p[_qp] * u;
 }

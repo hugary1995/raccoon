@@ -5,8 +5,9 @@
 #pragma once
 
 #include "ADKernelGrad.h"
+#include "BaseNameInterface.h"
 
-class ADPFFPressure : public ADKernelGrad
+class ADPFFPressure : public ADKernelGrad, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -16,7 +17,7 @@ public:
 protected:
   virtual ADRealVectorValue precomputeQpResidual() override;
 
-  const ADMaterialProperty<Real> & _p_mat;
+  const ADMaterialProperty<Real> & _p;
   const unsigned int _ndisp;
   std::vector<const ADVariableValue *> _disp;
 };

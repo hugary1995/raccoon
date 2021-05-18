@@ -12,7 +12,8 @@ ADCoefMatDiffusion::validParams()
 {
   InputParameters params = ADKernel::validParams();
   params.addClassDescription(
-      "Reaction term optionally multiplied with a coefficient and a material property");
+      "Diffsuion term optionally multiplied with a coefficient and material properties. The weak "
+      "form is $(\\grad w, c \\grad u)$, where $c$ is the product of all multipliers.");
   params.addParam<Real>("coefficient", 1.0, "Coefficient of the term");
   params.addParam<std::vector<MaterialPropertyName>>(
       "prop_names", "names of the material properties to provide the multiplier");

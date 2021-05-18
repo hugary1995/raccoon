@@ -11,7 +11,8 @@ ADCoefMatReaction::validParams()
 {
   InputParameters params = ADKernelValue::validParams();
   params.addClassDescription(
-      "Reaction term optionally multiplied with a coefficient and some material properties");
+      "Reaction term optionally multiplied with a coefficient and material properties. The weak "
+      "form is $(w, c u)$, where $c$ is the product of all multipliers.");
   params.addParam<Real>("coefficient", 1.0, "Coefficient of the term");
   params.addParam<std::vector<MaterialPropertyName>>(
       "prop_names", "names of the material properties to provide the multiplier");

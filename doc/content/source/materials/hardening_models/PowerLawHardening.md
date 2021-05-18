@@ -1,20 +1,18 @@
 # PowerLawHardening
 
-!alert construction title=Undocumented Class
-The PowerLawHardening has not been documented. The content listed below should be used as a starting point for
-documenting the class, which includes the typical automatic documentation associated with a
-MooseObject; however, what is contained is ultimately determined by what is necessary to make the
-documentation clear for users.
-
 !syntax description /Materials/PowerLawHardening
 
 ## Overview
 
-!! Replace these lines with information regarding the PowerLawHardening object.
+This plastic hardening model defines the following plastic energy (and its derivatives)
+
+\begin{equation}
+  \begin{aligned}
+    \psi^p = \dfrac{n}{n+1}g \sigma_y \epsilon_0 \left[ \left( 1+\dfrac{\ep}{\epsilon_0} \right)^{\dfrac{n+1}{n}} - 1 \right], \\
+  \end{aligned}
+\end{equation}
 
 ## Example Input File Syntax
-
-!! Describe and include an example of how to use the PowerLawHardening object.
 
 !syntax parameters /Materials/PowerLawHardening
 

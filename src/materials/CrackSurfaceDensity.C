@@ -10,11 +10,11 @@ InputParameters
 CrackSurfaceDensity::validParams()
 {
   InputParameters params = Material::validParams();
-  params.addClassDescription("computes the crack surface density");
-  params.addParam<std::string>("base_name",
-                               "Optional parameter that allows the user to define "
-                               "multiple mechanics material systems on the same "
-                               "block, i.e. for multiple phases");
+  params += BaseNameInterface::validParams();
+  params.addClassDescription(
+      "This class computes the crack surface density $\\gamma = \\dfrac{1}{c_0 l} (\\alpha + l^2 "
+      "\\grad d \\cdot \\grad d)$, where $\\alpha$ is the crack geometric function, $c_0$ is the "
+      "normalization constant, and $l$ is the phase-field regularization length.");
 
   params.addRequiredCoupledVar("phase_field", "The phase-field variable");
   params.addParam<MaterialPropertyName>(
@@ -31,16 +31,12 @@ CrackSurfaceDensity::validParams()
 
 CrackSurfaceDensity::CrackSurfaceDensity(const InputParameters & parameters)
   : Material(parameters),
-    _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
+    BaseNameInterface(parameters),
     _grad_d(adCoupledGradient("phase_field")),
-    _c0(getADMaterialProperty<Real>(_base_name +
-                                    getParam<MaterialPropertyName>("normalization_constant"))),
-    _l(getADMaterialProperty<Real>(_base_name +
-                                   getParam<MaterialPropertyName>("regularization_length"))),
-    _alpha(getADMaterialProperty<Real>(_base_name +
-                                       getParam<MaterialPropertyName>("crack_geometric_function"))),
-    _gamma(declareADProperty<Real>(_base_name +
-                                   getParam<MaterialPropertyName>("crack_surface_density")))
+    _c0(getADMaterialProperty<Real>(prependBaseName("normalization_constant", true))),
+    _l(getADMaterialProperty<Real>(prependBaseName("regularization_length", true))),
+    _alpha(getADMaterialProperty<Real>(prependBaseName("crack_geometric_function", true))),
+    _gamma(declareADProperty<Real>(prependBaseName("crack_surface_density", true)))
 {
 }
 

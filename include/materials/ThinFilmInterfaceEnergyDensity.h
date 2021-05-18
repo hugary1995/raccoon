@@ -6,19 +6,19 @@
 
 #include "Material.h"
 #include "DerivativeMaterialPropertyNameInterface.h"
+#include "BaseNameInterface.h"
 
-class ThinFilmInterfaceEnergy : public Material, public DerivativeMaterialPropertyNameInterface
+class ThinFilmInterfaceEnergyDensity : public Material,
+                                       public DerivativeMaterialPropertyNameInterface,
+                                       public BaseNameInterface
 {
 public:
   static InputParameters validParams();
 
-  ThinFilmInterfaceEnergy(const InputParameters & parameters);
+  ThinFilmInterfaceEnergyDensity(const InputParameters & parameters);
 
 protected:
   virtual void computeQpProperties() override;
-
-  /// The base name
-  const std::string _base_name;
 
   /// The shear lag coefficient
   const ADMaterialProperty<Real> & _coef;

@@ -1,20 +1,18 @@
 # SmallDeformationIsotropicElasticity
 
-!alert construction title=Undocumented Class
-The SmallDeformationIsotropicElasticity has not been documented. The content listed below should be used as a starting point for
-documenting the class, which includes the typical automatic documentation associated with a
-MooseObject; however, what is contained is ultimately determined by what is necessary to make the
-documentation clear for users.
-
 !syntax description /Materials/SmallDeformationIsotropicElasticity
 
 ## Overview
 
-!! Replace these lines with information regarding the SmallDeformationIsotropicElasticity object.
+The strain energy density is defined as
+
+\begin{equation}
+  \psi^e = \dfrac{1}{2} K \tr(\strain)^2 + G \dev(\strain):\dev(\strain).
+\end{equation}
+
+This class features three most commonly used splits of the strain energy, i.e. no decomposition, spectral decomposition, and volumetric-deviatoric decomposition.
 
 ## Example Input File Syntax
-
-!! Describe and include an example of how to use the SmallDeformationIsotropicElasticity object.
 
 !syntax parameters /Materials/SmallDeformationIsotropicElasticity
 
