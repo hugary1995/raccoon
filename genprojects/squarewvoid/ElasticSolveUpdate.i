@@ -11,7 +11,7 @@ G = '${fparse E/2/(1+nu)}'
   [fracture]
     type = TransientMultiApp
     input_files = 'fractureUpdate.i'
-    app_type = raccoonApp
+    #app_type = raccoonApp
     execute_on = 'TIMESTEP_BEGIN'
     cli_args = 'Gc=${Gc};l=${l};psic=${psic}'#k=${k};
   []
@@ -25,12 +25,12 @@ G = '${fparse E/2/(1+nu)}'
     source_variable = 'd'
     variable = 'd'
   []
-  [to_we_active]
+  [to_psie_active]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = to_multiapp
-    variable = we_active
-    source_variable = we_active
+    variable = psie_active
+    source_variable = psie_active
   []
 []
 
@@ -53,10 +53,6 @@ G = '${fparse E/2/(1+nu)}'
 [AuxVariables]
   [d]
   []
-  [E_el_active]
-    order = CONSTANT
-    family = MONOMIAL
-  []
   [stress_xx]
     order = CONSTANT
     family = MONOMIAL
@@ -65,22 +61,9 @@ G = '${fparse E/2/(1+nu)}'
     order = CONSTANT
     family = MONOMIAL
   []
-  [bounds_dummy]
-  []
-  [we_active]
-    order = CONSTANT
-    family = MONOMIAL
-  []
 []
 
 [AuxKernels]
-
-  [E_el]
-    type = ADMaterialRealAux
-    variable = 'E_el_active'
-    property = 'E_el_active'
-    execute_on = 'TIMESTEP_END'
-  []
   [stress_xx]
     type = ADRankTwoAux
     variable = 'stress_xx'
@@ -150,39 +133,40 @@ G = '${fparse E/2/(1+nu)}'
 
 [Materials]
 
-  [elasticity_tensor]
-    type = ADComputeIsotropicElasticityTensor
-    youngs_modulus = ${E}
-    poissons_ratio = ${nu}
+  [elasticity]
+    type = SmallDeformationIsotropicElasticity
+    bulk_modulus = K
+    shear_modulus = G
+    phase_field = d
+    degradation_function = g
+    decomposition = VOLDEV
+    output_properties = 'elastic_strain psie_active'
+    outputs = exodus
   []
-  #[strain]
-  #  type = ADComputeSmallStrain
-  #  displacements = 'disp_x disp_y'
-  #]
   [strain]
     type = ADComputePlaneSmallStrain
     out_of_plane_strain = 'strain_zz'
     displacements = 'disp_x disp_y'
   []
   [stress]
-    type = SmallStrainDegradedElasticPK2Stress_StrainVolDev
-    d = 'd'
+    type = ComputeSmallDeformationStress
+    elasticity_model = elasticity
   []
-  [fracture_properties]
+  [bulk_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'Gc psic l'
-    prop_values = '${Gc} ${psic} ${l}'
+    prop_names = 'K G l Gc psic'
+    prop_values = '${K} ${G} ${l} ${Gc} ${psic}'
   []
   [crack_geometric]
     type = CrackGeometricFunction
     f_name = alpha
     function = 'd'
-    d = d
+    phase_field = d
   []
   [degradation]
     type = RationalDegradationFunction
     f_name = g
-    d = d
+    phase_field = d
     parameter_names = 'p a2 a3 eta'
     parameter_values = '2 1 0 1e-09'
   []

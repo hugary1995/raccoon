@@ -11,11 +11,11 @@
 []
 
 [AuxVariables]
-  [E_el_active]
+  [bounds_dummy]
+  []
+  [psie_active]
     order = CONSTANT
     family = MONOMIAL
-  []
-  [bounds_dummy]
   []
 []
 
@@ -23,14 +23,14 @@
   #Testing with irreversibiility
   [irreversibility]
     type = VariableOldValueBoundsAux
-    variable = 'bounds_dummy'
-    bounded_variable = 'd'
+    variable = bounds_dummy
+    bounded_variable = d
     bound_type = lower
   []
   [upper]
     type = ConstantBoundsAux
-    variable = 'bounds_dummy'
-    bounded_variable = 'd'
+    variable = bounds_dummy
+    bounded_variable = d
     bound_type = upper
     bound_value = 1
   []
@@ -39,8 +39,8 @@
 [BCs]
   [damageBC]
     type = DirichletBC
-    variable = 'd'
-    boundary = 'Hole'
+    variable = d
+    boundary = Hole
 
     value = 0
     #use_displaced_mesh = true
@@ -72,21 +72,21 @@
     type = CrackGeometricFunction
     f_name = alpha
     function = 'd'
-    d = d
+    phase_field = d
   []
   [degradation]
     #Lorentz
     type = RationalDegradationFunction
     f_name = g
-    d = d
+    phase_field = d
     parameter_names = 'p a2 a3 eta'
     parameter_values = '2 1 0 1e-09'
   []
   [psi]
     type = ADDerivativeParsedMaterial
     f_name = psi
-    function = 'alpha/c0/l+g*we_active/Gc'
-    args = 'd we_active'
+    function = 'alpha*Gc/c0/l+g*psie_active'
+    args = 'd psie_active'
     material_property_names = 'alpha(d) g(d) Gc c0 l'
     derivative_order = 1
   []
