@@ -5,8 +5,9 @@
 #pragma once
 
 #include "Material.h"
+#include "BaseNameInterface.h"
 
-class CrackSurfaceDensity : public Material
+class CrackSurfaceDensity : public Material, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -15,9 +16,6 @@ public:
 
 protected:
   virtual void computeQpProperties() override;
-
-  /// The base name
-  const std::string _base_name;
 
   /// The gradient of phase field
   const ADVariableGradient & _grad_d;

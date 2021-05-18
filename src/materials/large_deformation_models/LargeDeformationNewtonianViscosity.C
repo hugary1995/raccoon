@@ -20,9 +20,8 @@ LargeDeformationNewtonianViscosity::validParams()
 LargeDeformationNewtonianViscosity::LargeDeformationNewtonianViscosity(
     const InputParameters & parameters)
   : LargeDeformationViscoelasticityModel(parameters),
-    _eta(getADMaterialProperty<Real>(_base_name + getParam<MaterialPropertyName>("viscosity"))),
-    _g(getADMaterialProperty<Real>(_base_name +
-                                   getParam<MaterialPropertyName>("degradation_function")))
+    _eta(getADMaterialProperty<Real>(prependBaseName("viscosity", true))),
+    _g(getADMaterialProperty<Real>(prependBaseName("degradation_function", true)))
 {
 }
 

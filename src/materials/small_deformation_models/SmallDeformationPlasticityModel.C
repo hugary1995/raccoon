@@ -10,10 +10,7 @@ SmallDeformationPlasticityModel::validParams()
 {
   InputParameters params = Material::validParams();
   params += ADSingleVariableReturnMappingSolution::validParams();
-  params.addParam<std::string>("base_name",
-                               "Optional parameter that allows the user to define "
-                               "multiple mechanics material systems on the same "
-                               "block, i.e. for multiple phases");
+  params += BaseNameInterface::validParams();
 
   params.addRequiredParam<MaterialName>("hardening_model", "Name of the plastic hardening model");
 
@@ -26,12 +23,13 @@ SmallDeformationPlasticityModel::validParams()
 SmallDeformationPlasticityModel::SmallDeformationPlasticityModel(const InputParameters & parameters)
   : Material(parameters),
     ADSingleVariableReturnMappingSolution(parameters),
-    _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
-    _plastic_strain(declareADProperty<RankTwoTensor>(_base_name + "plastic_strain")),
-    _plastic_strain_old(getMaterialPropertyOldByName<RankTwoTensor>(_base_name + "plastic_strain")),
-    _ep(declareADProperty<Real>(_base_name + "effective_plastic_strain")),
-    _ep_old(getMaterialPropertyOldByName<Real>(_base_name + "effective_plastic_strain")),
-    _Np(declareADProperty<RankTwoTensor>(_base_name + "flow_direction"))
+    BaseNameInterface(parameters),
+    _plastic_strain(declareADProperty<RankTwoTensor>(prependBaseName("plastic_strain"))),
+    _plastic_strain_old(
+        getMaterialPropertyOldByName<RankTwoTensor>(prependBaseName("plastic_strain"))),
+    _ep(declareADProperty<Real>(prependBaseName("effective_plastic_strain"))),
+    _ep_old(getMaterialPropertyOldByName<Real>(prependBaseName("effective_plastic_strain"))),
+    _Np(declareADProperty<RankTwoTensor>(prependBaseName("flow_direction")))
 {
 }
 

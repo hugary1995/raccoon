@@ -10,9 +10,11 @@ InputParameters
 KineticEnergy::validParams()
 {
   InputParameters params = ElementIntegralPostprocessor::validParams();
+  params += BaseNameInterface::validParams();
   params.addClassDescription(
       "This class computes the total kinetic energy of the form $\\int_\\body "
       "0.5\\rho \\dot{u} \\cdot \\dot{u} \\diff{V}$.");
+
   params.addRequiredCoupledVar("displacements",
                                "The string of displacements suitable for the problem statement");
   params.addParam<MaterialPropertyName>(
@@ -22,7 +24,8 @@ KineticEnergy::validParams()
 
 KineticEnergy::KineticEnergy(const InputParameters & parameters)
   : ElementIntegralPostprocessor(parameters),
-    _rho(getADMaterialProperty<Real>("density")),
+    BaseNameInterface(parameters),
+    _rho(getADMaterialProperty<Real>(prependBaseName("density", true))),
     _ndisp(coupledComponents("displacements")),
     _u_dots(coupledDots("displacements"))
 {

@@ -31,21 +31,19 @@ CNHIsotropicElasticity::validParams()
 CNHIsotropicElasticity::CNHIsotropicElasticity(const InputParameters & parameters)
   : LargeDeformationElasticityModel(parameters),
     DerivativeMaterialPropertyNameInterface(),
-    _K(getADMaterialPropertyByName<Real>(_base_name +
-                                         getParam<MaterialPropertyName>("bulk_modulus"))),
-    _G(getADMaterialPropertyByName<Real>(_base_name +
-                                         getParam<MaterialPropertyName>("shear_modulus"))),
+    _K(getADMaterialPropertyByName<Real>(prependBaseName("bulk_modulus", true))),
+    _G(getADMaterialPropertyByName<Real>(prependBaseName("shear_modulus", true))),
 
     _d_name(getVar("phase_field", 0)->name()),
 
     // The strain energy density and its derivatives
-    _psie_name(_base_name + getParam<MaterialPropertyName>("strain_energy_density")),
+    _psie_name(prependBaseName("strain_energy_density", true)),
     _psie(declareADProperty<Real>(_psie_name)),
     _psie_active(declareADProperty<Real>(_psie_name + "_active")),
     _dpsie_dd(declareADProperty<Real>(derivativePropertyName(_psie_name, {_d_name}))),
 
     // The degradation function and its derivatives
-    _g_name(_base_name + getParam<MaterialPropertyName>("degradation_function")),
+    _g_name(prependBaseName("degradation_function", true)),
     _g(getADMaterialProperty<Real>(_g_name)),
     _dg_dd(getADMaterialProperty<Real>(derivativePropertyName(_g_name, {_d_name}))),
 

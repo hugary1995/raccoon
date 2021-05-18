@@ -31,20 +31,20 @@ PowerLawHardening::validParams()
 PowerLawHardening::PowerLawHardening(const InputParameters & parameters)
   : PlasticHardeningModel(parameters),
     DerivativeMaterialPropertyNameInterface(),
-    _sigma_y(getADMaterialProperty<Real>("yield_stress")),
-    _n(getADMaterialProperty<Real>("exponent")),
-    _ep0(getADMaterialProperty<Real>("reference_plastic_strain")),
+    _sigma_y(getADMaterialProperty<Real>(prependBaseName("yield_stress", true))),
+    _n(getADMaterialProperty<Real>(prependBaseName("exponent", true))),
+    _ep0(getADMaterialProperty<Real>(prependBaseName("reference_plastic_strain", true))),
 
     _d_name(getVar("phase_field", 0)->name()),
 
     // The strain energy density and its derivatives
-    _psip_name(_base_name + getParam<MaterialPropertyName>("plastic_energy_density")),
+    _psip_name(prependBaseName("plastic_energy_density", true)),
     _psip(declareADProperty<Real>(_psip_name)),
     _psip_active(declareADProperty<Real>(_psip_name + "_active")),
     _dpsip_dd(declareADProperty<Real>(derivativePropertyName(_psip_name, {_d_name}))),
 
     // The degradation function and its derivatives
-    _gp_name(_base_name + getParam<MaterialPropertyName>("degradation_function")),
+    _gp_name(prependBaseName("degradation_function", true)),
     _gp(getADMaterialProperty<Real>(_gp_name)),
     _dgp_dd(getADMaterialProperty<Real>(derivativePropertyName(_gp_name, {_d_name})))
 {

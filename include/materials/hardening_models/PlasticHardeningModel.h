@@ -5,8 +5,9 @@
 #pragma once
 
 #include "Material.h"
+#include "BaseNameInterface.h"
 
-class PlasticHardeningModel : public Material
+class PlasticHardeningModel : public Material, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -30,8 +31,4 @@ public:
   void resetQpProperties() final {}
   void resetProperties() final {}
   // @}
-
-protected:
-  /// The base name
-  const std::string _base_name;
 };

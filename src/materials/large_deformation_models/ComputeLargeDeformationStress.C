@@ -13,6 +13,7 @@ InputParameters
 ComputeLargeDeformationStress::validParams()
 {
   InputParameters params = Material::validParams();
+  params += BaseNameInterface::validParams();
   params.addClassDescription("Stress calculator given an elasticity model, a plasticity model and "
                              "a viscoelasticity model. Large deformation is assumed.");
 
@@ -21,23 +22,19 @@ ComputeLargeDeformationStress::validParams()
   params.addParam<MaterialName>("plasticity_model", "Name of the plasticity model");
   params.addParam<MaterialName>("viscoelasticity_model", "Name of the viscoelasticity model");
 
-  params.addParam<std::string>("base_name",
-                               "Optional parameter that allows the user to define "
-                               "multiple mechanics material systems on the same "
-                               "block, i.e. for multiple phases");
   params.suppressParameter<bool>("use_displaced_mesh");
   return params;
 }
 
 ComputeLargeDeformationStress::ComputeLargeDeformationStress(const InputParameters & parameters)
   : Material(parameters),
-    _base_name(isParamValid("base_name") ? getParam<std::string>("base_name") + "_" : ""),
-    _Fm(getADMaterialProperty<RankTwoTensor>(_base_name + "mechanical_deformation_gradient")),
-    _Fm_old(
-        isParamValid("viscoelasticity_model")
-            ? &getMaterialPropertyOld<RankTwoTensor>(_base_name + "mechanical_deformation_gradient")
-            : nullptr),
-    _stress(declareADProperty<RankTwoTensor>(_base_name + "stress"))
+    BaseNameInterface(parameters),
+    _Fm(getADMaterialProperty<RankTwoTensor>(prependBaseName("mechanical_deformation_gradient"))),
+    _Fm_old(isParamValid("viscoelasticity_model")
+                ? &getMaterialPropertyOld<RankTwoTensor>(
+                      prependBaseName("mechanical_deformation_gradient"))
+                : nullptr),
+    _stress(declareADProperty<RankTwoTensor>(prependBaseName("stress")))
 {
   if (getParam<bool>("use_displaced_mesh"))
     mooseError("The stress calculator needs to run on the undisplaced mesh.");
