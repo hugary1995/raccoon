@@ -1,3 +1,5 @@
+mesh_file = 'gold/beam.msh'
+
 psic = 90
 Gc = 20
 l = 0.027
@@ -21,7 +23,7 @@ ep0 = 0.345
   [fracture]
     type = TransientMultiApp
     input_files = 'fracture.i'
-    cli_args = 'Gc=${Gc};psic=${psic};l=${l}'
+    cli_args = 'mesh_file=${mesh_file};Gc=${Gc};psic=${psic};l=${l}'
   []
 []
 
@@ -33,19 +35,19 @@ ep0 = 0.345
     source_variable = d
     variable = d
   []
-  [to_we_active]
+  [to_psie_active]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = to_multiapp
-    source_variable = we_active
-    variable = we_active
+    source_variable = psie_active
+    variable = psie_active
   []
-  [to_wp_active]
+  [to_psip_active]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = to_multiapp
-    source_variable = wp_active
-    variable = wp_active
+    source_variable = psip_active
+    variable = psip_active
   []
 []
 
@@ -57,7 +59,7 @@ ep0 = 0.345
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/beam.msh'
+    file = ${mesh_file}
   []
   [active]
     type = SubdomainBoundingBoxGenerator
@@ -157,7 +159,7 @@ ep0 = 0.345
     shear_modulus = G
     phase_field = d
     degradation_function = g
-    output_properties = 'we_active'
+    output_properties = 'psie_active'
     outputs = exodus
     block = 0
   []
@@ -168,7 +170,7 @@ ep0 = 0.345
     reference_plastic_strain = ${ep0}
     phase_field = d
     degradation_function = g
-    output_properties = 'wp_active'
+    output_properties = 'psip_active'
     outputs = exodus
     block = 0
   []
