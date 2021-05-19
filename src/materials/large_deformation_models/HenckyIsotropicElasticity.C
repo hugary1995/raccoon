@@ -20,7 +20,7 @@ HenckyIsotropicElasticity::validParams()
   params.addRequiredCoupledVar("phase_field", "Name of the phase-field (damage) variable");
   params.addParam<MaterialPropertyName>(
       "strain_energy_density",
-      "we",
+      "psie",
       "Name of the strain energy density computed by this material model");
   params.addParam<MaterialPropertyName>("degradation_function", "g", "The degradation function");
   params.addParam<MooseEnum>(

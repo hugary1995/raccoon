@@ -5,8 +5,8 @@ RACCOON features the plug-n-play design, which allows (almost) any physically ad
 The constitutive models can be roughly categorized as
 
 - Elasticity models
-- Plasticity models
 - Viscoelasticity models
+- Plasticity (creep) models
 - Plastic hardening models
 - Phase-field fracture models
 
@@ -19,18 +19,20 @@ We support both small deformation and large deformation. Several hyperelastic mo
 - [Compressible Neo-Hookean material](CNHIsotropicElasticity.md)
 - [A Hencky-type material](HenckyIsotropicElasticity.md)
 
-## Plasticity models
-
-- [Small deformation $J_2$ plasticity](SmallDeformationJ2Plasticity.md)
-- [Large deformation $J_2$ plasticity](LargeDeformationJ2Plasticity.md)
-
 ## Viscoelasticity models
 
 - [Large deformation Newtonian viscosity](LargeDeformationNewtonianViscosity.md)
 
+## Plasticity models
+
+- [Small deformation $J_2$ plasticity](SmallDeformationJ2Plasticity.md)
+- [Large deformation $J_2$ plasticity](LargeDeformationJ2Plasticity.md)
+- [Large deformation $J_2$ power-law creep](LargeDeformationJ2PowerLawCreep.md)
+
 ## Plastic hardening models
 
-- [Power law hardening](PowerLawHardening.md)
+- [Power-law hardening](PowerLawHardening.md)
+- [Arrhenius-law hardening](ArrheniusLawHardening.md)
 
 ## Phase-field fracture models
 
