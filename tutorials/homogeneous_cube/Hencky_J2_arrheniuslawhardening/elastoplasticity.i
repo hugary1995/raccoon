@@ -1,22 +1,57 @@
 a = 250
-R = 4
+ratio = 4
 
 psic = 15
 Gc = 1.38e5
-l = '${fparse R * a}'
+l = '${fparse ratio * a}'
 
 E = 6.88e4
 nu = 0.33
 K = '${fparse E/3/(1-2*nu)}'
 G = '${fparse E/2/(1+nu)}'
 
-sigma_y = 320
-n = 5
-ep0 = 0.01
+sigma_0 = 2e-7
+Q = '${fparse 1.4054e8}'
+R = 8.3143e3
+T = 800
+eps = '${fparse E/100}'
 
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
   volumetric_locking_correction = true
+[]
+
+[MultiApps]
+  [fracture]
+    type = TransientMultiApp
+    input_files = 'fracture.i'
+    cli_args = 'a=${a};psic=${psic};Gc=${Gc};l=${l};'
+    execute_on = 'TIMESTEP_END'
+  []
+[]
+
+[Transfers]
+  [from_d]
+    type = MultiAppCopyTransfer
+    multi_app = fracture
+    direction = from_multiapp
+    variable = d
+    source_variable = d
+  []
+  [to_psie_active]
+    type = MultiAppCopyTransfer
+    multi_app = fracture
+    direction = to_multiapp
+    variable = psie_active
+    source_variable = psie_active
+  []
+  [to_psip_active]
+    type = MultiAppCopyTransfer
+    multi_app = fracture
+    direction = to_multiapp
+    variable = psip_active
+    source_variable = psip_active
+  []
 []
 
 [Mesh]
@@ -36,12 +71,13 @@ ep0 = 0.01
   []
   [disp_z]
   []
-  [d]
-  []
 []
 
 [AuxVariables]
-  [bounds_dummy]
+  [d]
+  []
+  [T]
+    initial_condition = ${T}
   []
   [stress]
     order = CONSTANT
@@ -50,22 +86,6 @@ ep0 = 0.01
   [F]
     order = CONSTANT
     family = MONOMIAL
-  []
-[]
-
-[Bounds]
-  [irreversibility]
-    type = VariableOldValueBoundsAux
-    variable = bounds_dummy
-    bounded_variable = d
-    bound_type = lower
-  []
-  [upper]
-    type = ConstantBoundsAux
-    variable = bounds_dummy
-    bounded_variable = d
-    bound_type = upper
-    bound_value = 1
   []
 []
 
@@ -105,22 +125,13 @@ ep0 = 0.01
     component = 2
     use_displaced_mesh = true
   []
-  [pff_diff]
-    type = ADPFFDiffusion
-    variable = d
-  []
-  [pff_source]
-    type = ADPFFSource
-    variable = d
-    free_energy = psi
-  []
 []
 
 [Materials]
   [bulk_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'K G l Gc psic'
-    prop_values = '${K} ${G} ${l} ${Gc} ${psic}'
+    prop_names = 'K G l Gc psic sigma_0 Q'
+    prop_values = '${K} ${G} ${l} ${Gc} ${psic} ${sigma_0} ${Q}'
   []
   [degradation]
     type = RationalDegradationFunction
@@ -137,40 +148,43 @@ ep0 = 0.01
     function = 'd'
     phase_field = d
   []
+  [arrhenius_law]
+    type = ArrheniusLaw
+    arrhenius_coefficient = A
+    activation_energy = Q
+    ideal_gas_constant = ${R}
+    T = T
+  []
   [defgrad]
     type = ComputeDeformationGradient
   []
   [hencky]
-    type = CNHIsotropicElasticity
+    type = HenckyIsotropicElasticity
     bulk_modulus = K
     shear_modulus = G
     phase_field = d
     degradation_function = g
+    output_properties = 'psie_active'
+    outputs = exodus
   []
-  [power_law_hardening]
-    type = PowerLawHardening
-    yield_stress = ${sigma_y}
-    exponent = ${n}
-    reference_plastic_strain = ${ep0}
+  [arrhenius_law_hardening]
+    type = ArrheniusLawHardening
+    reference_stress = sigma_0
+    arrhenius_coefficient = A
+    eps = ${eps}
     phase_field = d
     degradation_function = g
+    output_properties = 'psip_active'
+    outputs = exodus
   []
   [J2]
     type = LargeDeformationJ2Plasticity
-    hardening_model = power_law_hardening
+    hardening_model = arrhenius_law_hardening
   []
   [stress]
     type = ComputeLargeDeformationStress
     elasticity_model = hencky
     plasticity_model = J2
-  []
-  [psi]
-    type = ADDerivativeParsedMaterial
-    f_name = psi
-    function = 'alpha*Gc/c0/l+we+wp'
-    args = d
-    material_property_names = 'alpha(d) g(d) Gc c0 l we(d) wp(d)'
-    derivative_order = 1
   []
 []
 
@@ -225,24 +239,28 @@ ep0 = 0.01
   type = Transient
 
   solve_type = NEWTON
-  petsc_options_iname = '-pc_type -snes_type   -pc_factor_shift_type -pc_factor_shift_amount'
-  petsc_options_value = 'lu       vinewtonrsls NONZERO               1e-10'
-
-  line_search = none
+  petsc_options_iname = '-pc_type'
+  petsc_options_value = 'lu'
 
   nl_rel_tol = 1e-08
   nl_abs_tol = 1e-10
   nl_max_its = 50
 
-  dt = '${fparse 0.0001 * a}'
+  dt = '${fparse 0.0005 * a}'
   end_time = '${fparse 0.1 * a}'
 
   automatic_scaling = true
 
+  picard_max_its = 100
+  picard_rel_tol = 1e-08
+  picard_abs_tol = 1e-10
+  accept_on_max_picard_iteration = true
   abort_on_solve_fail = true
 []
 
 [Outputs]
+  file_base = 'stress_deformation'
   print_linear_residuals = false
   csv = true
+  exodus = true
 []

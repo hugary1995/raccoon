@@ -167,9 +167,9 @@ ep0 = 0.01
   [psi]
     type = ADDerivativeParsedMaterial
     f_name = psi
-    function = 'alpha*Gc/c0/l+we+wp'
+    function = 'alpha*Gc/c0/l+psie+psip'
     args = d
-    material_property_names = 'alpha(d) g(d) Gc c0 l we(d) wp(d)'
+    material_property_names = 'alpha(d) g(d) Gc c0 l psie(d) psip(d)'
     derivative_order = 1
   []
 []
@@ -243,6 +243,8 @@ ep0 = 0.01
 []
 
 [Outputs]
+  file_base = stress_deformation
   print_linear_residuals = false
   csv = true
+  exodus = true
 []
