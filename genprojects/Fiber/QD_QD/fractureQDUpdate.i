@@ -1,7 +1,7 @@
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/domain05Coarse.msh'
+    file = '../gold/domain05Coarse.msh'
   []
 []
 
@@ -20,7 +20,6 @@
 []
 
 [Bounds]
-  #Testing with irreversibiility
   [irreversibility]
     type = VariableOldValueBoundsAux
     variable = bounds_dummy
@@ -41,10 +40,7 @@
     type = DirichletBC
     variable = d
     boundary = Hole
-
     value = 0
-    #use_displaced_mesh = true
-
   []
 []
 
@@ -65,22 +61,21 @@
 [Materials]
   [fracture_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'Gc psic l'
-    prop_values = '${Gc} ${psic} ${l}'
+    prop_names = 'Gc l'
+    prop_values = '${Gc} ${l}'
   []
   [crack_geometric]
     type = CrackGeometricFunction
     f_name = alpha
-    function = 'd'
+    function = 'd^2'
     phase_field = d
   []
   [degradation]
-    #Lorentz
-    type = RationalDegradationFunction
+    type = PowerDegradationFunction
     f_name = g
     phase_field = d
-    parameter_names = 'p a2 a3 eta'
-    parameter_values = '2 1 0 1e-04'
+    parameter_names = 'p eta '
+    parameter_values = '2 ${k}'
   []
   [psi]
     type = ADDerivativeParsedMaterial

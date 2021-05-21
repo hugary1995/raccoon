@@ -141,6 +141,7 @@ v = '${fparse sqrt(Gc*3/lambda)}'
 []
 
 [Outputs]
+  file_base = 'testt'
   exodus = true
   print_linear_residuals = false
 []

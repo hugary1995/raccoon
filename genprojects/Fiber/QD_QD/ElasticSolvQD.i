@@ -161,6 +161,12 @@ k = 1e-06
     type = SmallStrainDegradedElasticPK2Stress_StrainVolDev
     d = 'd'
   []
+  [crack_geometric]
+    type = CrackGeometricFunction
+    f_name = alpha
+    function = 'd^2'
+    phase_field = d
+  []
   [fracture_properties]
     type = ADGenericFunctionMaterial
     prop_names = 'energy_release_rate phase_field_regularization_length'

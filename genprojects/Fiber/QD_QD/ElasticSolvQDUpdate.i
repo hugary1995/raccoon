@@ -3,11 +3,10 @@ nu = 0.2
 K = '${fparse E/3/(1-2*nu)}'
 G = '${fparse E/2/(1+nu)}'
 lambda = '${fparse K-2*G/3}'
+
 Gc = 1e-3
-l = 0.1
+l = 0.001
 k = 2e-4
-psic = 0.0002636
-#psic = 0.00001
 
 v = '${fparse sqrt(Gc*3/lambda)}'
 
@@ -18,8 +17,8 @@ v = '${fparse sqrt(Gc*3/lambda)}'
 [MultiApps]
   [fracture]
     type = TransientMultiApp
-    input_files = 'fractureUpdate.i'
-    cli_args = 'Gc=${Gc};l=${l};k=${k};psic=${psic}'
+    input_files = 'fractureQDUpdate.i'
+    cli_args = 'Gc=${Gc};l=${l};k=${k}'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -43,7 +42,7 @@ v = '${fparse sqrt(Gc*3/lambda)}'
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/domain05Coarse.msh'
+    file = '../gold/domain05Coarse.msh'
   []
 []
 
@@ -129,7 +128,6 @@ v = '${fparse sqrt(Gc*3/lambda)}'
 []
 
 [Materials]
-
   [elasticity]
     type = SmallDeformationIsotropicElasticity
     bulk_modulus = K
@@ -145,6 +143,12 @@ v = '${fparse sqrt(Gc*3/lambda)}'
     out_of_plane_strain = strain_zz
     displacements = 'disp_x disp_y'
   []
+  [crack_geometric]
+    type = CrackGeometricFunction
+    f_name = alpha
+    function = 'd^2'
+    phase_field = d
+  []
   [stress]
     type = ComputeSmallDeformationStress
     elasticity_model = elasticity
@@ -153,21 +157,15 @@ v = '${fparse sqrt(Gc*3/lambda)}'
   []
   [bulk_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'K G l Gc psic'
-    prop_values = '${K} ${G} ${l} ${Gc} ${psic}'
-  []
-  [crack_geometric]
-    type = CrackGeometricFunction
-    f_name = alpha
-    function = 'd'
-    phase_field = d
+    prop_names = 'K G l Gc'
+    prop_values = '${K} ${G} ${l} ${Gc}'
   []
   [degradation]
-    type = RationalDegradationFunction
+    type = PowerDegradationFunction
     f_name = g
     phase_field = d
-    parameter_names = 'p a2 a3 eta'
-    parameter_values = '2 1 0 1e-04'
+    parameter_names = 'p eta'
+    parameter_values = '2 ${k}'
   []
 []
 
@@ -192,10 +190,13 @@ v = '${fparse sqrt(Gc*3/lambda)}'
   #picard_abs_tol = 1e-50
   #picard_rel_tol = 1e-03
   #accept_on_max_picard_iteration = false
+
+
+
 []
 
 [Outputs]
-  file_base = 'Elastic_squarewvoidsmallstep_quad_Traction_Brittle_VolDev_Res_BC_Lorenz_Coarse'
+  file_base = 'Fibermatrix_Update_QD_fine'
   exodus = true
   interval = 1
 []
