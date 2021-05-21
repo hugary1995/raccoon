@@ -44,6 +44,9 @@ protected:
   /// Whether to apply volumetric locaking correction
   const bool _volumetric_locking_correction;
 
+  /// The optional out of plane strain
+  const ADVariableValue * _out_of_plane_strain;
+
   /// The current element volume
   const Real & _current_elem_volume;
 

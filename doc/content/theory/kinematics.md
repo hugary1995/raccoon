@@ -3,7 +3,7 @@
 We start by defining degrees of freedom in the system. Let $\body_0$ be the reference configuration and $\Omega_t$ be the current configuration at time $t$. Let $\bs{\phi} : \bfX \to \bfx$ be the deformation map from $\bfX \in \body_0$ to $\bfx \in \body_t$. The deformation gradient is denoted as $\bfF = \grad\bs{\phi}$, where the operator $\grad$ denotes differentiation with respect to $\bfX$. The deformations due to thermal expansion and plastic flow are modeled using the multiplicative decomposition
 
 \begin{equation}
-  \bfF = \bfF^g\bfF^e\bfF^p,
+  \bfF = \bfF^e\bfF^p\bfF^g,
 \end{equation}
 
 where $\bfF^g$, $\bfF^e$, and $\bfF^p$ are referred to as the eigen, elastic, and plastic deformation gradients, respectively. For convenience, $\bfF^m = \bfF^e\bfF^p$ is defined as the mechanical deformation gradient.

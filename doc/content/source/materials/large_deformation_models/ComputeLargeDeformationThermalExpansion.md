@@ -1,0 +1,11 @@
+# ComputeThermalExpansionEigenDeformationGradient
+
+!syntax description /Materials/ComputeThermalExpansionEigenDeformationGradient
+
+## Example Input File Syntax
+
+!syntax parameters /Materials/ComputeThermalExpansionEigenDeformationGradient
+
+!syntax inputs /Materials/ComputeThermalExpansionEigenDeformationGradient
+
+!syntax children /Materials/ComputeThermalExpansionEigenDeformationGradient
