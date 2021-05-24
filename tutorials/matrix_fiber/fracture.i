@@ -36,7 +36,7 @@
 []
 
 [BCs]
-  [damageBC]
+  [no_damage_hole]
     type = DirichletBC
     variable = d
     boundary = hole
@@ -48,8 +48,6 @@
   [diff]
     type = ADPFFDiffusion
     variable = d
-    regularization_length = l
-    normalization_constant = c0
   []
   [source]
     type = ADPFFSource
@@ -61,21 +59,22 @@
 [Materials]
   [fracture_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'Gc l'
-    prop_values = '${Gc} ${l}'
+    prop_names = 'Gc l psic'
+    prop_values = '${Gc} ${l} ${psic}'
   []
   [crack_geometric]
     type = CrackGeometricFunction
     f_name = alpha
-    function = 'd^2'
+    function = d
     phase_field = d
   []
   [degradation]
-    type = PowerDegradationFunction
+    type = RationalDegradationFunction
     f_name = g
     phase_field = d
-    parameter_names = 'p eta '
-    parameter_values = '2 ${k}'
+    parameter_names = 'p a2 a3 eta '
+    parameter_values = '2 1 0 ${k}'
+    material_property_names = 'Gc psic xi c0 l '
   []
   [psi]
     type = ADDerivativeParsedMaterial
