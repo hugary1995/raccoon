@@ -1,38 +1,44 @@
 E = 4000
 nu = 0.2
-Gc = 100
-l = 0.02
-#psic = 0.4
-k = 1e-06
+K = '${fparse E/3/(1-2*nu)}'
+G = '${fparse E/2/(1+nu)}'
+lambda = '${fparse K-2*G/3}'
 
+Gc = 1e-3
+l = 0.1
+k = 2e-4
+
+v = '${fparse -sqrt(Gc*3/lambda)}'
+
+[GlobalParams]
+  displacements = 'disp_x disp_y'
+[]
 
 [MultiApps]
   [fracture]
     type = TransientMultiApp
-    input_files = 'fractureLD.i'
-    app_type = raccoonApp
-    execute_on = 'TIMESTEP_BEGIN'
+    input_files = 'fractureQDUpdate.i'
     cli_args = 'Gc=${Gc};l=${l};k=${k}'
+    execute_on = 'TIMESTEP_END'
   []
 []
 
 [Transfers]
   [from_d]
     type = MultiAppCopyTransfer
-    multi_app = 'fracture'
+    multi_app = fracture
     direction = from_multiapp
-    source_variable = 'd'
-    variable = 'd'
+    source_variable = d
+    variable = d
   []
-  [to_E_el_active]
+  [to_psie_active]
     type = MultiAppCopyTransfer
-    multi_app = 'fracture'
+    multi_app = fracture
     direction = to_multiapp
-    source_variable = 'E_el_active'
-    variable = 'E_el_active'
+    variable = psie_active
+    source_variable = psie_active
   []
 []
-
 [Mesh]
   [fmg]
     type = FileMeshGenerator
@@ -52,10 +58,6 @@ k = 1e-06
 [AuxVariables]
   [d]
   []
-  [E_el_active]
-    order = CONSTANT
-    family = MONOMIAL
-  []
   [stress_xx]
     order = CONSTANT
     family = MONOMIAL
@@ -67,13 +69,6 @@ k = 1e-06
 []
 
 [AuxKernels]
-
-  [E_el]
-    type = ADMaterialRealAux
-    variable = 'E_el_active'
-    property = 'E_el_active'
-    execute_on = 'TIMESTEP_END'
-  []
   [stress_xx]
     type = ADRankTwoAux
     variable = 'stress_xx'
@@ -95,20 +90,17 @@ k = 1e-06
 [Kernels]
   [solid_x]
     type = ADStressDivergenceTensors
-    variable = 'disp_x'
+    variable = disp_x
     component = 0
-    displacements = 'disp_x disp_y'
   []
   [solid_y]
     type = ADStressDivergenceTensors
-    variable = 'disp_y'
+    variable = disp_y
     component = 1
-    displacements = 'disp_x disp_y'
   []
   [plane_stress]
     type = ADWeakPlaneStress
-    variable = 'strain_zz'
-    displacements = 'disp_x disp_y'
+    variable = strain_zz
   []
 []
 
@@ -116,74 +108,65 @@ k = 1e-06
 [BCs]
   [forcing]
     type = FunctionDirichletBC
-    variable = 'disp_y'
+    variable = disp_y
     boundary = 'Top'
-    #//function = '-t/50'
-    #function = 'if(t<4.0, 0.0175*t, 0.005*t )'
-    function = '0.1*t'
-    #preset = false
-    #use_displaced_mesh = true
+    function = '${v}*t'
+    preset = false
   []
-
   [FixedHole_x]
     type = DirichletBC
-    variable = 'disp_x'
+    variable = disp_x
     boundary = 'Hole'
     value = 0
-    #use_displaced_mesh = true
   []
   [FixedHole_y]
     type = DirichletBC
-    variable = 'disp_y'
+    variable = disp_y
     boundary = 'Hole'
     value = 0
-    #use_displaced_mesh = true
-  []
+    []
 []
 
 [Materials]
-
-  [elasticity_tensor]
-    type = ADComputeIsotropicElasticityTensor
-    youngs_modulus = ${E}
-    poissons_ratio = ${nu}
+  [elasticity]
+    type = SmallDeformationIsotropicElasticity
+    bulk_modulus = K
+    shear_modulus = G
+    phase_field = d
+    degradation_function = g
+    decomposition = VOLDEV
+    output_properties = 'elastic_strain psie_active'
+    outputs = exodus
   []
-  #[strain]
-  #  type = ADComputeSmallStrain
-  #  displacements = 'disp_x disp_y'fractureLD
-  #]
   [strain]
     type = ADComputePlaneSmallStrain
-    out_of_plane_strain = 'strain_zz'
+    out_of_plane_strain = strain_zz
     displacements = 'disp_x disp_y'
   []
+  [crack_geometric]
+    type = CrackGeometricFunction
+    f_name = alpha
+    function = 'd'
+    phase_field = d
+  []
   [stress]
-    type = SmallStrainDegradedElasticPK2Stress_StrainVolDev
-    d = 'd'
+    type = ComputeSmallDeformationStress
+    elasticity_model = elasticity
+    output_properties = 'stress'
+    outputs = exodus
   []
-  [fracture_properties]
-    type = ADGenericFunctionMaterial
-    prop_names = 'energy_release_rate phase_field_regularization_length'
-    prop_values = '${Gc} ${l}' #${psic}'
-
-  []
-  [local_dissipation]
-    type = LinearLocalDissipation
-    #type = QuadraticLocalDissipation
-    d = d
-  []
-  [phase_field_properties]
-    type = ADFractureMaterial
-    local_dissipation_norm = 8/3
-    #local_dissipation_norm = 2
+  [bulk_properties]
+    type = ADGenericConstantMaterial
+    prop_names = 'K G l Gc'
+    prop_values = '${K} ${G} ${l} ${Gc}'
   []
   [degradation]
-    type = QuadraticDegradation
-    #type = LorentzDegradation
-    d = d
-    residual_degradation = ${k}
+    type = PowerDegradationFunction
+    f_name = g
+    phase_field = d
+    parameter_names = 'p eta'
+    parameter_values = '2 ${k}'
   []
-
 []
 
 [Executioner]
@@ -213,7 +196,7 @@ k = 1e-06
 []
 
 [Outputs]
-  file_base = 'Elastic_squarewvoidsmallstep_quad_Traction_Brittle_VolDev_Res_BC_LD'
+  file_base = 'Fibermatrix_Update_QD'
   exodus = true
   interval = 1
 []

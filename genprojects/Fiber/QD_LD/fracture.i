@@ -11,26 +11,25 @@
 []
 
 [AuxVariables]
-  [E_el_active]
+  [bounds_dummy]
+  []
+  [psie_active]
     order = CONSTANT
     family = MONOMIAL
-  []
-  [bounds_dummy]
   []
 []
 
 [Bounds]
-#  Testing with irreversibiility
   [irreversibility]
     type = VariableOldValueBoundsAux
-    variable = 'bounds_dummy'
-    bounded_variable = 'd'
+    variable = bounds_dummy
+    bounded_variable = d
     bound_type = lower
- []
+  []
   [upper]
     type = ConstantBoundsAux
-    variable = 'bounds_dummy'
-    bounded_variable = 'd'
+    variable = bounds_dummy
+    bounded_variable = d
     bound_type = upper
     bound_value = 1
   []
@@ -39,54 +38,52 @@
 [BCs]
   [damageBC]
     type = DirichletBC
-    variable = 'd'
-    boundary = 'Hole'
-
+    variable = d
+    boundary = Hole
     value = 0
-    #use_displaced_mesh = true
-
   []
 []
 
 [Kernels]
-  [pff_diff]
+  [diff]
     type = ADPFFDiffusion
-    variable = 'd'
+    variable = d
+    regularization_length = l
+    normalization_constant = c0
   []
-  [pff_barr]
-    type = ADPFFBarrier
-    variable = 'd'
-  []
-  [pff_react]
-    type = ADPFFReaction
-    variable = 'd'
-    driving_energy_var = 'E_el_active'
-    lag = false
+  [source]
+    type = ADPFFSource
+    variable = d
+    free_energy = psi
   []
 []
 
 [Materials]
-  [bulk]
+  [fracture_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'phase_field_regularization_length energy_release_rate'
-    prop_values = '${l} ${Gc}'
+    prop_names = 'Gc l'
+    prop_values = '${Gc} ${l}'
   []
-  [local_dissipation]
-    type = LinearLocalDissipation
-    #type = QuadraticLocalDissipation
-    d = d
-  []
-  [phase_field_properties]
-    type = ADFractureMaterial
-    local_dissipation_norm = 8/3
-   #local_dissipation_norm = 2
+  [crack_geometric]
+    type = CrackGeometricFunction
+    f_name = alpha
+    function = 'd'
+    phase_field = d
   []
   [degradation]
-    type = QuadraticDegradation
-    #type = LorentzDegradation
-    d = d
-    residual_degradation = ${k}
-    #residual_degradation = 1e-09
+    type = PowerDegradationFunction
+    f_name = g
+    phase_field = d
+    parameter_names = 'p eta '
+    parameter_values = '2 ${k}'
+  []
+  [psi]
+    type = ADDerivativeParsedMaterial
+    f_name = psi
+    function = 'alpha*Gc/c0/l+g*psie_active'
+    args = 'd psie_active'
+    material_property_names = 'alpha(d) g(d) Gc c0 l'
+    derivative_order = 1
   []
 []
 

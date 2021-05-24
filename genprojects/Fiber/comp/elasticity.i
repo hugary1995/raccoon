@@ -18,7 +18,7 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
 [MultiApps]
   [fracture]
     type = TransientMultiApp
-    input_files = 'fractureUpdate.i'
+    input_files = 'fracturepara.i'
     cli_args = 'Gc=${Gc};l=${l};k=${k};psic=${psic}'
     execute_on = 'TIMESTEP_END'
   []
@@ -43,7 +43,7 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/domain05.msh'
+    file = '../gold/domain05Coarse.msh'
   []
 []
 
@@ -51,8 +51,6 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
   [disp_x]
   []
   [disp_y]
-  []
-  [strain_zz]
   []
 []
 
@@ -99,10 +97,6 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
     variable = disp_y
     component = 1
   []
-  [plane_stress]
-    type = ADWeakPlaneStress
-    variable = strain_zz
-  []
 []
 
 
@@ -141,9 +135,7 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
     outputs = exodus
   []
   [strain]
-    type = ADComputePlaneSmallStrain
-    out_of_plane_strain = strain_zz
-    displacements = 'disp_x disp_y'
+    type = ADComputeSmallStrain
   []
   [degradation]
     type = RationalDegradationFunction
@@ -179,8 +171,8 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
   #petsc_options_value = 'lu       superlu_dist'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
   petsc_options_value = 'lu      ilu          200         200                0                     vinewtonrsls'
-  dt = 0.00492
-  #dt = 0.01
+  #dt = 0.00492
+  dt = 0.01
   end_time =8
   nl_abs_tol = 1e-06
   nl_rel_tol = 1e-06
@@ -196,7 +188,7 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
 []
 
 [Outputs]
-  file_base = 'comp'
+  file_base = 'Fiber_Comp_planestrain'
   exodus = true
   interval = 1
 []
