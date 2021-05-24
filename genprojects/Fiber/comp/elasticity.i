@@ -18,7 +18,7 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
 [MultiApps]
   [fracture]
     type = TransientMultiApp
-    input_files = 'fracturepara.i'
+    input_files = 'fracture.i'
     cli_args = 'Gc=${Gc};l=${l};k=${k};psic=${psic}'
     execute_on = 'TIMESTEP_END'
   []
@@ -43,7 +43,7 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = '../gold/domain05Coarse.msh'
+    file = '../gold/domain05.msh'
   []
 []
 
@@ -171,8 +171,8 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
   #petsc_options_value = 'lu       superlu_dist'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
   petsc_options_value = 'lu      ilu          200         200                0                     vinewtonrsls'
-  #dt = 0.00492
-  dt = 0.01
+  dt = 0.00492
+  #dt = 0.01
   end_time =8
   nl_abs_tol = 1e-06
   nl_rel_tol = 1e-06
@@ -190,5 +190,5 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
 [Outputs]
   file_base = 'Fiber_Comp_planestrain'
   exodus = true
-  interval = 1
+  interval = 10
 []

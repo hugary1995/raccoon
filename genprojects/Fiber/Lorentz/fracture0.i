@@ -1,7 +1,7 @@
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = '../gold/domain05.msh'
+    file = '../gold/domain05Coarse.msh'
   []
 []
 
