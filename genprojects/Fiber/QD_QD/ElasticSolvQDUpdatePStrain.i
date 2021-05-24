@@ -5,7 +5,7 @@ G = '${fparse E/2/(1+nu)}'
 lambda = '${fparse K-2*G/3}'
 
 Gc = 1e-3
-l = 0.01
+l = 0.1
 k = 2e-4
 
 v = '${fparse -sqrt(Gc*3/lambda)}'
@@ -42,7 +42,7 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = '../gold/domain05Coarse.msh'
+    file = '../gold/domain05.msh'
   []
 []
 
@@ -50,8 +50,6 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
   [disp_x]
   []
   [disp_y]
-  []
-  [strain_zz]
   []
 []
 
@@ -98,10 +96,6 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
     variable = disp_y
     component = 1
   []
-  [plane_stress]
-    type = ADWeakPlaneStress
-    variable = strain_zz
-  []
 []
 
 
@@ -139,8 +133,7 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
     outputs = exodus
   []
   [strain]
-    type = ADComputePlaneSmallStrain
-    out_of_plane_strain = strain_zz
+    type = ADComputeSmallStrain
     displacements = 'disp_x disp_y'
   []
   [crack_geometric]
@@ -176,8 +169,8 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
   #petsc_options_value = 'lu       superlu_dist'
   petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels -snes_type'
   petsc_options_value = 'lu      ilu          200         200                0                     vinewtonrsls'
-  #dt = 0.00492
-  dt = 0.01
+  dt = 0.00492
+  #dt = 0.01
   end_time =20
   nl_abs_tol = 1e-06
   nl_rel_tol = 1e-06
@@ -196,7 +189,7 @@ v = '${fparse -sqrt(Gc*3/lambda)}'
 []
 
 [Outputs]
-  file_base = 'Fibermatrix_Update_QD'
+  file_base = 'Fibermatrix_Update_QD_planestrain'
   exodus = true
   interval = 1
 []
