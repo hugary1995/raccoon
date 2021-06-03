@@ -1,0 +1,94 @@
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+
+#include "GeneralizedExternalDrivingForce.h"
+#include "Function.h"
+
+registerADMooseObject("raccoonApp", GeneralizedExternalDrivingForce);
+
+InputParameters
+GeneralizedExternalDrivingForce::validParams()
+{
+  InputParameters params = ADMaterial::validParams();
+  params.addClassDescription("computes the Kumar coeffs"
+                             "Ce()");
+//  params.addRequiredParam<Real>(
+//      "coef", "The coefficient describing the mismatch between the film and the substrate");
+//  params.addRequiredCoupledVar(
+//      "displacements",
+//      "The displacements appropriate for the simulation geometry and coordinate system");
+  params.addParam<Real>(
+      "energy_release_rate", 1, "energy release rate or fracture toughness");
+  params.addParam<Real>(
+      "phase_field_regularization_length", 1, "phase_field_regularization length");
+  params.addParam<Real>(
+      "Lame_first_parameter", 1, "Lame's first parameter Lambda");
+  params.addParam<Real>(
+      "shear_modulus", 1, "shear modulus mu or G");
+  params.addParam<Real>(
+      "tensile_strength", 1, "tensile strength");
+  params.addParam<Real>(
+      "compressive_strength", 1, "compressive strength");
+  params.addParam<Real>(
+      "delta", 1, "delta");
+  params.addParam<MaterialPropertyName>(
+      "external_driving_force_name", "ex_driving", "name of the material that holds the external_driving_force");
+  // params.addParam<MaterialPropertyName>(
+  //     "beta_0","beta_0","the zeroth beta coefficeient"  )
+//  params.addParam<MaterialPropertyName>(
+//      "first_invariant", "invar_1", "The first standard invariants of stress tensor");
+//  params.addParam<MaterialPropertyName>(
+//      "second_invariant", "invar_2", "The second standard invariants of stress tensor");
+params.addCoupledVar("first_invariant","The first standard invariants of stress tensor");
+params.addCoupledVar("second_invariant","The second standard invariants of stress tensor");
+
+  return params;
+}
+
+GeneralizedExternalDrivingForce::GeneralizedExternalDrivingForce(const InputParameters & parameters)
+  : ADMaterial(parameters),
+    _ex_driving_name(getParam<MaterialPropertyName>("external_driving_force_name")),
+    _ex_driving(declareADProperty<Real>(_ex_driving_name)),
+    // _Gc(getADMaterialProperty<Real>("energy_release_rate")),
+    _Gc(getParam<Real>("energy_release_rate")),
+    _L(getParam<Real>("phase_field_regularization_length")),
+    _Lambda(getParam<Real>("Lame_first_parameter")),
+    _mu(getParam<Real>("shear_modulus")),
+    _sigma_ts(getParam<Real>("tensile_strength")),
+    _sigma_cs(getParam<Real>("compressive_strength")),
+    _delta(getParam<Real>("delta"))
+    ,_beta_0(declareADProperty<Real>("beta_0"))
+    ,_beta_1(declareADProperty<Real>("beta_1"))
+    ,_beta_2(declareADProperty<Real>("beta_2"))
+    ,_beta_3(declareADProperty<Real>("beta_2"))
+    ,_invar_1(adCoupledValue("first_invariant"))
+    ,_invar_2(adCoupledValue("second_invariant"))
+//    _invar_1(getParam<Real>(getParam<MaterialPropertyName>("first_invariant"))),
+//    _invar_2(getParam<Real>(getParam<MaterialPropertyName>("second_invariant")))
+
+//    _E_int(declareADProperty<Real>(_E_int_name)),
+ //   _coef(getParam<Real>("coef")),
+  //  _ndisp(coupledComponents("displacements")),
+//    _disp(3)
+{
+  _gamma_0 = _sigma_ts/6.0/(3.0*_Lambda+2.0*_mu)+_sigma_ts/6.0/_mu;
+  _gamma_1 = (1.0+_delta)*(_sigma_cs-_sigma_ts)/(2.0*_sigma_ts*_sigma_cs);
+  _gamma_2 = (1.0+_delta)*(_sigma_cs+_sigma_ts)/(2.0*_sigma_ts*_sigma_cs)*std::sqrt(3.0);
+}
+
+void
+GeneralizedExternalDrivingForce::computeQpProperties()
+{
+  ADReal _temp = _Gc * 3.0/_L/8.0;
+  ADReal I1= _invar_1[_qp];
+  ADReal I2 = _invar_2[_qp];
+  ADReal J2 = I1*I1/3.0-I2;
+  _beta_0[_qp]= _delta*_temp;
+  _beta_1[_qp] = -_gamma_1*_temp+_gamma_0;
+  _beta_2[_qp] = -_gamma_2*_temp+std::sqrt(3.0)*_gamma_0;
+  _beta_3[_qp] = (1-std::sqrt(I1*I1)/I1)*(J2/2.0/_mu+I1*I1/6.0/(3.0*_Lambda+2.0*_mu));
+
+  _ex_driving[_qp] = _beta_2[_qp]*std::sqrt(J2)+_beta_1[_qp]*I1+_beta_0[_qp]+_beta_3[_qp];
+
+}
