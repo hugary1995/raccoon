@@ -1,32 +1,66 @@
+[Problem]
+  kernel_coverage_check = false
+  material_coverage_check = false
+[]
+
 [Mesh]
   [fmg]
     type = FileMeshGenerator
-    file = 'gold/fields_refined.e'
-    use_for_exodus_restart = true
+    file = gold/cylinder2.msh
+  []
+[]
+
+[Functions]
+  [Gc_func]
+    type = PiecewiseMultilinear
+    data_file = gold/Gc.txt
   []
 []
 
 [Variables]
   [d]
+    block = oxide
   []
 []
 
 [AuxVariables]
-  [psie_active]
-    order = CONSTANT
-    family = MONOMIAL
-  []
-  [psii_active]
+  [c]
     order = CONSTANT
     family = MONOMIAL
   []
   [bounds_dummy]
+    block = oxide
+  []
+  [psie_active]
+    order = FIRST
+    family = MONOMIAL
+  []
+  [psii_active]
+    order = FIRST
+    family = MONOMIAL
+  []
+  [effective_creep_strain]
+    order = FIRST
+    family = MONOMIAL
   []
   [Gc]
-    initial_from_file_var = 'Gc'
+    order = FIRST
+    family = MONOMIAL
+    block = oxide
+    [InitialCondition]
+      type = FunctionIC
+      function = Gc_func
+    []
   []
-  [psic]
-    initial_from_file_var = 'psic'
+[]
+
+[AuxKernels]
+  [debonding]
+    type = ParsedAux
+    variable = c
+    function = 'psii_active/(psii_active+Gc/500)'
+    args = 'psii_active Gc'
+    block = oxide
   []
 []
 
@@ -36,6 +70,7 @@
     variable = bounds_dummy
     bounded_variable = d
     bound_type = lower
+    block = oxide
   []
   [upper]
     type = ConstantBoundsAux
@@ -43,6 +78,7 @@
     bounded_variable = d
     bound_type = upper
     bound_value = 1
+    block = oxide
   []
 []
 
@@ -50,76 +86,94 @@
   [pff_diff]
     type = ADPFFDiffusion
     variable = d
+    block = oxide
   []
-  [pff_react]
+  [pff_source]
     type = ADPFFSource
     variable = d
     free_energy = psi
+    block = oxide
   []
 []
 
 [Materials]
-  [fracture_toughness]
+  [fracture_properties]
+    type = ADGenericConstantMaterial
+    prop_names = 'l psic'
+    prop_values = '${l} ${psic}'
+    block = oxide
+  []
+  [gc]
+    type = ADParsedMaterial
+    f_name = gc
+    args = effective_creep_strain
+    function = '1-(1-beta)*(1-exp(-effective_creep_strain/ep0))'
+    constant_names = 'beta ep0'
+    constant_expressions = '0.3 1e-7'
+    block = oxide
+  []
+  [Gc_oxide]
     type = ADParsedMaterial
     f_name = Gc
     args = Gc
     function = 'Gc'
+    block = oxide
   []
-  [critial_fracture_energy]
-    type = ADParsedMaterial
-    f_name = psic
-    args = psic
-    function = 'psic'
+  [degradation]
+    type = RationalDegradationFunction
+    f_name = gip
+    function = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
+    phase_field = d
+    material_property_names = 'Gc psic xi c0 l '
+    parameter_names = 'p a2 a3 eta '
+    parameter_values = '2 1 0 1e-6'
+    block = oxide
   []
-  [length_scale]
-    type = ADGenericConstantMaterial
-    prop_names = 'l'
-    prop_values = '${l}'
+  [plastic_degradation]
+    type = RationalDegradationFunction
+    f_name = gop
+    function = 1
+    # function = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
+    phase_field = d
+    material_property_names = 'Gc psic xi c0 l '
+    parameter_names = 'p a2 a3 eta '
+    parameter_values = '2 1 0 1e-6'
+    block = oxide
   []
   [crack_geometric]
     type = CrackGeometricFunction
     f_name = alpha
     function = 'd'
     phase_field = d
-  []
-  [degradation]
-    type = RationalDegradationFunction
-    f_name = g
-    function = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
-    phase_field = d
-    parameter_names = 'p a2 a3 eta '
-    parameter_values = '2 1 0 1e-6'
-    material_property_names = 'Gc psic xi c0 l '
+    block = oxide
   []
   [psi]
     type = ADDerivativeParsedMaterial
     f_name = psi
-    function = 'alpha*Gc/c0/l+g*(psie_active+psii_active)'
-    args = 'd psie_active psii_active'
-    material_property_names = 'alpha(d) g(d) Gc c0 l'
+    function = 'gc*alpha*Gc/c0/l+gip*psie_active'
+    args = 'd psie_active'
+    material_property_names = 'alpha(d) gip(d) Gc c0 l gc'
     derivative_order = 1
-  []
-[]
-
-[BCs]
-  [Periodic]
-    [all]
-      variable = d
-      auto_direction = 'x y'
-    []
+    block = oxide
   []
 []
 
 [Executioner]
   type = Transient
-  solve_type = 'NEWTON'
-  petsc_options_iname = '-pc_type -pc_factor_mat_solver_package -snes_type'
-  petsc_options_value = 'lu       superlu_dist                  vinewtonrsls'
 
-  nl_abs_tol = 1e-08
-  nl_rel_tol = 1e-06
+  solve_type = NEWTON
+  petsc_options_iname = '-pc_type -snes_type'
+  petsc_options_value = 'lu vinewtonrsls'
+
+  nl_rel_tol = 1e-08
+  nl_abs_tol = 1e-10
+
+  dt = 1e20
+
+  automatic_scaling = true
 []
 
 [Outputs]
   print_linear_residuals = false
+  exodus = true
 []

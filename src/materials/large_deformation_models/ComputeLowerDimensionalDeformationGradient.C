@@ -112,16 +112,19 @@ ComputeLowerDimensionalDeformationGradient::computeProperties()
 
     // Step 1: Compute the coordinate transformation matrix Q such that the z-axis aligns with
     // element normal. Then apply the transformation to matrix A.
-    RealVectorValue n = getNormal();
-    Real cost = n(2);
+    // RealVectorValue nt = getNormal();
+    RealVectorValue nt(-_q_point[_qp](0), -_q_point[_qp](1), 0);
+    nt /= nt.norm();
+    RealVectorValue nz(0, 0, 1);
+    RealVectorValue n = nz.cross(nt);
+    Real cost = nt * nz;
     Real sint = std::sqrt(1 - cost * cost);
-    RankTwoTensor nxn, sinn;
+    RankTwoTensor nxn, offn;
     nxn.vectorOuterProduct(n, n);
-    sinn.fillFromInputVector(
-        {0, -n(2) * sint, n(1) * sint, n(2) * sint, 0, -n(0) * sint, -n(1) * sint, n(0) * sint, 0});
+    offn.fillFromInputVector({0, -n(2), n(1), n(2), 0, -n(0), -n(1), n(0), 0});
     _Q[_qp].setToIdentity();
     _Q[_qp] *= cost;
-    _Q[_qp] += nxn * (1 - cost) + sinn;
+    _Q[_qp] += nxn * (1 - cost) + offn * sint;
     ADRankTwoTensor Ap = _Q[_qp] * A * _Q[_qp].transpose();
 
     // Step 2: Fill in the out-of-plane strain, and zero out the shear components.

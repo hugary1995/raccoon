@@ -17,5 +17,8 @@ protected:
   ADReal computeQpResidual() override;
 
   /// Thickness of the lower dimensional block
-  const MaterialProperty<Real> & _thickness;
+  const ADMaterialProperty<Real> & _thickness;
+
+  /// Coordinate transformation matrix
+  const MaterialProperty<RankTwoTensor> & _Q;
 };

@@ -19,12 +19,24 @@ ADLowerDimensionalStressDivergenceTensors::validParams()
 ADLowerDimensionalStressDivergenceTensors::ADLowerDimensionalStressDivergenceTensors(
     const InputParameters & parameters)
   : ADStressDivergenceTensors(parameters),
-    _thickness(getMaterialProperty<Real>(_base_name + getParam<MaterialPropertyName>("thickness")))
+    _thickness(
+        getADMaterialProperty<Real>(_base_name + getParam<MaterialPropertyName>("thickness"))),
+    _Q(getMaterialProperty<RankTwoTensor>(_base_name +
+                                          "lower_dimensional_coordinate_transformation"))
 {
 }
 
 ADReal
 ADLowerDimensionalStressDivergenceTensors::computeQpResidual()
 {
-  return _thickness[_qp] * ADStressDivergenceTensors::computeQpResidual();
+  ADRankTwoTensor stress = _Q[_qp] * _stress[_qp] * _Q[_qp].transpose();
+  stress(0, 2) = stress(1, 2) = stress(2, 0) = stress(2, 1) = stress(2, 2) = 0;
+  stress = _Q[_qp].transpose() * stress * _Q[_qp];
+  ADReal residual = stress.row(_component) * _grad_test[_i][_qp];
+
+  // volumetric locking correction
+  if (_volumetric_locking_correction)
+    residual += (_avg_grad_test[_i] - _grad_test[_i][_qp](_component)) / 3.0 * stress.trace();
+
+  return _thickness[_qp] * residual;
 }

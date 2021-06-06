@@ -12,12 +12,13 @@
 /**
  * This class computes the deformation gradient
  */
-class ComputeThermalExpansionEigenDeformationGradient : public Material, public BaseNameInterface
+class ComputeInstantaneousThermalExpansionEigenDeformationGradient : public Material,
+                                                                     public BaseNameInterface
 {
 public:
   static InputParameters validParams();
 
-  ComputeThermalExpansionEigenDeformationGradient(const InputParameters & parameters);
+  ComputeInstantaneousThermalExpansionEigenDeformationGradient(const InputParameters & parameters);
 
 protected:
   virtual void initQpStatefulProperties() override;
@@ -26,12 +27,14 @@ protected:
 
   // The thermal eigen deformation gradient
   ADMaterialProperty<RankTwoTensor> & _Fg;
+  const MaterialProperty<RankTwoTensor> & _Fg_old;
 
   // The thermal expansion coefficient
   const Function & _alpha;
 
   // The current temperature
   const ADVariableValue & _T;
+  const VariableValue & _T_old;
 
   // The reference temperature
   const VariableValue & _T0;
