@@ -20,7 +20,4 @@ protected:
 
   /// Thickness of the lower dimensional block
   const MaterialProperty<Real> & _thickness;
-
-  /// Coordinate transformation matrix
-  const MaterialProperty<RankTwoTensor> & _Q;
 };

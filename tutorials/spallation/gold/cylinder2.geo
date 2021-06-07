@@ -11,9 +11,9 @@ Ro = 25;
 H = 200;
 
 // Oxide in-plane mesh size
-ev = 0.25;
-Nv = Ceil(H/v)+1;
-eh = 2;
+ev = 1.5;
+Nv = Ceil(H/ev)+1;
+eh = 1;
 Nh = Ceil((Ro-Ri)/eh)+1;
 
 Point(0) = {0, 0, 0, 1};
@@ -52,7 +52,7 @@ Recombine Surface {1, 16, 20, 24, 28, 29};
 
 Transfinite Line {3, 32} = Nh;
 Transfinite Line {41, 37} = Nv;
-Transfinite Line {5, 7, 31, -33} = 6 Using Progression 1.5;
+Transfinite Line {5, 7, 31, -33} = 4 Using Progression 1.5;
 Transfinite Surface {2, 51, 46, 42, 38};
 Recombine Surface {2, 51, 46, 42, 38};
 

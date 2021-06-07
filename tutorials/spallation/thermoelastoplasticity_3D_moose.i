@@ -33,6 +33,8 @@ h_steam = 2.8
 psic = 0.013
 Gc = 0.125
 l = 0.4
+ep0 = 1e-6
+beta = 0.3
 
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
@@ -48,7 +50,7 @@ l = 0.4
   [fracture]
     type = TransientMultiApp
     input_files = 'fracture.i'
-    cli_args = 'psic=${psic};l=${l};'
+    cli_args = 'psic=${psic};l=${l};ep0=${ep0};beta=${beta}'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -185,15 +187,15 @@ l = 0.4
   [temp_in_K]
   []
   [effective_creep_strain]
-    order = FIRST
+    order = CONSTANT
     family = MONOMIAL
   []
   [psie_active]
-    order = FIRST
+    order = CONSTANT
     family = MONOMIAL
   []
   [psii_active]
-    order = FIRST
+    order = CONSTANT
     family = MONOMIAL
   []
   [stress_xx]
@@ -209,7 +211,7 @@ l = 0.4
     family = MONOMIAL
   []
   [Gc]
-    order = FIRST
+    order = CONSTANT
     family = MONOMIAL
     block = oxide
     [InitialCondition]
@@ -218,7 +220,7 @@ l = 0.4
     []
   []
   [E]
-    order = FIRST
+    order = CONSTANT
     family = MONOMIAL
     block = oxide
     [InitialCondition]
@@ -289,6 +291,7 @@ l = 0.4
     use_displaced_mesh = true
     temperature = temp
     eigenstrain_names = 'thermal_eigenstrain'
+    block = metal
   []
   [solid_y_metal]
     type = StressDivergenceTensors
@@ -297,6 +300,7 @@ l = 0.4
     use_displaced_mesh = true
     temperature = temp
     eigenstrain_names = 'thermal_eigenstrain'
+    block = metal
   []
   [solid_z_metal]
     type = StressDivergenceTensors
@@ -305,6 +309,38 @@ l = 0.4
     use_displaced_mesh = true
     temperature = temp
     eigenstrain_names = 'thermal_eigenstrain'
+    block = metal
+  []
+  # oxide
+  [solid_x_oxide]
+    type = LowerDimensionalStressDivergenceTensors
+    variable = disp_x
+    component = 0
+    use_displaced_mesh = true
+    temperature = temp
+    eigenstrain_names = 'thermal_eigenstrain'
+    thickness = thickness
+    block = oxide
+  []
+  [solid_y_oxide]
+    type = LowerDimensionalStressDivergenceTensors
+    variable = disp_y
+    component = 1
+    use_displaced_mesh = true
+    temperature = temp
+    eigenstrain_names = 'thermal_eigenstrain'
+    thickness = thickness
+    block = oxide
+  []
+  [solid_z_oxide]
+    type = LowerDimensionalStressDivergenceTensors
+    variable = disp_z
+    component = 2
+    use_displaced_mesh = true
+    temperature = temp
+    eigenstrain_names = 'thermal_eigenstrain'
+    thickness = thickness
+    block = oxide
   []
 []
 
@@ -448,7 +484,7 @@ l = 0.4
     args = effective_creep_strain
     function = '1-(1-beta)*(1-exp(-effective_creep_strain/ep0))'
     constant_names = 'beta ep0'
-    constant_expressions = '0.3 1e-8'
+    constant_expressions = '${beta} ${ep0}'
     block = oxide
     output_properties = 'gc'
     outputs = exodus
@@ -467,13 +503,13 @@ l = 0.4
     type = ParsedMaterial
     f_name = gop
     args = c
-    function = '(1-c)^2'
+    function = '1-c'
     block = oxide
   []
   [thickness]
-    type = GenericConstantMaterial
+    type = GenericFunctionMaterial
     prop_names = 'thickness'
-    prop_values = '0.001'
+    prop_values = '1.468e-5*sqrt(t)/0.2'
     block = oxide
   []
   [thermal_oxide]

@@ -32,19 +32,19 @@
     block = oxide
   []
   [psie_active]
-    order = FIRST
+    order = CONSTANT
     family = MONOMIAL
   []
   [psii_active]
-    order = FIRST
+    order = CONSTANT
     family = MONOMIAL
   []
   [effective_creep_strain]
-    order = FIRST
+    order = CONSTANT
     family = MONOMIAL
   []
   [Gc]
-    order = FIRST
+    order = CONSTANT
     family = MONOMIAL
     block = oxide
     [InitialCondition]
@@ -58,9 +58,10 @@
   [debonding]
     type = ParsedAux
     variable = c
-    function = 'psii_active/(psii_active+Gc/500)'
+    function = 'if(psii_active>Gc/(1.468e-5*sqrt(t))/1e4,1,0)'
     args = 'psii_active Gc'
     block = oxide
+    use_xyzt = true
   []
 []
 
@@ -109,7 +110,7 @@
     args = effective_creep_strain
     function = '1-(1-beta)*(1-exp(-effective_creep_strain/ep0))'
     constant_names = 'beta ep0'
-    constant_expressions = '0.3 1e-7'
+    constant_expressions = '${beta} ${ep0}'
     block = oxide
   []
   [Gc_oxide]
