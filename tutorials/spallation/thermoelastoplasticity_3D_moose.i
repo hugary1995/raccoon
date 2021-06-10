@@ -503,7 +503,9 @@ beta = 0.3
     type = ParsedMaterial
     f_name = gop
     args = c
-    function = '1-c'
+    function = '(1-c)*(1-eta)+eta'
+    constant_names = 'eta'
+    constant_expressions = '1e-3'
     block = oxide
   []
   [thickness]
@@ -612,8 +614,11 @@ beta = 0.3
   type = Transient
   solve_type = PJFNK
   petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
-  petsc_options_value = 'lu       superlu_dist                 '
-
+  petsc_options_value = 'lu       strumpack                    '
+  # petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
+  # petsc_options_value = 'lu       superlu_dist                 '
+  # petsc_options_iname = '-pc_type -sub_pc_type -ksp_max_it -ksp_gmres_restart -sub_pc_factor_levels '
+  # petsc_options_value = 'asm      ilu          200         200                0                     '
   [TimeStepper]
     type = CSVTimeSequenceStepper
     file_name = 'gold/BC.csv'
@@ -636,7 +641,12 @@ beta = 0.3
 []
 
 [Outputs]
-  print_linear_residuals = false
+  print_linear_residuals = true
   exodus = true
   csv = true
+  [checkpoint]
+    type = Checkpoint
+    file_base = 'checkpoint'
+    num_files = 2
+  []
 []
