@@ -36,11 +36,16 @@ protected:
   // @{ The degradation function and its derivative w/r/t damage
   const MaterialPropertyName _gip_name;
   const MaterialProperty<Real> & _gip;
-  const MaterialPropertyName _gop_name;
-  const MaterialProperty<Real> & _gop;
   // @}
 
+  MaterialProperty<Real> & _c;
+  const MaterialProperty<Real> & _c_old;
+  const MaterialProperty<Real> & _gamma;
+  const Real _psic;
+
 private:
+  Real g(const Real c, const unsigned int order);
+
   RankTwoTensor I2;
   RankFourTensor I4;
   RankFourTensor I4_ip;

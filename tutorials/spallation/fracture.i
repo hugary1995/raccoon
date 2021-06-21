@@ -24,18 +24,10 @@
 []
 
 [AuxVariables]
-  [c]
-    order = CONSTANT
-    family = MONOMIAL
-  []
   [bounds_dummy]
     block = oxide
   []
   [psie_active]
-    order = CONSTANT
-    family = MONOMIAL
-  []
-  [psii_active]
     order = CONSTANT
     family = MONOMIAL
   []
@@ -51,17 +43,6 @@
       type = FunctionIC
       function = Gc_func
     []
-  []
-[]
-
-[AuxKernels]
-  [debonding]
-    type = ParsedAux
-    variable = c
-    function = 'if(psii_active>Gc/(1.468e-5*sqrt(t))/1e4,1,0)'
-    args = 'psii_active Gc'
-    block = oxide
-    use_xyzt = true
   []
 []
 
@@ -124,17 +105,6 @@
     type = RationalDegradationFunction
     f_name = gip
     function = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
-    phase_field = d
-    material_property_names = 'Gc psic xi c0 l '
-    parameter_names = 'p a2 a3 eta '
-    parameter_values = '2 1 0 1e-6'
-    block = oxide
-  []
-  [plastic_degradation]
-    type = RationalDegradationFunction
-    f_name = gop
-    function = 1
-    # function = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
     phase_field = d
     material_property_names = 'Gc psic xi c0 l '
     parameter_names = 'p a2 a3 eta '

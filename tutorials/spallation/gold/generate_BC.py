@@ -35,7 +35,7 @@ shutdown_cycle_duration = fs_transition + shutdown_duration + sf_transition
 # fs -> shutdown -> sf
 
 # operation time until shutdown: 6 months
-operation_duration = 3 * 30 * 24 * 3600
+operation_duration = 6 * 30 * 24 * 3600
 
 # total simulation time
 total_duration = 6 * 12 * 30 * 24 * 3600
@@ -46,8 +46,8 @@ partial_dt = partial_duration / 1
 shutdown_dt = shutdown_duration / 1
 fp_dt = fp_transition / 1
 pf_dt = pf_transition / 1
-fs_dt = fs_transition / 9
-sf_dt = sf_transition / 9
+fs_dt = fs_transition / 6
+sf_dt = sf_transition / 6
 
 # all temperature in celsius
 # T_gas_full = 1100

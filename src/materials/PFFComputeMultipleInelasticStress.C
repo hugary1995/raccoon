@@ -27,7 +27,9 @@ PFFComputeMultipleInelasticStress::validParams()
   params.addParam<MaterialPropertyName>(
       "in_plane_degradation_function", "gip", "The in-plane degradation function");
   params.addParam<MaterialPropertyName>(
-      "out_of_plane_degradation_function", "gop", "The out-of-plane degradation function");
+      "out_of_plane_fracture_toughness", "gamma", "The out-of-plane fracture toughness");
+  params.addRequiredParam<Real>("out_of_plane_critical_fracture_energy",
+                                "The out-of-plane critical fracture energy");
   return params;
 }
 
@@ -46,8 +48,13 @@ PFFComputeMultipleInelasticStress::PFFComputeMultipleInelasticStress(
     // The degradation function
     _gip_name(_base_name + getParam<MaterialPropertyName>("in_plane_degradation_function")),
     _gip(getMaterialProperty<Real>(_gip_name)),
-    _gop_name(_base_name + getParam<MaterialPropertyName>("out_of_plane_degradation_function")),
-    _gop(getMaterialProperty<Real>(_gop_name)),
+
+    // Out-of-plane fracture properties
+    _c(declareProperty<Real>(_base_name + "debonding_indicator")),
+    _c_old(getMaterialPropertyOldByName<Real>(_base_name + "debonding_indicator")),
+    _gamma(getMaterialProperty<Real>(
+        _base_name + getParam<MaterialPropertyName>("out_of_plane_fracture_toughness"))),
+    _psic(getParam<Real>("out_of_plane_critical_fracture_energy")),
 
     I2(RankTwoTensor::initIdentity),
     I4(RankFourTensor::initIdentitySymmetricFour)
@@ -72,12 +79,62 @@ PFFComputeMultipleInelasticStress::initQpStatefulProperties()
 {
   ComputeMultipleInelasticStress::initQpStatefulProperties();
   _psii_active[_qp] = 0;
+  _c[_qp] = 0;
+}
+
+Real
+PFFComputeMultipleInelasticStress::g(const Real c, const unsigned int order)
+{
+  Real m = _gamma[_qp] / _psic;
+  Real value = 0;
+
+  Real num = (1 - c) * (1 - c);
+  Real denom = num + m * c * (1 - 0.5 * c);
+
+  Real eta = 1e-3;
+
+  if (order == 0)
+    value = num / denom;
+  else if (order > 0)
+  {
+    Real dnum = -2 * (1 - c);
+    Real ddenom = dnum + m * (1 - c);
+    if (order == 1)
+      value = (dnum * denom - num * ddenom) / denom / denom;
+    else if (order == 2)
+    {
+      Real d2num = 2;
+      Real d2denom = d2num - m;
+      value = d2num / denom - 2 * dnum * ddenom / denom / denom - num * d2denom / denom / denom +
+              2 * num * ddenom * ddenom / denom / denom / denom;
+    }
+  }
+
+  return value * (1 - eta) + eta;
 }
 
 void
 PFFComputeMultipleInelasticStress::computeQpStress()
 {
   ComputeMultipleInelasticStress::computeQpStress();
+
+  // Compute out of plane damage
+  _c[_qp] = _c_old[_qp];
+  Real residual = -_gamma[_qp] - g(_c[_qp], 1) * _psii_active_old[_qp];
+  Real residual0 = residual;
+  int its = 0;
+  if (residual > 0)
+    while (abs(residual) > 1e-11 && abs(residual) > 1e-8 * residual0)
+    {
+      Real jacobian = -g(_c[_qp], 2) * _psii_active_old[_qp];
+      Real step = -residual / jacobian;
+      _c[_qp] += step;
+      residual = -_gamma[_qp] - g(_c[_qp], 1) * _psii_active_old[_qp];
+      its++;
+      if (its > 20)
+        mooseError("Residual has dropped from ", residual0, " to ", residual);
+    }
+  _c[_qp] = std::min(_c[_qp], 1.0);
 
   // Compute coordinate transformation
   RealVectorValue nt(-_q_point[_qp](0), -_q_point[_qp](1), 0);
@@ -115,17 +172,16 @@ PFFComputeMultipleInelasticStress::computeQpStress()
   RankTwoTensor strain_op_active = strain_op_tr > 0 ? strain_op : strain_op_dev;
   RankTwoTensor strain_op_inactive = strain_op - strain_op_active;
 
-  // Compute stress
-  _stress[_qp] = _elasticity_tensor[_qp] * (_gip[_qp] * strain_ip_active + strain_ip_inactive +
-                                            _gop[_qp] * strain_op_active + strain_op_inactive);
-  _stress[_qp] = Q.transpose() * _stress[_qp] * Q;
-
   // Compute driving energy
   _psie_active[_qp] =
       strain_ip_active.doubleContraction(_elasticity_tensor[_qp] * strain_ip_active);
   _psii_active[_qp] =
       strain_op_active.doubleContraction(_elasticity_tensor[_qp] * strain_op_active);
-  _psii_active[_qp] = std::max(_psii_active[_qp], _psii_active_old[_qp]);
+
+  // Compute stress
+  _stress[_qp] = _elasticity_tensor[_qp] * (_gip[_qp] * strain_ip_active + strain_ip_inactive +
+                                            g(_c[_qp], 0) * strain_op_active + strain_op_inactive);
+  _stress[_qp] = Q.transpose() * _stress[_qp] * Q;
 
   // Update jacobian
   RankFourTensor Jp = QQ * _Jacobian_mult[_qp] * QtQt;
@@ -134,6 +190,6 @@ PFFComputeMultipleInelasticStress::computeQpStress()
   RankFourTensor dstrain_op_inactive_dstrain = (strain_op_tr < 0 ? 1 : 0) * I4_op_vol * I4_op;
   RankFourTensor dstrain_op_active_dstrain = I4_op - dstrain_op_inactive_dstrain;
   Jp = Jp * (_gip[_qp] * dstrain_ip_active_dstrain + dstrain_ip_inactive_dstrain +
-             _gop[_qp] * dstrain_op_active_dstrain + dstrain_op_inactive_dstrain);
+             g(_c[_qp], 0) * dstrain_op_active_dstrain + dstrain_op_inactive_dstrain);
   _Jacobian_mult[_qp] = QtQt * Jp * QQ;
 }

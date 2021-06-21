@@ -71,26 +71,12 @@ beta = 0.3
     variable = d
     source_variable = d
   []
-  [from_c]
-    type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = from_multiapp
-    variable = c
-    source_variable = c
-  []
   [to_psie_active]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = to_multiapp
     variable = psie_active
     source_variable = psie_active
-  []
-  [to_psii_active]
-    type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = to_multiapp
-    variable = psii_active
-    source_variable = psii_active
   []
   [to_ep_active]
     type = MultiAppCopyTransfer
@@ -257,6 +243,12 @@ beta = 0.3
     rank_two_tensor = 'stress'
     index_i = 2
     index_j = 2
+  []
+  [c]
+    type = MaterialRealAux
+    variable = c
+    property = debonding_indicator
+    block = oxide
   []
   [effective_creep_strain]
     type = MaterialRealAux
@@ -499,13 +491,11 @@ beta = 0.3
     material_property_names = 'Gc psic l'
     block = oxide
   []
-  [out_of_plane_degradation]
+  [out_of_plane_fracture_toughness]
     type = ParsedMaterial
-    f_name = gop
-    args = c
-    function = '(1-c)*(1-eta)+eta'
-    constant_names = 'eta'
-    constant_expressions = '1e-3'
+    f_name = gamma
+    function = 'Gc/thickness/0.2/1e5'
+    material_property_names = 'Gc thickness'
     block = oxide
   []
   [thickness]
@@ -553,7 +543,8 @@ beta = 0.3
     type = PFFComputeMultipleInelasticStress
     inelastic_models = 'creep_oxide'
     in_plane_degradation_function = gip
-    out_of_plane_degradation_function = gop
+    out_of_plane_fracture_toughness = gamma
+    out_of_plane_critical_fracture_energy = 5e-7
     block = oxide
   []
 []
@@ -624,8 +615,7 @@ beta = 0.3
     file_name = 'gold/BC.csv'
     header = true
   []
-  # end_time = 188092800
-  end_time = 189561600
+  end_time = 188092800
 
   nl_rel_tol = 1e-06
   nl_abs_tol = 1e-08
