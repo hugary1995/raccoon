@@ -18,20 +18,20 @@ GeneralizedExternalDrivingForce::validParams()
 //  params.addRequiredCoupledVar(
 //      "displacements",
 //      "The displacements appropriate for the simulation geometry and coordinate system");
-  params.addParam<Real>(
-      "energy_release_rate", 1, "energy release rate or fracture toughness");
-  params.addParam<Real>(
-      "phase_field_regularization_length", 1, "phase_field_regularization length");
-  params.addParam<Real>(
-      "Lame_first_parameter", 1, "Lame's first parameter Lambda");
-  params.addParam<Real>(
-      "shear_modulus", 1, "shear modulus mu or G");
-  params.addParam<Real>(
-      "tensile_strength", 1, "tensile strength");
-  params.addParam<Real>(
-      "compressive_strength", 1, "compressive strength");
-  params.addParam<Real>(
-      "delta", 1, "delta");
+  params.addRequiredParam<Real>(
+      "energy_release_rate", "energy release rate or fracture toughness");
+  params.addRequiredParam<Real>(
+      "phase_field_regularization_length", "phase_field_regularization length");
+  params.addRequiredParam<Real>(
+      "Lame_first_parameter", "Lame's first parameter Lambda");
+  params.addRequiredParam<Real>(
+      "shear_modulus", "shear modulus mu or G");
+  params.addRequiredParam<Real>(
+      "tensile_strength", "tensile strength");
+  params.addRequiredParam<Real>(
+      "compressive_strength", "compressive strength");
+  params.addRequiredParam<Real>(
+      "delta", "delta");
   params.addParam<MaterialPropertyName>(
       "external_driving_force_name", "ex_driving", "name of the material that holds the external_driving_force");
   // params.addParam<MaterialPropertyName>(
@@ -61,9 +61,11 @@ GeneralizedExternalDrivingForce::GeneralizedExternalDrivingForce(const InputPara
     ,_beta_0(declareADProperty<Real>("beta_0"))
     ,_beta_1(declareADProperty<Real>("beta_1"))
     ,_beta_2(declareADProperty<Real>("beta_2"))
-    ,_beta_3(declareADProperty<Real>("beta_2"))
+    ,_beta_3(declareADProperty<Real>("beta_3"))
     ,_invar_1(adCoupledValue("first_invariant"))
     ,_invar_2(adCoupledValue("second_invariant"))
+    ,_F_surface(declareADProperty<Real>("F_surface"))
+    ,_J2(declareADProperty<Real>("J2"))
 //    _invar_1(getParam<Real>(getParam<MaterialPropertyName>("first_invariant"))),
 //    _invar_2(getParam<Real>(getParam<MaterialPropertyName>("second_invariant")))
 
@@ -83,12 +85,13 @@ GeneralizedExternalDrivingForce::computeQpProperties()
   ADReal _temp = _Gc * 3.0/_L/8.0;
   ADReal I1= _invar_1[_qp];
   ADReal I2 = _invar_2[_qp];
-  ADReal J2 = I1*I1/3.0-I2;
+  _J2[_qp] = I1*I1/3.0-I2;
   _beta_0[_qp]= _delta*_temp;
   _beta_1[_qp] = -_gamma_1*_temp+_gamma_0;
   _beta_2[_qp] = -_gamma_2*_temp+std::sqrt(3.0)*_gamma_0;
-  _beta_3[_qp] = (1-std::sqrt(I1*I1)/I1)*(J2/2.0/_mu+I1*I1/6.0/(3.0*_Lambda+2.0*_mu));
+  _beta_3[_qp] = (1-std::sqrt(I1*I1)/I1)*(_J2[_qp]/2.0/_mu+I1*I1/6.0/(3.0*_Lambda+2.0*_mu));
 
-  _ex_driving[_qp] = _beta_2[_qp]*std::sqrt(J2)+_beta_1[_qp]*I1+_beta_0[_qp]+_beta_3[_qp];
-
+  _ex_driving[_qp] = _beta_2[_qp]*std::sqrt(_J2[_qp])+_beta_1[_qp]*I1+_beta_0[_qp]+_beta_3[_qp];
+  Real K = _Lambda+2.0*_mu/3.0;
+  _F_surface[_qp] = _J2[_qp]/_mu + I1*I1/9.0/K - _ex_driving[_qp] - _temp;
 }

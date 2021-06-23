@@ -52,4 +52,6 @@ protected:
   Real _gamma_2;
   const ADVariableValue & _invar_1;
   const ADVariableValue & _invar_2;
+  ADMaterialProperty<Real> & _F_surface;
+  ADMaterialProperty<Real> & _J2;
 };
