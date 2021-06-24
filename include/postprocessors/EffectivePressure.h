@@ -4,25 +4,27 @@
 
 #pragma once
 
-#include "ADKernelValue.h"
+#include "ElementIntegralPostprocessor.h"
 #include "BaseNameInterface.h"
 #include "DerivativeMaterialPropertyNameInterface.h"
 
-class ADPressurizedCrack : public ADKernelValue,
-                           public BaseNameInterface,
-                           public DerivativeMaterialPropertyNameInterface
+class EffectivePressure : public ElementIntegralPostprocessor,
+                          public BaseNameInterface,
+                          public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
 
-  ADPressurizedCrack(const InputParameters & parameters);
+  EffectivePressure(const InputParameters & parameters);
 
 protected:
-  virtual ADReal precomputeQpResidual() override;
+  virtual Real computeQpIntegral() override;
 
-  const unsigned int _comp;
+  /// The pressure
   const ADMaterialProperty<Real> & _p;
-  const ADVariableGradient & _grad_d;
+
+  /// Gradient of phase field
+  const VariableGradient & _grad_d;
 
   const VariableName _d_name;
   const MaterialPropertyName _I_name;

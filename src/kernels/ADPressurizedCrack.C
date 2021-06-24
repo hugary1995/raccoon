@@ -15,7 +15,10 @@ ADPressurizedCrack::validParams()
                              "fracture. The weak form is $(w, p \\grad d)$.");
 
   params.addParam<MaterialPropertyName>("pressure", "pressure inside the crack");
-  params.addRequiredCoupledVar("d", "coupled damage variable");
+  params.addRequiredCoupledVar("phase_field", "coupled damage variable");
+  params.addRequiredParam<MaterialPropertyName>("indicator_function",
+                                                "I"
+                                                "The pressure indicator function");
   params.addRequiredParam<unsigned int>("component",
                                         "An integer corresponding to the direction "
                                         "the variable this kernel acts in. (0 for x, "
@@ -26,14 +29,18 @@ ADPressurizedCrack::validParams()
 ADPressurizedCrack::ADPressurizedCrack(const InputParameters & parameters)
   : ADKernelValue(parameters),
     BaseNameInterface(parameters),
+    DerivativeMaterialPropertyNameInterface(),
     _comp(getParam<unsigned int>("component")),
     _p(getADMaterialProperty<Real>(prependBaseName("pressure", true))),
-    _grad_d(adCoupledGradient("d"))
+    _grad_d(adCoupledGradient("phase_field")),
+    _d_name(getVar("phase_field", 0)->name()),
+    _I_name(prependBaseName("indicator_function", true)),
+    _dI_dd(getADMaterialProperty<Real>(derivativePropertyNameFirst(_I_name, _d_name)))
 {
 }
 
 ADReal
 ADPressurizedCrack::precomputeQpResidual()
 {
-  return _p[_qp] * _grad_d[_qp](_comp);
+  return _p[_qp] * _grad_d[_qp](_comp) * _dI_dd[_qp];
 }
