@@ -40,9 +40,10 @@ GeneralizedExternalDrivingForce::validParams()
 //      "first_invariant", "invar_1", "The first standard invariants of stress tensor");
 //  params.addParam<MaterialPropertyName>(
 //      "second_invariant", "invar_2", "The second standard invariants of stress tensor");
-params.addCoupledVar("first_invariant","The first standard invariants of stress tensor");
-params.addCoupledVar("second_invariant","The second standard invariants of stress tensor");
-
+// params.addCoupledVar("first_invariant","The first standard invariants of stress tensor");
+// params.addCoupledVar("second_invariant","The second standard invariants of stress tensor");
+  // params.addRequiredParam<ADMaterialProperty<Real>>("first_invariant","The first standard invariants of stress tensor");
+  // params.addRequiredParam<ADMaterialProperty<Real>>("second_invariant","The second standard invariants of stress tensor");
   return params;
 }
 
@@ -62,8 +63,10 @@ GeneralizedExternalDrivingForce::GeneralizedExternalDrivingForce(const InputPara
     ,_beta_1(declareADProperty<Real>("beta_1"))
     ,_beta_2(declareADProperty<Real>("beta_2"))
     ,_beta_3(declareADProperty<Real>("beta_3"))
-    ,_invar_1(adCoupledValue("first_invariant"))
-    ,_invar_2(adCoupledValue("second_invariant"))
+    // ,_invar_1(adCoupledValue("first_invariant"))
+    // ,_invar_2(adCoupledValue("second_invariant"))
+    ,_invar_1(getADMaterialProperty<Real>("invar_1"))
+    ,_invar_2(getADMaterialProperty<Real>("invar_2"))
     ,_F_surface(declareADProperty<Real>("F_surface"))
     ,_J2(declareADProperty<Real>("J2"))
 //    _invar_1(getParam<Real>(getParam<MaterialPropertyName>("first_invariant"))),

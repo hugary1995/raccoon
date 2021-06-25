@@ -24,15 +24,15 @@ delta = 9.66
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = from_multiapp
-    variable = 'd F_surface beta_0 beta_1 beta_2 beta_3 J2'
-    source_variable = 'd F_surface beta_0 beta_1 beta_2 beta_3 J2'
+    variable = 'd' # F_surface beta_0 beta_1 beta_2 beta_3 J2'
+    source_variable = 'd' # F_surface beta_0 beta_1 beta_2 beta_3 J2'
   []
   [to_psie_active]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = to_multiapp
-    variable = 'psie_active invar_1 invar_2'
-    source_variable ='psie_active invar_1 invar_2'
+    variable = 'psie_active ce' # invar_1 invar_2'
+    source_variable ='psie_active ce' #invar_1 invar_2'
   []
 []
 
@@ -96,24 +96,28 @@ delta = 9.66
   []
   [d]
   []
-  [F_surface]
-    family = MONOMIAL
-  []
-  [beta_0]
-    family = MONOMIAL
-  []
-  [beta_1]
-    family = MONOMIAL
-  []
-  [beta_2]
-    family = MONOMIAL
-  []
-  [beta_3]
-    family = MONOMIAL
-  []
-  [J2]
-    family = MONOMIAL
-  []
+  # [ce0]
+  #   # order = CONSTANT
+  #   # family = MONOMIAL
+  # []
+  # [F_surface]
+  #   family = MONOMIAL
+  # []
+  # [beta_0]
+  #   family = MONOMIAL
+  # []
+  # [beta_1]
+  #   family = MONOMIAL
+  # []
+  # [beta_2]
+  #   family = MONOMIAL
+  # []
+  # [beta_3]
+  #   family = MONOMIAL
+  # []
+  # [J2]
+  #   family = MONOMIAL
+  # []
 []
 
 
@@ -299,12 +303,31 @@ delta = 9.66
     output_properties = 'invar_2'
     outputs = exodus
   []
+  [kumar_material]
+    type = GeneralizedExternalDrivingForce
+    # first_invariant = invar_1
+    # second_invariant = invar_2
+    tensile_strength = '${sigma_ts}' #27MPa
+    compressive_strength = '${sigma_cs}' #77MPa
+    delta = '${delta}'
+    energy_release_rate = '${Gc}'
+    phase_field_regularization_length = '${l}'
+    Lame_first_parameter = '${Lambda}'
+    shear_modulus = '${G}'
+    external_driving_force_name = ce
+    output_properties = 'F_surface J2 beta_0 beta_1 beta_2 beta_3 ce'
+    outputs = exodus
+  []
 []
 
 [Postprocessors]
   [psie_active]
     type = ADElementAverageMaterialProperty
     mat_prop = psie_active
+  []
+  [ce]
+    type = ADElementAverageMaterialProperty
+    mat_prop = ce
   []
   [Fy]
     type = NodalSum
