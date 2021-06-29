@@ -97,4 +97,17 @@ GeneralizedExternalDrivingForce::computeQpProperties()
   _ex_driving[_qp] = _beta_2[_qp]*std::sqrt(_J2[_qp])+_beta_1[_qp]*I1+_beta_0[_qp]+_beta_3[_qp];
   Real K = _Lambda+2.0*_mu/3.0;
   _F_surface[_qp] = _J2[_qp]/_mu + I1*I1/9.0/K - _ex_driving[_qp] - _temp;
+
+// if (std::isnan(_ex_driving[_qp]))
+// {
+//   std::cout << "_invar_1[_qp] = " << _invar_1[_qp] << std::endl;
+//   std::cout << "_invar_2[_qp] = " << _invar_2[_qp] << std::endl;
+//   std::cout << "_beta_0[_qp] = " << _beta_0[_qp] << std::endl;
+//   std::cout << "_beta_1[_qp] = " << _beta_1[_qp] << std::endl;
+//   std::cout << "_beta_2[_qp] = " << _beta_2[_qp] << std::endl;
+//   std::cout << "_beta_3[_qp] = " << _beta_3[_qp] << std::endl;
+//   std::cout << "_J2[_qp] = " << _J2[_qp] << std::endl;
+//   std::cout << "_ex_driving[_qp] = " << _ex_driving[_qp] << std::endl;
+// }
+
 }

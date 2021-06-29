@@ -1,14 +1,15 @@
+
 [Mesh]
   [top_half]
     type = GeneratedMeshGenerator
     dim = 3
-    nx = 50
-    ny = 25
+    nx = 40
+    ny = 20
     nz = 1
     xmax = 1
     ymin = 0
     ymax = 0.5
-    zmax = 0.020
+    zmax = 0.025
     boundary_id_offset = 0
     boundary_name_prefix = top_half
   []
@@ -17,7 +18,7 @@
     input = top_half
     new_boundary = noncrack
     bottom_left = '0.5 0 0'
-    top_right = '1 0 0.02'
+    top_right = '1 0 0.025'
   []
   construct_side_list_from_node_list = true
 []
@@ -174,7 +175,7 @@
     f_name = psi
     function = '2*d/c0*(4.0/3.0*d*psie_active-8.0/3.0*psie_active+4.0/3.0*ce+Gc/2.0/l)'
     args = 'd psie_active ce'
-    material_property_names = 'Gc c0 l' #alpha(d) g(d)
+    material_property_names = 'Gc c0 l ' #alpha(d) g(d)
     derivative_order = 1
   []
   # [kumar_material]
@@ -227,10 +228,6 @@
     type = AverageNodalVariableValue
     variable = d
   []
-  # [psie_active]
-  #   type = ADElementAverageMaterialProperty
-  #   mat_prop = psie_active
-  # []
   # [invar_1]
   #   type = AverageNodalVariableValue
   #   variable = invar_1
@@ -241,18 +238,18 @@
   # []
 []
 
-[VectorPostprocessors]
-  [damage]
-    type = NodalValueSampler
-    variable = 'd'
-    sort_by = id
-  []
-  [ext]
-    type = ElementValueSampler
-    variable = 'ce'
-    sort_by = id
-  []
-[]
+# [VectorPostprocessors]
+#   [damage]
+#     type = NodalValueSampler
+#     variable = 'd'
+#     sort_by = id
+#   []
+#   [ext]
+#     type = ElementValueSampler
+#     variable = 'ce'
+#     sort_by = id
+#   []
+# []
 
 [Executioner]
   type = Transient
@@ -267,14 +264,14 @@
 []
 
 [Outputs]
-  [csv_]
-    type = CSV
-    file_base = kumar_mode1_half_Gc4L0.35del4.41z1ele_frac
-    append_date = true
-    execute_vector_postprocessors_on = final
-  []
-  exodus = true
-  file_base = kumar_mode1_half_Gc4L0.35del4.41z1ele_frac
-  append_date = true
+  # [csv_]
+  #   type = CSV
+  #   file_base = kumar_mode1_half_m4020_frac
+  #   append_date = true
+  #   execute_vector_postprocessors_on = final
+  # []
+  # exodus = true
+  # file_base = kumar_mode1_half_m4020_frac
+  # append_date = true
   print_linear_residuals = false
 []

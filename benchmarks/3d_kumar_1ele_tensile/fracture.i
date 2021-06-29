@@ -1,43 +1,13 @@
-# [Problem]
-#   solve = false
-# []
-
 [Mesh]
   [gen]
     type = GeneratedMeshGenerator
     dim = 3
-    nx = 30
-    ny = 15
-    nz = 15
-    ymax = 0.5
-    zmax = 0.5
+    nx = 1
+    ny = 1
+    nz = 1
   []
-    [noncrack]
-        type = BoundingBoxNodeSetGenerator
-        input = gen
-        new_boundary = noncrack
-        bottom_left = '0.5 0 0'
-        top_right = '1 0.5 0'
-      []
-      construct_side_list_from_node_list = true
 []
 
-[Adaptivity]
-  marker = marker
-  initial_marker = marker
-  initial_steps = 2
-  stop_time = 0
-  max_h_level = 2
-  [Markers]
-    [marker]
-      type = BoxMarker
-      bottom_left = '0.4 0 0'
-      top_right = '0.6 0.5 0.1'
-      outside = DO_NOTHING
-      inside = REFINE
-    []
-  []
-[]
 
 [Variables]
   [d]
@@ -47,13 +17,13 @@
 [AuxVariables]
   [bounds_dummy]
   []
-  [psie]
+  [psie_active]
     order = CONSTANT
     family = MONOMIAL
   []
-  [invar_1]
-  []
-  [invar_2]
+  [ce]
+    order = CONSTANT
+    family = MONOMIAL
   []
 []
 
@@ -111,37 +81,49 @@
   [psi]
     type = ADDerivativeParsedMaterial
     f_name = psi
-    function = 'alpha/c0*(4.0/3.0*d*psie-8.0/3.0*psie+4.0/3.0*ce+Gc/2.0/l)'
-    args = 'd psie'
-    material_property_names = 'alpha(d) g(d) Gc c0 l ce'
+    function = '2*d/c0*(4.0/3.0*d*psie_active-8.0/3.0*psie_active+4.0/3.0*ce+Gc/2.0/l)'
+    args = 'd ce  psie_active'
+    material_property_names = 'Gc c0 l ' #alpha(d) g(d)
     derivative_order = 1
+    # output_properties = dpsi
+    # outputs = exodus
   []
-  [kumar_material]
-    type = GeneralizedExternalDrivingForce
-    output_properties = delta
-    first_invariant = invar_1
-    second_invariant = invar_2
-    tensile_strength = 27 #27MPa
-    compressive_strength = 77 #77MPa
-    delta = 3.22
-    energy_release_rate = '${Gc}'
-    phase_field_regularization_length = '${l}'
-    Lame_first_parameter = '${Lambda}'
-    shear_modulus = '${G}'
-    external_driving_force_name = ce
-  []
-
 []
 
 [Postprocessors]
-  [extdriving]
-    type = ADElementAverageMaterialProperty
-    mat_prop = 'ce'
+  [extdriving_v]
+    type = ElementAverageValue
+    variable = 'ce'
   []
+  # [extdriving]
+  #   type = ADElementAverageMaterialProperty
+  #   mat_prop = 'ce'
+  # []
+  # [beta_0]
+  #   type = ADElementAverageMaterialProperty
+  #   mat_prop = 'beta_0'
+  # []
+  # [beta_1]
+  #   type = ADElementAverageMaterialProperty
+  #   mat_prop = 'beta_1'
+  # []
+  # [beta_2]
+  #   type = ADElementAverageMaterialProperty
+  #   mat_prop = 'beta_2'
+  # []
+  # [beta_3]
+  #   type = ADElementAverageMaterialProperty
+  #   mat_prop = 'beta_3'
+  # []
+  # [F_surface]
+  #   type = ADElementAverageMaterialProperty
+  #   mat_prop = 'F_surface'
+  # []
   [d_avg]
     type = AverageNodalVariableValue
     variable = d
   []
+
   # [invar_1]
   #   type = AverageNodalVariableValue
   #   variable = invar_1
@@ -152,13 +134,18 @@
   # []
 []
 
-# [VectorPostprocessors]
-#   [damage]
-#     type = NodalValueSampler
-#     variable = 'd'
-#     sort_by = id
-#   []
-# []
+[VectorPostprocessors]
+  [damage]
+    type = NodalValueSampler
+    variable = 'd'
+    sort_by = id
+  []
+  [ext]
+    type = ElementValueSampler
+    variable = 'ce'
+    sort_by = id
+  []
+[]
 
 [Executioner]
   type = Transient
@@ -175,9 +162,12 @@
 [Outputs]
   [csv_]
     type = CSV
-    file_base = kumar_frac
+    file_base = kumar_1ele_t_Gc4L0.12del9.66_frac
     append_date = true
     execute_vector_postprocessors_on = final
   []
+  exodus = true
+  file_base = kumar_1ele_t_Gc4L0.12del9.66_frac
+  append_date = true
   print_linear_residuals = false
 []

@@ -1,14 +1,14 @@
 E = 9.8e3 #9.8Gpa
-nu = 0.13
+nu = 0 #0.13
 K = '${fparse E/3/(1-2*nu)}'
 G = '${fparse E/2/(1+nu)}'
 Lambda = '${fparse E*nu/(1+nu)/(1-2*nu)}'
 
 Gc = 9.1e-4 # 91N/m
-l = 0.35 #0.5
+l = 0.12
 sigma_ts = 27
 sigma_cs = 77
-delta = 4.41 #13
+delta = 9.66
 
 [MultiApps]
   [fracture]
@@ -24,86 +24,39 @@ delta = 4.41 #13
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = from_multiapp
-    variable = d
-    source_variable = d
+    variable = 'd' # ce F'
+    source_variable = 'd' # ce F_surface'
   []
-  [to_psie_active]
+  [to_psie]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = to_multiapp
-    variable = 'psie_active ce'
-    source_variable ='psie_active ce'
+    variable = 'psie_active ce' # invar_1 invar_2'
+    source_variable ='psie_active ce' #invar_1 invar_2'
   []
 []
 
 [GlobalParams]
-  displacements = 'disp_x disp_y'
+  displacements = 'disp_x disp_y disp_z'
 []
 
 [Mesh]
-  [top_half]
+  [gen]
     type = GeneratedMeshGenerator
-    dim = 2
-    nx = 50
-    ny = 25
-    ymin = 0
-    ymax = 0.5
-    boundary_id_offset = 0
-    boundary_name_prefix = top_half
+    dim = 3
+    nx = 1
+    ny = 1
+    nz = 1
   []
-  [top_stitch] #top_stitch
-    type = BoundingBoxNodeSetGenerator
-    input = top_half
-    new_boundary = top_stitch
-    bottom_left = '0.5 0 0'
-    top_right = '1 0 0'
-  []
-  [bottom_half]
-    type = GeneratedMeshGenerator
-    dim = 2
-    nx = 50
-    ny = 25
-    ymin = -0.5
-    ymax = 0
-    boundary_id_offset = 5
-    boundary_name_prefix = bottom_half
-  []
-  [bottom_stitch]
-    type = BoundingBoxNodeSetGenerator
-    input = bottom_half
-    new_boundary = bottom_stitch
-    bottom_left = '0.5 0 0'
-    top_right = '1 0 0'
-  []
-  [stitch]
-    type = StitchedMeshGenerator
-    inputs = 'top_stitch bottom_stitch'
-    stitch_boundaries_pairs = 'top_stitch bottom_stitch'
-  []
-  construct_side_list_from_node_list = true
 []
 
-# [Adaptivity]
-#   marker = marker
-#   initial_marker = marker
-#   initial_steps = 2
-#   stop_time = 0
-#   max_h_level = 2
-#   [Markers]
-#     [marker]
-#       type = BoxMarker
-#       bottom_left = '0.4 -0.15 0'
-#       top_right = '1 0.15 0'
-#       outside = DO_NOTHING
-#       inside = REFINE
-#     []
-#   []
-# []
 
 [Variables]
   [disp_x]
   []
   [disp_y]
+  []
+  [disp_z]
   []
 []
 
@@ -112,6 +65,10 @@ delta = 4.41 #13
   []
   [d]
   []
+  # [ce]
+  # []
+  # [F]
+  # []
 []
 
 
@@ -120,12 +77,20 @@ delta = 4.41 #13
     type = ADStressDivergenceTensors
     variable = disp_x
     component = 0
+    displacements = 'disp_x disp_y disp_z'
   []
   [solid_y]
     type = ADStressDivergenceTensors
     variable = disp_y
     component = 1
+    displacements = 'disp_x disp_y disp_z'
     save_in = fy
+  []
+  [solid_z]
+    type = ADStressDivergenceTensors
+    variable = disp_z
+    component = 2
+    displacements = 'disp_x disp_y disp_z'
   []
 []
 
@@ -143,41 +108,35 @@ delta = 4.41 #13
   #   value = 0
   # []
   # [right_x]
-  #   type = DirichletBC
+  #   type = FunctionDirichletBC
   #     variable = disp_x
-  #     boundary = 'top_half_right bottom_half_right'
-  #     value = 0
+  #     boundary = right
+  #     function = 't*0.01'
   # []
   # [right_y]
   #   type = DirichletBC
   #   variable = disp_y
-  #   boundary = 'top_half_right bottom_half_right'
-  #   value = 0
-  # []
-  # [right_z]
-  #   type = DirichletBC
-  #   variable = disp_z
-  #   boundary = 'top_half_right bottom_half_right'
+  #   boundary = right
   #   value = 0
   # []
   [bottom_x]
     type = DirichletBC
     variable = disp_x
-    boundary = bottom_half_bottom
+    boundary = bottom
     value = 0
   []
   [bottom_y]
     type = DirichletBC
     variable = disp_y
-    boundary = bottom_half_bottom
+    boundary = bottom
     value = 0
   []
-  # [bottom_z]
-  #   type = DirichletBC
-  #   variable = disp_z
-  #   boundary = bottom_half_bottom
-  #   value = 0
-  # []
+  [bottom_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = bottom
+    value = 0
+  []
   # [top_x]
   #   type = DirichletBC
   #   variable = disp_x
@@ -187,7 +146,7 @@ delta = 4.41 #13
   [top_y]
     type = FunctionDirichletBC
       variable = disp_y
-      boundary = top_half_top
+      boundary = top
       function = 't'
   []
   # [back_x]
@@ -312,14 +271,19 @@ delta = 4.41 #13
   [Fy]
     type = NodalSum
     variable = fy
-    boundary = top_half_top
+    boundary = top
   []
+  # [sigma_00_0]
+  #   type = ElementalVariableValue
+  #   elementid = 0
+  #   variable = sigma_00
+  # []
 []
 
 [VectorPostprocessors]
   [nodal]
     type = NodalValueSampler
-    variable = 'd disp_x disp_y' # sigma_00 sigma_11 sigma_22 invar_1 invar_2'
+    variable = 'd disp_x disp_y disp_z' # sigma_00 sigma_11 sigma_22 invar_1 invar_2'
     sort_by = id
   []
 []
@@ -335,8 +299,8 @@ delta = 4.41 #13
   nl_rel_tol = 1e-8
   nl_abs_tol = 1e-10
 
-  dt = 1e-5
-  end_time = 1e-3
+  dt = 1e-4
+  end_time = 5e-3
 
   picard_max_its = 20
   accept_on_max_picard_iteration = true
@@ -347,13 +311,12 @@ delta = 4.41 #13
 [Outputs]
   [csv_]
 type = CSV
-file_base = kumar_mode1_2d_Gc4L0.35del4.41_ela
+file_base = kumar_1ele_t_Gc4L0.12del9.66_ela
 append_date = true
-#show = 'var_u'
 execute_vector_postprocessors_on = final
 []
   exodus = true
-  file_base = kumar_mode1_2d_Gc4L0.35del4.41
+  file_base = kumar_1ele_t_Gc4L0.12del9.66
   append_date = true
   print_linear_residuals = false
 []

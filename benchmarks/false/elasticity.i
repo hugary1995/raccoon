@@ -5,10 +5,10 @@ G = '${fparse E/2/(1+nu)}'
 Lambda = '${fparse E*nu/(1+nu)/(1-2*nu)}'
 
 Gc = 9.1e-4 # 91N/m
-l = 0.35 #0.5
+l = 0.120 #0.5
 sigma_ts = 27
 sigma_cs = 77
-delta = 4.41 #13
+delta = 9.66 #13
 
 [MultiApps]
   [fracture]
@@ -24,61 +24,42 @@ delta = 4.41 #13
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = from_multiapp
-    variable = d
-    source_variable = d
+    variable = 'd F_surface beta_0 beta_1 beta_2 beta_3 J2'
+    source_variable = 'd F_surface beta_0 beta_1 beta_2 beta_3 J2'
   []
   [to_psie_active]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = to_multiapp
-    variable = 'psie_active ce'
-    source_variable ='psie_active ce'
+    variable = 'psie_active invar_1 invar_2'
+    source_variable ='psie_active invar_1 invar_2'
   []
 []
 
 [GlobalParams]
-  displacements = 'disp_x disp_y'
+  displacements = 'disp_x disp_y disp_z'
 []
 
 [Mesh]
   [top_half]
     type = GeneratedMeshGenerator
-    dim = 2
-    nx = 50
-    ny = 25
+    dim = 3
+    nx = 40
+    ny = 20
+    nz = 1
+    xmax = 1
     ymin = 0
     ymax = 0.5
+    zmax = 0.025
     boundary_id_offset = 0
     boundary_name_prefix = top_half
   []
-  [top_stitch] #top_stitch
+  [noncrack]
     type = BoundingBoxNodeSetGenerator
     input = top_half
-    new_boundary = top_stitch
+    new_boundary = noncrack
     bottom_left = '0.5 0 0'
-    top_right = '1 0 0'
-  []
-  [bottom_half]
-    type = GeneratedMeshGenerator
-    dim = 2
-    nx = 50
-    ny = 25
-    ymin = -0.5
-    ymax = 0
-    boundary_id_offset = 5
-    boundary_name_prefix = bottom_half
-  []
-  [bottom_stitch]
-    type = BoundingBoxNodeSetGenerator
-    input = bottom_half
-    new_boundary = bottom_stitch
-    bottom_left = '0.5 0 0'
-    top_right = '1 0 0'
-  []
-  [stitch]
-    type = StitchedMeshGenerator
-    inputs = 'top_stitch bottom_stitch'
-    stitch_boundaries_pairs = 'top_stitch bottom_stitch'
+    top_right = '1 0 0.025'
   []
   construct_side_list_from_node_list = true
 []
@@ -92,18 +73,21 @@ delta = 4.41 #13
 #   [Markers]
 #     [marker]
 #       type = BoxMarker
-#       bottom_left = '0.4 -0.15 0'
-#       top_right = '1 0.15 0'
+#       bottom_left = '0.4 0 0'
+#       top_right = '1 0.2 0.5'
 #       outside = DO_NOTHING
 #       inside = REFINE
 #     []
 #   []
 # []
 
+
 [Variables]
   [disp_x]
   []
   [disp_y]
+  []
+  [disp_z]
   []
 []
 
@@ -111,6 +95,24 @@ delta = 4.41 #13
   [fy]
   []
   [d]
+  []
+  [F_surface]
+    family = MONOMIAL
+  []
+  [beta_0]
+    family = MONOMIAL
+  []
+  [beta_1]
+    family = MONOMIAL
+  []
+  [beta_2]
+    family = MONOMIAL
+  []
+  [beta_3]
+    family = MONOMIAL
+  []
+  [J2]
+    family = MONOMIAL
   []
 []
 
@@ -120,12 +122,20 @@ delta = 4.41 #13
     type = ADStressDivergenceTensors
     variable = disp_x
     component = 0
+    # displacements = 'disp_x disp_y disp_z'
   []
   [solid_y]
     type = ADStressDivergenceTensors
     variable = disp_y
     component = 1
+    # displacements = 'disp_x disp_y disp_z'
     save_in = fy
+  []
+  [solid_z]
+    type = ADStressDivergenceTensors
+    variable = disp_z
+    component = 2
+    # displacements = 'disp_x disp_y disp_z'
   []
 []
 
@@ -140,6 +150,12 @@ delta = 4.41 #13
   #   type = DirichletBC
   #   variable = disp_y
   #   boundary = left
+  #   value = 0
+  # []
+  # [left_z]
+  #   type = DirichletBC
+  #   variable = disp_z
+  #   boundary = top_half_left
   #   value = 0
   # []
   # [right_x]
@@ -157,27 +173,27 @@ delta = 4.41 #13
   # [right_z]
   #   type = DirichletBC
   #   variable = disp_z
-  #   boundary = 'top_half_right bottom_half_right'
+  #   boundary = top_half_right
   #   value = 0
   # []
   [bottom_x]
     type = DirichletBC
     variable = disp_x
-    boundary = bottom_half_bottom
+    boundary = noncrack
     value = 0
   []
   [bottom_y]
     type = DirichletBC
     variable = disp_y
-    boundary = bottom_half_bottom
+    boundary = noncrack
     value = 0
   []
-  # [bottom_z]
-  #   type = DirichletBC
-  #   variable = disp_z
-  #   boundary = bottom_half_bottom
-  #   value = 0
-  # []
+  [bottom_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = noncrack
+    value = 0
+  []
   # [top_x]
   #   type = DirichletBC
   #   variable = disp_x
@@ -190,6 +206,12 @@ delta = 4.41 #13
       boundary = top_half_top
       function = 't'
   []
+  # [top_z]
+  #   type = DirichletBC
+  #   variable = disp_z
+  #   boundary = top_half_top
+  #   value = 0
+  # []
   # [back_x]
   #   type = DirichletBC
   #   variable = disp_x
@@ -202,12 +224,12 @@ delta = 4.41 #13
   #   boundary = noncrack
   #   value = 0
   # []
-  # [back_z]
-  #   type = DirichletBC
-  #   variable = disp_z
-  #   boundary = back
-  #   value = 0
-  # []
+  [back_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = top_half_back
+    value = 0
+  []
   # [front_x]
   #   type = DirichletBC
   #   variable = disp_x
@@ -220,18 +242,12 @@ delta = 4.41 #13
   #   boundary = front
   #   value = 0
   # []
-  # [front_z]
-  #   type = FunctionDirichletBC
-  #     variable = disp_z
-  #     boundary = front
-  #     function = 't*0.03'
-  # []
-  # [front_z]
-  #   type = FunctionDirichletBC
-  #   variable = disp_z
-  #   boundary = front
-  #   function = 't/100'
-  # []
+  [front_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = top_half_front
+    value = 0
+  []
 []
 
 [Materials]
@@ -283,21 +299,6 @@ delta = 4.41 #13
     output_properties = 'invar_2'
     outputs = exodus
   []
-  [kumar_material]
-    type = GeneralizedExternalDrivingForce
-    # first_invariant = invar_1
-    # second_invariant = invar_2
-    tensile_strength = '${sigma_ts}' #27MPa
-    compressive_strength = '${sigma_cs}' #77MPa
-    delta = '${delta}'
-    energy_release_rate = '${Gc}'
-    phase_field_regularization_length = '${l}'
-    Lame_first_parameter = '${Lambda}'
-    shear_modulus = '${G}'
-    external_driving_force_name = ce
-    output_properties = 'F_surface J2 beta_0 beta_1 beta_2 beta_3 ce'
-    outputs = exodus
-  []
 []
 
 [Postprocessors]
@@ -305,21 +306,22 @@ delta = 4.41 #13
     type = ADElementAverageMaterialProperty
     mat_prop = psie_active
   []
-  [ce]
-    type = ADElementAverageMaterialProperty
-    mat_prop = ce
-  []
   [Fy]
     type = NodalSum
     variable = fy
     boundary = top_half_top
   []
+  # [sigma_00_0]
+  #   type = ElementalVariableValue
+  #   elementid = 0
+  #   variable = sigma_00
+  # []
 []
 
 [VectorPostprocessors]
   [nodal]
     type = NodalValueSampler
-    variable = 'd disp_x disp_y' # sigma_00 sigma_11 sigma_22 invar_1 invar_2'
+    variable = 'd disp_x disp_y disp_z' # sigma_00 sigma_11 sigma_22 invar_1 invar_2'
     sort_by = id
   []
 []
@@ -335,8 +337,8 @@ delta = 4.41 #13
   nl_rel_tol = 1e-8
   nl_abs_tol = 1e-10
 
-  dt = 1e-5
-  end_time = 1e-3
+  dt = 1e-4
+  end_time = 1e-4
 
   picard_max_its = 20
   accept_on_max_picard_iteration = true
@@ -347,13 +349,13 @@ delta = 4.41 #13
 [Outputs]
   [csv_]
 type = CSV
-file_base = kumar_mode1_2d_Gc4L0.35del4.41_ela
+file_base = kumar_mode1_falsez0_ela
 append_date = true
 #show = 'var_u'
 execute_vector_postprocessors_on = final
 []
   exodus = true
-  file_base = kumar_mode1_2d_Gc4L0.35del4.41
+  file_base = kumar_mode1_falsez0m4020
   append_date = true
   print_linear_residuals = false
 []

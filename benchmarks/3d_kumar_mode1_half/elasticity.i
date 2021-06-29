@@ -5,10 +5,10 @@ G = '${fparse E/2/(1+nu)}'
 Lambda = '${fparse E*nu/(1+nu)/(1-2*nu)}'
 
 Gc = 9.1e-4 # 91N/m
-l = 0.120
+l = 0.35
 sigma_ts = 27
 sigma_cs = 77
-delta = 9.66
+delta = 4.41
 
 [MultiApps]
   [fracture]
@@ -228,12 +228,12 @@ delta = 9.66
   #   boundary = noncrack
   #   value = 0
   # []
-  # [back_z]
-  #   type = DirichletBC
-  #   variable = disp_z
-  #   boundary = top_half_back
-  #   value = 0
-  # []
+  [back_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = top_half_back
+    value = 0
+  []
   # [front_x]
   #   type = DirichletBC
   #   variable = disp_x
@@ -246,12 +246,12 @@ delta = 9.66
   #   boundary = front
   #   value = 0
   # []
-  # [front_z]
-  #   type = DirichletBC
-  #   variable = disp_z
-  #   boundary = top_half_front
-  #   value = 0
-  # []
+  [front_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = top_half_front
+    value = 0
+  []
 []
 
 [Materials]
@@ -356,7 +356,7 @@ delta = 9.66
   nl_abs_tol = 1e-10
 
   dt = 1e-4
-  end_time = 1e-3
+  end_time = 1e-2
 
   picard_max_its = 20
   accept_on_max_picard_iteration = true

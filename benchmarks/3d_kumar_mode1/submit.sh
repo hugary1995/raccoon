@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --ntasks=32
+#SBATCH --ntasks=16
 #SBATCH --job-name=kumar_mode1_Gc4L0.12del9.66
 #SBATCH --partition=dolbowlab
 #SBATCH --mem-per-cpu=10G

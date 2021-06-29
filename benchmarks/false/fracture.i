@@ -1,42 +1,27 @@
+# [Problem]
+#   solve = false
+# []
+
 [Mesh]
   [top_half]
     type = GeneratedMeshGenerator
-    dim = 2
-    nx = 50
-    ny = 25
+    dim = 3
+    nx = 40
+    ny = 20
+    nz = 1
+    xmax = 1
     ymin = 0
     ymax = 0.5
+    zmax = 0.025
     boundary_id_offset = 0
     boundary_name_prefix = top_half
   []
-  [top_stitch] #top_stitch
+  [noncrack]
     type = BoundingBoxNodeSetGenerator
     input = top_half
-    new_boundary = top_stitch
+    new_boundary = noncrack
     bottom_left = '0.5 0 0'
-    top_right = '1 0 0'
-  []
-  [bottom_half]
-    type = GeneratedMeshGenerator
-    dim = 2
-    nx = 50
-    ny = 25
-    ymin = -0.5
-    ymax = 0
-    boundary_id_offset = 5
-    boundary_name_prefix = bottom_half
-  []
-  [bottom_stitch]
-    type = BoundingBoxNodeSetGenerator
-    input = bottom_half
-    new_boundary = bottom_stitch
-    bottom_left = '0.5 0 0'
-    top_right = '1 0 0'
-  []
-  [stitch]
-    type = StitchedMeshGenerator
-    inputs = 'top_stitch bottom_stitch'
-    stitch_boundaries_pairs = 'top_stitch bottom_stitch'
+    top_right = '1 0 0.025'
   []
   construct_side_list_from_node_list = true
 []
@@ -50,13 +35,14 @@
 #   [Markers]
 #     [marker]
 #       type = BoxMarker
-#       bottom_left = '0.4 -0.15 0'
-#       top_right = '1 0.15 0'
+#       bottom_left = '0.4 0 0'
+#       top_right = '1 0.2 0.5'
 #       outside = DO_NOTHING
 #       inside = REFINE
 #     []
 #   []
 # []
+
 
 [Variables]
   [d]
@@ -70,9 +56,65 @@
     order = CONSTANT
     family = MONOMIAL
   []
-  [ce]
+  [invar_1]
     order = CONSTANT
     family = MONOMIAL
+  []
+  [invar_2]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [F_surface]
+    # order = CONSTANT
+    family = MONOMIAL
+  []
+  [beta_0]
+    family = MONOMIAL
+  []
+  [beta_1]
+    family = MONOMIAL
+  []
+  [beta_2]
+    family = MONOMIAL
+  []
+  [beta_3]
+    family = MONOMIAL
+  []
+  [J2]
+    family = MONOMIAL
+  []
+[]
+
+[AuxKernels]
+  [F_s]
+    type = ADMaterialRealAux
+    property = 'F_surface'
+    variable = 'F_surface'
+  []
+  [b0]
+    type = ADMaterialRealAux
+    property = 'beta_0'
+    variable = 'beta_0'
+  []
+  [b1]
+    type = ADMaterialRealAux
+    property = 'beta_1'
+    variable = 'beta_1'
+  []
+  [b2]
+    type = ADMaterialRealAux
+    property = 'beta_2'
+    variable = 'beta_2'
+  []
+  [b3]
+    type = ADMaterialRealAux
+    property = 'beta_3'
+    variable = 'beta_3'
+  []
+  [J2]
+    type = ADMaterialRealAux
+    property = 'J2'
+    variable = 'J2'
   []
 []
 
@@ -135,30 +177,47 @@
     material_property_names = 'Gc c0 l ce' #alpha(d) g(d)
     derivative_order = 1
   []
-  # [kumar_material]
-  #   type = GeneralizedExternalDrivingForce
-  #   first_invariant = invar_1
-  #   second_invariant = invar_2
-  #   tensile_strength = '${sigma_ts}' #27MPa
-  #   compressive_strength = '${sigma_cs}' #77MPa
-  #   delta = '${delta}'
-  #   energy_release_rate = '${Gc}'
-  #   phase_field_regularization_length = '${l}'
-  #   Lame_first_parameter = '${Lambda}'
-  #   shear_modulus = '${G}'
-  #   external_driving_force_name = ce
-  # []
+  [kumar_material]
+    type = GeneralizedExternalDrivingForce
+    first_invariant = invar_1
+    second_invariant = invar_2
+    tensile_strength = '${sigma_ts}' #27MPa
+    compressive_strength = '${sigma_cs}' #77MPa
+    delta = '${delta}'
+    energy_release_rate = '${Gc}'
+    phase_field_regularization_length = '${l}'
+    Lame_first_parameter = '${Lambda}'
+    shear_modulus = '${G}'
+    external_driving_force_name = ce
+    output_properties = 'F_surface J2 beta_0 beta_1 beta_2 beta_3'
+  []
 
 []
 
 [Postprocessors]
-  # [extdriving]
-  #   type = ADElementAverageMaterialProperty
-  #   mat_prop = 'ce'
-  # []
-  [extdriving_v]
-    type = ElementAverageValue
-    variable = 'ce'
+  [extdriving]
+    type = ADElementAverageMaterialProperty
+    mat_prop = 'ce'
+  []
+  [beta_0]
+    type = ADElementAverageMaterialProperty
+    mat_prop = 'beta_0'
+  []
+  [beta_1]
+    type = ADElementAverageMaterialProperty
+    mat_prop = 'beta_1'
+  []
+  [beta_2]
+    type = ADElementAverageMaterialProperty
+    mat_prop = 'beta_2'
+  []
+  [beta_3]
+    type = ADElementAverageMaterialProperty
+    mat_prop = 'beta_3'
+  []
+  [F_surfac]
+    type = ADElementAverageMaterialProperty
+    mat_prop = 'F_surface'
   []
   [d_avg]
     type = AverageNodalVariableValue
@@ -174,18 +233,13 @@
   # []
 []
 
-[VectorPostprocessors]
-  [damage]
-    type = NodalValueSampler
-    variable = 'd'
-    sort_by = id
-  []
-  [ext]
-    type = ElementValueSampler
-    variable = 'ce'
-    sort_by = id
-  []
-[]
+# [VectorPostprocessors]
+#   [damage]
+#     type = NodalValueSampler
+#     variable = 'd'
+#     sort_by = id
+#   []
+# []
 
 [Executioner]
   type = Transient
@@ -202,9 +256,9 @@
 [Outputs]
   [csv_]
     type = CSV
-    file_base = kumar_mode1_2d_Gc4L0.35del4.41_frac
+    file_base = kumar_mode1_falsez0_frac
     append_date = true
-    execute_vector_postprocessors_on = final
+    #execute_vector_postprocessors_on = final
   []
   print_linear_residuals = false
 []
