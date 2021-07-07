@@ -76,7 +76,7 @@ HenckyIsotropicElasticity::computeMandelStressNoDecomposition(const ADRankTwoTen
 {
   ADRankTwoTensor strain = Fe;
   // If this is called during a plasticity update, we need to first exponentiate Fe, where Fe should
-  // be some plastic flow. The foolowing operations cancel out with an exponentiation of Fe, so we
+  // be some plastic flow. The following operations cancel out with an exponentiation of Fe, so we
   // only do this in the case of exponentiate == false
   if (!plasticity_update)
     strain = 0.5 * RaccoonUtils::log(Fe.transpose() * Fe);
@@ -145,7 +145,7 @@ HenckyIsotropicElasticity::computeMandelStressSpectralDecomposition(const ADRank
 {
   ADRankTwoTensor strain = Fe;
   // If this is called during a plasticity update, we need to first exponentiate Fe, where Fe should
-  // be some plastic flow. The foolowing operations cancel out with an exponentiation of Fe, so we
+  // be some plastic flow. The following operations cancel out with an exponentiation of Fe, so we
   // only do this in the case of exponentiate == false
   if (!plasticity_update)
     strain = 0.5 * RaccoonUtils::log(Fe.transpose() * Fe);
