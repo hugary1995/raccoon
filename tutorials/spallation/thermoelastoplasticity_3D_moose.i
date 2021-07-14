@@ -1,4 +1,4 @@
-mesh = 'gold/cylinder2.msh'
+mesh = 'gold/cylinder3.msh'
 
 # ideal gas constant
 R = 8.3143
@@ -30,11 +30,11 @@ h_gas = 0.1
 h_steam = 2.8
 
 # fracture properties
-psic = 0.013
-Gc = 0.125
-l = 0.4
+psic = 0.008
+Gc = 0.025
+l = 0.25
 ep0 = 1e-6
-beta = 0.3
+beta = 0.05
 
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
@@ -50,8 +50,8 @@ beta = 0.3
   [fracture]
     type = TransientMultiApp
     input_files = 'fracture.i'
-    cli_args = 'psic=${psic};l=${l};ep0=${ep0};beta=${beta}'
-    execute_on = 'TIMESTEP_END'
+    cli_args = 'psic=${psic};l=${l};ep0=${ep0};beta=${beta};Gc=${Gc};mesh=${mesh}'
+    execute_on = 'INITIAL TIMESTEP_END'
   []
 []
 
@@ -65,21 +65,21 @@ beta = 0.3
     execute_on = 'INITIAL'
   []
   [from_d]
-    type = MultiAppCopyTransfer
+    type = MultiAppMeshFunctionTransfer
     multi_app = fracture
     direction = from_multiapp
     variable = d
     source_variable = d
   []
   [to_psie_active]
-    type = MultiAppCopyTransfer
+    type = MultiAppMeshFunctionTransfer
     multi_app = fracture
     direction = to_multiapp
     variable = psie_active
     source_variable = psie_active
   []
   [to_ep_active]
-    type = MultiAppCopyTransfer
+    type = MultiAppMeshFunctionTransfer
     multi_app = fracture
     direction = to_multiapp
     variable = effective_creep_strain
@@ -135,6 +135,14 @@ beta = 0.3
     argument_column = 'time'
     value_column = 'dt'
   []
+  [Gc]
+    type = PiecewiseMultilinear
+    data_file = gold/Gc.txt
+  []
+  [E]
+    type = PiecewiseMultilinear
+    data_file = gold/E.txt
+  []
 []
 
 [Variables]
@@ -145,17 +153,6 @@ beta = 0.3
   [disp_z]
   []
   [temp]
-  []
-[]
-
-[Functions]
-  [Gc_func]
-    type = PiecewiseMultilinear
-    data_file = gold/Gc.txt
-  []
-  [E_func]
-    type = PiecewiseMultilinear
-    data_file = gold/E.txt
   []
 []
 
@@ -184,34 +181,20 @@ beta = 0.3
     order = CONSTANT
     family = MONOMIAL
   []
-  [stress_xx]
-    order = CONSTANT
-    family = MONOMIAL
-  []
-  [stress_yy]
-    order = CONSTANT
-    family = MONOMIAL
-  []
-  [stress_zz]
-    order = CONSTANT
-    family = MONOMIAL
-  []
   [Gc]
     order = CONSTANT
     family = MONOMIAL
-    block = oxide
     [InitialCondition]
       type = FunctionIC
-      function = Gc_func
+      function = 'Gc'
     []
   []
   [E]
     order = CONSTANT
     family = MONOMIAL
-    block = oxide
     [InitialCondition]
       type = FunctionIC
-      function = E_func
+      function = 'E'
     []
   []
 []
@@ -222,27 +205,6 @@ beta = 0.3
     variable = 'temp_in_K'
     args = 'temp'
     function = 'temp + 273.15'
-  []
-  [stress_xx]
-    type = RankTwoAux
-    variable = 'stress_xx'
-    rank_two_tensor = 'stress'
-    index_i = 0
-    index_j = 0
-  []
-  [stress_yy]
-    type = RankTwoAux
-    variable = 'stress_yy'
-    rank_two_tensor = 'stress'
-    index_i = 1
-    index_j = 1
-  []
-  [stress_zz]
-    type = RankTwoAux
-    variable = 'stress_zz'
-    rank_two_tensor = 'stress'
-    index_i = 2
-    index_j = 2
   []
   [c]
     type = MaterialRealAux
@@ -340,7 +302,7 @@ beta = 0.3
   [fix_bottom_z]
     type = DirichletBC
     variable = disp_z
-    boundary = 'bottom'
+    boundary = 'top bottom'
     value = 0
   []
   [fix_left_x]
@@ -383,14 +345,14 @@ beta = 0.3
   []
 []
 
-[Constraints]
-  [top]
-    type = EqualValueBoundaryConstraint
-    variable = disp_z
-    penalty = 1e9
-    secondary = top
-  []
-[]
+# [Constraints]
+#   [top]
+#     type = EqualValueBoundaryConstraint
+#     variable = disp_z
+#     penalty = 1e9
+#     secondary = top
+#   []
+# []
 
 [Dampers]
   [ejd]
@@ -456,22 +418,22 @@ beta = 0.3
     prop_values = '${l} ${psic}'
     block = oxide
   []
-  [Gc]
-    type = ParsedMaterial
-    f_name = Gc
-    args = Gc
-    function = 'Gc'
-    block = oxide
-  []
-  [E]
+  [E_oxide]
     type = ParsedMaterial
     f_name = E
-    args = E
     function = 'E'
+    args = 'E'
+    block = oxide
+  []
+  [Gc_oxide]
+    type = ParsedMaterial
+    f_name = Gc
+    function = 'Gc'
+    args = 'Gc'
     block = oxide
   []
   [gc]
-    type = ADParsedMaterial
+    type = ParsedMaterial
     f_name = gc
     args = effective_creep_strain
     function = '1-(1-beta)*(1-exp(-effective_creep_strain/ep0))'
@@ -494,14 +456,14 @@ beta = 0.3
   [out_of_plane_fracture_toughness]
     type = ParsedMaterial
     f_name = gamma
-    function = 'Gc/thickness/0.2/1e5'
+    function = 'Gc/thickness/0.2/1e3'
     material_property_names = 'Gc thickness'
     block = oxide
   []
   [thickness]
     type = GenericFunctionMaterial
     prop_names = 'thickness'
-    prop_values = '1.468e-5*sqrt(t)/0.2'
+    prop_values = '1.468e-5*sqrt(t)/0.2*100'
     block = oxide
   []
   [thermal_oxide]
@@ -522,7 +484,7 @@ beta = 0.3
     type = ComputeVariableIsotropicElasticityTensor
     youngs_modulus = E
     poissons_ratio = ${nu_oxide}
-    args = E
+    args = 'E'
     block = oxide
   []
   [strain_oxide]
@@ -546,6 +508,8 @@ beta = 0.3
     out_of_plane_fracture_toughness = gamma
     out_of_plane_critical_fracture_energy = 5e-7
     block = oxide
+    outputs = exodus
+    output_properties = 'elastic_strain stress'
   []
 []
 
@@ -554,42 +518,30 @@ beta = 0.3
     type = FunctionValuePostprocessor
     function = 't/86400/360'
   []
-  # [stress_rr]
-  #   type = PointValue
-  #   variable = stress_xx
-  #   point = '13.9 0 10'
-  # []
-  # [stress_tt]
-  #   type = PointValue
-  #   variable = stress_yy
-  #   point = '13.9 0 10'
-  # []
-  # [stress_zz]
-  #   type = PointValue
-  #   variable = stress_zz
-  #   point = '13.9 0 10'
-  # []
-  [psie_active]
+  [psie]
     type = ElementIntegralMaterialProperty
-    mat_prop = psie_active
+    mat_prop = psie
     block = oxide
+    execute_on = 'INITIAL TIMESTEP_END'
   []
-  [psii_active]
+  [psii]
     type = ElementIntegralMaterialProperty
-    mat_prop = psii_active
+    mat_prop = psii
     block = oxide
+    execute_on = 'INITIAL TIMESTEP_END'
   []
   [solution_change]
     type = SolutionChangeNorm
     variable = 'disp_x disp_y disp_z d'
     block = oxide
+    outputs = none
   []
 []
 
 [VectorPostprocessors]
   [bcs]
     type = CSVReader
-    csv_file = 'gold/BC.csv'
+    csv_file = 'gold/BC_seed.csv'
     header = true
   []
 []
@@ -612,20 +564,20 @@ beta = 0.3
   # petsc_options_value = 'asm      ilu          200         200                0                     '
   [TimeStepper]
     type = CSVTimeSequenceStepper
-    file_name = 'gold/BC.csv'
+    file_name = 'gold/BC_seed.csv'
     header = true
   []
-  end_time = 188092800
+  end_time = 15674400
 
   nl_rel_tol = 1e-06
   nl_abs_tol = 1e-08
 
   automatic_scaling = true
 
-  picard_max_its = 10
+  picard_max_its = 50
   picard_custom_pp = solution_change
-  custom_abs_tol = 1e-6
-  custom_rel_tol = 1e-8
+  custom_rel_tol = 1e-03
+  custom_abs_tol = 1e-03
   disable_picard_residual_norm_check = true
   accept_on_max_picard_iteration = true
 []

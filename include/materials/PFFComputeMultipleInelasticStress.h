@@ -24,11 +24,13 @@ protected:
 
   // @{ Strain energy density and its derivative w/r/t damage
   const MaterialPropertyName _psie_name;
+  MaterialProperty<Real> & _psie;
   MaterialProperty<Real> & _psie_active;
   // @}
 
   // @{ Interface energy density and its derivative w/r/t damage
   const MaterialPropertyName _psii_name;
+  MaterialProperty<Real> & _psii;
   MaterialProperty<Real> & _psii_active;
   const MaterialProperty<Real> & _psii_active_old;
   // @}

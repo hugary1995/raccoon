@@ -4,16 +4,16 @@ clc
 %% Field parameters
 
 % Correlation length
-Lc1 = 10;
-Lc2 = 10;
+Lc1 = 3;
+Lc2 = 3;
 % tolerance
 tol = 0.001;
 % quantity name
 name = 'Gc';
 % Mean value of the field
-average = 0.125;
+average = 0.025;
 % Coefficient of variance
-CV = 0.3;
+CV = 0.1;
 % Solving shape and scale parameters for a Gaussian distribution
 A = 1/CV^2;
 B = average*CV^2;
@@ -21,15 +21,14 @@ B = average*CV^2;
 %% Mesh
 
 % Dimension of mesh
-X1 = 0;
-X2 = 14;
+X1 = 14;
+X2 = 25;
 Y1 = 0;
-Y2 = 200;
-r = 14;
+Y2 = 30;
 
 % Discretization of the mesh
-Nx = 101;
-Ny = 101;
+Nx = 56;
+Ny = 151;
 
 % Generate mesh
 Np = Nx*Ny;
@@ -40,7 +39,7 @@ Sy = linspace(Y1,Y2,Ny);
 %% KL expansion
 
 % Set up the covariance matrix and solve the expansion
-[d,v] = KLexpansion(r,Lc1,Lc2,Xmesh,Ymesh,Np,tol);
+[d,v] = KLexpansion(Lc1,Lc2,Xmesh,Ymesh,Np,tol);
 
 % stochastic dimension = num of KL terms per field * num of fields
 nu = length(d)*1;
