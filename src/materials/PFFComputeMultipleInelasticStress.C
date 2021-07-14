@@ -38,10 +38,12 @@ PFFComputeMultipleInelasticStress::PFFComputeMultipleInelasticStress(
   : ComputeMultipleInelasticStress(parameters),
     // The strain energy density
     _psie_name(_base_name + getParam<MaterialPropertyName>("strain_energy_density")),
+    _psie(declareProperty<Real>(_psie_name)),
     _psie_active(declareProperty<Real>(_psie_name + "_active")),
 
     // The interface energy density
     _psii_name(_base_name + getParam<MaterialPropertyName>("interface_energy_density")),
+    _psii(declareProperty<Real>(_psii_name)),
     _psii_active(declareProperty<Real>(_psii_name + "_active")),
     _psii_active_old(getMaterialPropertyOldByName<Real>(_psii_name + "_active")),
 
@@ -124,7 +126,7 @@ PFFComputeMultipleInelasticStress::computeQpStress()
   Real residual0 = residual;
   int its = 0;
   if (residual > 0)
-    while (abs(residual) > 1e-11 && abs(residual) > 1e-8 * residual0)
+    while (abs(residual) > 1e-8 && abs(residual) > 1e-6 * residual0)
     {
       Real jacobian = -g(_c[_qp], 2) * _psii_active_old[_qp];
       Real step = -residual / jacobian;
@@ -172,15 +174,19 @@ PFFComputeMultipleInelasticStress::computeQpStress()
   RankTwoTensor strain_op_active = strain_op_tr > 0 ? strain_op : strain_op_dev;
   RankTwoTensor strain_op_inactive = strain_op - strain_op_active;
 
-  // Compute driving energy
-  _psie_active[_qp] =
-      strain_ip_active.doubleContraction(_elasticity_tensor[_qp] * strain_ip_active);
-  _psii_active[_qp] =
-      strain_op_active.doubleContraction(_elasticity_tensor[_qp] * strain_op_active);
-
   // Compute stress
   _stress[_qp] = _elasticity_tensor[_qp] * (_gip[_qp] * strain_ip_active + strain_ip_inactive +
                                             g(_c[_qp], 0) * strain_op_active + strain_op_inactive);
+
+  // Compute driving energy
+  _psie[_qp] = _stress[_qp].doubleContraction(strain_ip) / 2;
+  _psie_active[_qp] =
+      strain_ip_active.doubleContraction(_elasticity_tensor[_qp] * strain_ip_active);
+  _psii[_qp] = _stress[_qp].doubleContraction(strain_op) / 2;
+  _psii_active[_qp] =
+      strain_op_active.doubleContraction(_elasticity_tensor[_qp] * strain_op_active);
+
+  // Transform stress back to the global coordinates
   _stress[_qp] = Q.transpose() * _stress[_qp] * Q;
 
   // Update jacobian

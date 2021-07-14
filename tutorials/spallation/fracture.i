@@ -3,17 +3,17 @@
   material_coverage_check = false
 []
 
-[Mesh]
-  [fmg]
-    type = FileMeshGenerator
-    file = gold/cylinder2.msh
+[Functions]
+  [Gc]
+    type = PiecewiseMultilinear
+    data_file = gold/Gc.txt
   []
 []
 
-[Functions]
-  [Gc_func]
-    type = PiecewiseMultilinear
-    data_file = gold/Gc.txt
+[Mesh]
+  [fmg]
+    type = FileMeshGenerator
+    file = ${mesh}
   []
 []
 
@@ -38,10 +38,9 @@
   [Gc]
     order = CONSTANT
     family = MONOMIAL
-    block = oxide
     [InitialCondition]
       type = FunctionIC
-      function = Gc_func
+      function = 'Gc'
     []
   []
 []
@@ -85,6 +84,13 @@
     prop_values = '${l} ${psic}'
     block = oxide
   []
+  [Gc_oxide]
+    type = ADParsedMaterial
+    f_name = Gc
+    function = 'Gc'
+    args = 'Gc'
+    block = oxide
+  []
   [gc]
     type = ADParsedMaterial
     f_name = gc
@@ -92,13 +98,6 @@
     function = '1-(1-beta)*(1-exp(-effective_creep_strain/ep0))'
     constant_names = 'beta ep0'
     constant_expressions = '${beta} ${ep0}'
-    block = oxide
-  []
-  [Gc_oxide]
-    type = ADParsedMaterial
-    f_name = Gc
-    args = Gc
-    function = 'Gc'
     block = oxide
   []
   [degradation]
@@ -122,6 +121,7 @@
     type = ADDerivativeParsedMaterial
     f_name = psi
     function = 'gc*alpha*Gc/c0/l+gip*psie_active'
+    # function = 'gc*alpha*Gc/c0/l'
     args = 'd psie_active'
     material_property_names = 'alpha(d) gip(d) Gc c0 l gc'
     derivative_order = 1

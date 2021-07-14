@@ -14,7 +14,7 @@ class STATE(Enum):
     SF = 7
 
 
-filename = 'BC.csv'
+filename = 'BC_seed.csv'
 
 # all time in seconds
 full_duration = 240 * 3600
@@ -38,7 +38,7 @@ shutdown_cycle_duration = fs_transition + shutdown_duration + sf_transition
 operation_duration = 6 * 30 * 24 * 3600
 
 # total simulation time
-total_duration = 6 * 12 * 30 * 24 * 3600
+total_duration = 6 * 30 * 24 * 3600
 
 # timestep
 full_dt = full_duration / 1
@@ -46,7 +46,7 @@ partial_dt = partial_duration / 1
 shutdown_dt = shutdown_duration / 1
 fp_dt = fp_transition / 1
 pf_dt = pf_transition / 1
-fs_dt = fs_transition / 6
+fs_dt = fs_transition / 480
 sf_dt = sf_transition / 6
 
 # all temperature in celsius

@@ -9,8 +9,8 @@ h_gas = 0.1
 h_steam = 2.8
 
 # boundary condition
-T_gas = '${fparse 1100}'
-T_steam = '${fparse 530}'
+T_gas = '${fparse 900}'
+T_steam = '${fparse 525}'
 
 [Mesh]
   [fmg]
