@@ -11,8 +11,7 @@ InputParameters
 GeneralizedExternalDrivingForce::validParams()
 {
   InputParameters params = ADMaterial::validParams();
-  params.addClassDescription("computes the Kumar coeffs"
-                             "Ce()");
+  params.addClassDescription("computes the Kumar external driving force","Ce()");
   params.addRequiredParam<Real>(
       "energy_release_rate", "energy release rate or fracture toughness");
   params.addRequiredParam<Real>(
@@ -22,11 +21,11 @@ GeneralizedExternalDrivingForce::validParams()
   params.addRequiredParam<Real>(
       "shear_modulus", "shear modulus mu or G");
   params.addRequiredParam<Real>(
-      "tensile_strength", "tensile strength");
+      "tensile_strength", "critical tensile strength");
   params.addRequiredParam<Real>(
-      "compressive_strength", "compressive strength");
+      "compressive_strength", "critical compressive strength");
   params.addRequiredParam<Real>(
-      "delta", "delta");
+      "delta", "regularizaion length dependent parameter");
   params.addRequiredParam<MaterialPropertyName>(
       "rank_two_tensor","name of the stress tensor");
   params.addParam<MaterialPropertyName>(
@@ -38,7 +37,6 @@ GeneralizedExternalDrivingForce::GeneralizedExternalDrivingForce(const InputPara
   : ADMaterial(parameters),
     _ex_driving_name(getParam<MaterialPropertyName>("external_driving_force_name")),
     _ex_driving(declareADProperty<Real>(_ex_driving_name)),
-    // _Gc(getADMaterialProperty<Real>("energy_release_rate")),
     _Gc(getParam<Real>("energy_release_rate")),
     _L(getParam<Real>("phase_field_regularization_length")),
     _Lambda(getParam<Real>("Lame_first_parameter")),
