@@ -2,15 +2,16 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "GeneralizedExternalDrivingForce.h"
+#include "GeneralizedExternalDrivingForceold.h"
 #include "Function.h"
-// #include "RankTwoTensorImplementation.h"
-// #include "ADRankTwoTensorForward.h"
+#include <iostream>
+#include <fstream>
+#include <time.h>
 
-registerADMooseObject("raccoonApp", GeneralizedExternalDrivingForce);
+registerADMooseObject("raccoonApp", GeneralizedExternalDrivingForceold);
 
 InputParameters
-GeneralizedExternalDrivingForce::validParams()
+GeneralizedExternalDrivingForceold::validParams()
 {
   InputParameters params = ADMaterial::validParams();
   params.addClassDescription("computes the Kumar coeffs"
@@ -34,22 +35,21 @@ GeneralizedExternalDrivingForce::validParams()
       "compressive_strength", "compressive strength");
   params.addRequiredParam<Real>(
       "delta", "delta");
-  params.addRequiredParam<MaterialPropertyName>(
-      "rank_two_tensor","name of the stress tensor");
   params.addParam<MaterialPropertyName>(
       "external_driving_force_name", "ex_driving", "name of the material that holds the external_driving_force");
+  // params.addParam<MaterialPropertyName>(
+  //     "beta_0","beta_0","the zeroth beta coefficeient"  )
 //  params.addParam<MaterialPropertyName>(
 //      "first_invariant", "invar_1", "The first standard invariants of stress tensor");
 //  params.addParam<MaterialPropertyName>(
 //      "second_invariant", "invar_2", "The second standard invariants of stress tensor");
-// params.addCoupledVar("first_invariant","The first standard invariants of stress tensor");
-// params.addCoupledVar("second_invariant","The second standard invariants of stress tensor");
-  // params.addRequiredParam<ADMaterialProperty<Real>>("first_invariant","The first standard invariants of stress tensor");
-  // params.addRequiredParam<ADMaterialProperty<Real>>("second_invariant","The second standard invariants of stress tensor");
+params.addCoupledVar("first_invariant","The first standard invariants of stress tensor");
+params.addCoupledVar("second_invariant","The second standard invariants of stress tensor");
+
   return params;
 }
 
-GeneralizedExternalDrivingForce::GeneralizedExternalDrivingForce(const InputParameters & parameters)
+GeneralizedExternalDrivingForceold::GeneralizedExternalDrivingForceold(const InputParameters & parameters)
   : ADMaterial(parameters),
     _ex_driving_name(getParam<MaterialPropertyName>("external_driving_force_name")),
     _ex_driving(declareADProperty<Real>(_ex_driving_name)),
@@ -65,12 +65,8 @@ GeneralizedExternalDrivingForce::GeneralizedExternalDrivingForce(const InputPara
     ,_beta_1(declareADProperty<Real>("beta_1"))
     ,_beta_2(declareADProperty<Real>("beta_2"))
     ,_beta_3(declareADProperty<Real>("beta_3"))
-    // ,_invar_1(adCoupledValue("first_invariant"))
-    // ,_invar_2(adCoupledValue("second_invariant"))
-    // ,_invar_1(getADMaterialProperty<Real>("invar_1"))
-    // ,_invar_2(getADMaterialProperty<Real>("invar_2"))
-    ,_rank_two_tensor(getParam<MaterialPropertyName>("rank_two_tensor"))
-    ,_stress(getADMaterialProperty<RankTwoTensor>(_rank_two_tensor))
+    ,_invar_1(adCoupledValue("first_invariant"))
+    ,_invar_2(adCoupledValue("second_invariant"))
     ,_F_surface(declareADProperty<Real>("F_surface"))
     ,_J2(declareADProperty<Real>("J2"))
 //    _invar_1(getParam<Real>(getParam<MaterialPropertyName>("first_invariant"))),
@@ -87,12 +83,12 @@ GeneralizedExternalDrivingForce::GeneralizedExternalDrivingForce(const InputPara
 }
 
 void
-GeneralizedExternalDrivingForce::computeQpProperties()
+GeneralizedExternalDrivingForceold::computeQpProperties()
 {
   ADReal _temp = _Gc * 3.0/_L/8.0;
-  ADReal I1 = _stress[_qp](0,0)+_stress[_qp](1,1)+_stress[_qp](2,2);
-  ADReal I2 = _stress[_qp](0,0)*_stress[_qp](1,1)+_stress[_qp](0,0)*_stress[_qp](2,2)+_stress[_qp](1,1)*_stress[_qp](2,2)-pow(_stress[_qp](0,1),2)-pow(_stress[_qp](1,2),2)-pow(_stress[_qp](2,0),2);
-  _J2[_qp] = ( pow(_stress[_qp](0,0)-_stress[_qp](1,1),2)+pow(_stress[_qp](1,1)-_stress[_qp](2,2),2)+pow(_stress[_qp](0,0)-_stress[_qp](2,2),2) )/6.0+pow(_stress[_qp](0,1),2)+pow(_stress[_qp](0,2),2)+pow(_stress[_qp](2,1),2);
+  ADReal I1= _invar_1[_qp];
+  ADReal I2 = _invar_2[_qp];
+  _J2[_qp] = I1*I1/3.0-I2;
   try{
     if (_J2[_qp]<0)
     {throw 11;}
@@ -101,9 +97,7 @@ GeneralizedExternalDrivingForce::computeQpProperties()
     std::cout<<"Negative J2 "<<_J2[_qp]<<std::endl;
     exit(e);
   }
-  // ADReal I1= _invar_1[_qp];
-  // ADReal I2 = _invar_2[_qp];
-  // _J2[_qp] = I1*I1/3.0-I2;
+
   _beta_0[_qp]= _delta*_temp;
   _beta_1[_qp] = -_gamma_1*_temp+_gamma_0;
   _beta_2[_qp] = -_gamma_2*_temp+std::sqrt(3.0)*_gamma_0;
@@ -112,17 +106,37 @@ GeneralizedExternalDrivingForce::computeQpProperties()
   _ex_driving[_qp] = _beta_2[_qp]*std::sqrt(_J2[_qp])+_beta_1[_qp]*I1+_beta_0[_qp]+_beta_3[_qp];
   Real K = _Lambda+2.0*_mu/3.0;
   _F_surface[_qp] = _J2[_qp]/_mu + I1*I1/9.0/K - _ex_driving[_qp] - _temp;
+  // if (_J2[_qp]<0.0001132)
+  //
+  //   // time_t timer;
+  //   // time(&timer);
+  //   std::ofstream myfile;
+  //   myfile.open ("nan.csv",std::ofstream::app);
+  //   // myfile << "_invar_1[_qp],_invar_2[_qp],_beta_0[_qp],_beta_1[_qp],_beta_2[_qp],_beta_3[_qp],_J2[_qp],_ex_driving[_qp],\n ";
+  //   myfile <<  _invar_1[_qp] <<","<< _invar_2[_qp]<<","<< _beta_0[_qp] <<","<< _beta_1[_qp]<<","<< _beta_2[_qp] <<","<< _beta_3[_qp] <<","<< _J2[_qp] <<","<< _ex_driving[_qp]<<","<<_q_point[_qp] <<",\n";
+  //   myfile.close();
+  //   // std::cout << "_invar_1[_qp] = " << _invar_1[_qp] << std::endl;
+  //   // std::cout << "_invar_2[_qp] = " << _invar_2[_qp] << std::endl;
+  //   // std::cout << "_beta_0[_qp] = " << _beta_0[_qp] << std::endl;
+  //   // std::cout << "_beta_1[_qp] = " << _beta_1[_qp] << std::endl;
+  //   // std::cout << "_beta_2[_qp] = " << _beta_2[_qp] << std::endl;
+  //   // std::cout << "_beta_3[_qp] = " << _beta_3[_qp] << std::endl;
+  //   // std::cout << "_J2[_qp] = " << _J2[_qp] << std::endl;
+  //   // std::cout << "_ex_driving[_qp] = " << _ex_driving[_qp] << std::endl;
+  // }
+  // else
+  // {
+  //   std::ofstream myfile2;
+  //   myfile2.open ("normal.csv",std::ofstream::app);
+  //   // myfile << "_invar_1[_qp],_invar_2[_qp],_beta_0[_qp],_beta_1[_qp],_beta_2[_qp],_beta_3[_qp],_J2[_qp],_ex_driving[_qp],\n ";
+  //   myfile2 <<  _invar_1[_qp] <<","<< _invar_2[_qp]<<","<< _beta_0[_qp] <<","<< _beta_1[_qp]<<","<< _beta_2[_qp] <<","<< _beta_3[_qp] <<","<< _J2[_qp] <<","<< _ex_driving[_qp] <<",\n";
+  //   myfile2.close();
+  // }
 
-// if (std::isnan(_ex_driving[_qp]))
-// {
-//   std::cout << "_invar_1[_qp] = " << _invar_1[_qp] << std::endl;
-//   std::cout << "_invar_2[_qp] = " << _invar_2[_qp] << std::endl;
-//   std::cout << "_beta_0[_qp] = " << _beta_0[_qp] << std::endl;
-//   std::cout << "_beta_1[_qp] = " << _beta_1[_qp] << std::endl;
-//   std::cout << "_beta_2[_qp] = " << _beta_2[_qp] << std::endl;
-//   std::cout << "_beta_3[_qp] = " << _beta_3[_qp] << std::endl;
-//   std::cout << "_J2[_qp] = " << _J2[_qp] << std::endl;
-//   std::cout << "_ex_driving[_qp] = " << _ex_driving[_qp] << std::endl;
-// }
-
+      // myfile << "This is the first cell in the first column.\n";
+      // myfile << "a,b,c,\n";
+      // myfile << "c,s,v,\n";
+      // myfile << "1,2,3.456\n";
+      // myfile << "semi;colon";
+      // myfile.close();
 }

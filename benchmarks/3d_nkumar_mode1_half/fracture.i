@@ -1,7 +1,3 @@
-# [Problem]
-#   solve = false
-# []
-
 [Mesh]
   [top_half]
     type = GeneratedMeshGenerator
@@ -56,67 +52,12 @@
     order = CONSTANT
     family = MONOMIAL
   []
-  [invar_1]
+  [ce]
     order = CONSTANT
-    family = MONOMIAL
-  []
-  [invar_2]
-    order = CONSTANT
-    family = MONOMIAL
-  []
-  [F_surface]
-    # order = CONSTANT
-    family = MONOMIAL
-  []
-  [beta_0]
-    family = MONOMIAL
-  []
-  [beta_1]
-    family = MONOMIAL
-  []
-  [beta_2]
-    family = MONOMIAL
-  []
-  [beta_3]
-    family = MONOMIAL
-  []
-  [J2]
     family = MONOMIAL
   []
 []
 
-[AuxKernels]
-  [F_s]
-    type = ADMaterialRealAux
-    property = 'F_surface'
-    variable = 'F_surface'
-  []
-  [b0]
-    type = ADMaterialRealAux
-    property = 'beta_0'
-    variable = 'beta_0'
-  []
-  [b1]
-    type = ADMaterialRealAux
-    property = 'beta_1'
-    variable = 'beta_1'
-  []
-  [b2]
-    type = ADMaterialRealAux
-    property = 'beta_2'
-    variable = 'beta_2'
-  []
-  [b3]
-    type = ADMaterialRealAux
-    property = 'beta_3'
-    variable = 'beta_3'
-  []
-  [J2]
-    type = ADMaterialRealAux
-    property = 'J2'
-    variable = 'J2'
-  []
-[]
 
 [Bounds]
   [irreversibility]
@@ -152,8 +93,8 @@
 [Materials]
   [fracture_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'Gc l Lambda G'
-    prop_values = '${Gc} ${l} ${Lambda} ${G}'
+    prop_names = 'Gc l' # Lambda G'
+    prop_values = '${Gc} ${l}' #' ${Lambda} ${G}'
   []
   [degradation]
     type = PowerDegradationFunction
@@ -173,70 +114,32 @@
     type = ADDerivativeParsedMaterial
     f_name = psi
     function = '2*d/c0*(4.0/3.0*d*psie_active-8.0/3.0*psie_active+4.0/3.0*ce+Gc/2.0/l)'
-    args = 'd psie_active'
-    material_property_names = 'Gc c0 l ce' #alpha(d) g(d)
+    args = 'd psie_active ce'
+    material_property_names = 'Gc c0 l' #alpha(d) g(d)
     derivative_order = 1
   []
-  [kumar_material]
-    type = GeneralizedExternalDrivingForceold
-    first_invariant = invar_1
-    second_invariant = invar_2
-    tensile_strength = '${sigma_ts}' #27MPa
-    compressive_strength = '${sigma_cs}' #77MPa
-    delta = '${delta}'
-    energy_release_rate = '${Gc}'
-    phase_field_regularization_length = '${l}'
-    Lame_first_parameter = '${Lambda}'
-    shear_modulus = '${G}'
-    external_driving_force_name = ce
-    output_properties = 'F_surface J2 beta_0 beta_1 beta_2 beta_3'
-  []
-
 []
 
 [Postprocessors]
   [extdriving]
-    type = ADElementAverageMaterialProperty
-    mat_prop = 'ce'
-  []
-  [beta_0]
-    type = ADElementAverageMaterialProperty
-    mat_prop = 'beta_0'
-  []
-  [beta_1]
-    type = ADElementAverageMaterialProperty
-    mat_prop = 'beta_1'
-  []
-  [beta_2]
-    type = ADElementAverageMaterialProperty
-    mat_prop = 'beta_2'
-  []
-  [beta_3]
-    type = ADElementAverageMaterialProperty
-    mat_prop = 'beta_3'
-  []
-  [F_surfac]
-    type = ADElementAverageMaterialProperty
-    mat_prop = 'F_surface'
+    type = ElementAverageValue
+    variable = 'ce'
   []
   [d_avg]
     type = AverageNodalVariableValue
     variable = d
   []
-  # [invar_1]
-  #   type = AverageNodalVariableValue
-  #   variable = invar_1
-  # []
-  # [invar_2]
-  #   type = AverageNodalVariableValue
-  #   variable = invar_2
-  # []
 []
 
 # [VectorPostprocessors]
 #   [damage]
 #     type = NodalValueSampler
 #     variable = 'd'
+#     sort_by = id
+#   []
+#   [ext]
+#     type = ElementValueSampler
+#     variable = 'ce'
 #     sort_by = id
 #   []
 # []
@@ -254,11 +157,14 @@
 []
 
 [Outputs]
-  [csv_]
-    type = CSV
-    file_base = kumar_mode1_falsez0_frac
-    append_date = true
-    #execute_vector_postprocessors_on = final
-  []
+  # [csv_]
+  #   type = CSV
+  #   file_base = kumar_mode1_half_Gc4L0.35del4.41z1ele_frac
+  #   append_date = true
+  #   execute_vector_postprocessors_on = final
+  # []
+  exodus = true
+  file_base = nkumar_mode1_half_m4020z01ele_stress_frac
+  append_date = true
   print_linear_residuals = false
 []

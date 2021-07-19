@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --ntasks=2
-#SBATCH --job-name=kumar_mode1_falsez0
+#SBATCH --ntasks=4
+#SBATCH --job-name=check_transfer_nkumar_1ele_c
 #SBATCH --partition=dolbowlab
 #SBATCH --mem-per-cpu=10G
 #SBATCH --mail-user=bo.zeng@duke.edu
 #SBATCH --mail-type=END
-#SBATCH -o kumar_mode1_falsez0_%j
+#SBATCH -o check_transfer_nkumar_1ele_c_%j
 
 module load cmake/3.19.3-rhel8
 module load Python/3.8.1

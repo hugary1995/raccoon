@@ -6,12 +6,12 @@
 
 #include "ADMaterial.h"
 
-class GeneralizedExternalDrivingForce : public ADMaterial
+class GeneralizedExternalDrivingForcefracold : public ADMaterial
 {
 public:
   static InputParameters validParams();
 
-  GeneralizedExternalDrivingForce(const InputParameters & parameters);
+  GeneralizedExternalDrivingForcefracold(const InputParameters & parameters);
 
 protected:
   virtual void computeQpProperties() override;
@@ -54,9 +54,14 @@ protected:
   // const ADVariableValue & _invar_2;
   // const ADMaterialProperty<Real> & _invar_1;
   // const ADMaterialProperty<Real> & _invar_2;
-  const MaterialPropertyName _rank_two_tensor;
-  const ADMaterialProperty<RankTwoTensor> & _stress;
-// const GenericMaterialProperty<RankTwoTensor, is_ad> & _stress;
+  // const MaterialPropertyName _rank_two_tensor;
+  // const ADMaterialProperty<RankTwoTensor> & _stress;
+  const ADVariableValue & _stress_00;
+  const ADVariableValue & _stress_01;
+  const ADVariableValue & _stress_02;
+  const ADVariableValue & _stress_11;
+  const ADVariableValue & _stress_12;
+  const ADVariableValue & _stress_22;
   ADMaterialProperty<Real> & _F_surface;
   ADMaterialProperty<Real> & _J2;
 };

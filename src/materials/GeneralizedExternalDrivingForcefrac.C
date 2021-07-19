@@ -2,15 +2,15 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "GeneralizedExternalDrivingForce.h"
+#include "GeneralizedExternalDrivingForcefrac.h"
 #include "Function.h"
 // #include "RankTwoTensorImplementation.h"
 // #include "ADRankTwoTensorForward.h"
 
-registerADMooseObject("raccoonApp", GeneralizedExternalDrivingForce);
+registerADMooseObject("raccoonApp", GeneralizedExternalDrivingForcefrac);
 
 InputParameters
-GeneralizedExternalDrivingForce::validParams()
+GeneralizedExternalDrivingForcefrac::validParams()
 {
   InputParameters params = ADMaterial::validParams();
   params.addClassDescription("computes the Kumar coeffs"
@@ -34,8 +34,8 @@ GeneralizedExternalDrivingForce::validParams()
       "compressive_strength", "compressive strength");
   params.addRequiredParam<Real>(
       "delta", "delta");
-  params.addRequiredParam<MaterialPropertyName>(
-      "rank_two_tensor","name of the stress tensor");
+  // params.addRequiredParam<MaterialPropertyName>(
+  //     "rank_two_tensor","name of the stress tensor");
   params.addParam<MaterialPropertyName>(
       "external_driving_force_name", "ex_driving", "name of the material that holds the external_driving_force");
 //  params.addParam<MaterialPropertyName>(
@@ -46,10 +46,16 @@ GeneralizedExternalDrivingForce::validParams()
 // params.addCoupledVar("second_invariant","The second standard invariants of stress tensor");
   // params.addRequiredParam<ADMaterialProperty<Real>>("first_invariant","The first standard invariants of stress tensor");
   // params.addRequiredParam<ADMaterialProperty<Real>>("second_invariant","The second standard invariants of stress tensor");
+params.addCoupledVar("stress_00","00");
+params.addCoupledVar("stress_01","01");
+params.addCoupledVar("stress_02","02");
+params.addCoupledVar("stress_11","11");
+params.addCoupledVar("stress_12","12");
+params.addCoupledVar("stress_22","22");
   return params;
 }
 
-GeneralizedExternalDrivingForce::GeneralizedExternalDrivingForce(const InputParameters & parameters)
+GeneralizedExternalDrivingForcefrac::GeneralizedExternalDrivingForcefrac(const InputParameters & parameters)
   : ADMaterial(parameters),
     _ex_driving_name(getParam<MaterialPropertyName>("external_driving_force_name")),
     _ex_driving(declareADProperty<Real>(_ex_driving_name)),
@@ -69,8 +75,14 @@ GeneralizedExternalDrivingForce::GeneralizedExternalDrivingForce(const InputPara
     // ,_invar_2(adCoupledValue("second_invariant"))
     // ,_invar_1(getADMaterialProperty<Real>("invar_1"))
     // ,_invar_2(getADMaterialProperty<Real>("invar_2"))
-    ,_rank_two_tensor(getParam<MaterialPropertyName>("rank_two_tensor"))
-    ,_stress(getADMaterialProperty<RankTwoTensor>(_rank_two_tensor))
+    // ,_rank_two_tensor(getParam<MaterialPropertyName>("rank_two_tensor"))
+    // ,_stress(getADMaterialProperty<RankTwoTensor>(_rank_two_tensor))
+    ,_stress_00(adCoupledValue("stress_00"))
+    ,_stress_01(adCoupledValue("stress_01"))
+    ,_stress_02(adCoupledValue("stress_02"))
+    ,_stress_11(adCoupledValue("stress_11"))
+    ,_stress_12(adCoupledValue("stress_12"))
+    ,_stress_22(adCoupledValue("stress_22"))
     ,_F_surface(declareADProperty<Real>("F_surface"))
     ,_J2(declareADProperty<Real>("J2"))
 //    _invar_1(getParam<Real>(getParam<MaterialPropertyName>("first_invariant"))),
@@ -87,20 +99,24 @@ GeneralizedExternalDrivingForce::GeneralizedExternalDrivingForce(const InputPara
 }
 
 void
-GeneralizedExternalDrivingForce::computeQpProperties()
+GeneralizedExternalDrivingForcefrac::computeQpProperties()
 {
   ADReal _temp = _Gc * 3.0/_L/8.0;
-  ADReal I1 = _stress[_qp](0,0)+_stress[_qp](1,1)+_stress[_qp](2,2);
-  ADReal I2 = _stress[_qp](0,0)*_stress[_qp](1,1)+_stress[_qp](0,0)*_stress[_qp](2,2)+_stress[_qp](1,1)*_stress[_qp](2,2)-pow(_stress[_qp](0,1),2)-pow(_stress[_qp](1,2),2)-pow(_stress[_qp](2,0),2);
-  _J2[_qp] = ( pow(_stress[_qp](0,0)-_stress[_qp](1,1),2)+pow(_stress[_qp](1,1)-_stress[_qp](2,2),2)+pow(_stress[_qp](0,0)-_stress[_qp](2,2),2) )/6.0+pow(_stress[_qp](0,1),2)+pow(_stress[_qp](0,2),2)+pow(_stress[_qp](2,1),2);
-  try{
-    if (_J2[_qp]<0)
-    {throw 11;}
-  }
-  catch(int e){
-    std::cout<<"Negative J2 "<<_J2[_qp]<<std::endl;
-    exit(e);
-  }
+  ADRankTwoTensor _stress;
+  _stress(0,0) = _stress_00[_qp];
+  _stress(0,1) = _stress_01[_qp];
+  _stress(0,2) = _stress_02[_qp];
+  _stress(1,1) = _stress_11[_qp];
+  _stress(1,2) = _stress_12[_qp];
+  _stress(2,2) = _stress_22[_qp];
+
+  ADReal I1 = _stress(0,0)+_stress(1,1)+_stress(2,2);
+  ADReal I2 = _stress(0,0)*_stress(1,1)+_stress(0,0)*_stress(2,2)+_stress(1,1)*_stress(2,2)-pow(_stress(0,1),2)-pow(_stress(1,2),2)-pow(_stress(2,0),2);
+  _J2[_qp] = ( pow(_stress(0,0)-_stress(1,1),2)+pow(_stress(1,1)-_stress(2,2),2)+pow(_stress(0,0)-_stress(2,2),2) )/6.0+pow(_stress(0,1),2)+pow(_stress(0,2),2)+pow(_stress(2,1),2);
+
+  // ADReal I1 = _stress[_qp](0,0)+_stress[_qp](1,1)+_stress[_qp](2,2);
+  // ADReal I2 = _stress[_qp](0,0)*_stress[_qp](1,1)+_stress[_qp](0,0)*_stress[_qp](2,2)+_stress[_qp](1,1)*_stress[_qp](2,2)-pow(_stress[_qp](0,1),2)-pow(_stress[_qp](1,2),2)-pow(_stress[_qp](2,0),2);
+  // _J2[_qp] = ( pow(_stress[_qp](0,0)-_stress[_qp](1,1),2)+pow(_stress[_qp](1,1)-_stress[_qp](2,2),2)+pow(_stress[_qp](0,0)-_stress[_qp](2,2),2) )/6.0+pow(_stress[_qp](0,1),2)+pow(_stress[_qp](0,2),2)+pow(_stress[_qp](2,1),2);
   // ADReal I1= _invar_1[_qp];
   // ADReal I2 = _invar_2[_qp];
   // _J2[_qp] = I1*I1/3.0-I2;
