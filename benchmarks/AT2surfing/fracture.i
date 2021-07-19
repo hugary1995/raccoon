@@ -77,9 +77,9 @@
 [Adaptivity]
   marker = marker
   initial_marker = marker
-  initial_steps = 3
+  initial_steps = 4
   stop_time = 0
-  max_h_level = 3
+  max_h_level = 4
   [Markers]
     [marker]
       type = BoxMarker
@@ -238,7 +238,7 @@
   #   execute_vector_postprocessors_on = final
   # []
   exodus = true
-  file_base = surf_AT2_Gc2L0.70del1.16_dt1e-2_J5b_noirr_frac
+  file_base = surf_AT2_Gc2L0.35del1.16_dt1e-2_J5b_noirr_frac
   append_date = true
   print_linear_residuals = false
 []
