@@ -22,6 +22,10 @@ protected:
   // @{ Decomposition methods
   virtual ADRankTwoTensor computeMandelStressNoDecomposition(const ADRankTwoTensor & Fe,
                                                              const bool plasticity_update);
+  virtual ADRankTwoTensor computeMandelStressVolDevDecomposition(const ADRankTwoTensor & Fe,
+                                                                 const bool plasticity_update);
+  virtual ADRankTwoTensor computeMandelStressSpectralDecomposition(const ADRankTwoTensor & Fe,
+                                                                   const bool plasticity_update);
   // @}
 
   /// The bulk modulus
@@ -46,6 +50,6 @@ protected:
   const ADMaterialProperty<Real> & _dg_dd;
   // @}
 
-  /// Decomposittion types
+  /// Decomposition types
   const enum class Decomposition { none, spectral, voldev } _decomposition;
 };
