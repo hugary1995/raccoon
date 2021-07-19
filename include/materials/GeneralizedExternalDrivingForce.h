@@ -21,13 +21,10 @@ protected:
   ADMaterialProperty<Real> & _ex_driving;
 
   /// energy release rate
-  //const GenericMaterialProperty<Real,true> & _Gc;
   const Real & _Gc;
-  // const Real & _Gc;
 
   /// phase field regularization length
   const Real & _L;
-  // const Real & _L;
 
   const Real & _Lambda;
 
@@ -50,13 +47,8 @@ protected:
   Real _gamma_0;
   Real _gamma_1;
   Real _gamma_2;
-  // const ADVariableValue & _invar_1;
-  // const ADVariableValue & _invar_2;
-  // const ADMaterialProperty<Real> & _invar_1;
-  // const ADMaterialProperty<Real> & _invar_2;
   const MaterialPropertyName _rank_two_tensor;
   const ADMaterialProperty<RankTwoTensor> & _stress;
-// const GenericMaterialProperty<RankTwoTensor, is_ad> & _stress;
   ADMaterialProperty<Real> & _F_surface;
   ADMaterialProperty<Real> & _J2;
 };

@@ -4,8 +4,6 @@
 
 #include "GeneralizedExternalDrivingForce.h"
 #include "Function.h"
-// #include "RankTwoTensorImplementation.h"
-// #include "ADRankTwoTensorForward.h"
 
 registerADMooseObject("raccoonApp", GeneralizedExternalDrivingForce);
 
@@ -15,11 +13,6 @@ GeneralizedExternalDrivingForce::validParams()
   InputParameters params = ADMaterial::validParams();
   params.addClassDescription("computes the Kumar coeffs"
                              "Ce()");
-//  params.addRequiredParam<Real>(
-//      "coef", "The coefficient describing the mismatch between the film and the substrate");
-//  params.addRequiredCoupledVar(
-//      "displacements",
-//      "The displacements appropriate for the simulation geometry and coordinate system");
   params.addRequiredParam<Real>(
       "energy_release_rate", "energy release rate or fracture toughness");
   params.addRequiredParam<Real>(
@@ -38,14 +31,6 @@ GeneralizedExternalDrivingForce::validParams()
       "rank_two_tensor","name of the stress tensor");
   params.addParam<MaterialPropertyName>(
       "external_driving_force_name", "ex_driving", "name of the material that holds the external_driving_force");
-//  params.addParam<MaterialPropertyName>(
-//      "first_invariant", "invar_1", "The first standard invariants of stress tensor");
-//  params.addParam<MaterialPropertyName>(
-//      "second_invariant", "invar_2", "The second standard invariants of stress tensor");
-// params.addCoupledVar("first_invariant","The first standard invariants of stress tensor");
-// params.addCoupledVar("second_invariant","The second standard invariants of stress tensor");
-  // params.addRequiredParam<ADMaterialProperty<Real>>("first_invariant","The first standard invariants of stress tensor");
-  // params.addRequiredParam<ADMaterialProperty<Real>>("second_invariant","The second standard invariants of stress tensor");
   return params;
 }
 
@@ -65,21 +50,10 @@ GeneralizedExternalDrivingForce::GeneralizedExternalDrivingForce(const InputPara
     ,_beta_1(declareADProperty<Real>("beta_1"))
     ,_beta_2(declareADProperty<Real>("beta_2"))
     ,_beta_3(declareADProperty<Real>("beta_3"))
-    // ,_invar_1(adCoupledValue("first_invariant"))
-    // ,_invar_2(adCoupledValue("second_invariant"))
-    // ,_invar_1(getADMaterialProperty<Real>("invar_1"))
-    // ,_invar_2(getADMaterialProperty<Real>("invar_2"))
     ,_rank_two_tensor(getParam<MaterialPropertyName>("rank_two_tensor"))
     ,_stress(getADMaterialProperty<RankTwoTensor>(_rank_two_tensor))
     ,_F_surface(declareADProperty<Real>("F_surface"))
     ,_J2(declareADProperty<Real>("J2"))
-//    _invar_1(getParam<Real>(getParam<MaterialPropertyName>("first_invariant"))),
-//    _invar_2(getParam<Real>(getParam<MaterialPropertyName>("second_invariant")))
-
-//    _E_int(declareADProperty<Real>(_E_int_name)),
- //   _coef(getParam<Real>("coef")),
-  //  _ndisp(coupledComponents("displacements")),
-//    _disp(3)
 {
   _gamma_0 = _sigma_ts/6.0/(3.0*_Lambda+2.0*_mu)+_sigma_ts/6.0/_mu;
   _gamma_1 = (1.0+_delta)*(_sigma_cs-_sigma_ts)/(2.0*_sigma_ts*_sigma_cs);
@@ -101,9 +75,6 @@ GeneralizedExternalDrivingForce::computeQpProperties()
     std::cout<<"Negative J2 "<<_J2[_qp]<<std::endl;
     exit(e);
   }
-  // ADReal I1= _invar_1[_qp];
-  // ADReal I2 = _invar_2[_qp];
-  // _J2[_qp] = I1*I1/3.0-I2;
   _beta_0[_qp]= _delta*_temp;
   _beta_1[_qp] = -_gamma_1*_temp+_gamma_0;
   _beta_2[_qp] = -_gamma_2*_temp+std::sqrt(3.0)*_gamma_0;
@@ -112,17 +83,5 @@ GeneralizedExternalDrivingForce::computeQpProperties()
   _ex_driving[_qp] = _beta_2[_qp]*std::sqrt(_J2[_qp])+_beta_1[_qp]*I1+_beta_0[_qp]+_beta_3[_qp];
   Real K = _Lambda+2.0*_mu/3.0;
   _F_surface[_qp] = _J2[_qp]/_mu + I1*I1/9.0/K - _ex_driving[_qp] - _temp;
-
-// if (std::isnan(_ex_driving[_qp]))
-// {
-//   std::cout << "_invar_1[_qp] = " << _invar_1[_qp] << std::endl;
-//   std::cout << "_invar_2[_qp] = " << _invar_2[_qp] << std::endl;
-//   std::cout << "_beta_0[_qp] = " << _beta_0[_qp] << std::endl;
-//   std::cout << "_beta_1[_qp] = " << _beta_1[_qp] << std::endl;
-//   std::cout << "_beta_2[_qp] = " << _beta_2[_qp] << std::endl;
-//   std::cout << "_beta_3[_qp] = " << _beta_3[_qp] << std::endl;
-//   std::cout << "_J2[_qp] = " << _J2[_qp] << std::endl;
-//   std::cout << "_ex_driving[_qp] = " << _ex_driving[_qp] << std::endl;
-// }
 
 }
