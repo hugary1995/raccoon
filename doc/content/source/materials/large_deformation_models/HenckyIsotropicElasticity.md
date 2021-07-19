@@ -22,6 +22,34 @@ The stress conjugate follows from the variational principles.
   \bs{\Sigma} = K \tr(\bs{\varepsilon}^e) \bfI + 2 G \dev(\bs{\varepsilon}^e).
 \end{equation}
 
+Three types of splits are available
+
+1. No Split
+
+\begin{equation}
+    w_{\langle A\rangle}^e(\bfC^e) = \frac{1}{2}K \tr(\bs{\varepsilon})^2 + G \text{ dev } \bs{\varepsilon}^e:\text{dev } \bs{\varepsilon}^e
+\end{equation}
+
+2. Volumetric Deviatoric Split
+
+\begin{equation}
+  w_{\langle A\rangle}^e(\bfC^e) = \frac{1}{2}K\langle \tr(\bs{\varepsilon}^e)\rangle_{+}+G \text{ dev} \bs{\varepsilon}^e:\text{dev} \bs{\varepsilon}^e
+\end{equation}
+\begin{equation}
+  w_{\langle I \rangle}^e(\bfC^e) = \frac{1}{2}K\langle \tr(\bs{\varepsilon}^e)\rangle_-
+\end{equation}
+
+
+3. Spectral Decomposition
+
+\begin{equation}
+  w_{\langle A \rangle}^e(\bfC^e) = \frac{1}{2}\lambda \langle \bs{\varepsilon}_1^e + \bs{\varepsilon}_2^e + \bs{\varepsilon}_3^e\rangle_+^2 + G(\langle \bs{\varepsilon}_1\rangle_+^2+\langle\bs{\varepsilon}_2\rangle_+^2+\langle\bs{\varepsilon}_3\rangle_+^2)
+\end{equation}
+\begin{equation}
+    w_{\langle I \rangle}^e(\bfC^e) = \frac{1}{2}\lambda \langle \bs{\varepsilon}_1^e + \bs{\varepsilon}_2^e + \bs{\varepsilon}_3^e\rangle_-^2 + G(\langle \bs{\varepsilon}_1\rangle_-^2+\langle\bs{\varepsilon}_2\rangle_-^2+\langle\bs{\varepsilon}_3\rangle_-^2)
+\end{equation}
+
+
 ## Example Input File Syntax
 
 !syntax parameters /Materials/HenckyIsotropicElasticity
