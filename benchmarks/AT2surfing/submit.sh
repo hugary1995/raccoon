@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -N 1
-#SBATCH --ntasks=16
+#SBATCH --ntasks=8
 #SBATCH --job-name=surf_AT2_Gc2L0.70del1.16_dt1e-2_J5b
 #SBATCH --partition=dolbowlab
 #SBATCH --mem-per-cpu=10G

@@ -104,31 +104,23 @@
     order = CONSTANT
     family = MONOMIAL
   []
-  [ce]
-    order = CONSTANT
-    family = MONOMIAL
-  []
-  # [disp_x]
-  # []
-  # [disp_y]
-  # []
 []
 
 
 [Bounds]
-  # [irreversibility]
-  #   type = VariableOldValueBoundsAux
-  #   variable = bounds_dummy
-  #   bounded_variable = d
-  #   bound_type = lower
-  # []
-  [lower]
-    type = ConstantBoundsAux
+  [irreversibility]
+    type = VariableOldValueBoundsAux
     variable = bounds_dummy
     bounded_variable = d
     bound_type = lower
-    bound_value = 0
   []
+  # [lower]
+  #   type = ConstantBoundsAux
+  #   variable = bounds_dummy
+  #   bounded_variable = d
+  #   bound_type = lower
+  #   bound_value = 0
+  # []
   [upper]
     type = ConstantBoundsAux
     variable = bounds_dummy
@@ -181,12 +173,12 @@
     material_property_names = 'alpha(d) g(d) Gc c0 l'
     derivative_order = 1
   []
-  [cracksurface]
-    type = CrackSurfaceDensity
-    phase_field = d
-    output_properties = gamma
-    outputs = exodus
- []
+ #  [cracksurface]
+ #    type = CrackSurfaceDensity
+ #    phase_field = d
+ #    output_properties = gamma
+ #    outputs = exodus
+ # []
 []
 
 
@@ -237,8 +229,8 @@
   #   append_date = true
   #   execute_vector_postprocessors_on = final
   # []
-  exodus = true
-  file_base = surf_AT2_Gc2L0.70del1.16_dt1e-2_J5b_noirr_frac
-  append_date = true
-  print_linear_residuals = false
+  # exodus = true
+  # file_base = surf_AT2_Gc2L0.70del1.16_dt1e-2_J5b_noirr_frac
+  # append_date = true
+  # print_linear_residuals = false
 []

@@ -327,7 +327,7 @@ c2 = '${fparse (3-nu)/(1-nu)}'
     phase_field = d
     degradation_function = g
     decomposition = NONE
-    output_properties = 'psie_active' #elastic_strain
+    output_properties = 'psie_active psie' #elastic_strain
     outputs = exodus
   []
   [stress]
@@ -375,7 +375,7 @@ c2 = '${fparse (3-nu)/(1-nu)}'
   [Jint]
     type = PhaseFieldJIntegral
     J_direction = '1 0 0'
-    elastic_energy_name = psie_active
+    elastic_energy_name = psie
     displacements = 'disp_x disp_y'
     boundary = 'top_half_left top_half_top top_half_right bottom_half_right bottom_half_bottom bottom_half_left'
   []
@@ -417,7 +417,7 @@ c2 = '${fparse (3-nu)/(1-nu)}'
 # execute_vector_postprocessors_on = final
 # []
   exodus = true
-  file_base = surf_AT2_Gc2L0.70del1.16_dt1e-2_J5b_noirr_ela
+  file_base = surf_AT2_Gc2L0.70del1.16_dt1e-2_J5b_psie_ela
   append_date = true
   print_linear_residuals = false
 []

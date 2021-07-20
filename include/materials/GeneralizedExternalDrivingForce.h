@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include "ADMaterial.h"
+#include "Material.h"
 
-class GeneralizedExternalDrivingForce : public ADMaterial
+class GeneralizedExternalDrivingForce : public Material
 {
 public:
   static InputParameters validParams();
@@ -15,48 +15,44 @@ public:
 
 protected:
   virtual void computeQpProperties() override;
-
+  /// Name of the external driving force
   const MaterialPropertyName _ex_driving_name;
-
+  /// The external driving force
   ADMaterialProperty<Real> & _ex_driving;
 
   /// energy release rate
-  //const GenericMaterialProperty<Real,true> & _Gc;
-  const Real & _Gc;
-  // const Real & _Gc;
+  const ADMaterialProperty<Real> & _Gc;
 
   /// phase field regularization length
-  const Real & _L;
-  // const Real & _L;
+  const ADMaterialProperty<Real> & _L;
+  /// Lame's first parameter
+  const ADMaterialProperty<Real> & _Lambda;
+  /// shear modulus
+  const ADMaterialProperty<Real> & _mu;
 
-  const Real & _Lambda;
-
-  const Real & _mu;
-
-  /// tensile strength
+  /// critical tensile strength
   const Real & _sigma_ts;
 
-  /// compressive strength
+  /// critical compressive strength
   const Real & _sigma_cs;
 
-  ///
+  /// regularization length dependent parameter
   const Real & _delta;
 
-  ///
-  ADMaterialProperty<Real> & _beta_0;
-  ADMaterialProperty<Real> & _beta_1;
-  ADMaterialProperty<Real> & _beta_2;
-  ADMaterialProperty<Real> & _beta_3;
-  Real _gamma_0;
-  Real _gamma_1;
-  Real _gamma_2;
-  // const ADVariableValue & _invar_1;
-  // const ADVariableValue & _invar_2;
-  // const ADMaterialProperty<Real> & _invar_1;
-  // const ADMaterialProperty<Real> & _invar_2;
-  const MaterialPropertyName _rank_two_tensor;
+  /// values computed during
+  // ADMaterialProperty<Real> & _beta_0;
+  // ADMaterialProperty<Real> & _beta_1;
+  // ADMaterialProperty<Real> & _beta_2;
+  // ADMaterialProperty<Real> & _beta_3;
+  // Real _gamma_0;
+  // Real _gamma_1;
+  // Real _gamma_2;
+  /// name of the degraded stress tensor
+  const MaterialPropertyName _rank_two_tensor; //remove
+  /// the degraded stress tensor
   const ADMaterialProperty<RankTwoTensor> & _stress;
-// const GenericMaterialProperty<RankTwoTensor, is_ad> & _stress;
+  /// strength surface computed
   ADMaterialProperty<Real> & _F_surface;
+  /// j2 invariant
   ADMaterialProperty<Real> & _J2;
 };
