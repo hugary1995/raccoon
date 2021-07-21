@@ -38,19 +38,15 @@ jobs:
       - name: Compile RACCOON
         run: |
           conda list | grep moose
-          conda activate moose
-          conda list | grep moose
+          echo $LIBMESH_DIR
+          ls $CONDA_PKGS_DIR
           make -j 2
         
-      - name: Check documentation
+      - name: Check and build documentation
         run: |
           mkdir gh-pages
           cd doc
           ./moosedocs.py check
-          
-      - name: Build documentation
-        run: |
-          cd doc
           ./moosedocs.py build --destination ../gh-pages/
           
       - name: Deploy to GitHub Pages
