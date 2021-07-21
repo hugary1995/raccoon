@@ -19,18 +19,12 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Setup Miniconda
-        uses: conda-incubator/setup-miniconda@v2.1.1
-        with:
-          miniconda-version: "latest"
-          activate-environment: moose
-          channels: conda-forge,idaholab
-          mamba-version: "*"
-          
-      - name: Install MOOSE environments
+      - name: Install dependencies
         run: |
-          mamba install moose-tools
-          mamba install moose-libmesh
+          conda config --add channels conda-forge
+          conda config --add channels idaholab
+          conda install mamba
+          manba install moose-tools moose-libmesh
         
       - name: Compile RACCOON
         run: |
