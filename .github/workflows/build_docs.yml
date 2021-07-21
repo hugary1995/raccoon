@@ -25,33 +25,18 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Download and install miniconda
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v2.1.1
+        with:
+          miniconda-version: "latest"
+          activate-environment: moose
+          channels: conda-forge,idaholab
+          mamba-version: "*"
+          
+      - name: Install MOOSE environments
         run: |
-          curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-          bash Miniconda3-latest-Linux-x86_64.sh -b -p ~/miniconda3
+          mamba install moose-tools
+          mamba install moose-libmesh
           
       - name: Export environment variables
-        run: |
-          export RACCOON_DIR=`pwd`
-          export PATH=$HOME/miniconda3/bin:$PATH
-      
-      - name: Initialize conda shell
-        run: |
-          conda init bash
-          source ~/.bashrc
-      
-      - name: Add conda channels
-        run: |
-          conda config --add channels conda-forge
-          conda config --add channels idaholab
-      
-      - name: Create the moose environment
-        run: |
-          conda create -n moose -q -y
-          conda activate moose
-          
-      - name: Install moose-tools
-        run: conda install moose-tools
-        
-      - name: Install moose-libmesh
-        run: conda install moose-libmesh
+        run: export RACCOON_DIR=`pwd`
