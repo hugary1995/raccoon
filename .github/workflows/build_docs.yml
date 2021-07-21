@@ -16,6 +16,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
       - name: Setup Miniconda
         uses: conda-incubator/setup-miniconda@v2.1.1
@@ -48,6 +50,7 @@ jobs:
           ./moosedocs.py build --destination ../gh-pages/
           
       - name: Deploy to GitHub Pages
+        if: ${{ github.event_name == 'push' }}
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
           branch: gh-pages
