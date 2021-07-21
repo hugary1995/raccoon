@@ -30,15 +30,28 @@ jobs:
           curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
           bash Miniconda3-latest-Linux-x86_64.sh -b -p ~/miniconda3
           
-      - name: Download and install the moose environment
+      - name: Export environment variables
         run: |
           export RACCOON_DIR=`pwd`
           export PATH=$HOME/miniconda3/bin:$PATH
-          conda config --add channels conda-forge
-          conda config --add channels idaholab
-          conda create -n moose -q -y
+      
+      - name: Initialize conda shell
+        run: |
           conda init bash
           source ~/.bashrc
+      
+      - name: Add conda channels
+        run: |
+          conda config --add channels conda-forge
+          conda config --add channels idaholab
+      
+      - name: Create the moose environment
+        run: |
+          conda create -n moose -q -y
           conda activate moose
-          conda install moose-tools
-          conda install moose-libmesh
+          
+      - name: Install moose-tools
+        run: conda install moose-tools
+        
+      - name: Install moose-libmesh
+        run: conda install moose-libmesh
