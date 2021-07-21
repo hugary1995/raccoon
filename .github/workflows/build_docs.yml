@@ -31,13 +31,10 @@ jobs:
         run: |
           mamba install moose-tools
           mamba install moose-libmesh
-          
-      - name: Export environment variables
-        run: |
-          export RACCOON_DIR=`pwd`
-          export LIBMESH_DIR=$CONDA/envs/moose/libmesh
         
       - name: Compile RACCOON
+        env:
+          LIBMESH_DIR: $CONDA/envs/moose/libmesh
         run: |
           conda list | grep moose
           make -j 2
