@@ -19,13 +19,27 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install dependencies and build documentation
+      - name: Install dependencies
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: moose
+          channels: conda-forge,idaholab
+          mamba-version: "*"
+
+      - name: Install dependencies
+        shell: bash -l {0}
         run: |
-          conda config --add channels conda-forge
-          conda config --add channels idaholab
-          conda install moose-tools moose-libmesh
+          mamba install moose-tools moose-libmesh
           conda list | grep moose
+
+      - name: Compile RACCOON
+        shell: bash -l {0}
+        run: |
           make -j 2
+
+      - name: Build documentation
+        shell: bash -l {0}
+        run: |
           mkdir gh-pages
           cd doc
           ./moosedocs.py check
