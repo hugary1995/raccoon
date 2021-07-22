@@ -19,20 +19,13 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install dependencies
+      - name: Install dependencies and build documentation
         run: |
           conda config --add channels conda-forge
           conda config --add channels idaholab
           conda install moose-tools moose-libmesh
-        
-      - name: Compile RACCOON
-        run: |
-          which mpiexec
           conda list | grep moose
           make -j 2
-        
-      - name: Check and build documentation
-        run: |
           mkdir gh-pages
           cd doc
           ./moosedocs.py check
