@@ -1,4 +1,7 @@
-// By: Sina A. V. Based on RACCOON
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+//* By: @Sina-av
 
 #pragma once
 
