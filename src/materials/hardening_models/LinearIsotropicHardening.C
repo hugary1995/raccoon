@@ -1,4 +1,7 @@
-// By: Sina A. V. Based on RACCOON
+//* This file is part of the RACCOON application
+//* being developed at Dolbow lab at Duke University
+//* http://dolbow.pratt.duke.edu
+//* By: @Sina-av
 
 #include "LinearIsotropicHardening.h"
 
@@ -10,7 +13,8 @@ LinearIsotropicHardening::validParams()
   InputParameters params = PlasticHardeningModel::validParams();
   params.addClassDescription("Plastic hardening following a linear isotropic law.");
 
-  params.addRequiredParam<MaterialPropertyName>("yield_stress", "The initial yield stress $\\sigma_y$");
+  params.addRequiredParam<MaterialPropertyName>("yield_stress",
+                                                "The initial yield stress $\\sigma_y$");
   params.addRequiredParam<MaterialPropertyName>("hardening_modulus", "The hardening modulus $H$");
 
   params.addRequiredCoupledVar("phase_field", "Name of the phase-field (damage) variable");
