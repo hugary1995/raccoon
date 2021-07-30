@@ -1,6 +1,6 @@
 RACCOON 
 
-[![Tests](https://github.com/hugary1995/raccoon/actions/workflows/tests.yml/badge.svg)](https://github.com/hugary1995/raccoon/actions/workflows/tests.yml) [![Documentation](https://github.com/hugary1995/raccoon/actions/workflows/build_docs.yml/badge.svg)](https://github.com/hugary1995/raccoon/actions/workflows/build_docs.yml) ![merge-chance-badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fmerge-chance.info%2Fbadge%3Frepo%3Dhugary1995/raccoon)
+[![Tests](https://github.com/hugary1995/raccoon/actions/workflows/tests.yml/badge.svg)](https://github.com/hugary1995/raccoon/actions/workflows/tests.yml) [![Documentation](https://github.com/hugary1995/raccoon/actions/workflows/build_docs.yml/badge.svg)](https://github.com/hugary1995/raccoon/actions/workflows/build_docs.yml) [![clang-format](https://github.com/hugary1995/raccoon/actions/workflows/clang_format.yml/badge.svg)](https://github.com/hugary1995/raccoon/actions/workflows/clang_format.yml)
 =======
 
 RACCOON is built on MOOSE, a massively parallel object-oriented framework for finite element.
