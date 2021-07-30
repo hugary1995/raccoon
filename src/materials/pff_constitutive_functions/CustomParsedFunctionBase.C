@@ -21,8 +21,7 @@ CustomParsedFunctionBase::validParams()
   return params;
 }
 
-CustomParsedFunctionBase::CustomParsedFunctionBase(
-    const InputParameters & parameters)
+CustomParsedFunctionBase::CustomParsedFunctionBase(const InputParameters & parameters)
   : DerivativeParsedMaterialHelperTempl<true>(parameters, VariableNameMappingMode::USE_MOOSE_NAMES),
     _function(getParam<std::string>("function")),
     _param_names(getParam<std::vector<std::string>>("parameter_names")),

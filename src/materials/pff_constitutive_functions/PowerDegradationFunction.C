@@ -20,8 +20,7 @@ PowerDegradationFunction::validParams()
   return params;
 }
 
-PowerDegradationFunction::PowerDegradationFunction(
-    const InputParameters & parameters)
+PowerDegradationFunction::PowerDegradationFunction(const InputParameters & parameters)
   : DegradationFunctionBase(parameters)
 {
 }
