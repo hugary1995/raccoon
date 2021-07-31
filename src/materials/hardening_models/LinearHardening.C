@@ -3,12 +3,12 @@
 //* http://dolbow.pratt.duke.edu
 //* By: @Sina-av
 
-#include "LinearIsotropicHardening.h"
+#include "LinearHardening.h"
 
-registerMooseObject("raccoonApp", LinearIsotropicHardening);
+registerMooseObject("raccoonApp", LinearHardening);
 
 InputParameters
-LinearIsotropicHardening::validParams()
+LinearHardening::validParams()
 {
   InputParameters params = PlasticHardeningModel::validParams();
   params.addClassDescription("Plastic hardening following a linear isotropic law.");
@@ -27,7 +27,7 @@ LinearIsotropicHardening::validParams()
   return params;
 }
 
-LinearIsotropicHardening::LinearIsotropicHardening(const InputParameters & parameters)
+LinearHardening::LinearHardening(const InputParameters & parameters)
   : PlasticHardeningModel(parameters),
     DerivativeMaterialPropertyNameInterface(),
     _sigma_y(getADMaterialProperty<Real>(prependBaseName("yield_stress", true))),
@@ -49,7 +49,7 @@ LinearIsotropicHardening::LinearIsotropicHardening(const InputParameters & param
 }
 
 ADReal
-LinearIsotropicHardening::plasticEnergy(const ADReal & ep, const unsigned int derivative)
+LinearHardening::plasticEnergy(const ADReal & ep, const unsigned int derivative)
 {
   if (derivative == 0)
   {
