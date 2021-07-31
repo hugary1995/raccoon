@@ -8,13 +8,12 @@
 #include "PlasticHardeningModel.h"
 #include "DerivativeMaterialPropertyNameInterface.h"
 
-class LinearIsotropicHardening : public PlasticHardeningModel,
-                                 public DerivativeMaterialPropertyNameInterface
+class LinearHardening : public PlasticHardeningModel, public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
 
-  LinearIsotropicHardening(const InputParameters & parameters);
+  LinearHardening(const InputParameters & parameters);
 
   virtual ADReal plasticEnergy(const ADReal & ep, const unsigned int derivative = 0) override;
 
