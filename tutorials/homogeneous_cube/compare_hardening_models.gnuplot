@@ -1,6 +1,7 @@
 set multiplot layout 1,2
 set datafile separator ','
 set xrange [1:]
+set yrange [0:1.8]
 set key left top
 set xlabel "F_{yy}"
 

@@ -60,10 +60,10 @@ LinearHardening::plasticEnergy(const ADReal & ep, const unsigned int derivative)
   }
   // derivative of plastic energy w.r.t equivalent plastic strain ep
   if (derivative == 1)
-    return _sigma_y[_qp] + _H[_qp] * ep;
+    return _gp[_qp] * _sigma_y[_qp] + _H[_qp] * ep;
 
   if (derivative == 2)
-    return _H[_qp];
+    return _gp[_qp] * _H[_qp];
 
   mooseError(name(), "internal error: unsupported derivative order.");
   return 0;

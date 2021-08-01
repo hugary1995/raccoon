@@ -11,7 +11,7 @@ K = '${fparse E/3/(1-2*nu)}'
 G = '${fparse E/2/(1+nu)}'
 
 sigma_y = 320
-H = 688
+H = 3.44e3
 
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
