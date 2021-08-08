@@ -30,7 +30,7 @@ protected:
   /// The elasticity model
   SmallDeformationElasticityModel * _elasticity_model;
 
-  /// The elasticity model
+  /// The plasticity model
   SmallDeformationPlasticityModel * _plasticity_model;
 
   /// The mechanical strain excluding eigen strains from the total strain
