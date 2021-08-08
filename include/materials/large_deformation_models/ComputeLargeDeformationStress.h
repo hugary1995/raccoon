@@ -32,7 +32,7 @@ protected:
   /// The elasticity model
   LargeDeformationElasticityModel * _elasticity_model;
 
-  /// The elasticity model
+  /// The plasticity model
   LargeDeformationPlasticityModel * _plasticity_model;
 
   /// The viscoelasticity model
