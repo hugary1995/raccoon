@@ -33,8 +33,9 @@ GeneralizedExternalDrivingForce::validParams()
   params.addRequiredParam<Real>("compressive_strength", "critical compressive strength");
   params.addRequiredParam<Real>("delta", "delta");
   params.addParam<MaterialPropertyName>("rank_two_tensor", "stress", "name of the stress tensor");
-  params.addParam<MaterialPropertyName>(
-      "external_driving_force_name", "ex_driving", "name of the material that holds the external_driving_force");
+  params.addParam<MaterialPropertyName>("external_driving_force_name",
+                                        "ex_driving",
+                                        "name of the material that holds the external_driving_force");
   return params;
 }
 
@@ -66,9 +67,9 @@ GeneralizedExternalDrivingForce::computeQpProperties()
   ADReal J2 = (pow(_stress[_qp](0, 0) - _stress[_qp](1, 1), 2) +
                pow(_stress[_qp](1, 1) - _stress[_qp](2, 2), 2) +
                pow(_stress[_qp](0, 0) - _stress[_qp](2, 2), 2)) /
-               6.0 +
-               pow(_stress[_qp](0, 1), 2) + pow(_stress[_qp](0, 2), 2) +
-               pow(_stress[_qp](2, 1), 2);
+                  6.0 +
+              pow(_stress[_qp](0, 1), 2) + pow(_stress[_qp](0, 2), 2) +
+              pow(_stress[_qp](2, 1), 2);
 
   mooseAssert(J2 >= 0, "Negative J2");
 
