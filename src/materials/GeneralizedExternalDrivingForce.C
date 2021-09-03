@@ -33,8 +33,8 @@ GeneralizedExternalDrivingForce::validParams()
   params.addRequiredParam<Real>("compressive_strength", "critical compressive strength");
   params.addRequiredParam<Real>("delta", "delta");
   params.addParam<MaterialPropertyName>("rank_two_tensor", "stress", "name of the stress tensor");
-  params.addParam<MaterialPropertyName>("external_driving_force_name", "ex_driving", "name of the material that holds the external_driving_force");
-
+  params.addParam<MaterialPropertyName>(
+      "external_driving_force_name", "ex_driving", "name of the material that holds the external_driving_force");
   return params;
 }
 
@@ -65,7 +65,8 @@ GeneralizedExternalDrivingForce::computeQpProperties()
   ADReal I1 = _stress[_qp](0, 0) + _stress[_qp](1, 1) + _stress[_qp](2, 2);
   ADReal J2 = (pow(_stress[_qp](0, 0) - _stress[_qp](1, 1), 2) +
                pow(_stress[_qp](1, 1) - _stress[_qp](2, 2), 2) +
-               pow(_stress[_qp](0, 0) - _stress[_qp](2, 2), 2)) / 6.0 +
+               pow(_stress[_qp](0, 0) - _stress[_qp](2, 2), 2)) /
+               6.0 +
                pow(_stress[_qp](0, 1), 2) + pow(_stress[_qp](0, 2), 2) +
                pow(_stress[_qp](2, 1), 2);
 
@@ -74,7 +75,8 @@ GeneralizedExternalDrivingForce::computeQpProperties()
   ADReal _beta_0 = _delta * _temp;
   ADReal _beta_1 = (-_gamma_1 * _temp - _gamma_2) * (_sigma_cs - _sigma_ts) -
                    _gamma_0 * (pow(_sigma_cs, 3) - pow(_sigma_ts, 3));
-  ADReal _beta_2 = std::sqrt(3.0) * ((-_gamma_1 * _temp + _gamma_2) * (_sigma_cs + _sigma_ts) + _gamma_0 * (pow(_sigma_cs, 3) + pow(_sigma_ts, 3)));
+  ADReal _beta_2 = std::sqrt(3.0) * ((-_gamma_1 * _temp + _gamma_2) * (_sigma_cs + _sigma_ts) +
+                   _gamma_0 * (pow(_sigma_cs, 3) + pow(_sigma_ts, 3)));
   ADReal _beta_3 = _L[_qp] * _sigma_ts / _mu[_qp] / K / _Gc[_qp];
   _ex_driving[_qp] = (_beta_2 * std::sqrt(J2) + _beta_1 * I1 + _beta_0) / (1 + _beta_3 * I1 * I1);
 }
