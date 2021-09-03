@@ -5,17 +5,19 @@
 // Forward Declarations
 class ConditionalBoundsAux;
 
-template <> InputParameters validParams<ConditionalBoundsAux>();
+template <>
+InputParameters validParams<ConditionalBoundsAux>();
 
 /**
  * Provides a conditional bound of a variable using its old value or fixed
  * value.
  */
-class ConditionalBoundsAux : public BoundsAuxBase {
+class ConditionalBoundsAux : public BoundsAuxBase
+{
 public:
   static InputParameters validParams();
 
-  ConditionalBoundsAux(const InputParameters &parameters);
+  ConditionalBoundsAux(const InputParameters & parameters);
 
 protected:
   virtual Real getBound() override;
