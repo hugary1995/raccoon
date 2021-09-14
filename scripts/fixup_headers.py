@@ -1,11 +1,12 @@
-#!/usr/bin/env python2
-
 # This script checks and can optionally update MOOSE source files.
 # You should always run this script without the "-u" option
 # first to make sure there is a clean dry run of the files that should
 # be updated
 
-import os, string, re, shutil
+import os
+import string
+import re
+import shutil
 from optparse import OptionParser
 
 global_ignores = ['contrib', '.svn', '.git', 'libmesh']
@@ -22,6 +23,7 @@ python_header = """\
 
 global_options = {}
 
+
 def fixupHeader():
     for dirpath, dirnames, filenames in os.walk(os.getcwd() + "/../"):
 
@@ -30,14 +32,15 @@ def fixupHeader():
             if ignore in dirnames:
                 dirnames.remove(ignore)
 
-        #print dirpath
-        #print dirnames
+        # print dirpath
+        # print dirnames
         for file in filenames:
             suffix = os.path.splitext(file)
             if (suffix[-1] == '.C' or suffix[-1] == '.h') and not global_options.python_only:
                 checkAndUpdateCPlusPlus(os.path.abspath(dirpath + '/' + file))
             if suffix[-1] == '.py' and not global_options.cxx_only:
                 checkAndUpdatePython(os.path.abspath(dirpath + '/' + file))
+
 
 def checkAndUpdateCPlusPlus(filename):
     # Don't update soft links
@@ -53,10 +56,10 @@ def checkAndUpdateCPlusPlus(filename):
     # Check (exact match only)
     if (string.find(text, header) == -1 or global_options.force == True):
         # print the first 10 lines or so of the file
-        if global_options.update == False: # Report only
+        if global_options.update == False:  # Report only
             print filename + ' does not contain an up to date header'
             if global_options.verbose == True:
-                print '>'*40, '\n', '\n'.join((text.split('\n', 10))[:10]), '\n'*5
+                print '>' * 40, '\n', '\n'.join((text.split('\n', 10))[:10]), '\n' * 5
         else:
             # Make sure any previous C-style header version is removed
             text = re.sub(r'^/\*+/$.*^/\*+/$', '', text, flags=re.S | re.M)
@@ -70,7 +73,8 @@ def checkAndUpdateCPlusPlus(filename):
 
             suffix = os.path.splitext(filename)
             if suffix[-1] == '.h':
-                text = re.sub(r'^#ifndef\s*\S+_H_?\s*\n#define.*\n', '', text, flags=re.M)
+                text = re.sub(r'^#ifndef\s*\S+_H_?\s*\n#define.*\n',
+                              '', text, flags=re.M)
                 text = re.sub(r'^#endif.*\n[\s]*\Z', '', text, flags=re.M)
 
             # Update
@@ -85,6 +89,7 @@ def checkAndUpdateCPlusPlus(filename):
             f.close()
             os.rename(filename + '~tmp', filename)
 
+
 def checkAndUpdatePython(filename):
     f = open(filename)
     text = f.read()
@@ -95,10 +100,10 @@ def checkAndUpdatePython(filename):
     # Check (exact match only)
     if (string.find(text, header) == -1):
         # print the first 10 lines or so of the file
-        if global_options.update == False: # Report only
+        if global_options.update == False:  # Report only
             print filename + ' does not contain an up to date header'
             if global_options.verbose == True:
-                print '>'*40, '\n', '\n'.join((text.split('\n', 10))[:10]), '\n'*5
+                print '>' * 40, '\n', '\n'.join((text.split('\n', 10))[:10]), '\n' * 5
         else:
             # Save off the shebang line if it exists
             m = re.match(r'#!.*\n', text)
@@ -147,13 +152,19 @@ def checkAndUpdatePython(filename):
             shutil.copystat(filename, filename + '~tmp')
             os.rename(filename + '~tmp', filename)
 
+
 if __name__ == '__main__':
     parser = OptionParser()
-    parser.add_option("-u", "--update", action="store_true", dest="update", default=False)
-    parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False)
-    parser.add_option("--python-only", action="store_true", dest="python_only", default=False)
-    parser.add_option("--cxx-only", action="store_true", dest="cxx_only", default=False)
-    parser.add_option("-f", "--force", action="store_true", dest="force", default=False)
+    parser.add_option("-u", "--update", action="store_true",
+                      dest="update", default=False)
+    parser.add_option("-v", "--verbose", action="store_true",
+                      dest="verbose", default=False)
+    parser.add_option("--python-only", action="store_true",
+                      dest="python_only", default=False)
+    parser.add_option("--cxx-only", action="store_true",
+                      dest="cxx_only", default=False)
+    parser.add_option("-f", "--force", action="store_true",
+                      dest="force", default=False)
 
     (global_options, args) = parser.parse_args()
     fixupHeader()
