@@ -2,11 +2,7 @@
 
 #include "BoundsAuxBase.h"
 
-// Forward Declarations
 class ConditionalBoundsAux;
-
-template <>
-InputParameters validParams<ConditionalBoundsAux>();
 
 /**
  * Provides a conditional bound of a variable using its old value or fixed

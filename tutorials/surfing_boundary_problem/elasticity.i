@@ -150,7 +150,7 @@ c2 = '${fparse (3-nu)/(1+nu)}'
 [Materials]
   [bulk]
     type = ADGenericConstantMaterial
-    prop_names = 'E K G Lambda Gc l'
+    prop_names = 'E K G lambda Gc l'
     prop_values = '${E} ${K} ${G} ${Lambda} ${Gc} ${l}'
   []
   [degradation]
@@ -181,8 +181,15 @@ c2 = '${fparse (3-nu)/(1+nu)}'
     elasticity_model = elasticity
     output_properties = 'stress'
   []
+  [crack_geometric]
+    type = CrackGeometricFunction
+    f_name = alpha
+    function = 'd'
+    phase_field = d
+  []
   [kumar_material]
-    type = OGeneralizedExternalDrivingForce
+    type = NucleationMicroForce
+    normalization_constant = c0
     tensile_strength = '${sigma_ts}'
     compressive_strength = '${sigma_cs}'
     delta = '${delta}'
@@ -216,10 +223,10 @@ c2 = '${fparse (3-nu)/(1+nu)}'
   dt = 2e-2
   end_time = 5e-1
 
-  picard_max_its = 100
+  picard_max_its = 20
   accept_on_max_picard_iteration = false
-  picard_rel_tol = 1e-6
-  picard_abs_tol = 1e-8
+  picard_rel_tol = 1e-3
+  picard_abs_tol = 1e-5
 []
 
 [Outputs]

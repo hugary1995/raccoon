@@ -6,12 +6,12 @@
 
 #include "Material.h"
 
-class GeneralizedExternalDrivingForce : public Material
+class NucleationMicroForce : public Material
 {
 public:
   static InputParameters validParams();
 
-  GeneralizedExternalDrivingForce(const InputParameters & parameters);
+  NucleationMicroForce(const InputParameters & parameters);
 
 protected:
   virtual void computeQpProperties() override;
@@ -23,10 +23,13 @@ protected:
   /// energy release rate
   const ADMaterialProperty<Real> & _Gc;
 
+  /// The normalization constant
+  const ADMaterialProperty<Real> & _c0;
+
   /// phase field regularization length
   const ADMaterialProperty<Real> & _L;
   /// Lame's first parameter
-  const ADMaterialProperty<Real> & _Lambda;
+  const ADMaterialProperty<Real> & _lambda;
   /// shear modulus
   const ADMaterialProperty<Real> & _mu;
 
@@ -39,8 +42,6 @@ protected:
   /// regularization length dependent parameter
   const Real & _delta;
 
-  /// name of the degraded stress tensor
-  const MaterialPropertyName _rank_two_tensor; // remove
   /// the degraded stress tensor
   const ADMaterialProperty<RankTwoTensor> & _stress;
 };
