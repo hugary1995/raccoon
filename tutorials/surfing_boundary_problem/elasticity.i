@@ -12,6 +12,10 @@ delta = 1.16
 c1 = '${fparse (1+nu)*sqrt(Gc)/sqrt(2*pi*E)}'
 c2 = '${fparse (3-nu)/(1+nu)}'
 
+nx = 90
+ny = 30
+refine = 3
+
 [Functions]
   [bc_func]
     type = ParsedFunction
@@ -25,7 +29,8 @@ c2 = '${fparse (3-nu)/(1+nu)}'
   [fracture]
     type = TransientMultiApp
     input_files = fracture.i
-    cli_args = 'E=${E};K=${K};G=${G};Lambda=${Lambda};Gc=${Gc};l=${l}'
+    cli_args = 'E=${E};K=${K};G=${G};Lambda=${Lambda};Gc=${Gc};l=${l};nx=${nx};ny=${ny};refine=${refi'
+               'ne}'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -55,8 +60,8 @@ c2 = '${fparse (3-nu)/(1+nu)}'
   [gen]
     type = GeneratedMeshGenerator
     dim = 2
-    nx = 90
-    ny = 30
+    nx = ${nx}
+    ny = ${ny}
     xmax = 30
     ymin = -5
     ymax = 5
@@ -74,7 +79,7 @@ c2 = '${fparse (3-nu)/(1+nu)}'
   initial_marker = marker
   initial_steps = 3
   stop_time = 0
-  max_h_level = 3
+  max_h_level = ${refine}
   [Markers]
     [marker]
       type = BoxMarker

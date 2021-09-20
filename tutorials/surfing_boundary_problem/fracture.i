@@ -2,8 +2,8 @@
   [gen]
     type = GeneratedMeshGenerator
     dim = 2
-    nx = 90
-    ny = 30
+    nx = ${nx}
+    ny = ${ny}
     xmax = 30
     ymin = -5
     ymax = 5
@@ -15,7 +15,7 @@
   initial_marker = marker
   initial_steps = 3
   stop_time = 0
-  max_h_level = 3
+  max_h_level = ${refine}
   [Markers]
     [marker]
       type = BoxMarker
@@ -54,7 +54,6 @@
     type = ConditionalBoundsAux
     variable = bounds_dummy
     bounded_variable = d
-    bound_type = lower
     fixed_bound_value = 0
     threshold_value = 0.95
   []
