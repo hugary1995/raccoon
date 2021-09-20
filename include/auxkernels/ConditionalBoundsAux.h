@@ -2,10 +2,8 @@
 
 #include "BoundsAuxBase.h"
 
-class ConditionalBoundsAux;
-
 /**
- * Provides a conditional bound of a variable using its old value or fixed
+ * Provides a conditional bound of a variable using its old value or a fixed
  * value.
  */
 class ConditionalBoundsAux : public BoundsAuxBase
@@ -18,7 +16,7 @@ public:
 protected:
   virtual Real getBound() override;
 
-  /// The value of fixed bound for the variable
+  /// The value of the fixed bound for the variable
   Real _fixed_bound_value;
 
   /// The threshold for conditional bound for the variable

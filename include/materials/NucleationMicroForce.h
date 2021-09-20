@@ -5,8 +5,13 @@
 #pragma once
 
 #include "Material.h"
+#include "BaseNameInterface.h"
 
-class NucleationMicroForce : public Material
+/**
+ * The class implements the external driving force to recover a Drucker-Prager
+ * strength envelope. See Kumar et. al. https://doi.org/10.1016/j.jmps.2020.104027.
+ */
+class NucleationMicroForce : public Material, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -15,33 +20,36 @@ public:
 
 protected:
   virtual void computeQpProperties() override;
+
   /// Name of the external driving force
   const MaterialPropertyName _ex_driving_name;
+
   /// The external driving force
   ADMaterialProperty<Real> & _ex_driving;
 
-  /// energy release rate
+  ///@{ Phase field properties
+  /// The fracture toughness
   const ADMaterialProperty<Real> & _Gc;
-
   /// The normalization constant
   const ADMaterialProperty<Real> & _c0;
-
   /// phase field regularization length
   const ADMaterialProperty<Real> & _L;
+  ///@}
+
   /// Lame's first parameter
   const ADMaterialProperty<Real> & _lambda;
-  /// shear modulus
+  /// The shear modulus
   const ADMaterialProperty<Real> & _mu;
 
-  /// critical tensile strength
+  /// The critical tensile strength
   const Real & _sigma_ts;
 
-  /// critical compressive strength
+  /// The critical compressive strength
   const Real & _sigma_cs;
 
-  /// regularization length dependent parameter
+  /// The regularization length dependent parameter
   const Real & _delta;
 
-  /// the degraded stress tensor
+  /// The stress tensor
   const ADMaterialProperty<RankTwoTensor> & _stress;
 };

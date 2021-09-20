@@ -27,7 +27,6 @@
   []
 []
 
-
 [Variables]
   [d]
     [InitialCondition]
@@ -49,7 +48,6 @@
     family = MONOMIAL
   []
 []
-
 
 [Bounds]
   [conditional]
@@ -113,7 +111,6 @@
     derivative_order = 1
   []
 []
-
 
 [Executioner]
   type = Transient

@@ -6,11 +6,15 @@ InputParameters
 ConditionalBoundsAux::validParams()
 {
   InputParameters params = BoundsAuxBase::validParams();
-  params.addClassDescription("This class conditionally enforces a bound. When the variable value is below a given threshold, a constant value is used as the bound; when the variable value is above a given threshold, irreversibility is enforced.");
+  params.addClassDescription(
+      "This class conditionally enforces a lower bound. When the variable value is below a given "
+      "threshold, a constant value is used as the bound; when the variable value is above a given "
+      "threshold, irreversibility is enforced.");
   params.addRequiredParam<Real>("fixed_bound_value", "The value of fixed bound for the variable");
   params.addRequiredParam<Real>("threshold_value",
                                 "The threshold for conditional history bound for the variable");
   params.set<MooseEnum>("bound_type") = "lower";
+  params.suppressParameter<MooseEnum>("bound_type");
   return params;
 }
 

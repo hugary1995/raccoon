@@ -12,7 +12,6 @@ delta = 1.16
 c1 = '${fparse (1+nu)*sqrt(Gc)/sqrt(2*pi*E)}'
 c2 = '${fparse (3-nu)/(1+nu)}'
 
-
 [Functions]
   [bc_func]
     type = ParsedFunction
@@ -44,7 +43,7 @@ c2 = '${fparse (3-nu)/(1+nu)}'
     multi_app = fracture
     direction = to_multiapp
     variable = 'psie_active ce'
-    source_variable ='psie_active ce'
+    source_variable = 'psie_active ce'
   []
 []
 
@@ -87,7 +86,6 @@ c2 = '${fparse (3-nu)/(1+nu)}'
   []
 []
 
-
 [Variables]
   [disp_x]
   []
@@ -105,7 +103,6 @@ c2 = '${fparse (3-nu)/(1+nu)}'
     []
   []
 []
-
 
 [Kernels]
   [solid_x]
@@ -145,7 +142,6 @@ c2 = '${fparse (3-nu)/(1+nu)}'
     function = bc_func
   []
 []
-
 
 [Materials]
   [bulk]
@@ -203,7 +199,7 @@ c2 = '${fparse (3-nu)/(1+nu)}'
   [Jint]
     type = PhaseFieldJIntegral
     J_direction = '1 0 0'
-    elastic_energy_name = psie
+    strain_energy_density = psie
     displacements = 'disp_x disp_y'
     boundary = 'left top right bottom'
   []
@@ -223,10 +219,10 @@ c2 = '${fparse (3-nu)/(1+nu)}'
   dt = 2e-2
   end_time = 5e-1
 
-  picard_max_its = 20
-  accept_on_max_picard_iteration = false
-  picard_rel_tol = 1e-3
-  picard_abs_tol = 1e-5
+  fixed_point_max_its = 20
+  accept_on_max_fixed_point_iteration = false
+  fixed_point_rel_tol = 1e-3
+  fixed_point_abs_tol = 1e-5
 []
 
 [Outputs]
