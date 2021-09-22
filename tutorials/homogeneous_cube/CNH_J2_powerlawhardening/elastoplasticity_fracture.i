@@ -140,7 +140,7 @@ ep0 = 0.01
   [defgrad]
     type = ComputeDeformationGradient
   []
-  [hencky]
+  [cnh]
     type = CNHIsotropicElasticity
     bulk_modulus = K
     shear_modulus = G
@@ -161,7 +161,7 @@ ep0 = 0.01
   []
   [stress]
     type = ComputeLargeDeformationStress
-    elasticity_model = hencky
+    elasticity_model = cnh
     plasticity_model = J2
   []
   [psi]
