@@ -263,10 +263,10 @@ creep_coef = 1
 
   automatic_scaling = true
 
-  picard_max_its = 100
-  picard_rel_tol = 1e-08
-  picard_abs_tol = 1e-10
-  accept_on_max_picard_iteration = true
+  fixed_point_max_its = 100
+  fixed_point_rel_tol = 1e-08
+  fixed_point_abs_tol = 1e-10
+  accept_on_max_fixed_point_iteration = true
   abort_on_solve_fail = true
 []
 

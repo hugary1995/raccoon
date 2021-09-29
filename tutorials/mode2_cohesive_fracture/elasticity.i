@@ -216,10 +216,10 @@ l = 0.02
   dt = 2e-5
   end_time = 2e-2
 
-  picard_max_its = 20
-  accept_on_max_picard_iteration = true
-  picard_rel_tol = 1e-8
-  picard_abs_tol = 1e-10
+  fixed_point_max_its = 20
+  accept_on_max_fixed_point_iteration = true
+  fixed_point_rel_tol = 1e-8
+  fixed_point_abs_tol = 1e-10
 []
 
 [Outputs]
