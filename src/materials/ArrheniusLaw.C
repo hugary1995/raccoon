@@ -19,7 +19,7 @@ ArrheniusLaw::validParams()
       "arrhenius_coefficient", "A", "Name of the Arrhenius coefficient material");
   params.addParam<MaterialPropertyName>("activation_energy", "Q", "The activation energy");
   params.addRequiredParam<Real>("ideal_gas_constant", "The ideal gas constant");
-  params.addRequiredCoupledVar("T", "The temperature");
+  params.addRequiredCoupledVar("temperature", "The temperature");
 
   return params;
 }
@@ -27,10 +27,14 @@ ArrheniusLaw::validParams()
 ArrheniusLaw::ArrheniusLaw(const InputParameters & parameters)
   : Material(parameters),
     BaseNameInterface(parameters),
-    _arrhenius_coef(declareADProperty<Real>(prependBaseName("arrhenius_coefficient", true))),
+    DerivativeMaterialPropertyNameInterface(),
+    _arrhenius_coef_name(prependBaseName("arrhenius_coefficient", true)),
+    _arrhenius_coef(declareADProperty<Real>(_arrhenius_coef_name)),
+    _darrhenius_coef_dT(declareADProperty<Real>(
+        derivativePropertyName(_arrhenius_coef_name, {getVar("temperature", 0)->name()}))),
     _Q(getADMaterialProperty<Real>(prependBaseName("activation_energy", true))),
     _R(getParam<Real>("ideal_gas_constant")),
-    _T(adCoupledValue("T"))
+    _T(adCoupledValue("temperature"))
 {
 }
 
@@ -38,4 +42,5 @@ void
 ArrheniusLaw::computeQpProperties()
 {
   _arrhenius_coef[_qp] = std::exp(-_Q[_qp] / _R / _T[_qp]);
+  _darrhenius_coef_dT[_qp] = _arrhenius_coef[_qp] * _Q[_qp] / _R / _T[_qp] / _T[_qp];
 }

@@ -20,6 +20,10 @@ n = 160
 rate = 10000
 creep_coef = 1
 
+rho = 1
+cv = 1
+k = 1
+
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
   volumetric_locking_correction = true
@@ -35,26 +39,19 @@ creep_coef = 1
 []
 
 [Transfers]
-  [from_d]
+  [from_fracture]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = from_multiapp
     variable = d
     source_variable = d
   []
-  [to_psie_active]
+  [to_fracture]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = to_multiapp
-    variable = psie_active
-    source_variable = psie_active
-  []
-  [to_psip_active]
-    type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = to_multiapp
-    variable = psip_active
-    source_variable = psip_active
+    variable = 'psie_active psip_active'
+    source_variable = 'psie_active psip_active'
   []
 []
 
@@ -75,13 +72,13 @@ creep_coef = 1
   []
   [disp_z]
   []
+  [T]
+    initial_condition = ${T}
+  []
 []
 
 [AuxVariables]
   [d]
-  []
-  [T]
-    initial_condition = ${T}
   []
   [stress]
     order = CONSTANT
@@ -131,9 +128,31 @@ creep_coef = 1
     component = 2
     use_displaced_mesh = true
   []
+  [hcond_time]
+    type = HeatConductionTimeDerivative
+    variable = T
+    density_name = density
+    specific_heat = specific_heat
+  []
+  [hcond]
+    type = HeatConduction
+    variable = T
+    diffusion_coefficient = thermal_conductivity
+  []
+  [heat_source]
+    type = ADCoefMatSource
+    variable = T
+    coefficient = -1
+    prop_names = 'plastic_heat_generation'
+  []
 []
 
 [Materials]
+  [thermal_properties]
+    type = GenericConstantMaterial
+    prop_names = 'density specific_heat thermal_conductivity'
+    prop_values = '${rho} ${cv} ${k}'
+  []
   [bulk_properties]
     type = ADGenericConstantMaterial
     prop_names = 'K G l Gc psic sigma_0 Q'
@@ -159,7 +178,7 @@ creep_coef = 1
     arrhenius_coefficient = A
     activation_energy = Q
     ideal_gas_constant = ${R}
-    T = T
+    temperature = T
   []
   [defgrad]
     type = ComputeDeformationGradient
@@ -180,6 +199,8 @@ creep_coef = 1
     eps = ${eps}
     phase_field = d
     degradation_function = g
+    taylor_quinney_factor = 1
+    temperature = T
     output_properties = 'psip_active'
     outputs = exodus
   []
@@ -243,6 +264,16 @@ creep_coef = 1
   [ep]
     type = ADElementAverageMaterialProperty
     mat_prop = effective_plastic_strain
+    execute_on = 'INITIAL TIMESTEP_END'
+  []
+  [power]
+    type = ADElementAverageMaterialProperty
+    mat_prop = plastic_heat_generation
+    execute_on = 'INITIAL TIMESTEP_END'
+  []
+  [T]
+    type = ElementAverageValue
+    variable = T
     execute_on = 'INITIAL TIMESTEP_END'
   []
 []
