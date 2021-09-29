@@ -1,35 +1,41 @@
-E = 2.1e5
-nu = 0.3
+E = 3e4
+nu = 0.2
 K = '${fparse E/3/(1-2*nu)}'
 G = '${fparse E/2/(1+nu)}'
 
-Gc = 2.7
-psic = 14.88
-l = 0.02
+p = 0.5
+
+Gc = 0.12
+sigmac = 3
+psic = '${fparse sigmac^2/2/E}'
+l = 20
+R = 10
+h = '${fparse l/R}'
+nx = '${fparse ceil(200/h)}'
 
 [MultiApps]
   [fracture]
     type = TransientMultiApp
     input_files = fracture.i
-    cli_args = 'Gc=${Gc};psic=${psic};l=${l}'
+    cli_args = 'p=${p};Gc=${Gc};psic=${psic};l=${l};nx=${nx}'
     execute_on = 'TIMESTEP_END'
   []
 []
 
 [Transfers]
-  [from_d]
+  [from_fracture]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = from_multiapp
     variable = d
     source_variable = d
   []
-  [to_psie_active]
+  [to_fracture]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = to_multiapp
-    variable = psie_active
-    source_variable = psie_active
+    variable = 'psie_active disp_x disp_y'
+    source_variable = 'psie_active disp_x disp_y'
   []
 []
 
@@ -38,66 +44,13 @@ l = 0.02
 []
 
 [Mesh]
-  [top_half]
+  [gen]
     type = GeneratedMeshGenerator
     dim = 2
-    nx = 30
-    ny = 15
-    ymin = 0
-    ymax = 0.5
-    boundary_id_offset = 0
-    boundary_name_prefix = top_half
-  []
-  [top_stitch]
-    type = BoundingBoxNodeSetGenerator
-    input = top_half
-    new_boundary = top_stitch
-    bottom_left = '0.5 0 0'
-    top_right = '1 0 0'
-  []
-  [bottom_half]
-    type = GeneratedMeshGenerator
-    dim = 2
-    nx = 30
-    ny = 15
-    ymin = -0.5
-    ymax = 0
-    boundary_id_offset = 5
-    boundary_name_prefix = bottom_half
-  []
-  [bottom_stitch]
-    type = BoundingBoxNodeSetGenerator
-    input = bottom_half
-    new_boundary = bottom_stitch
-    bottom_left = '0.5 0 0'
-    top_right = '1 0 0'
-  []
-  [stitch]
-    type = StitchedMeshGenerator
-    inputs = 'top_stitch bottom_stitch'
-    stitch_boundaries_pairs = 'top_stitch bottom_stitch'
-  []
-  construct_side_list_from_node_list = true
-[]
-
-[Adaptivity]
-  marker = marker
-  initial_marker = marker
-  initial_steps = 2
-  stop_time = 0
-  max_h_level = 2
-  [Markers]
-    [marker]
-      type = OrientedBoxMarker
-      center = '0.65 -0.25 0'
-      length = 0.8
-      width = 0.2
-      height = 1
-      length_direction = '1 -1.5 0'
-      width_direction = '1.5 1 0'
-      inside = REFINE
-      outside = DO_NOTHING
-    []
+    xmax = 200
+    ymax = 1
+    nx = ${nx}
+    ny = 1
   []
 []
 
@@ -127,27 +80,41 @@ l = 0.02
     variable = disp_y
     component = 1
   []
+  [pressure_x]
+    type = ADPressurizedCrack
+    variable = disp_x
+    pressure = p
+    phase_field = d
+    indicator_function = I
+    component = 0
+  []
+  [pressure_y]
+    type = ADPressurizedCrack
+    variable = disp_y
+    pressure = p
+    phase_field = d
+    indicator_function = I
+    component = 1
+  []
 []
 
 [BCs]
   [xdisp]
     type = FunctionDirichletBC
-    variable = 'disp_x'
-    boundary = 'top_half_top'
+    variable = disp_x
+    boundary = right
     function = 't'
-    preset = false
   []
   [yfix]
     type = DirichletBC
-    variable = 'disp_y'
-    boundary = 'top_half_top bottom_half_bottom top_half_left top_half_right bottom_half_left '
-               'bottom_half_right'
+    variable = disp_y
+    boundary = bottom
     value = 0
   []
   [xfix]
     type = DirichletBC
-    variable = 'disp_x'
-    boundary = 'bottom_half_bottom'
+    variable = disp_x
+    boundary = left
     value = 0
   []
 []
@@ -155,14 +122,21 @@ l = 0.02
 [Materials]
   [bulk_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'K G l Gc psic'
-    prop_values = '${K} ${G} ${l} ${Gc} ${psic}'
+    prop_names = 'K G l Gc psic p'
+    prop_values = '${K} ${G} ${l} ${Gc} ${psic} ${p}'
   []
   [crack_geometric]
     type = CrackGeometricFunction
     f_name = alpha
-    function = 'd'
+    function = '2*d-d^2'
     phase_field = d
+  []
+  [indicator]
+    type = ADDerivativeParsedMaterial
+    f_name = I
+    args = 'd'
+    function = 'd^2'
+    derivative_order = 1
   []
   [degradation]
     type = RationalDegradationFunction
@@ -182,23 +156,37 @@ l = 0.02
     shear_modulus = G
     phase_field = d
     degradation_function = g
-    decomposition = SPECTRAL
-    output_properties = 'elastic_strain psie_active'
+    decomposition = NONE
+    output_properties = 'psie_active'
     outputs = exodus
   []
   [stress]
     type = ComputeSmallDeformationStress
     elasticity_model = elasticity
-    output_properties = 'stress'
-    outputs = exodus
+  []
+  [pressure_density]
+    type = PressureDensity
+    effective_pressure_density = p_density
+    phase_field = d
+    pressure = p
+    indicator_function = I
   []
 []
 
 [Postprocessors]
-  [Fx]
+  [Fx_left]
     type = NodalSum
     variable = fx
-    boundary = top_half_top
+    boundary = left
+  []
+  [Fx_right]
+    type = NodalSum
+    variable = fx
+    boundary = right
+  []
+  [effective_pressure]
+    type = ADElementIntegralMaterialProperty
+    mat_prop = p_density
   []
 []
 
@@ -213,16 +201,18 @@ l = 0.02
   nl_rel_tol = 1e-8
   nl_abs_tol = 1e-10
 
-  dt = 2e-5
-  end_time = 2e-2
+  dt = 5e-4
+  end_time = 5e-2
 
-  fixed_point_max_its = 20
-  accept_on_max_fixed_point_iteration = true
+  fixed_point_max_its = 200
+  accept_on_max_fixed_point_iteration = false
   fixed_point_rel_tol = 1e-8
   fixed_point_abs_tol = 1e-10
 []
 
 [Outputs]
+  file_base = 'p_${p}_l_${l}'
   exodus = true
+  csv = true
   print_linear_residuals = false
 []
