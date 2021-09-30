@@ -20,9 +20,7 @@ n = 160
 rate = 10000
 creep_coef = 1
 
-rho = 1
-cv = 1
-k = 1
+tqf = 0
 
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
@@ -72,12 +70,12 @@ k = 1
   []
   [disp_z]
   []
-  [T]
-    initial_condition = ${T}
-  []
 []
 
 [AuxVariables]
+  [T]
+    initial_condition = ${T}
+  []
   [d]
   []
   [stress]
@@ -128,31 +126,9 @@ k = 1
     component = 2
     use_displaced_mesh = true
   []
-  [hcond_time]
-    type = HeatConductionTimeDerivative
-    variable = T
-    density_name = density
-    specific_heat = specific_heat
-  []
-  [hcond]
-    type = HeatConduction
-    variable = T
-    diffusion_coefficient = thermal_conductivity
-  []
-  [heat_source]
-    type = ADCoefMatSource
-    variable = T
-    coefficient = -1
-    prop_names = 'plastic_heat_generation'
-  []
 []
 
 [Materials]
-  [thermal_properties]
-    type = GenericConstantMaterial
-    prop_names = 'density specific_heat thermal_conductivity'
-    prop_values = '${rho} ${cv} ${k}'
-  []
   [bulk_properties]
     type = ADGenericConstantMaterial
     prop_names = 'K G l Gc psic sigma_0 Q'
@@ -199,7 +175,7 @@ k = 1
     eps = ${eps}
     phase_field = d
     degradation_function = g
-    taylor_quinney_factor = 1
+    taylor_quinney_factor = ${tqf}
     temperature = T
     output_properties = 'psip_active'
     outputs = exodus
@@ -264,16 +240,6 @@ k = 1
   [ep]
     type = ADElementAverageMaterialProperty
     mat_prop = effective_plastic_strain
-    execute_on = 'INITIAL TIMESTEP_END'
-  []
-  [power]
-    type = ADElementAverageMaterialProperty
-    mat_prop = plastic_heat_generation
-    execute_on = 'INITIAL TIMESTEP_END'
-  []
-  [T]
-    type = ElementAverageValue
-    variable = T
     execute_on = 'INITIAL TIMESTEP_END'
   []
 []

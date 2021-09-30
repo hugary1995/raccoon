@@ -16,7 +16,15 @@ R = 8.3143e3
 T = 800
 eps = '${fparse E/100}'
 
-tqf = 0
+n = 160
+rate = 10000
+creep_coef = 1
+
+rho = 1
+cv = 1
+k = 1
+
+tqf = 1
 
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
@@ -66,13 +74,13 @@ tqf = 0
   []
   [disp_z]
   []
+  [T]
+    initial_condition = ${T}
+  []
 []
 
 [AuxVariables]
   [d]
-  []
-  [T]
-    initial_condition = ${T}
   []
   [stress]
     order = CONSTANT
@@ -91,6 +99,7 @@ tqf = 0
     rank_two_tensor = stress
     index_i = 1
     index_j = 1
+    execute_on = 'INITIAL TIMESTEP_END'
   []
   [F]
     type = ADRankTwoAux
@@ -98,6 +107,7 @@ tqf = 0
     rank_two_tensor = deformation_gradient
     index_i = 1
     index_j = 1
+    execute_on = 'INITIAL TIMESTEP_END'
   []
 []
 
@@ -120,9 +130,31 @@ tqf = 0
     component = 2
     use_displaced_mesh = true
   []
+  [hcond_time]
+    type = HeatConductionTimeDerivative
+    variable = T
+    density_name = density
+    specific_heat = specific_heat
+  []
+  [hcond]
+    type = HeatConduction
+    variable = T
+    diffusion_coefficient = thermal_conductivity
+  []
+  [heat_source]
+    type = ADCoefMatSource
+    variable = T
+    coefficient = -1
+    prop_names = 'plastic_heat_generation'
+  []
 []
 
 [Materials]
+  [thermal_properties]
+    type = GenericConstantMaterial
+    prop_names = 'density specific_heat thermal_conductivity'
+    prop_values = '${rho} ${cv} ${k}'
+  []
   [bulk_properties]
     type = ADGenericConstantMaterial
     prop_names = 'K G l Gc psic sigma_0 Q'
@@ -175,8 +207,10 @@ tqf = 0
     outputs = exodus
   []
   [J2]
-    type = LargeDeformationJ2Plasticity
+    type = LargeDeformationJ2PowerLawCreep
     hardening_model = arrhenius_law_hardening
+    coefficient = ${creep_coef}
+    exponent = ${n}
   []
   [stress]
     type = ComputeLargeDeformationStress
@@ -208,7 +242,7 @@ tqf = 0
     type = FunctionDirichletBC
     variable = disp_y
     boundary = 'top'
-    function = 't'
+    function = '${rate}*t'
     preset = false
   []
 []
@@ -217,23 +251,33 @@ tqf = 0
   [F]
     type = ElementAverageValue
     variable = F
+    execute_on = 'INITIAL TIMESTEP_END'
   []
   [stress]
     type = ElementAverageValue
     variable = stress
+    execute_on = 'INITIAL TIMESTEP_END'
   []
   [d]
     type = ElementAverageValue
     variable = d
+    execute_on = 'INITIAL TIMESTEP_END'
   []
   [ep]
     type = ADElementAverageMaterialProperty
     mat_prop = effective_plastic_strain
+    execute_on = 'INITIAL TIMESTEP_END'
   []
-  # [heat]
-  #   type = ADElementAverageMaterialProperty
-  #   mat_prop = plastic_heat_generation
-  # []
+  [heat]
+    type = ADElementAverageMaterialProperty
+    mat_prop = plastic_heat_generation
+    execute_on = 'TIMESTEP_END'
+  []
+  [T]
+    type = ElementAverageValue
+    variable = T
+    execute_on = 'INITIAL TIMESTEP_END'
+  []
 []
 
 [Executioner]
@@ -247,8 +291,8 @@ tqf = 0
   nl_abs_tol = 1e-10
   nl_max_its = 50
 
-  dt = '${fparse 0.0005 * a}'
-  end_time = '${fparse 0.1 * a}'
+  dt = '${fparse 0.0005 * a / rate}'
+  end_time = '${fparse 0.1 * a / rate}'
 
   automatic_scaling = true
 
@@ -260,7 +304,7 @@ tqf = 0
 []
 
 [Outputs]
-  file_base = 'stress_deformation'
+  file_base = 'stress_deformation_n_${n}_rate_${rate}_tqf_${tqf}'
   print_linear_residuals = false
   csv = true
   exodus = true
