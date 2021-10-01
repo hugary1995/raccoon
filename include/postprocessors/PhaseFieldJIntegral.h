@@ -6,8 +6,9 @@
 
 #include "SideIntegralPostprocessor.h"
 #include "RankTwoTensor.h"
+#include "BaseNameInterface.h"
 
-class PhaseFieldJIntegral : public SideIntegralPostprocessor
+class PhaseFieldJIntegral : public SideIntegralPostprocessor, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -17,20 +18,14 @@ public:
 protected:
   virtual Real computeQpIntegral() override;
 
-  /// base name of stress
-  const std::string _base_name;
-  /// stress tensor
+  /// The stress tensor
   const ADMaterialProperty<RankTwoTensor> & _stress;
-  /// degraded eleastic energy
-  const ADMaterialProperty<Real> & _E_elastic;
-  /// number of displacement variables provided
+  /// The strain energy density
+  const ADMaterialProperty<Real> & _psie;
+  /// Number of displacement variables provided
   const unsigned int _ndisp;
-  /// du_dx
-  const VariableGradient & _grad_disp_0;
-  /// du_dy
-  const VariableGradient & _grad_disp_1;
-  /// du_dz
-  const VariableGradient & _grad_disp_2;
-  /// direction of J integral
+  /// Gradient of displacements
+  std::vector<const VariableGradient *> _grad_disp;
+  /// Direction of J integral
   const RealVectorValue _t;
 };

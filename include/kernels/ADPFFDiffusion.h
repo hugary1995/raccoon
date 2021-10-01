@@ -5,8 +5,9 @@
 #pragma once
 
 #include "ADKernel.h"
+#include "BaseNameInterface.h"
 
-class ADPFFDiffusion : public ADKernel
+class ADPFFDiffusion : public ADKernel, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -16,11 +17,14 @@ public:
 protected:
   virtual ADReal computeQpResidual() override;
 
-  /// Allen-Cahn interface coefficient computed from fracture properties
-  const MaterialProperty<Real> & _kappa;
+  /// The fracture toughness
+  const ADMaterialProperty<Real> & _Gc;
 
-  /// Allen-Cahn mobility computed from fracture properties
-  const ADMaterialProperty<Real> & _M;
+  /// The normalization constant
+  const ADMaterialProperty<Real> & _c0;
+
+  /// The regularization length
+  const ADMaterialProperty<Real> & _l;
 
   /// the coordinate system
   const Moose::CoordinateSystemType & _coord_sys;

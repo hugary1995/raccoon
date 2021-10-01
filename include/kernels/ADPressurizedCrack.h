@@ -5,8 +5,12 @@
 #pragma once
 
 #include "ADKernelValue.h"
+#include "BaseNameInterface.h"
+#include "DerivativeMaterialPropertyNameInterface.h"
 
-class ADPressurizedCrack : public ADKernelValue
+class ADPressurizedCrack : public ADKernelValue,
+                           public BaseNameInterface,
+                           public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
@@ -17,9 +21,9 @@ protected:
   virtual ADReal precomputeQpResidual() override;
 
   const unsigned int _comp;
-  const ADMaterialProperty<Real> * _p_mat;
-  const ADVariableValue * _p_var;
-  const ADVariableValue & _d;
+  const ADMaterialProperty<Real> & _p;
   const ADVariableGradient & _grad_d;
-  const Real _xi;
+
+  /// The derivative of the indicator function w.r.t. the phase field
+  const ADMaterialProperty<Real> & _dI_dd;
 };

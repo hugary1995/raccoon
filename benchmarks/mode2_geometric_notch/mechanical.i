@@ -2,6 +2,7 @@ E = 2.1e5
 nu = 0.3
 Gc = 2.7
 l = 0.015
+psic = 14.88
 k = 1e-09
 
 [MultiApps]
@@ -10,12 +11,12 @@ k = 1e-09
     input_files = 'fracture.i'
     app_type = raccoonApp
     execute_on = 'TIMESTEP_BEGIN'
-    cli_args = 'Gc=${Gc};l=${l};k=${k}'
+    cli_args = 'Gc=${Gc};l=${l};psic=${psic};k=${k}'
   []
 []
 
 [Transfers]
-  [send_E_el]
+  [send_E_el_active]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = to_multiapp
@@ -55,10 +56,11 @@ k = 1e-09
 []
 
 [AuxKernels]
-  [E_el_active]
+  [E_el]
     type = ADMaterialRealAux
     variable = 'E_el_active'
     property = 'E_el_active'
+    execute_on = 'TIMESTEP_END'
   []
 []
 
@@ -84,6 +86,7 @@ k = 1e-09
     variable = 'disp_x'
     boundary = 'top'
     function = 't'
+    preset = false
   []
   [yfix]
     type = DirichletBC
@@ -111,24 +114,24 @@ k = 1e-09
     displacements = 'disp_x disp_y'
   []
   [stress]
-    type = SmallStrainDegradedElasticPK2Stress_StrainVolDev
+    type = SmallStrainDegradedElasticPK2Stress_StrainSpectral
     d = 'd'
   []
   [fracture_properties]
-    type = GenericFunctionMaterial
+    type = ADGenericFunctionMaterial
     prop_names = 'energy_release_rate phase_field_regularization_length critical_fracture_energy'
     prop_values = '${Gc} ${l} ${psic}'
   []
   [local_dissipation]
-    type = QuadraticLocalDissipation
+    type = LinearLocalDissipation
     d = d
   []
   [phase_field_properties]
-    type = FractureMaterial
-    local_dissipation_norm = 2
+    type = ADFractureMaterial
+    local_dissipation_norm = 8/3
   []
   [degradation]
-    type = QuadraticDegradation
+    type = LorentzDegradation
     d = d
     residual_degradation = ${k}
   []
@@ -139,17 +142,18 @@ k = 1e-09
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
   petsc_options_value = 'lu       superlu_dist'
+
   dt = 1e-4
   end_time = 2e-2
-
-  nl_abs_tol = 1e-08
   nl_rel_tol = 1e-06
+  nl_abs_tol = 1e-08
 
   automatic_scaling = true
 
   picard_max_its = 100
-  picard_abs_tol = 1e-08
-  picard_rel_tol = 1e-06
+  picard_abs_tol = 1e-50
+  picard_rel_tol = 1e-03
+  accept_on_max_picard_iteration = true
 []
 
 [Postprocessors]
@@ -168,14 +172,9 @@ k = 1e-09
     type = CSV
     delimiter = ' '
     file_base = 'force_displacement'
-    time_column = false
   []
   [exodus]
     type = Exodus
     file_base = 'visualize'
-  []
-  [console]
-    type = Console
-    hide = 'Fx'
   []
 []

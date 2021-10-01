@@ -1,1 +1,11 @@
-!template load file=stubs/moose_object.md.template name=ADCoefMatSource syntax=/Kernels/ADCoefMatSource
+# ADCoefMatSource
+
+!syntax description /Kernels/ADCoefMatSource
+
+## Example Input File Syntax
+
+!syntax parameters /Kernels/ADCoefMatSource
+
+!syntax inputs /Kernels/ADCoefMatSource
+
+!syntax children /Kernels/ADCoefMatSource

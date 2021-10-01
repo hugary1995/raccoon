@@ -4,44 +4,42 @@
 
 #include "ADPressurizedCrack.h"
 
-registerADMooseObject("raccoonApp", ADPressurizedCrack);
+registerMooseObject("raccoonApp", ADPressurizedCrack);
 
 InputParameters
 ADPressurizedCrack::validParams()
 {
   InputParameters params = ADKernelValue::validParams();
-  params.addClassDescription("computes the body force term from pressurized phase-field fracture");
-  params.addParam<MaterialPropertyName>("pressure_mat", "pressure inside the crack");
-  params.addCoupledVar("pressure_var", "pressure inside the crack");
-  params.addRequiredCoupledVar("d", "coupled damage variable");
+  params += BaseNameInterface::validParams();
+  params.addClassDescription("This class computes the body force term from pressurized phase-field "
+                             "fracture. The weak form is $(w, p \\grad d)$.");
+
+  params.addRequiredParam<MaterialPropertyName>("pressure", "pressure inside the crack");
+  params.addRequiredCoupledVar("phase_field", "coupled damage variable");
   params.addRequiredParam<unsigned int>("component",
                                         "An integer corresponding to the direction "
                                         "the variable this kernel acts in. (0 for x, "
                                         "1 for y, 2 for z)");
-  params.addParam<Real>("xi", 1, "initial slope of the crack indicator function");
+  params.addParam<MaterialPropertyName>("indicator_function",
+                                        "I"
+                                        "The indicator function");
   return params;
 }
 
 ADPressurizedCrack::ADPressurizedCrack(const InputParameters & parameters)
   : ADKernelValue(parameters),
+    BaseNameInterface(parameters),
+    DerivativeMaterialPropertyNameInterface(),
     _comp(getParam<unsigned int>("component")),
-    _p_mat(isParamValid("pressure_mat") ? &getADMaterialProperty<Real>("pressure_mat") : nullptr),
-    _p_var(isParamValid("pressure_var") ? &adCoupledValue("pressure_var") : nullptr),
-    _d(adCoupledValue("d")),
-    _grad_d(adCoupledGradient("d")),
-    _xi(getParam<Real>("xi"))
+    _p(getADMaterialProperty<Real>(prependBaseName("pressure", true))),
+    _grad_d(adCoupledGradient("phase_field")),
+    _dI_dd(getADMaterialProperty<Real>(derivativePropertyNameFirst(
+        getParam<MaterialPropertyName>("indicator_function"), getVar("phase_field", 0)->name())))
 {
-  if (!_p_mat && !_p_var)
-    mooseError(name() +
-               ": pressure should be provided by pressure_mat or pressure_var, none provided.");
-  if (_p_mat && _p_var)
-    mooseError(name() +
-               ": pressure should be provided by either pressure_mat or pressure_var, not both.");
 }
 
 ADReal
 ADPressurizedCrack::precomputeQpResidual()
 {
-  ADReal p = _p_mat ? (*_p_mat)[_qp] : (*_p_var)[_qp];
-  return p * _grad_d[_qp](_comp) * (_xi + 2 * (1 - _xi) * _d[_qp]);
+  return _p[_qp] * _grad_d[_qp](_comp) * _dI_dd[_qp];
 }

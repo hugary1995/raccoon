@@ -64,10 +64,12 @@
   [inertia_x]
     type = InertialForce
     variable = 'disp_x'
+    density = 'reg_density'
   []
   [inertia_y]
     type = InertialForce
     variable = 'disp_y'
+    density = 'reg_density'
   []
   [solid_x]
     type = ADStressDivergenceTensors
@@ -114,7 +116,7 @@
 
 [Materials]
   [bulk]
-    type = GenericConstantMaterial
+    type = ADGenericConstantMaterial
     prop_names = 'density phase_field_regularization_length energy_release_rate '
                  'critical_fracture_energy'
     prop_values = '8e-9 0.35 22.2 7.9'
@@ -137,13 +139,18 @@
     d = 'd'
   []
   [fracture_properties]
-    type = FractureMaterial
+    type = ADFractureMaterial
     local_dissipation_norm = 8/3
   []
   [degradation]
     type = LorentzDegradation
     d = 'd'
     residual_degradation = 1e-09
+  []
+  [reg_density]
+    type = MaterialConverter
+    ad_props_in = 'density'
+    reg_props_out = 'reg_density'
   []
 []
 
@@ -166,6 +173,8 @@
 
 [Outputs]
   print_linear_residuals = false
+  print_linear_converged_reason = false
+  print_nonlinear_converged_reason = false
   file_base = 'visualize_implicit'
   exodus = true
 []

@@ -1,1 +1,11 @@
-!template load file=stubs/moose_object.md.template name=ADPFFDiffusion syntax=/Kernels/ADPFFDiffusion
+# ADPFFDiffusion
+
+!syntax description /Kernels/ADPFFDiffusion
+
+## Example Input File Syntax
+
+!syntax parameters /Kernels/ADPFFDiffusion
+
+!syntax inputs /Kernels/ADPFFDiffusion
+
+!syntax children /Kernels/ADPFFDiffusion

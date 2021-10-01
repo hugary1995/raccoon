@@ -1,12 +1,12 @@
 language:             cpp
 branches:
   only:
-  - master
+    - master
 jobs:
   include:
-    - name:           "TEST UBUNTU 18.04"
+    - name:           "TEST UBUNTU 20.04"
       os:             linux
-      dist:           bionic
+      dist:           focal
       deploy:
         provider:     pages
         edge:         true
@@ -18,45 +18,22 @@ jobs:
       before_install:
         - curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
         - bash Miniconda3-latest-Linux-x86_64.sh -b -p ~/miniconda3
-      before_script:
-        - conda init bash
-        - source ~/.bashrc
-    - name:           "TEST UBUNTU 16.04"
-      os:             linux
-      dist:           xenial
-      before_install:
-        - curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-        - bash Miniconda3-latest-Linux-x86_64.sh -b -p ~/miniconda3
-      before_script:
-        - conda init bash
-        - source ~/.bashrc
-    - name:           "TEST UBUNTU 20.04"
-      os:             linux
-      dist:           focal
-      before_install:
-        - curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-        - bash Miniconda3-latest-Linux-x86_64.sh -b -p ~/miniconda3
-      before_script:
-        - conda init bash
-        - source ~/.bashrc
-    - name:           "TEST MAC OSX"
-      os:             osx
-      before_install:
-        - curl -L -O https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
-        - bash Miniconda3-latest-MacOSX-x86_64.sh -b -p ~/miniconda3
-      before_script:
-        - conda init bash
-        - source ~/.bash_profile
 install:
   - export RACCOON_DIR=`pwd`
   - export PATH=$HOME/miniconda3/bin:$PATH
   - conda config --add channels conda-forge
-  - conda config --add channels https://mooseframework.org/conda/moose
-  - conda create -y --name moose moose-libmesh moose-tools
+  - conda config --add channels idaholab
+  - conda create -n moose -q -y
+  - conda init bash
+  - source ~/.bashrc
+  - conda activate moose
+  - travis_wait 30 conda install moose-tools
+  - travis_wait 30 conda install moose-libmesh
 script:
   - conda activate moose
-  - make -j 2
+  - make -j 8
   - ./run_tests -j 2
   - mkdir gh-pages
   - cd doc
+  - ./moosedocs.py check
   - ./moosedocs.py build --destination ../gh-pages/

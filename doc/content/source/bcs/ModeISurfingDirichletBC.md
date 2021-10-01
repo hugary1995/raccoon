@@ -1,1 +1,11 @@
-!template load file=stubs/moose_object.md.template name=ModeISurfingDirichletBC syntax=/BCs/ModeISurfingDirichletBC
+# ModeISurfingDirichletBC
+
+!syntax description /BCs/ModeISurfingDirichletBC
+
+## Example Input File Syntax
+
+!syntax parameters /BCs/ModeISurfingDirichletBC
+
+!syntax inputs /BCs/ModeISurfingDirichletBC
+
+!syntax children /BCs/ModeISurfingDirichletBC

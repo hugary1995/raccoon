@@ -1,1 +1,11 @@
-!template load file=stubs/moose_object.md.template name=BrittleDamageIC syntax=/ICs/BrittleDamageIC
+# BrittleDamageIC
+
+!syntax description /ICs/BrittleDamageIC
+
+## Example Input File Syntax
+
+!syntax parameters /ICs/BrittleDamageIC
+
+!syntax inputs /ICs/BrittleDamageIC
+
+!syntax children /ICs/BrittleDamageIC

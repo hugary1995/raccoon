@@ -1,0 +1,29 @@
+name: clang-format
+
+on:
+  # Run it everyday to keep the status up-to-date
+  schedule:
+    - cron: '0 0 * * *'
+    
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ devel ]
+
+jobs:
+  formatting-check:
+    name: Check clang-format
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        path:
+          - 'src'
+          - 'include'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run clang-format style check for C++ headers and sources
+      uses: jidicula/clang-format-action@v3.4.0
+      with:
+        clang-format-version: '11'
+        check-path: ${{ matrix.path }}

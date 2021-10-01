@@ -5,8 +5,12 @@
 #pragma once
 
 #include "ADKernelGrad.h"
+#include "BaseNameInterface.h"
+#include "DerivativeMaterialPropertyNameInterface.h"
 
-class ADPFFPressure : public ADKernelGrad
+class ADPFFPressure : public ADKernelGrad,
+                      public BaseNameInterface,
+                      public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
@@ -16,9 +20,10 @@ public:
 protected:
   virtual ADRealVectorValue precomputeQpResidual() override;
 
-  const ADMaterialPropertyUserObject * _p_uo;
-  const ADMaterialProperty<Real> * _p_mat;
+  const ADMaterialProperty<Real> & _p;
   const unsigned int _ndisp;
   std::vector<const ADVariableValue *> _disp;
-  const Real _xi;
+
+  /// The derivative of the indicator function w.r.t. the phase field
+  const ADMaterialProperty<Real> & _dI_dd;
 };

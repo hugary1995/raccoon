@@ -1,1 +1,11 @@
-!template load file=stubs/moose_object.md.template name=ADPressurizedCrack syntax=/Kernels/ADPressurizedCrack
+# ADPressurizedCrack
+
+!syntax description /Kernels/ADPressurizedCrack
+
+## Example Input File Syntax
+
+!syntax parameters /Kernels/ADPressurizedCrack
+
+!syntax inputs /Kernels/ADPressurizedCrack
+
+!syntax children /Kernels/ADPressurizedCrack

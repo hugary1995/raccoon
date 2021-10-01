@@ -1,1 +1,0 @@
-!template load file=stubs/moose_object.md.template name=CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative syntax=/Materials/CNHDegradedElasticPlasticPK1Stress_LinearHardening_StrictlyDissipative

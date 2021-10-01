@@ -1,1 +1,11 @@
-!template load file=stubs/moose_object.md.template name=PhaseFieldJIntegral syntax=/Postprocessors/PhaseFieldJIntegral
+# PhaseFieldJIntegral
+
+!syntax description /UserObjects/PhaseFieldJIntegral
+
+## Example Input File Syntax
+
+!syntax parameters /UserObjects/PhaseFieldJIntegral
+
+!syntax inputs /UserObjects/PhaseFieldJIntegral
+
+!syntax children /UserObjects/PhaseFieldJIntegral

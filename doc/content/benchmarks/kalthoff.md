@@ -1,1 +1,0 @@
-# The Kalthoff-Winkler Experiment

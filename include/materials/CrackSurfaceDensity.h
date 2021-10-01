@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "ADMaterial.h"
-#include "Function.h"
+#include "Material.h"
+#include "BaseNameInterface.h"
 
-class CrackSurfaceDensity : public ADMaterial
+class CrackSurfaceDensity : public Material, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -17,21 +17,18 @@ public:
 protected:
   virtual void computeQpProperties() override;
 
-  /// norm of the local dissipation function
-  const Function & _c0;
-
-  /// phase field regularization length
-  const MaterialProperty<Real> & _L;
-
-  /// gradient of damage
+  /// The gradient of phase field
   const ADVariableGradient & _grad_d;
 
-  /// local dissipation function
-  const ADMaterialProperty<Real> & _w;
+  /// The normalization constant
+  const ADMaterialProperty<Real> & _c0;
 
-  /// crack surface density
+  /// The phase-field regularization length
+  const ADMaterialProperty<Real> & _l;
+
+  /// Crack geometric function
+  const ADMaterialProperty<Real> & _alpha;
+
+  /// The crack surface density
   ADMaterialProperty<Real> & _gamma;
-
-  /// crack surface normal (if well-defined)
-  ADMaterialProperty<RealVectorValue> & _n;
 };

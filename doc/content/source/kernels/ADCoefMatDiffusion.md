@@ -1,1 +1,11 @@
-!template load file=stubs/moose_object.md.template name=ADCoefMatDiffusion syntax=/Kernels/ADCoefMatDiffusion
+# ADCoefMatDiffusion
+
+!syntax description /Kernels/ADCoefMatDiffusion
+
+## Example Input File Syntax
+
+!syntax parameters /Kernels/ADCoefMatDiffusion
+
+!syntax inputs /Kernels/ADCoefMatDiffusion
+
+!syntax children /Kernels/ADCoefMatDiffusion

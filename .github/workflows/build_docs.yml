@@ -1,0 +1,57 @@
+name: Documentation
+
+on:
+  # Run it everyday to keep the status up-to-date
+  schedule:
+    - cron: '0 0 * * *'
+
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ devel ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: moose
+          channels: conda-forge,https://conda.software.inl.gov/public
+          mamba-version: "*"
+
+      - name: Install dependencies
+        shell: bash -l {0}
+        run: |
+          mamba install moose-tools moose-libmesh
+          conda list | grep moose
+
+      - name: Compile RACCOON
+        shell: bash -l {0}
+        run: |
+          make -j 2
+
+      - name: Build documentation
+        shell: bash -l {0}
+        run: |
+          mkdir gh-pages
+          cd doc
+          ./moosedocs.py check
+          ./moosedocs.py build --destination ../gh-pages/
+
+      - name: Deploy to GitHub Pages
+        if: ${{ github.event_name == 'push' }}
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages
+          folder: gh-pages

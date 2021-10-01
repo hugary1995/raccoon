@@ -34,15 +34,15 @@
 []
 
 [Kernels]
-  [pff_diff]
+  [diff]
     type = ADPFFDiffusion
     variable = 'd'
   []
-  [pff_barr_coalesce]
+  [barrier]
     type = ADPFFBarrier
     variable = 'd'
   []
-  [pff_react_elastic]
+  [react]
     type = ADPFFReaction
     variable = 'd'
     driving_energy_var = 'E_el_active'
@@ -50,21 +50,21 @@
 []
 
 [Materials]
-  [fracture_energy_barrier]
-    type = GenericFunctionMaterial
+  [fracture_bulk]
+    type = ADGenericFunctionMaterial
     prop_names = 'energy_release_rate phase_field_regularization_length critical_fracture_energy'
     prop_values = '${Gc} ${l} ${psic}'
   []
   [local_dissipation]
-    type = QuadraticLocalDissipation
+    type = LinearLocalDissipation
     d = d
   []
   [fracture_properties]
-    type = FractureMaterial
-    local_dissipation_norm = 2
+    type = ADFractureMaterial
+    local_dissipation_norm = 8/3
   []
   [degradation]
-    type = QuadraticDegradation
+    type = LorentzDegradation
     d = d
     residual_degradation = ${k}
   []
@@ -74,19 +74,18 @@
   type = Transient
   solve_type = 'NEWTON'
   petsc_options_iname = '-pc_type -snes_type'
-  petsc_options_value = 'lu vinewtonrsls'
-  automatic_scaling = true
+  petsc_options_value = 'lu       vinewtonrsls'
 
-  nl_abs_tol = 1e-08
+  dt = 1e-4
   nl_rel_tol = 1e-06
+  nl_abs_tol = 1e-08
+
+  relaxed_variables = d
+  relaxation_factor = 0.95
 []
 
 [Outputs]
   print_linear_residuals = false
   print_linear_converged_reason = false
   print_nonlinear_converged_reason = false
-  [console]
-    type = Console
-    outlier_variable_norms = false
-  []
 []

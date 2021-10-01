@@ -1,1 +1,11 @@
-!template load file=stubs/moose_object.md.template name=ADPFFPressure syntax=/Kernels/ADPFFPressure
+# ADPFFPressure
+
+!syntax description /Kernels/ADPFFPressure
+
+## Example Input File Syntax
+
+!syntax parameters /Kernels/ADPFFPressure
+
+!syntax inputs /Kernels/ADPFFPressure
+
+!syntax children /Kernels/ADPFFPressure

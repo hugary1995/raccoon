@@ -15,8 +15,8 @@ raccoonApp::validParams()
   InputParameters params = MooseApp::validParams();
   params.set<bool>("automatic_automatic_scaling") = false;
 
-  // Do not use legacy DirichletBC, that is, set DirichletBC default for preset = true
-  params.set<bool>("use_legacy_dirichlet_bc") = false;
+  // Do not use legacy material output option.
+  params.set<bool>("use_legacy_material_output") = false;
   return params;
 }
 
