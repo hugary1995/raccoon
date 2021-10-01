@@ -6,8 +6,11 @@
 
 #include "Material.h"
 #include "BaseNameInterface.h"
+#include "DerivativeMaterialPropertyNameInterface.h"
 
-class ArrheniusLaw : public Material, public BaseNameInterface
+class ArrheniusLaw : public Material,
+                     public BaseNameInterface,
+                     public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
@@ -17,8 +20,13 @@ public:
 protected:
   virtual void computeQpProperties() override;
 
+  const std::string _arrhenius_coef_name;
+
   /// The Arrhenius coefficient
   ADMaterialProperty<Real> & _arrhenius_coef;
+
+  /// The derivative of the Arrhenius coefficient W.R.T. the temperature
+  ADMaterialProperty<Real> & _darrhenius_coef_dT;
 
   /// The activation energy
   const ADMaterialProperty<Real> & _Q;

@@ -29,7 +29,8 @@ LargeDeformationPlasticityModel::LargeDeformationPlasticityModel(const InputPara
         prependBaseName("plastic_deformation_gradient"))),
     _ep(declareADProperty<Real>(prependBaseName("effective_plastic_strain"))),
     _ep_old(getMaterialPropertyOldByName<Real>(prependBaseName("effective_plastic_strain"))),
-    _Np(declareADProperty<RankTwoTensor>(prependBaseName("flow_direction")))
+    _Np(declareADProperty<RankTwoTensor>(prependBaseName("flow_direction"))),
+    _heat(declareADProperty<Real>(prependBaseName("plastic_heat_generation")))
 {
 }
 
