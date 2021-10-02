@@ -82,7 +82,7 @@ Next, we set up the appropriate transfer:
          link=False
          language=python
 
-The phase-field $d$ is retrieved from the sub app, and the main app sends the active elastic energy $psie_active$ to the sub app.
+The phase-field $d$ is retrieved from the sub app, and the main app sends the active elastic energy `psie_active` to the sub app.
 
 ## The alternating minimization scheme
 
