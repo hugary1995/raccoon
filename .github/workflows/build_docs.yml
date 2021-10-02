@@ -63,7 +63,19 @@ jobs:
           lcov --gcov-tool gcov --capture --ignore-errors gcov,source --directory $RACCOON_SRC --directory $RACCOON_BUILD --output-file $COVERAGE_DIR/covered.info
           lcov --gcov-tool gcov --add-tracefile $COVERAGE_DIR/initialize.info --add-tracefile $COVERAGE_DIR/covered.info --output-file $COVERAGE_DIR/final.info
           lcov --gcov-tool gcov --extract $COVERAGE_DIR/final.info \*$RACCOON_SRC/\* --extract $COVERAGE_DIR/final.info \*$RACCOON_INCLUDE/\* --output-file $COVERAGE_DIR/coverage.info
-          genhtml $COVERAGE_DIR/coverage.info --output-directory $COVERAGE_DIR
+          genhtml $COVERAGE_DIR/coverage.info --output-directory $COVERAGE_DIR > $COVERAGE_DIR/genhtml.out
+          cd scripts
+          echo "COVERAGE_PCT="$(python extract_coverage_percentage.py $COVERAGE_DIR/genhtml.out)"" >> $GITHUB_ENV
+
+      - name: Create coverage badge
+          uses: schneegans/dynamic-badges-action@v1.1.0
+          with:
+            auth: ${{ secrets.GIST_TOKEN }}
+            gistID: ${{ secrets.COVERAGE_GIST_ID }}
+            filename: RACCOON_coverage.json
+            label: coverage
+            message: ${{ env.COVERAGE_PCT }}
+            color: lightgrey
 
       - name: Deploy to GitHub Pages
         if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
