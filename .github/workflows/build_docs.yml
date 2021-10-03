@@ -32,17 +32,10 @@ jobs:
           mamba install moose-tools moose-libmesh lcov
           conda list | grep moose
 
-      - name: Compile RACCOON (with coverage)
-        if: ${{ github.event_name == 'push' }}
+      - name: Compile RACCOON
         shell: bash -l {0}
         run: |
           coverage=true make -j 2
-
-      - name: Compile RACCOON (without coverage)
-        if: ${{ github.event_name == 'pull_request' }}
-        shell: bash -l {0}
-        run: |
-          make -j 2
 
       - name: Build documentation
         shell: bash -l {0}
@@ -53,7 +46,6 @@ jobs:
           ./moosedocs.py build --destination ../gh-pages/
 
       - name: Extract coverage data
-        if: ${{ github.event_name == 'push' }}
         shell: bash -l {0}
         run: |
           mkdir gh-pages/coverage
@@ -72,7 +64,6 @@ jobs:
           echo "COVERAGE_PCT="$(python extract_coverage_percentage.py $COVERAGE_DIR/genhtml.out)"" >> $GITHUB_ENV
 
       - name: Create coverage badge
-        if: ${{ github.event_name == 'push' }}
         uses: schneegans/dynamic-badges-action@v1.1.0
         with:
           auth: ${{ secrets.GIST_TOKEN }}
@@ -81,9 +72,9 @@ jobs:
           label: coverage
           message: ${{ env.COVERAGE_PCT }}
           color: lightgrey
-          
+
       - name: Deploy to GitHub Pages
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
           branch: gh-pages
