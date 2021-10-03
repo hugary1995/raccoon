@@ -2,100 +2,29 @@
 
 # Tutorial 3: Mode-II crack propagation
 
-In this tutorial, we will set up the model for Mode-I crack propagation.
+In this tutorial, we will set up the model for Mode-II crack propagation. This problem is almost identical to [Tutorial 2](tutorials/02_mode1_brittle_fracture.md) except for its mesh and boundary conditions.
 
-The geometry and boundary conditions are the same as those in [Tutorial 1](tutorials/01_small_deformation_elasticity.md).
+!media media/mode2_bcs.png style=display:block;margin:auto;width:60%; caption=Geometry and boundary conditions of the Mode-II crack propagation problem. id=mode2_schematics
 
-At each time step, the alternative minimization scheme first solves the displacements with a fixed phase-field, then solves the phase-field with the updated displacements. This scheme is realized using MOOSE's MultiApp system. We will set up two input files. One for the displacement subproblem, and the other one for the phase-field subproblem.
+## Mesh generators
+
+Since we can no longer utilize half symmetry in the Mode-II problem, we will have to mesh the full computational domain. There are many ways of generating the mesh. Here, we demonstrate the use of first-class [`MeshGenerator`](MeshGenerator.md)s to generate the mesh:
+
+!listing tutorials/mode2_brittle_fracture/elasticity.i
+         block=Mesh
+         language=python
+
+First, the top half of the domain is meshed using the [`GeneratedMeshGenerator`](GeneratedMeshGenerator.md), and a node set named "top_stitch" is identified using the [`BoundingBoxNodeSetGenerator`](BoundingBoxNodeSetGenerator.md). Next, similarly, the bottom half of the domain is meshed and a node set named "bottom_stitch" is identified. Finally, the top half and the bottom half meshes are "stitched" together by merging the "top_stitch" and the "bottom_stitch" node sets using the [`StitchedMeshGenerator`](StitchedMeshGenerator.md). The parameter `construct_side_list_from_node_list` is set to true to construct side sets from all of the node sets.
 
 ## `elasticity.i`: The displacement subproblem
 
-First, we set up the displacement subproblem as our *main app*. Two additional global expressions are defined at the top of the input file:
+The displacement subproblem is almost identical to that in the previous tutorial, except for the boundary conditions [mode2_schematics]:
 
 !listing tutorials/mode2_brittle_fracture/elasticity.i
-         start=Gc
-         end=l
-         include-end=True
-         link=False
+         block=BCs
          language=python
 
-The mesh is locally refined using initial adaptivity:
-
-!listing tutorials/mode2_brittle_fracture/elasticity.i
-         block=Adaptivity
-         link=False
-         language=python
-
-The quadratic degradation function is defined as
-
-!listing tutorials/mode2_brittle_fracture/elasticity.i
-         block=Materials/degradation
-         link=False
-         language=python
-
-## `fracture.i`: The phase-field subproblem
-
-Next, we set up the phase-field subproblem as our *sub app*. The sub app uses the same mesh as the main app. The equation we want to solve is
-
-\begin{equation}
-  - \divergence \dfrac{2 \Gc l}{c_0} \grad d + \dfrac{\partial}{\partial d} \left( \alpha \dfrac{\Gc}{c_0l} + \psi^e \right) = 0,
-\end{equation}
-
-on the inactive set. The (local part of the) free energy, i.e. the term in the paranthesis, is defined using an `ADDerivativeParsedMaterial`:
-
-!listing tutorials/mode2_brittle_fracture/fracture.i
-         block=Materials/psi
-         link=False
-         language=python
-
-With the definition of local free energy `psi`, the following kernels are used to construct the equation:
-
-!listing tutorials/mode2_brittle_fracture/fracture.i
-         block=Kernels
-         link=False
-         language=python
-
-The bound constraints $d_{n-1} \leqslant d_n \leqslant 1$ on the active set is defined using
-
-!listing tutorials/mode2_brittle_fracture/fracture.i
-         block=Bounds
-         link=False
-         language=python
-
-## Transferring information between the main and the sub app
-
-The displacement subproblem need to know the solution of the phase-field subproblem, and the phase-field subproblem need to know the active elastic energy `psie_active`. Therefore, some transfer of information between the two apps must exist.
-
-To do that, we first let the displacement subproblem (the main app) be aware of its subapp by adding the following section to `elasticity.i`:
-
-!listing tutorials/mode2_brittle_fracture/elasticity.i
-         block=MultiApps
-         link=False
-         language=python
-
-The `cli_args` makes sure $\Gc$ and $l$ are consistent across the two apps. The `execute_on` flag tells the main app to execute the sub app at the end of the time step (after the displacements are solved).
-
-Next, we set up the appropriate transfer:
-
-!listing tutorials/mode2_brittle_fracture/elasticity.i
-         block=Transfers
-         link=False
-         language=python
-
-The phase-field $d$ is retrieved from the sub app, and the main app sends the active elastic energy `psie_active` to the sub app.
-
-## The alternating minimization scheme
-
-Now that we have set up the displacement subproblem, the phase-field subproblem, and the transfers between them, we are now in good shape to set up the alternating minimization scheme.
-
-To do so, we rely on MOOSE's fxied point iteration. In essence, a fixed point solve iterates between the main app and the sub app(s) until the solution in the main app no longer changes between Picard iterations. We add the following parameters to the `Executioner` section to enable the fixed point iteration:
-
-!listing tutorials/mode2_brittle_fracture/elasticity.i
-         start=fixed_point_max_its
-         end=fixed_point_abs_tol
-         include-end=True
-         link=False
-         language=python
+The bottom boundary of the bottom half of the mesh is fixed in both x- and y- directions, while the top boundary of the top half of the mesh is subject to x-displacement with roller support.
 
 ## The complete input files
 
