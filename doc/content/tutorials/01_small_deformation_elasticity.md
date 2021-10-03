@@ -6,6 +6,8 @@ This tutorial covers the basic usage of RACCOON.
 
 Consider a two-dimensional square plate with a notch (the commonly used geometry for Mode-I fracture) under stretch, we would like to solve for the displacements and visualize its strains and stresses everywhere.
 
+!media media/mode1_bcs.png style=display:block;margin:auto;width:60%; caption=Geometry and boundary conditions of the Mode-I crack propagation problem. id=mode1_schematics
+
 ## Global expressions and parameters
 
 It is always good practice to define parameters using expressions at the top of the input file. Here, we first define two expressions for Young's modulus and Poisson's ratio:
@@ -84,7 +86,7 @@ We are solving a vector-valued equation, and the two kernels correspond to the t
 
 ## Boundary conditions
 
-In this problem, there is a symmetry boundary condition on the bottom nodeset called "noncrack", and a displacement-controlled Dirichlet boundary condition on the top. The boundary conditions are defined as
+Boundary conditions are shown in [mode1_schematics]: only the top half of the domain is modeled utilizing symmetry. On the bottom of the computational domain, i.e. a nodeset named "noncrack" is generated and used to define the symmetry condition. A displacement-controlled Dirichlet boundary condition is applied on the top. In the input file, these boundary conditions correspond to
 
 !listing tutorials/small_deformation/elasticity.i
          block=BCs
