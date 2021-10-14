@@ -1,4 +1,3 @@
-###############################################################################
 E = 16
 nu = 0.1812
 
@@ -11,14 +10,14 @@ l = 0.75
 domain_size = 80.0
 crack_size = 8.0
 end_time = 4.0
-###############################################################################
+
 [Mesh]
-  [./generated_mesh]
+  [generated_mesh]
     type = GeneratedMeshGenerator
     dim = 2
     elem_type = QUAD4
-    nx = ${fparse domain_size}
-    ny = ${fparse domain_size}
+    nx = ${domain_size}
+    ny = ${domain_size}
     nz = 0
     xmin = 0
     xmax = ${domain_size}
@@ -26,32 +25,32 @@ end_time = 4.0
     ymax = ${domain_size}
     zmin = 0
     zmax = 0
-  [../]
+  []
 []
 
 [ICs]
-  [./d]
+  [d]
     type = CohesiveDamageIC
     variable = d
     d0 = 1.0
     l = ${l}
-    x1 = ${fparse 0.5*(domain_size-crack_size)}
-    y1 = ${fparse 0.5*domain_size}
+    x1 = '${fparse 0.5*(domain_size-crack_size)}'
+    y1 = '${fparse 0.5*domain_size}'
     z1 = 0.0
-    x2 = ${fparse 0.5*(domain_size+crack_size)} 
-    y2 = ${fparse 0.5*domain_size}
+    x2 = '${fparse 0.5*(domain_size+crack_size)}'
+    y2 = '${fparse 0.5*domain_size}'
     z2 = 0
-  [../]
+  []
 []
 
-###############################################################################
 [MultiApps]
   [mechanical]
     type = TransientMultiApp
     input_files = 'poromechanics.i'
     app_type = raccoonApp
     execute_on = 'TIMESTEP_BEGIN'
-    cli_args = 'G=${G};K=${K};l=${l};domain_size=${domain_size};end_time=${end_time};crack_size=${crack_size}'
+    cli_args = 'G=${G};K=${K};l=${l};domain_size=${domain_size};end_time=${end_time};crack_size=${cra'
+               'ck_size}'
   []
 []
 
