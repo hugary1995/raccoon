@@ -10,23 +10,27 @@ InputParameters
 ADAnisotropicDiffusion::validParams()
 {
   InputParameters params = ADKernel::validParams();
-  params.addClassDescription(
-      "Kernel handling fluid diffusion in domain with anisotropic permeability");
+  params += BaseNameInterface::validParams();
+  params.addClassDescription("Kernel handling diffusion with anisotropic diffusivity");
   params.addRequiredParam<MaterialPropertyName>(
-      "mobility_name", "Name of fluid mobility material property");
-  params.addCoupledVar("v", "Coupled variable of the kernel");
+      "diffusivity", "The anisotropic diffusivity, should be a second-order tensor.");
+  params.addCoupledVar(
+      "coupled_var",
+      "Coupled variable of the kernel. If a variable is coupled, this kernel will operate on the "
+      "coupled variable. If not, this kernel will operate on the variable in the regular way.");
   return params;
 }
 
 ADAnisotropicDiffusion::ADAnisotropicDiffusion(const InputParameters & parameters)
-  : ADKernel(parameters), 
-  _grad_v(isCoupled("v") ? adCoupledGradient("v") : _grad_u),
-  _fluid_mob(getADMaterialProperty<RankTwoTensor>("mobility_name"))
+  : ADKernel(parameters),
+    BaseNameInterface(parameters),
+    _grad_v(isCoupled("coupled_var") ? adCoupledGradient("coupled_var") : _grad_u),
+    _D(getADMaterialProperty<RankTwoTensor>(prependBaseName("diffusivity", true)))
 {
 }
 
 ADReal
 ADAnisotropicDiffusion::computeQpResidual()
 {
-  return (_fluid_mob[_qp] * _grad_v[_qp]) * _grad_test[_i][_qp];
+  return (_D[_qp] * _grad_v[_qp]) * _grad_test[_i][_qp];
 }

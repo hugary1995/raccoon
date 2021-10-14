@@ -5,8 +5,9 @@
 #pragma once
 
 #include "ADKernel.h"
+#include "BaseNameInterface.h"
 
-class ADAnisotropicDiffusion : public ADKernel
+class ADAnisotropicDiffusion : public ADKernel, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -16,9 +17,9 @@ public:
 protected:
   virtual ADReal computeQpResidual() override;
 
-  /// gradient of the coupled variable 
+  /// gradient of the coupled variable
   const ADVariableGradient & _grad_v;
-  
-  /// fluid mobility tensor
-  const ADMaterialProperty<RankTwoTensor> & _fluid_mob;
+
+  /// The anisotropic diffusivity
+  const ADMaterialProperty<RankTwoTensor> & _D;
 };
