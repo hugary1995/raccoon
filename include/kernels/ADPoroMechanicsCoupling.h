@@ -5,8 +5,9 @@
 #pragma once
 
 #include "ADKernel.h"
+#include "BaseNameInterface.h"
 
-class ADPoroMechanicsCoupling : public ADKernel
+class ADPoroMechanicsCoupling : public ADKernel, public BaseNameInterface
 {
 public:
   static InputParameters validParams();

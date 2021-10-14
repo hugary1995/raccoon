@@ -10,22 +10,27 @@ InputParameters
 ADPoroMechanicsCoupling::validParams()
 {
   InputParameters params = ADKernel::validParams();
+  params += BaseNameInterface::validParams();
   params.addClassDescription(
-      "Kernel handling coupling of porepressure to porous media through biot coefficient");
-  params.addRequiredCoupledVar("porepressure", "Pore pressure");
+      "Kernel handling coupling of porepressure to porous media through the Biot coefficient");
+  params.addRequiredCoupledVar("porepressure", "The pore pressure");
   params.addRequiredParam<unsigned int>("component",
-                                        "The gradient direction (0 for x, 1 for y and 2 for z)");
+                                        "The gradient component (0 for x, 1 for y and 2 for z)");
+  params.addParam<MaterialPropertyName>(
+      "biot_coefficient", "biot_coefficient", "The Biot coefficient.");
   return params;
 }
 
 ADPoroMechanicsCoupling::ADPoroMechanicsCoupling(const InputParameters & parameters)
   : ADKernel(parameters),
-    _coefficient(getADMaterialProperty<Real>("biot_coefficient")),
+    BaseNameInterface(parameters),
+    _coefficient(getADMaterialProperty<Real>(prependBaseName("biot_coefficient", true))),
     _porepressure(adCoupledValue("porepressure")),
     _component(getParam<unsigned int>("component"))
 {
   if (_component >= _mesh.dimension())
-    mooseError("PoroMechanicsCoupling: component should not be greater than the mesh dimension\n");
+    mooseError(
+        name(), ": component is ", _component, ", but mesh dimension is ", _mesh.dimension());
 }
 
 ADReal

@@ -5,8 +5,9 @@
 #pragma once
 
 #include "ADTimeDerivative.h"
+#include "BaseNameInterface.h"
 
-class ADSPFPressureTimeDerivative : public ADTimeDerivative
+class ADSPFPressureTimeDerivative : public ADTimeDerivative, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -16,5 +17,5 @@ public:
 protected:
   virtual ADReal precomputeQpResidual() override;
 
-  const MaterialProperty<Real> & _M;
+  const ADMaterialProperty<Real> & _M;
 };

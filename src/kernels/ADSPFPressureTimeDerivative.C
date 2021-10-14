@@ -10,14 +10,17 @@ InputParameters
 ADSPFPressureTimeDerivative::validParams()
 {
   InputParameters params = ADTimeDerivative::validParams();
+  params += BaseNameInterface::validParams();
   params.addClassDescription(
-      "AD Time derivative of pressure divided by the biot modulus in single phase flow.");
-  params.addParam<MaterialPropertyName>("biot_modulus", "biot_modulus", "biot_modulus");
+      "The time derivative of pressure normalized by the Biot modulus in single phase flow.");
+  params.addParam<MaterialPropertyName>("biot_modulus", "biot_modulus", "The Biot modulus");
   return params;
 }
 
 ADSPFPressureTimeDerivative::ADSPFPressureTimeDerivative(const InputParameters & parameters)
-  : ADTimeDerivative(parameters), _M(getMaterialProperty<Real>("biot_modulus"))
+  : ADTimeDerivative(parameters),
+    BaseNameInterface(parameters),
+    _M(getADMaterialProperty<Real>(prependBaseName("biot_modulus", true)))
 {
 }
 
