@@ -18,14 +18,16 @@ ADSPFVolStrTimeDerivative::validParams()
 
 ADSPFVolStrTimeDerivative::ADSPFVolStrTimeDerivative(const InputParameters & parameters)
   : ADTimeKernel(parameters),
-    _strain(getADMaterialPropertyByName<RankTwoTensor>("total_strain")),
-    _strain_old(getMaterialPropertyOldByName<RankTwoTensor>("total_strain")),
-    _alpha(getADMaterialProperty<Real>("biot_coefficient"))
+    BaseNameInterface(parameters),
+    _strain(getADMaterialPropertyByName<RankTwoTensor>(prependBaseName("total_strain"))),
+    _strain_old(getMaterialPropertyOldByName<RankTwoTensor>(prependBaseName("total_strain"))),
+    _alpha(getADMaterialProperty<Real>(prependBaseName("biot_coefficient", true)))
 {
 }
 
 ADReal
 ADSPFVolStrTimeDerivative::computeQpResidual()
 {
-  return _test[_i][_qp] * _alpha[_qp] * ((_strain[_qp].trace() - _strain_old[_qp].trace()) / _dt);
+  ADReal vol_strain_rate = (_strain[_qp].trace() - _strain_old[_qp].trace()) / _dt;
+  return _test[_i][_qp] * _alpha[_qp] * vol_strain_rate;
 }

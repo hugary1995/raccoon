@@ -6,25 +6,24 @@
 
 #include "Material.h"
 #include "RankTwoTensorForward.h"
+#include "BaseNameInterface.h"
 
-class ADComputeCrackOpening : public Material
+class CrackOpeningDisplacementApproximation : public Material, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
 
-  ADComputeCrackOpening(const InputParameters & parameters);
+  CrackOpeningDisplacementApproximation(const InputParameters & parameters);
 
 protected:
   virtual void computeQpProperties() override;
 
-  /// crack opneing 
+  /// The approximated crack opneing displacement
   ADMaterialProperty<Real> & _wn;
 
-  /// damage and gradient of damage
-  const ADVariableValue & _d;
+  /// The gradient of phase field
   const ADVariableGradient & _grad_d;
 
-  /// strain tensor at current and previous time step
-  const ADMaterialProperty<RankTwoTensor> & _strain;
+  /// The old strain
   const MaterialProperty<RankTwoTensor> & _strain_old;
 };

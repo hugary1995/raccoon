@@ -5,8 +5,9 @@
 #pragma once
 
 #include "ADTimeKernel.h"
+#include "BaseNameInterface.h"
 
-class ADSPFVolStrTimeDerivative : public ADTimeKernel
+class ADSPFVolStrTimeDerivative : public ADTimeKernel, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
@@ -16,8 +17,11 @@ public:
 protected:
   virtual ADReal computeQpResidual() override;
 
+  // @{ The current and the old strain
   const ADMaterialProperty<RankTwoTensor> & _strain;
   const MaterialProperty<RankTwoTensor> & _strain_old;
+  // @}
 
+  /// The Biot coefficient
   const ADMaterialProperty<Real> & _alpha;
 };
