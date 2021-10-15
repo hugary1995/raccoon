@@ -182,8 +182,8 @@ M = 12.5
   []
   [stress_h]
     type = ADRankTwoScalarAux
-    rank_two_tensor = 'stress'
     variable = 'stress_h'
+    rank_two_tensor = 'stress'
     scalar_type = Hydrostatic
     execute_on = 'TIMESTEP_END'
   []
@@ -213,44 +213,44 @@ M = 12.5
   []
   [lambda_xx]
     type = ADMaterialRankTwoTensorAux
-    property = 'fluid_mobility'
     variable = 'lambda_xx'
+    property = 'fluid_mobility'
     i = 0
     j = 0
     execute_on = 'TIMESTEP_END'
   []
   [lambda_xy]
     type = ADMaterialRankTwoTensorAux
-    property = 'fluid_mobility'
     variable = 'lambda_xy'
+    property = 'fluid_mobility'
     i = 0
     j = 1
     execute_on = 'TIMESTEP_END'
   []
   [lambda_yy]
     type = ADMaterialRankTwoTensorAux
-    property = 'fluid_mobility'
     variable = 'lambda_yy'
+    property = 'fluid_mobility'
     i = 1
     j = 1
     execute_on = 'TIMESTEP_END'
   []
   [crack_opening]
     type = ADMaterialRealAux
-    property = 'crack_opening'
     variable = 'crack_opening'
+    property = 'wn'
     execute_on = 'TIMESTEP_END'
   []
   [fluid_source_term]
     type = ADMaterialRealAux
-    property = 'fluid_source_term'
     variable = 'fluid_source_term'
+    property = 'fluid_source_term'
     execute_on = 'TIMESTEP_END'
   []
   [biot_coefficient]
     type = ADMaterialRealAux
-    property = 'biot_coefficient'
     variable = 'biot_coefficient'
+    property = 'biot_coefficient'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -266,17 +266,15 @@ M = 12.5
     prop_names = 'intact_biot_coef biot_modulus'
     prop_values = '${alpha} ${M}'
   []
-
   [crack_opening]
-    type = ADComputeCrackOpening
-    damage = 'd'
+    type = ComputeCrackOpeningDisplacement
+    phase_field = d
   []
   [mob_w]
     type = ADComputeFluidMobility
     damage = 'd'
     mobility_exponent = '${eps}'
   []
-
   [fluid_source_term]
     type = ADParsedMaterial
     f_name = fluid_source_term
@@ -284,7 +282,6 @@ M = 12.5
     args = 'd0'
     function = 'if(d0>0.5, fluid_source, 0.0)'
   []
-
   [biot_coefficient]
     type = ADDerivativeParsedMaterial
     f_name = biot_coefficient

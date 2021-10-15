@@ -2,12 +2,12 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "CrackOpeningDisplacementApproximation.h"
+#include "ComputeCrackOpeningDisplacement.h"
 
-registerMooseObject("raccoonApp", CrackOpeningDisplacementApproximation);
+registerMooseObject("raccoonApp", ComputeCrackOpeningDisplacement);
 
 InputParameters
-CrackOpeningDisplacementApproximation::validParams()
+ComputeCrackOpeningDisplacement::validParams()
 {
   InputParameters params = Material::validParams();
   params += BaseNameInterface::validParams();
@@ -20,18 +20,18 @@ CrackOpeningDisplacementApproximation::validParams()
   return params;
 }
 
-CrackOpeningDisplacementApproximation::CrackOpeningDisplacementApproximation(
-    const InputParameters & parameters)
+ComputeCrackOpeningDisplacement::ComputeCrackOpeningDisplacement(const InputParameters & parameters)
   : Material(parameters),
     BaseNameInterface(parameters),
     _wn(declareADProperty<Real>(prependBaseName("crack_opening_displacement", true))),
     _grad_d(adCoupledGradient("phase_field")),
+    // _strain(getADMaterialPropertyByName<RankTwoTensor>(prependBaseName("total_strain"))),
     _strain_old(getMaterialPropertyOldByName<RankTwoTensor>(prependBaseName("total_strain")))
 {
 }
 
 void
-CrackOpeningDisplacementApproximation::computeQpProperties()
+ComputeCrackOpeningDisplacement::computeQpProperties()
 {
   // Use the phase field gradient to approximate the crack surface normal
   const Real eps = 1e-15;

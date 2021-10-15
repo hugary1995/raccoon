@@ -27,7 +27,7 @@ ADComputeFluidMobility::ADComputeFluidMobility(const InputParameters & parameter
   : Material(parameters),
     _fluid_mob(
         declareADProperty<RankTwoTensor>(getParam<MaterialPropertyName>("fluid_mobility_name"))),
-    _wn(getADMaterialPropertyByName<Real>("crack_opening")),
+    _wn(getADMaterialPropertyByName<Real>("wn")),
     _d(adCoupledValue("damage")),
     _grad_d(adCoupledGradient("damage")),
     _eta(getADMaterialProperty<Real>("fluid_viscosity_name")),
@@ -37,14 +37,14 @@ ADComputeFluidMobility::ADComputeFluidMobility(const InputParameters & parameter
 {
 }
 
-ADRankTwoTensor 
+ADRankTwoTensor
 ADComputeFluidMobility::computeMatrixMob()
 {
   ADRankTwoTensor identity(ADRankTwoTensor::initIdentity);
   return _K[_qp] / _eta[_qp] * identity;
 }
 
-ADRankTwoTensor 
+ADRankTwoTensor
 ADComputeFluidMobility::computeFractureMob()
 {
   const Real eps = 1e-15;
@@ -54,7 +54,7 @@ ADComputeFluidMobility::computeFractureMob()
     n = _grad_d[_qp] / _grad_d[_qp].norm();
   ADRankTwoTensor nn;
   nn.vectorOuterProduct(n, n);
-  return (_wn[_qp]+_wcr) * (_wn[_qp]+_wcr) / (12 * _eta[_qp]) * (identity - nn);
+  return (_wn[_qp] + _wcr) * (_wn[_qp] + _wcr) / (12 * _eta[_qp]) * (identity - nn);
 }
 
 void

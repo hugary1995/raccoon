@@ -1,6 +1,6 @@
-# CrackOpeningDisplacementApproximation
+# ComputeCrackOpeningDisplacement
 
-!syntax description /Materials/CrackOpeningDisplacementApproximation
+!syntax description /Materials/ComputeCrackOpeningDisplacement
 
 ## Overview
 
@@ -13,8 +13,8 @@ where $h^e$ is the edge length of the current element.
 
 ## Example Input File Syntax
 
-!syntax parameters /Materials/CrackOpeningDisplacementApproximation
+!syntax parameters /Materials/ComputeCrackOpeningDisplacement
 
-!syntax inputs /Materials/CrackOpeningDisplacementApproximation
+!syntax inputs /Materials/ComputeCrackOpeningDisplacement
 
-!syntax children /Materials/CrackOpeningDisplacementApproximation
+!syntax children /Materials/ComputeCrackOpeningDisplacement
