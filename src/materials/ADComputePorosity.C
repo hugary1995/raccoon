@@ -11,8 +11,8 @@ InputParameters
 ADComputePorosity::validParams()
 {
   InputParameters params = Material::validParams();
-  params.addClassDescription(
-      "compute porosity in poroelastic media as a function of fluid pressure and solid volumetric strain");
+  params.addClassDescription("compute porosity in poroelastic media as a function of fluid "
+                             "pressure and solid volumetric strain");
   params.addRequiredCoupledVar("porepressure", "fluid phase porepressure");
   params.addParam<MaterialPropertyName>(
       "porosity_name", "porosity", "Name of porosity material property");

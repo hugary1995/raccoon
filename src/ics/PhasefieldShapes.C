@@ -16,7 +16,8 @@ PhasefieldShapes::validParams()
   params.addParam<std::vector<std::string>>("gradients", "array of gradient types: box");
   params.addParam<std::vector<Real>>("centers_tips", "coordinates");
   params.addParam<std::vector<Real>>("gradient_values", "coordinates and values");
-  params.addRequiredParam<Real>("fluid_phase", "string indicating which fluid phase to place inside the shape");
+  params.addRequiredParam<Real>("fluid_phase",
+                                "string indicating which fluid phase to place inside the shape");
 
   return params;
 }
@@ -98,35 +99,40 @@ PhasefieldShapes::value(const Point & p)
       if (((p(0) - _center_x) >= 0.0) && ((p(1) - _center_y) >= 0.0))
         angle = angle;
       if (((p(0) - _center_x) < 0.0) && ((p(1) - _center_y) >= 0.0))
-        angle = -pi/2 + angle;
+        angle = -pi / 2 + angle;
       if (((p(0) - _center_x) < 0.0) && ((p(1) - _center_y) < 0.0))
         angle = -pi + angle;
       if (((p(0) - _center_x) >= 0.0) && ((p(1) - _center_y) < 0.0))
-        angle = -3*pi/2 + angle;
+        angle = -3 * pi / 2 + angle;
 
       double perturbation = amp * sin(k * angle);
 
       aux_distance = sqrt((p(0) - _center_x) * (p(0) - _center_x) +
                           (p(1) - _center_y) * (p(1) - _center_y)); // distance to
 
-      if (aux_distance <= 0.0) {
+      if (aux_distance <= 0.0)
+      {
         if (_fluid_phase == 1.0)
           current_value = 1.0;
         else if (_fluid_phase == 0.0)
-          current_value = 0.0;      
-      } else {
+          current_value = 0.0;
+      }
+      else
+      {
         if (_fluid_phase == 1.0)
-          current_value = 1.0 - 0.5 * (1.0 + tanh((((aux_distance - _radius_a) + perturbation) / _epsilon)));
+          current_value =
+              1.0 - 0.5 * (1.0 + tanh((((aux_distance - _radius_a) + perturbation) / _epsilon)));
         else if (_fluid_phase == 0.0)
-          current_value = 0.5 * (1.0 + tanh((((aux_distance - _radius_a) + perturbation) / _epsilon)));
+          current_value =
+              0.5 * (1.0 + tanh((((aux_distance - _radius_a) + perturbation) / _epsilon)));
       }
 
-      //if (_fluid_phase == 1.0)
+      // if (_fluid_phase == 1.0)
       //  current_value = exp(-(aux_distance - (_radius_a + perturbation)) / _epsilon);
-      //else if (_fluid_phase == 0.0)
+      // else if (_fluid_phase == 0.0)
       //  current_value = 1.0 - exp(-(aux_distance - (_radius_a + perturbation)) / _epsilon);
       //
-      //if (aux_distance < (_radius_a + perturbation)) {
+      // if (aux_distance < (_radius_a + perturbation)) {
       //  if (_fluid_phase == 1.0)
       //    current_value = 1.0;
       //  else if (_fluid_phase == 0.0)
