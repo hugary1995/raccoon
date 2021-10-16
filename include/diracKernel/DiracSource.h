@@ -19,8 +19,8 @@ public:
 protected:
   /// position of the dirac source
   Point _point;
-  
-  /// numbe of dimensions 
+
+  /// numbe of dimensions
   int _dim;
   Real _fL;
 
