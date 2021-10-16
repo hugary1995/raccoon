@@ -1,9 +1,24 @@
+# Fluid viscosity
 eta = 1e-12
-k_int = 3e-12
+
+# Intrinsic permeability
+P = 3e-12
+
+# Fluid source
 Q = 4e-3
+
+# Intact Biot coefficient
 alpha = 0.79
+
+# Fracture mobility exponent
 eps = 50
-M = 12.5
+
+# Biot modulus
+B = 12.5
+
+[GlobalParams]
+  displacements = 'disp_x disp_y'
+[]
 
 [Mesh]
   [generated_mesh]
@@ -35,10 +50,6 @@ M = 12.5
     y2 = '${fparse 0.5*domain_size}'
     z2 = 0
   []
-[]
-
-[GlobalParams]
-  displacements = 'disp_x disp_y'
 []
 
 [Variables]
@@ -104,19 +115,19 @@ M = 12.5
 [BCs]
   [xfix]
     type = DirichletBC
-    variable = 'disp_x'
+    variable = disp_x
     boundary = 'top bottom left right'
     value = 0
   []
   [yfix]
     type = DirichletBC
-    variable = 'disp_y'
+    variable = disp_y
     boundary = 'top bottom left right'
     value = 0
   []
   [p]
     type = DirichletBC
-    variable = 'pressure'
+    variable = pressure
     boundary = 'top bottom left right'
     value = 0
   []
@@ -127,48 +138,52 @@ M = 12.5
   ###################################
   [solid_x]
     type = ADStressDivergenceTensors
-    variable = 'disp_x'
+    variable = disp_x
     displacements = 'disp_x disp_y'
     component = 0
   []
   [solid_y]
     type = ADStressDivergenceTensors
-    variable = 'disp_y'
+    variable = disp_y
     displacements = 'disp_x disp_y'
     component = 1
   []
   [poro_x]
     type = ADPoroMechanicsCoupling
-    variable = 'disp_x'
-    porepressure = 'pressure'
+    variable = disp_x
+    porepressure = pressure
+    biot_coefficient = alpha
     component = 0
   []
   [poro_y]
     type = ADPoroMechanicsCoupling
-    variable = 'disp_y'
-    porepressure = 'pressure'
+    variable = disp_y
+    porepressure = pressure
+    biot_coefficient = alpha
     component = 1
   []
 
-  # pressure
+  # fluid pressure
   ###################################
   [timederivative_pressure]
     type = ADSPFPressureTimeDerivative
     variable = pressure
+    biot_modulus = B
   []
   [timederivative_epsV]
     type = ADSPFVolStrTimeDerivative
     variable = pressure
+    biot_coefficient = alpha
   []
   [diffusion_pressure]
     type = ADAnisotropicDiffusion
     variable = pressure
-    diffusivity = 'fluid_mobility'
+    diffusivity = Mf
   []
   [source_term]
     type = ADCoefMatSource
     variable = pressure
-    prop_names = 'fluid_source_term'
+    prop_names = 'Q'
     coefficient = -1
   []
 []
@@ -214,7 +229,7 @@ M = 12.5
   [lambda_xx]
     type = ADMaterialRankTwoTensorAux
     variable = 'lambda_xx'
-    property = 'fluid_mobility'
+    property = 'Mf'
     i = 0
     j = 0
     execute_on = 'TIMESTEP_END'
@@ -222,7 +237,7 @@ M = 12.5
   [lambda_xy]
     type = ADMaterialRankTwoTensorAux
     variable = 'lambda_xy'
-    property = 'fluid_mobility'
+    property = 'Mf'
     i = 0
     j = 1
     execute_on = 'TIMESTEP_END'
@@ -230,7 +245,7 @@ M = 12.5
   [lambda_yy]
     type = ADMaterialRankTwoTensorAux
     variable = 'lambda_yy'
-    property = 'fluid_mobility'
+    property = 'Mf'
     i = 1
     j = 1
     execute_on = 'TIMESTEP_END'
@@ -244,13 +259,13 @@ M = 12.5
   [fluid_source_term]
     type = ADMaterialRealAux
     variable = 'fluid_source_term'
-    property = 'fluid_source_term'
+    property = 'Q'
     execute_on = 'TIMESTEP_END'
   []
   [biot_coefficient]
     type = ADMaterialRealAux
     variable = 'biot_coefficient'
-    property = 'biot_coefficient'
+    property = 'alpha'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -258,37 +273,38 @@ M = 12.5
 [Materials]
   [constants]
     type = ADGenericConstantMaterial
-    prop_names = 'fluid_viscosity intrinsic_permeability fluid_source'
-    prop_values = '${eta} ${k_int} ${Q}'
+    prop_names = 'eta P'
+    prop_values = '${eta} ${P}'
   []
   [biot]
     type = ADGenericConstantMaterial
-    prop_names = 'intact_biot_coef biot_modulus'
-    prop_values = '${alpha} ${M}'
+    prop_names = 'alpha0 B'
+    prop_values = '${alpha} ${B}'
   []
   [crack_opening]
     type = ComputeCrackOpeningDisplacement
     phase_field = d
   []
   [mob_w]
-    type = ADComputeFluidMobility
-    damage = 'd'
-    mobility_exponent = '${eps}'
+    type = ComputeFluidMobility
+    fluid_mobility = Mf
+    fluid_viscosity = eta
+    intrinsic_permeability = P
+    phase_field = d
+    mobility_exponent = ${eps}
   []
   [fluid_source_term]
     type = ADParsedMaterial
-    f_name = fluid_source_term
-    material_property_names = 'fluid_source'
+    f_name = Q
     args = 'd0'
-    function = 'if(d0>0.5, fluid_source, 0.0)'
+    function = 'if(d0>0.5, ${Q}, 0.0)'
   []
   [biot_coefficient]
     type = ADDerivativeParsedMaterial
-    f_name = biot_coefficient
-    material_property_names = 'intact_biot_coef'
+    f_name = alpha
+    material_property_names = 'alpha0'
     args = 'd'
-    function = 'intact_biot_coef'
-    enable_jit = true
+    function = 'alpha0'
     derivative_order = 1
   []
 
@@ -329,15 +345,18 @@ M = 12.5
 
 [Executioner]
   type = Transient
+
   solve_type = NEWTON
-  nl_max_its = 50
-  nl_rel_tol = 1e-6
-  nl_abs_tol = 1e-8
-  dt = 1e-1
-  end_time = ${end_time}
   petsc_options_iname = '-pc_type'
   petsc_options_value = 'lu'
   automatic_scaling = true
+
+  nl_max_its = 50
+  nl_rel_tol = 1e-6
+  nl_abs_tol = 1e-8
+
+  dt = 1e-1
+  end_time = ${end_time}
 []
 
 [Outputs]

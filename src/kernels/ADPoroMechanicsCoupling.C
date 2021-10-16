@@ -16,8 +16,7 @@ ADPoroMechanicsCoupling::validParams()
   params.addRequiredCoupledVar("porepressure", "The pore pressure");
   params.addRequiredParam<unsigned int>("component",
                                         "The gradient component (0 for x, 1 for y and 2 for z)");
-  params.addParam<MaterialPropertyName>(
-      "biot_coefficient", "biot_coefficient", "The Biot coefficient.");
+  params.addParam<MaterialPropertyName>("biot_coefficient", "alpha", "The Biot coefficient.");
   return params;
 }
 

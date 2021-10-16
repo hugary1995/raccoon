@@ -24,7 +24,11 @@ protected:
   /// The gradient of phase field
   const ADVariableGradient & _grad_d;
 
-  /// The old strain
-  // const ADMaterialProperty<RankTwoTensor> & _strain;
+  /// The initial crack opening displacement
+  const Real _w0;
+
+  // @{ The current and the old strain
+  const ADMaterialProperty<RankTwoTensor> & _strain;
   const MaterialProperty<RankTwoTensor> & _strain_old;
+  // @}
 };

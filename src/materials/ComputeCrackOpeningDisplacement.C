@@ -17,6 +17,7 @@ ComputeCrackOpeningDisplacement::validParams()
       "crack_opening_displacement", "wn", "Name of the crack opening displacement");
   params.addRequiredCoupledVar(
       "phase_field", "The phase field variable used to approximate the crack surface normal.");
+  params.addParam<Real>("initial_crack_opening", 0.0, "Initial crack opening displacement");
   return params;
 }
 
@@ -25,7 +26,8 @@ ComputeCrackOpeningDisplacement::ComputeCrackOpeningDisplacement(const InputPara
     BaseNameInterface(parameters),
     _wn(declareADProperty<Real>(prependBaseName("crack_opening_displacement", true))),
     _grad_d(adCoupledGradient("phase_field")),
-    // _strain(getADMaterialPropertyByName<RankTwoTensor>(prependBaseName("total_strain"))),
+    _w0(getParam<Real>("initial_crack_opening")),
+    _strain(getADMaterialPropertyByName<RankTwoTensor>(prependBaseName("total_strain"))),
     _strain_old(getMaterialPropertyOldByName<RankTwoTensor>(prependBaseName("total_strain")))
 {
 }
@@ -42,5 +44,5 @@ ComputeCrackOpeningDisplacement::computeQpProperties()
   // Get the characteristic element size
   Real hel = (_current_elem->hmin() + _current_elem->hmax()) / 2;
 
-  _wn[_qp] = hel * (_strain_old[_qp] * n) * n;
+  _wn[_qp] = hel * (_strain_old[_qp] * n) * n + _w0;
 }

@@ -12,7 +12,7 @@ ADSPFVolStrTimeDerivative::validParams()
   InputParameters params = ADTimeKernel::validParams();
   params += BaseNameInterface::validParams();
   params.addClassDescription("Single phase flow volumetric strain time derivative term.");
-  params.addParam<MaterialPropertyName>("biot_coefficient", "biot_coefficient", "biot_coefficient");
+  params.addParam<MaterialPropertyName>("biot_coefficient", "alpha", "The Biot coefficient");
   return params;
 }
 

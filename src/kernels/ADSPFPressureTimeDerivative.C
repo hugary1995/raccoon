@@ -13,19 +13,19 @@ ADSPFPressureTimeDerivative::validParams()
   params += BaseNameInterface::validParams();
   params.addClassDescription(
       "The time derivative of pressure normalized by the Biot modulus in single phase flow.");
-  params.addParam<MaterialPropertyName>("biot_modulus", "biot_modulus", "The Biot modulus");
+  params.addParam<MaterialPropertyName>("biot_modulus", "B", "The Biot modulus");
   return params;
 }
 
 ADSPFPressureTimeDerivative::ADSPFPressureTimeDerivative(const InputParameters & parameters)
   : ADTimeDerivative(parameters),
     BaseNameInterface(parameters),
-    _M(getADMaterialProperty<Real>(prependBaseName("biot_modulus", true)))
+    _B(getADMaterialProperty<Real>(prependBaseName("biot_modulus", true)))
 {
 }
 
 ADReal
 ADSPFPressureTimeDerivative::precomputeQpResidual()
 {
-  return 1 / _M[_qp] * ADTimeDerivative::precomputeQpResidual();
+  return 1 / _B[_qp] * ADTimeDerivative::precomputeQpResidual();
 }
