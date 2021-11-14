@@ -26,9 +26,4 @@ protected:
   /// The gradient of phase field
   const ADVariableValue & _d;
   const ADVariableGradient & _grad_d;
-
-  const ADVariableGradient & _grad_phi;
-
-  const bool _normal_provided;
-  const RealVectorValue _normal;
 };
