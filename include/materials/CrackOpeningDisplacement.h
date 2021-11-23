@@ -26,4 +26,7 @@ protected:
   /// The gradient of phase field
   const ADVariableValue & _d;
   const ADVariableGradient & _grad_d;
+
+  /// The gradient of level set
+  const ADVariableGradient & _grad_phi;
 };

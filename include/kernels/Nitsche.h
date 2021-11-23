@@ -17,8 +17,7 @@ public:
 protected:
   virtual ADReal computeQpResidual() override;
 
-  const ADVariableValue & _d;
-  const ADVariableGradient & _grad_d;
+  const ADVariableGradient & _grad_phi;
 
   const ADMaterialProperty<Real> & _wn;
 

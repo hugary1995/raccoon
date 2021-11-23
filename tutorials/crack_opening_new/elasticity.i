@@ -6,36 +6,36 @@ G = '${fparse E/2/(1+nu)}'
 Gc = 1
 l = 0.02
 
-N = 200
+e = 0.012
 
-a = 0.2
+a = 0.8
 
 [MultiApps]
   [fracture]
     type = FullSolveMultiApp
     input_files = fracture.i
-    cli_args = 'Gc=${Gc};l=${l};N=${N};a=${a}'
+    cli_args = 'Gc=${Gc};l=${l};e=${e};a=${a}'
     execute_on = 'INITIAL'
   []
-  [cod]
+  [levelset]
     type = FullSolveMultiApp
-    input_files = cod.i
-    cli_args = 'N=${N};a=${a}'
+    input_files = levelset.i
+    cli_args = 'e=${e};a=${a}'
     execute_on = 'TIMESTEP_END'
   []
 []
 
 [Transfers]
-  [from_d]
+  [from_fracture]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = from_multiapp
     variable = d
     source_variable = d
   []
-  [to_cod]
+  [to_levelset]
     type = MultiAppCopyTransfer
-    multi_app = cod
+    multi_app = levelset
     direction = to_multiapp
     variable = 'd disp_x disp_y'
     source_variable = 'd disp_x disp_y'
@@ -47,15 +47,9 @@ a = 0.2
 []
 
 [Mesh]
-  # [gen]
-  #   type = GeneratedMeshGenerator
-  #   dim = 2
-  #   nx = ${N}
-  #   ny = ${N}
-  # []
   [gen]
     type = FileMeshGenerator
-    file = gold/plate.msh
+    file = 'gold/plate_${e}.msh'
   []
 []
 

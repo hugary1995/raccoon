@@ -1,3 +1,22 @@
+[MultiApps]
+  [cod]
+    type = FullSolveMultiApp
+    input_files = cod.i
+    cli_args = 'e=${e};a=${a}'
+    execute_on = 'TIMESTEP_END'
+  []
+[]
+
+[Transfers]
+  [to_cod]
+    type = MultiAppMeshFunctionTransfer
+    multi_app = cod
+    direction = to_multiapp
+    variable = 'd disp_x disp_y phi'
+    source_variable = 'd disp_x disp_y phi'
+  []
+[]
+
 [Problem]
   kernel_coverage_check = false
   material_coverage_check = false
@@ -25,7 +44,7 @@
 []
 
 [Variables]
-  [w]
+  [phi]
     block = 1
   []
 []
@@ -36,12 +55,6 @@
   [disp_x]
   []
   [disp_y]
-  []
-  [cod]
-    order = CONSTANT
-    family = MONOMIAL
-  []
-  [phi]
   []
 []
 
@@ -58,57 +71,42 @@
   []
 []
 
-[AuxKernels]
-  [cod]
-    type = ADMaterialRealAux
-    variable = cod
-    property = crack_opening_displacement
-    block = 1
-  []
-[]
-
 [Kernels]
-  [diff]
-    type = ADCoefMatDiffusion
-    variable = w
-    coefficient = 0
+  [levelset_diff]
+    type = ADDiffusion
+    variable = phi
     block = 1
   []
-  [cod]
-    type = Nitsche
-    variable = w
-    level_set = phi
-    alpha = alpha
+  [f]
+    type = ADCoefMatSource
+    variable = phi
+    prop_names = f
+    block = 1
+  []
+  [penalty]
+    type = ADCoefMatSource
+    variable = phi
+    prop_names = penalty
     block = 1
   []
 []
 
 [Materials]
-  [cod]
-    type = CrackOpeningDisplacement
-    phase_field = d
-    level_set = phi
-    displacements = 'disp_x disp_y'
-    block = 1
-  []
-  [penalty]
+  [f]
     type = ADParsedMaterial
-    f_name = alpha
-    args = 'd'
-    function = '1*d'
-    outputs = exodus
+    f_name = f
+    args = d
+    function = 'if(d>0,-20,10)'
     block = 1
   []
-[]
-
-[VectorPostprocessors]
-  [w]
-    type = LineValueSampler
-    variable = w
-    start_point = '0 0.5 0'
-    end_point = '1 0.5 0'
-    num_points = 1000
-    sort_by = x
+  [levelset_penalty]
+    type = ADParsedMaterial
+    f_name = penalty
+    args = 'phi d'
+    constant_names = 'p dls'
+    constant_expressions = '1e6 1e-2'
+    function = 'if(d<dls & d>0, 2*p*phi, 0)'
+    block = 1
   []
 []
 
@@ -128,13 +126,4 @@
 
 [Outputs]
   print_linear_residuals = false
-  [exodus]
-    type = Exodus
-    file_base = 'output/e_${e}'
-  []
-  [csv]
-    type = CSV
-    file_base = 'data/e_${e}'
-    execute_on = 'TIMESTEP_END'
-  []
 []

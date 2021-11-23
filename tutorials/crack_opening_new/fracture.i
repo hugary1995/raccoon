@@ -1,27 +1,15 @@
 [Mesh]
-  # [gen]
-  #   type = GeneratedMeshGenerator
-  #   dim = 2
-  #   nx = ${N}
-  #   ny = ${N}
-  # []
   [gen]
     type = FileMeshGenerator
-    file = gold/plate.msh
+    file = 'gold/plate_${e}.msh'
   []
 []
 
 [Variables]
   [d]
     [InitialCondition]
-      # type = BoundingBoxIC
-      # inside = 1
-      # x1 = '${fparse 0.5-a/2}'
-      # x2 = '${fparse 0.5+a/2}'
-      # y1 = 0.499
-      # y2 = 0.501
       type = CohesiveDamageIC
-      d0 = 1
+      d0 = 1.05
       l = '${fparse 2*l}'
       x1 = '${fparse 0.5-a/2}'
       x2 = '${fparse 0.5+a/2}'
