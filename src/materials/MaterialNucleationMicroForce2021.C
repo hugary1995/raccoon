@@ -3,19 +3,19 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "Function.h"
-#include "MaterialNucleationMicroForce.h"
+#include "MaterialNucleationMicroForce2021.h"
 
-registerADMooseObject("raccoonApp", MaterialNucleationMicroForce);
+registerADMooseObject("raccoonApp", MaterialNucleationMicroForce2021);
 
 InputParameters
-MaterialNucleationMicroForce::validParams()
+MaterialNucleationMicroForce2021::validParams()
 {
   InputParameters params = Material::validParams();
   params += BaseNameInterface::validParams();
 
   params.addClassDescription(
       "This class computes the external driving force for nucleation given "
-      "a Drucker-Prager strength envelope. The implementation follows Kumar et. al. (2020).");
+      "a Drucker-Prager strength envelope. The implementation follows Kumar et. al. (2021).");
 
   params.addParam<MaterialPropertyName>(
       "fracture_toughness", "Gc", "energy release rate or fracture toughness");
@@ -35,8 +35,7 @@ MaterialNucleationMicroForce::validParams()
       "compressive_strength",
       "The compressive strength of the material beyond which the material fails.");
 
-  // params.addRequiredParam<Real>("delta", "delta");
-  params.addRequiredParam<MaterialPropertyName>("delta", "delta");
+  params.addRequiredParam<Real>("delta", "delta");
   params.addParam<MaterialPropertyName>(
       "external_driving_force_name",
       "ex_driving",
@@ -45,7 +44,7 @@ MaterialNucleationMicroForce::validParams()
   return params;
 }
 
-MaterialNucleationMicroForce::MaterialNucleationMicroForce(const InputParameters & parameters)
+MaterialNucleationMicroForce2021::MaterialNucleationMicroForce2021(const InputParameters & parameters)
   : Material(parameters),
     BaseNameInterface(parameters),
     _ex_driving(declareADProperty<Real>(prependBaseName("external_driving_force_name", true))),
@@ -58,23 +57,22 @@ MaterialNucleationMicroForce::MaterialNucleationMicroForce(const InputParameters
     _sigma_ts(getADMaterialProperty<Real>(prependBaseName("tensile_strength", true))),
     // _sigma_cs(getParam<Real>("compressive_strength")),
     _sigma_cs(getADMaterialProperty<Real>(prependBaseName("compressive_strength", true))),
-    // _delta(getParam<Real>("delta")),
-    _delta(getADMaterialProperty<Real>(prependBaseName("delta", true))),
+    _delta(getParam<Real>("delta")),
     _stress(getADMaterialProperty<RankTwoTensor>(prependBaseName("stress")))
 {
 }
 
 void
-MaterialNucleationMicroForce::computeQpProperties()
+MaterialNucleationMicroForce2021::computeQpProperties()
 {
   // The bulk modulus
   ADReal K = _lambda[_qp] + 2 * _mu[_qp] / 3;
 
   // Parameters in the strength surface
   ADReal gamma_0 =
-      (_mu[_qp] + 3 * K) * _sigma_ts[_qp] * _L[_qp] / _Gc[_qp] / 18 / _mu[_qp] / _mu[_qp] / K / K;
-  ADReal gamma_1 = (1.0 + _delta[_qp]) / (2.0 * _sigma_ts[_qp] * _sigma_cs[_qp]);
-  ADReal gamma_2 = (8 * _mu[_qp] + 24 * K - 27 * _sigma_ts[_qp]) / 144 / _mu[_qp] / K;
+      _sigma_ts[_qp]/6.0/(3.0*_lambda[_qp]+2.0*_mu[_qp])+_sigma_ts[_qp]/6.0/_mu[_qp];
+  ADReal gamma_1 = (1.0 + _delta) / (2.0 * _sigma_ts[_qp] * _sigma_cs[_qp]);
+  // ADReal gamma_2 = (8 * _mu[_qp] + 24 * K - 27 * _sigma_ts[_qp]) / 144 / _mu[_qp] / K;
 
   // The mobility
   ADReal M = _Gc[_qp] / _L[_qp] / _c0[_qp];
@@ -96,11 +94,11 @@ MaterialNucleationMicroForce::computeQpProperties()
   mooseAssert(J2 >= 0, "Negative J2");
 
   // Compute the external driving force required to recover the desired strength envelope.
-  ADReal beta_0 = _delta[_qp] * M;
-  ADReal beta_1 = (-gamma_1 * M - gamma_2) * (_sigma_cs[_qp] - _sigma_ts[_qp]) -
-                  gamma_0 * (pow(_sigma_cs[_qp], 3) - pow(_sigma_ts[_qp], 3));
-  ADReal beta_2 = std::sqrt(3.0) * ((-gamma_1 * M + gamma_2) * (_sigma_cs[_qp] + _sigma_ts[_qp]) +
-                                    gamma_0 * (pow(_sigma_cs[_qp], 3) + pow(_sigma_ts[_qp], 3)));
+  ADReal beta_0 = _delta * M;
+  ADReal beta_1 = -gamma_1 * M * (_sigma_cs[_qp] - _sigma_ts[_qp]) - gamma_0 ;
+  ADReal beta_2 = std::sqrt(3.0) * (- gamma_1 * M  * (_sigma_cs[_qp] + _sigma_ts[_qp]) +
+                                    gamma_0);
   ADReal beta_3 = _L[_qp] * _sigma_ts[_qp] / _mu[_qp] / K / _Gc[_qp];
-  _ex_driving[_qp] = (beta_2 * std::sqrt(J2) + beta_1 * I1 + beta_0) / (1 + beta_3 * I1 * I1);
+  _ex_driving[_qp] = (beta_2 * std::sqrt(J2) + beta_1 * I1 + beta_0)
+                    +(1.0-std::sqrt(I1*I1)/I1) * (J2/2.0/_mu[_qp]+I1*I1/6.0/(3.0*_lambda[_qp]+2.0*_mu[_qp]));
 }

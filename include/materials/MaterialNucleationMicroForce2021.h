@@ -11,12 +11,12 @@
  * The class implements the external driving force to recover a Drucker-Prager
  * strength envelope. See Kumar et. al. https://doi.org/10.1016/j.jmps.2020.104027.
  */
-class MaterialNucleationMicroForce : public Material, public BaseNameInterface
+class MaterialNucleationMicroForce2021 : public Material, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
 
-  MaterialNucleationMicroForce(const InputParameters & parameters);
+  MaterialNucleationMicroForce2021(const InputParameters & parameters);
 
 protected:
   virtual void computeQpProperties() override;
@@ -50,8 +50,7 @@ protected:
   const ADMaterialProperty<Real> & _sigma_cs;
 
   /// The regularization length dependent parameter
-  // const Real & _delta;
-  const ADMaterialProperty<Real> & _delta;
+  const Real & _delta;
 
   /// The stress tensor
   const ADMaterialProperty<RankTwoTensor> & _stress;
