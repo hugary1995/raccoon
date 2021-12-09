@@ -43,6 +43,7 @@ ModeISurfingDirichletBC::computeQpResidual()
 {
   Real E = 9 * _K * _G / (3 * _K + _G);
   Real nu = (3 * _K - 2 * _G) / 2 / (3 * _K + _G);
+  Real Kolosov = (3 - 4 * nu);
 
   Point c = _c;
   if (_t > 1)
@@ -54,7 +55,7 @@ ModeISurfingDirichletBC::computeQpResidual()
   Real K1 = std::sqrt(E * _Gc / (1 - nu * nu));
   K1 *= _t < 1 ? _t : 1;
 
-  Real u = K1 / 2 / _G * std::sqrt(r / 2 / M_PI) * (_K - std::cos(theta));
+  Real u = K1 / 2 / _G * std::sqrt(r / 2 / M_PI) * (Kolosov - std::cos(theta));
   if (_component == 0)
     u *= std::cos(theta / 2);
   if (_component == 1)

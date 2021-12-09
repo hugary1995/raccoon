@@ -16,6 +16,8 @@ R = 8.3143e3
 T = 800
 eps = '${fparse E/100}'
 
+tqf = 0
+
 [GlobalParams]
   displacements = 'disp_x disp_y disp_z'
   volumetric_locking_correction = true
@@ -31,26 +33,19 @@ eps = '${fparse E/100}'
 []
 
 [Transfers]
-  [from_d]
+  [from_fracture]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = from_multiapp
     variable = d
     source_variable = d
   []
-  [to_psie_active]
+  [to_fracture]
     type = MultiAppCopyTransfer
     multi_app = fracture
     direction = to_multiapp
-    variable = psie_active
-    source_variable = psie_active
-  []
-  [to_psip_active]
-    type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = to_multiapp
-    variable = psip_active
-    source_variable = psip_active
+    variable = 'psie_active psip_active'
+    source_variable = 'psie_active psip_active'
   []
 []
 
@@ -153,7 +148,7 @@ eps = '${fparse E/100}'
     arrhenius_coefficient = A
     activation_energy = Q
     ideal_gas_constant = ${R}
-    T = T
+    temperature = T
   []
   [defgrad]
     type = ComputeDeformationGradient
@@ -174,6 +169,8 @@ eps = '${fparse E/100}'
     eps = ${eps}
     phase_field = d
     degradation_function = g
+    taylor_quinney_factor = ${tqf}
+    temperature = T
     output_properties = 'psip_active'
     outputs = exodus
   []
@@ -233,6 +230,10 @@ eps = '${fparse E/100}'
     type = ADElementAverageMaterialProperty
     mat_prop = effective_plastic_strain
   []
+  # [heat]
+  #   type = ADElementAverageMaterialProperty
+  #   mat_prop = plastic_heat_generation
+  # []
 []
 
 [Executioner]
@@ -251,10 +252,10 @@ eps = '${fparse E/100}'
 
   automatic_scaling = true
 
-  picard_max_its = 100
-  picard_rel_tol = 1e-08
-  picard_abs_tol = 1e-10
-  accept_on_max_picard_iteration = true
+  fixed_point_max_its = 100
+  fixed_point_rel_tol = 1e-08
+  fixed_point_abs_tol = 1e-10
+  accept_on_max_fixed_point_iteration = true
   abort_on_solve_fail = true
 []
 

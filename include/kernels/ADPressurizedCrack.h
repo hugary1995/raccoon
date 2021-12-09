@@ -6,8 +6,11 @@
 
 #include "ADKernelValue.h"
 #include "BaseNameInterface.h"
+#include "DerivativeMaterialPropertyNameInterface.h"
 
-class ADPressurizedCrack : public ADKernelValue, public BaseNameInterface
+class ADPressurizedCrack : public ADKernelValue,
+                           public BaseNameInterface,
+                           public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
@@ -20,4 +23,7 @@ protected:
   const unsigned int _comp;
   const ADMaterialProperty<Real> & _p;
   const ADVariableGradient & _grad_d;
+
+  /// The derivative of the indicator function w.r.t. the phase field
+  const ADMaterialProperty<Real> & _dI_dd;
 };

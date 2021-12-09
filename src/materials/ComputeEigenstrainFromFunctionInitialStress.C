@@ -13,7 +13,8 @@ ComputeEigenstrainFromFunctionInitialStress::validParams()
   params += BaseNameInterface::validParams();
   params.addClassDescription(
       "This class computes the eigenstrain given a predefined intial stress. The eigenstrain is "
-      "defined as $\\strain_0 = - \\mathbb{C} : \\stress_0$. Isotropic linear elasticity is "
+      "defined as $\\strain_0 = - \\mathbb{S} : \\stress_0$, where $\\mathbb{S}$ is the compliance "
+      "tensor. Isotropic linear elasticity is "
       "assumed.");
 
   params.addRequiredParam<MaterialPropertyName>("bulk_modulus", "The bulk modulus $\\K$");

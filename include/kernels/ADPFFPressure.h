@@ -6,8 +6,11 @@
 
 #include "ADKernelGrad.h"
 #include "BaseNameInterface.h"
+#include "DerivativeMaterialPropertyNameInterface.h"
 
-class ADPFFPressure : public ADKernelGrad, public BaseNameInterface
+class ADPFFPressure : public ADKernelGrad,
+                      public BaseNameInterface,
+                      public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
@@ -20,4 +23,7 @@ protected:
   const ADMaterialProperty<Real> & _p;
   const unsigned int _ndisp;
   std::vector<const ADVariableValue *> _disp;
+
+  /// The derivative of the indicator function w.r.t. the phase field
+  const ADMaterialProperty<Real> & _dI_dd;
 };

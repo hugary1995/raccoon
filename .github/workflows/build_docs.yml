@@ -1,0 +1,91 @@
+name: Documentation
+
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ devel ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Setup Miniconda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: moose
+          channels: conda-forge,https://conda.software.inl.gov/public
+          mamba-version: "*"
+
+      - name: Install dependencies
+        shell: bash -l {0}
+        run: |
+          mamba install moose-tools moose-libmesh lcov
+          conda list | grep moose
+
+      - name: Compile RACCOON (with coverage)
+        if: ${{ github.event_name == 'push' }}
+        shell: bash -l {0}
+        run: |
+          coverage=true make -j 2
+
+      - name: Compile RACCOON (without coverage)
+        if: ${{ github.event_name == 'pull_request' }}
+        shell: bash -l {0}
+        run: |
+          make -j 2
+
+      - name: Build documentation
+        shell: bash -l {0}
+        run: |
+          mkdir gh-pages
+          cd doc
+          ./moosedocs.py check
+          ./moosedocs.py build --destination ../gh-pages/
+
+      - name: Extract coverage data
+        if: ${{ github.event_name == 'push' }}
+        shell: bash -l {0}
+        run: |
+          mkdir gh-pages/coverage
+          export RACCOON_DIR=$GITHUB_WORKSPACE
+          export RACCOON_SRC=$RACCOON_DIR/src
+          export RACCOON_INCLUDE=$RACCOON_DIR/include
+          export RACCOON_BUILD=$RACCOON_DIR/build
+          export COVERAGE_DIR=$RACCOON_DIR/gh-pages/coverage
+          lcov --gcov-tool gcov --capture --initial --directory $RACCOON_SRC --directory $RACCOON_BUILD --output-file $COVERAGE_DIR/initialize.info
+          ./run_tests -j 2 || true
+          lcov --gcov-tool gcov --capture --ignore-errors gcov,source --directory $RACCOON_SRC --directory $RACCOON_BUILD --output-file $COVERAGE_DIR/covered.info
+          lcov --gcov-tool gcov --add-tracefile $COVERAGE_DIR/initialize.info --add-tracefile $COVERAGE_DIR/covered.info --output-file $COVERAGE_DIR/final.info
+          lcov --gcov-tool gcov --extract $COVERAGE_DIR/final.info \*$RACCOON_SRC/\* --extract $COVERAGE_DIR/final.info \*$RACCOON_INCLUDE/\* --output-file $COVERAGE_DIR/coverage.info
+          genhtml $COVERAGE_DIR/coverage.info --output-directory $COVERAGE_DIR > $COVERAGE_DIR/genhtml.out
+          cd scripts
+          echo "COVERAGE_PCT="$(python extract_coverage_percentage.py $COVERAGE_DIR/genhtml.out)"" >> $GITHUB_ENV
+
+      - name: Create coverage badge
+        if: ${{ github.event_name == 'push' }}
+        uses: schneegans/dynamic-badges-action@v1.1.0
+        with:
+          auth: ${{ secrets.GIST_TOKEN }}
+          gistID: ${{ secrets.COVERAGE_GIST_ID }}
+          filename: RACCOON_coverage.json
+          label: coverage
+          message: ${{ env.COVERAGE_PCT }}
+          color: brightgreen
+
+      - name: Deploy to GitHub Pages
+        if: ${{ github.event_name == 'push' }}
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages
+          folder: gh-pages
+          single-commit: true

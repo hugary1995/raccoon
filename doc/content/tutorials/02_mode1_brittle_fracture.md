@@ -6,6 +6,8 @@ In this tutorial, we will set up the model for Mode-I crack propagation.
 
 The geometry and boundary conditions are the same as those in [Tutorial 1](tutorials/01_small_deformation_elasticity.md).
 
+!media media/mode1_bcs.png style=display:block;margin:auto;width:60%; caption=Geometry and boundary conditions of the Mode-I crack propagation problem. id=mode1_schematics
+
 At each time step, the alternative minimization scheme first solves the displacements with a fixed phase-field, then solves the phase-field with the updated displacements. This scheme is realized using MOOSE's MultiApp system. We will set up two input files. One for the displacement subproblem, and the other one for the phase-field subproblem.
 
 ## `elasticity.i`: The displacement subproblem

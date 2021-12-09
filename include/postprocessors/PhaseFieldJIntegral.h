@@ -8,6 +8,7 @@
 #include "RankTwoTensor.h"
 
 class PhaseFieldJIntegral : public SideIntegralPostprocessor
+
 {
 public:
   static InputParameters validParams();
@@ -16,6 +17,7 @@ public:
 
 protected:
   virtual Real computeQpIntegral() override;
+
 
   /// base name of stress
   const std::string _base_name;

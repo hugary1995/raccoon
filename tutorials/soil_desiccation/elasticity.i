@@ -203,12 +203,12 @@ c = 0.1
 
   automatic_scaling = true
 
-  picard_max_its = 10
-  picard_custom_pp = delta_d
-  disable_picard_residual_norm_check = true
+  fixed_point_max_its = 10
+  custom_pp = delta_d
   custom_abs_tol = 1e-03
   custom_rel_tol = 1e-03
-  accept_on_max_picard_iteration = true
+  disable_fixed_point_residual_norm_check = true
+  accept_on_max_fixed_point_iteration = true
 []
 
 [Outputs]
