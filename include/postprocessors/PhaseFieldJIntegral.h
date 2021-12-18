@@ -8,7 +8,6 @@
 #include "RankTwoTensor.h"
 
 class PhaseFieldJIntegral : public SideIntegralPostprocessor
-
 {
 public:
   static InputParameters validParams();
