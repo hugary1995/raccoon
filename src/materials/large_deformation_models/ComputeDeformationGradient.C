@@ -103,27 +103,28 @@ ComputeDeformationGradient::computeQpOutOfPlaneGradDisp()
 void
 ComputeDeformationGradient::computeProperties()
 {
-  ADRankTwoTensor ave_F;
+  ADReal ave_F_det = 0;
 
   for (_qp = 0; _qp < _qrule->n_points(); ++_qp)
   {
-    ADRankTwoTensor A((*_grad_disp[0])[_qp], (*_grad_disp[1])[_qp], (*_grad_disp[2])[_qp]);
+    ADRankTwoTensor A = ADRankTwoTensor::initializeFromRows(
+        (*_grad_disp[0])[_qp], (*_grad_disp[1])[_qp], (*_grad_disp[2])[_qp]);
     if (_coord_sys == Moose::COORD_RZ)
       A(2, 2) = computeQpOutOfPlaneGradDisp();
     _F[_qp] = A;
     _F[_qp].addIa(1.0);
 
     if (_volumetric_locking_correction)
-      ave_F += _F[_qp] * _JxW[_qp] * _coord[_qp];
+      ave_F_det += _F[_qp].det() * _JxW[_qp] * _coord[_qp];
   }
 
   if (_volumetric_locking_correction)
-    ave_F /= _current_elem_volume;
+    ave_F_det /= _current_elem_volume;
 
   for (_qp = 0; _qp < _qrule->n_points(); ++_qp)
   {
     if (_volumetric_locking_correction)
-      _F[_qp] *= std::cbrt(ave_F.det() / _F[_qp].det());
+      _F[_qp] *= std::cbrt(ave_F_det / _F[_qp].det());
 
     // Remove the eigen deformation gradient
     ADRankTwoTensor Fg(ADRankTwoTensor::initIdentity);
