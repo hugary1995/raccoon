@@ -45,7 +45,6 @@ G = '${fparse E/2/(1+nu)}'
     variable = disp_x
     component = 0
     use_displaced_mesh = true
-    save_in = fx
   []
   [solid_y]
     type = ADStressDivergenceTensors
@@ -59,7 +58,6 @@ G = '${fparse E/2/(1+nu)}'
     variable = disp_z
     component = 2
     use_displaced_mesh = true
-    save_in = fz
   []
 []
 
