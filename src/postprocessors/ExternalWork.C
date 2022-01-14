@@ -63,7 +63,7 @@ Real
 ExternalWork::getValue()
 {
   gatherSum(_sum);
-  return _sum + _sum_old;
+  return _sum * _dt + _sum_old;
 }
 
 void
