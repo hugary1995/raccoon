@@ -122,7 +122,6 @@ G = '${fparse E/2/(1+nu)}'
     type = ExternalWork
     boundary = 'top'
     forces = 'fx fy fz'
-    use_displaced_mesh = true
   []
   [strain_energy]
     type = ADElementIntegralMaterialProperty

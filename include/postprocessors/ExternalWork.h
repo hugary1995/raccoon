@@ -18,8 +18,8 @@ protected:
   virtual void execute() override;
   virtual Real computeQpValue();
   virtual Real getValue() override;
-
-  void threadJoin(const UserObject & y) override;
+  virtual void finalize() override;
+  virtual void threadJoin(const UserObject & y) override;
 
   /// Cumulative sum of the post-processor value
   Real _sum;
