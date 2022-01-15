@@ -1,20 +1,22 @@
 //* This file is part of the RACCOON application
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
-//* By: @Sina-av
 
-#include "LinearHardening.h"
+#include "ExponentialHardening.h"
 
-registerMooseObject("raccoonApp", LinearHardening);
+registerMooseObject("raccoonApp", ExponentialHardening);
 
 InputParameters
-LinearHardening::validParams()
+ExponentialHardening::validParams()
 {
   InputParameters params = PlasticHardeningModel::validParams();
-  params.addClassDescription("Plastic hardening following a linear isotropic law.");
+  params.addClassDescription("Plastic hardening in exponential form.");
 
-  params.addRequiredParam<MaterialPropertyName>("yield_stress",
-                                                "The initial yield stress $\\sigma_y$");
+  params.addRequiredParam<MaterialPropertyName>("yield_stress", "The yield stress $\\sigma_y$");
+  params.addRequiredParam<MaterialPropertyName>("ultimate_stress",
+                                                "The ultimate stress $\\sigma_\\infty$");
+  params.addRequiredParam<MaterialPropertyName>(
+      "reference_plastic_strain", "The $\\epsilon_0$ parameter in the exponential hardening");
   params.addRequiredParam<MaterialPropertyName>("hardening_modulus", "The hardening modulus $H$");
 
   params.addRequiredCoupledVar("phase_field", "Name of the phase-field (damage) variable");
@@ -27,10 +29,12 @@ LinearHardening::validParams()
   return params;
 }
 
-LinearHardening::LinearHardening(const InputParameters & parameters)
+ExponentialHardening::ExponentialHardening(const InputParameters & parameters)
   : PlasticHardeningModel(parameters),
     DerivativeMaterialPropertyNameInterface(),
     _sigma_y(getADMaterialProperty<Real>(prependBaseName("yield_stress", true))),
+    _sigma_ult(getADMaterialProperty<Real>(prependBaseName("ultimate_stress", true))),
+    _ep0(getADMaterialProperty<Real>(prependBaseName("reference_plastic_strain", true))),
     _H(getADMaterialProperty<Real>(prependBaseName("hardening_modulus", true))),
 
     _d_name(getVar("phase_field", 0)->name()),
@@ -49,21 +53,27 @@ LinearHardening::LinearHardening(const InputParameters & parameters)
 }
 
 ADReal
-LinearHardening::plasticEnergy(const ADReal & ep, const unsigned int derivative)
+ExponentialHardening::plasticEnergy(const ADReal & ep, const unsigned int derivative)
 {
   if (derivative == 0)
   {
-    _psip_active[_qp] = _sigma_y[_qp] * ep + _H[_qp] / 2. * ep * ep;
+    _psip_active[_qp] =
+        _sigma_ult[_qp] * ep +
+        _ep0[_qp] * (_sigma_ult[_qp] - _sigma_y[_qp]) * (std::exp(-ep / _ep0[_qp]) - 1) +
+        0.5 * _H[_qp] * ep * ep;
     _psip[_qp] = _gp[_qp] * _psip_active[_qp];
     _dpsip_dd[_qp] = _dgp_dd[_qp] * _psip_active[_qp];
     return _psip[_qp];
   }
-  // derivative of plastic energy w.r.t equivalent plastic strain ep
+
   if (derivative == 1)
-    return _gp[_qp] * (_sigma_y[_qp] + _H[_qp] * ep);
+    return _gp[_qp] *
+           (_sigma_ult[_qp] - (_sigma_ult[_qp] - _sigma_y[_qp]) * std::exp(-ep / _ep0[_qp]) +
+            _H[_qp] * ep);
 
   if (derivative == 2)
-    return _gp[_qp] * _H[_qp];
+    return _gp[_qp] *
+           ((_sigma_ult[_qp] - _sigma_y[_qp]) * std::exp(-ep / _ep0[_qp]) / _ep0[_qp] + _H[_qp]);
 
   mooseError(name(), "internal error: unsupported derivative order.");
   return 0;
