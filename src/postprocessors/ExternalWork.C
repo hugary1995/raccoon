@@ -62,8 +62,13 @@ ExternalWork::computeQpValue()
 Real
 ExternalWork::getValue()
 {
+  return _sum * _dt + _sum_old;
+}
+
+void
+ExternalWork::finalize()
+{
   gatherSum(_sum);
-  return _sum + _sum_old;
 }
 
 void
