@@ -19,7 +19,6 @@ public:
 
 protected:
   virtual Real computeQpIntegral() override;
-  virtual Real getValue() override;
 
   /// Cumulative sum of the post-processor value from the old time step
   const PostprocessorValue & _integral_value_old;
@@ -36,12 +35,12 @@ protected:
   /// The number of displacements
   const unsigned int _ndisp;
 
-  /// Vector of velocities
-  std::vector<const VariableValue *> _u_dots;
+  /// Vector of displacement gradients
+  std::vector<const VariableGradient *> _grad_u;
 
   /// Direction of the J-integral
   const RealVectorValue _t;
 
-  /// Gradient of the domain indicator function
-  const VariableGradient & _grad_q;
+  /// The domain indicator function
+  const VariableValue & _q;
 };

@@ -9,10 +9,10 @@ The standard forms of J-integral, e.g. [`JIntegralContourForm`](JIntegralContour
 This classes concerns with the special case where pressure is acting on phase-field regularized crack surfaces. The correction term can be written as
 
 \begin{equation}
-  \dot{J_p} = - \int\limits_{\body} p (\grad d \dot{\bfu}) (\bft \grad q) I_{,d} \diff{V},
+  J_p = - \int\limits_{\body} p \bft \cdot \bfH \grad d I_{,d} q \diff{V},
 \begin{equation}
 
-where $p$ is the pressure, $\bft$ is the direction of crack propagation, $q$ is the domain indicator function, and $I$ is the phase-field indicator function. The rate $\dot{J_p}$ is integrated in time.
+where $p$ is the pressure, $\bft$ is the direction of crack propagation, $\bfH$ is the displacement gradient tnesor, $q$ is the domain indicator function, and $I$ is the phase-field indicator function.
 
 ## Example Input File Syntax
 

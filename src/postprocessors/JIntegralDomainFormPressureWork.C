@@ -40,24 +40,17 @@ JIntegralDomainFormPressureWork::JIntegralDomainFormPressureWork(const InputPara
     _dI_dd(getADMaterialProperty<Real>(derivativePropertyNameFirst(
         getParam<MaterialPropertyName>("indicator_function"), getVar("phase_field", 0)->name()))),
     _ndisp(coupledComponents("displacements")),
-    _u_dots(coupledDots("displacements")),
+    _grad_u(coupledGradients("displacements")),
     _t(getParam<RealVectorValue>("J_direction")),
-    _grad_q(coupledGradient("domain"))
+    _q(coupledValue("domain"))
 {
   for (unsigned int i = _ndisp; i < 3; ++i)
-    _u_dots.push_back(&_zero);
+    _grad_u.push_back(&_grad_zero);
 }
 
 Real
 JIntegralDomainFormPressureWork::computeQpIntegral()
 {
-  RealVectorValue u_dot((*_u_dots[0])[_qp], (*_u_dots[1])[_qp], (*_u_dots[2])[_qp]);
-  return -raw_value(_p[_qp] * _grad_d[_qp] * _dI_dd[_qp] * u_dot * _t * _grad_q[_qp]);
-}
-
-Real
-JIntegralDomainFormPressureWork::getValue()
-{
-  gatherSum(_integral_value);
-  return _integral_value * _dt + _integral_value_old;
+  RankTwoTensor H((*_grad_u[0])[_qp], (*_grad_u[1])[_qp], (*_grad_u[2])[_qp]);
+  return -raw_value(_p[_qp] * _t * H * _grad_d[_qp] * _dI_dd[_qp] * _q[_qp]);
 }
