@@ -3,7 +3,6 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "ADCoefMatDiffusion.h"
-#include "Assembly.h"
 
 registerMooseObject("raccoonApp", ADCoefMatDiffusion);
 
@@ -24,8 +23,7 @@ ADCoefMatDiffusion::ADCoefMatDiffusion(const InputParameters & parameters)
   : ADKernel(parameters),
     _coef(getParam<Real>("coefficient")),
     _prop_names(getParam<std::vector<MaterialPropertyName>>("prop_names")),
-    _num_props(_prop_names.size()),
-    _coord_sys(_assembly.coordSystem())
+    _num_props(_prop_names.size())
 {
   _props.resize(_num_props);
   for (unsigned int i = 0; i < _num_props; i++)
@@ -40,8 +38,6 @@ ADCoefMatDiffusion::computeQpResidual()
     factor *= (*prop)[_qp];
 
   ADReal value = _grad_test[_i][_qp] * _grad_u[_qp];
-  if (_coord_sys == Moose::COORD_RZ)
-    value -= _test[_i][_qp] / _ad_q_point[_qp](0) * _grad_u[_qp](0);
 
   return factor * value;
 }
