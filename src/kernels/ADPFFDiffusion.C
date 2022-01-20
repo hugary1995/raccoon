@@ -3,7 +3,6 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "ADPFFDiffusion.h"
-#include "Assembly.h"
 
 registerMooseObject("raccoonApp", ADPFFDiffusion);
 
@@ -29,8 +28,7 @@ ADPFFDiffusion::ADPFFDiffusion(const InputParameters & parameters)
     BaseNameInterface(parameters),
     _Gc(getADMaterialProperty<Real>(prependBaseName("fracture_toughness", true))),
     _c0(getADMaterialProperty<Real>(prependBaseName("normalization_constant", true))),
-    _l(getADMaterialProperty<Real>(prependBaseName("regularization_length", true))),
-    _coord_sys(_assembly.coordSystem())
+    _l(getADMaterialProperty<Real>(prependBaseName("regularization_length", true)))
 {
 }
 
@@ -38,9 +36,6 @@ ADReal
 ADPFFDiffusion::computeQpResidual()
 {
   ADReal value = _grad_test[_i][_qp] * _grad_u[_qp];
-
-  if (_coord_sys == Moose::COORD_RZ)
-    value -= _test[_i][_qp] / _ad_q_point[_qp](0) * _grad_u[_qp](0);
 
   return 2 * _Gc[_qp] * _l[_qp] / _c0[_qp] * value;
 }
