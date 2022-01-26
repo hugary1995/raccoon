@@ -23,7 +23,4 @@ protected:
   const unsigned int _num_props;
 
   std::vector<const ADMaterialProperty<Real> *> _props;
-
-  /// the coordinate system
-  const Moose::CoordinateSystemType & _coord_sys;
 };
