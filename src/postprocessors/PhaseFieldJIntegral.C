@@ -51,5 +51,4 @@ PhaseFieldJIntegral::computeQpIntegral()
   RealVectorValue n = _normals[_qp];
   ADReal value = _t * Sigma * n;
   return value.value();
-
 }
