@@ -54,15 +54,15 @@ Plasticity is added through constitutive updates in the Materials block.
     link=False
     language=python
 
-Here we add the blocks for `HenckyIsotropicElasticity`, `linearhardening`, `LargeDeformationJ2Plasticity`, and `ComputeLargeDeformationStress`.
+Here we add the blocks for `HenckyIsotropicElasticity`, `linearhardening`, `LargeDeformationJ2Plasticity`, and `LargeDeformationEquilibriumStress`.
 
 `LargeDeformationJ2Plasticity`: This utilizes the selected hardening model to calculate the value of the yield surface and determine whether the material has begun plastic deformation.
 
-`HenckyIsotropicElasticity:` This calculates elastic stress using the hencky model. Returns the Mandel stress to `ComputeLargeDeformationStress`
+`HenckyIsotropicElasticity:` This calculates elastic stress using the hencky model. Returns the Mandel stress to `LargeDeformationEquilibriumStress`
 
 `LinearHardening:`This performs plastic hardening following a linear isotropic law. It returns plastic energy to `LargeDeformationJ2Plasticity`
 
-`ComputeLargeDeformationStress:`This computes stress given an elasticity model and a plasticity model. It uses the elasticity model to compute Cauchy stress and the plasticity model to update the plastic deformation to bring the stress state back unto the yield surface.
+`LargeDeformationEquilibriumStress:`This computes stress given an elasticity model and a plasticity model. It uses the elasticity model to compute Cauchy stress and the plasticity model to update the plastic deformation to bring the stress state back unto the yield surface.
 
 ## Modifications
 

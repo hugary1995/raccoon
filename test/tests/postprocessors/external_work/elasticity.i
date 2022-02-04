@@ -84,7 +84,7 @@ G = '${fparse E/2/(1+nu)}'
     degradation_function = g
   []
   [stress]
-    type = ComputeLargeDeformationStress
+    type = LargeDeformationEquilibriumStress
     elasticity_model = hencky
   []
 []

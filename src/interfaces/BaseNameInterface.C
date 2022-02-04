@@ -16,8 +16,8 @@ BaseNameInterface::validParams()
 }
 
 BaseNameInterface::BaseNameInterface(const InputParameters & params)
-  : _params(params),
-    _base_name(_params.isParamValid("base_name") ? _params.get<std::string>("base_name") + "_" : "")
+  : _bi_params(params),
+    _base_name(params.isParamValid("base_name") ? params.get<std::string>("base_name") + "_" : "")
 {
 }
 
@@ -25,7 +25,7 @@ const MaterialPropertyName
 BaseNameInterface::prependBaseName(const MaterialPropertyName s, const bool get_property_name) const
 {
   if (get_property_name)
-    return _base_name + _params.get<MaterialPropertyName>(s);
+    return _base_name + _bi_params.get<MaterialPropertyName>(s);
   return _base_name + s;
 }
 

@@ -178,7 +178,7 @@ l = 1
     block = glass
   []
   [stress_glass]
-    type = ComputeSmallDeformationStress
+    type = SmallDeformationEquilibriumStress
     elasticity_model = elasticity_glass
     block = glass
   []

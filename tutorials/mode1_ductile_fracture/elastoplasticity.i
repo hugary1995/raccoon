@@ -188,7 +188,7 @@ ep0 = 0.005
     outputs = exodus
   []
   [stress]
-    type = ComputeSmallDeformationStress
+    type = SmallDeformationEquilibriumStress
     elasticity_model = elasticity
     plasticity_model = plasticity
     output_properties = 'stress'

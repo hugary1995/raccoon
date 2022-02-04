@@ -187,7 +187,7 @@ tqf = 0
     exponent = ${n}
   []
   [stress]
-    type = ComputeLargeDeformationStress
+    type = LargeDeformationEquilibriumStress
     elasticity_model = hencky
     plasticity_model = J2
   []

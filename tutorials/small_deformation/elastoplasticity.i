@@ -39,8 +39,6 @@ ep0 = 0.001
 [AuxVariables]
   [fy]
   []
-  [d]
-  []
 []
 
 [Kernels]
@@ -84,42 +82,34 @@ ep0 = 0.001
     prop_names = 'K G'
     prop_values = '${K} ${G}'
   []
-  [no_degradation]
-    type = NoDegradation
-    f_name = g
-    function = 1
-    phase_field = d
-  []
-  [strain]
-    type = ADComputeSmallStrain
-  []
-  [elasticity]
-    type = SmallDeformationIsotropicElasticity
+  [elastic_energy_density]
+    type = SDIsotropicElasticEnergyDensity
+    elastic_energy_density = psie
     bulk_modulus = K
     shear_modulus = G
-    phase_field = d
-    degradation_function = g
     output_properties = 'elastic_strain'
     outputs = exodus
   []
-  [hardening]
-    type = PowerLawHardening
+  [plastic_energy_density]
+    type = PowerLawHardeningPlasticEnergyDensity
+    plastic_energy_density = psip
     yield_stress = ${sigma_y}
     exponent = ${n}
     reference_plastic_strain = ${ep0}
-    phase_field = d
-    degradation_function = g
   []
-  [plasticity]
-    type = SmallDeformationJ2Plasticity
-    hardening_model = hardening
+  [mechanical_strain]
+    type = ADComputeSmallStrain
+  []
+  [plastic_strain]
+    type = SDJ2PlasticStrain
+    elasticity_model = elastic_energy_density
+    hardening_model = plastic_energy_density
     output_properties = 'effective_plastic_strain plastic_strain'
     outputs = exodus
   []
   [stress]
-    type = ComputeSmallDeformationStress
-    elasticity_model = elasticity
-    plasticity_model = plasticity
+    type = SDCauchyStress
+    energy_densities = 'psie psip'
     output_properties = 'stress'
     outputs = exodus
   []

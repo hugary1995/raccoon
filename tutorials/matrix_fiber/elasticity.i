@@ -129,7 +129,7 @@ v = '${fparse sqrt(Gc*3/lambda)}'
     type = ADComputeSmallStrain
   []
   [stress]
-    type = ComputeSmallDeformationStress
+    type = SmallDeformationEquilibriumStress
     elasticity_model = elasticity
     output_properties = 'stress'
     outputs = exodus

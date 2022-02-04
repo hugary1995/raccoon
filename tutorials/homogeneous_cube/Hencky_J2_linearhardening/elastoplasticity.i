@@ -168,7 +168,7 @@ H = 3.44e3
     hardening_model = linear_hardening
   []
   [stress]
-    type = ComputeLargeDeformationStress
+    type = LargeDeformationEquilibriumStress
     elasticity_model = hencky
     plasticity_model = J2
   []

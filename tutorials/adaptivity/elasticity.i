@@ -207,7 +207,7 @@ l = 0.01
     decomposition = SPECTRAL
   []
   [stress]
-    type = ComputeSmallDeformationStress
+    type = SmallDeformationEquilibriumStress
     elasticity_model = elasticity
   []
 []

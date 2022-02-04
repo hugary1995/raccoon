@@ -160,7 +160,7 @@ ep0 = 0.01
     hardening_model = power_law_hardening
   []
   [stress]
-    type = ComputeLargeDeformationStress
+    type = LargeDeformationEquilibriumStress
     elasticity_model = cnh
     plasticity_model = J2
   []

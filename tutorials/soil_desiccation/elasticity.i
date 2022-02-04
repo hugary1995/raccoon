@@ -170,7 +170,7 @@ c = 0.1
     outputs = exodus
   []
   [stress]
-    type = ComputeSmallDeformationStress
+    type = SmallDeformationEquilibriumStress
     elasticity_model = elasticity
   []
   [interfacial_energy]

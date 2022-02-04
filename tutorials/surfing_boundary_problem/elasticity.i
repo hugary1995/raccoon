@@ -178,7 +178,7 @@ refine = 3
     outputs = exodus
   []
   [stress]
-    type = ComputeSmallDeformationStress
+    type = SmallDeformationEquilibriumStress
     elasticity_model = elasticity
     output_properties = 'stress'
   []

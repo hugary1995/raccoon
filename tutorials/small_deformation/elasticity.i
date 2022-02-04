@@ -35,8 +35,6 @@ G = '${fparse E/2/(1+nu)}'
 [AuxVariables]
   [fy]
   []
-  [d]
-  []
 []
 
 [Kernels]
@@ -80,27 +78,20 @@ G = '${fparse E/2/(1+nu)}'
     prop_names = 'K G'
     prop_values = '${K} ${G}'
   []
-  [no_degradation]
-    type = NoDegradation
-    f_name = g
-    function = 1
-    phase_field = d
-  []
-  [strain]
-    type = ADComputeSmallStrain
-  []
-  [elasticity]
-    type = SmallDeformationIsotropicElasticity
+  [elastic_energy_density]
+    type = SDIsotropicElasticEnergyDensity
+    elastic_energy_density = psie
     bulk_modulus = K
     shear_modulus = G
-    phase_field = d
-    degradation_function = g
     output_properties = 'elastic_strain'
     outputs = exodus
   []
+  [mechanical_strain]
+    type = ADComputeSmallStrain
+  []
   [stress]
-    type = ComputeSmallDeformationStress
-    elasticity_model = elasticity
+    type = SDCauchyStress
+    energy_densities = psie
     output_properties = 'stress'
     outputs = exodus
   []

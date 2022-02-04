@@ -25,7 +25,7 @@ public:
 
 protected:
   /// The parameters
-  const InputParameters & _params;
+  const InputParameters & _bi_params;
 
   /// The base name
   const std::string _base_name;

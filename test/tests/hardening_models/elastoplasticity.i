@@ -158,7 +158,7 @@ G = '${fparse E/2/(1+nu)}'
     hardening_model = ${hardening_model_name}
   []
   [stress]
-    type = ComputeLargeDeformationStress
+    type = LargeDeformationEquilibriumStress
     elasticity_model = hencky
     plasticity_model = J2
   []

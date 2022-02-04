@@ -179,7 +179,7 @@ tqf = 0
     hardening_model = arrhenius_law_hardening
   []
   [stress]
-    type = ComputeLargeDeformationStress
+    type = LargeDeformationEquilibriumStress
     elasticity_model = hencky
     plasticity_model = J2
   []

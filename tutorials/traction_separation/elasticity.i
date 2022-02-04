@@ -161,7 +161,7 @@ nx = '${fparse ceil(200/h)}'
     outputs = exodus
   []
   [stress]
-    type = ComputeSmallDeformationStress
+    type = SmallDeformationEquilibriumStress
     elasticity_model = elasticity
   []
   [pressure_density]

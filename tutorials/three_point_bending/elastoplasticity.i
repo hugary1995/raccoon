@@ -186,7 +186,7 @@ ep0 = 0.345
     block = 0
   []
   [stress]
-    type = ComputeLargeDeformationStress
+    type = LargeDeformationEquilibriumStress
     elasticity_model = hencky
     plasticity_model = J2
     viscoelasticity_model = newtonian_viscosity

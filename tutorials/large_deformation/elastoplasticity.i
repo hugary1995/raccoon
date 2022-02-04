@@ -117,7 +117,7 @@ ep0 = 0.001
     outputs = exodus
   []
   [stress]
-    type = ComputeLargeDeformationStress
+    type = LargeDeformationEquilibriumStress
     elasticity_model = hencky
     plasticity_model = J2
     output_properties = 'stress'
