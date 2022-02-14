@@ -25,7 +25,4 @@ protected:
 
   /// The regularization length
   const ADMaterialProperty<Real> & _l;
-
-  /// the coordinate system
-  const Moose::CoordinateSystemType & _coord_sys;
 };
