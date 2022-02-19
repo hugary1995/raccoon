@@ -80,8 +80,8 @@ NucleationMicroForce::computeQpProperties()
 
   // Just to be extra careful... J2 is for sure non-negative.
   mooseAssert(J2 >= 0, "Negative J2");
-  
-  //define zero J2's derivative
+
+  // define zero J2's derivative
   if (MooseUtils::absoluteFuzzyEqual(J2, 0))
     J2.value() = libMesh::TOLERANCE * libMesh::TOLERANCE;
 
