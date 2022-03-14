@@ -8,13 +8,12 @@
 #include "ADRankTwoTensorForward.h"
 #include "BaseNameInterface.h"
 
-class ElasticEnergyDensityBase : public DerivativeMaterialInterface<Material>,
-                                 public BaseNameInterface
+class ElasticityBase : public DerivativeMaterialInterface<Material>, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
 
-  ElasticEnergyDensityBase(const InputParameters & parameters);
+  ElasticityBase(const InputParameters & parameters);
 
   /// Set the current quadrature point
   virtual void setQp(unsigned int qp) { _qp = qp; }
@@ -39,4 +38,11 @@ protected:
 
   /// The elastic energy density
   ADMaterialProperty<Real> & _psie;
+
+  /// The elastic strain
+  const ADMaterialProperty<RankTwoTensor> & _mechanical_strain;
+
+  /// @{ Derivatives of the elastic energy density
+  ADMaterialProperty<RankTwoTensor> & _dpsie_dmechanical_strain;
+  /// @}
 };

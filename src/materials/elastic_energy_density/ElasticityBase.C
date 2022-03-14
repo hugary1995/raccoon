@@ -2,10 +2,10 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "ElasticEnergyDensityBase.h"
+#include "ElasticityBase.h"
 
 InputParameters
-ElasticEnergyDensityBase::validParams()
+ElasticityBase::validParams()
 {
   InputParameters params = Material::validParams();
   params += BaseNameInterface::validParams();
@@ -14,16 +14,19 @@ ElasticEnergyDensityBase::validParams()
   return params;
 }
 
-ElasticEnergyDensityBase::ElasticEnergyDensityBase(const InputParameters & params)
+ElasticityBase::ElasticityBase(const InputParameters & params)
   : DerivativeMaterialInterface<Material>(params),
     BaseNameInterface(params),
     _psie_name(prependBaseName("elastic_energy_density", true)),
-    _psie(declareADProperty<Real>(_psie_name))
+    _psie(declareADProperty<Real>(_psie_name)),
+    _mechanical_strain(getADMaterialProperty<RankTwoTensor>(prependBaseName("mechanical_strain"))),
+    _dpsie_dmechanical_strain(declarePropertyDerivative<RankTwoTensor, true>(
+        _psie_name, {prependBaseName("mechanical_strain")}))
 {
 }
 
 void
-ElasticEnergyDensityBase::computeQpProperties()
+ElasticityBase::computeQpProperties()
 {
   precomputeQpElasticEnergyDensity();
   computeQpElasticEnergyDensity();

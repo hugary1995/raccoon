@@ -4,21 +4,19 @@
 
 #pragma once
 
-#include "SDElasticEnergyDensityBase.h"
+#include "ElasticityBase.h"
 
-class SDIsotropicElasticEnergyDensity : public SDElasticEnergyDensityBase
+class LinearIsotropicElasticity : public ElasticityBase
 {
 public:
   static InputParameters validParams();
 
-  SDIsotropicElasticEnergyDensity(const InputParameters & parameters);
+  LinearIsotropicElasticity(const InputParameters & parameters);
 
-  virtual ADRankTwoTensor MandelStress(const ADRankTwoTensor & strain) override;
+  virtual ADRankTwoTensor stress() override;
 
 protected:
   virtual void computeQpElasticEnergyDensity() override;
-
-  virtual void finalizeQpElasticEnergyDensity() override;
 
   /// The bulk modulus
   const ADMaterialProperty<Real> & _K;
