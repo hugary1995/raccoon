@@ -41,7 +41,14 @@ MaterialNucleationMicroForce::validParams()
       "external_driving_force_name",
       "ex_driving",
       "Name of the material that holds the external_driving_force");
-
+  params.addParam<MaterialPropertyName>(
+      "stress_balance_name",
+      "stress_balance",
+      "Name of the stress balance");
+  params.addParam<MaterialPropertyName>(
+      "stress_name",
+      "stress",
+      "Name of the stress tensor");
   return params;
 }
 
@@ -60,7 +67,8 @@ MaterialNucleationMicroForce::MaterialNucleationMicroForce(const InputParameters
     _sigma_cs(getADMaterialProperty<Real>(prependBaseName("compressive_strength", true))),
     // _delta(getParam<Real>("delta")),
     _delta(getADMaterialProperty<Real>(prependBaseName("delta", true))),
-    _stress(getADMaterialProperty<RankTwoTensor>(prependBaseName("stress")))
+    _stress(getADMaterialProperty<RankTwoTensor>(prependBaseName("stress_name",true))),
+    _stress_balance(declareADProperty<Real>(prependBaseName("stress_balance_name", true)))
 {
 }
 
@@ -107,4 +115,5 @@ MaterialNucleationMicroForce::computeQpProperties()
                                     gamma_0 * (pow(_sigma_cs[_qp], 3) + pow(_sigma_ts[_qp], 3)));
   ADReal beta_3 = _L[_qp] * _sigma_ts[_qp] / _mu[_qp] / K / _Gc[_qp];
   _ex_driving[_qp] = (beta_2 * std::sqrt(J2) + beta_1 * I1 + beta_0) / (1 + beta_3 * I1 * I1);
+  _stress_balance[_qp] = J2/_mu[_qp]+pow(I1,2)/9.0/K-_ex_driving[_qp]-M;
 }

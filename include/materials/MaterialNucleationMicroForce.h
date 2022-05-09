@@ -56,4 +56,10 @@ protected:
   /// The stress tensor
   const ADMaterialProperty<RankTwoTensor> & _stress;
 
+
+  /// Name of the stress space balance
+  const MaterialPropertyName _stress_balance_name;
+  /// stress space balance
+  ADMaterialProperty<Real> & _stress_balance;
+
 };
