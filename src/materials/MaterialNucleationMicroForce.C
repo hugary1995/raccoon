@@ -87,6 +87,16 @@ MaterialNucleationMicroForce::computeQpProperties()
   // The mobility
   ADReal M = _Gc[_qp] / _L[_qp] / _c0[_qp];
 
+  // std::cout<<"------------------------------------------------------------------------------Gc "<<_Gc[_qp]<<std::endl;
+  // std::cout<<"-------------------------------------------------------------------------------L "<<_L[_qp]<<std::endl;
+  // std::cout<<"------------------------------------------------------------------------------c0 "<<_c0[_qp]<<std::endl;
+  // std::cout<<"-------------------------------------------------------------------------------K "<<K.value()<<std::endl;
+  // std::cout<<"--------------------------------------------------------------------------gamma0 "<<gamma_0.value()<<std::endl;
+  // std::cout<<"--------------------------------------------------------------------------gamma1 "<<gamma_1.value()<<std::endl;
+  // std::cout<<"--------------------------------------------------------------------------gamma2 "<<gamma_2.value()<<std::endl;
+  // std::cout<<"-------------------------------------------------------------------------------M "<<M.value()<<std::endl;
+
+
   // Invariants of the stress
   ADReal I1 = _stress[_qp].trace();
   ADRankTwoTensor stress_dev = _stress[_qp].deviatoric();
@@ -107,6 +117,8 @@ MaterialNucleationMicroForce::computeQpProperties()
   if (MooseUtils::absoluteFuzzyEqual(J2, 0))
     J2.value() = libMesh::TOLERANCE * libMesh::TOLERANCE;
 
+  // std::cout<<"------------------------------------------------------------------------------J2 "<<J2.value()<<std::endl;
+  // std::cout<<"--------------------------------------------------------------------------sqrtJ2 "<<std::sqrt(J2)<<std::endl;
   // Compute the external driving force required to recover the desired strength envelope.
   ADReal beta_0 = _delta[_qp] * M;
   ADReal beta_1 = (-gamma_1 * M - gamma_2) * (_sigma_cs[_qp] - _sigma_ts[_qp]) -
@@ -116,4 +128,9 @@ MaterialNucleationMicroForce::computeQpProperties()
   ADReal beta_3 = _L[_qp] * _sigma_ts[_qp] / _mu[_qp] / K / _Gc[_qp];
   _ex_driving[_qp] = (beta_2 * std::sqrt(J2) + beta_1 * I1 + beta_0) / (1 + beta_3 * I1 * I1);
   _stress_balance[_qp] = J2/_mu[_qp]+pow(I1,2)/9.0/K-_ex_driving[_qp]-M;
+  // std::cout<<"---------------------------------------------------------------------------beta0 "<<beta_0.value()<<std::endl;
+  // std::cout<<"---------------------------------------------------------------------------beta1 "<<beta_1.value()<<std::endl;
+  // std::cout<<"---------------------------------------------------------------------------beta2 "<<beta_2.value()<<std::endl;
+  // std::cout<<"---------------------------------------------------------------------------beta3 "<<beta_3.value()<<std::endl;
+  // std::cout<<"------------------------------------------------------------------------------ce "<<_ex_driving[_qp]<<std::endl;
 }
