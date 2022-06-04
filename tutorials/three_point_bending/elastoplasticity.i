@@ -54,6 +54,7 @@ ep0 = 0.345
 [Problem]
   kernel_coverage_check = false
   material_coverage_check = false
+  boundary_restricted_node_integrity_check = false
 []
 
 [Mesh]
