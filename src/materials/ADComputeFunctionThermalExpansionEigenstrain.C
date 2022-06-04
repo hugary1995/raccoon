@@ -28,14 +28,13 @@ ADComputeFunctionThermalExpansionEigenstrain::ADComputeFunctionThermalExpansionE
 {
 }
 
-void
-ADComputeFunctionThermalExpansionEigenstrain::computeThermalStrain(ADReal & thermal_strain)
+ADReal
+ADComputeFunctionThermalExpansionEigenstrain::computeThermalStrain()
 {
   if (_use_old_temperature)
-    thermal_strain =
-        _thermal_expansion_coeff[_qp] * (_temperature_old[_qp] - _stress_free_temperature[_qp]);
+    return  _thermal_expansion_coeff[_qp] * (_temperature_old[_qp] - _stress_free_temperature[_qp]);
   else
-    thermal_strain = _thermal_expansion_coeff[_qp] * (_temperature[_qp] - _stress_free_temperature[_qp]);
+    return  _thermal_expansion_coeff[_qp] * (_temperature[_qp] - _stress_free_temperature[_qp]);
 
   // std::cout << "thermal_strain" << raw_value(thermal_strain) << std::endl;
   // std::cout << "_temperature" << raw_value(_temperature[_qp]) << std::endl;
