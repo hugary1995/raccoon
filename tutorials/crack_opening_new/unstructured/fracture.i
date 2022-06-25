@@ -10,7 +10,7 @@
     [InitialCondition]
       type = CohesiveDamageIC
       d0 = 1.05
-      l = '${fparse 2*l}'
+      l = '${fparse l}'
       x1 = '${fparse 0.5-a/2}'
       x2 = '${fparse 0.5+a/2}'
       y1 = 0.5

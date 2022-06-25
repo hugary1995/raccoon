@@ -29,6 +29,7 @@ Nitsche::Nitsche(const InputParameters & parameters)
 ADReal
 Nitsche::computeQpResidual()
 {
+
   ADReal value = _test[_i][_qp] * (_u[_qp] - _wn[_qp]);
 
   ADRealVectorValue n = _grad_phi[_qp] / _grad_phi[_qp].norm();

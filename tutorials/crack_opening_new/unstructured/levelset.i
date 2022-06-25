@@ -2,7 +2,7 @@
   [cod]
     type = FullSolveMultiApp
     input_files = cod.i
-    cli_args = 'e=${e};a=${a}'
+    cli_args = 'e=${e}'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -10,10 +10,9 @@
 [Transfers]
   [to_cod]
     type = MultiAppMeshFunctionTransfer
-    multi_app = cod
-    direction = to_multiapp
-    variable = 'd disp_x disp_y phi'
-    source_variable = 'd disp_x disp_y phi'
+    to_multi_app = cod
+    variable = 'd disp_x disp_y phi cti'
+    source_variable = 'd disp_x disp_y phi cti'
   []
 []
 
@@ -45,6 +44,9 @@
 
 [Variables]
   [phi]
+    block = 1
+  []
+  [cti]
     block = 1
   []
 []
@@ -89,6 +91,25 @@
     prop_names = penalty
     block = 1
   []
+
+  [diff_cti]
+    type = RankTwoTensorAnisoDiffusion
+    variable = cti
+    diffusivity = D
+    block = 1
+  []
+  [react]
+    type = Reaction
+    variable = cti
+    block = 1
+  []
+  [source]
+    type = ADCoefMatSource
+    variable = cti
+    prop_names = source
+    coefficient = -1
+    block = 1
+  []
 []
 
 [Materials]
@@ -106,6 +127,20 @@
     constant_names = 'p dls'
     constant_expressions = '1e6 1e-2'
     function = 'if(d<dls & d>0, 2*p*phi, 0)'
+    block = 1
+  []
+  [D]
+    type = Rectifier
+    phase_field = d
+    small_D = 1e-4
+    large_D = 1
+    block = 1
+  []
+  [source]
+    type = ADParsedMaterial
+    f_name = source
+    args = d
+    function = 'd'
     block = 1
   []
 []

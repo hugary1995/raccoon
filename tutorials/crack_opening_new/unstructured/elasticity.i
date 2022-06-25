@@ -4,9 +4,9 @@ K = '${fparse E/3/(1-2*nu)}'
 G = '${fparse E/2/(1+nu)}'
 
 Gc = 1
-l = 0.02
+l = 0.024
 
-e = 0.012
+e = 0.0015
 
 a = 0.8
 
@@ -20,23 +20,21 @@ a = 0.8
   [levelset]
     type = FullSolveMultiApp
     input_files = levelset.i
-    cli_args = 'e=${e};a=${a}'
+    cli_args = 'e=${e}'
     execute_on = 'TIMESTEP_END'
   []
 []
 
 [Transfers]
-  [from_fracture]
+  [d]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = from_multiapp
+    from_multi_app = fracture
     variable = d
     source_variable = d
   []
-  [to_levelset]
+  [disp]
     type = MultiAppCopyTransfer
-    multi_app = levelset
-    direction = to_multiapp
+    to_multi_app = levelset
     variable = 'd disp_x disp_y'
     source_variable = 'd disp_x disp_y'
   []

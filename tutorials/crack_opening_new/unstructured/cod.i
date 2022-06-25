@@ -43,15 +43,17 @@
   []
   [phi]
   []
+  [cti]
+  []
 []
 
 [UserObjects]
   [active_domain]
     type = CoupledVarThresholdElementSubdomainModifier
     apply_initial_conditions = false
-    coupled_var = d
+    coupled_var = cti
     criterion_type = ABOVE
-    threshold = 0
+    threshold = 0.27
     subdomain_id = 1
     complement_subdomain_id = 0
     execute_on = TIMESTEP_BEGIN
@@ -107,6 +109,22 @@
     variable = w
     start_point = '0 0.5 0'
     end_point = '1 0.5 0'
+    num_points = 1000
+    sort_by = x
+  []
+  [uy+]
+    type = LineValueSampler
+    variable = disp_y
+    start_point = '0 0.503 0'
+    end_point = '1 0.503 0'
+    num_points = 1000
+    sort_by = x
+  []
+  [uy-]
+    type = LineValueSampler
+    variable = disp_y
+    start_point = '0 0.497 0'
+    end_point = '1 0.497 0'
     num_points = 1000
     sort_by = x
   []
