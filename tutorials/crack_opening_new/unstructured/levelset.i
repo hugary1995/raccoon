@@ -2,7 +2,7 @@
   [cod]
     type = FullSolveMultiApp
     input_files = cod.i
-    cli_args = 'e=${e}'
+    cli_args = 'h=${h}'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -24,7 +24,7 @@
 [Mesh]
   [gen]
     type = FileMeshGenerator
-    file = 'gold/plate_${e}.msh'
+    file = 'gold/plate_${h}.msh'
   []
   [block0]
     type = SubdomainBoundingBoxGenerator
@@ -124,9 +124,9 @@
     type = ADParsedMaterial
     f_name = penalty
     args = 'phi d'
-    constant_names = 'p dls'
-    constant_expressions = '1e6 1e-2'
-    function = 'if(d<dls & d>0, 2*p*phi, 0)'
+    constant_names = 'p'
+    constant_expressions = '1e6'
+    function = 'if(d<${dls} & d>0, 2*p*phi, 0)'
     block = 1
   []
   [D]

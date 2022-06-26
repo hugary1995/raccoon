@@ -4,9 +4,9 @@ K = '${fparse E/3/(1-2*nu)}'
 G = '${fparse E/2/(1+nu)}'
 
 Gc = 1
-l = 0.024
+l = 0.025
 
-e = 0.0015
+dls = '${fparse (1-(2*l-h)/(2*l))^2}'
 
 a = 0.8
 
@@ -14,13 +14,13 @@ a = 0.8
   [fracture]
     type = FullSolveMultiApp
     input_files = fracture.i
-    cli_args = 'Gc=${Gc};l=${l};e=${e};a=${a}'
+    cli_args = 'Gc=${Gc};l=${l};h=${h};a=${a}'
     execute_on = 'INITIAL'
   []
   [levelset]
     type = FullSolveMultiApp
     input_files = levelset.i
-    cli_args = 'e=${e}'
+    cli_args = 'h=${h};dls=${dls}'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -47,7 +47,7 @@ a = 0.8
 [Mesh]
   [gen]
     type = FileMeshGenerator
-    file = 'gold/plate_${e}.msh'
+    file = 'gold/plate_${h}.msh'
   []
 []
 
@@ -94,7 +94,7 @@ a = 0.8
   [xfix]
     type = DirichletBC
     variable = disp_x
-    boundary = 'top bottom'
+    boundary = 'top bottom left right'
     value = 0
   []
 []
@@ -111,7 +111,7 @@ a = 0.8
     function = (1-d)^p*(1-eta)+eta
     phase_field = d
     parameter_names = 'p eta '
-    parameter_values = '2 1e-8'
+    parameter_values = '2 1e-9'
   []
   [strain]
     type = ADComputeSmallStrain

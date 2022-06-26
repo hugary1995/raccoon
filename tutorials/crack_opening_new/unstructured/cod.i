@@ -6,7 +6,7 @@
 [Mesh]
   [gen]
     type = FileMeshGenerator
-    file = 'gold/plate_${e}.msh'
+    file = 'gold/plate_${h}.msh'
   []
   [block0]
     type = SubdomainBoundingBoxGenerator
@@ -115,16 +115,16 @@
   [uy+]
     type = LineValueSampler
     variable = disp_y
-    start_point = '0 0.503 0'
-    end_point = '1 0.503 0'
+    start_point = '0 ${fparse 0.5+2*h} 0'
+    end_point = '1 ${fparse 0.5+2*h} 0'
     num_points = 1000
     sort_by = x
   []
   [uy-]
     type = LineValueSampler
     variable = disp_y
-    start_point = '0 0.497 0'
-    end_point = '1 0.497 0'
+    start_point = '0 ${fparse 0.5-2*h} 0'
+    end_point = '1 ${fparse 0.5-2*h} 0'
     num_points = 1000
     sort_by = x
   []
@@ -148,11 +148,11 @@
   print_linear_residuals = false
   [exodus]
     type = Exodus
-    file_base = 'output/e_${e}'
+    file_base = 'output/h_${h}'
   []
   [csv]
     type = CSV
-    file_base = 'data/e_${e}'
+    file_base = 'data/h_${h}'
     execute_on = 'TIMESTEP_END'
   []
 []

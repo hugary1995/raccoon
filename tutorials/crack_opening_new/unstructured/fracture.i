@@ -1,7 +1,7 @@
 [Mesh]
   [gen]
     type = FileMeshGenerator
-    file = 'gold/plate_${e}.msh'
+    file = 'gold/plate_${h}.msh'
   []
 []
 
