@@ -1,8 +1,8 @@
 [MultiApps]
   [cod]
-    type = FullSolveMultiApp
+    type = TransientMultiApp
     input_files = cod.i
-    cli_args = 'refine=${refine};h=${h};l_over_h=${l_over_h}'
+    cli_args = 'refine=${refine};h=${h};l_over_h=${l_over_h};l=${l}'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -19,6 +19,12 @@
     to_multi_app = cod
     variable = 'cti'
     source_variable = 'cti'
+  []
+  [from_cod]
+    type = MultiAppMeshFunctionTransfer
+    from_multi_app = cod
+    variable = 'w wT_x wT_y'
+    source_variable = 'w wT_x wT_y'
   []
 []
 
@@ -66,6 +72,12 @@
   [disp_y]
   []
   [T]
+  []
+  [w]
+  []
+  [wT_x]
+  []
+  [wT_y]
   []
 []
 

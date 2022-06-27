@@ -15,6 +15,7 @@ Nitsche::validParams()
   params.addRequiredParam<MaterialPropertyName>("alpha", "penalty");
   params.addParam<MaterialPropertyName>(
       "jump", "crack_opening_displacement", "The jump to integrate");
+  params.addRequiredParam<Real>("support", "support length");
   return params;
 }
 
@@ -23,14 +24,15 @@ Nitsche::Nitsche(const InputParameters & parameters)
     BaseNameInterface(parameters),
     _grad_phi(adCoupledGradient("level_set")),
     _wn(getADMaterialPropertyByName<Real>(prependBaseName("jump", true))),
-    _alpha(getADMaterialPropertyByName<Real>(prependBaseName("alpha", true)))
+    _alpha(getADMaterialPropertyByName<Real>(prependBaseName("alpha", true))),
+    _support(getParam<Real>("support"))
 {
 }
 
 ADReal
 Nitsche::computeQpResidual()
 {
-  ADReal value = _test[_i][_qp] * (_u[_qp] - _wn[_qp]);
+  ADReal value = _test[_i][_qp] * (_u[_qp] - _support * _wn[_qp]);
 
   ADRealVectorValue n = _grad_phi[_qp] / _grad_phi[_qp].norm();
   value += _alpha[_qp] * (_grad_test[_i][_qp] * n) * (_grad_u[_qp] * n);

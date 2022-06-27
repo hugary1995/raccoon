@@ -3,6 +3,8 @@ nu = 0.3
 K = '${fparse E/3/(1-2*nu)}'
 G = '${fparse E/2/(1+nu)}'
 
+gapK = 5e-3
+
 Gc = 1
 l = 0.025
 
@@ -21,25 +23,37 @@ a = 0.8
     execute_on = 'INITIAL'
   []
   [levelset]
-    type = FullSolveMultiApp
+    type = TransientMultiApp
     input_files = levelset.i
-    cli_args = 'refine=${refine};h=${h};l_over_h=${l_over_h};dls=${dls}'
+    cli_args = 'refine=${refine};h=${h};l_over_h=${l_over_h};dls=${dls};l=${l}'
     execute_on = 'TIMESTEP_END'
   []
 []
 
 [Transfers]
-  [d]
+  [fracture]
     type = MultiAppCopyTransfer
     from_multi_app = fracture
     variable = d
     source_variable = d
   []
-  [disp]
+  [to_levelset]
     type = MultiAppCopyTransfer
     to_multi_app = levelset
     variable = 'd disp_x disp_y T'
     source_variable = 'd disp_x disp_y T'
+  []
+  [from_levelset]
+    type = MultiAppCopyTransfer
+    from_multi_app = levelset
+    variable = 'w wT_x wT_y'
+    source_variable = 'w wT_x wT_y'
+  []
+  [from_levelset_phi]
+    type = MultiAppMeshFunctionTransfer
+    from_multi_app = levelset
+    variable = 'phi'
+    source_variable = 'phi'
   []
 []
 
@@ -83,6 +97,12 @@ a = 0.8
   []
   [phi]
   []
+  [w]
+  []
+  [wT_x]
+  []
+  [wT_y]
+  []
 []
 
 [Kernels]
@@ -100,6 +120,16 @@ a = 0.8
     type = ADHeatConduction
     variable = T
     thermal_conductivity = kappa
+  []
+  [gap_transfer]
+    type = ADPFFGapHeatTransfer
+    variable = T
+    T_jump = 'wT_x wT_y'
+    u_jump = w
+    gap_conductivity = gapK
+    phase_field = d
+    level_set = phi
+    min_gap = 1e-3
   []
 []
 
@@ -132,15 +162,15 @@ a = 0.8
     type = DirichletBC
     variable = T
     boundary = 'top'
-    value = 0.01
+    value = 100
   []
 []
 
 [Materials]
   [bulk_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'K G'
-    prop_values = '${K} ${G}'
+    prop_names = 'K G gapK'
+    prop_values = '${K} ${G} ${gapK}'
   []
   [degradation]
     type = PowerDegradationFunction
@@ -188,8 +218,15 @@ a = 0.8
 
   dt = 0.01
   num_steps = 1
+
+  fixed_point_algorithm = picard
+  fixed_point_max_its = 20
+  fixed_point_rel_tol = 1e-08
+  fixed_point_abs_tol = 1e-10
+  accept_on_max_fixed_point_iteration = true
 []
 
 [Outputs]
+  exodus = true
   print_linear_residuals = false
 []

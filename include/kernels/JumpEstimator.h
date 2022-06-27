@@ -24,4 +24,6 @@ protected:
   const ADMaterialProperty<Real> & _alpha;
 
   const unsigned int _component;
+
+  const Real _support;
 };

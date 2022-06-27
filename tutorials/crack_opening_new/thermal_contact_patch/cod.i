@@ -35,9 +35,6 @@
   [wT_y]
     block = 1
   []
-  [wT_z]
-    block = 1
-  []
 []
 
 [AuxVariables]
@@ -83,6 +80,7 @@
     variable = w
     level_set = phi
     alpha = alpha
+    support = '${fparse 4*l}'
     block = 1
   []
   [T_jump_x]
@@ -92,6 +90,7 @@
     alpha = alpha_T
     jump = T_jump
     component = 0
+    support = '${fparse 4*l}'
     block = 1
   []
   [T_jump_y]
@@ -101,15 +100,7 @@
     alpha = alpha_T
     jump = T_jump
     component = 1
-    block = 1
-  []
-  [T_jump_z]
-    type = JumpEstimator
-    variable = wT_z
-    level_set = phi
-    alpha = alpha_T
-    jump = T_jump
-    component = 2
+    support = '${fparse 4*l}'
     block = 1
   []
 []
@@ -141,7 +132,7 @@
     type = ADParsedMaterial
     f_name = alpha_T
     args = 'd'
-    function = '1*d'
+    function = '1e2*d'
     outputs = exodus
     block = 1
   []
