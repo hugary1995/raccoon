@@ -38,11 +38,11 @@ CrackOpeningDisplacement::CrackOpeningDisplacement(const InputParameters & param
 void
 CrackOpeningDisplacement::computeQpProperties()
 {
-  if (_d[_qp] > 1e-6 && _grad_phi[_qp].norm() > 1e-6)
+  if (_grad_d[_qp].norm() > 1e-12 && _grad_phi[_qp].norm() > 1e-12)
   {
     ADRealVectorValue u((*_disp[0])[_qp], (*_disp[1])[_qp], (*_disp[2])[_qp]);
     ADRealVectorValue n = _grad_phi[_qp] / _grad_phi[_qp].norm();
-    ADReal grad_d_norm = std::sqrt(_grad_d[_qp] * _grad_d[_qp] + 1e-6);
+    ADReal grad_d_norm = std::sqrt(_grad_d[_qp] * _grad_d[_qp]);
     _wn[_qp] = -u * n * grad_d_norm;
   }
   else

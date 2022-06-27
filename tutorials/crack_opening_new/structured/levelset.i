@@ -81,14 +81,22 @@
 []
 
 [Kernels]
-  [levelset_reaction]
-    type = ADReaction
+  [levelset_diff]
+    type = ADDiffusion
     variable = phi
+    block = 1
   []
-  [levelset_source]
+  [f]
     type = ADCoefMatSource
     variable = phi
-    prop_names = d
+    prop_names = f
+    block = 1
+  []
+  [penalty]
+    type = ADCoefMatSource
+    variable = phi
+    prop_names = penalty
+    block = 1
   []
 
   [diff_cti]
@@ -112,11 +120,20 @@
 []
 
 [Materials]
-  [d]
+  [f]
     type = ADParsedMaterial
-    f_name = d
+    f_name = f
     args = d
-    function = '-d'
+    function = 'if(d>0,-20,10)'
+    block = 1
+  []
+  [levelset_penalty]
+    type = ADParsedMaterial
+    f_name = penalty
+    args = 'phi d'
+    constant_names = 'p'
+    constant_expressions = '1e6'
+    function = 'if(d<${dls} & d>0, 2*p*phi, 0)'
     block = 1
   []
   [D]

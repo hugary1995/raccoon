@@ -90,7 +90,7 @@
   [cod]
     type = CrackOpeningDisplacement
     phase_field = d
-    level_set = phi
+    level_set = d
     displacements = 'disp_x disp_y'
     block = 1
   []

@@ -4,12 +4,12 @@ from scipy.ndimage import gaussian_filter1d
 
 
 l = 0.024
-h = 0.0015625
+h = 0.00078125
 bandwidth = 4 * l
 
 df_w = pd.read_csv("data/h_" + str(h) + "_w_0001.csv")
-df_uy_plus = pd.read_csv("data/h_" + str(h) + "_uy+_0001.csv")
-df_uy_minus = pd.read_csv("data/h_" + str(h) + "_uy-_0001.csv")
+df_uy_plus = pd.read_csv("../structured/data/l_over_h_16_uy+_0001.csv")
+df_uy_minus = pd.read_csv("../structured/data/l_over_h_16_uy-_0001.csv")
 
 x = df_w["x"]
 w = df_w["w"]
