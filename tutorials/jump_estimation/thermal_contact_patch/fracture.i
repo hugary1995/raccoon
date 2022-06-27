@@ -2,8 +2,21 @@
   [gen]
     type = GeneratedMeshGenerator
     dim = 2
-    nx = ${N}
-    ny = ${N}
+    nx = 10
+    ny = 10
+  []
+  [mid]
+    type = SubdomainBoundingBoxGenerator
+    input = gen
+    block_id = 1
+    bottom_left = '0 0.45 0'
+    top_right = '1 0.55 0'
+  []
+  [refine]
+    type = RefineBlockGenerator
+    input = mid
+    block = 1
+    refinement = ${refine}
   []
 []
 
@@ -11,11 +24,12 @@
   [d]
     [InitialCondition]
       type = BoundingBoxIC
+      x1 = 0
+      y1 = '${fparse 0.5-h}'
+      x2 = 1
+      y2 = '${fparse 0.5+h}'
       inside = 1
-      x1 = '${fparse 0.5-a/2}'
-      x2 = '${fparse 0.5+a/2}'
-      y1 = 0.495
-      y2 = 0.505
+      outside = 0
     []
   []
 []
