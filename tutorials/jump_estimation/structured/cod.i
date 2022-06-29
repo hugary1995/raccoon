@@ -82,6 +82,7 @@
     variable = w
     level_set = phi
     alpha = alpha
+    support = '${fparse 4*l}'
     block = 1
   []
 []

@@ -23,7 +23,7 @@ dls = '${fparse (1-(2*l-h)/(2*l))^2}'
   [levelset]
     type = TransientMultiApp
     input_files = levelset.i
-    cli_args = 'refine=${refine};h=${h};l_over_h=${l_over_h};dls=${dls};l=${l}'
+    cli_args = 'refine=${refine};dls=${dls};l=${l}'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -203,6 +203,18 @@ dls = '${fparse (1-(2*l-h)/(2*l))^2}'
   []
 []
 
+[VectorPostprocessors]
+  [T]
+    type = LineValueSampler
+    variable = T
+    start_point = '0.5 0 0'
+    end_point = '0.5 1 0'
+    sort_by = y
+    num_points = 1000
+    execute_on = FINAL
+  []
+[]
+
 [Executioner]
   type = Transient
 
@@ -227,4 +239,9 @@ dls = '${fparse (1-(2*l-h)/(2*l))^2}'
 [Outputs]
   exodus = true
   print_linear_residuals = false
+  [csv]
+    type = CSV
+    file_base = 'data/l_over_h_${l_over_h}'
+    execute_vector_postprocessors_on = FINAL
+  []
 []

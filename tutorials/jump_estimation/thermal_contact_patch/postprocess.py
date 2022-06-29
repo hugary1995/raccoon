@@ -1,17 +1,25 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df_wT = pd.read_csv("data/l_over_h_8_wT_y_0001.csv")
-df_T_plus = pd.read_csv("data/l_over_h_8_T+_0001.csv")
-df_T_minus = pd.read_csv("data/l_over_h_8_T-_0001.csv")
+df = pd.read_csv("data/l_over_h_8_T_0002.csv")
 
-x = df_wT["x"]
-wT = df_wT["wT_y"]
-T_plus = df_T_plus["T"]
-T_minus = df_T_minus["T"]
+y = df["y"]
+T = df["T"]
 
-plt.plot(x, wT, label="approximation")
-plt.plot(x, T_plus - T_minus, label="reference")
+k = 1
+h = 5e-3
+u_jump = 0.01
+h_bar = h / u_jump
+k_bar = h_bar / (h_bar + k)
+Tl = 0
+Tr = 100
+T_sol_l = k_bar * (Tr - Tl) * y + Tl
+T_sol_r = k_bar * (Tr - Tl) * y + Tr - k_bar * (Tr + Tl)
+
+plt.plot(y, T, label="approximation")
+plt.plot(y, T_sol_l, label="solution l")
+plt.plot(y, T_sol_r, label="solution r")
+plt.xlim(0)
 plt.ylim(0)
 plt.legend()
 plt.show()

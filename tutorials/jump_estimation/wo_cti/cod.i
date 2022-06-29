@@ -29,12 +29,6 @@
   [w]
     block = 1
   []
-  [wT_x]
-    block = 1
-  []
-  [wT_y]
-    block = 1
-  []
 []
 
 [AuxVariables]
@@ -44,16 +38,9 @@
   []
   [disp_y]
   []
-  [T]
-  []
   [cod]
     order = CONSTANT
     family = MONOMIAL
-    [AuxKernel]
-      type = ADMaterialRealAux
-      property = crack_opening_displacement
-      block = 1
-    []
   []
   [phi]
   []
@@ -74,32 +61,21 @@
   []
 []
 
+[AuxKernels]
+  [cod]
+    type = ADMaterialRealAux
+    variable = cod
+    property = crack_opening_displacement
+    block = 1
+  []
+[]
+
 [Kernels]
   [cod]
     type = Nitsche
     variable = w
     level_set = phi
     alpha = alpha
-    support = '${fparse 4*l}'
-    block = 1
-  []
-  [T_jump_x]
-    type = JumpEstimator
-    variable = wT_x
-    level_set = phi
-    alpha = alpha_T
-    jump = T_jump
-    component = 0
-    support = '${fparse 4*l}'
-    block = 1
-  []
-  [T_jump_y]
-    type = JumpEstimator
-    variable = wT_y
-    level_set = phi
-    alpha = alpha_T
-    jump = T_jump
-    component = 1
     support = '${fparse 4*l}'
     block = 1
   []
@@ -113,26 +89,64 @@
     displacements = 'disp_x disp_y'
     block = 1
   []
-  [T_jump]
-    type = VariableJump
-    variable = T
-    jump = T_jump
-    phase_field = d
-    level_set = d
-  []
   [penalty]
     type = ADParsedMaterial
     f_name = alpha
     args = 'd'
     function = '1*d'
+    outputs = exodus
     block = 1
   []
-  [penalty_T]
-    type = ADParsedMaterial
-    f_name = alpha_T
-    args = 'd'
-    function = '1e2*d'
-    block = 1
+[]
+
+[VectorPostprocessors]
+  [w]
+    type = LineValueSampler
+    variable = w
+    start_point = '0 0.5 0'
+    end_point = '1 0.5 0'
+    num_points = 1000
+    sort_by = x
+  []
+  [uy+]
+    type = LineValueSampler
+    variable = disp_y
+    start_point = '0 ${fparse 0.5+2.5*h} 0'
+    end_point = '1 ${fparse 0.5+2.5*h} 0'
+    num_points = 1000
+    sort_by = x
+  []
+  [uy-]
+    type = LineValueSampler
+    variable = disp_y
+    start_point = '0 ${fparse 0.5-2.5*h} 0'
+    end_point = '1 ${fparse 0.5-2.5*h} 0'
+    num_points = 1000
+    sort_by = x
+  []
+  [w_center]
+    type = LineValueSampler
+    variable = w
+    start_point = '0.5 0.4 0'
+    end_point = '0.5 0.6 0'
+    num_points = 100
+    sort_by = y
+  []
+  [d_center]
+    type = LineValueSampler
+    variable = d
+    start_point = '0.5 0.4 0'
+    end_point = '0.5 0.6 0'
+    num_points = 100
+    sort_by = y
+  []
+  [uy_center]
+    type = LineValueSampler
+    variable = disp_y
+    start_point = '0.5 0.4 0'
+    end_point = '0.5 0.6 0'
+    num_points = 100
+    sort_by = y
   []
 []
 
@@ -152,4 +166,13 @@
 
 [Outputs]
   print_linear_residuals = false
+  [exodus]
+    type = Exodus
+    file_base = 'output/good_a_${a}'
+  []
+  [csv]
+    type = CSV
+    file_base = 'data/good_a_${a}'
+    execute_on = 'TIMESTEP_END'
+  []
 []

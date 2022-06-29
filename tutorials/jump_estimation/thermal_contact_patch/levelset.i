@@ -2,7 +2,7 @@
   [cod]
     type = TransientMultiApp
     input_files = cod.i
-    cli_args = 'refine=${refine};h=${h};l_over_h=${l_over_h};l=${l}'
+    cli_args = 'refine=${refine};l=${l}'
     execute_on = 'TIMESTEP_END'
   []
 []

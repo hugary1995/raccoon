@@ -6,7 +6,7 @@ G = '${fparse E/2/(1+nu)}'
 Gc = 1
 l = 0.025
 
-refine = 3
+refine = 6
 h = '${fparse 0.1/2^refine}'
 l_over_h = '${fparse int(l/h)}'
 dls = '${fparse (1-(2*l-h)/(2*l))^2}'
@@ -23,7 +23,7 @@ a = 0.8
   [levelset]
     type = FullSolveMultiApp
     input_files = levelset.i
-    cli_args = 'refine=${refine};h=${h};l_over_h=${l_over_h};dls=${dls};l=${l}'
+    cli_args = 'refine=${refine};h=${h};l_over_h=${l_over_h};dls=${dls};l=${l};a=${a}'
     execute_on = 'TIMESTEP_END'
   []
 []
