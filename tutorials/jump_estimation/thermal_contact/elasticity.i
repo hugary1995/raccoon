@@ -19,7 +19,7 @@ a = 0.8
   [fracture]
     type = FullSolveMultiApp
     input_files = fracture.i
-    cli_args = 'Gc=${Gc};l=${l};refine=${refine};a=${a}'
+    cli_args = 'Gc=${Gc};l=${l};refine=${refine};h=${h};a=${a}'
     execute_on = 'INITIAL'
   []
   [levelset]
@@ -34,8 +34,8 @@ a = 0.8
   [fracture]
     type = MultiAppCopyTransfer
     from_multi_app = fracture
-    variable = d
-    source_variable = d
+    variable = 'd'
+    source_variable = 'd'
   []
   [to_levelset]
     type = MultiAppCopyTransfer
@@ -205,6 +205,49 @@ a = 0.8
   []
 []
 
+[VectorPostprocessors]
+  [T_0.1]
+    type = LineValueSampler
+    variable = T
+    start_point = '0.1 0 0'
+    end_point = '0.1 1 0'
+    sort_by = y
+    num_points = 1000
+  []
+  [T_0.2]
+    type = LineValueSampler
+    variable = T
+    start_point = '0.2 0 0'
+    end_point = '0.2 1 0'
+    sort_by = y
+    num_points = 1000
+  []
+  [T_0.3]
+    type = LineValueSampler
+    variable = T
+    start_point = '0.3 0 0'
+    end_point = '0.3 1 0'
+    sort_by = y
+    num_points = 1000
+  []
+  [T_0.4]
+    type = LineValueSampler
+    variable = T
+    start_point = '0.4 0 0'
+    end_point = '0.4 1 0'
+    sort_by = y
+    num_points = 1000
+  []
+  [T_0.5]
+    type = LineValueSampler
+    variable = T
+    start_point = '0.5 0 0'
+    end_point = '0.5 1 0'
+    sort_by = y
+    num_points = 1000
+  []
+[]
+
 [Executioner]
   type = Transient
 
@@ -229,4 +272,9 @@ a = 0.8
 [Outputs]
   exodus = true
   print_linear_residuals = false
+  [csv]
+    type = CSV
+    file_base = 'data/l_over_h_${l_over_h}'
+    execute_vector_postprocessors_on = FINAL
+  []
 []

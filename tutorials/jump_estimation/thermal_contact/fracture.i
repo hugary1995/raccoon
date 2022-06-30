@@ -23,15 +23,13 @@
 [Variables]
   [d]
     [InitialCondition]
-      type = CohesiveDamageIC
-      d0 = 1.05
-      l = '${fparse l}'
+      type = BoundingBoxIC
       x1 = '${fparse 0.5-a/2}'
+      y1 = '${fparse 0.5-h}'
       x2 = '${fparse 0.5+a/2}'
-      y1 = 0.5
-      y2 = 0.5
-      z1 = 0
-      z2 = 0
+      y2 = '${fparse 0.5+h}'
+      inside = 1
+      outside = 0
     []
   []
 []
