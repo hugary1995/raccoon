@@ -274,7 +274,7 @@ a = 0.8
   print_linear_residuals = false
   [csv]
     type = CSV
-    file_base = 'data/l_over_h_${l_over_h}'
+    file_base = 'data/l_over_h_${l_over_h}_l_${l}'
     execute_vector_postprocessors_on = FINAL
   []
 []

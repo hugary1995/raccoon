@@ -10,8 +10,8 @@ right = '${fparse left+crack_length}'
   [gen]
     type = GeneratedMeshGenerator
     dim = 2
-    nx = 20
-    ny = 20
+    nx = 100
+    ny = 100
     xmin = 0.0
     xmax = 1.0
     ymin = 0.0

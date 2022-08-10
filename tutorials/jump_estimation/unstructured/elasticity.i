@@ -20,7 +20,7 @@ a = 0.8
   [levelset]
     type = FullSolveMultiApp
     input_files = levelset.i
-    cli_args = 'h=${h};dls=${dls}'
+    cli_args = 'h=${h};dls=${dls};l=${l}'
     execute_on = 'TIMESTEP_END'
   []
 []

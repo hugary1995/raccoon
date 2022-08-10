@@ -53,7 +53,7 @@
     apply_initial_conditions = false
     coupled_var = cti
     criterion_type = ABOVE
-    threshold = 0.27
+    threshold = 0.32
     subdomain_id = 1
     complement_subdomain_id = 0
     execute_on = TIMESTEP_BEGIN
@@ -70,17 +70,12 @@
 []
 
 [Kernels]
-  [diff]
-    type = ADCoefMatDiffusion
-    variable = w
-    coefficient = 0
-    block = 1
-  []
   [cod]
     type = Nitsche
     variable = w
     level_set = phi
     alpha = alpha
+    support = '${fparse 4*l}'
     block = 1
   []
 []

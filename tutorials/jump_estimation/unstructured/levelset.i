@@ -2,7 +2,7 @@
   [cod]
     type = FullSolveMultiApp
     input_files = cod.i
-    cli_args = 'h=${h}'
+    cli_args = 'h=${h};l=${l}'
     execute_on = 'TIMESTEP_END'
   []
 []

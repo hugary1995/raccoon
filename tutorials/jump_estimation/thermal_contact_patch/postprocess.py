@@ -1,7 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-df = pd.read_csv("data/l_over_h_8_T_0002.csv")
+df = pd.read_csv("data/l_over_h_16_T_0002.csv")
 
 y = df["y"]
 T = df["T"]

@@ -125,7 +125,6 @@
     f_name = alpha
     args = 'd'
     function = '1*d'
-    outputs = exodus
     block = 1
   []
   [penalty_T]
@@ -133,7 +132,6 @@
     f_name = alpha_T
     args = 'd'
     function = '1e2*d'
-    outputs = exodus
     block = 1
   []
 []
@@ -205,13 +203,4 @@
 
 [Outputs]
   print_linear_residuals = false
-  [exodus]
-    type = Exodus
-    file_base = 'output/l_over_h_${l_over_h}'
-  []
-  [csv]
-    type = CSV
-    file_base = 'data/l_over_h_${l_over_h}'
-    execute_on = 'TIMESTEP_END'
-  []
 []
