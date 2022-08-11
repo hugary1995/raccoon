@@ -3,6 +3,6 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "raccoonAppTypes.h"
-#include "MooseEnumItem.h"
+#include "ExecFlagRegistry.h"
 
-const ExecFlagType EXEC_BETWEEN_FPI("BETWEEN_FPI");
+const ExecFlagType EXEC_BETWEEN_FPI = registerExecFlag("BETWEEN_FPI");
