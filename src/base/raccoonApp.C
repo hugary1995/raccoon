@@ -39,7 +39,6 @@ raccoonApp::registerAll(Factory & factory, ActionFactory & action_factory, Synta
   Registry::registerObjectsTo(factory, {"raccoonApp"});
   Registry::registerActionsTo(action_factory, {"raccoonApp"});
   associateSyntaxInner(syntax, action_factory);
-  registerExecFlag(EXEC_BETWEEN_FPI);
 }
 
 void
