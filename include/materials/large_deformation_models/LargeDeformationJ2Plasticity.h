@@ -16,6 +16,13 @@ public:
   virtual void updateState(ADRankTwoTensor & stress, ADRankTwoTensor & Fe) override;
 
 protected:
+  virtual ADReal initialGuess(const ADReal & effective_trial_stress) override
+  {
+    return _hardening_model->initialGuess(effective_trial_stress);
+  }
+
+  virtual ADReal minimumPermissibleValue(const ADReal &) const override { return 0; }
+
   virtual ADReal computeResidual(const ADReal & effective_trial_stress,
                                  const ADReal & delta_ep) override;
 
@@ -24,4 +31,7 @@ protected:
 
   virtual Real computeReferenceResidual(const ADReal & effective_trial_stress,
                                         const ADReal & delta_ep) override;
+
+  ADMaterialProperty<Real> & _heat;
+  ADMaterialProperty<Real> & _trial;
 };
