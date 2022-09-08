@@ -41,9 +41,8 @@ LargeDeformationJ2Plasticity::updateState(ADRankTwoTensor & stress, ADRankTwoTen
   // Return mapping
   ADReal phi = computeResidual(stress_dev_norm, delta_ep);
   if (phi > 0)
-  {
     returnMappingSolve(stress_dev_norm, delta_ep, _console);
-  }
+
   _ep[_qp] = _ep_old[_qp] + delta_ep;
   ADRankTwoTensor delta_Fp = RaccoonUtils::exp(delta_ep * _Np[_qp]);
   _Fp[_qp] = delta_Fp * _Fp_old[_qp];
