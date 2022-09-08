@@ -33,5 +33,4 @@ protected:
                                         const ADReal & delta_ep) override;
 
   ADMaterialProperty<Real> & _heat;
-  ADMaterialProperty<Real> & _trial;
 };
