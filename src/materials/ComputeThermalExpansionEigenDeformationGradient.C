@@ -12,8 +12,8 @@ ComputeThermalExpansionEigenDeformationGradient::validParams()
   InputParameters params = Material::validParams();
   params += BaseNameInterface::validParams();
   params.addClassDescription(
-      "This class computes the thermal deformation gradient, $\\bfF = (1+\\alpha(T-T_0))\bfI$, "
-      "where \\alpha is the thermal expansion coefficient, $T$ is the temperature, and $T_0$ is "
+      "This class computes the thermal deformation gradient, $\bfF = (1+\alpha(T-T_0))\bfI$, "
+      "where $\alpha$ is the thermal expansion coefficient, $T$ is the temperature, and $T_0$ is "
       "the reference temperature corresponding to zero thermal expansion.");
 
   params.addRequiredParam<MaterialPropertyName>("eigen_deformation_gradient_name",

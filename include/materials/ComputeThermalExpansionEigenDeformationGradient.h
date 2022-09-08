@@ -9,9 +9,8 @@
 #include "ADRankTwoTensorForward.h"
 #include "Function.h"
 
-/**
- * This class computes the deformation gradient
- */
+// This class computes the deformation gradient
+
 class ComputeThermalExpansionEigenDeformationGradient : public Material, public BaseNameInterface
 {
 public:
