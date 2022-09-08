@@ -33,7 +33,7 @@ protected:
   // const ADVariableValue & _T;
   const VariableValue & _T;
   const Real _tqf;
-  const ADMaterialProperty<Real> &  _A;
+  const ADMaterialProperty<Real> & _A;
   const Real _B;
   const Real _C;
   const Real _Tm;
