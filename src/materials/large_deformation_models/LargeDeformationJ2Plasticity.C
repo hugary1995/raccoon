@@ -53,14 +53,14 @@ LargeDeformationJ2Plasticity::updateState(ADRankTwoTensor & stress, ADRankTwoTen
   _hardening_model->plasticEnergy(_ep[_qp]);
 
   // Avoid div/0 issues
-  if (delta_ep > 0 && _ep[_qp] > 0)
-  {
-    _heat[_qp] = _hardening_model->plasticDissipation(delta_ep, _ep[_qp], 1) * delta_ep / _dt;
-  }
-  else
-  {
-    _heat[_qp] = 0;
-  }
+  // if (delta_ep > 0 && _ep[_qp] > 0)
+  //{
+  _heat[_qp] = _hardening_model->plasticDissipation(delta_ep, _ep[_qp], 1) * delta_ep / _dt;
+  //}
+  // else
+  //{
+  //_heat[_qp] = 0;
+  //}
 
   _heat[_qp] += _hardening_model->thermalConjugate(_ep[_qp]) * delta_ep / _dt;
 }
