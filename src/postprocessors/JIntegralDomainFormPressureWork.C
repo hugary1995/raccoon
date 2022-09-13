@@ -58,6 +58,5 @@ JIntegralDomainFormPressureWork::computeQpIntegral()
 Real
 JIntegralDomainFormPressureWork::getValue()
 {
-  gatherSum(_integral_value);
   return _integral_value * _dt + _integral_value_old;
 }
