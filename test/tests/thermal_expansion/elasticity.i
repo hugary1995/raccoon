@@ -194,6 +194,16 @@ rate = 100
     variable = d
     execute_on = 'INITIAL TIMESTEP_END'
   []
+  [ep]
+    type = ADElementAverageMaterialProperty
+    mat_prop = effective_plastic_strain
+    execute_on = 'INITIAL TIMESTEP_END'
+  []
+  [heat]
+    type = ADElementAverageMaterialProperty
+    mat_prop = plastic_heat_generation
+    execute_on = 'TIMESTEP_END'
+  []
   [T]
     type = ElementAverageValue
     variable = T
