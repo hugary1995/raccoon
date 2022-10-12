@@ -16,7 +16,7 @@
 using namespace libMesh;
 
 std::vector<Real> sample_gaussian(const std::vector<Real> & eigvals,
-                                  const std::vector<std::vector<Real>> & eigvecs,
+                                  const std::vector<std::map<dof_id_type, Real>> & eigvecs,
                                   std::default_random_engine & generator);
 
 void compute_correlated_Gamma_fields(const std::vector<Real> & Xi_1,
@@ -48,7 +48,7 @@ main(int argc, char ** argv)
 
   // Read the eigenpairs
   std::vector<Real> eigvals;
-  std::vector<std::vector<Real>> eigvecs;
+  std::vector<std::map<dof_id_type, Real>> eigvecs;
 
   ExodusII_IO basis(mesh);
   basis.read("basis.e");
@@ -89,7 +89,7 @@ main(int argc, char ** argv)
 
 std::vector<Real>
 sample_gaussian(const std::vector<Real> & eigvals,
-                const std::vector<std::vector<Real>> & eigvecs,
+                const std::vector<std::map<dof_id_type, Real>> & eigvecs,
                 std::default_random_engine & generator)
 {
   unsigned int ndof = eigvecs[0].size();
@@ -100,7 +100,7 @@ sample_gaussian(const std::vector<Real> & eigvals,
   {
     Real eta = distribution(generator);
     for (unsigned int j = 0; j < ndof; j++)
-      Xi[j] += std::sqrt(eigvals[i]) * eta * eigvecs[i][j];
+      Xi[j] += std::sqrt(eigvals[i]) * eta * eigvecs[i].at(j);
   }
 
   return Xi;
