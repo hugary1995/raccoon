@@ -18,7 +18,7 @@ include $(LIBMESH_DIR)/Make.common
 
 target     := ./sample-$(METHOD)
 
-
+libmesh_CXXFLAGS += -I$(BOOST_DIR)
 ###############################################################################
 # File management.  This is where the source, header, and object files are
 # defined
