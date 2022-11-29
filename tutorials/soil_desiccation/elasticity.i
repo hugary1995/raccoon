@@ -20,23 +20,20 @@ c = 0.1
 
 [Transfers]
   [send_psie_active]
-    type = MultiAppMeshFunctionTransfer
-    multi_app = fracture
-    direction = to_multiapp
+    type = MultiAppShapeEvaluationTransfer
+    to_multi_app = fracture
     source_variable = psie_active
     variable = psie_active
   []
   [send_psii_active]
-    type = MultiAppMeshFunctionTransfer
-    multi_app = fracture
-    direction = to_multiapp
+    type = MultiAppShapeEvaluationTransfer
+    to_multi_app = fracture
     source_variable = psii_active
     variable = psii_active
   []
   [get_d]
-    type = MultiAppMeshFunctionTransfer
-    multi_app = fracture
-    direction = from_multiapp
+    type = MultiAppShapeEvaluationTransfer
+    from_multi_app = fracture
     source_variable = d
     variable = d
   []
@@ -193,8 +190,9 @@ c = 0.1
 [Executioner]
   type = Transient
   solve_type = 'NEWTON'
-  petsc_options_iname = '-pc_type -pc_factor_mat_solver_package'
-  petsc_options_value = 'lu       superlu_dist'
+  petsc_options = '-ksp_converged_reason'
+  petsc_options_iname = '-pc_type -pc_factor_mat_solver_package -ksp_type'
+  petsc_options_value = 'lu       superlu_dist                  gmres'
   dt = 0.0005
   end_time = 0.22
 
@@ -209,6 +207,9 @@ c = 0.1
   custom_rel_tol = 1e-03
   disable_fixed_point_residual_norm_check = true
   accept_on_max_fixed_point_iteration = true
+
+  reuse_preconditioner = true
+  reuse_preconditioner_max_linear_its = 50
 []
 
 [Outputs]
