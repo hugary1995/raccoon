@@ -17,6 +17,8 @@ public:
   /// Set the current quadrature point
   virtual void setQp(unsigned int qp) { _qp = qp; }
 
+  virtual ADReal initialGuess(const ADReal & /*effective_trial_stress*/) { return 0; }
+
   /**
    * Compute the plastic energy and its derivatives w/r/t the (scalar) effective plastic strain
    * @param ep         The effective plastic strain
