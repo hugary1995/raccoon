@@ -95,7 +95,7 @@ MaterialNucleationMicroForce2021::computeQpProperties()
 
   // Compute the external driving force required to recover the desired strength envelope.
   ADReal beta_0 = _delta * M;
-  ADReal beta_1 = - gamma_1 * M * (_sigma_cs[_qp] - _sigma_ts[_qp]) - gamma_0;
+  ADReal beta_1 = -gamma_1 * M * (_sigma_cs[_qp] - _sigma_ts[_qp]) - gamma_0;
   ADReal beta_2 = std::sqrt(3.0) * (-gamma_1 * M * (_sigma_cs[_qp] + _sigma_ts[_qp]) + gamma_0);
   ADReal beta_3 = _L[_qp] * _sigma_ts[_qp] / _mu[_qp] / K / _Gc[_qp];
   _ex_driving[_qp] =
