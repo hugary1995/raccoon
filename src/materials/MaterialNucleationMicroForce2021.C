@@ -42,6 +42,7 @@ MaterialNucleationMicroForce2021::validParams()
       "Name of the material that holds the external_driving_force");
 
   return params;
+  
 }
 
 MaterialNucleationMicroForce2021::MaterialNucleationMicroForce2021(
