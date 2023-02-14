@@ -42,11 +42,9 @@ MaterialNucleationMicroForce2021::validParams()
       "Name of the material that holds the external_driving_force");
 
   return params;
-  
 }
 
-MaterialNucleationMicroForce2021::MaterialNucleationMicroForce2021(
-    const InputParameters & parameters)
+MaterialNucleationMicroForce2021::MaterialNucleationMicroForce2021(const InputParameters & parameters)
   : Material(parameters),
     BaseNameInterface(parameters),
     _ex_driving(declareADProperty<Real>(prependBaseName("external_driving_force_name", true))),
@@ -71,8 +69,8 @@ MaterialNucleationMicroForce2021::computeQpProperties()
   ADReal K = _lambda[_qp] + 2 * _mu[_qp] / 3;
 
   // Parameters in the strength surface
-  ADReal gamma_0 = _sigma_ts[_qp] / 6.0 / (3.0 * _lambda[_qp] + 2.0 * _mu[_qp]) +
-                   _sigma_ts[_qp] / 6.0 / _mu[_qp];
+  ADReal gamma_0 = 
+      _sigma_ts[_qp] / 6.0 / (3.0 * _lambda[_qp] + 2.0 * _mu[_qp]) + _sigma_ts[_qp] / 6.0 / _mu[_qp];
   ADReal gamma_1 = (1.0 + _delta) / (2.0 * _sigma_ts[_qp] * _sigma_cs[_qp]);
   // ADReal gamma_2 = (8 * _mu[_qp] + 24 * K - 27 * _sigma_ts[_qp]) / 144 / _mu[_qp] / K;
 
@@ -97,7 +95,7 @@ MaterialNucleationMicroForce2021::computeQpProperties()
 
   // Compute the external driving force required to recover the desired strength envelope.
   ADReal beta_0 = _delta * M;
-  ADReal beta_1 = -gamma_1 * M * (_sigma_cs[_qp] - _sigma_ts[_qp]) - gamma_0;
+  ADReal beta_1 = - gamma_1 * M * (_sigma_cs[_qp] - _sigma_ts[_qp]) - gamma_0;
   ADReal beta_2 = std::sqrt(3.0) * (-gamma_1 * M * (_sigma_cs[_qp] + _sigma_ts[_qp]) + gamma_0);
   ADReal beta_3 = _L[_qp] * _sigma_ts[_qp] / _mu[_qp] / K / _Gc[_qp];
   _ex_driving[_qp] =
