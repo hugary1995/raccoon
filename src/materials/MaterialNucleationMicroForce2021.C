@@ -44,7 +44,8 @@ MaterialNucleationMicroForce2021::validParams()
   return params;
 }
 
-MaterialNucleationMicroForce2021::MaterialNucleationMicroForce2021(const InputParameters & parameters)
+MaterialNucleationMicroForce2021::MaterialNucleationMicroForce2021(
+    const InputParameters & parameters)
   : Material(parameters),
     BaseNameInterface(parameters),
     _ex_driving(declareADProperty<Real>(prependBaseName("external_driving_force_name", true))),
@@ -69,8 +70,8 @@ MaterialNucleationMicroForce2021::computeQpProperties()
   ADReal K = _lambda[_qp] + 2 * _mu[_qp] / 3;
 
   // Parameters in the strength surface
-  ADReal gamma_0 =
-      _sigma_ts[_qp] / 6.0 / (3.0 * _lambda[_qp] + 2.0 * _mu[_qp]) + _sigma_ts[_qp] / 6.0 / _mu[_qp];
+  ADReal gamma_0 = _sigma_ts[_qp] / 6.0 / (3.0 * _lambda[_qp] + 2.0 * _mu[_qp]) +
+                   _sigma_ts[_qp] / 6.0 / _mu[_qp];
   ADReal gamma_1 = (1.0 + _delta) / (2.0 * _sigma_ts[_qp] * _sigma_cs[_qp]);
   // ADReal gamma_2 = (8 * _mu[_qp] + 24 * K - 27 * _sigma_ts[_qp]) / 144 / _mu[_qp] / K;
 
