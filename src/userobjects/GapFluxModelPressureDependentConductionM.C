@@ -33,10 +33,8 @@ GapFluxModelPressureDependentConductionM::validParams()
       "primary_hardness", "The hardness value of the primary surface material");
   params.addRequiredParam<MaterialPropertyName>("secondary_hardness",
                                                 "The hardness of the secondary surface material");
-  params.addParam<MaterialPropertyName>("min_conductivity", 1e-6,
-                                                "The minimum conductivity");                                              
-  params.addParam<MaterialPropertyName>("max_conductivity", 1e6,
-                                                "The maximum conductivity"); 
+  params.addParam<MaterialPropertyName>("min_conductivity", 1e-6, "The minimum conductivity");
+  params.addParam<MaterialPropertyName>("max_conductivity", 1e6, "The maximum conductivity");
   return params;
 }
 
@@ -71,17 +69,21 @@ GapFluxModelPressureDependentConductionM::computeFlux() const
   const ADReal h_harmonic = 2 * _primary_hardness[_qp] * _secondary_hardness[_qp] / h_sum;
 
   // return _scaling * k_harmonic * (_primary_T[_qp] - _secondary_T[_qp]) * _contact_pressure[_qp] /
-        //  h_harmonic;
+  //  h_harmonic;
 
-  // return max(_scaling * k_harmonic* _contact_pressure[_qp]/h_harmonic,0.4)  * (_primary_T[_qp] - _secondary_T[_qp])  ;
-  const ADReal h_cond = _scaling * k_harmonic* _contact_pressure[_qp]/h_harmonic;
-  if (h_cond.value() <  _min_conductivity[_qp]){
+  // return max(_scaling * k_harmonic* _contact_pressure[_qp]/h_harmonic,0.4)  * (_primary_T[_qp] -
+  // _secondary_T[_qp])  ;
+  const ADReal h_cond = _scaling * k_harmonic * _contact_pressure[_qp] / h_harmonic;
+  if (h_cond.value() < _min_conductivity[_qp])
+  {
     return _min_conductivity[_qp] * (_primary_T[_qp] - _secondary_T[_qp]);
   }
-  else if (h_cond.value() >  _max_conductivity[_qp]){
+  else if (h_cond.value() > _max_conductivity[_qp])
+  {
     return _max_conductivity[_qp] * (_primary_T[_qp] - _secondary_T[_qp]);
   }
-  else {
+  else
+  {
     return h_cond * (_primary_T[_qp] - _secondary_T[_qp]);
   }
 }
