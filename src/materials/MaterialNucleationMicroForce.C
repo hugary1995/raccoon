@@ -41,7 +41,14 @@ MaterialNucleationMicroForce::validParams()
       "external_driving_force_name",
       "ex_driving",
       "Name of the material that holds the external_driving_force");
-
+  params.addParam<MaterialPropertyName>(
+      "stress_balance_name",
+      "stress_balance",
+      "Name of the stress balance");
+  params.addParam<MaterialPropertyName>(
+      "stress_name",
+      "stress",
+      "Name of the stress tensor");
   return params;
 }
 
@@ -60,7 +67,8 @@ MaterialNucleationMicroForce::MaterialNucleationMicroForce(const InputParameters
     _sigma_cs(getADMaterialProperty<Real>(prependBaseName("compressive_strength", true))),
     // _delta(getParam<Real>("delta")),
     _delta(getADMaterialProperty<Real>(prependBaseName("delta", true))),
-    _stress(getADMaterialProperty<RankTwoTensor>(prependBaseName("stress")))
+    _stress(getADMaterialProperty<RankTwoTensor>(prependBaseName("stress_name",true))),
+    _stress_balance(declareADProperty<Real>(prependBaseName("stress_balance_name", true)))
 {
 }
 
@@ -79,10 +87,20 @@ MaterialNucleationMicroForce::computeQpProperties()
   // The mobility
   ADReal M = _Gc[_qp] / _L[_qp] / _c0[_qp];
 
+  // std::cout<<"------------------------------------------------------------------------------Gc "<<_Gc[_qp]<<std::endl;
+  // std::cout<<"-------------------------------------------------------------------------------L "<<_L[_qp]<<std::endl;
+  // std::cout<<"------------------------------------------------------------------------------c0 "<<_c0[_qp]<<std::endl;
+  // std::cout<<"-------------------------------------------------------------------------------K "<<K.value()<<std::endl;
+  // std::cout<<"--------------------------------------------------------------------------gamma0 "<<gamma_0.value()<<std::endl;
+  // std::cout<<"--------------------------------------------------------------------------gamma1 "<<gamma_1.value()<<std::endl;
+  // std::cout<<"--------------------------------------------------------------------------gamma2 "<<gamma_2.value()<<std::endl;
+  // std::cout<<"-------------------------------------------------------------------------------M "<<M.value()<<std::endl;
+
+
   // Invariants of the stress
   ADReal I1 = _stress[_qp].trace();
   ADRankTwoTensor stress_dev = _stress[_qp].deviatoric();
-  ADReal J2 = stress_dev.doubleContraction(stress_dev);
+  ADReal J2 = 0.5*stress_dev.doubleContraction(stress_dev);
   // ADReal M = _Gc[_qp] * 3.0 / _L[_qp] / 8.0;
   // ADReal I1 = _stress[_qp](0, 0) + _stress[_qp](1, 1) + _stress[_qp](2, 2);
   // ADReal J2 = (pow(_stress[_qp](0, 0) - _stress[_qp](1, 1), 2) +
@@ -95,6 +113,12 @@ MaterialNucleationMicroForce::computeQpProperties()
   // Just to be extra careful... J2 is for sure non-negative.
   mooseAssert(J2 >= 0, "Negative J2");
 
+  // define zero J2's derivative
+  if (MooseUtils::absoluteFuzzyEqual(J2, 0))
+    J2.value() = libMesh::TOLERANCE * libMesh::TOLERANCE;
+
+  // std::cout<<"------------------------------------------------------------------------------J2 "<<J2.value()<<std::endl;
+  // std::cout<<"--------------------------------------------------------------------------sqrtJ2 "<<std::sqrt(J2)<<std::endl;
   // Compute the external driving force required to recover the desired strength envelope.
   ADReal beta_0 = _delta[_qp] * M;
   ADReal beta_1 = (-gamma_1 * M - gamma_2) * (_sigma_cs[_qp] - _sigma_ts[_qp]) -
@@ -103,4 +127,10 @@ MaterialNucleationMicroForce::computeQpProperties()
                                     gamma_0 * (pow(_sigma_cs[_qp], 3) + pow(_sigma_ts[_qp], 3)));
   ADReal beta_3 = _L[_qp] * _sigma_ts[_qp] / _mu[_qp] / K / _Gc[_qp];
   _ex_driving[_qp] = (beta_2 * std::sqrt(J2) + beta_1 * I1 + beta_0) / (1 + beta_3 * I1 * I1);
+  _stress_balance[_qp] = J2/_mu[_qp]+pow(I1,2)/9.0/K-_ex_driving[_qp]-M;
+  // std::cout<<"---------------------------------------------------------------------------beta0 "<<beta_0.value()<<std::endl;
+  // std::cout<<"---------------------------------------------------------------------------beta1 "<<beta_1.value()<<std::endl;
+  // std::cout<<"---------------------------------------------------------------------------beta2 "<<beta_2.value()<<std::endl;
+  // std::cout<<"---------------------------------------------------------------------------beta3 "<<beta_3.value()<<std::endl;
+  // std::cout<<"------------------------------------------------------------------------------ce "<<_ex_driving[_qp]<<std::endl;
 }
