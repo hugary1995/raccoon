@@ -17,7 +17,8 @@ ADComputeFunctionThermalExpansionEigenstrain::validParams()
   InputParameters params = ADComputeThermalExpansionEigenstrainBase::validParams();
   params.addClassDescription("Computes eigenstrain due to thermal expansion "
                              "with a functional(material) coefficient");
-  params.addRequiredParam<MaterialPropertyName>("thermal_expansion_coeff", "Material Thermal expansion coefficient");
+  params.addRequiredParam<MaterialPropertyName>("thermal_expansion_coeff",
+                                                "Material Thermal expansion coefficient");
   return params;
 }
 
@@ -32,11 +33,12 @@ ADReal
 ADComputeFunctionThermalExpansionEigenstrain::computeThermalStrain()
 {
   if (_use_old_temperature)
-    return  _thermal_expansion_coeff[_qp] * (_temperature_old[_qp] - _stress_free_temperature[_qp]);
+    return _thermal_expansion_coeff[_qp] * (_temperature_old[_qp] - _stress_free_temperature[_qp]);
   else
-    return  _thermal_expansion_coeff[_qp] * (_temperature[_qp] - _stress_free_temperature[_qp]);
+    return _thermal_expansion_coeff[_qp] * (_temperature[_qp] - _stress_free_temperature[_qp]);
 
   // std::cout << "thermal_strain" << raw_value(thermal_strain) << std::endl;
   // std::cout << "_temperature" << raw_value(_temperature[_qp]) << std::endl;
-  // std::cout << "_stress_free_temperature" << raw_value(_stress_free_temperature[_qp]) << std::endl;
+  // std::cout << "_stress_free_temperature" << raw_value(_stress_free_temperature[_qp]) <<
+  // std::endl;
 }

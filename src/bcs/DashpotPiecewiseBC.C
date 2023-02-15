@@ -22,8 +22,10 @@ DashpotPiecewiseBC::validParams()
   params.addCoupledVar("disp_z", "Displacement in the z direction");
 
   // params.addParam<Real>("coefficient", 1.0, "The viscosity coefficient");
-  params.addParam<Real>("coeff_tension", 1.0, "The viscosity coefficient when spring is in tension");
-  params.addParam<Real>("coeff_compression", 1.0, "The viscosity coefficient when spring is in compression");
+  params.addParam<Real>(
+      "coeff_tension", 1.0, "The viscosity coefficient when spring is in tension");
+  params.addParam<Real>(
+      "coeff_compression", 1.0, "The viscosity coefficient when spring is in compression");
   return params;
 }
 
@@ -48,14 +50,13 @@ DashpotPiecewiseBC::computeQpResidual()
 {
   RealVectorValue velocity(_disp_x_dot[_qp], _disp_y_dot[_qp], _disp_z_dot[_qp]);
 
-  if (_normals[_qp] * velocity>0)
+  if (_normals[_qp] * velocity > 0)
     // {
-      _coefficient = _coeff_compression;
-    // std::cout<<"_coeff_compression "<<_coefficient<<std::endl;}
+    _coefficient = _coeff_compression;
+  // std::cout<<"_coeff_compression "<<_coefficient<<std::endl;}
   else
     _coefficient = _coeff_tension;
-  
-  
+
   return _test[_i][_qp] * _coefficient * _normals[_qp] * velocity;
 }
 
@@ -65,11 +66,11 @@ DashpotPiecewiseBC::computeQpJacobian()
   RealVectorValue velocity;
   velocity(_component) = _phi[_j][_qp] / _dt;
 
-  if (_normals[_qp] * velocity>0)
+  if (_normals[_qp] * velocity > 0)
     _coefficient = _coeff_compression;
   else
     _coefficient = _coeff_tension;
-  
+
   return _test[_i][_qp] * _coefficient * _normals[_qp] * velocity;
 }
 

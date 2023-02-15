@@ -47,6 +47,4 @@ private:
   const VariableValue & _disp_x_dot;
   const VariableValue & _disp_y_dot;
   const VariableValue & _disp_z_dot;
-
-  
 };
