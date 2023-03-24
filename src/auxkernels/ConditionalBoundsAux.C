@@ -28,7 +28,11 @@ ConditionalBoundsAux::ConditionalBoundsAux(const InputParameters & parameters)
 Real
 ConditionalBoundsAux::getBound()
 {
-  Real d_old = _var.getNodalValueOld(*_current_node);
+  Real d_old = 0;
+  if (_fe_var && isNodal())
+    d_old = _fe_var->getNodalValueOld(*_current_node);
+  else
+    mooseError("This variable type is not supported yet");
   if (d_old >= _threshold_value)
     return d_old;
   else
