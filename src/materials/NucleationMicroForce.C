@@ -40,7 +40,11 @@ NucleationMicroForce::validParams()
       "ex_driving",
       "Name of the material that holds the external_driving_force");
   params.addParam<MaterialPropertyName>(
-      "stress_balance_name", "stress_balance", "Name of the stress balance function $$F= {J_2 \over \mu} + {I_1^2 \over 9\kappa} - c_e -{3G_c \over 8\delta}=0 $$. This value tells how close the material is to stress surface.");
+      "stress_balance_name",
+      "stress_balance",
+      "Name of the stress balance function $F= \\dfrac{J_2}{\\mu} + \\dfrac{I_1^2}{9\\kappa} - c_e "
+      "-\\dfrac{3\\Gc}{8\\delta}=0 $. This value tells how close the material is to stress "
+      "surface.");
   params.addParam<MaterialPropertyName>("stress_name", "stress", "Name of the stress tensor");
   return params;
 }
