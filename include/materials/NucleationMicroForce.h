@@ -10,6 +10,7 @@
 /**
  * The class implements the external driving force to recover a Drucker-Prager
  * strength envelope. See Kumar et. al. https://doi.org/10.1016/j.jmps.2020.104027.
+ * all parameters are required to be Material type, not double type
  */
 class NucleationMicroForce : public Material, public BaseNameInterface
 {
@@ -41,15 +42,20 @@ protected:
   /// The shear modulus
   const ADMaterialProperty<Real> & _mu;
 
-  /// The critical tensile strength
-  const Real & _sigma_ts;
+   /// The critical tensile strength
+  const ADMaterialProperty<Real> & _sigma_ts;
 
   /// The critical compressive strength
-  const Real & _sigma_cs;
+  const ADMaterialProperty<Real> & _sigma_cs;
 
   /// The regularization length dependent parameter
-  const Real & _delta;
+  const ADMaterialProperty<Real> & _delta;
 
   /// The stress tensor
   const ADMaterialProperty<RankTwoTensor> & _stress;
+
+  /// Name of the stress space balance
+  const MaterialPropertyName _stress_balance_name;
+  /// Quantifying how far is the stress state from stress surface
+  ADMaterialProperty<Real> & _stress_balance;
 };

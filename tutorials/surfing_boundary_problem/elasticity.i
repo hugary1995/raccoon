@@ -1,3 +1,8 @@
+# This  tutorial is based on example of material graphite in section 4.3.4
+# See Kumar et. al. https://doi.org/10.1016/j.jmps.2020.104027.
+# For regularization length 0.35mm, delta 1.16, mesh size 0.035,
+# J intergal over Gc should return a value close to 1
+
 E = 9.8e3 #9.8Gpa
 nu = 0.13
 K = '${fparse E/3/(1-2*nu)}'
@@ -11,17 +16,19 @@ sigma_cs = 77
 delta = 1.16
 c1 = '${fparse (1+nu)*sqrt(Gc)/sqrt(2*pi*E)}'
 c2 = '${fparse (3-nu)/(1+nu)}'
-
-nx = 90
-ny = 30
+ahead = 2
+V = 20
+# mesh size 0.035
+nx = 108
+ny = 36
 refine = 3
 
 [Functions]
   [bc_func]
     type = ParsedFunction
-    value = c1*((x-20*t)^2+y^2)^(0.25)*(c2-cos(atan2(y,(x-20*t))))*sin(0.5*atan2(y,(x-20*t)))
-    vars = 'c1 c2'
-    vals = '${c1} ${c2}'
+    expression = c1*((x-V*t-ahead)^2+y^2)^(0.25)*(c2-cos(atan2(y,(x-V*t-ahead))))*sin(0.5*atan2(y,(x-V*t-ahead)))
+    symbol_names = 'c1 c2 V ahead'
+    symbol_values = '${c1} ${c2} ${V} ${ahead}'
   []
 []
 
@@ -29,8 +36,7 @@ refine = 3
   [fracture]
     type = TransientMultiApp
     input_files = fracture.i
-    cli_args = 'E=${E};K=${K};G=${G};Lambda=${Lambda};Gc=${Gc};l=${l};nx=${nx};ny=${ny};refine=${refi'
-               'ne}'
+    cli_args = 'E=${E};K=${K};G=${G};Lambda=${Lambda};Gc=${Gc};l=${l};nx=${nx};ny=${ny};refine=${refine};sigma_ts=${sigma_ts};sigma_cs=${sigma_cs};delta=${delta}'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -38,17 +44,15 @@ refine = 3
 [Transfers]
   [from_d]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = from_multiapp
+    from_multi_app = fracture
     variable = 'd'
     source_variable = 'd'
   []
   [to_psie_active]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = to_multiapp
-    variable = 'psie_active ce'
-    source_variable = 'psie_active ce'
+    to_multi_app = fracture
+    variable = 'disp_x disp_y strain_zz psie_active'
+    source_variable = 'disp_x disp_y strain_zz psie_active'
   []
 []
 
@@ -182,22 +186,6 @@ refine = 3
     elasticity_model = elasticity
     output_properties = 'stress'
   []
-  [crack_geometric]
-    type = CrackGeometricFunction
-    f_name = alpha
-    function = 'd'
-    phase_field = d
-  []
-  [kumar_material]
-    type = NucleationMicroForce
-    normalization_constant = c0
-    tensile_strength = '${sigma_ts}'
-    compressive_strength = '${sigma_cs}'
-    delta = '${delta}'
-    external_driving_force_name = ce
-    output_properties = 'ce'
-    outputs = exodus
-  []
 []
 
 [Postprocessors]
@@ -207,6 +195,11 @@ refine = 3
     strain_energy_density = psie
     displacements = 'disp_x disp_y'
     boundary = 'left top right bottom'
+  []
+  [Jint_over_Gc]
+    type = ScalePostprocessor
+    value = 'Jint'
+    scaling_factor = '${fparse 1.0/Gc}'
   []
 []
 
@@ -221,13 +214,14 @@ refine = 3
   nl_rel_tol = 1e-8
   nl_abs_tol = 1e-10
 
-  dt = 2e-2
-  end_time = 5e-1
+  dt = 1e-2
+  dtmin = 1e-2
+  end_time = 4e-1
 
-  fixed_point_max_its = 20
+  fixed_point_max_its = 50
   accept_on_max_fixed_point_iteration = false
   fixed_point_rel_tol = 1e-3
-  fixed_point_abs_tol = 1e-5
+  fixed_point_abs_tol = 1e-6
 []
 
 [Outputs]

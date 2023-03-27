@@ -39,11 +39,13 @@
 [AuxVariables]
   [bounds_dummy]
   []
-  [psie_active]
-    order = CONSTANT
-    family = MONOMIAL
+  [disp_x]
   []
-  [ce]
+  [disp_y]
+  []
+  [strain_zz]
+  []
+  [psie_active]
     order = CONSTANT
     family = MONOMIAL
   []
@@ -79,13 +81,18 @@
     variable = d
     free_energy = psi
   []
+  [nuc_force]
+    type = ADCoefMatSource
+    variable = d
+    prop_names = 'ce'
+  []
 []
 
 [Materials]
   [fracture_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'E K G lambda Gc l'
-    prop_values = '${E} ${K} ${G} ${Lambda} ${Gc} ${l}'
+    prop_names = 'E K G lambda Gc l sigma_ts sigma_cs delta'
+    prop_values = '${E} ${K} ${G} ${Lambda} ${Gc} ${l} ${sigma_ts} ${sigma_cs} ${delta}'
   []
   [degradation]
     type = PowerDegradationFunction
@@ -104,10 +111,37 @@
   [psi]
     type = ADDerivativeParsedMaterial
     f_name = psi
-    function = 'g*psie_active+(ce+Gc/c0/l)*alpha'
-    args = 'd psie_active ce'
+    function = 'g*psie_active+(Gc/c0/l)*alpha'
+    args = 'd psie_active'
     material_property_names = 'alpha(d) g(d) Gc c0 l'
     derivative_order = 1
+  []
+  [kumar_material]
+    type = NucleationMicroForce
+    normalization_constant = c0
+    tensile_strength = sigma_ts
+    compressive_strength = sigma_cs
+    delta = delta
+    external_driving_force_name = ce
+    output_properties = 'ce'
+  []
+  [strain]
+    type = ADComputePlaneSmallStrain
+    out_of_plane_strain = 'strain_zz'
+    displacements = 'disp_x disp_y'
+  []
+  [elasticity]
+    type = SmallDeformationIsotropicElasticity
+    bulk_modulus = K
+    shear_modulus = G
+    phase_field = d
+    degradation_function = g
+    decomposition = NONE
+  []
+  [stress]
+    type = ComputeSmallDeformationStress
+    elasticity_model = elasticity
+    output_properties = 'stress'
   []
 []
 
