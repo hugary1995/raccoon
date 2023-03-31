@@ -42,7 +42,7 @@ protected:
   /// The shear modulus
   const ADMaterialProperty<Real> & _mu;
 
-   /// The critical tensile strength
+  /// The critical tensile strength
   const ADMaterialProperty<Real> & _sigma_ts;
 
   /// The critical compressive strength
