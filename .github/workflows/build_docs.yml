@@ -22,14 +22,13 @@ jobs:
       - name: Install Conda environment with Micromamba
         uses: mamba-org/provision-with-micromamba@main
         with:
-          mamba-version: "0.22"
-          activate-environment: moose
+          environment-file: false
+          environment-name: moose
           channels: conda-forge,https://conda.software.inl.gov/public
-
-      - name: Install dependencies
-        shell: bash -l {0}
-        run: |
-          mamba install moose-tools moose-libmesh lcov
+          extra-specs: |
+            moose-tools
+            moose-libmesh
+            lcov
 
       - name: Compile RACCOON (with coverage)
         if: ${{ github.event_name != 'pull_request' }}
