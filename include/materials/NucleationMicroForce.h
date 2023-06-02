@@ -6,13 +6,19 @@
 
 #include "Material.h"
 #include "BaseNameInterface.h"
+#include "DerivativeMaterialPropertyNameInterface.h"
 
 /**
  * The class implements the external driving force to recover a Drucker-Prager
- * strength envelope. See Kumar et. al. https://doi.org/10.1016/j.jmps.2020.104027.
- * all parameters are required to be Material type, not double type
+ * strength envelope. See Kumar et. al. https://doi.org/10.1016/j.jmps.2020.104027 for model 2020,
+ * and Kumar, A., Ravi-Chandar, K. & Lopez-Pamies, O. The revisited phase-field approach to brittle
+ * fracture: application to indentation and notch problems. Int J Fract 237, 83–100 (2022).
+ * https://doi.org/10.1007/s10704-022-00653-z for model 2022. all parameters are required to be
+ * Material type, not double type
  */
-class NucleationMicroForce : public Material, public BaseNameInterface
+class NucleationMicroForce : public Material,
+                             public BaseNameInterface,
+                             public DerivativeMaterialPropertyNameInterface
 {
 public:
   static InputParameters validParams();
@@ -48,7 +54,7 @@ protected:
   /// The critical compressive strength
   const ADMaterialProperty<Real> & _sigma_cs;
 
-  /// The regularization length dependent parameter
+  /// The materiel and model dependent parameter
   const ADMaterialProperty<Real> & _delta;
 
   /// The stress tensor
@@ -58,4 +64,15 @@ protected:
   const MaterialPropertyName _stress_balance_name;
   /// Quantifying how far is the stress state from stress surface
   ADMaterialProperty<Real> & _stress_balance;
+
+  /// Name of the phase-field variable
+  const VariableName _d_name;
+  // @{ The degradation function and its derivative w/r/t damage
+  const MaterialPropertyName _g_name;
+  const ADMaterialProperty<Real> & _g;
+  const ADMaterialProperty<Real> & _dg_dd;
+  // @}
+
+  /// model year
+  const enum class ModelYear { year2020, year2022 } _model_year;
 };
