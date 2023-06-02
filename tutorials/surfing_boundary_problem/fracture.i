@@ -13,7 +13,7 @@
 [Adaptivity]
   marker = marker
   initial_marker = marker
-  initial_steps = 3
+  initial_steps = ${refine}
   stop_time = 0
   max_h_level = ${refine}
   [Markers]
@@ -118,12 +118,14 @@
   []
   [kumar_material]
     type = NucleationMicroForce
+    phase_field = d
     normalization_constant = c0
     tensile_strength = sigma_ts
     compressive_strength = sigma_cs
     delta = delta
     external_driving_force_name = ce
     output_properties = 'ce'
+    model_year = year2022 # year2020
   []
   [strain]
     type = ADComputePlaneSmallStrain
