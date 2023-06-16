@@ -2,7 +2,7 @@
 
 !syntax description /Materials/NucleationMicroForce
 
-In general, model published in 2022 [!cite](https://doi.org/10.1007/s10704-022-00653-z) is recommended over model 2020[!cite](https://doi.org/10.1016/j.jmps.2020.104027)for better performance in compression and smaller $\delta$ value that reduce the mesh burden.
+In general, model published in 2022 [!cite](https://doi.org/10.1007/s10704-022-00653-z) is recommended over model 2020[!cite](https://doi.org/10.1016/j.jmps.2020.104027) for better performance in compression. It also allows the use of smaller $\delta$ values that reduce the mesh burden.
 
 ## Overview 
 
