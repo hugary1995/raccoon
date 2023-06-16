@@ -72,7 +72,7 @@ During crack propagation, the effective regularization length $l_e$
 l_e = \frac{l_0}{\sqrt{1+\delta}},\quad (\delta > -1)
 \end{equation}
 
-could be different than the prescribed one. Make sure your mesh size can also fully resolve it.
+could deviate from $\ell$. The mesh should be able to resolve $l_e$ as well.
 
 Here is an example input deck
 
