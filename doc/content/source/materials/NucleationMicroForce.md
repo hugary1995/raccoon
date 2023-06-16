@@ -55,7 +55,7 @@ The numerical strength surface introduced by the external driving force is
 \hat{F}^{l_0}(I_1,J_2)=\frac{J_2}{\mu}+\frac{I_1^2}{9\kappa}-c_e(I_1,J_2;l_0)-\frac{3G_c}{8l_0}=0,
 \end{equation}
 
-which strictly satisfied the critical tensile strength $\sigma_{ts}$ and critical compressive strength $\sigma_{cs}$. Other locations on the surface approach to an existed model for the stress envelope, the Drucker-Prager model[!cite](https://www.jstor.org/stable/43633942), as regularization length approach zero limit:
+defined in terms of the critical tensile strength $\sigma_{ts}$ and the critical compressive strength $\sigma_{cs}$. Other locations on the surface approach to the Drucker-Prager criterion [!cite](https://www.jstor.org/stable/43633942) as the phase-field regularization length approaches zero:
 
 \begin{equation}
     \hat{F}(I_1,J_2)
