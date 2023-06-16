@@ -39,7 +39,7 @@ with material properties and simulation parameter dependent constants defined as
 +\frac{\sqrt{3}\sigma_{ts}}{6(3\lambda+2\mu)}+\frac{\sqrt{3}\sigma_{ts}}{6\mu}.
 \end{equation}
 
-The $I_1$ and $J_2$ are invariants for the degraded Cauchy stress:
+$I_1$ and $J_2$ are invariants of the Cauchy stress:
 
 \begin{equation}
     I_1=tr(\boldsymbol{\sigma}), \quad
