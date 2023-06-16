@@ -49,7 +49,7 @@ NucleationMicroForce::validParams()
   params.addRequiredCoupledVar("phase_field", "Name of the phase-field (damage) variable");
 
   params.addParam<MaterialPropertyName>("degradation_function", "g", "The degradation function");
-  params.addParam<MooseEnum>("model_year",
+  params.addParam<MooseEnum>("model_version",
                              MooseEnum("year2020 year2022", "year2022"),
                              "The model version by year published. In general, 2022 is recommended "
                              "for a lower $\\delta and better performance in compression.");
