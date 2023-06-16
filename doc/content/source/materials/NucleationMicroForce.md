@@ -64,7 +64,7 @@ defined in terms of the critical tensile strength $\sigma_{ts}$ and the critical
     -\frac{2\sigma_{cs}\sigma_{ts}}{\sqrt{3}(\sigma_{cs}+\sigma_{ts})}I_1=0
 \end{equation}
 
-$l_0$ is the prescribed regularization length. By enforcing the irreversibility restriction only when the material is close to fully damaged, say $d\ge 0.95$, the $G_c$ behavior of Griffith model can be kept by calibrating parameter $\delta$. Currently we use a [surfing boundary problem](tutorials/12_surfing_boundary_problem.md) to match the precribed $G_c$ and the J intergral. Be aware that this $\delta$ is currently dependent on material properties and model parameters (regularization length, mesh size,...) until further developed version. Do calibrate it when any of the parameter is changed.
+$l_0$ is the prescribed regularization length. By enforcing the irreversibility restriction only when the material is close to fully damaged, say $d\ge 0.95$, the $G_c$ behavior of Griffith model can be kept by calibrating parameter $\delta$. Currently we use a [surfing boundary problem](tutorials/12_surfing_boundary_problem.md) to match the precribed $G_c$ and the J intergral. Be aware that this $\delta$ is currently dependent on material properties and model parameters (regularization length, mesh size,...). In other words, calibration of $\delta$ is necessary.
 
 During crack propagation, the effective regularization length $l_e$ 
 
