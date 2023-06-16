@@ -8,7 +8,7 @@ In general, model published in 2022 [!cite](https://doi.org/10.1007/s10704-022-0
 
 ### Model 2022
 
-By adding an extra term in the governing equation for fracture, $c_e$, the material strength surface is employed as damage initiation criteria,
+By adding an extra term in the governing equation for fracture, $c_e$, the material's strength surface can be effectively employed as the damage initiation criterion,
 
 \begin{equation}
 g'(d) W + \frac{G_c}{c_0 \ell_0} ( \alpha' (d) - 2 \ell_0 \Delta d)  + c_e \ge 0.
