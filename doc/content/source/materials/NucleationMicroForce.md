@@ -49,7 +49,7 @@ $I_1$ and $J_2$ are invariants of the Cauchy stress:
     J_2=\frac{1}{2}(\boldsymbol{\sigma}-\frac{1}{3}(tr(\boldsymbol{\sigma})\boldsymbol{I})):(\boldsymbol{\sigma}-\frac{1}{3}(tr(\boldsymbol{\sigma})\boldsymbol{I})).
 \end{equation}
 
-The numerical stress envelope introduced by the external driving force is
+The numerical strength surface introduced by the external driving force is
 
 \begin{equation}
 \hat{F}^{l_0}(I_1,J_2)=\frac{J_2}{\mu}+\frac{I_1^2}{9\kappa}-c_e(I_1,J_2;l_0)-\frac{3G_c}{8l_0}=0,
