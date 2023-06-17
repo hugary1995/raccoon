@@ -117,15 +117,15 @@
     derivative_order = 1
   []
   [kumar_material]
-    type = NucleationMicroForce
+    type = KLRNucleationMicroForce
     phase_field = d
+    # type = KLBFNucleationMicroForce
     normalization_constant = c0
     tensile_strength = sigma_ts
     compressive_strength = sigma_cs
     delta = delta
     external_driving_force_name = ce
     output_properties = 'ce'
-    model_year = year2022 # year2020
   []
   [strain]
     type = ADComputePlaneSmallStrain

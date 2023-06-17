@@ -1,12 +1,12 @@
-# NucleationMicroForce
+# KLRNucleationMicroForce
 
-!syntax description /Materials/NucleationMicroForce
+!syntax description /Materials/KLRNucleationMicroForce
 
-In general, model published in 2022 [!cite](https://doi.org/10.1007/s10704-022-00653-z) is recommended over model 2020[!cite](https://doi.org/10.1016/j.jmps.2020.104027) for better performance in compression. It also allows the use of smaller $\delta$ values that reduce the mesh burden.
+In general, model KLR published in 2022 [!cite](Kumar2022) is recommended over model KLBF published in 2020 [!cite](KUMAR2020104027) for better performance in compression. It also allows the use of smaller $\delta$ values that reduce the mesh burden.
 
 ## Overview 
 
-### Model 2022
+### KLR (Kumar, Lopez, Ravi-Chandar) Model 2022
 
 By adding an extra term in the governing equation for fracture, $c_e$, the material's strength surface can be effectively employed as the damage initiation criterion,
 
@@ -55,7 +55,7 @@ The numerical strength surface introduced by the external driving force is
 \hat{F}^{l_0}(I_1,J_2)=\frac{J_2}{\mu}+\frac{I_1^2}{9\kappa}-c_e(I_1,J_2;l_0)-\frac{3G_c}{8l_0}=0,
 \end{equation}
 
-defined in terms of the critical tensile strength $\sigma_{ts}$ and the critical compressive strength $\sigma_{cs}$. Other locations on the surface approach to the Drucker-Prager criterion [!cite](https://www.jstor.org/stable/43633942) as the phase-field regularization length approaches zero:
+defined in terms of the critical tensile strength $\sigma_{ts}$ and the critical compressive strength $\sigma_{cs}$. Other locations on the surface approach to the Drucker-Prager criterion from [!cite](Drucker-Prager) as the phase-field regularization length approaches zero:
 
 \begin{equation}
     \hat{F}(I_1,J_2)
@@ -78,44 +78,14 @@ Here is an example input deck
 
 !listing /tutorials/surfing_boundary_problem/fracture.i block=Materials/kumar_material
 
-### Model 2020
+### KLBF (Kumar, Lopez, Bourdin, Francfort) Model 2020
 
-The two versions follow the same idea with differnt construction of the model parameters.
-
-The external driving force of model published in 2020 is in the form of:
-
-\begin{equation}
-    c_e(I_1,J_2;l_0)=\frac{1}{1+\beta_3^{l_0}I_1^2}( \beta^{l_0}_2\sqrt{J_2}+\beta^{l_0}_1I_1+\beta^{l_0}_0),
-\end{equation} 
-
-with material properties and simulation parameter dependent constants defined as
-
-\begin{equation}
-\beta_0^{l_0}=\delta\frac{3G_c}{8l_0}
-\end{equation}
-
-\begin{equation}
-\beta_1^{l_0}
-=-\frac{(1+\delta)(\sigma_{cs}-\sigma_{ts})}{2\sigma_{cs}\sigma_{ts}}\frac{3G_c}{8l_0}
--\frac{(8\mu + 24\kappa - 27\sigma_{ts})(\sigma_{cs}-\sigma_{ts})}{144\mu\kappa}
--\frac{(\mu+3\kappa)(\sigma_{cs}^3-\sigma_{ts}^3)\sigma_{ts}}{18\mu^2\kappa^2}\frac{l_0}{G_c},
-\end{equation}
-
-\begin{equation}
-\beta_2^{l_0}
-=-\frac{\sqrt{3}(1+\delta)(\sigma_{cs}+\sigma_{ts})}{2\sigma_{cs}\sigma_{ts}}\frac{3G_c}{8l_0}
-+\frac{(8\mu + 24\kappa - 27\sigma_{ts})(\sigma_{cs}+\sigma_{ts})}{48\sqrt{3}\mu\kappa}
-+\frac{(\mu+3\kappa)(\sigma_{cs}^3-\sigma_{ts}^3)\sigma_{ts}}{6\sqrt{3}\mu^2\kappa^2}\frac{l_0}{G_c},
-\end{equation}
-
-\begin{equation}
-\beta_3^{l_0}=\frac{l_0\sigma_{ts}}{\mu\kappa G_c}.
-\end{equation}
+See [KLBFNucleationMicroForce](source/materials/KLBFNucleationMicroForce.md)
 
 ## Example Input File Syntax
 
-!syntax parameters /Materials/NucleationMicroForce
+!syntax parameters /Materials/KLRNucleationMicroForce
 
-!syntax inputs /Materials/NucleationMicroForce
+!syntax inputs /Materials/KLRNucleationMicroForce
 
-!syntax children /Materials/NucleationMicroForce
+!syntax children /Materials/KLRNucleationMicroForce
