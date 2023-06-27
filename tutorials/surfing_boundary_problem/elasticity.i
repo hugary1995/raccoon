@@ -2,6 +2,8 @@
 # See Kumar et. al. https://doi.org/10.1016/j.jmps.2020.104027.
 # For regularization length 0.35mm, delta 1.16, mesh size 0.035,
 # J intergal over Gc should return a value close to 1
+# delta value 0.2 is updated for model 2022
+# (see Kumar et. al. https://doi.org/10.1007/s10704-022-00653-z)
 
 E = 9.8e3 #9.8Gpa
 nu = 0.13
@@ -13,7 +15,9 @@ Gc = 9.1e-2 # 91N/m
 l = 0.35
 sigma_ts = 27
 sigma_cs = 77
-delta = 1.16
+# for model 2022 (KLR), select delta=0.2
+# for model 2020 (KLBF), select delta=1.16
+delta = 0.2 #1.16
 c1 = '${fparse (1+nu)*sqrt(Gc)/sqrt(2*pi*E)}'
 c2 = '${fparse (3-nu)/(1+nu)}'
 ahead = 2
@@ -81,7 +85,7 @@ refine = 3
 [Adaptivity]
   marker = marker
   initial_marker = marker
-  initial_steps = 3
+  initial_steps = ${refine}
   stop_time = 0
   max_h_level = ${refine}
   [Markers]
@@ -216,12 +220,12 @@ refine = 3
 
   dt = 1e-2
   dtmin = 1e-2
-  end_time = 4e-1
+  end_time = 0.3
 
-  fixed_point_max_its = 50
+  fixed_point_max_its = 500
   accept_on_max_fixed_point_iteration = false
-  fixed_point_rel_tol = 1e-3
-  fixed_point_abs_tol = 1e-6
+  fixed_point_rel_tol = 1e-6
+  fixed_point_abs_tol = 1e-8
 []
 
 [Outputs]
