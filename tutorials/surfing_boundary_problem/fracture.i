@@ -13,7 +13,7 @@
 [Adaptivity]
   marker = marker
   initial_marker = marker
-  initial_steps = 3
+  initial_steps = ${refine}
   stop_time = 0
   max_h_level = ${refine}
   [Markers]
@@ -117,7 +117,9 @@
     derivative_order = 1
   []
   [kumar_material]
-    type = NucleationMicroForce
+    type = KLRNucleationMicroForce
+    phase_field = d
+    # type = KLBFNucleationMicroForce
     normalization_constant = c0
     tensile_strength = sigma_ts
     compressive_strength = sigma_cs
