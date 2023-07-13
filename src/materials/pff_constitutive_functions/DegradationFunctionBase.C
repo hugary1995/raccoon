@@ -9,7 +9,7 @@ DegradationFunctionBase::validParams()
 {
   InputParameters params = CustomParsedFunctionBase::validParams();
 
-  params.set<std::string>("f_name") = "g";
+  params.set<std::string>("property_name") = "g";
   params.addRequiredCoupledVar("phase_field", "The phase-field variable");
 
   params.set<unsigned int>("derivative_order") = 1;
