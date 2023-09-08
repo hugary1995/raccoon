@@ -39,7 +39,8 @@ PhaseFieldJIntegral::PhaseFieldJIntegral(const InputParameters & parameters)
 Real
 PhaseFieldJIntegral::computeQpIntegral()
 {
-  RankTwoTensor H((*_grad_disp[0])[_qp], (*_grad_disp[1])[_qp], (*_grad_disp[2])[_qp]);
+  auto H = RankTwoTensor::initializeFromRows(
+      (*_grad_disp[0])[_qp], (*_grad_disp[1])[_qp], (*_grad_disp[2])[_qp]);
   RankTwoTensor I2(RankTwoTensor::initIdentity);
   ADRankTwoTensor Sigma = _psie[_qp] * I2 - H.transpose() * _stress[_qp];
   RealVectorValue n = _normals[_qp];
