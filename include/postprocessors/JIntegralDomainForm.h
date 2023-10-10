@@ -4,28 +4,35 @@
 
 #pragma once
 
-#include "SideIntegralPostprocessor.h"
-#include "RankTwoTensor.h"
+#include "ElementIntegralPostprocessor.h"
+#include "RankTwoTensorForward.h"
 #include "BaseNameInterface.h"
 
-class PhaseFieldJIntegral : public SideIntegralPostprocessor, public BaseNameInterface
+class JIntegralDomainForm : public ElementIntegralPostprocessor, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
 
-  PhaseFieldJIntegral(const InputParameters & parameters);
+  JIntegralDomainForm(const InputParameters & parameters);
 
 protected:
   virtual Real computeQpIntegral() override;
 
   /// The stress tensor
   const ADMaterialProperty<RankTwoTensor> & _stress;
+
   /// The strain energy density
   const ADMaterialProperty<Real> & _psie;
-  /// Number of displacement variables provided
+
+  /// The number of displacements
   const unsigned int _ndisp;
-  /// Gradient of displacements
-  std::vector<const VariableGradient *> _grad_disp;
-  /// Direction of J integral
+
+  /// Vector of displacement gradients
+  std::vector<const VariableGradient *> _grad_u;
+
+  /// Direction of J-integral
   const RealVectorValue _t;
+
+  /// Gradient of the domain indicator function
+  const VariableGradient & _grad_q;
 };

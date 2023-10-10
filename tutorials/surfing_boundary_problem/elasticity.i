@@ -194,7 +194,7 @@ refine = 3
 
 [Postprocessors]
   [Jint]
-    type = PhaseFieldJIntegral
+    type = JIntegralContourForm
     J_direction = '1 0 0'
     strain_energy_density = psie
     displacements = 'disp_x disp_y'

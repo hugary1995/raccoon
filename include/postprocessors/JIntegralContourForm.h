@@ -5,28 +5,31 @@
 #pragma once
 
 #include "SideIntegralPostprocessor.h"
+#include "RankTwoTensorForward.h"
 #include "BaseNameInterface.h"
-#include "ADRankTwoTensorForward.h"
 
-class LargeDeformationJIntegral : public SideIntegralPostprocessor, public BaseNameInterface
+class JIntegralContourForm : public SideIntegralPostprocessor, public BaseNameInterface
 {
 public:
   static InputParameters validParams();
 
-  LargeDeformationJIntegral(const InputParameters & parameters);
+  JIntegralContourForm(const InputParameters & parameters);
 
 protected:
   virtual Real computeQpIntegral() override;
 
-  /// The Cauchy stress
+  /// The stress tensor
   const ADMaterialProperty<RankTwoTensor> & _stress;
 
   /// The strain energy density
   const ADMaterialProperty<Real> & _psie;
 
-  /// The mechanical deformation gradient
-  const ADMaterialProperty<RankTwoTensor> & _Fm;
+  /// Number of displacement variables provided
+  const unsigned int _ndisp;
 
-  /// direction of J integral
+  /// Gradient of displacements
+  std::vector<const VariableGradient *> _grad_disp;
+
+  /// Direction of J integral
   const RealVectorValue _t;
 };

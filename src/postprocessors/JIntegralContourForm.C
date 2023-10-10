@@ -2,16 +2,21 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "PhaseFieldJIntegral.h"
+#include "JIntegralContourForm.h"
 
-registerMooseObject("raccoonApp", PhaseFieldJIntegral);
+registerMooseObjectRenamed("raccoonApp",
+                           PhaseFieldJIntegral,
+                           "01/01/2023 00:00",
+                           JIntegralContourForm);
+
+registerMooseObject("raccoonApp", JIntegralContourForm);
 
 InputParameters
-PhaseFieldJIntegral::validParams()
+JIntegralContourForm::validParams()
 {
   InputParameters params = SideIntegralPostprocessor::validParams();
   params += BaseNameInterface::validParams();
-  params.addClassDescription("Compute the J integral for a phase-field model of fracture");
+  params.addClassDescription("This class computes the contour form J-integral.");
   params.addRequiredParam<RealVectorValue>("J_direction", "direction of J integral");
   params.addParam<MaterialPropertyName>("strain_energy_density",
                                         "psie"
@@ -22,7 +27,7 @@ PhaseFieldJIntegral::validParams()
   return params;
 }
 
-PhaseFieldJIntegral::PhaseFieldJIntegral(const InputParameters & parameters)
+JIntegralContourForm::JIntegralContourForm(const InputParameters & parameters)
   : SideIntegralPostprocessor(parameters),
     BaseNameInterface(parameters),
     _stress(getADMaterialPropertyByName<RankTwoTensor>(prependBaseName("stress"))),
@@ -37,7 +42,7 @@ PhaseFieldJIntegral::PhaseFieldJIntegral(const InputParameters & parameters)
 }
 
 Real
-PhaseFieldJIntegral::computeQpIntegral()
+JIntegralContourForm::computeQpIntegral()
 {
   RankTwoTensor H((*_grad_disp[0])[_qp], (*_grad_disp[1])[_qp], (*_grad_disp[2])[_qp]);
   RankTwoTensor I2(RankTwoTensor::initIdentity);
