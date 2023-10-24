@@ -65,6 +65,8 @@ protected:
   /// Quantifying how far is the stress state from stress surface
   ADMaterialProperty<Real> & _stress_balance;
 
+  ADMaterialProperty<Real> & _druck_prager_balance;
+
   /// Name of the phase-field variable
   const VariableName _d_name;
   // @{ The degradation function and its derivative w/r/t damage
