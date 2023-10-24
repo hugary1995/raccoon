@@ -26,7 +26,7 @@ SolutionChangeNorm::SolutionChangeNorm(const InputParameters & parameters)
 }
 
 Real
-SolutionChangeNorm::getValue()
+SolutionChangeNorm::getValue() const
 {
   return std::sqrt(ElementIntegralPostprocessor::getValue());
 }

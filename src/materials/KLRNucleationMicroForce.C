@@ -13,9 +13,8 @@ KLRNucleationMicroForce::validParams()
   InputParameters params = Material::validParams();
   params += BaseNameInterface::validParams();
 
-  params.addClassDescription(
-      "This class computes the external driving force for nucleation given "
-      "a Drucker-Prager strength envelope developed by Kumar et al. (2022)");
+  params.addClassDescription("This class computes the external driving force for nucleation given "
+                             "a Drucker-Prager strength envelope developed by Kumar et al. (2022)");
 
   params.addParam<MaterialPropertyName>(
       "fracture_toughness", "Gc", "energy release rate or fracture toughness");
@@ -66,6 +65,7 @@ KLRNucleationMicroForce::KLRNucleationMicroForce(const InputParameters & paramet
     _delta(getADMaterialProperty<Real>(prependBaseName("delta", true))),
     _stress(getADMaterialProperty<RankTwoTensor>(prependBaseName("stress_name", true))),
     _stress_balance(declareADProperty<Real>(prependBaseName("stress_balance_name", true))),
+    _druck_prager_balance(declareADProperty<Real>("druck_prager_balance")),
     _d_name(getVar("phase_field", 0)->name()),
     _g_name(prependBaseName("degradation_function", true)),
     _g(getADMaterialProperty<Real>(_g_name)),
@@ -95,6 +95,9 @@ KLRNucleationMicroForce::computeQpProperties()
   if (MooseUtils::absoluteFuzzyEqual(J2, 0))
     J2.value() = libMesh::TOLERANCE * libMesh::TOLERANCE;
 
+  if (MooseUtils::absoluteFuzzyEqual(I1, 0))
+    I1.value() = libMesh::TOLERANCE;
+
   // Parameters in the strength surface
   ADReal gamma_0 = _sigma_ts[_qp] / 6.0 / (3.0 * _lambda[_qp] + 2.0 * _mu[_qp]) +
                    _sigma_ts[_qp] / 6.0 / _mu[_qp];
@@ -107,8 +110,13 @@ KLRNucleationMicroForce::computeQpProperties()
   // Compute the external driving force required to recover the desired strength envelope.
   _ex_driving[_qp] =
       (beta_2 * std::sqrt(J2) + beta_1 * I1 + beta_0) +
-      (1.0 - std::sqrt(I1 * I1) / I1) / pow(_g[_qp], 1.5) *
+      (1.0 - std::sqrt(I1 * I1) / I1) / std::pow(_g[_qp], 1.5) *
           (J2 / 2.0 / _mu[_qp] + I1 * I1 / 6.0 / (3.0 * _lambda[_qp] + 2.0 * _mu[_qp]));
 
-  _stress_balance[_qp] = J2 / _mu[_qp] + pow(I1, 2) / 9.0 / K - _ex_driving[_qp] - M;
+  _stress_balance[_qp] = J2 / _mu[_qp] + std::pow(I1, 2) / 9.0 / K - _ex_driving[_qp] - M;
+
+  _druck_prager_balance[_qp] =
+      std::sqrt(J2) +
+      (_sigma_cs[_qp] - _sigma_ts[_qp]) / std::sqrt(3.0) / (_sigma_cs[_qp] + _sigma_ts[_qp]) * I1 -
+      2.0 * _sigma_ts[_qp] * _sigma_cs[_qp] / std::sqrt(3.0) / (_sigma_cs[_qp] + _sigma_ts[_qp]);
 }

@@ -13,9 +13,8 @@ KLBFNucleationMicroForce::validParams()
   InputParameters params = Material::validParams();
   params += BaseNameInterface::validParams();
 
-  params.addClassDescription(
-      "This class computes the external driving force for nucleation given "
-      "a Drucker-Prager strength envelope developed by Kumar et al. (2020)");
+  params.addClassDescription("This class computes the external driving force for nucleation given "
+                             "a Drucker-Prager strength envelope developed by Kumar et al. (2020)");
 
   params.addParam<MaterialPropertyName>(
       "fracture_toughness", "Gc", "energy release rate or fracture toughness");
@@ -95,13 +94,14 @@ KLBFNucleationMicroForce::computeQpProperties()
   ADReal gamma_2 = (8 * _mu[_qp] + 24 * K - 27 * _sigma_ts[_qp]) / 144 / _mu[_qp] / K;
   ADReal beta_0 = _delta[_qp] * M;
   ADReal beta_1 = (-gamma_1 * M - gamma_2) * (_sigma_cs[_qp] - _sigma_ts[_qp]) -
-                  gamma_0 * (pow(_sigma_cs[_qp], 3) - pow(_sigma_ts[_qp], 3));
-  ADReal beta_2 = std::sqrt(3.0) * ((-gamma_1 * M + gamma_2) * (_sigma_cs[_qp] + _sigma_ts[_qp]) +
-                                    gamma_0 * (pow(_sigma_cs[_qp], 3) + pow(_sigma_ts[_qp], 3)));
+                  gamma_0 * (std::pow(_sigma_cs[_qp], 3) - std::pow(_sigma_ts[_qp], 3));
+  ADReal beta_2 =
+      std::sqrt(3.0) * ((-gamma_1 * M + gamma_2) * (_sigma_cs[_qp] + _sigma_ts[_qp]) +
+                        gamma_0 * (std::pow(_sigma_cs[_qp], 3) + std::pow(_sigma_ts[_qp], 3)));
   ADReal beta_3 = _L[_qp] * _sigma_ts[_qp] / _mu[_qp] / K / _Gc[_qp];
 
   // Compute the external driving force required to recover the desired strength envelope.
   _ex_driving[_qp] = (beta_2 * std::sqrt(J2) + beta_1 * I1 + beta_0) / (1 + beta_3 * I1 * I1);
 
-  _stress_balance[_qp] = J2 / _mu[_qp] + pow(I1, 2) / 9.0 / K - _ex_driving[_qp] - M;
+  _stress_balance[_qp] = J2 / _mu[_qp] + std::pow(I1, 2) / 9.0 / K - _ex_driving[_qp] - M;
 }

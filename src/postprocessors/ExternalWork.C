@@ -60,7 +60,7 @@ ExternalWork::computeQpValue()
 }
 
 Real
-ExternalWork::getValue()
+ExternalWork::getValue() const
 {
   return _sum * _dt + _sum_old;
 }
