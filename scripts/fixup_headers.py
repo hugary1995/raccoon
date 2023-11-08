@@ -1,4 +1,4 @@
-# This script checks and can optionally update MOOSE source files.
+# This script checks and can optionally update RACCOON source files.
 # You should always run this script without the "-u" option
 # first to make sure there is a clean dry run of the files that should
 # be updated
@@ -9,7 +9,7 @@ import re
 import shutil
 from optparse import OptionParser
 
-global_ignores = ['contrib', '.svn', '.git', 'libmesh']
+global_ignores = ['moose', '.git']
 
 unified_header = """\
 //* This file is part of the RACCOON application
@@ -32,8 +32,10 @@ def fixupHeader():
             if ignore in dirnames:
                 dirnames.remove(ignore)
 
-        # print dirpath
-        # print dirnames
+        print(dirpath)
+        print(dirnames)
+        print(filenames)
+        print("====================================================")
         for file in filenames:
             suffix = os.path.splitext(file)
             if (suffix[-1] == '.C' or suffix[-1] == '.h') and not global_options.python_only:
@@ -54,12 +56,13 @@ def checkAndUpdateCPlusPlus(filename):
     header = unified_header
 
     # Check (exact match only)
-    if (string.find(text, header) == -1 or global_options.force == True):
+    if (text.find(header) == -1 or global_options.force):
         # print the first 10 lines or so of the file
-        if global_options.update == False:  # Report only
-            print filename + ' does not contain an up to date header'
-            if global_options.verbose == True:
-                print '>' * 40, '\n', '\n'.join((text.split('\n', 10))[:10]), '\n' * 5
+        if not global_options.update:  # Report only
+            print(filename + ' does not contai)n an up to date header')
+            if global_options.verbose:
+                print('>' * 40, '\n',
+                      '\n'.join((text.split('\n', 10))[:10]), '\n' * 5)
         else:
             # Make sure any previous C-style header version is removed
             text = re.sub(r'^/\*+/$.*^/\*+/$', '', text, flags=re.S | re.M)
@@ -98,12 +101,13 @@ def checkAndUpdatePython(filename):
     header = python_header
 
     # Check (exact match only)
-    if (string.find(text, header) == -1):
+    if (text.find(header) == -1):
         # print the first 10 lines or so of the file
-        if global_options.update == False:  # Report only
-            print filename + ' does not contain an up to date header'
-            if global_options.verbose == True:
-                print '>' * 40, '\n', '\n'.join((text.split('\n', 10))[:10]), '\n' * 5
+        if not global_options.update:  # Report only
+            print(filename + ' does not contain an up to date header')
+            if global_options.verbose:
+                print('>' * 40, '\n',
+                      '\n'.join((text.split('\n', 10))[:10]), '\n' * 5)
         else:
             # Save off the shebang line if it exists
             m = re.match(r'#!.*\n', text)
