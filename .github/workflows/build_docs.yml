@@ -15,35 +15,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Install Conda environment with Micromamba
-        uses: mamba-org/provision-with-micromamba@main
+      - name: Setup environment
+        uses: mamba-org/setup-micromamba@v1
         with:
-          environment-file: false
           environment-name: moose
-          channels: conda-forge,https://conda.software.inl.gov/public
-          extra-specs: |
-            moose-tools
-            moose-libmesh
+          condarc: |
+            channels:
+              - conda-forge
+              - https://conda.software.inl.gov/public
+          init-shell: bash
+          create-args: >-
+            moose-dev
             lcov
 
       - name: Compile RACCOON (with coverage)
         if: ${{ github.event_name == 'push' }}
-        shell: bash -l {0}
+        shell: bash -el {0}
         run: |
           coverage=true make -j 2
 
       - name: Compile RACCOON (without coverage)
         if: ${{ github.event_name == 'pull_request' }}
-        shell: bash -l {0}
+        shell: bash -el {0}
         run: |
           make -j 2
 
       - name: Build documentation
-        shell: bash -l {0}
+        shell: bash -el {0}
         run: |
           mkdir gh-pages
           cd doc

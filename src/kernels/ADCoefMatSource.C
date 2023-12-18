@@ -14,7 +14,7 @@ ADCoefMatSource::validParams()
       "Source term defined by the product of a coefficient and material properties");
   params.addParam<Real>("coefficient", 1.0, "Coefficient of the term");
   params.addParam<std::vector<MaterialPropertyName>>(
-      "prop_names", "names of the material properties to provide the multiplier");
+      "prop_names", {}, "names of the material properties to provide the multiplier");
   return params;
 }
 
