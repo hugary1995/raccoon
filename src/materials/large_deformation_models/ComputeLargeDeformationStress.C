@@ -47,7 +47,7 @@ ComputeLargeDeformationStress::initialSetup()
       dynamic_cast<LargeDeformationElasticityModel *>(&getMaterial("elasticity_model"));
   if (!_elasticity_model)
     paramError("elasticity_model",
-               "Elasticity model " + _elasticity_model->name() +
+               "Elasticity model " + getParam<MaterialName>("elasticity_model") +
                    " is not compatible with ComputeLargeDeformationStress");
 
   _plasticity_model =
