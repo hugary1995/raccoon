@@ -38,7 +38,7 @@ raccoonTestApp::registerAll(Factory & f, ActionFactory & af, Syntax & s, bool us
 void
 raccoonTestApp::registerApps()
 {
-  registerApp(raccoonApp);
+  raccoonApp::registerApps();
   registerApp(raccoonTestApp);
 }
 
