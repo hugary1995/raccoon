@@ -45,6 +45,7 @@ void
 raccoonApp::registerApps()
 {
   registerApp(raccoonApp);
+  ModulesApp::registerApps();
 }
 
 /***************************************************************************************************
