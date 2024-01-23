@@ -1,12 +1,12 @@
 #pragma once
 
-#include "BoundsAuxBase.h"
+#include "BoundsBase.h"
 
 /**
  * Provides a conditional bound of a variable using its old value or a fixed
  * value.
  */
-class ConditionalBoundsAux : public BoundsAuxBase
+class ConditionalBoundsAux : public BoundsBase
 {
 public:
   static InputParameters validParams();
