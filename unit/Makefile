@@ -29,7 +29,7 @@ include $(FRAMEWORK_DIR)/moose.mk
 CHEMICAL_REACTIONS        := no
 CONTACT                   := no
 FLUID_PROPERTIES          := no
-HEAT_CONDUCTION           := yes
+HEAT_TRANSFER             := yes
 MISC                      := no
 NAVIER_STOKES             := no
 PHASE_FIELD               := yes
