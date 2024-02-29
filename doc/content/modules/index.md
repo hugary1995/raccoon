@@ -5,7 +5,7 @@ code duplication.
 
 Current version of RACCOON supports Thermal-Mechanical-Fracture coupling only. Therefore dependent MOOSE modules include:
 
-- [Tensor Mechanics](modules/tensor_mechanics/index.md)
+- [Solid Mechanics](modules/solid_mechanics/index.md)
 - [Heat Conduction](modules/heat_transfer/index.md)
 - [Phase Field](modules/phase_field/index.md)
 
