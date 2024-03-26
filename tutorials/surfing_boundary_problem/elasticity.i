@@ -15,9 +15,8 @@ Gc = 9.1e-2 # 91N/m
 l = 0.35
 sigma_ts = 27
 sigma_cs = 77
-# for model 2022 (KLR), select delta=0.2
-# for model 2020 (KLBF), select delta=1.16
-delta = 0.2 #1.16
+sigma_hs = '${fparse 2/3*sigma_ts*sigma_cs/(sigma_cs - sigma_ts)}'
+
 c1 = '${fparse (1+nu)*sqrt(Gc)/sqrt(2*pi*E)}'
 c2 = '${fparse (3-nu)/(1+nu)}'
 ahead = 2
@@ -40,7 +39,7 @@ refine = 3
   [fracture]
     type = TransientMultiApp
     input_files = fracture.i
-    cli_args = 'E=${E};K=${K};G=${G};Lambda=${Lambda};Gc=${Gc};l=${l};nx=${nx};ny=${ny};refine=${refine};sigma_ts=${sigma_ts};sigma_cs=${sigma_cs};delta=${delta}'
+    cli_args = 'E=${E};K=${K};G=${G};Lambda=${Lambda};Gc=${Gc};l=${l};nx=${nx};ny=${ny};refine=${refine};sigma_ts=${sigma_ts};sigma_hs=${sigma_hs}'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -201,9 +200,9 @@ refine = 3
     boundary = 'left top right bottom'
   []
   [Jint_over_Gc]
-    type = ScalePostprocessor
-    value = 'Jint'
-    scaling_factor = '${fparse 1.0/Gc}'
+    type = ParsedPostprocessor
+    pp_names = 'Jint'
+    function = 'Jint/${Gc}'
   []
 []
 

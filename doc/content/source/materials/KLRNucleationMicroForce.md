@@ -74,10 +74,6 @@ l_e = \frac{l_0}{\sqrt{1+\delta}},\quad (\delta > -1)
 
 could deviate from $\ell$. The mesh should be able to resolve $l_e$ as well.
 
-Here is an example input deck
-
-!listing /tutorials/surfing_boundary_problem/fracture.i block=Materials/kumar_material
-
 ### KLBF (Kumar, Lopez, Bourdin, Francfort) Model 2020
 
 See [KLBFNucleationMicroForce](source/materials/KLBFNucleationMicroForce.md)
