@@ -13,10 +13,8 @@ PowerDegradationFunction::validParams()
   params.addClassDescription(
       "defines the power degradation function $g(d) = (1-d)^p (1-\\eta) + \\eta$.");
 
-  params.set<std::string>("function") = "(1-d)^p*(1-eta)+eta";
-
-  const std::vector<std::string> default_params = {"p", "eta"};
-  params.set<std::vector<std::string>>("parameter_names") = default_params;
+  params.set<std::string>("expression") = "(1-d)^p*(1-eta)+eta";
+  params.set<std::vector<std::string>>("parameter_names") = {"p", "eta"};
   return params;
 }
 

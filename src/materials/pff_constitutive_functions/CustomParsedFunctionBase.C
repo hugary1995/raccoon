@@ -8,7 +8,7 @@ InputParameters
 CustomParsedFunctionBase::validParams()
 {
   InputParameters params = DerivativeParsedMaterialHelperTempl<true>::validParams();
-  params.addRequiredParam<std::string>("function", "Function to parse");
+  params.addRequiredParam<std::string>("expression", "Function to parse");
   params.addParam<std::vector<std::string>>("parameter_names",
                                             std::vector<std::string>(),
                                             "Vector of parameters used in the parsed function");
@@ -23,7 +23,7 @@ CustomParsedFunctionBase::validParams()
 
 CustomParsedFunctionBase::CustomParsedFunctionBase(const InputParameters & parameters)
   : DerivativeParsedMaterialHelperTempl<true>(parameters, VariableNameMappingMode::USE_MOOSE_NAMES),
-    _function(getParam<std::string>("function")),
+    _function(getParam<std::string>("expression")),
     _param_names(getParam<std::vector<std::string>>("parameter_names")),
     _param_values(getParam<std::vector<std::string>>("parameter_values")),
     _mat_props(getParam<std::vector<std::string>>("material_property_names"))

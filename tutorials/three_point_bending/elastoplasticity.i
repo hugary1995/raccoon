@@ -30,22 +30,19 @@ ep0 = 0.345
 [Transfers]
   [from_d]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = from_multiapp
+    from_multi_app = 'fracture'
     source_variable = d
     variable = d
   []
   [to_psie_active]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = to_multiapp
+    to_multi_app = 'fracture'
     source_variable = psie_active
     variable = psie_active
   []
   [to_psip_active]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = to_multiapp
+    to_multi_app = 'fracture'
     source_variable = psip_active
     variable = psip_active
   []
@@ -134,9 +131,9 @@ ep0 = 0.345
   []
   [degradation]
     type = ADDerivativeParsedMaterial
-    f_name = g
-    args = d
-    function = '(1-d)^2/(1+(0.5*Gc/c0/l/psic-1)*d)^2*(1-eta)+eta'
+    property_name = g
+    coupled_variables = d
+    expression = '(1-d)^2/(1+(0.5*Gc/c0/l/psic-1)*d)^2*(1-eta)+eta'
     material_property_names = 'Gc c0 l psic'
     constant_names = 'eta '
     constant_expressions = '5e-3'
@@ -145,8 +142,8 @@ ep0 = 0.345
   []
   [crack_geometric]
     type = CrackGeometricFunction
-    f_name = alpha
-    function = 'd'
+    property_name = alpha
+    expression = 'd'
     phase_field = d
     block = 0
   []

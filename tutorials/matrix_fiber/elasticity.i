@@ -27,15 +27,13 @@ v = '${fparse sqrt(Gc*3/lambda)}'
 [Transfers]
   [from_d]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = from_multiapp
+    from_multi_app = 'fracture'
     source_variable = d
     variable = d
   []
   [to_psie_active]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = to_multiapp
+    to_multi_app = 'fracture'
     variable = psie_active
     source_variable = psie_active
   []
@@ -103,13 +101,13 @@ v = '${fparse sqrt(Gc*3/lambda)}'
   []
   [crack_geometric]
     type = CrackGeometricFunction
-    f_name = alpha
-    function = d
+    property_name = alpha
+    expression = d
     phase_field = d
   []
   [degradation]
     type = RationalDegradationFunction
-    f_name = g
+    property_name = g
     phase_field = d
     parameter_names = 'p a2 a3 eta '
     parameter_values = '2 1 0 ${k}'
