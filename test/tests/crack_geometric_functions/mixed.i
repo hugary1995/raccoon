@@ -25,8 +25,8 @@
 [Materials]
   [crack_geometric]
     type = CrackGeometricFunction
-    f_name = alpha
-    function = 'xi*d+(1-xi)*d^2'
+    property_name = alpha
+    expression = 'xi*d+(1-xi)*d^2'
     phase_field = d
     parameter_names = 'xi'
     parameter_values = '2'

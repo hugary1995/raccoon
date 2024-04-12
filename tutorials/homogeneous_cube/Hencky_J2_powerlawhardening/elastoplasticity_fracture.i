@@ -55,13 +55,13 @@ ep0 = 0.01
 
 [Bounds]
   [irreversibility]
-    type = VariableOldValueBoundsAux
+    type = VariableOldValueBounds
     variable = bounds_dummy
     bounded_variable = d
     bound_type = lower
   []
   [upper]
-    type = ConstantBoundsAux
+    type = ConstantBounds
     variable = bounds_dummy
     bounded_variable = d
     bound_type = upper
@@ -124,8 +124,8 @@ ep0 = 0.01
   []
   [degradation]
     type = RationalDegradationFunction
-    f_name = g
-    function = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
+    property_name = g
+    expression = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
     phase_field = d
     material_property_names = 'Gc psic xi c0 l '
     parameter_names = 'p a2 a3 eta '
@@ -133,8 +133,8 @@ ep0 = 0.01
   []
   [crack_geometric]
     type = CrackGeometricFunction
-    f_name = alpha
-    function = 'd'
+    property_name = alpha
+    expression = 'd'
     phase_field = d
   []
   [defgrad]
@@ -166,9 +166,9 @@ ep0 = 0.01
   []
   [psi]
     type = ADDerivativeParsedMaterial
-    f_name = psi
-    function = 'alpha*Gc/c0/l+psie+psip'
-    args = d
+    property_name = psi
+    expression = 'alpha*Gc/c0/l+psie+psip'
+    coupled_variables = d
     material_property_names = 'alpha(d) g(d) Gc c0 l psie(d) psip(d)'
     derivative_order = 1
   []

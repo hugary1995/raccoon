@@ -25,8 +25,8 @@
 [Materials]
   [crack_geometric]
     type = CrackGeometricFunction
-    f_name = alpha
-    function = 'd^2'
+    property_name = alpha
+    expression = 'd^2'
     phase_field = d
   []
 []

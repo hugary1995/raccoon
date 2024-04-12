@@ -118,8 +118,7 @@ rate = 100
   []
   [no_degradation]
     type = NoDegradation
-    f_name = g
-    function = 1
+    property_name = g
     phase_field = d
   []
   [thermal_expansion]

@@ -19,15 +19,13 @@ l = 0.02
 [Transfers]
   [from_d]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = from_multiapp
+    from_multi_app = 'fracture'
     variable = d
     source_variable = d
   []
   [to_psie_active]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = to_multiapp
+    to_multi_app = 'fracture'
     variable = psie_active
     source_variable = psie_active
   []
@@ -140,8 +138,7 @@ l = 0.02
   [yfix]
     type = DirichletBC
     variable = 'disp_y'
-    boundary = 'top_half_top bottom_half_bottom top_half_left top_half_right bottom_half_left '
-               'bottom_half_right'
+    boundary = 'top_half_top bottom_half_bottom top_half_left top_half_right bottom_half_left bottom_half_right'
     value = 0
   []
   [xfix]
@@ -160,14 +157,14 @@ l = 0.02
   []
   [crack_geometric]
     type = CrackGeometricFunction
-    f_name = alpha
-    function = 'd'
+    property_name = alpha
+    expression = 'd'
     phase_field = d
   []
   [degradation]
     type = RationalDegradationFunction
-    f_name = g
-    function = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
+    property_name = g
+    expression = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
     phase_field = d
     material_property_names = 'Gc psic xi c0 l '
     parameter_names = 'p a2 a3 eta '

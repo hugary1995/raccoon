@@ -30,7 +30,7 @@
   []
   [degradation]
     type = RationalDegradationFunction
-    f_name = g
+    property_name = g
     phase_field = d
     parameter_names = 'p a2 a3 eta '
     parameter_values = '2 -0.5 0 1e-6'

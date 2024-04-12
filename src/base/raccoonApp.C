@@ -14,9 +14,8 @@ raccoonApp::validParams()
 {
   InputParameters params = MooseApp::validParams();
   params.set<bool>("automatic_automatic_scaling") = false;
-
-  // Do not use legacy material output option.
   params.set<bool>("use_legacy_material_output") = false;
+  params.set<bool>("use_legacy_initial_residual_evaluation_bahavior") = false;
   return params;
 }
 
@@ -27,25 +26,18 @@ raccoonApp::raccoonApp(InputParameters parameters) : MooseApp(parameters)
 
 raccoonApp::~raccoonApp() {}
 
-static void
-associateSyntaxInner(Syntax & /*syntax*/, ActionFactory & /*action_factory*/)
-{
-}
-
 void
-raccoonApp::registerAll(Factory & factory, ActionFactory & action_factory, Syntax & syntax)
+raccoonApp::registerAll(Factory & f, ActionFactory & af, Syntax & s)
 {
-  ModulesApp::registerAll(factory, action_factory, syntax);
-  Registry::registerObjectsTo(factory, {"raccoonApp"});
-  Registry::registerActionsTo(action_factory, {"raccoonApp"});
-  associateSyntaxInner(syntax, action_factory);
+  ModulesApp::registerAllObjects<raccoonApp>(f, af, s);
+  Registry::registerObjectsTo(f, {"raccoonApp"});
+  Registry::registerActionsTo(af, {"raccoonApp"});
 }
 
 void
 raccoonApp::registerApps()
 {
   registerApp(raccoonApp);
-  ModulesApp::registerApps();
 }
 
 /***************************************************************************************************
