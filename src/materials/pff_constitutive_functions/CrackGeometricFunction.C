@@ -15,7 +15,7 @@ CrackGeometricFunction::validParams()
       "function. The initial derivative as well as the normalization constant are automatically "
       "populated given the function definition.");
 
-  params.set<std::string>("f_name") = "alpha";
+  params.set<std::string>("property_name") = "alpha";
   params.addRequiredCoupledVar("phase_field", "The phase-field variable");
 
   params.set<unsigned int>("derivative_order") = 1;
