@@ -49,6 +49,10 @@
     order = CONSTANT
     family = MONOMIAL
   []
+  [ce]
+    order = CONSTANT
+    family = MONOMIAL
+  []
 []
 
 [Bounds]
@@ -88,6 +92,14 @@
   []
 []
 
+[AuxKernels]
+  [get_ce]
+    type = ADMaterialRealAux
+    variable = ce
+    property = ce
+  []
+[]
+
 [Materials]
   [fracture_properties]
     type = ADGenericConstantMaterial
@@ -118,6 +130,7 @@
   []
   [kumar_material]
     type = KLBFNucleationMicroForce
+    phase_field = d
     normalization_constant = c0
     tensile_strength = sigma_ts
     compressive_strength = sigma_cs

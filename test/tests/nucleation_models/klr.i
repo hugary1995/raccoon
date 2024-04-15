@@ -49,6 +49,10 @@
     order = CONSTANT
     family = MONOMIAL
   []
+  [ce]
+    order = CONSTANT
+    family = MONOMIAL
+  []
 []
 
 [Bounds]
@@ -65,6 +69,14 @@
     bounded_variable = d
     bound_type = upper
     bound_value = 1
+  []
+[]
+
+[AuxKernels]
+  [get_ce]
+    type = ADMaterialRealAux
+    variable = ce
+    property = ce
   []
 []
 
