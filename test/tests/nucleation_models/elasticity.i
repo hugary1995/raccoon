@@ -50,8 +50,8 @@ refine = 1
   [from_d]
     type = MultiAppCopyTransfer
     from_multi_app = fracture
-    variable = 'd'
-    source_variable = 'd'
+    variable = 'd ce'
+    source_variable = 'd ce'
   []
   [to_psie_active]
     type = MultiAppCopyTransfer
