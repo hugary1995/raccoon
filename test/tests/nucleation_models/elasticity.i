@@ -116,6 +116,10 @@ refine = 1
       function = 'if(y=0&x>=0&x<=5,1,0)'
     []
   []
+  [ce]
+    order = CONSTANT
+    family = MONOMIAL
+  []
 []
 
 [Kernels]
