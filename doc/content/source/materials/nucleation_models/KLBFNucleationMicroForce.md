@@ -8,7 +8,7 @@ In general, model KLR published in [!cite](Kumar2022) is recommended over model 
 
 ### KLR (Kumar, Lopez, Ravi-Chandar) Model 2022
 
-Please see [KLRNucleationMicroForce](source/materials/KLRNucleationMicroForce.md)
+Please see [KLRNucleationMicroForce](nucleation_models/KLRNucleationMicroForce.md)
 
 ### KLBF (Kumar, Lopez, Bourdin, Francfort) Model 2020
 
