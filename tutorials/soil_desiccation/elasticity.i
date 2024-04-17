@@ -20,19 +20,19 @@ c = 0.1
 
 [Transfers]
   [send_psie_active]
-    type = MultiAppShapeEvaluationTransfer
+    type = MultiAppGeneralFieldShapeEvaluationTransfer
     to_multi_app = fracture
     source_variable = psie_active
     variable = psie_active
   []
   [send_psii_active]
-    type = MultiAppShapeEvaluationTransfer
+    type = MultiAppGeneralFieldShapeEvaluationTransfer
     to_multi_app = fracture
     source_variable = psii_active
     variable = psii_active
   []
   [get_d]
-    type = MultiAppShapeEvaluationTransfer
+    type = MultiAppGeneralFieldShapeEvaluationTransfer
     from_multi_app = fracture
     source_variable = d
     variable = d
@@ -113,15 +113,15 @@ c = 0.1
   # fracture
   [fracture_toughness]
     type = ADParsedMaterial
-    f_name = Gc
-    args = Gc
-    function = 'Gc'
+    property_name = Gc
+    coupled_variables = Gc
+    expression = 'Gc'
   []
   [critial_fracture_energy]
     type = ADParsedMaterial
-    f_name = psic
-    args = psic
-    function = 'psic'
+    property_name = psic
+    coupled_variables = psic
+    expression = 'psic'
   []
   [bulk_properties]
     type = ADGenericConstantMaterial
@@ -130,14 +130,14 @@ c = 0.1
   []
   [crack_geometric]
     type = CrackGeometricFunction
-    f_name = alpha
-    function = 'd'
+    property_name = alpha
+    expression = 'd'
     phase_field = d
   []
   [degradation]
     type = RationalDegradationFunction
-    f_name = g
-    function = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
+    property_name = g
+    expression = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
     phase_field = d
     parameter_names = 'p a2 a3 eta '
     parameter_values = '2 1 0 1e-6'

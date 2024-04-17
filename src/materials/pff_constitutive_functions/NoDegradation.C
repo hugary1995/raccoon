@@ -12,7 +12,7 @@ NoDegradation::validParams()
   InputParameters params = DegradationFunctionBase::validParams();
   params.addClassDescription("Dummy function for no degradation, i.e. $g = 1$.");
 
-  params.set<std::string>("function") = "1";
+  params.set<std::string>("expression") = "1";
 
   return params;
 }

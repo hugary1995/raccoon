@@ -69,9 +69,8 @@ G = '${fparse E/2/(1+nu)}'
   []
   [degradation]
     type = NoDegradation
-    f_name = g
+    property_name = g
     phase_field = d
-    function = 1
   []
   [defgrad]
     type = ComputeDeformationGradient

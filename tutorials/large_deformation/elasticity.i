@@ -84,8 +84,8 @@ G = '${fparse E/2/(1+nu)}'
   []
   [no_degradation]
     type = NoDegradation
-    f_name = g
-    function = 1
+    property_name = g
+    expression = 1
     phase_field = d
   []
   [defgrad]

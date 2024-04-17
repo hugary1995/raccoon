@@ -39,15 +39,13 @@ tqf = 0
 [Transfers]
   [from_fracture]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = from_multiapp
+    from_multi_app = 'fracture'
     variable = d
     source_variable = d
   []
   [to_fracture]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = to_multiapp
+    to_multi_app = 'fracture'
     variable = 'psie_active psip_active'
     source_variable = 'psie_active psip_active'
   []
@@ -136,8 +134,8 @@ tqf = 0
   []
   [degradation]
     type = RationalDegradationFunction
-    f_name = g
-    function = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
+    property_name = g
+    expression = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
     phase_field = d
     material_property_names = 'Gc psic xi c0 l '
     parameter_names = 'p a2 a3 eta '
@@ -145,8 +143,8 @@ tqf = 0
   []
   [crack_geometric]
     type = CrackGeometricFunction
-    f_name = alpha
-    function = 'd'
+    property_name = alpha
+    expression = 'd'
     phase_field = d
   []
   [arrhenius_law]

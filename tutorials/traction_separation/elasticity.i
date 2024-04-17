@@ -25,15 +25,13 @@ nx = '${fparse ceil(200/h)}'
 [Transfers]
   [from_fracture]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = from_multiapp
+    from_multi_app = 'fracture'
     variable = d
     source_variable = d
   []
   [to_fracture]
     type = MultiAppCopyTransfer
-    multi_app = fracture
-    direction = to_multiapp
+    to_multi_app = 'fracture'
     variable = 'psie_active disp_x disp_y'
     source_variable = 'psie_active disp_x disp_y'
   []
@@ -127,21 +125,21 @@ nx = '${fparse ceil(200/h)}'
   []
   [crack_geometric]
     type = CrackGeometricFunction
-    f_name = alpha
-    function = '2*d-d^2'
+    property_name = alpha
+    expression = '2*d-d^2'
     phase_field = d
   []
   [indicator]
     type = ADDerivativeParsedMaterial
-    f_name = I
-    args = 'd'
-    function = 'd^2'
+    property_name = I
+    coupled_variables = 'd'
+    expression = 'd^2'
     derivative_order = 1
   []
   [degradation]
     type = RationalDegradationFunction
-    f_name = g
-    function = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
+    property_name = g
+    expression = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
     phase_field = d
     material_property_names = 'Gc psic xi c0 l '
     parameter_names = 'p a2 a3 eta '
