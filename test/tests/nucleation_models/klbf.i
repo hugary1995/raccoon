@@ -130,6 +130,7 @@
   []
   [kumar_material]
     type = KLBFNucleationMicroForce
+    phase_field = d
     normalization_constant = c0
     tensile_strength = sigma_ts
     compressive_strength = sigma_cs
