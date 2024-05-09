@@ -3,7 +3,7 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "RaccoonUtils.h"
-#include "DualRealOps.h"
+#include "ADReal.h"
 #include "MooseUtils.h"
 #include "RankTwoTensorImplementation.h"
 
