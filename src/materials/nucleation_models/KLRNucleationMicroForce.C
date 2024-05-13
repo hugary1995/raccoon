@@ -2,74 +2,36 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
-#include "Function.h"
 #include "KLRNucleationMicroForce.h"
 
-registerADMooseObject("raccoonApp", KLRNucleationMicroForce);
+registerMooseObjectReplaced("raccoonApp",
+                            KLRNucleationMicroForce,
+                            "12/31/2024 23:59",
+                            LDLNucleationMicroForce);
 
 InputParameters
 KLRNucleationMicroForce::validParams()
 {
-  InputParameters params = Material::validParams();
-  params += BaseNameInterface::validParams();
+  InputParameters params = NucleationMicroForceBase::validParams();
 
   params.addClassDescription("This class computes the external driving force for nucleation given "
                              "a Drucker-Prager strength envelope developed by Kumar et al. (2022)");
 
-  params.addParam<MaterialPropertyName>(
-      "fracture_toughness", "Gc", "energy release rate or fracture toughness");
-  params.addParam<MaterialPropertyName>(
-      "normalization_constant", "c0", "The normalization constant $c_0$");
-  params.addParam<MaterialPropertyName>(
-      "regularization_length", "l", "the phase field regularization length");
-
-  params.addParam<MaterialPropertyName>("lambda", "lambda", "Lame's first parameter lambda");
-  params.addParam<MaterialPropertyName>("shear_modulus", "G", "shear modulus mu or G");
-
   params.addRequiredParam<MaterialPropertyName>(
       "tensile_strength", "The tensile strength of the material beyond which the material fails.");
-
   params.addRequiredParam<MaterialPropertyName>(
       "compressive_strength",
       "The compressive strength of the material beyond which the material fails.");
-
   params.addRequiredParam<MaterialPropertyName>("delta", "delta");
-  params.addParam<MaterialPropertyName>(
-      "external_driving_force_name",
-      "ex_driving",
-      "Name of the material that holds the external_driving_force");
-  params.addParam<MaterialPropertyName>(
-      "stress_balance_name",
-      "stress_balance",
-      "Name of the stress balance function $F= \\dfrac{J_2}{\\mu} + \\dfrac{I_1^2}{9\\kappa} - c_e "
-      "-\\dfrac{3\\Gc}{8\\delta}=0 $. This value tells how close the material is to stress "
-      "surface.");
-  params.addParam<MaterialPropertyName>("stress_name", "stress", "Name of the stress tensor");
-  params.addRequiredCoupledVar("phase_field", "Name of the phase-field (damage) variable");
-
-  params.addParam<MaterialPropertyName>("degradation_function", "g", "The degradation function");
   return params;
 }
 
 KLRNucleationMicroForce::KLRNucleationMicroForce(const InputParameters & parameters)
-  : Material(parameters),
-    BaseNameInterface(parameters),
-    _ex_driving(declareADProperty<Real>(prependBaseName("external_driving_force_name", true))),
-    _Gc(getADMaterialProperty<Real>(prependBaseName("fracture_toughness", true))),
-    _c0(getADMaterialProperty<Real>(prependBaseName("normalization_constant", true))),
-    _L(getADMaterialProperty<Real>(prependBaseName("regularization_length", true))),
-    _lambda(getADMaterialProperty<Real>(prependBaseName("lambda", true))),
-    _mu(getADMaterialProperty<Real>(prependBaseName("shear_modulus", true))),
+  : NucleationMicroForceBase(parameters),
     _sigma_ts(getADMaterialProperty<Real>(prependBaseName("tensile_strength", true))),
     _sigma_cs(getADMaterialProperty<Real>(prependBaseName("compressive_strength", true))),
     _delta(getADMaterialProperty<Real>(prependBaseName("delta", true))),
-    _stress(getADMaterialProperty<RankTwoTensor>(prependBaseName("stress_name", true))),
-    _stress_balance(declareADProperty<Real>(prependBaseName("stress_balance_name", true))),
-    _druck_prager_balance(declareADProperty<Real>("druck_prager_balance")),
-    _d_name(getVar("phase_field", 0)->name()),
-    _g_name(prependBaseName("degradation_function", true)),
-    _g(getADMaterialProperty<Real>(_g_name)),
-    _dg_dd(getADMaterialProperty<Real>(derivativePropertyName(_g_name, {_d_name})))
+    _druck_prager_balance(declareADProperty<Real>("druck_prager_balance"))
 {
 }
 

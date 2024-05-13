@@ -53,11 +53,10 @@
 
 [Bounds]
   [conditional]
-    type = ConditionalBoundsAux
+    type = VariableOldValueBounds
     variable = bounds_dummy
     bounded_variable = d
-    fixed_bound_value = 0
-    threshold_value = 0.95
+    bound_type = lower
   []
   [upper]
     type = ConstantBounds
@@ -85,14 +84,15 @@
     type = ADCoefMatSource
     variable = d
     prop_names = 'ce'
+    coefficient = 1.0
   []
 []
 
 [Materials]
   [fracture_properties]
     type = ADGenericConstantMaterial
-    prop_names = 'E K G lambda Gc l sigma_ts sigma_cs delta'
-    prop_values = '${E} ${K} ${G} ${Lambda} ${Gc} ${l} ${sigma_ts} ${sigma_cs} ${delta}'
+    prop_names = 'E K G lambda Gc l sigma_ts sigma_hs'
+    prop_values = '${E} ${K} ${G} ${Lambda} ${Gc} ${l} ${sigma_ts} ${sigma_hs}'
   []
   [degradation]
     type = PowerDegradationFunction
@@ -111,21 +111,23 @@
   [psi]
     type = ADDerivativeParsedMaterial
     property_name = psi
-    expression = 'g*psie_active+(Gc/c0/l)*alpha'
+    expression = 'g*psie_active+(Gc*delta/c0/l)*alpha'
     coupled_variables = 'd psie_active'
-    material_property_names = 'alpha(d) g(d) Gc c0 l'
+    material_property_names = 'delta alpha(d) g(d) Gc c0 l'
     derivative_order = 1
   []
-  [kumar_material]
-    type = KLRNucleationMicroForce
+  [nucleation_micro_force]
+    type = LDLNucleationMicroForce
     phase_field = d
-    # type = KLBFNucleationMicroForce
+    degradation_function = g
+    regularization_length = l
     normalization_constant = c0
+    fracture_toughness = Gc
     tensile_strength = sigma_ts
-    compressive_strength = sigma_cs
+    hydrostatic_strength = sigma_hs
     delta = delta
+    h_correction = true
     external_driving_force_name = ce
-    output_properties = 'ce'
   []
   [strain]
     type = ADComputePlaneSmallStrain
