@@ -17,11 +17,7 @@ LargeDeformationJ2Plasticity::validParams()
 }
 
 LargeDeformationJ2Plasticity::LargeDeformationJ2Plasticity(const InputParameters & parameters)
-  : LargeDeformationPlasticityModel(parameters),
-    _phi(declareADProperty<Real>("phi")),
-    _flowstress(declareADProperty<Real>("flowstress")),
-    _visflowstress(declareADProperty<Real>("visflowstress"))
-
+  : LargeDeformationPlasticityModel(parameters)
 {
   _check_range = true;
 }
@@ -43,8 +39,8 @@ LargeDeformationJ2Plasticity::updateState(ADRankTwoTensor & stress, ADRankTwoTen
   stress_dev_norm = std::sqrt(1.5 * stress_dev_norm);
   _Np[_qp] = 1.5 * stress_dev / stress_dev_norm;
   // Return mapping
-  _phi[_qp] = computeResidual(stress_dev_norm, delta_ep);
-  if (_phi[_qp] > 0)
+  ADReal phi = computeResidual(stress_dev_norm, delta_ep);
+  if (phi > 0)
     returnMappingSolve(stress_dev_norm, delta_ep, _console);
 
   _ep[_qp] = _ep_old[_qp] + delta_ep;
@@ -71,9 +67,6 @@ LargeDeformationJ2Plasticity::updateState(ADRankTwoTensor & stress, ADRankTwoTen
   }
   else
     _heat[_qp] = 0;
-
-  _flowstress[_qp] = _hardening_model->plasticEnergy(_ep[_qp], 1);
-  _visflowstress[_qp] = _hardening_model->plasticDissipation(delta_ep, _ep[_qp], 1);
 }
 
 Real
