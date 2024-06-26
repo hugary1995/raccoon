@@ -111,3 +111,4 @@ LargeDeformationJ2Plasticity::computeDerivative(const ADReal & /*effective_trial
          _hardening_model->plasticEnergy(ep, 2) -
          _hardening_model->plasticDissipation(delta_ep, ep, 2);
 }
+
