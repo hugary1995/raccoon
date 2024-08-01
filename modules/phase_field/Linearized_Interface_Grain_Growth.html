@@ -1,0 +1,1629 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Linearized Interface Grain Growth Model | RACCOON</title><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="73a0a58c-5077-4554-a245-710156a68731" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="54408ad9-7a91-402f-91b7-0da1daebf494" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="d3d7eafb-c367-4e19-8b42-b71b17b996c2" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="9a962398-9378-4b52-bb3b-0d5093ea6a65" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="b955eaf7-8b7d-45b3-a1fc-c2f6c1658451"><i class="material-icons">menu</i></a><ul class="sidenav" id="b955eaf7-8b7d-45b3-a1fc-c2f6c1658451"><li><a href="#!" class="dropdown-trigger" data-target="a71dd2e9-d4cb-4859-85ab-2ed2809c1f4c" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="445321ca-3f7d-4bea-9744-58519339d903" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="05ba53a4-e776-4a11-bd9b-9de0b3b28107" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="992484d0-246f-4eda-8a4e-192887516fb1" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="73a0a58c-5077-4554-a245-710156a68731"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="54408ad9-7a91-402f-91b7-0da1daebf494"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li></ul><ul class="dropdown-content" id="d3d7eafb-c367-4e19-8b42-b71b17b996c2"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="9a962398-9378-4b52-bb3b-0d5093ea6a65"><li><a href="../index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="a71dd2e9-d4cb-4859-85ab-2ed2809c1f4c"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="445321ca-3f7d-4bea-9744-58519339d903"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li></ul><ul class="dropdown-content" id="05ba53a4-e776-4a11-bd9b-9de0b3b28107"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="992484d0-246f-4eda-8a4e-192887516fb1"><li><a href="../index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="fadeb922-f82f-410a-aa3b-2a74a41a5425" data-section-level="1" data-section-text="Linearized Interface Grain Growth Model"><h1 id="linearized-interface-grain-growth-model">Linearized Interface Grain Growth Model</h1><section id="324e18ff-e877-49cf-855b-a020fed3bfcb" data-section-level="2" data-section-text="Introduction"><h2 id="introduction">Introduction</h2><div class="card moose-float" style="width:40%;margin-left:1%;float:right;"><div class="card-content"><picture class="materialboxed moose-image"><img src="../../media/phase_field/linearized_interface_function.png"></img></picture><p class="moose-caption"><span class="moose-caption-text">Figure 1: Example of order parameter values (<span class="moose-katex-inline-equation" id="moose-equation-793c2a2a-0e87-49b8-a676-dc097e9ee94d"><script>var element = document.getElementById("moose-equation-793c2a2a-0e87-49b8-a676-dc097e9ee94d");katex.render("\\phi_1", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, <span class="moose-katex-inline-equation" id="moose-equation-1f1d1379-d2d4-46cf-a7d9-9a6eba127296"><script>var element = document.getElementById("moose-equation-1f1d1379-d2d4-46cf-a7d9-9a6eba127296");katex.render("\\phi_2", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>) and the linearized interface transformed variables (<span class="moose-katex-inline-equation" id="moose-equation-e6653b84-d704-416d-a78b-d8c44d8c5542"><script>var element = document.getElementById("moose-equation-e6653b84-d704-416d-a78b-d8c44d8c5542");katex.render("\\psi_1", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, <span class="moose-katex-inline-equation" id="moose-equation-7439deb5-afae-4a76-946f-5e81bd8d0a6e"><script>var element = document.getElementById("moose-equation-7439deb5-afae-4a76-946f-5e81bd8d0a6e");katex.render("\\psi_2", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>),</span></p></div></div><p>In a phase field grain growth model, like that developed by <a href="#moelans_quantitative_2008">Moelans et al. (2008)</a> and <a href="Grain_Growth_Model.html">implemented in MOOSE</a>, the order parameters that represent the grains tend to follow a <span class="moose-katex-inline-equation" id="moose-equation-b5fb618e-7b23-40a9-af3e-996d0428539d"><script>var element = document.getElementById("moose-equation-b5fb618e-7b23-40a9-af3e-996d0428539d");katex.render("\\tanh", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> profile across the interface. A fine mesh is required to resolve this highly nonlinear profile, such that at least three elements are typically required across the grain boundaries. This fine mesh required at the grain boundaries makes the computational cost of grain growth simulations high.</p><p>The cost of grain growth simulations can be reduced by using a change of variables to linearize the interface profile, sometimes referred to as nonlinear preconditioning and first suggested by <a href="#glasner2001nonlinear">Glasner (2001)</a>. This change in variables is defined by</p><p><span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-391a0ee8-f827-436c-9f99-407a7db35d76"></span><script>var element = document.getElementById("moose-equation-391a0ee8-f827-436c-9f99-407a7db35d76");katex.render("    \\phi_i = \\frac{1}{2} \\left[ 1 + \\tanh\\left( \\frac{\\psi_i}{\\sqrt{2}} \\right) \\right],", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span></p><p>where <span class="moose-katex-inline-equation" id="moose-equation-bf28d34f-134f-4122-991f-bc6794350894"><script>var element = document.getElementById("moose-equation-bf28d34f-134f-4122-991f-bc6794350894");katex.render("\\phi_i", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the original order parameter and <span class="moose-katex-inline-equation" id="moose-equation-c911cbf9-4ab5-4e37-914e-a33184cc176e"><script>var element = document.getElementById("moose-equation-c911cbf9-4ab5-4e37-914e-a33184cc176e");katex.render("\\psi_i", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the new variable. While <span class="moose-katex-inline-equation" id="moose-equation-db8df47d-9e45-4b43-a425-05f199482aac"><script>var element = document.getElementById("moose-equation-db8df47d-9e45-4b43-a425-05f199482aac");katex.render("\\phi_i", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> follows a <span class="moose-katex-inline-equation" id="moose-equation-3b817035-7da6-417e-b8ae-2551cb49ca89"><script>var element = document.getElementById("moose-equation-3b817035-7da6-417e-b8ae-2551cb49ca89");katex.render("\\tanh", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> profile across the interface, the new variable <span class="moose-katex-inline-equation" id="moose-equation-3d3c00f4-bc94-435f-8a76-0d4a27f16b29"><script>var element = document.getElementById("moose-equation-3d3c00f4-bc94-435f-8a76-0d4a27f16b29");katex.render("\\psi_i", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is linear across the interface, as illustrated in Figure 1. Due to the linear profile across the interface, a single linear element can resolve the profile without error. This significantly decreases the required resolution, and thus the computational cost.</p></section><section id="8ef80659-9bbb-40cc-9b6d-54c3e2d9b8e9" data-section-level="2" data-section-text="MOOSE Implementation"><h2 id="moose-implementation">MOOSE Implementation</h2><p>Linearized interface has been implemented in the multiphase field grain growth model in MOOSE. The basic model is identical to the <a href="Grain_Growth_Model.html">standard phase field model in MOOSE</a>, but it solves for the transformed linearized interface variables rather than the standard order parameters. The order parameters are created as AuxVariables, allowing them to be visualized. The grain boundary can be visualized using an AuxVariable equal to <span class="moose-katex-inline-equation" id="moose-equation-de2d471a-5683-4eb3-9da8-c1f6539abd62"><script>var element = document.getElementById("moose-equation-de2d471a-5683-4eb3-9da8-c1f6539abd62");katex.render("\\sum_i \\phi_i^2", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, calculated using <a href="../../source/auxkernels/BndsCalcAux.html">BndsCalcAux</a> in the usual manner.</p><p>The MOOSE objects used in the linearized interface grain growth model are listed, below:</p><p><strong>Materials</strong></p><ul class="browser-default"><li><p><a href="../../source/materials/LinearizedInterfaceFunction.html">LinearizedInterfaceFunction</a> - Defines the order parameters <span class="moose-katex-inline-equation" id="moose-equation-1a8caf2a-098c-4e4e-8695-a0bbfdb0084e"><script>var element = document.getElementById("moose-equation-1a8caf2a-098c-4e4e-8695-a0bbfdb0084e");katex.render("\\phi_i", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> from the <span class="moose-katex-inline-equation" id="moose-equation-24f91e35-d196-492c-ad19-f2310df01f26"><script>var element = document.getElementById("moose-equation-24f91e35-d196-492c-ad19-f2310df01f26");katex.render("\\psi_i", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> linear interface variable values at the quadrature points. It uses the <a href="FunctionMaterials/ExpressionBuilder.html">ExpressionBuilder</a> so it also calculates the analytical derivatives.</p></li></ul><p><strong>Kernels</strong></p><ul class="browser-default"><li><p><a href="../../source/kernels/ChangedVariableTimeDerivative.html">ChangedVariableTimeDerivative</a> - Version of the <a href="../../source/kernels/TimeDerivative.html">TimeDerivative</a> kernel after a change of variable. </p></li><li><p><a href="../../source/kernels/ACGrGrPolyLinearizedInterface.html">ACGrGrPolyLinearizedInterface</a> - Linearized interface version of the <a href="../../source/kernels/ACGrGrPoly.html">ACGrGrPoly</a> kernel. </p></li><li><p><a href="../../source/kernels/ACInterfaceChangedVariable.html">ACInterfaceChangedVariable</a> - Version of the <a href="../../source/kernels/ACInterface.html">ACInterface</a> kernel after a change of variable.</p></li></ul><p><strong>AuxKernels</strong></p><ul class="browser-default"><li><p><a href="../../source/auxkernels/LinearizedInterfaceAux.html">LinearizedInterfaceAux</a> - Defines AuxVariable values of the order parameters <span class="moose-katex-inline-equation" id="moose-equation-357a8ecf-a230-4430-bdde-560a32f49bfa"><script>var element = document.getElementById("moose-equation-357a8ecf-a230-4430-bdde-560a32f49bfa");katex.render("\\phi_i", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> from the <span class="moose-katex-inline-equation" id="moose-equation-1aa35e91-765f-4399-9ab6-c90964c5e111"><script>var element = document.getElementById("moose-equation-1aa35e91-765f-4399-9ab6-c90964c5e111");katex.render("\\psi_i", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> nonlinear variable values at the nodes for the linearized interface grain growth model.</p></li></ul></section><section id="8ac97322-322c-46dc-b246-0b6a1b2a8a4c" data-section-level="2" data-section-text="Bounded Solve"><h2 id="bounded-solve">Bounded Solve</h2><p>When solving the linearized interface version of the grain growth model, <a href="#gong2018fast">Gong et al. (2018)</a> and <a href="#chadwick2021development">Chadwick and Voorhees (2021)</a> found that the solve is unstable unless bounds are placed on the possible values for the transformed variables. Therefore, upper and lower bounds must be defined in the <code>[Bounds]</code> block for each variable using <a href="../../source/bounds/ConstantBounds.html">ConstantBounds</a>. A typical bounds range is <span class="moose-katex-inline-equation" id="moose-equation-2c9d879a-aa96-430b-a45a-0724b56dc959"><script>var element = document.getElementById("moose-equation-2c9d879a-aa96-430b-a45a-0724b56dc959");katex.render("\\pm5", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>. For example:</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[Bounds]
+  [phi0_upper_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi0
+    bound_type = upper
+    bound_value = 5.0
+  []
+  [phi0_lower_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi0
+    bound_type = lower
+    bound_value = -5.0
+  []
+  [phi1_upper_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi1
+    bound_type = upper
+    bound_value = 5.0
+  []
+  [phi1_lower_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi1
+    bound_type = lower
+    bound_value = -5.0
+  []
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#4ac92490-8044-45bc-be8d-c1e9dab7f30e">(moose/modules/phase_field/test/tests/grain_growth_w_linearized_interface/grain_growth_linearized_interface.i)</a><p>Note that in order for these bounds to have an effect, the user has to specify the PETSc options <code>-snes_type vinewtonssls</code> or <code>-snes_type vinewtonrsls</code>. A warning will be generated if neither options are specified. The PETSc manual pages for the <code>vinewtonssls</code> algorithm can be found <a href="https://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/SNES/SNESVINEWTONSSLS.html">here</a> while the manual page for <code>vinewtonrsls</code> can be found <a href="https://www.mcs.anl.gov/petsc/petsc-current/docs/manualpages/SNES/SNESVINEWTONRSLS.html#SNESVINEWTONRSLS">here</a>.</p><p>These solve options are demonstrated here:</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+
+  petsc_options_iname = &#x27;-pc_type -ksp_type -snes_type&#x27;
+  petsc_options_value = &#x27;bjacobi gmres vinewtonrsls&#x27;
+
+  dt = 0.1
+  end_time = 0.6
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#59ce5d04-564e-4adb-a688-f62ecfa1f9f0">(moose/modules/phase_field/test/tests/grain_growth_w_linearized_interface/grain_growth_linearized_interface.i)</a></section><section id="f889d061-298a-4711-8cc6-c9b224ebaf66" data-section-level="2" data-section-text="Simplified MOOSE syntax"><h2 id="simplified-moose-syntax">Simplified MOOSE syntax</h2><p>As with the standard grain growth model in MOOSE, an Action has been created to simplify the input file syntax needed to define a nonlinear preconditioning grain growth model. The <a href="../../source/actions/GrainGrowthLinearizedInterfaceAction.html">GrainGrowthLinearizedInterfaceAction</a> allows the user to specify the number of order parameters to be used in the model and it automatically generates the</p><ul class="browser-default"><li><p>Linearized interface variables <span class="moose-katex-inline-equation" id="moose-equation-bba2616f-db2e-400b-b4a9-4a5b6e1c2761"><script>var element = document.getElementById("moose-equation-bba2616f-db2e-400b-b4a9-4a5b6e1c2761");katex.render("\\psi_i", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> </p></li><li><p>AuxVariables and corresponding Auxkernels defining the order parameters <span class="moose-katex-inline-equation" id="moose-equation-3958d7cb-ff86-4255-8f32-86c08c29a136"><script>var element = document.getElementById("moose-equation-3958d7cb-ff86-4255-8f32-86c08c29a136");katex.render("\\phi_i", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> </p></li><li><p>All of the kernels </p></li><li><p>Material properties defining the order parameters <span class="moose-katex-inline-equation" id="moose-equation-653b7a3c-10ec-4c54-9366-2c3ec04dc1f9"><script>var element = document.getElementById("moose-equation-653b7a3c-10ec-4c54-9366-2c3ec04dc1f9");katex.render("\\phi_i", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> </p></li><li><p>Upper and lower bounds required for the solve </p></li><li><p>Auxvariable and kernel defining the grain boundary for visualization</p></li></ul><p>The custom syntax for the linearized interface grain growth model is nearly identical to that for the standard grain growth model, making it simple to switch back and forth between models.</p></section><section id="298cafda-7319-4246-879b-0d0e364fcef0" data-section-level="2" data-section-text="linearized interface Initial Conditions"><h2 id="linearized-interface-initial-conditions">linearized interface Initial Conditions</h2><p>Initial conditions have been created to transform the IC values for the standard grain growth model to the linearized interface model.</p><ul class="browser-default"><li><p><a href="../../source/ics/SmoothCircleICLinearizedInterface.html">SmoothCircleICLinearizedInterface</a> - Takes the output from the <a href="../../source/ics/SmoothCircleIC.html">SmoothCircleIC</a> and performs the change in variable. Used to model a shrinking circular grain. </p></li><li><p><a href="../../source/actions/PolycrystalColoringICAction.html">PolycrystalColoringICAction</a> - This custom syntax is used for all polycrystal ICs for both the standard grain growth model and with nolinear preconditioning. The parameter <code>nonlinear_preconditioning = true</code> uses the <a href="../../source/ics/PolycrystalColoringICLinearizedInterface.html">PolycrystalColoringICLinearizedInterface</a> for each variable.</p></li></ul></section><section id="d45be755-53a6-4e0b-9522-c314d1e1ad86" data-section-level="2" data-section-text="Usage with GrainTracker"><h2 id="usage-with-graintracker">Usage with GrainTracker</h2><p><a href="../../source/postprocessors/GrainTracker.html">GrainTracker</a>, which allows variables to represent multiple grains and remap them to other variables to avoid coalescence, also works with the linearized interface grain growth model. Several changes are needed in its use:</p><ol class="browser-default" start="1"><li><p>The input parameter <code>bound_value</code> should be set to the value used in the bounded solve. This will switch the variable value when a grain is remapped to -<code>bound_value</code>, erasing the grain from the original variable. This is the same parameter used in <a href="../../source/actions/GrainGrowthLinearizedInterfaceAction.html">GrainGrowthLinearizedInterfaceAction</a> and in the linearized interface ICs, so that it can be set for all of the objects from the <a href="../../source/actions/GlobalParamsAction.html">GlobalParams block</a>. </p></li><li><p>The <code>threshold</code> parameter must be changed to be slightly above the value of the lower bound (-<code>bound_value</code>). It is recommended to use -<code>bound_value</code> + 2*<code>bound_value</code>/10.</p></li></ol><p>The modified syntax is illustrated here:</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[GlobalParams]
+  # Parameters used by several kernels that are defined globally to simplify input file
+  op_num = 8 # Number of order parameters used
+  var_name_base = psi # Base name of grains
+  bound_value = 5 # +/- bound value
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#3741a039-5f53-456e-a8ba-eb549ad81bab">(moose/modules/phase_field/test/tests/grain_tracker_test/grain_tracker_remapping_linearized_interface_test.i)</a><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[UserObjects]
+  [grain_tracker]
+    type = GrainTracker
+    threshold = -4
+  []
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#e358e12e-c4fd-45ce-8f3e-27e1956a73dd">(moose/modules/phase_field/test/tests/grain_tracker_test/grain_tracker_remapping_linearized_interface_test.i)</a></section><section id="fbeaf02d-d79e-44d7-afb0-09d35d1fdbdd" data-section-level="2" data-section-text="Example Input Files"><h2 id="example-input-files">Example Input Files</h2><p>An example input file for a polycrystal simulation using the linearized interface grain growth model is available:</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[GlobalParams]
+  bound_value = 5.0
+  op_num = 8
+  var_name_base = phi
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmax = 1000
+  ymax = 1000
+  nx = 100
+  ny = 100
+  uniform_refine = 1
+[]
+
+[Modules]
+  [PhaseField]
+    [GrainGrowthLinearizedInterface]
+      op_name_base = gr
+      mobility = L
+      kappa = kappa_op
+    []
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = RandomVoronoi
+      nonlinear_preconditioning = true
+    []
+  []
+[]
+
+[UserObjects]
+  [RandomVoronoi]
+    type = PolycrystalVoronoi
+    grain_num = 60
+    int_width = 10
+    rand_seed = 103838
+  []
+  [grain_tracker]
+    type = GrainTracker
+    threshold = -4.0
+    compute_halo_maps = true # Only necessary for displaying HALOS
+  []
+[]
+
+[AuxVariables]
+  [unique_grains]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [var_indices]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [halos]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+[]
+
+[AuxKernels]
+  [unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    flood_counter = grain_tracker
+    field_display = UNIQUE_REGION
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    flood_counter = grain_tracker
+    field_display = VARIABLE_COLORING
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [halos]
+    type = FeatureFloodCountAux
+    variable = halos
+    flood_counter = grain_tracker
+    field_display = HALOS
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+[]
+
+[Materials]
+  [properties]
+    type = GenericConstantMaterial
+    prop_names = &#x27;gbmob gbenergy gbwidth gamma_asymm&#x27;
+    prop_values = &#x27;100 6 10 1.5&#x27;
+  []
+  [kappa_op]
+    type = ParsedMaterial
+    material_property_names = &#x27;gbenergy gbwidth&#x27;
+    property_name = kappa_op
+    expression = &#x27;3/4*gbenergy*gbwidth&#x27;
+  []
+  [L]
+    type = ParsedMaterial
+    material_property_names = &#x27;gbmob gbwidth&#x27;
+    property_name = L
+    expression = &#x27;4/3*gbmob/gbwidth&#x27;
+  []
+  [mu]
+    type = ParsedMaterial
+    material_property_names = &#x27;gbenergy gbwidth&#x27;
+    property_name = mu
+    expression = &#x27;6*gbenergy/gbwidth&#x27;
+  []
+[]
+
+[Postprocessors]
+  [dt]
+    type = TimestepSize
+    execute_on = &#x27;initial TIMESTEP_END&#x27;
+  []
+[]
+
+[BCs]
+  [Periodic]
+    [All]
+      auto_direction = &#x27;x y&#x27;
+    []
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = PJFNK
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -snes_type&#x27;
+  petsc_options_value = &#x27;hypre    boomeramg      vinewtonrsls&#x27;
+
+  l_tol = 1e-4
+  nl_max_its = 10
+  l_max_its = 45
+
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 0.02
+    optimal_iterations = 6
+  []
+  end_time = 30
+[]
+
+[Outputs]
+  exodus = true
+  perf_graph = true
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#2440e2c4-a235-4d30-905f-de675194868e">(moose/modules/phase_field/examples/grain_growth/grain_growth_linearized_interface.i)</a><p>The linearized interface tests also serve as good examples for how to use the capability.</p><p>The evolution of a shrinking circular grain is illustrated here:</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmax = 50
+  ymax = 50
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [phi0]
+  []
+  [phi1]
+  []
+[]
+
+[AuxVariables]
+  [gr0_aux]
+  []
+  [gr1_aux]
+  []
+  [bounds_dummy]
+  []
+[]
+
+[AuxKernels]
+  [gr0]
+    type = LinearizedInterfaceAux
+    variable = gr0_aux
+    nonlinear_variable = phi0
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+  [gr1]
+    type = LinearizedInterfaceAux
+    variable = gr1_aux
+    nonlinear_variable = phi1
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+[]
+
+[ICs]
+  [phi0_IC]
+    type = SmoothCircleICLinearizedInterface
+    variable = phi0
+    invalue = 1.0
+    outvalue = 0.0
+    bound_value = 5.0
+    radius = 30
+    int_width = 10
+    x1 = 0.0
+    y1 = 0.0
+    profile = TANH
+  []
+  [phi1_IC]
+    type = SmoothCircleICLinearizedInterface
+    variable = phi1
+    invalue = 0.0
+    outvalue = 1.0
+    bound_value = 5.0
+    radius = 30
+    int_width = 10
+    x1 = 0.0
+    y1 = 0.0
+    profile = TANH
+  []
+[]
+
+[Kernels]
+  #phi0 Kernels
+  [phi0_dot]
+    type = ChangedVariableTimeDerivative
+    variable = phi0
+    order_parameter = gr0
+  []
+  [phi0_ACInt]
+    type = ACInterfaceChangedVariable
+    variable = phi0
+    kappa_name = kappa_op
+    mob_name = L
+    order_parameter = gr0
+  []
+  [gr0_AC]
+    type = ACGrGrPolyLinearizedInterface
+    variable = phi0
+    mob_name = L
+    this_op = gr0
+    other_ops = gr1
+    v = phi1
+  []
+  #phi1 Kernels
+  [phi1_dot]
+    type = ChangedVariableTimeDerivative
+    variable = phi1
+    order_parameter = gr1
+  []
+  [phi1_ACInt]
+    type = ACInterfaceChangedVariable
+    variable = phi1
+    kappa_name = kappa_op
+    mob_name = L
+    order_parameter = gr1
+  []
+  [gr1_AC]
+    type = ACGrGrPolyLinearizedInterface
+    variable = phi1
+    mob_name = L
+    this_op = gr1
+    other_ops = gr0
+    v = phi0
+  []
+[]
+
+[Materials]
+  [gr0]
+    type = LinearizedInterfaceFunction
+    f_name = gr0
+    phi = phi0
+  []
+  [gr1]
+    type = LinearizedInterfaceFunction
+    f_name = gr1
+    phi = phi1
+  []
+  [GBEovlution]
+    type = GBEvolution
+    GBenergy = 0.97
+    GBMobility = 0.6e-6
+    T = 300
+    wGB = 10
+  []
+[]
+
+[Bounds]
+  [phi0_upper_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi0
+    bound_type = upper
+    bound_value = 5.0
+  []
+  [phi0_lower_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi0
+    bound_type = lower
+    bound_value = -5.0
+  []
+  [phi1_upper_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi1
+    bound_type = upper
+    bound_value = 5.0
+  []
+  [phi1_lower_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi1
+    bound_type = lower
+    bound_value = -5.0
+  []
+[]
+
+[Postprocessors]
+  [grain_area_mat]
+    type = ElementIntegralMaterialProperty
+    mat_prop = gr0
+    execute_on = &#x27;initial TIMESTEP_END&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+
+  petsc_options_iname = &#x27;-pc_type -ksp_type -snes_type&#x27;
+  petsc_options_value = &#x27;bjacobi gmres vinewtonrsls&#x27;
+
+  dt = 0.1
+  end_time = 0.6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#6fbdff76-6fc9-4ac3-8e60-95f23f8bb68e">(moose/modules/phase_field/test/tests/grain_growth_w_linearized_interface/grain_growth_linearized_interface.i)</a><p>The same problem but using <a href="../../source/actions/GrainGrowthLinearizedInterfaceAction.html">GrainGrowthLinearizedInterfaceAction</a> is illustrated here:</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[GlobalParams]
+  bound_value = 5.0
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmax = 50
+  ymax = 50
+  nx = 10
+  ny = 10
+[]
+
+[Modules]
+  [PhaseField]
+    [GrainGrowthLinearizedInterface]
+      op_num = 2
+      var_name_base = phi
+      op_name_base = gr
+      mobility = L
+      kappa = kappa_op
+    []
+  []
+[]
+
+[ICs]
+  [phi0_IC]
+    type = SmoothCircleICLinearizedInterface
+    variable = phi0
+    invalue = 1.0
+    outvalue = 0.0
+    radius = 30
+    int_width = 10
+    x1 = 0.0
+    y1 = 0.0
+    profile = TANH
+  []
+  [phi1_IC]
+    type = SmoothCircleICLinearizedInterface
+    variable = phi1
+    invalue = 0.0
+    outvalue = 1.0
+    radius = 30
+    int_width = 10
+    x1 = 0.0
+    y1 = 0.0
+    profile = TANH
+  []
+[]
+
+[Materials]
+  [GBEovlution]
+    type = GBEvolution
+    GBenergy = 0.97
+    GBMobility = 0.6e-6
+    T = 300
+    wGB = 10
+  []
+[]
+
+[Postprocessors]
+  [grain_area_mat]
+    type = ElementIntegralMaterialProperty
+    mat_prop = gr0
+    execute_on = &#x27;initial TIMESTEP_END&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+
+  petsc_options_iname = &#x27;-pc_type -ksp_type -snes_type&#x27;
+  petsc_options_value = &#x27;bjacobi gmres vinewtonrsls&#x27;
+
+  dt = 0.1
+  end_time = 0.6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#96e50294-e3fd-4838-a9bc-0e262bd0e4fb">(moose/modules/phase_field/test/tests/grain_growth_w_linearized_interface/linearized_interface_action.i)</a><p>The evolution of a five-grain polycrystal is illustrated here:</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[GlobalParams]
+  bound_value = 5.0
+  op_num = 5
+  var_name_base = phi
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmax = 100
+  ymax = 100
+  nx = 20
+  ny = 20
+[]
+
+[Modules]
+  [PhaseField]
+    [GrainGrowthLinearizedInterface]
+      op_name_base = gr
+      mobility = L
+      kappa = kappa_op
+    []
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = RandomVoronoi
+      linearized_interface = true
+    []
+  []
+[]
+
+[UserObjects]
+  [RandomVoronoi]
+    type = PolycrystalVoronoi
+    grain_num = 5
+    int_width = 10
+    rand_seed = 103838
+  []
+[]
+
+[Materials]
+  [GBEovlution]
+    type = GBEvolution
+    GBenergy = 0.97
+    GBMobility = 0.6e-6
+    T = 300
+    wGB = 10
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+
+  petsc_options_iname = &#x27;-pc_type -ksp_type -snes_type&#x27;
+  petsc_options_value = &#x27;bjacobi gmres vinewtonrsls&#x27;
+
+  dt = 0.05
+  num_steps = 1
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#5c306fba-a754-43f3-a2e4-581f63513133">(moose/modules/phase_field/test/tests/grain_growth_w_linearized_interface/voronoi_linearized_interface.i)</a></section><section id="227838f8-327f-48d5-b10b-313aeb7f6f91" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol><li id="chadwick2021development">Alexander&nbsp;F Chadwick and Peter&nbsp;W Voorhees.
+The development of grain structure during additive manufacturing.
+<em>Acta Materialia</em>, 211:116862, 2021.<a href="#6864e875-f19d-4655-a019-d6127c526fde" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="6864e875-f19d-4655-a019-d6127c526fde"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{chadwick2021development,
+    author = "Chadwick, Alexander F and Voorhees, Peter W",
+    title = "The development of grain structure during additive manufacturing",
+    journal = "Acta Materialia",
+    volume = "211",
+    pages = "116862",
+    year = "2021",
+    publisher = "Elsevier"
+}
+</code></pre></div></div></li><li id="glasner2001nonlinear">Karl Glasner.
+Nonlinear preconditioning for diffuse interfaces.
+<em>Journal of Computational Physics</em>, 174(2):695–711, 2001.<a href="#d3a3ec78-6401-465e-bcde-7b84f1093ae5" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="d3a3ec78-6401-465e-bcde-7b84f1093ae5"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{glasner2001nonlinear,
+    author = "Glasner, Karl",
+    title = "Nonlinear preconditioning for diffuse interfaces",
+    journal = "Journal of Computational Physics",
+    volume = "174",
+    number = "2",
+    pages = "695--711",
+    year = "2001",
+    publisher = "Elsevier"
+}
+</code></pre></div></div></li><li id="gong2018fast">Tong&nbsp;Zhao Gong, Yun Chen, Yan&nbsp;Fei Cao, Xiu&nbsp;Hong Kang, and Dian&nbsp;Zhong Li.
+Fast simulations of a large number of crystals growth in centimeter-scale during alloy solidification via nonlinearly preconditioned quantitative phase-field formula.
+<em>Computational Materials Science</em>, 147:338–352, 2018.<a href="#c36174b2-e8ed-4069-aab5-ed0595244bf9" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="c36174b2-e8ed-4069-aab5-ed0595244bf9"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{gong2018fast,
+    author = "Gong, Tong Zhao and Chen, Yun and Cao, Yan Fei and Kang, Xiu Hong and Li, Dian Zhong",
+    title = "Fast simulations of a large number of crystals growth in centimeter-scale during alloy solidification via nonlinearly preconditioned quantitative phase-field formula",
+    journal = "Computational Materials Science",
+    volume = "147",
+    pages = "338--352",
+    year = "2018",
+    publisher = "Elsevier"
+}
+</code></pre></div></div></li><li id="moelans_quantitative_2008">N.&nbsp;Moelans, B.&nbsp;Blanpain, and P.&nbsp;Wollants.
+Quantitative analysis of grain boundary properties in a generalized phase field model for grain growth in anisotropic systems.
+<em>Physical Review B</em>, 78(2):024113, Jul 2008.
+URL: <a href="http://link.aps.org/doi/10.1103/PhysRevB.78.024113">http://link.aps.org/doi/10.1103/PhysRevB.78.024113</a> (visited on 2016-06-02), <a href="https://doi.org/10.1103/PhysRevB.78.024113">doi:10.1103/PhysRevB.78.024113</a>.<a href="#2b9f543d-413b-4dc3-bf7c-3a7e5d5dae7c" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="2b9f543d-413b-4dc3-bf7c-3a7e5d5dae7c"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{moelans_quantitative_2008,
+    author = "Moelans, N. and Blanpain, B. and Wollants, P.",
+    title = "Quantitative analysis of grain boundary properties in a generalized phase field model for grain growth in anisotropic systems",
+    volume = "78",
+    url = "http://link.aps.org/doi/10.1103/PhysRevB.78.024113",
+    doi = "10.1103/PhysRevB.78.024113",
+    number = "2",
+    urldate = "2016-06-02",
+    journal = "Physical Review B",
+    month = "Jul",
+    year = "2008",
+    pages = "024113",
+    file = "APS Snapshot:/Users/i.greenquist/Zotero/storage/Q8854BXX/PhysRevB.78.html:text/html;PhysRevB.78.024113.pdf:/Users/i.greenquist/Zotero/storage/VSMEC28A/PhysRevB.78.024113.pdf:application/pdf;PhysRevB.78.pdf:/Users/i.greenquist/Zotero/storage/VEU7AATJ/PhysRevB.78.pdf:application/pdf"
+}
+</code></pre></div></div></li></ol></div></section></section><div class="moose-modal modal" id="4ac92490-8044-45bc-be8d-c1e9dab7f30e"><div class="modal-content"><h4>(moose/modules/phase_field/test/tests/grain_growth_w_linearized_interface/grain_growth_linearized_interface.i)</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmax = 50
+  ymax = 50
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [phi0]
+  []
+  [phi1]
+  []
+[]
+
+[AuxVariables]
+  [gr0_aux]
+  []
+  [gr1_aux]
+  []
+  [bounds_dummy]
+  []
+[]
+
+[AuxKernels]
+  [gr0]
+    type = LinearizedInterfaceAux
+    variable = gr0_aux
+    nonlinear_variable = phi0
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+  [gr1]
+    type = LinearizedInterfaceAux
+    variable = gr1_aux
+    nonlinear_variable = phi1
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+[]
+
+[ICs]
+  [phi0_IC]
+    type = SmoothCircleICLinearizedInterface
+    variable = phi0
+    invalue = 1.0
+    outvalue = 0.0
+    bound_value = 5.0
+    radius = 30
+    int_width = 10
+    x1 = 0.0
+    y1 = 0.0
+    profile = TANH
+  []
+  [phi1_IC]
+    type = SmoothCircleICLinearizedInterface
+    variable = phi1
+    invalue = 0.0
+    outvalue = 1.0
+    bound_value = 5.0
+    radius = 30
+    int_width = 10
+    x1 = 0.0
+    y1 = 0.0
+    profile = TANH
+  []
+[]
+
+[Kernels]
+  #phi0 Kernels
+  [phi0_dot]
+    type = ChangedVariableTimeDerivative
+    variable = phi0
+    order_parameter = gr0
+  []
+  [phi0_ACInt]
+    type = ACInterfaceChangedVariable
+    variable = phi0
+    kappa_name = kappa_op
+    mob_name = L
+    order_parameter = gr0
+  []
+  [gr0_AC]
+    type = ACGrGrPolyLinearizedInterface
+    variable = phi0
+    mob_name = L
+    this_op = gr0
+    other_ops = gr1
+    v = phi1
+  []
+  #phi1 Kernels
+  [phi1_dot]
+    type = ChangedVariableTimeDerivative
+    variable = phi1
+    order_parameter = gr1
+  []
+  [phi1_ACInt]
+    type = ACInterfaceChangedVariable
+    variable = phi1
+    kappa_name = kappa_op
+    mob_name = L
+    order_parameter = gr1
+  []
+  [gr1_AC]
+    type = ACGrGrPolyLinearizedInterface
+    variable = phi1
+    mob_name = L
+    this_op = gr1
+    other_ops = gr0
+    v = phi0
+  []
+[]
+
+[Materials]
+  [gr0]
+    type = LinearizedInterfaceFunction
+    f_name = gr0
+    phi = phi0
+  []
+  [gr1]
+    type = LinearizedInterfaceFunction
+    f_name = gr1
+    phi = phi1
+  []
+  [GBEovlution]
+    type = GBEvolution
+    GBenergy = 0.97
+    GBMobility = 0.6e-6
+    T = 300
+    wGB = 10
+  []
+[]
+
+[Bounds]
+  [phi0_upper_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi0
+    bound_type = upper
+    bound_value = 5.0
+  []
+  [phi0_lower_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi0
+    bound_type = lower
+    bound_value = -5.0
+  []
+  [phi1_upper_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi1
+    bound_type = upper
+    bound_value = 5.0
+  []
+  [phi1_lower_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi1
+    bound_type = lower
+    bound_value = -5.0
+  []
+[]
+
+[Postprocessors]
+  [grain_area_mat]
+    type = ElementIntegralMaterialProperty
+    mat_prop = gr0
+    execute_on = &#x27;initial TIMESTEP_END&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+
+  petsc_options_iname = &#x27;-pc_type -ksp_type -snes_type&#x27;
+  petsc_options_value = &#x27;bjacobi gmres vinewtonrsls&#x27;
+
+  dt = 0.1
+  end_time = 0.6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="59ce5d04-564e-4adb-a688-f62ecfa1f9f0"><div class="modal-content"><h4>(moose/modules/phase_field/test/tests/grain_growth_w_linearized_interface/grain_growth_linearized_interface.i)</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmax = 50
+  ymax = 50
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [phi0]
+  []
+  [phi1]
+  []
+[]
+
+[AuxVariables]
+  [gr0_aux]
+  []
+  [gr1_aux]
+  []
+  [bounds_dummy]
+  []
+[]
+
+[AuxKernels]
+  [gr0]
+    type = LinearizedInterfaceAux
+    variable = gr0_aux
+    nonlinear_variable = phi0
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+  [gr1]
+    type = LinearizedInterfaceAux
+    variable = gr1_aux
+    nonlinear_variable = phi1
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+[]
+
+[ICs]
+  [phi0_IC]
+    type = SmoothCircleICLinearizedInterface
+    variable = phi0
+    invalue = 1.0
+    outvalue = 0.0
+    bound_value = 5.0
+    radius = 30
+    int_width = 10
+    x1 = 0.0
+    y1 = 0.0
+    profile = TANH
+  []
+  [phi1_IC]
+    type = SmoothCircleICLinearizedInterface
+    variable = phi1
+    invalue = 0.0
+    outvalue = 1.0
+    bound_value = 5.0
+    radius = 30
+    int_width = 10
+    x1 = 0.0
+    y1 = 0.0
+    profile = TANH
+  []
+[]
+
+[Kernels]
+  #phi0 Kernels
+  [phi0_dot]
+    type = ChangedVariableTimeDerivative
+    variable = phi0
+    order_parameter = gr0
+  []
+  [phi0_ACInt]
+    type = ACInterfaceChangedVariable
+    variable = phi0
+    kappa_name = kappa_op
+    mob_name = L
+    order_parameter = gr0
+  []
+  [gr0_AC]
+    type = ACGrGrPolyLinearizedInterface
+    variable = phi0
+    mob_name = L
+    this_op = gr0
+    other_ops = gr1
+    v = phi1
+  []
+  #phi1 Kernels
+  [phi1_dot]
+    type = ChangedVariableTimeDerivative
+    variable = phi1
+    order_parameter = gr1
+  []
+  [phi1_ACInt]
+    type = ACInterfaceChangedVariable
+    variable = phi1
+    kappa_name = kappa_op
+    mob_name = L
+    order_parameter = gr1
+  []
+  [gr1_AC]
+    type = ACGrGrPolyLinearizedInterface
+    variable = phi1
+    mob_name = L
+    this_op = gr1
+    other_ops = gr0
+    v = phi0
+  []
+[]
+
+[Materials]
+  [gr0]
+    type = LinearizedInterfaceFunction
+    f_name = gr0
+    phi = phi0
+  []
+  [gr1]
+    type = LinearizedInterfaceFunction
+    f_name = gr1
+    phi = phi1
+  []
+  [GBEovlution]
+    type = GBEvolution
+    GBenergy = 0.97
+    GBMobility = 0.6e-6
+    T = 300
+    wGB = 10
+  []
+[]
+
+[Bounds]
+  [phi0_upper_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi0
+    bound_type = upper
+    bound_value = 5.0
+  []
+  [phi0_lower_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi0
+    bound_type = lower
+    bound_value = -5.0
+  []
+  [phi1_upper_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi1
+    bound_type = upper
+    bound_value = 5.0
+  []
+  [phi1_lower_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi1
+    bound_type = lower
+    bound_value = -5.0
+  []
+[]
+
+[Postprocessors]
+  [grain_area_mat]
+    type = ElementIntegralMaterialProperty
+    mat_prop = gr0
+    execute_on = &#x27;initial TIMESTEP_END&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+
+  petsc_options_iname = &#x27;-pc_type -ksp_type -snes_type&#x27;
+  petsc_options_value = &#x27;bjacobi gmres vinewtonrsls&#x27;
+
+  dt = 0.1
+  end_time = 0.6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="3741a039-5f53-456e-a8ba-eb549ad81bab"><div class="modal-content"><h4>(moose/modules/phase_field/test/tests/grain_tracker_test/grain_tracker_remapping_linearized_interface_test.i)</h4><pre class="moose-pre"><code class="language-text"># This simulation predicts GB migration of a 2D copper polycrystal with 100 grains represented with 18 order parameters
+# Mesh adaptivity and time step adaptivity are used
+# An AuxVariable is used to calculate the grain boundary locations
+# Postprocessors are used to record time step and the number of grains
+
+[Mesh]
+  # Mesh block.  Meshes can be read in or automatically generated
+  type = GeneratedMesh
+  dim = 2 # Problem dimension
+  nx = 25 # Number of elements in the x-direction
+  ny = 25 # Number of elements in the y-direction
+  xmax = 1000 # maximum x-coordinate of the mesh
+  ymax = 1000 # maximum y-coordinate of the mesh
+[]
+
+[GlobalParams]
+  # Parameters used by several kernels that are defined globally to simplify input file
+  op_num = 8 # Number of order parameters used
+  var_name_base = psi # Base name of grains
+  bound_value = 5 # +/- bound value
+[]
+
+[Modules]
+  [PhaseField]
+    [GrainGrowthLinearizedInterface]
+      op_name_base = gr
+      mobility = L
+      kappa = kappa_op
+    []
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = voronoi
+      linearized_interface = true
+    []
+  []
+[]
+
+[UserObjects]
+  [voronoi]
+    type = PolycrystalVoronoi
+    grain_num = 10 # Number of grains
+    rand_seed = 13405
+    int_width = 100
+  []
+  [grain_tracker]
+    type = GrainTracker
+    threshold = -4
+  []
+[]
+
+[Materials]
+  [CuGrGr]
+    # Material properties
+    type = GBEvolution
+    T = 450 # Constant temperature of the simulation (for mobility calculation)
+    wGB = 100 # Width of the diffuse GB
+    GBmob0 = 2.5e-6 # m^4(Js) for copper from schonfelder1997molecular bibtex entry
+    Q = 0.23 # eV for copper from schonfelder1997molecular bibtex entry
+    GBenergy = 0.708 # J/m^2 from schonfelder1997molecular bibtex entry
+  []
+[]
+
+[Executioner]
+  # Uses newton iteration to solve the problem.
+  type = Transient # Type of executioner, here it is transient with an adaptive time step
+  scheme = bdf2 # Type of time integration (2nd order backward euler), defaults to 1st order backward euler
+
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -snes_type&#x27;
+  petsc_options_value = &#x27;hypre    boomeramg      vinewtonrsls&#x27;
+
+  l_max_its = 30 # Max number of linear iterations
+  l_tol = 1e-4 # Relative tolerance for linear solves
+  nl_max_its = 13 # Max number of nonlinear iterations
+
+  num_steps = 7
+  dt = 100
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="e358e12e-c4fd-45ce-8f3e-27e1956a73dd"><div class="modal-content"><h4>(moose/modules/phase_field/test/tests/grain_tracker_test/grain_tracker_remapping_linearized_interface_test.i)</h4><pre class="moose-pre"><code class="language-text"># This simulation predicts GB migration of a 2D copper polycrystal with 100 grains represented with 18 order parameters
+# Mesh adaptivity and time step adaptivity are used
+# An AuxVariable is used to calculate the grain boundary locations
+# Postprocessors are used to record time step and the number of grains
+
+[Mesh]
+  # Mesh block.  Meshes can be read in or automatically generated
+  type = GeneratedMesh
+  dim = 2 # Problem dimension
+  nx = 25 # Number of elements in the x-direction
+  ny = 25 # Number of elements in the y-direction
+  xmax = 1000 # maximum x-coordinate of the mesh
+  ymax = 1000 # maximum y-coordinate of the mesh
+[]
+
+[GlobalParams]
+  # Parameters used by several kernels that are defined globally to simplify input file
+  op_num = 8 # Number of order parameters used
+  var_name_base = psi # Base name of grains
+  bound_value = 5 # +/- bound value
+[]
+
+[Modules]
+  [PhaseField]
+    [GrainGrowthLinearizedInterface]
+      op_name_base = gr
+      mobility = L
+      kappa = kappa_op
+    []
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = voronoi
+      linearized_interface = true
+    []
+  []
+[]
+
+[UserObjects]
+  [voronoi]
+    type = PolycrystalVoronoi
+    grain_num = 10 # Number of grains
+    rand_seed = 13405
+    int_width = 100
+  []
+  [grain_tracker]
+    type = GrainTracker
+    threshold = -4
+  []
+[]
+
+[Materials]
+  [CuGrGr]
+    # Material properties
+    type = GBEvolution
+    T = 450 # Constant temperature of the simulation (for mobility calculation)
+    wGB = 100 # Width of the diffuse GB
+    GBmob0 = 2.5e-6 # m^4(Js) for copper from schonfelder1997molecular bibtex entry
+    Q = 0.23 # eV for copper from schonfelder1997molecular bibtex entry
+    GBenergy = 0.708 # J/m^2 from schonfelder1997molecular bibtex entry
+  []
+[]
+
+[Executioner]
+  # Uses newton iteration to solve the problem.
+  type = Transient # Type of executioner, here it is transient with an adaptive time step
+  scheme = bdf2 # Type of time integration (2nd order backward euler), defaults to 1st order backward euler
+
+  solve_type = PJFNK
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -snes_type&#x27;
+  petsc_options_value = &#x27;hypre    boomeramg      vinewtonrsls&#x27;
+
+  l_max_its = 30 # Max number of linear iterations
+  l_tol = 1e-4 # Relative tolerance for linear solves
+  nl_max_its = 13 # Max number of nonlinear iterations
+
+  num_steps = 7
+  dt = 100
+[]
+
+[Outputs]
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="2440e2c4-a235-4d30-905f-de675194868e"><div class="modal-content"><h4>(moose/modules/phase_field/examples/grain_growth/grain_growth_linearized_interface.i)</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  bound_value = 5.0
+  op_num = 8
+  var_name_base = phi
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmax = 1000
+  ymax = 1000
+  nx = 100
+  ny = 100
+  uniform_refine = 1
+[]
+
+[Modules]
+  [PhaseField]
+    [GrainGrowthLinearizedInterface]
+      op_name_base = gr
+      mobility = L
+      kappa = kappa_op
+    []
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = RandomVoronoi
+      nonlinear_preconditioning = true
+    []
+  []
+[]
+
+[UserObjects]
+  [RandomVoronoi]
+    type = PolycrystalVoronoi
+    grain_num = 60
+    int_width = 10
+    rand_seed = 103838
+  []
+  [grain_tracker]
+    type = GrainTracker
+    threshold = -4.0
+    compute_halo_maps = true # Only necessary for displaying HALOS
+  []
+[]
+
+[AuxVariables]
+  [unique_grains]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [var_indices]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [halos]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+[]
+
+[AuxKernels]
+  [unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    flood_counter = grain_tracker
+    field_display = UNIQUE_REGION
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    flood_counter = grain_tracker
+    field_display = VARIABLE_COLORING
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [halos]
+    type = FeatureFloodCountAux
+    variable = halos
+    flood_counter = grain_tracker
+    field_display = HALOS
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+[]
+
+[Materials]
+  [properties]
+    type = GenericConstantMaterial
+    prop_names = &#x27;gbmob gbenergy gbwidth gamma_asymm&#x27;
+    prop_values = &#x27;100 6 10 1.5&#x27;
+  []
+  [kappa_op]
+    type = ParsedMaterial
+    material_property_names = &#x27;gbenergy gbwidth&#x27;
+    property_name = kappa_op
+    expression = &#x27;3/4*gbenergy*gbwidth&#x27;
+  []
+  [L]
+    type = ParsedMaterial
+    material_property_names = &#x27;gbmob gbwidth&#x27;
+    property_name = L
+    expression = &#x27;4/3*gbmob/gbwidth&#x27;
+  []
+  [mu]
+    type = ParsedMaterial
+    material_property_names = &#x27;gbenergy gbwidth&#x27;
+    property_name = mu
+    expression = &#x27;6*gbenergy/gbwidth&#x27;
+  []
+[]
+
+[Postprocessors]
+  [dt]
+    type = TimestepSize
+    execute_on = &#x27;initial TIMESTEP_END&#x27;
+  []
+[]
+
+[BCs]
+  [Periodic]
+    [All]
+      auto_direction = &#x27;x y&#x27;
+    []
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = PJFNK
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -snes_type&#x27;
+  petsc_options_value = &#x27;hypre    boomeramg      vinewtonrsls&#x27;
+
+  l_tol = 1e-4
+  nl_max_its = 10
+  l_max_its = 45
+
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 0.02
+    optimal_iterations = 6
+  []
+  end_time = 30
+[]
+
+[Outputs]
+  exodus = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="6fbdff76-6fc9-4ac3-8e60-95f23f8bb68e"><div class="modal-content"><h4>(moose/modules/phase_field/test/tests/grain_growth_w_linearized_interface/grain_growth_linearized_interface.i)</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmax = 50
+  ymax = 50
+  nx = 10
+  ny = 10
+[]
+
+[Variables]
+  [phi0]
+  []
+  [phi1]
+  []
+[]
+
+[AuxVariables]
+  [gr0_aux]
+  []
+  [gr1_aux]
+  []
+  [bounds_dummy]
+  []
+[]
+
+[AuxKernels]
+  [gr0]
+    type = LinearizedInterfaceAux
+    variable = gr0_aux
+    nonlinear_variable = phi0
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+  [gr1]
+    type = LinearizedInterfaceAux
+    variable = gr1_aux
+    nonlinear_variable = phi1
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+[]
+
+[ICs]
+  [phi0_IC]
+    type = SmoothCircleICLinearizedInterface
+    variable = phi0
+    invalue = 1.0
+    outvalue = 0.0
+    bound_value = 5.0
+    radius = 30
+    int_width = 10
+    x1 = 0.0
+    y1 = 0.0
+    profile = TANH
+  []
+  [phi1_IC]
+    type = SmoothCircleICLinearizedInterface
+    variable = phi1
+    invalue = 0.0
+    outvalue = 1.0
+    bound_value = 5.0
+    radius = 30
+    int_width = 10
+    x1 = 0.0
+    y1 = 0.0
+    profile = TANH
+  []
+[]
+
+[Kernels]
+  #phi0 Kernels
+  [phi0_dot]
+    type = ChangedVariableTimeDerivative
+    variable = phi0
+    order_parameter = gr0
+  []
+  [phi0_ACInt]
+    type = ACInterfaceChangedVariable
+    variable = phi0
+    kappa_name = kappa_op
+    mob_name = L
+    order_parameter = gr0
+  []
+  [gr0_AC]
+    type = ACGrGrPolyLinearizedInterface
+    variable = phi0
+    mob_name = L
+    this_op = gr0
+    other_ops = gr1
+    v = phi1
+  []
+  #phi1 Kernels
+  [phi1_dot]
+    type = ChangedVariableTimeDerivative
+    variable = phi1
+    order_parameter = gr1
+  []
+  [phi1_ACInt]
+    type = ACInterfaceChangedVariable
+    variable = phi1
+    kappa_name = kappa_op
+    mob_name = L
+    order_parameter = gr1
+  []
+  [gr1_AC]
+    type = ACGrGrPolyLinearizedInterface
+    variable = phi1
+    mob_name = L
+    this_op = gr1
+    other_ops = gr0
+    v = phi0
+  []
+[]
+
+[Materials]
+  [gr0]
+    type = LinearizedInterfaceFunction
+    f_name = gr0
+    phi = phi0
+  []
+  [gr1]
+    type = LinearizedInterfaceFunction
+    f_name = gr1
+    phi = phi1
+  []
+  [GBEovlution]
+    type = GBEvolution
+    GBenergy = 0.97
+    GBMobility = 0.6e-6
+    T = 300
+    wGB = 10
+  []
+[]
+
+[Bounds]
+  [phi0_upper_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi0
+    bound_type = upper
+    bound_value = 5.0
+  []
+  [phi0_lower_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi0
+    bound_type = lower
+    bound_value = -5.0
+  []
+  [phi1_upper_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi1
+    bound_type = upper
+    bound_value = 5.0
+  []
+  [phi1_lower_bound]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = phi1
+    bound_type = lower
+    bound_value = -5.0
+  []
+[]
+
+[Postprocessors]
+  [grain_area_mat]
+    type = ElementIntegralMaterialProperty
+    mat_prop = gr0
+    execute_on = &#x27;initial TIMESTEP_END&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+
+  petsc_options_iname = &#x27;-pc_type -ksp_type -snes_type&#x27;
+  petsc_options_value = &#x27;bjacobi gmres vinewtonrsls&#x27;
+
+  dt = 0.1
+  end_time = 0.6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="96e50294-e3fd-4838-a9bc-0e262bd0e4fb"><div class="modal-content"><h4>(moose/modules/phase_field/test/tests/grain_growth_w_linearized_interface/linearized_interface_action.i)</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  bound_value = 5.0
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmax = 50
+  ymax = 50
+  nx = 10
+  ny = 10
+[]
+
+[Modules]
+  [PhaseField]
+    [GrainGrowthLinearizedInterface]
+      op_num = 2
+      var_name_base = phi
+      op_name_base = gr
+      mobility = L
+      kappa = kappa_op
+    []
+  []
+[]
+
+[ICs]
+  [phi0_IC]
+    type = SmoothCircleICLinearizedInterface
+    variable = phi0
+    invalue = 1.0
+    outvalue = 0.0
+    radius = 30
+    int_width = 10
+    x1 = 0.0
+    y1 = 0.0
+    profile = TANH
+  []
+  [phi1_IC]
+    type = SmoothCircleICLinearizedInterface
+    variable = phi1
+    invalue = 0.0
+    outvalue = 1.0
+    radius = 30
+    int_width = 10
+    x1 = 0.0
+    y1 = 0.0
+    profile = TANH
+  []
+[]
+
+[Materials]
+  [GBEovlution]
+    type = GBEvolution
+    GBenergy = 0.97
+    GBMobility = 0.6e-6
+    T = 300
+    wGB = 10
+  []
+[]
+
+[Postprocessors]
+  [grain_area_mat]
+    type = ElementIntegralMaterialProperty
+    mat_prop = gr0
+    execute_on = &#x27;initial TIMESTEP_END&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+
+  petsc_options_iname = &#x27;-pc_type -ksp_type -snes_type&#x27;
+  petsc_options_value = &#x27;bjacobi gmres vinewtonrsls&#x27;
+
+  dt = 0.1
+  end_time = 0.6
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="5c306fba-a754-43f3-a2e4-581f63513133"><div class="modal-content"><h4>(moose/modules/phase_field/test/tests/grain_growth_w_linearized_interface/voronoi_linearized_interface.i)</h4><pre class="moose-pre"><code class="language-text">[GlobalParams]
+  bound_value = 5.0
+  op_num = 5
+  var_name_base = phi
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  xmax = 100
+  ymax = 100
+  nx = 20
+  ny = 20
+[]
+
+[Modules]
+  [PhaseField]
+    [GrainGrowthLinearizedInterface]
+      op_name_base = gr
+      mobility = L
+      kappa = kappa_op
+    []
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = RandomVoronoi
+      linearized_interface = true
+    []
+  []
+[]
+
+[UserObjects]
+  [RandomVoronoi]
+    type = PolycrystalVoronoi
+    grain_num = 5
+    int_width = 10
+    rand_seed = 103838
+  []
+[]
+
+[Materials]
+  [GBEovlution]
+    type = GBEvolution
+    GBenergy = 0.97
+    GBMobility = 0.6e-6
+    T = 300
+    wGB = 10
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = NEWTON
+
+  petsc_options_iname = &#x27;-pc_type -ksp_type -snes_type&#x27;
+  petsc_options_value = &#x27;bjacobi gmres vinewtonrsls&#x27;
+
+  dt = 0.05
+  num_steps = 1
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
