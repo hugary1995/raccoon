@@ -1,0 +1,961 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Reading EBSD Data | RACCOON</title><link rel="icon" type="image/x-icon" href="../../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../../contrib/katex/katex.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../../media/framework/github-logo.png" class="github-mark"></img><img src="../../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="fe8f8934-3e50-4713-9b61-06c124285fbe" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="175accd6-8528-4e87-9963-e05c930fce62" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="2a4d881a-cb05-47c7-b9ed-4c619d275bd7" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="86cf2159-b68a-4c0d-ada6-0f9aac0bcc15" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="55a3bb2e-c430-41e7-8b1b-132104381eb9"><i class="material-icons">menu</i></a><ul class="sidenav" id="55a3bb2e-c430-41e7-8b1b-132104381eb9"><li><a href="#!" class="dropdown-trigger" data-target="6c9968be-e377-476c-a95a-85ed92be10a1" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="1bac75a4-ebb2-4845-a149-d7fadff4a042" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="2bc4c810-d484-495e-972d-e1095e47bad5" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="a9550240-682c-469e-bf99-415ac0eaac4d" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="fe8f8934-3e50-4713-9b61-06c124285fbe"><li><a href="../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../getting_started/ide.html">Code development</a></li><li><a href="../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="175accd6-8528-4e87-9963-e05c930fce62"><li><a href="../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li></ul><ul class="dropdown-content" id="2a4d881a-cb05-47c7-b9ed-4c619d275bd7"><li><a href="../../../theory/intro.html">Introduction</a></li><li><a href="../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="86cf2159-b68a-4c0d-ada6-0f9aac0bcc15"><li><a href="../../index.html">Physics modules</a></li><li><a href="../../../syntax/index.html">Complete syntax</a></li><li><a href="../../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="6c9968be-e377-476c-a95a-85ed92be10a1"><li><a href="../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../getting_started/ide.html">Code development</a></li><li><a href="../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="1bac75a4-ebb2-4845-a149-d7fadff4a042"><li><a href="../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li></ul><ul class="dropdown-content" id="2bc4c810-d484-495e-972d-e1095e47bad5"><li><a href="../../../theory/intro.html">Introduction</a></li><li><a href="../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="a9550240-682c-469e-bf99-415ac0eaac4d"><li><a href="../../index.html">Physics modules</a></li><li><a href="../../../syntax/index.html">Complete syntax</a></li><li><a href="../../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="19ea885f-9734-422c-8ada-b34322b0df33" data-section-level="1" data-section-text="Reading EBSD Data"><h1 id="reading-ebsd-data">Reading EBSD Data</h1><p>To read experimental <a href="https://en.wikipedia.org/wiki/Electron_backscatter_diffraction">electron backscatter diffraction (EBSD)</a> data three components are needed</p><ul class="browser-default"><li><p><a href="../../../source/mesh/EBSDMesh.html"><code>EBSDMesh</code></a> Mesh object </p></li><li><p><a href="../../../source/userobjects/EBSDReader.html"><code>EBSDReader</code></a> UserObject </p></li><li><p>Initial conditions (such as the <code>ReconVarIC</code> action provides)</p></li></ul><div class="card moose-float" style="width:49%;margin-right:1%;float:left;"><div class="card-content"><picture class="materialboxed moose-image"><img src="../../../media/phase_field/EBSDReader_stress.png"></img></picture><p class="moose-caption"><span class="moose-caption-text">Reconstructed microstructure with stress, created using the combined module                example file <code>EBSD_reconstruction_grain_growth_mech.i</code></span></p></div></div><div class="card moose-float" style="width:49%;margin-left:1%;float:right;"><div class="card-content"><picture class="materialboxed moose-image"><img src="../../../media/phase_field/EBSDReader_example.png"></img></picture><p class="moose-caption"><span class="moose-caption-text">Reconstructed microstructure using EBSDReader, created using the phase_field module                example file <code>IN100-111grn.i</code></span></p></div></div><section id="b21dc493-846f-408f-b4b2-1e3d8c73df29" data-section-level="2" data-section-text="Mesh"><h2 id="mesh">Mesh</h2><p>The mesh is generated from the EBSD information in the specified EBSD data file to get an optimal reconstruction of the data. This is accomplished in the mesh block using the <a href="../../../source/mesh/EBSDMesh.html"><code>EBSDMesh</code></a> type. The mesh is created with one node per data point in the EBSD data file. If you wish to use mesh adaptivity and allow the mesh to get coarser during the simulation, the <code>uniform_refine</code> parameter is used to set how many times the mesh can be coarsened. The block takes the form:</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[Mesh]
+  [ebsd_mesh]
+    type = EBSDMeshGenerator
+    filename = IN100_120x120.txt
+    pre_refine = 2
+  []
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#8665de91-790d-4fd7-8255-af819b4f5086">(moose/modules/phase_field/examples/ebsd_reconstruction/IN100-111grn.i)</a></section><section id="7e1cd1f8-7b5f-46e2-a63f-c2729114e631" data-section-level="2" data-section-text="EBSD Reader UserObject"><h2 id="ebsd-reader-userobject">EBSD Reader UserObject</h2><p>The UserObject reads in the data file, using the name supplied in the mesh block, and stores a data object with the local data at each material point as well as the average data about each grain. The block syntax is very simple:</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[UserObjects]
+  [ebsd_reader]
+    type = EBSDReader
+  []
+  [ebsd]
+    type = PolycrystalEBSD
+    coloring_algorithm = bt
+    ebsd_reader = ebsd_reader
+    enable_var_coloring = true
+  []
+  [grain_tracker]
+    type = GrainTracker
+    flood_entity_type = ELEMENTAL
+    compute_halo_maps = true # For displaying HALO fields
+    polycrystal_ic_uo = ebsd
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = ebsd
+    []
+  []
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#b97bd6db-9e7b-427a-b285-47f54cc8271c">(moose/modules/phase_field/examples/ebsd_reconstruction/IN100-111grn.i)</a></section><section id="3ccc3f8b-4b9a-4487-a790-41838dbec4f2" data-section-level="2" data-section-text="Applying Initial Conditions"><h2 id="applying-initial-conditions">Applying Initial Conditions</h2><p>The initial condition for the variables is set from the EBSD data. There are three possible use cases summarized below.</p><section id="6fcdc8d3-6c33-4a7e-9dc8-b6825685bdfb" data-section-level="3" data-section-text="Case 1 : Create grain structure from the grain numbers in the EBSD data , ignoring the phase number"><h3 id="case-1-create-grain-structure-from-the-grain-numbers-in-the-ebsd-data-ignoring-the-phase-number">Case 1: Create grain structure from the grain numbers in the EBSD data, ignoring the phase number</h3><p>A grain structure is created from the EBSD data by assigning initial condition values for order parameters. Many more grains can be represented than the number of order parameters. The required blocks are</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[Mesh]
+  # Create a mesh representing the EBSD data
+  [ebsd_mesh]
+    type = EBSDMeshGenerator
+    filename = IN100_001_28x28_Marmot.txt
+  []
+[]
+
+[GlobalParams]
+  # Define the number and names of the order parameters used to represent the grains
+  op_num = 4
+  var_name_base = gr
+[]
+
+[UserObjects]
+  [ebsd_reader]
+    # Read in the EBSD data. Uses the filename given in the mesh block.
+    type = EBSDReader
+  []
+  [ebsd]
+    type = PolycrystalEBSD
+    coloring_algorithm = bt
+    ebsd_reader = ebsd_reader
+    output_adjacency_matrix = true
+  []
+  [grain_tracker]
+    type = GrainTracker
+    # For displaying HALO fields
+    compute_halo_maps = true
+    # Link in the ebsd userobject here so that grain tracker can extract info from it
+    polycrystal_ic_uo = ebsd
+  []
+[]
+
+[Variables]
+  [PolycrystalVariables]
+    # Create all the order parameters
+    order = FIRST
+    family = LAGRANGE
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      # Uses the data from the user object &#x27;ebsd&#x27; to initialize the variables for all the order parameters.
+      polycrystal_ic_uo = ebsd
+    []
+  []
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#20fb0004-78f8-436b-abf6-eb65fe549ab7">(moose/modules/phase_field/test/tests/reconstruction/1phase_reconstruction.i)</a></section><section id="18e81070-1217-4ef3-b2e0-80db9e3bded9" data-section-level="3" data-section-text="Case 2 : Initialize a variable from a specific phase number in the EBSD data , ignoring the grain numbers"><h3 id="case-2-initialize-a-variable-from-a-specific-phase-number-in-the-ebsd-data-ignoring-the-grain-numbers">Case 2: Initialize a variable from a specific phase number in the EBSD data, ignoring the grain numbers</h3><p>Here, the value for a single variable is initialized from the EBSD data corresponding to a single phase number. The required blocks are</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[Mesh]
+  # Create a mesh representing the EBSD data
+  [ebsd_mesh]
+    type = EBSDMeshGenerator
+    filename = &#x27;Ti_2Phase_28x28_ebsd.txt&#x27;
+  []
+[]
+
+[UserObjects]
+  [ebsd]
+    # Read in the EBSD data. Uses the filename given in the mesh block.
+    type = EBSDReader
+  []
+[]
+
+[Variables]
+  # Creates the two variables being initialized
+  [c1]
+  []
+  [c2]
+  []
+[]
+
+[ICs]
+  [phase1_recon]
+    # Initializes the variable info from the ebsd data
+    type = ReconPhaseVarIC
+    ebsd_reader = ebsd
+    phase = 1
+    variable = c1
+  []
+  [phase2_recon]
+    type = ReconPhaseVarIC
+    ebsd_reader = ebsd
+    phase = 2
+    variable = c2
+  []
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#d9c5f8b3-a0a4-42e7-904a-4b7d61e913e8">(moose/modules/phase_field/test/tests/reconstruction/2phase_reconstruction.i)</a></section><section id="2e214d82-3221-41d2-ba52-426c1f2981d5" data-section-level="3" data-section-text="Case 3 : Create an initial grain structure from the EBSD data only corresponding to one phase number Here , the grain and phase numbers are used . The order parameters are initialized from the EBSD data , but only using those grains with a given phase number ."><h3 id="case-3-create-an-initial-grain-structure-from-the-ebsd-data-only-corresponding-to-one-phase-number-here-the-grain-and-phase-numbers-are-used-the-order-parameters-are-initialized-from-the-ebsd-data-but-only-using-those-grains-with-a-given-phase-number">Case 3: Create an initial grain structure from the EBSD data only corresponding to one phase number Here, the grain and phase numbers are used. The order parameters are initialized from the EBSD data, but only using those grains with a given phase number.</h3><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[Mesh]
+  [ebsd_mesh]
+    type = EBSDMeshGenerator
+    filename = Ti_2Phase_28x28_ebsd.txt
+  []
+[]
+
+[GlobalParams]
+  op_num = 2
+  var_name_base = gr
+[]
+
+[UserObjects]
+  [ebsd_reader]
+    type = EBSDReader
+  []
+  [ebsd]
+    type = PolycrystalEBSD
+    coloring_algorithm = bt
+    ebsd_reader = ebsd_reader
+    phase = 1
+    output_adjacency_matrix = true
+  []
+[]
+
+[Variables]
+  [PolycrystalVariables]
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      # select only data for phase 1 from the EBSD file
+      polycrystal_ic_uo = ebsd
+    []
+  []
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#e9712b80-b7e0-4d13-98f6-d4bc45ec52dd">(moose/modules/phase_field/test/tests/reconstruction/2phase_reconstruction2.i)</a></section></section><section id="8aa1e30f-20fd-4eef-800c-20379806055f" data-section-level="2" data-section-text="Using EBSD Crystal Info"><h2 id="using-ebsd-crystal-info">Using EBSD Crystal Info</h2><p>The <code>EBSDReader</code> local grid data is extracted using the <code>getData(Point)</code> function call, where you pass in location of the point where you want the data. The available data that can be extracted for a given point is</p><ul class="browser-default"><li><p><code>phi1</code> - The first Euler angle <span class="moose-katex-inline-equation" id="moose-equation-0517833c-1d6f-43e3-974c-f3923e96c25a"><script>var element = document.getElementById("moose-equation-0517833c-1d6f-43e3-974c-f3923e96c25a");katex.render("\\phi_1", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> </p></li><li><p><code>phi</code> - The second Euler angle <span class="moose-katex-inline-equation" id="moose-equation-69e26cec-9ce5-4a9e-8028-46466f958446"><script>var element = document.getElementById("moose-equation-69e26cec-9ce5-4a9e-8028-46466f958446");katex.render("\\Phi", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> </p></li><li><p><code>phi2</code> - The third Euler angle <span class="moose-katex-inline-equation" id="moose-equation-f84a8e22-0160-483b-9ab5-f606d92d279b"><script>var element = document.getElementById("moose-equation-f84a8e22-0160-483b-9ab5-f606d92d279b");katex.render("\\phi_2", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> </p></li><li><p><code>grain</code> - The index of the grain </p></li><li><p><code>phase</code> - The index of the phase </p></li><li><p><code>symmetry</code> - The symmetry class (from TSL)</p></li></ul><p>An example of using this function is shown here</p><pre class="moose-pre"><code class="language-cpp">
+const EBSDReader::EBSDData &amp; d = _ebsd_reader.getData(p);
+_euler_angles(0) = d.phi1;
+_euler_angles(1) = d.phi;
+_euler_angles(2) = d.phi2;
+</code></pre><p>The EBSDReader average grain data is extracted using the <code>getAvgData(unsigned int)</code> function call, where you pass in the grain number for which you want the data. The available data that can be extracted</p><ul class="browser-default"><li><p><code>phi1</code> - The average first Euler angle <span class="moose-katex-inline-equation" id="moose-equation-744acbd7-cef3-4329-9837-cd72543584a0"><script>var element = document.getElementById("moose-equation-744acbd7-cef3-4329-9837-cd72543584a0");katex.render("\\phi_1", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> </p></li><li><p><code>phi</code> - The average second Euler angle <span class="moose-katex-inline-equation" id="moose-equation-8ce60525-d5f3-4fd6-b22a-be92b973b3f5"><script>var element = document.getElementById("moose-equation-8ce60525-d5f3-4fd6-b22a-be92b973b3f5");katex.render("\\Phi", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> </p></li><li><p><code>phi2</code> - The average third Euler angle <span class="moose-katex-inline-equation" id="moose-equation-58dba6f4-e83d-4bc0-ac10-1785f912d90e"><script>var element = document.getElementById("moose-equation-58dba6f4-e83d-4bc0-ac10-1785f912d90e");katex.render("\\phi_2", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> </p></li><li><p><code>phase</code> - The index of the phase of the grain </p></li><li><p><code>symmetry</code> - The symmetry class (from TSL) </p></li><li><p><code>p</code> - Point with centroid location</p></li></ul><p>An example of using this function is show here, taken from ReconVarIC</p><pre class="moose-pre"><code class="language-cpp">
+const EBSDReader::EBSDAvgData &amp; d = _ebsd_reader.getAvgData(grn_index);
+_centerpoints[gr] = d.p;
+</code></pre></section><section id="5bf6206f-ed0d-4309-8494-f46086382330" data-section-level="2" data-section-text="Plotting Color Representation of Crystal Orientations"><h2 id="plotting-color-representation-of-crystal-orientations">Plotting Color Representation of Crystal Orientations</h2><div class="card moose-float" style="width:30%;margin-left:20px;float:right;"><div class="card-content"><picture class="materialboxed moose-image"><img src="../../../media/phase_field/RGB_plot.png"></img></picture><p class="moose-caption"><span class="moose-caption-text">Reconstructed microstructure with the color representation of the inverse polefigure                description of the crystal orientations. Image created using the phase_field module                example file <code>IN100-111grn.i</code>.</span></p></div></div><p>It is common to use an inverse pole figure representation of the crystal orientations to color the grains to represent EBSD data. To simplify the comparison with experiments, MOOSE has a tool for outputting color values for the inverse pole figure representation that can then be visualized using Paraview. The spatially varying red, green, and blue (RGB) values are outputted as auxvariables that are automatically read by Paraview as a vector.</p><p>Two <code>Auxkernels</code> can be used to output the RGB values. The first, <a href="http://mooseframework.org/docs/doxygen/modules/classEulerAngleProvider2RGBAux.html">EulerAngleProvider2RGBAux</a> is the simplest but requires the entire domain to have the same crystal structure. The second, <a href="http://mooseframework.org/docs/doxygen/modules/classEulerAngleVariables2RGBAux.html">EulerAngleVariables2RGBAux</a> requires various other auxvariables that contain the Euler angles, the crystal structure, and the phase number.</p><p>The easiest way of outputting the values is to use a custom action block in the input file that is available. The syntax is</p><pre class="moose-pre"><code class="language-text">
+[Modules]
+  [./PhaseField]
+    [./EulerAngles2RGB]
+      crystal_structure = cubic
+      euler_angle_provider = ebsd
+      grain_tracker = grain_tracker
+    [../]
+  [../]
+[]
+</code></pre><p>We recommend you plot the colors using Paraview. The EulerAngle2RGB action will create three auxvariables with default names <code>RGB_x</code>, <code>RGB_y</code>, and <code>RGB_z</code>. Paraview will automatically create a vector variable of name <code>RGB_</code>. To correctly represent the colors,</p><ol class="browser-default" start="1"><li><p> Select <code>RGB_</code> as the visualization variable. </p></li><li><p> In the properties section with the advanced properties toggled on, uncheck <code>Map Scalars</code> under <code>Scalar Coloring</code>.</p></li></ol></section></section><div class="moose-modal modal" id="8665de91-790d-4fd7-8255-af819b4f5086"><div class="modal-content"><h4>(moose/modules/phase_field/examples/ebsd_reconstruction/IN100-111grn.i)</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [ebsd_mesh]
+    type = EBSDMeshGenerator
+    filename = IN100_120x120.txt
+    pre_refine = 2
+  []
+[]
+
+[GlobalParams]
+  op_num = 8
+  var_name_base = gr
+[]
+
+[UserObjects]
+  [ebsd_reader]
+    type = EBSDReader
+  []
+  [ebsd]
+    type = PolycrystalEBSD
+    coloring_algorithm = bt
+    ebsd_reader = ebsd_reader
+    enable_var_coloring = true
+  []
+  [grain_tracker]
+    type = GrainTracker
+    flood_entity_type = ELEMENTAL
+    compute_halo_maps = true # For displaying HALO fields
+    polycrystal_ic_uo = ebsd
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = ebsd
+    []
+  []
+[]
+
+[Variables]
+  [PolycrystalVariables]
+  []
+[]
+
+[AuxVariables]
+  [bnds]
+  []
+  [unique_grains_ic]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [unique_grains]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [ghost_elements]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [halos]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [var_indices_ic]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [var_indices]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [ebsd_grains]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+[]
+
+[Kernels]
+  [PolycrystalKernel]
+  []
+[]
+
+[AuxKernels]
+  [BndsCalc]
+    type = BndsCalcAux
+    variable = bnds
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [ghost_elements]
+    type = FeatureFloodCountAux
+    variable = ghost_elements
+    field_display = GHOSTED_ENTITIES
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+  []
+  [halos]
+    type = FeatureFloodCountAux
+    variable = halos
+    field_display = HALOS
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+  []
+  [var_indices_ic]
+    type = FeatureFloodCountAux
+    variable = var_indices_ic
+    execute_on = &#x27;initial&#x27;
+    flood_counter = ebsd
+    field_display = VARIABLE_COLORING
+  []
+  [unique_grains_ic]
+    type = FeatureFloodCountAux
+    variable = unique_grains_ic
+    execute_on = &#x27;initial&#x27;
+    flood_counter = ebsd
+    field_display = UNIQUE_REGION
+  []
+  [var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+    field_display = VARIABLE_COLORING
+  []
+  [unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+    field_display = UNIQUE_REGION
+  []
+  [grain_aux]
+    type = EBSDReaderPointDataAux
+    variable = ebsd_grains
+    ebsd_reader = ebsd_reader
+    data_name = &#x27;feature_id&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+[]
+
+[Modules]
+  [PhaseField]
+    [EulerAngles2RGB]
+      crystal_structure = cubic
+      euler_angle_provider = ebsd_reader
+      grain_tracker = grain_tracker
+    []
+  []
+[]
+
+[Materials]
+  [Copper]
+    # T = 500 # K
+    type = GBEvolution
+    T = 500
+    wGB = 0.6 # um
+    GBmob0 = 2.5e-6 # m^4/(Js) from Schoenfelder 1997
+    Q = 0.23 # Migration energy in eV
+    GBenergy = 0.708 # GB energy in J/m^2
+    molar_volume = 7.11e-6 # Molar volume in m^3/mol
+    length_scale = 1.0e-6
+    time_scale = 1.0e-6
+  []
+[]
+
+[Postprocessors]
+  [dt]
+    type = TimestepSize
+  []
+  [n_elements]
+    type = NumElements
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [n_nodes]
+    type = NumNodes
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [DOFs]
+    type = NumDOFs
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = PJFNK
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -pc_hypre_boomeramg_strong_threshold&#x27;
+  petsc_options_value = &#x27;hypre    boomeramg      0.7&#x27;
+
+  l_tol = 1.0e-4
+  l_max_its = 20
+  nl_max_its = 20
+  nl_rel_tol = 1.0e-8
+
+  start_time = 0.0
+  num_steps = 30
+
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    cutback_factor = 0.9
+    dt = 10.0
+    growth_factor = 1.1
+    optimal_iterations = 7
+  []
+
+  [Adaptivity]
+    initial_adaptivity = 2
+    refine_fraction = 0.7
+    coarsen_fraction = 0.1
+    max_h_level = 2
+  []
+[]
+
+[Outputs]
+  exodus = true
+  checkpoint = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="b97bd6db-9e7b-427a-b285-47f54cc8271c"><div class="modal-content"><h4>(moose/modules/phase_field/examples/ebsd_reconstruction/IN100-111grn.i)</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [ebsd_mesh]
+    type = EBSDMeshGenerator
+    filename = IN100_120x120.txt
+    pre_refine = 2
+  []
+[]
+
+[GlobalParams]
+  op_num = 8
+  var_name_base = gr
+[]
+
+[UserObjects]
+  [ebsd_reader]
+    type = EBSDReader
+  []
+  [ebsd]
+    type = PolycrystalEBSD
+    coloring_algorithm = bt
+    ebsd_reader = ebsd_reader
+    enable_var_coloring = true
+  []
+  [grain_tracker]
+    type = GrainTracker
+    flood_entity_type = ELEMENTAL
+    compute_halo_maps = true # For displaying HALO fields
+    polycrystal_ic_uo = ebsd
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = ebsd
+    []
+  []
+[]
+
+[Variables]
+  [PolycrystalVariables]
+  []
+[]
+
+[AuxVariables]
+  [bnds]
+  []
+  [unique_grains_ic]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [unique_grains]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [ghost_elements]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [halos]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [var_indices_ic]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [var_indices]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [ebsd_grains]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+[]
+
+[Kernels]
+  [PolycrystalKernel]
+  []
+[]
+
+[AuxKernels]
+  [BndsCalc]
+    type = BndsCalcAux
+    variable = bnds
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [ghost_elements]
+    type = FeatureFloodCountAux
+    variable = ghost_elements
+    field_display = GHOSTED_ENTITIES
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+  []
+  [halos]
+    type = FeatureFloodCountAux
+    variable = halos
+    field_display = HALOS
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+  []
+  [var_indices_ic]
+    type = FeatureFloodCountAux
+    variable = var_indices_ic
+    execute_on = &#x27;initial&#x27;
+    flood_counter = ebsd
+    field_display = VARIABLE_COLORING
+  []
+  [unique_grains_ic]
+    type = FeatureFloodCountAux
+    variable = unique_grains_ic
+    execute_on = &#x27;initial&#x27;
+    flood_counter = ebsd
+    field_display = UNIQUE_REGION
+  []
+  [var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+    field_display = VARIABLE_COLORING
+  []
+  [unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+    field_display = UNIQUE_REGION
+  []
+  [grain_aux]
+    type = EBSDReaderPointDataAux
+    variable = ebsd_grains
+    ebsd_reader = ebsd_reader
+    data_name = &#x27;feature_id&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+[]
+
+[Modules]
+  [PhaseField]
+    [EulerAngles2RGB]
+      crystal_structure = cubic
+      euler_angle_provider = ebsd_reader
+      grain_tracker = grain_tracker
+    []
+  []
+[]
+
+[Materials]
+  [Copper]
+    # T = 500 # K
+    type = GBEvolution
+    T = 500
+    wGB = 0.6 # um
+    GBmob0 = 2.5e-6 # m^4/(Js) from Schoenfelder 1997
+    Q = 0.23 # Migration energy in eV
+    GBenergy = 0.708 # GB energy in J/m^2
+    molar_volume = 7.11e-6 # Molar volume in m^3/mol
+    length_scale = 1.0e-6
+    time_scale = 1.0e-6
+  []
+[]
+
+[Postprocessors]
+  [dt]
+    type = TimestepSize
+  []
+  [n_elements]
+    type = NumElements
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [n_nodes]
+    type = NumNodes
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [DOFs]
+    type = NumDOFs
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = PJFNK
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -pc_hypre_boomeramg_strong_threshold&#x27;
+  petsc_options_value = &#x27;hypre    boomeramg      0.7&#x27;
+
+  l_tol = 1.0e-4
+  l_max_its = 20
+  nl_max_its = 20
+  nl_rel_tol = 1.0e-8
+
+  start_time = 0.0
+  num_steps = 30
+
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    cutback_factor = 0.9
+    dt = 10.0
+    growth_factor = 1.1
+    optimal_iterations = 7
+  []
+
+  [Adaptivity]
+    initial_adaptivity = 2
+    refine_fraction = 0.7
+    coarsen_fraction = 0.1
+    max_h_level = 2
+  []
+[]
+
+[Outputs]
+  exodus = true
+  checkpoint = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="20fb0004-78f8-436b-abf6-eb65fe549ab7"><div class="modal-content"><h4>(moose/modules/phase_field/test/tests/reconstruction/1phase_reconstruction.i)</h4><pre class="moose-pre"><code class="language-text">#
+# In this test we set the initial condition of a set of order parameters
+# by pulling out the grain data from given EBSD data file ignoring the phase completely.
+#
+
+[Problem]
+  type = FEProblem
+  solve = false
+  kernel_coverage_check = false
+[]
+
+# The following sections are extracted in the documentation in
+# moose/docs/content/modules/phase_field/ICs/EBSD.md
+
+[Mesh]
+  # Create a mesh representing the EBSD data
+  [ebsd_mesh]
+    type = EBSDMeshGenerator
+    filename = IN100_001_28x28_Marmot.txt
+  []
+[]
+
+[GlobalParams]
+  # Define the number and names of the order parameters used to represent the grains
+  op_num = 4
+  var_name_base = gr
+[]
+
+[UserObjects]
+  [ebsd_reader]
+    # Read in the EBSD data. Uses the filename given in the mesh block.
+    type = EBSDReader
+  []
+  [ebsd]
+    type = PolycrystalEBSD
+    coloring_algorithm = bt
+    ebsd_reader = ebsd_reader
+    output_adjacency_matrix = true
+  []
+  [grain_tracker]
+    type = GrainTracker
+    # For displaying HALO fields
+    compute_halo_maps = true
+    # Link in the ebsd userobject here so that grain tracker can extract info from it
+    polycrystal_ic_uo = ebsd
+  []
+[]
+
+[Variables]
+  [PolycrystalVariables]
+    # Create all the order parameters
+    order = FIRST
+    family = LAGRANGE
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      # Uses the data from the user object &#x27;ebsd&#x27; to initialize the variables for all the order parameters.
+      polycrystal_ic_uo = ebsd
+    []
+  []
+[]
+#ENDDOC - End of the file section that is included in the documentation. Do not change this line!
+
+[GlobalParams]
+  execute_on = &#x27;initial&#x27;
+  family = MONOMIAL
+  order = CONSTANT
+[]
+
+[AuxVariables]
+  [PHI1]
+  []
+  [PHI]
+  []
+  [PHI2]
+  []
+  [GRAIN]
+  []
+  [unique_grains]
+  []
+  [var_indices]
+  []
+  [halo0]
+  []
+  [halo1]
+  []
+  [halo2]
+  []
+  [halo3]
+  []
+[]
+
+[AuxKernels]
+  [phi1_aux]
+    type = EBSDReaderPointDataAux
+    variable = PHI1
+    ebsd_reader = ebsd_reader
+    data_name = &#x27;phi1&#x27;
+  []
+  [phi_aux]
+    type = EBSDReaderPointDataAux
+    variable = PHI
+    ebsd_reader = ebsd_reader
+    data_name = &#x27;phi&#x27;
+  []
+  [phi2_aux]
+    type = EBSDReaderPointDataAux
+    variable = PHI2
+    ebsd_reader = ebsd_reader
+    data_name = &#x27;phi2&#x27;
+  []
+  [grain_aux]
+    type = EBSDReaderPointDataAux
+    variable = GRAIN
+    ebsd_reader = ebsd_reader
+    data_name = &#x27;feature_id&#x27;
+  []
+  [unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    flood_counter = grain_tracker
+    field_display = UNIQUE_REGION
+  []
+  [var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    flood_counter = grain_tracker
+    field_display = VARIABLE_COLORING
+  []
+  [halo0]
+    type = FeatureFloodCountAux
+    variable = halo0
+    map_index = 0
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo1]
+    type = FeatureFloodCountAux
+    variable = halo1
+    map_index = 1
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo2]
+    type = FeatureFloodCountAux
+    variable = halo2
+    map_index = 2
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo3]
+    type = FeatureFloodCountAux
+    variable = halo3
+    map_index = 3
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+[]
+
+[Executioner]
+  type = Steady
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="d9c5f8b3-a0a4-42e7-904a-4b7d61e913e8"><div class="modal-content"><h4>(moose/modules/phase_field/test/tests/reconstruction/2phase_reconstruction.i)</h4><pre class="moose-pre"><code class="language-text">#
+# In this test we set the initial condition of two variables
+# based on solely the phase information in a given EBSD data file,
+# ignoring the feature IDs entirely
+#
+
+[Problem]
+  type = FEProblem
+  solve = false
+  kernel_coverage_check = false
+[]
+
+# The following sections are extracted in the documentation in
+# moose/docs/content/modules/phase_field/ICs/EBSD.md
+
+[Mesh]
+  # Create a mesh representing the EBSD data
+  [ebsd_mesh]
+    type = EBSDMeshGenerator
+    filename = &#x27;Ti_2Phase_28x28_ebsd.txt&#x27;
+  []
+[]
+
+[UserObjects]
+  [ebsd]
+    # Read in the EBSD data. Uses the filename given in the mesh block.
+    type = EBSDReader
+  []
+[]
+
+[Variables]
+  # Creates the two variables being initialized
+  [c1]
+  []
+  [c2]
+  []
+[]
+
+[ICs]
+  [phase1_recon]
+    # Initializes the variable info from the ebsd data
+    type = ReconPhaseVarIC
+    ebsd_reader = ebsd
+    phase = 1
+    variable = c1
+  []
+  [phase2_recon]
+    type = ReconPhaseVarIC
+    ebsd_reader = ebsd
+    phase = 2
+    variable = c2
+  []
+[]
+#ENDDOC - End of the file section that is included in the documentation. Do not change this line!
+
+[AuxVariables]
+  [PHI1]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [PHI]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [APHI2]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [PHI2]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+  [PHASE]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+[]
+
+[AuxKernels]
+  [phi1_aux]
+    type = EBSDReaderPointDataAux
+    variable = PHI1
+    ebsd_reader = ebsd
+    data_name = &#x27;phi1&#x27;
+    execute_on = &#x27;initial&#x27;
+  []
+  [phi_aux]
+    type = EBSDReaderPointDataAux
+    variable = PHI
+    ebsd_reader = ebsd
+    data_name = &#x27;phi&#x27;
+    execute_on = &#x27;initial&#x27;
+  []
+  [phi2_aux]
+    type = EBSDReaderPointDataAux
+    variable = PHI2
+    ebsd_reader = ebsd
+    data_name = &#x27;phi2&#x27;
+    execute_on = &#x27;initial&#x27;
+  []
+  [phase_aux]
+    type = EBSDReaderPointDataAux
+    variable = PHASE
+    ebsd_reader = ebsd
+    data_name = &#x27;phase&#x27;
+    execute_on = &#x27;initial&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  num_steps = 0
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="e9712b80-b7e0-4d13-98f6-d4bc45ec52dd"><div class="modal-content"><h4>(moose/modules/phase_field/test/tests/reconstruction/2phase_reconstruction2.i)</h4><pre class="moose-pre"><code class="language-text">#
+# In this test we set the initial condition of a set of order parameters
+# by pulling out the only grains from given EBSD data file that belong to a specified phase
+#
+
+[Problem]
+  type = FEProblem
+  solve = false
+  kernel_coverage_check = false
+[]
+
+# The following sections are extracted in the documentation in
+# moose/docs/content/modules/phase_field/ICs/EBSD.md
+
+[Mesh]
+  [ebsd_mesh]
+    type = EBSDMeshGenerator
+    filename = Ti_2Phase_28x28_ebsd.txt
+  []
+[]
+
+[GlobalParams]
+  op_num = 2
+  var_name_base = gr
+[]
+
+[UserObjects]
+  [ebsd_reader]
+    type = EBSDReader
+  []
+  [ebsd]
+    type = PolycrystalEBSD
+    coloring_algorithm = bt
+    ebsd_reader = ebsd_reader
+    phase = 1
+    output_adjacency_matrix = true
+  []
+[]
+
+[Variables]
+  [PolycrystalVariables]
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      # select only data for phase 1 from the EBSD file
+      polycrystal_ic_uo = ebsd
+    []
+  []
+[]
+#ENDDOC - End of the file section that is included in the documentation. Do not change this line!
+
+[Executioner]
+  type = Transient
+  num_steps = 0
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../../js/init.js"></script><script type="text/javascript" src="../../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../../js/sqa_moose.js"></script>
