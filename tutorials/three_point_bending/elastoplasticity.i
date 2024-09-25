@@ -84,7 +84,7 @@ ep0 = 0.345
     subdomain_id = 1
     complement_subdomain_id = 0
     execute_on = 'INITIAL TIMESTEP_END'
-    apply_initial_conditions = false
+    reinitialize_subdomains = ''
   []
 []
 
