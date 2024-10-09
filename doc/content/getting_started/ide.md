@@ -1,61 +1,49 @@
-# Setup Atom Editor for MOOSE
+# Setup VSCode Editor for MOOSE
 
-[Atom](http://atom.io) is a text editor developed by GitHub with a flexible plugin structure. Several
-plugins are available to customize Atom for MOOSE development, some specifically developed for MOOSE.
+[VSCode](https://code.visualstudio.com/) is a text editor developed by Microsoft with a flexible plugin structure. [It is recommended to set up VSCode as documented by the MOOSE team.](https://mooseframework.inl.gov/help/development/VSCode.html)
 
-## Setting up Atom
+## Optional steps
 
-Installation packages can be downloaded for Mac, Linux, and Windows operating systems from the
-[Atom website](http://atom.io). The editor has an automatic update system for both the core editor as
-well as the installed plugins.
+If you plan to work with the source code of RACCOON, then it is recommended to use the [clangd](https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd) extension instead of Microsoft IntelliSense for code autocompletion. Clangd reads the project's compile commands and stores linking information for faster retrieval. If you go this route, make sure to disable IntelliSense for C++ in VSCode (a prompt will pop up instructing you to do so once you install Clangd).
 
-### First Steps (for MacOS only)
+Clangd needs to have access to a `compile_commands.json` file to work. To generate this, simply navigate to your RACCOON directory and run,
 
-- +Start Atom+ for the first time and select *Atom->Install Shell Commands*. This activates the
-  `atom` and `apm` shell commands for use from a terminal.
-- +Close Atom+. From now on we will only start it from our MOOSE project directories using `atom`
-  ensuring that Atom sees the full MOOSE build environment.
+``` bash
+make compile_commands.json
+```
 
-## Important commands
+To configure Clangd so that it is able to find the file, it is recommended to set up a VSCode workspace as such,
 
-!media media/atom_fuzzyfinder.png
-       style=width:300px;padding-left:20px;float:right;
-       caption=Opening new files with the fuzzy search (Cmd-T).
+```JSON
+{
+    "folders": [
+        {
+            "path": "."
+        },
+        {
+            "path": "./moose"
+        }
+    ],
+    "settings": {
+        "clangd.arguments": [
+            "--compile-commands-dir=/<path to RACCOON>/raccoon",
+            "--background-index",
+            "--query-driver=/<path to miniforge>/miniforge/envs/moose/bin/mpicxx"
+        ],
+        "[moose]": {
+            "outline.showProperties": false,
+            "outline.showStrings": false
+        }
+    }
+}
+```
 
-- +Cmd-Shift-P+ opens the command palette. Every available Atom command can be accessed by typing a
-  few letters here. The dropdown list shows the keyboard shortcuts.
-- +Cmd-T+ opens a file anywhere in the current project tree (i.e. below the directory in which you
-  issued the `atom .` command. No need to know the precise path or even the precise spelling of the
-  filename!
+Create a file called `raccoon.code-workspace` with the above content and place it into the `.vscode` folder (if this folder does not exist then create it). Remember to replace the `<path to ... >` placeholders with their actual respective paths.
 
-## Plugins
+Clangd will now be activated by opening a source file and saving it (this can typically be done by pressing Ctrl+S). If all is in order, then you will see the indexing process start in the status bar of VSCode:
 
-The following plugins should be installed to effectively develop MOOSE based codes and edit MOOSE
-input files using Atom
+!media media/indexing.png style=display:block;margin:auto;width:50%;
 
-!media media/atom_autocomplete.gif
-       style=width:300px;padding-left:20px;float:right;
-       caption=autocomplete-moose in action.
+This may take a while depending on the speed of your processor; however, it only needs to be done once.
 
-- [switch-header-source](http://atom.io/packages/switch-header-source): Use +Ctrl-Alt-S+ to switch
-  between corresponding header and source files.
-- [language-moose](http://atom.io/packages/language-moose): Syntax highlighting and automatic
-  indentation for MOOSE input files, C++ [code snippets](./Snippets) for all MOOSE systems, and
-  highlighting of select MOOSE C++ types.
-- [autocomplete-moose](http://atom.io/packages/autocomplete-moose): Context sensitive autocompletion
-  for MOOSE input files.
-- [make-runner](http://atom.io/packages/make-runner): Press +Ctrl-R+ to build the current project
-  from within Atom. Features clickable compile error messages to jump straight to the locations with
-  the compile errors.
-- [autocomplete-clang](http://atom.io/packages/autocomplete-clang): Type-aware C++
-  autocompletion. Use ```make clang_complete``` in your project directory to generate the necessary
-  configuration file.
-- [clang-format](http://atom.io/packages/clang-format): Uses clang-format with the custom MOOSE style
-  rules to format your code. Can be set to reformat automatically when saving or manually by pressing
-  +Cmd-Shift-K+.
-
-
-### Recommended settings
-
-- In the *whitespace* core package (Settings->Packages search for 'whitespace') deactivate *Ignore
-  Whitespace On Current Line*.
+Once the indexing finishes you should be able to utilize the autocomplete features of Clangd in both RACCOON and MOOSE. I recommend reading the Clangd [documentation](https://marketplace.visualstudio.com/items?itemName=llvm-vs-code-extensions.vscode-clangd) to learn about the full capabilities.
