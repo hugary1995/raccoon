@@ -3,7 +3,7 @@
 Often times, it is useful to locally host the documentation of RACCOON (this website), both for convenience and for development purposes. To build the documentation, first make sure you have compiled RACCOON. Then build the documentation using
 
 ```bash
-cd docs
+cd doc
 ./moosedocs.py build --serve
 ```
 
