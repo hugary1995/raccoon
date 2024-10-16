@@ -75,7 +75,7 @@ ep0 = 0.345
   []
 []
 
-[UserObjects]
+[MeshModifiers]
   [esm]
     type = CoupledVarThresholdElementSubdomainModifier
     coupled_var = d
