@@ -71,7 +71,7 @@
   [diff]
     type = ADPFFDiffusion
     variable = d
-    fracture_toughness = Gc
+    fracture_toughness = Gc_delta
     regularization_length = l
     normalization_constant = c0
   []
@@ -146,6 +146,12 @@
     type = ComputeSmallDeformationStress
     elasticity_model = elasticity
     output_properties = 'stress'
+  []
+  [Gc_delta]
+    type = ADParsedMaterial
+    property_name = Gc_delta
+    expression = 'Gc*delta'
+    material_property_names = 'Gc delta'
   []
 []
 
