@@ -221,10 +221,10 @@ refine = 3
   dtmin = 1e-2
   end_time = 0.3
 
-  fixed_point_max_its = 500
+  fixed_point_max_its = 100
   accept_on_max_fixed_point_iteration = false
-  fixed_point_rel_tol = 1e-6
-  fixed_point_abs_tol = 1e-8
+  fixed_point_rel_tol = 1e-4
+  fixed_point_abs_tol = 1e-6
 []
 
 [Outputs]
