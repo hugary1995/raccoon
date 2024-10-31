@@ -148,7 +148,7 @@
     output_properties = 'stress'
   []
   [Gc_delta]
-    type = ADParsedFunctorMaterial
+    type = ADParsedMaterial
     property_name = Gc_delta
     expression = 'Gc*delta'
     material_property_names = 'Gc delta'
