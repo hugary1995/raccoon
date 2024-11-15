@@ -38,7 +38,6 @@ NAVIER_STOKES       := no
 PHASE_FIELD         := yes
 RDG                 := no
 RICHARDS            := no
-SOLID_MECHANICS     := no
 STOCHASTIC_TOOLS    := no
 SOLID_MECHANICS     := yes
 XFEM                := no
