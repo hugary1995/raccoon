@@ -33,6 +33,7 @@ We support both small deformation and large deformation. Several hyperelastic mo
 
 - [Power-law hardening](PowerLawHardening.md)
 - [Arrhenius-law hardening](ArrheniusLawHardening.md)
+- [Johnson-Cook Hardening](JohnsonCookHardening.md)
 
 ## Phase-field fracture models
 
