@@ -35,7 +35,7 @@ tqf = 1
   [fracture]
     type = TransientMultiApp
     input_files = 'fracture.i'
-    cli_args = 'a=${a};psic=${psic};Gc=${Gc};l=${l};'
+    cli_args = 'a=${a};psic=${psic};Gc=${Gc};l=${l} '
     execute_on = 'TIMESTEP_END'
   []
 []
