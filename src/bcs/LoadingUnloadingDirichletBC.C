@@ -3,6 +3,7 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "LoadingUnloadingDirichletBC.h"
+#include "FEProblemBase.h"
 
 registerMooseObject("raccoonApp", LoadingUnloadingDirichletBC);
 
