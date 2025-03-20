@@ -6,6 +6,8 @@ See *A variational formulation of Griffith phase-field fracture with material st
 
 This is a variational recast of the phase-field fracture formulation put forth by Kumar, Francfort and Lopez-Pamies (2018), where $\delta$ is explicitly evaluated.
 
+*To make the input deck of a series of nucleation models in years consistent in general, $c_e$ and its coefficients are flipped in signs as compared to [!cite](larsen2024)*
+
 ## Overview
 
 ### LDL (Larsen, Dolbow, Lopez) Model 2024
@@ -18,14 +20,16 @@ The fracture functional reads
 
 The governing equation for fracture is
 \begin{equation}
--\nabla\cdot \dfrac{2 G_c l \delta^l}{c_0}\nabla d + \dfrac{\partial}{\partial d}\left( \alpha \dfrac{\delta^l G_c}{c_0 l} - g(d)\psi_e\right) - g(d)\widehat{c_e} \ge 0.
+-\nabla\cdot \dfrac{2 G_c l \delta^l}{c_0}\nabla d + \dfrac{\partial}{\partial d}\left( \alpha \dfrac{\delta^l G_c}{c_0 l} + g(d)\psi_e\right) + g(d)\widehat{c_e} \ge 0.
 \end{equation}
 
 Note that the following derivation follows settings of `AT-1`, i.e., $\alpha(d)=d$ and $c_0=\dfrac{8}{3}$. In this model, the strict irreversibility condition for $d$ is adopted.
 
+*The current model was developed based on `AT-1`. For a different form of disspation funciton $\alpha(d)$, $c_e$ is expected to be different than what is introduced below*
+
 The "undamaged" nucleation driving force is defined as
 \begin{equation}
-\widehat{c_e}(\boldsymbol{\varepsilon}(\boldsymbol{u}))= \alpha_2 \sqrt{J_2} +  \alpha_1 I_1 - (1-d)\left(1 - \dfrac{\sqrt{I_1^2}}{I_1}\right)\psi_e.
+\widehat{c_e}(\boldsymbol{\varepsilon}(\boldsymbol{u}))= \alpha_2 \sqrt{J_2} +  \alpha_1 I_1 + (1-d)\left(1 - \dfrac{\sqrt{I_1^2}}{I_1}\right)\psi_e.
 \end{equation}
 
 In this recast, $\delta^l$ is evaluated explicitly as
