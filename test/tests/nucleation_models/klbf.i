@@ -136,7 +136,6 @@
     compressive_strength = sigma_cs
     delta = delta
     external_driving_force_name = ce
-    output_properties = 'ce'
   []
   [strain]
     type = ADComputePlaneSmallStrain
@@ -154,7 +153,6 @@
   [stress]
     type = ComputeSmallDeformationStress
     elasticity_model = elasticity
-    output_properties = 'stress'
   []
 []
 
