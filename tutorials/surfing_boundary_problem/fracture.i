@@ -145,7 +145,6 @@
   [stress]
     type = ComputeSmallDeformationStress
     elasticity_model = elasticity
-    output_properties = 'stress'
   []
   [Gc_delta]
     type = ADParsedMaterial
