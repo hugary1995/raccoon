@@ -193,7 +193,6 @@ refine = 1
   [stress]
     type = ComputeSmallDeformationStress
     elasticity_model = elasticity
-    output_properties = 'stress'
   []
 []
 
