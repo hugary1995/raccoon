@@ -77,6 +77,12 @@ LDLNucleationMicroForce::computeQpProperties()
     // Get mesh size of current element
     ADReal h = _current_elem->hmin();
 
+    if (h > _L[_qp] * 0.5)
+      mooseInfoRepeated(
+          "The mesh size might be too coarse for a valid h_correction in the complete "
+          "model and lead to unexpected numerical strength surface. You may either refine "
+          "the mesh or turn h_correction=false.");
+
     // Use formula with h correction
     _delta[_qp] = std::pow(1 + 3.0 / 8.0 * h / _L[_qp], -2) *
                       (_sigma_ts[_qp] + (1 + 2 * std::sqrt(3.0)) * _sigma_hs[_qp]) /
