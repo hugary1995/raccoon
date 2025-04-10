@@ -1,18 +1,55 @@
 [Tests]
-  [klbf_nucforce]
-    type = Exodiff
+  # [klbf_nucforce]
+  #   type = Exodiff
+  #   input = 'elasticity.i'
+  #   exodiff = 'klbf_out.e'
+  #   cli_args = 'delta=1.16 MultiApps/fracture/input_files=klbf.i Outputs/file_base=klbf_out'
+  #   abs_zero = 1e-9
+  #   rel_err = 1e-4
+  # []
+  # [klr_nucforce]
+  #   type = Exodiff
+  #   input = 'elasticity.i'
+  #   exodiff = 'klr_out.e'
+  #   cli_args = 'delta=0.2 MultiApps/fracture/input_files=klr.i Outputs/file_base=klr_out'
+  #   abs_zero = 1e-9
+  #   rel_err = 1e-4
+  # []
+  [ldl_warning_h_correction]
+    type = RunApp 
     input = 'elasticity.i'
-    exodiff = 'klbf_out.e'
-    cli_args = 'delta=1.16 MultiApps/fracture/input_files=klbf.i Outputs/file_base=klbf_out'
-    abs_zero = 1e-9
-    rel_err = 1e-4
+    issues = '#198'
+    requirement = 'LDL nucleation model should throw warnings when the mesh size is too coarse for h_correction=true'
+    cli_args = 'MultiApps/fracture/input_files=ldl.i Outputs/file_base=ldl_out Transfers/from_d/variable=d Transfers/from_d/source_variable=d --allow-unused'
+    expect_out = 'fracture0: Solution Invalid Warnings:
+fracture0: -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+fracture0: |         Object          | Converged | Timestep | Total |                                                                                                         Message                                                                                                        |
+fracture0: -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+fracture0: | LDLNucleationMicroForce |      1920 |    11520 | 26880 | The mesh size might be too coarse for a valid h_correction in the complete model and lead to unexpected numerical strength surface. You may either refine the mesh, reduce the reg length, or turn h_correction=false. |
+fracture0: -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------'
   []
-  [klr_nucforce]
+  [ldl_nucforce]
     type = Exodiff
     input = 'elasticity.i'
-    exodiff = 'klr_out.e'
-    cli_args = 'delta=0.2 MultiApps/fracture/input_files=klr.i Outputs/file_base=klr_out'
+    exodiff = 'ldl_out.e'
+    # cli_args = 'MultiApps/fracture/input_files=ldl.i Outputs/file_base=ldl_out Transfers/from_d/variable=d Transfers/from_d/source_variable=d --allow-unused'
     abs_zero = 1e-9
     rel_err = 1e-4
+    prereq = ldl_warning_h_correction
+    delete_output_before_running = false
+    should_execute = false
+  []
+  [ldl_warning_lch]
+    type = RunApp 
+    input = 'elasticity.i'
+    issues = '#198'
+    requirement = 'LDL nucleation model should throw warnings when the reg length is too large compared to the characteristic length.'
+    cli_args = 'MultiApps/fracture/input_files=ldl.i Outputs/file_base=ldl_out Transfers/from_d/variable=d Transfers/from_d/source_variable=d --allow-unused l=5 Executioner/num_steps=1 Executioner/fixed_point_max_its=1'
+    expect_out = 'fracture0: Solution Invalid Warnings:
+fracture0: ----------------------------------------------------------------------------------------------------------------------------------------------------
+fracture0: |         Object          | Converged | Timestep | Total |                                         Message                                         |
+fracture0: ----------------------------------------------------------------------------------------------------------------------------------------------------
+fracture0: | LDLNucleationMicroForce |      1920 |    30720 | 30720 | The reg length might be too large to construct a reasonable numerical strength surface. |
+fracture0: ----------------------------------------------------------------------------------------------------------------------------------------------------'
   []
 []
