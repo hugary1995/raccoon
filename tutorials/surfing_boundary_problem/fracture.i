@@ -31,7 +31,7 @@
   [d]
     [InitialCondition]
       type = FunctionIC
-      function = 'if(y=0&x>=0&x<=5,1,0)'
+      function = 'if(y=0&x>=0&x<=5,${initd},0)'
     []
   []
 []
@@ -53,10 +53,11 @@
 
 [Bounds]
   [conditional]
-    type = VariableOldValueBounds
+    type = ConditionalBoundsAux
     variable = bounds_dummy
     bounded_variable = d
-    bound_type = lower
+    fixed_bound_value = 0.0
+    threshold_value = 0.95
   []
   [upper]
     type = ConstantBounds
