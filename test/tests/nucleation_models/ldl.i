@@ -1,3 +1,5 @@
+sigma_hs = '${fparse 2/3*sigma_ts*sigma_cs/(sigma_cs - sigma_ts)}'
+
 [Mesh]
   [gen]
     type = GeneratedMeshGenerator
@@ -31,7 +33,7 @@
   [d]
     [InitialCondition]
       type = FunctionIC
-      function = 'if(y=0&x>=0&x<=5,${initd},0)'
+      function = 'if(y=0&x>=0&x<=5,1,0)'
     []
   []
 []
@@ -56,7 +58,7 @@
     type = ConditionalBoundsAux
     variable = bounds_dummy
     bounded_variable = d
-    fixed_bound_value = 0.0
+    fixed_bound_value = 0
     threshold_value = 0.95
   []
   [upper]

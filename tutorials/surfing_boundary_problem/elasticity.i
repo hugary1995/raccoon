@@ -25,6 +25,8 @@ V = 20
 nx = 108
 ny = 36
 refine = 3
+initd = 1 # initial crack phase field value
+filename = elasticity_out
 
 [Functions]
   [bc_func]
@@ -39,7 +41,8 @@ refine = 3
   [fracture]
     type = TransientMultiApp
     input_files = fracture.i
-    cli_args = 'E=${E};K=${K};G=${G};Lambda=${Lambda};Gc=${Gc};l=${l};nx=${nx};ny=${ny};refine=${refine};sigma_ts=${sigma_ts};sigma_hs=${sigma_hs}'
+    cli_args = 'E=${E};K=${K};G=${G};Lambda=${Lambda};Gc=${Gc};l=${l};nx=${nx};ny=${ny};refine=${refine};sigma_ts=${sigma_ts};sigma_hs=${sigma_hs};'
+    'initd=${initd}'
     execute_on = 'TIMESTEP_END'
   []
 []
@@ -111,7 +114,7 @@ refine = 3
   [d]
     [InitialCondition]
       type = FunctionIC
-      function = 'if(y=0&x>=0&x<=5,1,0)'
+      function = 'if(y=0&x>=0&x<=5,${initd},0)'
     []
   []
 []
@@ -228,5 +231,6 @@ refine = 3
 
 [Outputs]
   exodus = true
+  file_base = ${filename}
   print_linear_residuals = false
 []
