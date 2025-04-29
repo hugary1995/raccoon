@@ -13,8 +13,14 @@ To update RACCOON, use
 
 ```bash
 git pull
-git submodule update --init --recursive
+git submodule update
 ```
+
+> Note that if you are not using Conda, then run
+> 
+> ```bash
+> git submodule update --init --recursive
+> ```
 
 Then, recompile RACCOON using
 
