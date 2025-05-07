@@ -1,0 +1,1946 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Grain Growth Model | RACCOON</title><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" class="github-mark"></img><img src="../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="17db9c70-fa2f-4fd0-a4e5-2fa3a755a0d9" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="bf85fb48-b8f6-40dc-96dc-cca9271e9bdb" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="4a62cd3e-2f38-41bd-b7a2-3020e9df479f" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="be381d45-3bf7-4170-9735-6198f8f6e60f" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="4ae793d8-63d6-4de0-8b70-bf6c3f1e6ab2"><i class="material-icons">menu</i></a><ul class="sidenav" id="4ae793d8-63d6-4de0-8b70-bf6c3f1e6ab2"><li><a href="#!" class="dropdown-trigger" data-target="65b41099-0fa3-45f3-b525-68810141e43d" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="2860cfbb-2eb5-4ee3-9622-21e468fa8088" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="d6ec2232-27ea-4573-a35a-3ff540497428" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="ea6506c9-0614-46ec-aadc-739d2cbcba36" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="17db9c70-fa2f-4fd0-a4e5-2fa3a755a0d9"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="bf85fb48-b8f6-40dc-96dc-cca9271e9bdb"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li></ul><ul class="dropdown-content" id="4a62cd3e-2f38-41bd-b7a2-3020e9df479f"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="be381d45-3bf7-4170-9735-6198f8f6e60f"><li><a href="../index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="65b41099-0fa3-45f3-b525-68810141e43d"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="2860cfbb-2eb5-4ee3-9622-21e468fa8088"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li></ul><ul class="dropdown-content" id="d6ec2232-27ea-4573-a35a-3ff540497428"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="ea6506c9-0614-46ec-aadc-739d2cbcba36"><li><a href="../index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="4fc1e47e-5717-48d6-8729-af8436ce7cfa" data-section-level="1" data-section-text="Grain Growth Model"><h1 id="grain-growth-model">Grain Growth Model</h1><p>Grain boundaries (GBs) migrate to reduce the total free energy of the system. Various sources of free energy drive the GB migration, including stored defect energy, deformation energy, and GB energy. Various modeling approaches have been applied to model GB migration. While all of the various methods predict similar behavior, the phase-field method has emerged as one of the more popular due to its flexibility.</p><p>In MOOSE, we have implemented the multiphase grain growth model originally developed in <a href="#ChenYang1994">Chen and Yang (1994)</a> and <a href="#Chen1995">Chen (1995)</a> and further developed in <a href="#moelans_quantitative_2008">Moelans et al. (2008)</a>. The variables evolve to reduce the overall free energy of the system, representing GB migration. The evolution of each grain&#x27;s order parameter is defined with the Allen-Cahn equation: <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-28dbbafa-c03a-4cb6-bdce-cfc0f1025e57"></span><script>var element = document.getElementById("moose-equation-28dbbafa-c03a-4cb6-bdce-cfc0f1025e57");katex.render("  \\frac{\\partial \\eta_i}{\\partial t} = - L \\frac{\\delta F}{\\delta \\eta_i},", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> where <span class="moose-katex-inline-equation" id="moose-equation-1ea98fc8-26cc-47e7-b561-2afda482f892"><script>var element = document.getElementById("moose-equation-1ea98fc8-26cc-47e7-b561-2afda482f892");katex.render("F", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the free energy functional, <span class="moose-katex-inline-equation" id="moose-equation-0f0bae90-48d3-48b5-a07f-822b82ec72fc"><script>var element = document.getElementById("moose-equation-0f0bae90-48d3-48b5-a07f-822b82ec72fc");katex.render("L", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the order parameter mobility, and the <span class="moose-katex-inline-equation" id="moose-equation-e606ca6c-5da5-4ce9-be76-018bff34e001"><script>var element = document.getElementById("moose-equation-e606ca6c-5da5-4ce9-be76-018bff34e001");katex.render("\\delta", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> operator represents a variational derivative. The free energy for this problem is <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-15698d64-55eb-4658-8680-4b06cb4ad1a8"></span><script>var element = document.getElementById("moose-equation-15698d64-55eb-4658-8680-4b06cb4ad1a8");katex.render("  F = \\int_V f_{loc}(\\eta_0, \\eta_1, \\ldots, \\eta_N) + f_{add} (\\eta_0, \\eta_1, \\ldots, \\eta_N) + \\kappa \\sum^N_i |\\nabla \\eta_i|^2,", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> where <span class="moose-katex-inline-equation" id="moose-equation-7c134231-0ea2-45bb-8236-e40a4a34ec5e"><script>var element = document.getElementById("moose-equation-7c134231-0ea2-45bb-8236-e40a4a34ec5e");katex.render("N", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the total number of order parameters, <span class="moose-katex-inline-equation" id="moose-equation-ef7dbf30-7039-4e72-b6e9-ef986db0490f"><script>var element = document.getElementById("moose-equation-ef7dbf30-7039-4e72-b6e9-ef986db0490f");katex.render("f_{loc}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> represents the local free energy density, and <span class="moose-katex-inline-equation" id="moose-equation-e2dce244-ab64-4566-9e84-d499057caa0b"><script>var element = document.getElementById("moose-equation-e2dce244-ab64-4566-9e84-d499057caa0b");katex.render("f_{add}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> represents any additional sources of energy density. For the grain growth model, <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-b98e8433-8215-41d4-b465-059c4a6baa3a"></span><script>var element = document.getElementById("moose-equation-b98e8433-8215-41d4-b465-059c4a6baa3a");katex.render("  f_{loc} = \\mu \\left( \\sum_i^N \\left(\\frac{\\eta_i^4}{4} - \\frac{\\eta_i^2}{2} \\right)  + \\gamma \\sum_{i=1}^N \\sum_{j>i}^N \\eta_i^2 \\eta_j^2 + \\frac{1}{4} \\right),", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> where <span class="moose-katex-inline-equation" id="moose-equation-6cacf49e-58ad-4442-b782-5578a06c1d08"><script>var element = document.getElementById("moose-equation-6cacf49e-58ad-4442-b782-5578a06c1d08");katex.render("\\mu", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the free energy weight and <span class="moose-katex-inline-equation" id="moose-equation-31793280-50e2-4d2f-8350-953f87185f34"><script>var element = document.getElementById("moose-equation-31793280-50e2-4d2f-8350-953f87185f34");katex.render("\\gamma=1.5", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> for symmetric interfacial profiles.</p><p>The model parameters <span class="moose-katex-inline-equation" id="moose-equation-45182d84-b16b-4885-bce4-b38f2146a65f"><script>var element = document.getElementById("moose-equation-45182d84-b16b-4885-bce4-b38f2146a65f");katex.render("L", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, <span class="moose-katex-inline-equation" id="moose-equation-9934cf1d-3452-473c-a33b-38c47b04807f"><script>var element = document.getElementById("moose-equation-9934cf1d-3452-473c-a33b-38c47b04807f");katex.render("\\mu", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> and <span class="moose-katex-inline-equation" id="moose-equation-e363bd17-275f-4fb3-8692-45aad67404d4"><script>var element = document.getElementById("moose-equation-e363bd17-275f-4fb3-8692-45aad67404d4");katex.render("\\kappa", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> are defined in terms of the GB energy <span class="moose-katex-inline-equation" id="moose-equation-985a25a8-8579-4cc4-82b5-099cddcea8ef"><script>var element = document.getElementById("moose-equation-985a25a8-8579-4cc4-82b5-099cddcea8ef");katex.render("\\sigma", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, the diffuse GB width <span class="moose-katex-inline-equation" id="moose-equation-173dc187-1d70-471e-8dbe-ab52bfe4eed6"><script>var element = document.getElementById("moose-equation-173dc187-1d70-471e-8dbe-ab52bfe4eed6");katex.render("w_{GB}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, and the GB mobility <span class="moose-katex-inline-equation" id="moose-equation-d27e7cda-8f2e-4987-a89e-43ccca9051a8"><script>var element = document.getElementById("moose-equation-d27e7cda-8f2e-4987-a89e-43ccca9051a8");katex.render("M_{GB}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>. In reality, the GB energy and mobility are anisotropic, depending on both the misorientation and inclination of the GB. However, it is common to assume that the GB properties are isotropic. In the case of isotropic GB energy and mobility and symmetric interfacial profiles (<span class="moose-katex-inline-equation" id="moose-equation-809aaa9b-cffd-4ea3-86d1-3703f21229ca"><script>var element = document.getElementById("moose-equation-809aaa9b-cffd-4ea3-86d1-3703f21229ca");katex.render("\\gamma = 1.5", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>), <a href="#moelans_quantitative_2008">Moelans et al. (2008)</a> defined expressions for the model parameters in terms of <span class="moose-katex-inline-equation" id="moose-equation-b0ca56bd-2d3b-4a81-a3bd-46de788b9740"><script>var element = document.getElementById("moose-equation-b0ca56bd-2d3b-4a81-a3bd-46de788b9740");katex.render("\\sigma", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, <span class="moose-katex-inline-equation" id="moose-equation-2a7f85a4-edde-4629-89a8-fbb31e226fac"><script>var element = document.getElementById("moose-equation-2a7f85a4-edde-4629-89a8-fbb31e226fac");katex.render("w_{GB}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, and <span class="moose-katex-inline-equation" id="moose-equation-bde325f5-d4e2-48b3-815c-5540395cd46d"><script>var element = document.getElementById("moose-equation-bde325f5-d4e2-48b3-815c-5540395cd46d");katex.render("M_{GB}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>: <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-c55c59c6-3f6a-46d7-a344-80c6357cd97d"></span><script>var element = document.getElementById("moose-equation-c55c59c6-3f6a-46d7-a344-80c6357cd97d");katex.render("L = \\frac{4}{3} \\frac{M_{GB}}{w_{GB}}", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-87e3a672-20d7-461d-8c9e-dbf0295f4c50"></span><script>var element = document.getElementById("moose-equation-87e3a672-20d7-461d-8c9e-dbf0295f4c50");katex.render("\\mu = 6 \\frac{\\sigma}{w_{GB}}", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-ef2e7e5d-2f70-4bc5-864f-2303ed9d0ba5"></span><script>var element = document.getElementById("moose-equation-ef2e7e5d-2f70-4bc5-864f-2303ed9d0ba5");katex.render("\\kappa = \\frac{3}{4} \\sigma w_{GB}", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span></p><section id="3a7fead6-06bd-4efe-b3b1-6bdca7d32795" data-section-level="2" data-section-text="MOOSE Implementation"><h2 id="moose-implementation">MOOSE Implementation</h2><p>The grain growth model implementation in MOOSE can simulate grain growth in 2D and 3D, and can model large polycrystals with thousands of grains. A system of Allen-Cahn equations is solved to define the grain boundary migration. In MOOSE, we solve them in residual weak form: <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-162002b8-1db7-40d8-8846-3dff35654ca3"></span><script>var element = document.getElementById("moose-equation-162002b8-1db7-40d8-8846-3dff35654ca3");katex.render("  \\mathcal{R}_{\\eta_i} = \\left( \\frac{\\partial \\eta_i}{\\partial t},\\psi_m \\right) + \\left( L \\frac{\\partial f_{loc}}{\\partial \\eta_i}, \\psi_m \\right) - \\left(\\kappa \\nabla \\eta_i, L \\nabla \\psi_m \\right)  = 0,", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> where <span class="moose-katex-inline-equation" id="moose-equation-b9a07070-c8dd-4627-91ec-24043746359a"><script>var element = document.getElementById("moose-equation-b9a07070-c8dd-4627-91ec-24043746359a");katex.render("\\psi_m", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the test function. In standard MOOSE fashion, the various terms in the Allen-Cahn equation have been implemented in separate kernels. The MOOSE objects that are used in the grain growth model are summarized, below:</p><p><strong>Materials</strong></p><ul class="browser-default"><li><p><a href="../../source/materials/GBEvolution.html"><code>GBEvolution</code></a> - Defines the model parameters <span class="moose-katex-inline-equation" id="moose-equation-061c80fb-69d2-4b51-847d-696f196bc022"><script>var element = document.getElementById("moose-equation-061c80fb-69d2-4b51-847d-696f196bc022");katex.render("L", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, <span class="moose-katex-inline-equation" id="moose-equation-ffdb0441-d030-4f1a-822c-96b448d4a479"><script>var element = document.getElementById("moose-equation-ffdb0441-d030-4f1a-822c-96b448d4a479");katex.render("\\mu", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, and <span class="moose-katex-inline-equation" id="moose-equation-b4f0c399-e000-4fe6-ad2a-9be9812beea0"><script>var element = document.getElementById("moose-equation-b4f0c399-e000-4fe6-ad2a-9be9812beea0");katex.render("\\kappa", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> using the equations assuming isotropic properties. </p></li><li><p><a href="Grain_Boundary_Anisotropy.html"><code>GBAnistropy</code></a> - Defines parameters <span class="moose-katex-inline-equation" id="moose-equation-b6168705-7480-4263-974a-64c64a4cefc4"><script>var element = document.getElementById("moose-equation-b6168705-7480-4263-974a-64c64a4cefc4");katex.render("L", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, <span class="moose-katex-inline-equation" id="moose-equation-8f620834-29e4-413a-aaf1-47cd004b76a9"><script>var element = document.getElementById("moose-equation-8f620834-29e4-413a-aaf1-47cd004b76a9");katex.render("\\mu", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, and <span class="moose-katex-inline-equation" id="moose-equation-cb485b42-1846-454c-8e26-3f1c97622f64"><script>var element = document.getElementById("moose-equation-cb485b42-1846-454c-8e26-3f1c97622f64");katex.render("\\kappa", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> considering misorientation dependence for the GB energy.</p></li></ul><p><strong>Kernels</strong></p><ul class="browser-default"><li><p><a href="../../source/kernels/TimeDerivative.html"><code>TimeDerivative</code></a> - Defines the <span class="moose-katex-inline-equation" id="moose-equation-0e8f0de0-a8e3-4d78-b9e6-9b982e3fcf1f"><script>var element = document.getElementById("moose-equation-0e8f0de0-a8e3-4d78-b9e6-9b982e3fcf1f");katex.render("\\left( \\frac{\\partial \\eta_i}{\\partial t},\\psi_m \\right)", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> term. </p></li><li><p><a href="../../source/kernels/ACGrGrPoly.html"><code>ACGrGrPoly</code></a> - Defines the <span class="moose-katex-inline-equation" id="moose-equation-37a3f1d9-c154-48fa-92f0-85422203e443"><script>var element = document.getElementById("moose-equation-37a3f1d9-c154-48fa-92f0-85422203e443");katex.render("\\left( L \\frac{\\partial f_{loc}}{\\partial \\eta_i}, \\psi_m \\right)", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> term. </p></li><li><p><a href="../../source/kernels/ACInterface.html"><code>ACInterface</code></a> - Defines the <span class="moose-katex-inline-equation" id="moose-equation-e745f18c-db29-4e57-9475-11dc916655aa"><script>var element = document.getElementById("moose-equation-e745f18c-db29-4e57-9475-11dc916655aa");katex.render("\\left(\\kappa \\nabla \\eta_i, L \\nabla \\psi_m \\right)", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> term.</p></li></ul><p><strong>AuxKernels</strong></p><ul class="browser-default"><li><p><a href="../../source/auxkernels/BndsCalcAux.html"><code>BndsCalcAux</code></a> - To visualize the GB, it is convenient to use <span class="moose-katex-inline-equation" id="moose-equation-cce57457-bb42-488f-8b88-fdb80e97916b"><script>var element = document.getElementById("moose-equation-cce57457-bb42-488f-8b88-fdb80e97916b");katex.render("\\mathrm{bnds} = \\sum_i^N \\eta_i^2", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>.</p></li></ul></section><section id="903d29c8-18ed-45f6-a5a1-4ff46b5eccca" data-section-level="2" data-section-text="Simplified MOOSE syntax"><h2 id="simplified-moose-syntax">Simplified MOOSE syntax</h2><p>The default input file for MOOSE, in which each variable and kernel needed for each variable are added individually, would be very cumbersome for the grain growth model which can have many variables.  Therefore, Actions have been created that automate the creation of the various order parameters and their kernels.</p><ul class="browser-default"><li><p><a href="../../source/actions/GrainGrowthAction.html"><code>GrainGrowthAction</code></a> has the simplest syntax. It creates all of the variables and kernels needed for a basic grain growth model. </p></li><li><p><a href="../../source/actions/PolycrystalVariablesAction.html"><code>PolycrystalVariablesAction</code></a> just creates the variables. It can also be used for other models besides grain growth to create a series of variables with standard naming syntax. </p></li><li><p><a href="../../source/actions/PolycrystalKernelAction.html"><code>PolycrystalKernelAction</code></a> just creates the kernels needed for each of the order parameter variables.</p></li></ul></section><section id="61163770-fa09-489d-afe0-913f44bd6677" data-section-level="2" data-section-text="Initial Conditions"><h2 id="initial-conditions">Initial Conditions</h2><p>The initial conditions (ICs) for the polycrystal models are created using the ICs block in the input file. Under the ICs block, there is an additional block called <code>PolycrystalICs</code>. Under this block, there are various options to create initial conditions for bicrystals, tricrystals and polycrystals. These options are shown in the Table, below.</p><div form="['center', 'center']" recursive class="moose-table-div"><table><thead><tr><th style=";text-align:center">IC Action name</th><th style=";text-align:center">Description</th></tr></thead><tbody><tr><td style=";text-align:center"><a href="../../source/actions/BicrystalBoundingBoxICAction.html"><code>BicrystalBoundingBoxIC</code></a></td><td style=";text-align:center">Two grains defined by a bounding box</td></tr></tbody><tbody><tr><td style=";text-align:center"><a href="../../source/actions/BicrystalCircleGrainICAction.html"><code>BicrystalCircleGrainIC</code></a></td><td style=";text-align:center">Circle grain and matrix grain</td></tr></tbody><tbody><tr><td style=";text-align:center"><a href="../../source/actions/Tricrystal2CircleGrainsICAction.html"><code>Tricrystal2CircleGrainsIC</code></a></td><td style=";text-align:center">Two circle grains and a matrix grain</td></tr></tbody><tbody><tr><td style=";text-align:center"><a href="../../source/actions/PolycrystalRandomICAction.html"><code>PolycrystalRandomIC</code></a></td><td style=";text-align:center">Randomly seeds grain order parameters</td></tr></tbody><tbody><tr><td style=";text-align:center"><a href="../../source/actions/PolycrystalColoringICAction.html"><code>PolycrystalColoringIC</code></a></td><td style=";text-align:center"><a href="ICs/PolycrystalICs.html">Polycrystal initial conditions</a>. Grain shapes are specified by a polycrystal UserObject (see below).</td></tr></tbody></table></div><p>The polycrystal UserObjects available for use with <a href="../../source/actions/PolycrystalColoringICAction.html"><code>PolycrystalColoringIC</code></a> are:</p><ul class="browser-default"><li><p><a href="../../source/userobjects/PolycrystalVoronoi.html"><code>PolycrystalVoronoi</code></a> - Creates polycrystal grain structure using a Voronoi tessellation. </p></li><li><p><a href="../../source/userobjects/PolycrystalHex.html"><code>PolycrystalHex</code></a> - Creates a hexagonal polycrystal grain structure. </p></li><li><p><a href="../../source/userobjects/PolycrystalCircles.html"><code>PolycrystalCircles</code></a> - Creates circular/spherical grains from a file defining center coordinates and radii. </p></li><li><p><a href="../../source/userobjects/PolycrystalEBSD.html"><code>PolycrystalEBSD</code></a> - Reconstructs grain structures from EBSD data in a specific file format. Used in conjunction with the <a href="ICs/EBSD.html"><code>EBSD Reader</code></a>.</p></li></ul><p>There is also one tricrystal IC without an associated action: <a href="../../source/ics/TricrystalTripleJunctionIC.html"><code>TricrystalTripleJunctionIC</code></a>.</p></section><section id="52528249-ce01-4e8c-a7b5-deff823aa41c" data-section-level="2" data-section-text="Variable Remapping"><h2 id="variable-remapping">Variable Remapping</h2><p>If each order parameter is used to represent one grain, the computational cost gets very high to model polycrystal grain growth. However, if each order parameter is used to represent more than one grain, unphysical grain coalescence occurs when grains represented by the same variable come in contact. MOOSE uses the remapping algorithm <a href="../../source/postprocessors/GrainTracker.html">GrainTracker</a> to overcome this issue. Order parameters are used to represent multiple grains and grains are then remapped to other variables when needed to avoid coalescence.</p></section><section id="69585abd-e6a0-4865-b606-eef71d6086de" data-section-level="2" data-section-text="Model Verification"><h2 id="model-verification">Model Verification</h2><p>The grain growth model has been verified against analytical solutions for two cases, a circular grain imbedded in a larger grain and a half loop grain imbedded in a larger grain.</p><section id="5200a901-c8d2-4ca9-9cee-3db30eba693f" data-section-level="3" data-section-text="Circular Grain"><h3 id="circular-grain">Circular Grain</h3><p>For a circular grain, the grain boundary velocity is calculated according to <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-befb8f32-d41e-4175-b90e-9b3dd6411c04"></span><script>var element = document.getElementById("moose-equation-befb8f32-d41e-4175-b90e-9b3dd6411c04");katex.render("v = M F,", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> where <span class="moose-katex-inline-equation" id="moose-equation-1f092e3c-0e54-4531-95bf-be551096ab65"><script>var element = document.getElementById("moose-equation-1f092e3c-0e54-4531-95bf-be551096ab65");katex.render("F", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the driving force. In our simple verification cases, the driving force depends only on the curvature of the grain boundary and can be written as <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-9ca58ec8-d581-4697-8ce2-879f07cee903"></span><script>var element = document.getElementById("moose-equation-9ca58ec8-d581-4697-8ce2-879f07cee903");katex.render("F = \\frac{\\gamma}{R},", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> where <span class="moose-katex-inline-equation" id="moose-equation-049b4029-0613-497f-8ef9-f995029c5418"><script>var element = document.getElementById("moose-equation-049b4029-0613-497f-8ef9-f995029c5418");katex.render("\\gamma", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the GB energy and <span class="moose-katex-inline-equation" id="moose-equation-35485623-652d-4bb9-885f-aac6e6f7ab3e"><script>var element = document.getElementById("moose-equation-35485623-652d-4bb9-885f-aac6e6f7ab3e");katex.render("R", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the radius of curvature. The change in area with time is equal to <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-e4a1b601-eca3-43b1-a35f-c4628fd528f3"></span><script>var element = document.getElementById("moose-equation-e4a1b601-eca3-43b1-a35f-c4628fd528f3");katex.render("\\begin{array}{rl} \\frac{\\partial A}{\\partial t} &= 2 \\pi R \\frac{\\partial R}{\\partial t} = 2 \\pi R v\\\\ &= 2 \\pi M \\gamma. \\end{array}", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> Thus, the area at any time <span class="moose-katex-inline-equation" id="moose-equation-669f5524-435e-444f-b41a-6179062ef6a4"><script>var element = document.getElementById("moose-equation-669f5524-435e-444f-b41a-6179062ef6a4");katex.render("t", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> can be calculated with <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-70328a2b-7cd7-44dc-947f-d1e65bb8b525"></span><script>var element = document.getElementById("moose-equation-70328a2b-7cd7-44dc-947f-d1e65bb8b525");katex.render("A = A_0 - 2 \\pi M \\gamma t,", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> where <span class="moose-katex-inline-equation" id="moose-equation-d8ce54ac-a621-4ff4-ac95-9fdd99205994"><script>var element = document.getElementById("moose-equation-d8ce54ac-a621-4ff4-ac95-9fdd99205994");katex.render("A_0", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the initial radius of the circular grain.</p><p>This case can be easily implemented using MOOSE, and the change in the area with time is outputted using a Postprocessor, as shown in the below input which leverages data from (<a href="#schonfelder1997molecular">Schönfelder et al., 1997</a>).</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  xmin = 0
+  xmax = 400
+  ymin = 0
+  ymax = 400
+  zmin = 0
+  zmax = 0
+  elem_type = QUAD4
+  uniform_refine = 1
+[]
+
+[GlobalParams]
+  op_num = 2
+  var_name_base = gr
+[]
+
+[Variables]
+  [./PolycrystalVariables]
+  [../]
+[]
+
+[ICs]
+  [./PolycrystalICs]
+    [./BicrystalCircleGrainIC]
+      radius = 300
+      x = 400
+      y = 0
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./bnds]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./PolycrystalKernel]
+  [../]
+[]
+
+[AuxKernels]
+  [./BndsCalc]
+    type = BndsCalcAux
+    variable = bnds
+  [../]
+[]
+
+[Materials]
+  [./Copper]
+    type = GBEvolution
+    T = 500 # K
+    wGB = 60 # nm
+    GBmob0 = 2.5e-6 #m^4/(Js) from Schoenfelder 1997
+    Q = 0.23 #Migration energy in eV
+    GBenergy = 0.708 #GB energy in J/m^2
+  [../]
+[]
+
+[Postprocessors]
+  [./gr1area]
+    type = ElementIntegralVariablePostprocessor
+    variable = gr1
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = &#x27;NEWTON&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+
+  l_tol = 1.0e-4
+  l_max_its = 30
+  nl_max_its = 20
+  nl_rel_tol = 1.0e-9
+  start_time = 0.0
+  num_steps = 5
+  dt = 80.0
+
+  [./Adaptivity]
+    initial_adaptivity = 2
+    refine_fraction = 0.8
+    coarsen_fraction = 0.05
+    max_h_level = 2
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#e27a6ec4-dccb-4086-9e81-5d8edf401253">(moose/modules/phase_field/test/tests/grain_growth/test.i)</a></section><section id="122e47df-7046-44a5-8028-5c79435a4248" data-section-level="3" data-section-text="Half Loop Grain"><h3 id="half-loop-grain">Half Loop Grain</h3><p>Following the same approach from the circle grain but for the half loop geometry gives the expression <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-ed71e282-4008-4a66-9ff2-8dd6a206a2f5"></span><script>var element = document.getElementById("moose-equation-ed71e282-4008-4a66-9ff2-8dd6a206a2f5");katex.render("A = A_0 - \\pi M \\gamma t.", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span></p><p>This case can also be easily implemented in MOOSE, with the area outputted using a Postprocessor:</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  xmin = 0
+  xmax = 1000
+  ymin = 0
+  ymax = 1000
+  zmin = 0
+  zmax = 0
+  elem_type = QUAD4
+
+  uniform_refine = 2
+[]
+
+[GlobalParams]
+  op_num = 2
+  var_name_base = gr
+  v = &#x27;gr0 gr1&#x27;
+[]
+
+[Variables]
+  [./gr0]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = ThumbIC
+      xcoord = 500.0
+      height = 600.0
+      width = 400.0
+      invalue = 0.0
+      outvalue = 1.0
+    [../]
+  [../]
+
+  [./gr1]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = ThumbIC
+      xcoord = 500.0
+      height = 600.0
+      width = 400.0
+      invalue = 1.0
+      outvalue = 0.0
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./bnds]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./PolycrystalKernel]
+  [../]
+[]
+
+[AuxKernels]
+  [./BndsCalc]
+    type = BndsCalcAux
+    variable = bnds
+  [../]
+[]
+
+[BCs]
+  active = &#x27; &#x27;
+
+  [./Periodic]
+    [./left_right]
+      primary = 0
+      secondary = 2
+      translation = &#x27;0 1000 0&#x27;
+    [../]
+
+    [./top_bottom]
+      primary = 1
+      secondary = 3
+      translation = &#x27;-1000 0 0&#x27;
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./Copper]
+    type = GBEvolution
+    T = 500 # K
+    wGB = 60 # nm
+    GBmob0 = 2.5e-6 #m^4/(Js) from Schoenfelder 1997
+    Q = 0.23 #Migration energy in eV
+    GBenergy = 0.708 #GB energy in J/m^2
+  [../]
+[]
+
+[Postprocessors]
+  [./gr_area]
+    type = ElementIntegralVariablePostprocessor
+    variable = gr1
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+   type = SMP
+   full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = &#x27;bdf2&#x27;
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+
+  l_tol = 1.0e-4
+  l_max_its = 30
+
+  nl_max_its = 20
+  nl_rel_tol = 1.0e-9
+
+  start_time = 0.0
+  num_steps = 10
+  dt = 80.0
+
+  [./Adaptivity]
+    initial_adaptivity = 2
+    refine_fraction = 0.8
+    coarsen_fraction = 0.05
+    max_h_level = 2
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#672c0384-0ac2-444a-8b82-6fa7163a2f80">(moose/modules/phase_field/test/tests/grain_growth/thumb.i)</a></section></section><section id="584c7596-8f96-45be-8e87-74b819e45bc6" data-section-level="2" data-section-text="Example Input Files"><h2 id="example-input-files">Example Input Files</h2><p>An example 2D input file for a polycrystal simulation using <code>GrainTracker</code> is available. It should be run on at least 4 processors:</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text"># This simulation predicts GB migration of a 2D copper polycrystal with 100 grains represented with 8 order parameters
+# Mesh adaptivity and time step adaptivity are used
+# An AuxVariable is used to calculate the grain boundary locations
+# Postprocessors are used to record time step and the number of grains
+
+[Mesh]
+  # Mesh block.  Meshes can be read in or automatically generated
+  type = GeneratedMesh
+  dim = 2 # Problem dimension
+  nx = 44 # Number of elements in the x-direction
+  ny = 44 # Number of elements in the y-direction
+  xmax = 1000 # maximum x-coordinate of the mesh
+  ymax = 1000 # maximum y-coordinate of the mesh
+  elem_type = QUAD4 # Type of elements used in the mesh
+  uniform_refine = 2 # Initial uniform refinement of the mesh
+[]
+
+[GlobalParams]
+  # Parameters used by several kernels that are defined globally to simplify input file
+  op_num = 8 # Number of order parameters used
+  var_name_base = gr # Base name of grains
+[]
+
+[Modules]
+  [PhaseField]
+    [GrainGrowth]
+    []
+  []
+[]
+
+[UserObjects]
+  [voronoi]
+    type = PolycrystalVoronoi
+    grain_num = 100 # Number of grains
+    rand_seed = 10
+    int_width = 7
+  []
+  [grain_tracker]
+    type = GrainTracker
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = voronoi
+    []
+  []
+[]
+
+[AuxVariables]
+  # Dependent variables
+  [unique_grains]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [var_indices]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+[]
+
+[AuxKernels]
+  # AuxKernel block, defining the equations used to calculate the auxvars
+  [bnds_aux]
+    # AuxKernel that calculates the GB term
+    type = BndsCalcAux
+    variable = bnds
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    flood_counter = grain_tracker
+    field_display = UNIQUE_REGION
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    flood_counter = grain_tracker
+    field_display = VARIABLE_COLORING
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+[]
+
+[BCs]
+  # Boundary Condition block
+  [Periodic]
+    [All]
+      auto_direction = &#x27;x y&#x27; # Makes problem periodic in the x and y directions
+    []
+  []
+[]
+
+[Materials]
+  [CuGrGr]
+    # Material properties
+    type = GBEvolution
+    T = 450 # Constant temperature of the simulation (for mobility calculation)
+    wGB = 14 # Width of the diffuse GB
+    GBmob0 = 2.5e-6 #m^4(Js) for copper from schonfelder1997molecular bibtex entry
+    Q = 0.23 #eV for copper from schonfelder1997molecular bibtex entry
+    GBenergy = 0.708 #J/m^2 from schonfelder1997molecular bibtex entry
+  []
+[]
+
+[Postprocessors]
+  # Scalar postprocessors
+  [dt]
+    # Outputs the current time step
+    type = TimestepSize
+  []
+[]
+
+[Executioner]
+  type = Transient # Type of executioner, here it is transient with an adaptive time step
+  scheme = bdf2 # Type of time integration (2nd order backward euler), defaults to 1st order backward euler
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  # Uses newton iteration to solve the problem.
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+
+  l_max_its = 50 # Max number of linear iterations
+  l_tol = 1e-4 # Relative tolerance for linear solves
+  nl_max_its = 10 # Max number of nonlinear iterations
+
+  end_time = 4000
+
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 20 # Initial time step.  In this simulation it changes.
+    optimal_iterations = 6 # Time step will adapt to maintain this number of nonlinear iterations
+  []
+
+  [Adaptivity]
+    # Block that turns on mesh adaptivity. Note that mesh will never coarsen beyond initial mesh (before uniform refinement)
+    initial_adaptivity = 2 # Number of times mesh is adapted to initial condition
+    refine_fraction = 0.8 # Fraction of high error that will be refined
+    coarsen_fraction = 0.05 # Fraction of low error that will coarsened
+    max_h_level = 2 # Max number of refinements used, starting from initial mesh (before uniform refinement)
+  []
+[]
+
+[Outputs]
+  exodus = true # Exodus file will be outputted
+  csv = true
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#f2fa162f-f16c-4101-98ea-ebc014cc378b">(moose/modules/phase_field/examples/grain_growth/grain_growth_2D_graintracker.i)</a><p>An example 3D input file is also available. It should be run on at least 2 processors:</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text"># This simulation predicts GB migration of a 3D copper polycrystal with 25 grains represented with 15 order parameters
+# Time step adaptivity are used
+# An AuxVariable is used to calculate the grain boundary locations
+# Postprocessors are used to record time step and the number of grains
+
+[Mesh]
+  # Mesh block.  Meshes can be read in or automatically generated
+  type = GeneratedMesh
+  dim = 3 # Problem dimension
+  nx = 10 # Number of elements in the x-direction
+  ny = 10 # Number of elements in the y-direction
+  nz = 10
+  xmax = 1000 # maximum x-coordinate of the mesh
+  ymax = 1000 # maximum y-coordinate of the mesh
+  zmax = 1000
+  uniform_refine = 1 # Initial uniform refinement of the mesh
+
+  parallel_type = distributed
+[]
+
+[GlobalParams]
+  # Parameters used by several kernels that are defined globally to simplify input file
+  op_num = 15 # Number of order parameters used
+  var_name_base = gr # Base name of grains
+  order = CONSTANT
+  family = MONOMIAL
+[]
+
+[Modules]
+  [PhaseField]
+    [GrainGrowth]
+      family = LAGRANGE
+      order = FIRST
+    []
+  []
+[]
+
+[UserObjects]
+  [voronoi]
+    type = PolycrystalVoronoi
+    grain_num = 25 # Number of grains
+    rand_seed = 10
+    coloring_algorithm = jp
+  []
+  [grain_tracker]
+    type = GrainTracker
+    threshold = 0.2
+    connecting_threshold = 0.08
+    compute_halo_maps = true # Only necessary for displaying HALOS
+    polycrystal_ic_uo = voronoi
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = voronoi
+    []
+  []
+[]
+
+[AuxVariables]
+  # Dependent variables
+  [unique_grains]
+  []
+
+  [var_indices]
+  []
+
+  [ghost_regions]
+  []
+
+  [halos]
+  []
+
+  [halo0]
+  []
+
+  [halo1]
+  []
+
+  [halo2]
+  []
+
+  [halo3]
+  []
+
+  [halo4]
+  []
+
+  [halo5]
+  []
+
+  [halo6]
+  []
+
+  [halo7]
+  []
+
+  [halo8]
+  []
+
+  [halo9]
+  []
+
+  [halo10]
+  []
+
+  [halo11]
+  []
+
+  [halo12]
+  []
+
+  [halo13]
+  []
+
+  [halo14]
+  []
+
+  [proc]
+  []
+[]
+
+[AuxKernels]
+  # AuxKernel block, defining the equations used to calculate the auxvars
+  [unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    flood_counter = grain_tracker
+    field_display = UNIQUE_REGION
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    flood_counter = grain_tracker
+    field_display = VARIABLE_COLORING
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [ghosted_entities]
+    type = FeatureFloodCountAux
+    variable = ghost_regions
+    flood_counter = grain_tracker
+    field_display = GHOSTED_ENTITIES
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [halos]
+    type = FeatureFloodCountAux
+    variable = halos
+    flood_counter = voronoi
+    field_display = HALOS
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [halo0]
+    type = FeatureFloodCountAux
+    variable = halo0
+    map_index = 0
+    field_display = HALOS
+    flood_counter = grain_tracker
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [halo1]
+    type = FeatureFloodCountAux
+    variable = halo1
+    map_index = 1
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo2]
+    type = FeatureFloodCountAux
+    variable = halo2
+    map_index = 2
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo3]
+    type = FeatureFloodCountAux
+    variable = halo3
+    map_index = 3
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo4]
+    type = FeatureFloodCountAux
+    variable = halo4
+    map_index = 4
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo5]
+    type = FeatureFloodCountAux
+    variable = halo5
+    map_index = 5
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo6]
+    type = FeatureFloodCountAux
+    variable = halo6
+    map_index = 6
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo7]
+    type = FeatureFloodCountAux
+    variable = halo7
+    map_index = 7
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo8]
+    type = FeatureFloodCountAux
+    variable = halo8
+    map_index = 8
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo9]
+    type = FeatureFloodCountAux
+    variable = halo9
+    map_index = 9
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo10]
+    type = FeatureFloodCountAux
+    variable = halo10
+    map_index = 10
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo11]
+    type = FeatureFloodCountAux
+    variable = halo11
+    map_index = 11
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo12]
+    type = FeatureFloodCountAux
+    variable = halo12
+    map_index = 12
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo13]
+    type = FeatureFloodCountAux
+    variable = halo13
+    map_index = 13
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo14]
+    type = FeatureFloodCountAux
+    variable = halo14
+    map_index = 14
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [proc]
+    type = ProcessorIDAux
+    variable = proc
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+
+[]
+
+[Materials]
+  [CuGrGr]
+    # Material properties
+    type = GBEvolution
+    T = 450 # Constant temperature of the simulation (for mobility calculation)
+    wGB = 125 # Width of the diffuse GB
+    GBmob0 = 2.5e-6 #m^4(Js) for copper from schonfelder1997molecular bibtex entry
+    Q = 0.23 #eV for copper from schonfelder1997molecular bibtex entry
+    GBenergy = 0.708 #J/m^2 from schonfelder1997molecular bibtex entry
+  []
+[]
+
+[Postprocessors]
+  # Scalar postprocessors
+  [dt]
+    # Outputs the current time step
+    type = TimestepSize
+  []
+[]
+
+[Executioner]
+  type = Transient # Type of executioner, here it is transient with an adaptive time step
+  scheme = bdf2 # Type of time integration (2nd order backward euler), defaults to 1st order backward euler
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  # Uses newton iteration to solve the problem.
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;asm&#x27;
+
+  l_max_its = 30 # Max number of linear iterations
+  l_tol = 1e-4 # Relative tolerance for linear solves
+  nl_max_its = 20 # Max number of nonlinear iterations
+
+  start_time = 0.0
+  end_time = 4000
+
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 25 # Initial time step.  In this simulation it changes.
+    optimal_iterations = 6 # Time step will adapt to maintain this number of nonlinear iterations
+  []
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+  [pg]
+    type = PerfGraphOutput
+    execute_on = &#x27;initial final&#x27; # Default is &quot;final&quot;
+    level = 2 # Default is 1
+  []
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#bf936df8-a35f-4687-8e37-d921dde0f28d">(moose/modules/phase_field/examples/grain_growth/grain_growth_3D.i)</a><p>There is also an example reconstructing the initial grain structure from EBSD data. It should be run on at least 4 processors:</p><pre class="moose-pre" style="max-height:350px;"><code class="language-text">[Mesh]
+  [ebsd_mesh]
+    type = EBSDMeshGenerator
+    filename = IN100_120x120.txt
+    pre_refine = 2
+  []
+[]
+
+[GlobalParams]
+  op_num = 8
+  var_name_base = gr
+[]
+
+[UserObjects]
+  [ebsd_reader]
+    type = EBSDReader
+  []
+  [ebsd]
+    type = PolycrystalEBSD
+    coloring_algorithm = bt
+    ebsd_reader = ebsd_reader
+    enable_var_coloring = true
+  []
+  [grain_tracker]
+    type = GrainTracker
+    flood_entity_type = ELEMENTAL
+    compute_halo_maps = true # For displaying HALO fields
+    polycrystal_ic_uo = ebsd
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = ebsd
+    []
+  []
+[]
+
+[Variables]
+  [PolycrystalVariables]
+  []
+[]
+
+[AuxVariables]
+  [bnds]
+  []
+  [unique_grains_ic]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [unique_grains]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [ghost_elements]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [halos]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [var_indices_ic]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [var_indices]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [ebsd_grains]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+[]
+
+[Kernels]
+  [PolycrystalKernel]
+  []
+[]
+
+[AuxKernels]
+  [BndsCalc]
+    type = BndsCalcAux
+    variable = bnds
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [ghost_elements]
+    type = FeatureFloodCountAux
+    variable = ghost_elements
+    field_display = GHOSTED_ENTITIES
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+  []
+  [halos]
+    type = FeatureFloodCountAux
+    variable = halos
+    field_display = HALOS
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+  []
+  [var_indices_ic]
+    type = FeatureFloodCountAux
+    variable = var_indices_ic
+    execute_on = &#x27;initial&#x27;
+    flood_counter = ebsd
+    field_display = VARIABLE_COLORING
+  []
+  [unique_grains_ic]
+    type = FeatureFloodCountAux
+    variable = unique_grains_ic
+    execute_on = &#x27;initial&#x27;
+    flood_counter = ebsd
+    field_display = UNIQUE_REGION
+  []
+  [var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+    field_display = VARIABLE_COLORING
+  []
+  [unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+    field_display = UNIQUE_REGION
+  []
+  [grain_aux]
+    type = EBSDReaderPointDataAux
+    variable = ebsd_grains
+    ebsd_reader = ebsd_reader
+    data_name = &#x27;feature_id&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+[]
+
+[Modules]
+  [PhaseField]
+    [EulerAngles2RGB]
+      crystal_structure = cubic
+      euler_angle_provider = ebsd_reader
+      grain_tracker = grain_tracker
+    []
+  []
+[]
+
+[Materials]
+  [Copper]
+    # T = 500 # K
+    type = GBEvolution
+    T = 500
+    wGB = 0.6 # um
+    GBmob0 = 2.5e-6 # m^4/(Js) from Schoenfelder 1997
+    Q = 0.23 # Migration energy in eV
+    GBenergy = 0.708 # GB energy in J/m^2
+    molar_volume = 7.11e-6 # Molar volume in m^3/mol
+    length_scale = 1.0e-6
+    time_scale = 1.0e-6
+  []
+[]
+
+[Postprocessors]
+  [dt]
+    type = TimestepSize
+  []
+  [n_elements]
+    type = NumElements
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [n_nodes]
+    type = NumNodes
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [DOFs]
+    type = NumDOFs
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = PJFNK
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -pc_hypre_boomeramg_strong_threshold&#x27;
+  petsc_options_value = &#x27;hypre    boomeramg      0.7&#x27;
+
+  l_tol = 1.0e-4
+  l_max_its = 20
+  nl_max_its = 20
+  nl_rel_tol = 1.0e-8
+
+  start_time = 0.0
+  num_steps = 30
+
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    cutback_factor = 0.9
+    dt = 10.0
+    growth_factor = 1.1
+    optimal_iterations = 7
+  []
+
+  [Adaptivity]
+    initial_adaptivity = 2
+    refine_fraction = 0.7
+    coarsen_fraction = 0.1
+    max_h_level = 2
+  []
+[]
+
+[Outputs]
+  exodus = true
+  checkpoint = true
+  perf_graph = true
+[]
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#72eded39-773a-4f90-938d-f19ef7e20ee6">(moose/modules/phase_field/examples/ebsd_reconstruction/IN100-111grn.i)</a></section><section id="ffdf9008-c230-4767-b4a9-b874b0df7241" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol><li id="Chen1995">Long-Qing Chen.
+A novel computer simulation technique for modeling grain growth.
+<em>Scripta Metallurgica et Materialia</em>, 32:115–120, 1995.
+URL: <a href="https://www.sciencedirect.com/science/article/pii/S0956716X99800223">https://www.sciencedirect.com/science/article/pii/S0956716X99800223</a>, <a href="https://doi.org/10.1016/S0956-716X(99)80022-3">doi:10.1016/S0956-716X(99)80022-3</a>.<a href="#aa406885-cdb3-4a7c-89cd-9472a9b7c46e" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="aa406885-cdb3-4a7c-89cd-9472a9b7c46e"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{Chen1995,
+    author = "Chen, Long-Qing",
+    title = "A novel computer simulation technique for modeling grain growth",
+    journal = "Scripta Metallurgica et Materialia",
+    volume = "32",
+    issue = "1",
+    pages = "115--120",
+    year = "1995",
+    publisher = "Elsevier Pergamon",
+    doi = "10.1016/S0956-716X(99)80022-3",
+    url = "https://www.sciencedirect.com/science/article/pii/S0956716X99800223"
+}
+</code></pre></div></div></li><li id="ChenYang1994">Long-Qing Chen and Wei Yang.
+Computer simulation of the domain dynamics of a quenched system with a large number of nonconserved order parameters: the grain-growth kinetics.
+<em>Phys. Rev. B</em>, 50:15752–15756, Dec 1994.
+URL: <a href="https://link.aps.org/doi/10.1103/PhysRevB.50.15752">https://link.aps.org/doi/10.1103/PhysRevB.50.15752</a>, <a href="https://doi.org/10.1103/PhysRevB.50.15752">doi:10.1103/PhysRevB.50.15752</a>.<a href="#fb297cbc-5193-4266-a8d2-de3239a60e05" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="fb297cbc-5193-4266-a8d2-de3239a60e05"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{ChenYang1994,
+    author = "Chen, Long-Qing and Yang, Wei",
+    title = "Computer simulation of the domain dynamics of a quenched system with a large number of nonconserved order parameters: The grain-growth kinetics",
+    journal = "Phys. Rev. B",
+    volume = "50",
+    issue = "21",
+    pages = "15752--15756",
+    year = "1994",
+    month = "Dec",
+    publisher = "American Physical Society",
+    doi = "10.1103/PhysRevB.50.15752",
+    url = "https://link.aps.org/doi/10.1103/PhysRevB.50.15752"
+}
+</code></pre></div></div></li><li id="moelans_quantitative_2008">N.&nbsp;Moelans, B.&nbsp;Blanpain, and P.&nbsp;Wollants.
+Quantitative analysis of grain boundary properties in a generalized phase field model for grain growth in anisotropic systems.
+<em>Physical Review B</em>, 78(2):024113, Jul 2008.
+URL: <a href="http://link.aps.org/doi/10.1103/PhysRevB.78.024113">http://link.aps.org/doi/10.1103/PhysRevB.78.024113</a> (visited on 2016-06-02), <a href="https://doi.org/10.1103/PhysRevB.78.024113">doi:10.1103/PhysRevB.78.024113</a>.<a href="#e6242b99-6fab-4e86-b0c9-ee693cd57fa3" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="e6242b99-6fab-4e86-b0c9-ee693cd57fa3"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{moelans_quantitative_2008,
+    author = "Moelans, N. and Blanpain, B. and Wollants, P.",
+    title = "Quantitative analysis of grain boundary properties in a generalized phase field model for grain growth in anisotropic systems",
+    volume = "78",
+    url = "http://link.aps.org/doi/10.1103/PhysRevB.78.024113",
+    doi = "10.1103/PhysRevB.78.024113",
+    number = "2",
+    urldate = "2016-06-02",
+    journal = "Physical Review B",
+    month = "Jul",
+    year = "2008",
+    pages = "024113",
+    file = "APS Snapshot:/Users/i.greenquist/Zotero/storage/Q8854BXX/PhysRevB.78.html:text/html;PhysRevB.78.024113.pdf:/Users/i.greenquist/Zotero/storage/VSMEC28A/PhysRevB.78.024113.pdf:application/pdf;PhysRevB.78.pdf:/Users/i.greenquist/Zotero/storage/VEU7AATJ/PhysRevB.78.pdf:application/pdf"
+}
+</code></pre></div></div></li><li id="schonfelder1997molecular">B&nbsp;Sch<span class="bibtex-protected">ö</span>nfelder, D&nbsp;Wolf, SR&nbsp;Phillpot, and M&nbsp;Furtkamp.
+Molecular-dynamics method for the simulation of grain-boundary migration.
+<em>Interface Science</em>, 5:245–262, 1997.<a href="#0a8995cd-a91d-4548-b534-6f545417e1f5" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="0a8995cd-a91d-4548-b534-6f545417e1f5"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{schonfelder1997molecular,
+    author = {Sch{\"o}nfelder, B and Wolf, D and Phillpot, SR and Furtkamp, M},
+    title = "Molecular-dynamics method for the simulation of grain-boundary migration",
+    journal = "Interface Science",
+    volume = "5",
+    pages = "245--262",
+    year = "1997",
+    publisher = "Springer"
+}
+</code></pre></div></div></li></ol></div></section></section><div class="moose-modal modal" id="e27a6ec4-dccb-4086-9e81-5d8edf401253"><div class="modal-content"><h4>(moose/modules/phase_field/test/tests/grain_growth/test.i)</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  xmin = 0
+  xmax = 400
+  ymin = 0
+  ymax = 400
+  zmin = 0
+  zmax = 0
+  elem_type = QUAD4
+  uniform_refine = 1
+[]
+
+[GlobalParams]
+  op_num = 2
+  var_name_base = gr
+[]
+
+[Variables]
+  [./PolycrystalVariables]
+  [../]
+[]
+
+[ICs]
+  [./PolycrystalICs]
+    [./BicrystalCircleGrainIC]
+      radius = 300
+      x = 400
+      y = 0
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./bnds]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./PolycrystalKernel]
+  [../]
+[]
+
+[AuxKernels]
+  [./BndsCalc]
+    type = BndsCalcAux
+    variable = bnds
+  [../]
+[]
+
+[Materials]
+  [./Copper]
+    type = GBEvolution
+    T = 500 # K
+    wGB = 60 # nm
+    GBmob0 = 2.5e-6 #m^4/(Js) from Schoenfelder 1997
+    Q = 0.23 #Migration energy in eV
+    GBenergy = 0.708 #GB energy in J/m^2
+  [../]
+[]
+
+[Postprocessors]
+  [./gr1area]
+    type = ElementIntegralVariablePostprocessor
+    variable = gr1
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = &#x27;NEWTON&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+
+  l_tol = 1.0e-4
+  l_max_its = 30
+  nl_max_its = 20
+  nl_rel_tol = 1.0e-9
+  start_time = 0.0
+  num_steps = 5
+  dt = 80.0
+
+  [./Adaptivity]
+    initial_adaptivity = 2
+    refine_fraction = 0.8
+    coarsen_fraction = 0.05
+    max_h_level = 2
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="672c0384-0ac2-444a-8b82-6fa7163a2f80"><div class="modal-content"><h4>(moose/modules/phase_field/test/tests/grain_growth/thumb.i)</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 10
+  ny = 10
+  nz = 0
+  xmin = 0
+  xmax = 1000
+  ymin = 0
+  ymax = 1000
+  zmin = 0
+  zmax = 0
+  elem_type = QUAD4
+
+  uniform_refine = 2
+[]
+
+[GlobalParams]
+  op_num = 2
+  var_name_base = gr
+  v = &#x27;gr0 gr1&#x27;
+[]
+
+[Variables]
+  [./gr0]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = ThumbIC
+      xcoord = 500.0
+      height = 600.0
+      width = 400.0
+      invalue = 0.0
+      outvalue = 1.0
+    [../]
+  [../]
+
+  [./gr1]
+    order = FIRST
+    family = LAGRANGE
+    [./InitialCondition]
+      type = ThumbIC
+      xcoord = 500.0
+      height = 600.0
+      width = 400.0
+      invalue = 1.0
+      outvalue = 0.0
+    [../]
+  [../]
+[]
+
+[AuxVariables]
+  [./bnds]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./PolycrystalKernel]
+  [../]
+[]
+
+[AuxKernels]
+  [./BndsCalc]
+    type = BndsCalcAux
+    variable = bnds
+  [../]
+[]
+
+[BCs]
+  active = &#x27; &#x27;
+
+  [./Periodic]
+    [./left_right]
+      primary = 0
+      secondary = 2
+      translation = &#x27;0 1000 0&#x27;
+    [../]
+
+    [./top_bottom]
+      primary = 1
+      secondary = 3
+      translation = &#x27;-1000 0 0&#x27;
+    [../]
+  [../]
+[]
+
+[Materials]
+  [./Copper]
+    type = GBEvolution
+    T = 500 # K
+    wGB = 60 # nm
+    GBmob0 = 2.5e-6 #m^4/(Js) from Schoenfelder 1997
+    Q = 0.23 #Migration energy in eV
+    GBenergy = 0.708 #GB energy in J/m^2
+  [../]
+[]
+
+[Postprocessors]
+  [./gr_area]
+    type = ElementIntegralVariablePostprocessor
+    variable = gr1
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+   type = SMP
+   full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  scheme = &#x27;bdf2&#x27;
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+
+  l_tol = 1.0e-4
+  l_max_its = 30
+
+  nl_max_its = 20
+  nl_rel_tol = 1.0e-9
+
+  start_time = 0.0
+  num_steps = 10
+  dt = 80.0
+
+  [./Adaptivity]
+    initial_adaptivity = 2
+    refine_fraction = 0.8
+    coarsen_fraction = 0.05
+    max_h_level = 2
+  [../]
+[]
+
+[Outputs]
+  execute_on = &#x27;timestep_end&#x27;
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="f2fa162f-f16c-4101-98ea-ebc014cc378b"><div class="modal-content"><h4>(moose/modules/phase_field/examples/grain_growth/grain_growth_2D_graintracker.i)</h4><pre class="moose-pre"><code class="language-text"># This simulation predicts GB migration of a 2D copper polycrystal with 100 grains represented with 8 order parameters
+# Mesh adaptivity and time step adaptivity are used
+# An AuxVariable is used to calculate the grain boundary locations
+# Postprocessors are used to record time step and the number of grains
+
+[Mesh]
+  # Mesh block.  Meshes can be read in or automatically generated
+  type = GeneratedMesh
+  dim = 2 # Problem dimension
+  nx = 44 # Number of elements in the x-direction
+  ny = 44 # Number of elements in the y-direction
+  xmax = 1000 # maximum x-coordinate of the mesh
+  ymax = 1000 # maximum y-coordinate of the mesh
+  elem_type = QUAD4 # Type of elements used in the mesh
+  uniform_refine = 2 # Initial uniform refinement of the mesh
+[]
+
+[GlobalParams]
+  # Parameters used by several kernels that are defined globally to simplify input file
+  op_num = 8 # Number of order parameters used
+  var_name_base = gr # Base name of grains
+[]
+
+[Modules]
+  [PhaseField]
+    [GrainGrowth]
+    []
+  []
+[]
+
+[UserObjects]
+  [voronoi]
+    type = PolycrystalVoronoi
+    grain_num = 100 # Number of grains
+    rand_seed = 10
+    int_width = 7
+  []
+  [grain_tracker]
+    type = GrainTracker
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = voronoi
+    []
+  []
+[]
+
+[AuxVariables]
+  # Dependent variables
+  [unique_grains]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [var_indices]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+[]
+
+[AuxKernels]
+  # AuxKernel block, defining the equations used to calculate the auxvars
+  [bnds_aux]
+    # AuxKernel that calculates the GB term
+    type = BndsCalcAux
+    variable = bnds
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    flood_counter = grain_tracker
+    field_display = UNIQUE_REGION
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    flood_counter = grain_tracker
+    field_display = VARIABLE_COLORING
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+[]
+
+[BCs]
+  # Boundary Condition block
+  [Periodic]
+    [All]
+      auto_direction = &#x27;x y&#x27; # Makes problem periodic in the x and y directions
+    []
+  []
+[]
+
+[Materials]
+  [CuGrGr]
+    # Material properties
+    type = GBEvolution
+    T = 450 # Constant temperature of the simulation (for mobility calculation)
+    wGB = 14 # Width of the diffuse GB
+    GBmob0 = 2.5e-6 #m^4(Js) for copper from schonfelder1997molecular bibtex entry
+    Q = 0.23 #eV for copper from schonfelder1997molecular bibtex entry
+    GBenergy = 0.708 #J/m^2 from schonfelder1997molecular bibtex entry
+  []
+[]
+
+[Postprocessors]
+  # Scalar postprocessors
+  [dt]
+    # Outputs the current time step
+    type = TimestepSize
+  []
+[]
+
+[Executioner]
+  type = Transient # Type of executioner, here it is transient with an adaptive time step
+  scheme = bdf2 # Type of time integration (2nd order backward euler), defaults to 1st order backward euler
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  # Uses newton iteration to solve the problem.
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+
+  l_max_its = 50 # Max number of linear iterations
+  l_tol = 1e-4 # Relative tolerance for linear solves
+  nl_max_its = 10 # Max number of nonlinear iterations
+
+  end_time = 4000
+
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 20 # Initial time step.  In this simulation it changes.
+    optimal_iterations = 6 # Time step will adapt to maintain this number of nonlinear iterations
+  []
+
+  [Adaptivity]
+    # Block that turns on mesh adaptivity. Note that mesh will never coarsen beyond initial mesh (before uniform refinement)
+    initial_adaptivity = 2 # Number of times mesh is adapted to initial condition
+    refine_fraction = 0.8 # Fraction of high error that will be refined
+    coarsen_fraction = 0.05 # Fraction of low error that will coarsened
+    max_h_level = 2 # Max number of refinements used, starting from initial mesh (before uniform refinement)
+  []
+[]
+
+[Outputs]
+  exodus = true # Exodus file will be outputted
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="bf936df8-a35f-4687-8e37-d921dde0f28d"><div class="modal-content"><h4>(moose/modules/phase_field/examples/grain_growth/grain_growth_3D.i)</h4><pre class="moose-pre"><code class="language-text"># This simulation predicts GB migration of a 3D copper polycrystal with 25 grains represented with 15 order parameters
+# Time step adaptivity are used
+# An AuxVariable is used to calculate the grain boundary locations
+# Postprocessors are used to record time step and the number of grains
+
+[Mesh]
+  # Mesh block.  Meshes can be read in or automatically generated
+  type = GeneratedMesh
+  dim = 3 # Problem dimension
+  nx = 10 # Number of elements in the x-direction
+  ny = 10 # Number of elements in the y-direction
+  nz = 10
+  xmax = 1000 # maximum x-coordinate of the mesh
+  ymax = 1000 # maximum y-coordinate of the mesh
+  zmax = 1000
+  uniform_refine = 1 # Initial uniform refinement of the mesh
+
+  parallel_type = distributed
+[]
+
+[GlobalParams]
+  # Parameters used by several kernels that are defined globally to simplify input file
+  op_num = 15 # Number of order parameters used
+  var_name_base = gr # Base name of grains
+  order = CONSTANT
+  family = MONOMIAL
+[]
+
+[Modules]
+  [PhaseField]
+    [GrainGrowth]
+      family = LAGRANGE
+      order = FIRST
+    []
+  []
+[]
+
+[UserObjects]
+  [voronoi]
+    type = PolycrystalVoronoi
+    grain_num = 25 # Number of grains
+    rand_seed = 10
+    coloring_algorithm = jp
+  []
+  [grain_tracker]
+    type = GrainTracker
+    threshold = 0.2
+    connecting_threshold = 0.08
+    compute_halo_maps = true # Only necessary for displaying HALOS
+    polycrystal_ic_uo = voronoi
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = voronoi
+    []
+  []
+[]
+
+[AuxVariables]
+  # Dependent variables
+  [unique_grains]
+  []
+
+  [var_indices]
+  []
+
+  [ghost_regions]
+  []
+
+  [halos]
+  []
+
+  [halo0]
+  []
+
+  [halo1]
+  []
+
+  [halo2]
+  []
+
+  [halo3]
+  []
+
+  [halo4]
+  []
+
+  [halo5]
+  []
+
+  [halo6]
+  []
+
+  [halo7]
+  []
+
+  [halo8]
+  []
+
+  [halo9]
+  []
+
+  [halo10]
+  []
+
+  [halo11]
+  []
+
+  [halo12]
+  []
+
+  [halo13]
+  []
+
+  [halo14]
+  []
+
+  [proc]
+  []
+[]
+
+[AuxKernels]
+  # AuxKernel block, defining the equations used to calculate the auxvars
+  [unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    flood_counter = grain_tracker
+    field_display = UNIQUE_REGION
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    flood_counter = grain_tracker
+    field_display = VARIABLE_COLORING
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [ghosted_entities]
+    type = FeatureFloodCountAux
+    variable = ghost_regions
+    flood_counter = grain_tracker
+    field_display = GHOSTED_ENTITIES
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [halos]
+    type = FeatureFloodCountAux
+    variable = halos
+    flood_counter = voronoi
+    field_display = HALOS
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [halo0]
+    type = FeatureFloodCountAux
+    variable = halo0
+    map_index = 0
+    field_display = HALOS
+    flood_counter = grain_tracker
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [halo1]
+    type = FeatureFloodCountAux
+    variable = halo1
+    map_index = 1
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo2]
+    type = FeatureFloodCountAux
+    variable = halo2
+    map_index = 2
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo3]
+    type = FeatureFloodCountAux
+    variable = halo3
+    map_index = 3
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo4]
+    type = FeatureFloodCountAux
+    variable = halo4
+    map_index = 4
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo5]
+    type = FeatureFloodCountAux
+    variable = halo5
+    map_index = 5
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo6]
+    type = FeatureFloodCountAux
+    variable = halo6
+    map_index = 6
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo7]
+    type = FeatureFloodCountAux
+    variable = halo7
+    map_index = 7
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo8]
+    type = FeatureFloodCountAux
+    variable = halo8
+    map_index = 8
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo9]
+    type = FeatureFloodCountAux
+    variable = halo9
+    map_index = 9
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo10]
+    type = FeatureFloodCountAux
+    variable = halo10
+    map_index = 10
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo11]
+    type = FeatureFloodCountAux
+    variable = halo11
+    map_index = 11
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo12]
+    type = FeatureFloodCountAux
+    variable = halo12
+    map_index = 12
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo13]
+    type = FeatureFloodCountAux
+    variable = halo13
+    map_index = 13
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [halo14]
+    type = FeatureFloodCountAux
+    variable = halo14
+    map_index = 14
+    field_display = HALOS
+    flood_counter = grain_tracker
+  []
+  [proc]
+    type = ProcessorIDAux
+    variable = proc
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+
+[]
+
+[Materials]
+  [CuGrGr]
+    # Material properties
+    type = GBEvolution
+    T = 450 # Constant temperature of the simulation (for mobility calculation)
+    wGB = 125 # Width of the diffuse GB
+    GBmob0 = 2.5e-6 #m^4(Js) for copper from schonfelder1997molecular bibtex entry
+    Q = 0.23 #eV for copper from schonfelder1997molecular bibtex entry
+    GBenergy = 0.708 #J/m^2 from schonfelder1997molecular bibtex entry
+  []
+[]
+
+[Postprocessors]
+  # Scalar postprocessors
+  [dt]
+    # Outputs the current time step
+    type = TimestepSize
+  []
+[]
+
+[Executioner]
+  type = Transient # Type of executioner, here it is transient with an adaptive time step
+  scheme = bdf2 # Type of time integration (2nd order backward euler), defaults to 1st order backward euler
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  # Uses newton iteration to solve the problem.
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;asm&#x27;
+
+  l_max_its = 30 # Max number of linear iterations
+  l_tol = 1e-4 # Relative tolerance for linear solves
+  nl_max_its = 20 # Max number of nonlinear iterations
+
+  start_time = 0.0
+  end_time = 4000
+
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    dt = 25 # Initial time step.  In this simulation it changes.
+    optimal_iterations = 6 # Time step will adapt to maintain this number of nonlinear iterations
+  []
+[]
+
+[Outputs]
+  exodus = true
+  csv = true
+  [pg]
+    type = PerfGraphOutput
+    execute_on = &#x27;initial final&#x27; # Default is &quot;final&quot;
+    level = 2 # Default is 1
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="72eded39-773a-4f90-938d-f19ef7e20ee6"><div class="modal-content"><h4>(moose/modules/phase_field/examples/ebsd_reconstruction/IN100-111grn.i)</h4><pre class="moose-pre"><code class="language-text">[Mesh]
+  [ebsd_mesh]
+    type = EBSDMeshGenerator
+    filename = IN100_120x120.txt
+    pre_refine = 2
+  []
+[]
+
+[GlobalParams]
+  op_num = 8
+  var_name_base = gr
+[]
+
+[UserObjects]
+  [ebsd_reader]
+    type = EBSDReader
+  []
+  [ebsd]
+    type = PolycrystalEBSD
+    coloring_algorithm = bt
+    ebsd_reader = ebsd_reader
+    enable_var_coloring = true
+  []
+  [grain_tracker]
+    type = GrainTracker
+    flood_entity_type = ELEMENTAL
+    compute_halo_maps = true # For displaying HALO fields
+    polycrystal_ic_uo = ebsd
+  []
+[]
+
+[ICs]
+  [PolycrystalICs]
+    [PolycrystalColoringIC]
+      polycrystal_ic_uo = ebsd
+    []
+  []
+[]
+
+[Variables]
+  [PolycrystalVariables]
+  []
+[]
+
+[AuxVariables]
+  [bnds]
+  []
+  [unique_grains_ic]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [unique_grains]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [ghost_elements]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [halos]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [var_indices_ic]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [var_indices]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [ebsd_grains]
+    family = MONOMIAL
+    order = CONSTANT
+  []
+[]
+
+[Kernels]
+  [PolycrystalKernel]
+  []
+[]
+
+[AuxKernels]
+  [BndsCalc]
+    type = BndsCalcAux
+    variable = bnds
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [ghost_elements]
+    type = FeatureFloodCountAux
+    variable = ghost_elements
+    field_display = GHOSTED_ENTITIES
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+  []
+  [halos]
+    type = FeatureFloodCountAux
+    variable = halos
+    field_display = HALOS
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+  []
+  [var_indices_ic]
+    type = FeatureFloodCountAux
+    variable = var_indices_ic
+    execute_on = &#x27;initial&#x27;
+    flood_counter = ebsd
+    field_display = VARIABLE_COLORING
+  []
+  [unique_grains_ic]
+    type = FeatureFloodCountAux
+    variable = unique_grains_ic
+    execute_on = &#x27;initial&#x27;
+    flood_counter = ebsd
+    field_display = UNIQUE_REGION
+  []
+  [var_indices]
+    type = FeatureFloodCountAux
+    variable = var_indices
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+    field_display = VARIABLE_COLORING
+  []
+  [unique_grains]
+    type = FeatureFloodCountAux
+    variable = unique_grains
+    execute_on = &#x27;initial timestep_end&#x27;
+    flood_counter = grain_tracker
+    field_display = UNIQUE_REGION
+  []
+  [grain_aux]
+    type = EBSDReaderPointDataAux
+    variable = ebsd_grains
+    ebsd_reader = ebsd_reader
+    data_name = &#x27;feature_id&#x27;
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+[]
+
+[Modules]
+  [PhaseField]
+    [EulerAngles2RGB]
+      crystal_structure = cubic
+      euler_angle_provider = ebsd_reader
+      grain_tracker = grain_tracker
+    []
+  []
+[]
+
+[Materials]
+  [Copper]
+    # T = 500 # K
+    type = GBEvolution
+    T = 500
+    wGB = 0.6 # um
+    GBmob0 = 2.5e-6 # m^4/(Js) from Schoenfelder 1997
+    Q = 0.23 # Migration energy in eV
+    GBenergy = 0.708 # GB energy in J/m^2
+    molar_volume = 7.11e-6 # Molar volume in m^3/mol
+    length_scale = 1.0e-6
+    time_scale = 1.0e-6
+  []
+[]
+
+[Postprocessors]
+  [dt]
+    type = TimestepSize
+  []
+  [n_elements]
+    type = NumElements
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [n_nodes]
+    type = NumNodes
+    execute_on = &#x27;initial timestep_end&#x27;
+  []
+  [DOFs]
+    type = NumDOFs
+  []
+[]
+
+[Executioner]
+  type = Transient
+  scheme = bdf2
+  solve_type = PJFNK
+
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -pc_hypre_boomeramg_strong_threshold&#x27;
+  petsc_options_value = &#x27;hypre    boomeramg      0.7&#x27;
+
+  l_tol = 1.0e-4
+  l_max_its = 20
+  nl_max_its = 20
+  nl_rel_tol = 1.0e-8
+
+  start_time = 0.0
+  num_steps = 30
+
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    cutback_factor = 0.9
+    dt = 10.0
+    growth_factor = 1.1
+    optimal_iterations = 7
+  []
+
+  [Adaptivity]
+    initial_adaptivity = 2
+    refine_fraction = 0.7
+    coarsen_fraction = 0.1
+    max_h_level = 2
+  []
+[]
+
+[Outputs]
+  exodus = true
+  checkpoint = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>
