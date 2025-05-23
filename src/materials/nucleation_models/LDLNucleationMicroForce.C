@@ -82,7 +82,7 @@ LDLNucleationMicroForce::computeQpProperties()
     // Get mesh size of current element
     ADReal h = _current_elem->hmin();
     // if (_L[_qp]/h *_L[_qp]/l_ch > 0.16)
-    if ((h > _L[_qp] * 0.5) & (_L[_qp] > l_ch * 0.7))
+    if ((h > _L[_qp] * 0.5) && (_L[_qp] > l_ch * 0.7))
       flagSolutionWarning(
           "The mesh size might be too coarse for a valid h_correction in the complete "
           "model and lead to unexpected numerical strength surface. You may either refine "
