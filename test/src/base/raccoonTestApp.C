@@ -16,7 +16,7 @@ raccoonTestApp::validParams()
   return params;
 }
 
-raccoonTestApp::raccoonTestApp(InputParameters parameters) : MooseApp(parameters)
+raccoonTestApp::raccoonTestApp(const InputParameters & parameters) : MooseApp(parameters)
 {
   raccoonTestApp::registerAll(
       _factory, _action_factory, _syntax, getParam<bool>("allow_test_objects"));

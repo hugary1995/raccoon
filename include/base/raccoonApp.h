@@ -11,9 +11,11 @@ class raccoonApp : public MooseApp
 public:
   static InputParameters validParams();
 
-  raccoonApp(InputParameters parameters);
+  raccoonApp(const InputParameters & parameters);
 
   virtual ~raccoonApp();
+
+  virtual std::string getInstallableInputs() const override;
 
   static void registerApps();
   static void registerAll(Factory & f, ActionFactory & af, Syntax & s);
