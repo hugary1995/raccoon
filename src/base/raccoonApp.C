@@ -19,7 +19,7 @@ raccoonApp::validParams()
   return params;
 }
 
-raccoonApp::raccoonApp(InputParameters parameters) : MooseApp(parameters)
+raccoonApp::raccoonApp(const InputParameters & parameters) : MooseApp(parameters)
 {
   raccoonApp::registerAll(_factory, _action_factory, _syntax);
 }

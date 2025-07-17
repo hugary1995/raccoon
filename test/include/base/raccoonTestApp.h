@@ -10,7 +10,7 @@ class raccoonTestApp : public MooseApp
 {
 public:
   static InputParameters validParams();
-  raccoonTestApp(InputParameters parameters);
+  raccoonTestApp(const InputParameters & parameters);
   virtual ~raccoonTestApp();
 
   static void registerApps();

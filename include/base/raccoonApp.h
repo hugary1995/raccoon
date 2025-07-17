@@ -11,7 +11,7 @@ class raccoonApp : public MooseApp
 public:
   static InputParameters validParams();
 
-  raccoonApp(InputParameters parameters);
+  raccoonApp(const InputParameters & parameters);
 
   virtual ~raccoonApp();
 
