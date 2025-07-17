@@ -4,6 +4,7 @@
 
 #include "raccoonApp.h"
 #include "raccoonAppTypes.h"
+#include "RaccoonRevision.h"
 #include "Moose.h"
 #include "AppFactory.h"
 #include "ModulesApp.h"
@@ -38,6 +39,12 @@ void
 raccoonApp::registerApps()
 {
   registerApp(raccoonApp);
+}
+
+std::string
+raccoonApp::getInstallableInputs() const
+{
+  return RACCOON_INSTALLABLE_DIRS;
 }
 
 /***************************************************************************************************
