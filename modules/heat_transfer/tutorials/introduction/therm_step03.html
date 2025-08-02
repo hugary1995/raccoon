@@ -1,0 +1,456 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Step 3 Adding additional terms to the heat equation | RACCOON</title><link rel="icon" type="image/x-icon" href="../../../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../../../contrib/katex/katex.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../../../media/framework/github-logo.png" class="github-mark"></img><img src="../../../../media/framework/github-mark.png" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="eacc5edf-ddd8-4ecb-834e-0a4124a92795" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="bb2b8ebb-4f33-45a6-bf73-62c640bfff7b" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="5d302b27-f533-4e65-9238-fb777f326aae" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="7cffb3b2-2225-42b1-acc9-2f754f614c06" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="ac285332-8b42-4717-b5a0-a1cea9ecdd18"><i class="material-icons">menu</i></a><ul class="sidenav" id="ac285332-8b42-4717-b5a0-a1cea9ecdd18"><li><a href="#!" class="dropdown-trigger" data-target="d8e40322-c094-4e52-88e4-a36c2e7ace4e" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="1bf0fa76-f482-49ab-b528-9e10064ec472" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="058972a9-6542-49e1-904b-8a3b837274a4" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="f549ba1d-2aa2-454c-a0da-1d6d7a6e963b" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="eacc5edf-ddd8-4ecb-834e-0a4124a92795"><li><a href="../../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../../getting_started/ide.html">Code development</a></li><li><a href="../../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="bb2b8ebb-4f33-45a6-bf73-62c640bfff7b"><li><a href="../../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li></ul><ul class="dropdown-content" id="5d302b27-f533-4e65-9238-fb777f326aae"><li><a href="../../../../theory/intro.html">Introduction</a></li><li><a href="../../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="7cffb3b2-2225-42b1-acc9-2f754f614c06"><li><a href="../../../index.html">Physics modules</a></li><li><a href="../../../../syntax/index.html">Complete syntax</a></li><li><a href="../../../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="d8e40322-c094-4e52-88e4-a36c2e7ace4e"><li><a href="../../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../../getting_started/ide.html">Code development</a></li><li><a href="../../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="1bf0fa76-f482-49ab-b528-9e10064ec472"><li><a href="../../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li></ul><ul class="dropdown-content" id="058972a9-6542-49e1-904b-8a3b837274a4"><li><a href="../../../../theory/intro.html">Introduction</a></li><li><a href="../../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="f549ba1d-2aa2-454c-a0da-1d6d7a6e963b"><li><a href="../../../index.html">Physics modules</a></li><li><a href="../../../../syntax/index.html">Complete syntax</a></li><li><a href="../../../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="bc8adb20-087b-482a-aa65-99de77d51e51" data-section-level="1" data-section-text="Step 3 - Adding additional terms to the heat equation"><h1 id="step-3-adding-additional-terms-to-the-heat-equation">Step 3 - Adding additional terms to the heat equation</h1><p>In the previous step, we modified boundary conditions to solve a meaningful problem that provided the steady-state solution to the heat equation by neglecting time-dependent terms. In this step, we will add terms to the  heat equation by adding kernels. The heat equation with the full set of terms typically used for heat transfer within a solid or stationary fluid is:</p><p><span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-f230d9fa-7dad-41b9-b1f4-ba331b0889c6"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-f230d9fa-7dad-41b9-b1f4-ba331b0889c6");katex.render("   \\rho(t, \\vec{x}) c(t, \\vec{x})\\frac{\\partial T}{\\partial t} = \\nabla k(t,\\vec{x}) \\nabla T + \\dot{q} ~\\text{for}~\\vec{x} \\in \\Omega,", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span></p><p>where <span class="moose-katex-inline-equation" id="moose-equation-0e16fbec-f9ce-4938-8f06-90b0a7625a18"><script>var element = document.getElementById("moose-equation-0e16fbec-f9ce-4938-8f06-90b0a7625a18");katex.render("T", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is temperature, <span class="moose-katex-inline-equation" id="moose-equation-096ac824-2b0b-440f-aee4-9f050d5cf6a2"><script>var element = document.getElementById("moose-equation-096ac824-2b0b-440f-aee4-9f050d5cf6a2");katex.render("t", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is time, <span class="moose-katex-inline-equation" id="moose-equation-2afd31b9-d945-4db1-b0c3-5f179e7562bd"><script>var element = document.getElementById("moose-equation-2afd31b9-d945-4db1-b0c3-5f179e7562bd");katex.render("\\vec{x}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the vector of spatial coordinates, <span class="moose-katex-inline-equation" id="moose-equation-854d8ae4-9ea9-4547-bf75-7961a2320c7c"><script>var element = document.getElementById("moose-equation-854d8ae4-9ea9-4547-bf75-7961a2320c7c");katex.render("\\rho", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the density, <span class="moose-katex-inline-equation" id="moose-equation-f8955063-1edc-46bd-88cd-e873021ecec3"><script>var element = document.getElementById("moose-equation-f8955063-1edc-46bd-88cd-e873021ecec3");katex.render("c", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the specific heat capacity, <span class="moose-katex-inline-equation" id="moose-equation-f1ac46b7-d058-4853-8365-2944badf5732"><script>var element = document.getElementById("moose-equation-f1ac46b7-d058-4853-8365-2944badf5732");katex.render("k", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the thermal conductivity, <span class="moose-katex-inline-equation" id="moose-equation-a6f0eb52-1b39-4084-b14e-de0fcbbe3d8f"><script>var element = document.getElementById("moose-equation-a6f0eb52-1b39-4084-b14e-de0fcbbe3d8f");katex.render("\\dot{q}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is a heat source, and <span class="moose-katex-inline-equation" id="moose-equation-dec8d2ef-2ffe-4c40-9592-ab5a3eda6eac"><script>var element = document.getElementById("moose-equation-dec8d2ef-2ffe-4c40-9592-ab5a3eda6eac");katex.render("\\Omega", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the solution domain.</p><p>The first step will be to add the time derivative term to this equation, and then in a subsequent step, a volumetric heating term will be added.</p><pre style="max-height:350px;"><code class="language-moose">#
+# Single block thermal input with time derivative term
+# https://mooseframework.inl.gov/modules/heat_transfer/tutorials/introduction/therm_step03.html
+#
+
+[Mesh&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../../syntax/Mesh/index.html&quot;}&gt;&gt;&gt;]
+  [generated]
+    type = GeneratedMeshGenerator&lt;&lt;&lt;{&quot;description&quot;: &quot;Create a line, square, or cube mesh with uniformly spaced or biased elements.&quot;, &quot;href&quot;: &quot;../../../../source/meshgenerators/GeneratedMeshGenerator.html&quot;}&gt;&gt;&gt;
+    dim&lt;&lt;&lt;{&quot;description&quot;: &quot;The dimension of the mesh to be generated&quot;}&gt;&gt;&gt; = 2
+    nx&lt;&lt;&lt;{&quot;description&quot;: &quot;Number of elements in the X direction&quot;}&gt;&gt;&gt; = 10
+    ny&lt;&lt;&lt;{&quot;description&quot;: &quot;Number of elements in the Y direction&quot;}&gt;&gt;&gt; = 10
+    xmax&lt;&lt;&lt;{&quot;description&quot;: &quot;Upper X Coordinate of the generated mesh&quot;}&gt;&gt;&gt; = 2
+    ymax&lt;&lt;&lt;{&quot;description&quot;: &quot;Upper Y Coordinate of the generated mesh&quot;}&gt;&gt;&gt; = 1
+  []
+[]
+
+[Variables&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../../syntax/Variables/index.html&quot;}&gt;&gt;&gt;]
+  [T]
+    initial_condition&lt;&lt;&lt;{&quot;description&quot;: &quot;Specifies a constant initial condition for this variable&quot;}&gt;&gt;&gt; = 300.0
+  []
+[]
+
+[Kernels&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../../syntax/Kernels/index.html&quot;}&gt;&gt;&gt;]
+  [heat_conduction]
+    type = HeatConduction&lt;&lt;&lt;{&quot;description&quot;: &quot;Diffusive heat conduction term $-\\nabla\\cdot(k\\nabla T)$ of the thermal energy conservation equation&quot;, &quot;href&quot;: &quot;../../../../source/kernels/HeatConduction.html&quot;}&gt;&gt;&gt;
+    variable&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the variable that this residual object operates on&quot;}&gt;&gt;&gt; = T
+  []
+  [time_derivative]
+    type = HeatConductionTimeDerivative&lt;&lt;&lt;{&quot;description&quot;: &quot;Time derivative term $\\rho c_p \\frac{\\partial T}{\\partial t}$ of the thermal energy conservation equation.&quot;, &quot;href&quot;: &quot;../../../../source/kernels/HeatConductionTimeDerivative.html&quot;}&gt;&gt;&gt;
+    variable&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the variable that this residual object operates on&quot;}&gt;&gt;&gt; = T
+  []
+[]
+
+[Materials&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../../syntax/Materials/index.html&quot;}&gt;&gt;&gt;]
+  [thermal]
+    type = HeatConductionMaterial&lt;&lt;&lt;{&quot;description&quot;: &quot;General-purpose material model for heat conduction&quot;, &quot;href&quot;: &quot;../../../../source/materials/HeatConductionMaterial.html&quot;}&gt;&gt;&gt;
+    thermal_conductivity&lt;&lt;&lt;{&quot;description&quot;: &quot;The thermal conductivity value&quot;}&gt;&gt;&gt; = 45.0
+    specific_heat&lt;&lt;&lt;{&quot;description&quot;: &quot;The specific heat value&quot;}&gt;&gt;&gt; = 0.5
+  []
+  [density]
+    type = GenericConstantMaterial&lt;&lt;&lt;{&quot;description&quot;: &quot;Declares material properties based on names and values prescribed by input parameters.&quot;, &quot;href&quot;: &quot;../../../../source/materials/GenericConstantMaterial.html&quot;}&gt;&gt;&gt;
+    prop_names&lt;&lt;&lt;{&quot;description&quot;: &quot;The names of the properties this material will have&quot;}&gt;&gt;&gt; = &#x27;density&#x27;
+    prop_values&lt;&lt;&lt;{&quot;description&quot;: &quot;The values associated with the named properties&quot;}&gt;&gt;&gt; = 8000.0
+  []
+[]
+
+[BCs&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../../syntax/BCs/index.html&quot;}&gt;&gt;&gt;]
+  [t_left]
+    type = DirichletBC&lt;&lt;&lt;{&quot;description&quot;: &quot;Imposes the essential boundary condition $u=g$, where $g$ is a constant, controllable value.&quot;, &quot;href&quot;: &quot;../../../../source/bcs/DirichletBC.html&quot;}&gt;&gt;&gt;
+    variable&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the variable that this residual object operates on&quot;}&gt;&gt;&gt; = T
+    value&lt;&lt;&lt;{&quot;description&quot;: &quot;Value of the BC&quot;}&gt;&gt;&gt; = 300
+    boundary&lt;&lt;&lt;{&quot;description&quot;: &quot;The list of boundary IDs from the mesh where this object applies&quot;}&gt;&gt;&gt; = &#x27;left&#x27;
+  []
+  [t_right]
+    type = FunctionDirichletBC&lt;&lt;&lt;{&quot;description&quot;: &quot;Imposes the essential boundary condition $u=g(t,\\vec{x})$, where $g$ is a (possibly) time and space-dependent MOOSE Function.&quot;, &quot;href&quot;: &quot;../../../../source/bcs/FunctionDirichletBC.html&quot;}&gt;&gt;&gt;
+    variable&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the variable that this residual object operates on&quot;}&gt;&gt;&gt; = T
+    function&lt;&lt;&lt;{&quot;description&quot;: &quot;The forcing function.&quot;}&gt;&gt;&gt; = &#x27;300+5*t&#x27;
+    boundary&lt;&lt;&lt;{&quot;description&quot;: &quot;The list of boundary IDs from the mesh where this object applies&quot;}&gt;&gt;&gt; = &#x27;right&#x27;
+  []
+[]
+
+[Executioner&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../../syntax/Executioner/index.html&quot;}&gt;&gt;&gt;]
+  type = Transient
+  end_time = 5
+  dt = 1
+[]
+
+[VectorPostprocessors&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../../syntax/VectorPostprocessors/index.html&quot;}&gt;&gt;&gt;]
+  [t_sampler]
+    type = LineValueSampler&lt;&lt;&lt;{&quot;description&quot;: &quot;Samples variable(s) along a specified line&quot;, &quot;href&quot;: &quot;../../../../source/vectorpostprocessors/LineValueSampler.html&quot;}&gt;&gt;&gt;
+    variable&lt;&lt;&lt;{&quot;description&quot;: &quot;The names of the variables that this VectorPostprocessor operates on&quot;}&gt;&gt;&gt; = T
+    start_point&lt;&lt;&lt;{&quot;description&quot;: &quot;The beginning of the line&quot;}&gt;&gt;&gt; = &#x27;0 0.5 0&#x27;
+    end_point&lt;&lt;&lt;{&quot;description&quot;: &quot;The ending of the line&quot;}&gt;&gt;&gt; = &#x27;2 0.5 0&#x27;
+    num_points&lt;&lt;&lt;{&quot;description&quot;: &quot;The number of points to sample along the line&quot;}&gt;&gt;&gt; = 20
+    sort_by&lt;&lt;&lt;{&quot;description&quot;: &quot;What to sort the samples by&quot;}&gt;&gt;&gt; = x
+  []
+[]
+
+[Outputs&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../../syntax/Outputs/index.html&quot;}&gt;&gt;&gt;]
+  exodus&lt;&lt;&lt;{&quot;description&quot;: &quot;Output the results using the default settings for Exodus output.&quot;}&gt;&gt;&gt; = true
+  [csv]
+    type = CSV&lt;&lt;&lt;{&quot;description&quot;: &quot;Output for postprocessors, vector postprocessors, and scalar variables using comma seperated values (CSV).&quot;, &quot;href&quot;: &quot;../../../../source/outputs/CSV.html&quot;}&gt;&gt;&gt;
+    file_base&lt;&lt;&lt;{&quot;description&quot;: &quot;The desired solution output name without an extension. If not provided, MOOSE sets it with Outputs/file_base when available. Otherwise, MOOSE uses input file name and this object name for a master input or uses master file_base, the subapp name and this object name for a subapp input to set it.&quot;}&gt;&gt;&gt; = therm_step03_out
+    execute_on&lt;&lt;&lt;{&quot;description&quot;: &quot;The list of flag(s) indicating when this object should be executed. For a description of each flag, see https://mooseframework.inl.gov/source/interfaces/SetupInterface.html.&quot;}&gt;&gt;&gt; = final
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#f178da4b-6ed6-463d-8637-9941edadcddd">(moose/modules/heat_transfer/tutorials/introduction/therm_step03.i)</a><section id="26f36b3a-d86f-4409-93aa-6d24f002573b" data-section-level="2" data-section-text="Input file"><h2 id="input-file">Input file</h2><section id="37143998-e50d-4a41-89a3-f59303a16e0c" data-section-level="3" data-section-text="Variables"><h3><code>Variables</code></h3><p>The first change necessary to convert this from a quasi-steady-state problem to a transient problem is to define a reasonable initial condition for the temperature variable. The default initial value of variables is 0, which did not affect the steady-state solution in the previous step, but has a significant effect on the transient solution. The <code>initial_condition</code> parameter is set for the <code>T</code> variable to 300. Units of Kelvin are used here, and this is close to room temperature.</p><pre style="max-height:350px;"><code class="language-moose">[Variables&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../../syntax/Variables/index.html&quot;}&gt;&gt;&gt;]
+  [T]
+    initial_condition&lt;&lt;&lt;{&quot;description&quot;: &quot;Specifies a constant initial condition for this variable&quot;}&gt;&gt;&gt; = 300.0
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#8ee7fc0b-46b5-4f01-a8aa-38ecb53170dc">(moose/modules/heat_transfer/tutorials/introduction/therm_step03.i)</a></section><section id="d2ab16c8-7a9a-4ddc-9d01-ad7eefc95de6" data-section-level="3" data-section-text="Kernels"><h3><code>Kernels</code></h3><p>An additional block is added under the <code>Kernels</code> top level block to include the time dependent term <span class="moose-katex-inline-equation" id="moose-equation-c28fba08-635b-4835-92c7-7fc8b5a0c896"><script>var element = document.getElementById("moose-equation-c28fba08-635b-4835-92c7-7fc8b5a0c896");katex.render("\\rho(t, \\vec{x}) c(t, \\vec{x})\\frac{\\partial T}{\\partial t}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> in the heat equation. The Kernel that provides this term is named <code>HeatConductionTimeDerivative</code> because this term has a dependence on the time derivative of the temperature.</p><pre style="max-height:350px;"><code class="language-moose">[Kernels&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../../syntax/Kernels/index.html&quot;}&gt;&gt;&gt;]
+  [heat_conduction]
+    type = HeatConduction&lt;&lt;&lt;{&quot;description&quot;: &quot;Diffusive heat conduction term $-\\nabla\\cdot(k\\nabla T)$ of the thermal energy conservation equation&quot;, &quot;href&quot;: &quot;../../../../source/kernels/HeatConduction.html&quot;}&gt;&gt;&gt;
+    variable&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the variable that this residual object operates on&quot;}&gt;&gt;&gt; = T
+  []
+  [time_derivative]
+    type = HeatConductionTimeDerivative&lt;&lt;&lt;{&quot;description&quot;: &quot;Time derivative term $\\rho c_p \\frac{\\partial T}{\\partial t}$ of the thermal energy conservation equation.&quot;, &quot;href&quot;: &quot;../../../../source/kernels/HeatConductionTimeDerivative.html&quot;}&gt;&gt;&gt;
+    variable&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the variable that this residual object operates on&quot;}&gt;&gt;&gt; = T
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#ff18232f-8f86-496b-a5a5-6acde27b4e3a">(moose/modules/heat_transfer/tutorials/introduction/therm_step03.i)</a></section><section id="b993151f-1557-4261-97ab-9f4e3caed6a0" data-section-level="3" data-section-text="Materials"><h3><code>Materials</code></h3><p>The <code>HeatConductionTimeDerivative</code> Kernel depends on two additional material properties: <code>density</code> and <code>specific_heat</code>, which must be provided by material models. The specific heat can be provided by adding an additional parameter to the <code>HeatConductionMaterial</code> Material block.</p><p>The density is not provided by <code>HeatConductionMaterial</code> because that is a property that is used by other physics models, in particular by the models for solid mechanics. There is a specialized model to compute the density of a deforming material that is commonly used in those calculations, but there is no deformation in the present simulation, so a constant property can be used. The <code>GenericConstantMaterial</code> is a material model that can be used to define one or more properties by providing the name of the property and the constant value. This is used here as a simple way to define the density.</p><pre style="max-height:350px;"><code class="language-moose">[Materials&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../../syntax/Materials/index.html&quot;}&gt;&gt;&gt;]
+  [thermal]
+    type = HeatConductionMaterial&lt;&lt;&lt;{&quot;description&quot;: &quot;General-purpose material model for heat conduction&quot;, &quot;href&quot;: &quot;../../../../source/materials/HeatConductionMaterial.html&quot;}&gt;&gt;&gt;
+    thermal_conductivity&lt;&lt;&lt;{&quot;description&quot;: &quot;The thermal conductivity value&quot;}&gt;&gt;&gt; = 45.0
+    specific_heat&lt;&lt;&lt;{&quot;description&quot;: &quot;The specific heat value&quot;}&gt;&gt;&gt; = 0.5
+  []
+  [density]
+    type = GenericConstantMaterial&lt;&lt;&lt;{&quot;description&quot;: &quot;Declares material properties based on names and values prescribed by input parameters.&quot;, &quot;href&quot;: &quot;../../../../source/materials/GenericConstantMaterial.html&quot;}&gt;&gt;&gt;
+    prop_names&lt;&lt;&lt;{&quot;description&quot;: &quot;The names of the properties this material will have&quot;}&gt;&gt;&gt; = &#x27;density&#x27;
+    prop_values&lt;&lt;&lt;{&quot;description&quot;: &quot;The values associated with the named properties&quot;}&gt;&gt;&gt; = 8000.0
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#aadac360-9dfa-4671-b45a-69e78331a23b">(moose/modules/heat_transfer/tutorials/introduction/therm_step03.i)</a></section></section><section id="2e040ad7-84fc-4c4c-a3ab-cf8ee952be2f" data-section-level="2" data-section-text="Questions"><h2 id="questions">Questions</h2><p>Before running the model, consider the initial conditions and boundary conditions, and estimate what expected solution should be when the time-dependent term is included.</p><p><a href="answer03a.html">Click here for the answer.</a></p><p>Now go ahead and run the input and visualize the result to see if it matches the behavior you would expect.</p><section id="c82697ac-8db2-487a-bac8-36b8b49256cb" data-section-level="3" data-section-text="Exploring parameters"><h3 id="exploring-parameters">Exploring parameters</h3><p>Which parameters would you expect to be able to change to give a solution that matches more closely with the steady-state solution? Try changing those parameters to see if they have the expected effect after re-running the model.</p><p><a href="answer03b.html">Click here for the answer.</a></p></section><section id="2d0c1a6a-008b-4d5d-b939-6e8caad95bdb" data-section-level="3" data-section-text="Sidebar :"><h3 id="sidebar">Sidebar:</h3><blockquote><p>Some problems also have volumetric heating, which can be included by adding another Kernel.</p></blockquote><p><a href="therm_step03a.html">Click here for the sidebar on adding volumetric heating.</a></p></section><section id="b4a72235-1eee-4c9b-8abc-21412e7d204f" data-section-level="3" data-section-text="Comparison of results"><h3 id="comparison-of-results">Comparison of results</h3><p>A Python script called <code>therm_soln_compare.py</code> in this directory is set up to plot the results of the problems from steps 2a, 3, and 3a to show a side-by-side comparison of the temperature profiles at the end of the analysis for these cases. This script depends on having the <code>matplotlib</code> and <code>pandas</code> libraries available in your Python installation. It is executed by typing:</p><pre style="max-height:350px;"><code class="language-text">
+./therm_soln_compare.py
+</code></pre><p>from the directory where the problems are run. It will generate an image called <code>therm_soln_compare.png</code> with line plots for these three cases. </p></section></section></section><div class="moose-modal modal" id="f178da4b-6ed6-463d-8637-9941edadcddd"><div class="modal-content"><h4>(moose/modules/heat_transfer/tutorials/introduction/therm_step03.i)</h4><pre style="max-height:350px;"><code class="language-moose">#
+# Single block thermal input with time derivative term
+# https://mooseframework.inl.gov/modules/heat_transfer/tutorials/introduction/therm_step03.html
+#
+
+[Mesh]
+  [generated]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 10
+    ny = 10
+    xmax = 2
+    ymax = 1
+  []
+[]
+
+[Variables]
+  [T]
+    initial_condition = 300.0
+  []
+[]
+
+[Kernels]
+  [heat_conduction]
+    type = HeatConduction
+    variable = T
+  []
+  [time_derivative]
+    type = HeatConductionTimeDerivative
+    variable = T
+  []
+[]
+
+[Materials]
+  [thermal]
+    type = HeatConductionMaterial
+    thermal_conductivity = 45.0
+    specific_heat = 0.5
+  []
+  [density]
+    type = GenericConstantMaterial
+    prop_names = &#x27;density&#x27;
+    prop_values = 8000.0
+  []
+[]
+
+[BCs]
+  [t_left]
+    type = DirichletBC
+    variable = T
+    value = 300
+    boundary = &#x27;left&#x27;
+  []
+  [t_right]
+    type = FunctionDirichletBC
+    variable = T
+    function = &#x27;300+5*t&#x27;
+    boundary = &#x27;right&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  end_time = 5
+  dt = 1
+[]
+
+[VectorPostprocessors]
+  [t_sampler]
+    type = LineValueSampler
+    variable = T
+    start_point = &#x27;0 0.5 0&#x27;
+    end_point = &#x27;2 0.5 0&#x27;
+    num_points = 20
+    sort_by = x
+  []
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    file_base = therm_step03_out
+    execute_on = final
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="8ee7fc0b-46b5-4f01-a8aa-38ecb53170dc"><div class="modal-content"><h4>(moose/modules/heat_transfer/tutorials/introduction/therm_step03.i)</h4><pre style="max-height:350px;"><code class="language-moose">#
+# Single block thermal input with time derivative term
+# https://mooseframework.inl.gov/modules/heat_transfer/tutorials/introduction/therm_step03.html
+#
+
+[Mesh]
+  [generated]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 10
+    ny = 10
+    xmax = 2
+    ymax = 1
+  []
+[]
+
+[Variables]
+  [T]
+    initial_condition = 300.0
+  []
+[]
+
+[Kernels]
+  [heat_conduction]
+    type = HeatConduction
+    variable = T
+  []
+  [time_derivative]
+    type = HeatConductionTimeDerivative
+    variable = T
+  []
+[]
+
+[Materials]
+  [thermal]
+    type = HeatConductionMaterial
+    thermal_conductivity = 45.0
+    specific_heat = 0.5
+  []
+  [density]
+    type = GenericConstantMaterial
+    prop_names = &#x27;density&#x27;
+    prop_values = 8000.0
+  []
+[]
+
+[BCs]
+  [t_left]
+    type = DirichletBC
+    variable = T
+    value = 300
+    boundary = &#x27;left&#x27;
+  []
+  [t_right]
+    type = FunctionDirichletBC
+    variable = T
+    function = &#x27;300+5*t&#x27;
+    boundary = &#x27;right&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  end_time = 5
+  dt = 1
+[]
+
+[VectorPostprocessors]
+  [t_sampler]
+    type = LineValueSampler
+    variable = T
+    start_point = &#x27;0 0.5 0&#x27;
+    end_point = &#x27;2 0.5 0&#x27;
+    num_points = 20
+    sort_by = x
+  []
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    file_base = therm_step03_out
+    execute_on = final
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="ff18232f-8f86-496b-a5a5-6acde27b4e3a"><div class="modal-content"><h4>(moose/modules/heat_transfer/tutorials/introduction/therm_step03.i)</h4><pre style="max-height:350px;"><code class="language-moose">#
+# Single block thermal input with time derivative term
+# https://mooseframework.inl.gov/modules/heat_transfer/tutorials/introduction/therm_step03.html
+#
+
+[Mesh]
+  [generated]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 10
+    ny = 10
+    xmax = 2
+    ymax = 1
+  []
+[]
+
+[Variables]
+  [T]
+    initial_condition = 300.0
+  []
+[]
+
+[Kernels]
+  [heat_conduction]
+    type = HeatConduction
+    variable = T
+  []
+  [time_derivative]
+    type = HeatConductionTimeDerivative
+    variable = T
+  []
+[]
+
+[Materials]
+  [thermal]
+    type = HeatConductionMaterial
+    thermal_conductivity = 45.0
+    specific_heat = 0.5
+  []
+  [density]
+    type = GenericConstantMaterial
+    prop_names = &#x27;density&#x27;
+    prop_values = 8000.0
+  []
+[]
+
+[BCs]
+  [t_left]
+    type = DirichletBC
+    variable = T
+    value = 300
+    boundary = &#x27;left&#x27;
+  []
+  [t_right]
+    type = FunctionDirichletBC
+    variable = T
+    function = &#x27;300+5*t&#x27;
+    boundary = &#x27;right&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  end_time = 5
+  dt = 1
+[]
+
+[VectorPostprocessors]
+  [t_sampler]
+    type = LineValueSampler
+    variable = T
+    start_point = &#x27;0 0.5 0&#x27;
+    end_point = &#x27;2 0.5 0&#x27;
+    num_points = 20
+    sort_by = x
+  []
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    file_base = therm_step03_out
+    execute_on = final
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="aadac360-9dfa-4671-b45a-69e78331a23b"><div class="modal-content"><h4>(moose/modules/heat_transfer/tutorials/introduction/therm_step03.i)</h4><pre style="max-height:350px;"><code class="language-moose">#
+# Single block thermal input with time derivative term
+# https://mooseframework.inl.gov/modules/heat_transfer/tutorials/introduction/therm_step03.html
+#
+
+[Mesh]
+  [generated]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 10
+    ny = 10
+    xmax = 2
+    ymax = 1
+  []
+[]
+
+[Variables]
+  [T]
+    initial_condition = 300.0
+  []
+[]
+
+[Kernels]
+  [heat_conduction]
+    type = HeatConduction
+    variable = T
+  []
+  [time_derivative]
+    type = HeatConductionTimeDerivative
+    variable = T
+  []
+[]
+
+[Materials]
+  [thermal]
+    type = HeatConductionMaterial
+    thermal_conductivity = 45.0
+    specific_heat = 0.5
+  []
+  [density]
+    type = GenericConstantMaterial
+    prop_names = &#x27;density&#x27;
+    prop_values = 8000.0
+  []
+[]
+
+[BCs]
+  [t_left]
+    type = DirichletBC
+    variable = T
+    value = 300
+    boundary = &#x27;left&#x27;
+  []
+  [t_right]
+    type = FunctionDirichletBC
+    variable = T
+    function = &#x27;300+5*t&#x27;
+    boundary = &#x27;right&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+  end_time = 5
+  dt = 1
+[]
+
+[VectorPostprocessors]
+  [t_sampler]
+    type = LineValueSampler
+    variable = T
+    start_point = &#x27;0 0.5 0&#x27;
+    end_point = &#x27;2 0.5 0&#x27;
+    num_points = 20
+    sort_by = x
+  []
+[]
+
+[Outputs]
+  exodus = true
+  [csv]
+    type = CSV
+    file_base = therm_step03_out
+    execute_on = final
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../../../js/init.js"></script><script type="text/javascript" src="../../../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../../../js/sqa_moose.js"></script><script type="text/javascript" src="../../../../js/moose_input_parser.js"></script>
