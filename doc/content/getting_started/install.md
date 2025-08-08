@@ -12,11 +12,11 @@ each of which should only take a handful of commands.
 
 !include getting_started/dcc.md
 
-### Step 1: Install dependencies style=line-height:150%;
+### Step 1: Install dependencies style=line-height:150%
 
-First, follow [these instructions](getting_started/conda.md) to install environment packages for MOOSE and RACCOON.
+First, follow [these instructions](https://mooseframework.inl.gov/getting_started/installation/conda.html) to install environment packages for MOOSE and RACCOON. Stop at the header "Cloning MOOSE".
 
-### Step 2: Clone RACCOON style=line-height:150%;
+### Step 2: Clone RACCOON style=line-height:150%
 
 Next, clone RACCOON to your local projects directory:
 
@@ -38,7 +38,7 @@ These commands should download a copy of RACCOON and a copy of MOOSE (as a submo
 > ./moose/scripts/update_and_rebuild_libmesh.sh
 > ```
 
-### Step 3: Compile RACCOON style=line-height:150%;
+### Step 3: Compile RACCOON style=line-height:150%
 
 Next, you can compile RACCOON using
 

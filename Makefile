@@ -50,7 +50,8 @@ include $(MOOSE_DIR)/modules/modules.mk
 APPLICATION_DIR    := $(CURDIR)
 APPLICATION_NAME   := raccoon
 BUILD_EXEC         := yes
-GEN_REVISION       := no
+GEN_REVISION       := yes
+INSTALLABLE_DIRS   := test/tests->tests tutorials
 include            $(FRAMEWORK_DIR)/app.mk
 
 ###############################################################################
