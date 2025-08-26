@@ -1,11 +1,8 @@
 [Problem]
   solve = false
-  # kernel_coverage_check = false
-  # material_coverage_check = false
 []
 
-[Mesh] # h final = 0.25
-# uniform_refine = ${patchref}
+[Mesh]
   [ori]
     type = GeneratedMeshGenerator
     dim = 2
@@ -39,12 +36,10 @@
   [sigma_ts]
     type = ADParsedMaterial
     property_name = 'sigma_ts'
-    # material_property_names = 'sigma_ts_raw'
     constant_names = 'sigma_ts_raw'
     constant_expressions = '${sigma_ts}'
     coupled_variables = 'scale'
     expression = 'sigma_ts_raw*(10+ceil(scale))/10'
-    # block = 'pellet_outer'
     output_properties = 'sigma_ts'
     outputs = nemesis
   []
@@ -64,12 +59,11 @@
   nl_abs_tol = 1e-10
 
   start_time = 0
-  # end_time = 0
   num_steps = 1
 []
 
 [Outputs]
-  [nemesis]
+  [exodus]
     type = Exodus
     enable = false
   []

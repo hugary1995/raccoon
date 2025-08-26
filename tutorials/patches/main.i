@@ -7,7 +7,6 @@ filebase=patchref${patchref}
 
 [Problem]
   type = FEProblem
-  # verbose_multiapps = true
   solve = False
 []
 
@@ -33,7 +32,7 @@ filebase=patchref${patchref}
 []
 
 
-[Mesh] # h final = 0.25
+[Mesh]
   [ori]
     type = GeneratedMeshGenerator
     dim = 2
@@ -53,7 +52,7 @@ filebase=patchref${patchref}
 []
 
 [AuxVariables]
-  [sigma_ts_var] # patch
+  [sigma_ts_var]
     order = CONSTANT
     family = MONOMIAL
   []
@@ -83,7 +82,6 @@ filebase=patchref${patchref}
   [exodus]
     type = Exodus
   []
-  # file_base = '${filebase}/${filebase}'
   file_base = '${filebase}'
   print_linear_residuals = false
 []
