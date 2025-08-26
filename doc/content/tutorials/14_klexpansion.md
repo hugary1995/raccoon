@@ -8,7 +8,7 @@ The generated field is ready to be used in [Tutorial 5](tutorials/05_soil_desicc
 
 ## Step 0: required packages
 
-`Boost` required for patch generation. While your Conda MOOSE environment is active, install boost by running:
+`Boost` is required for patch generation. While your Conda MOOSE environment is active, install boost by running:
 
 ```
 conda install boost
@@ -20,7 +20,7 @@ For this step, navigate to folder `factorize/`.
 
 In `klexpansion.C`:
 
-Line 52 provided the mesh for the kl expansion construction (this mesh does not have to been identical to the mesh for the physical problem).
+Line 52 provided the mesh for the kl expansion construction (this mesh does not have to be identical to the mesh for the physical problem).
 
 ```
 MeshTools::Generation::build_square(mesh, 50, 50, 0, 100, 0, 100, QUAD4);
@@ -97,7 +97,7 @@ To sample a random field
 ./sample-opt
 ```
 
-The tutorial code generates new field with default name `fields.e`.\\
+The tutorial code generates a new field with the default name `fields.e`.\\
 Each time you run `./sample-opt`, a different field is generated with an updated random seed.
 
 ## Example fields
