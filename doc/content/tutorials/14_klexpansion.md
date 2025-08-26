@@ -16,7 +16,7 @@ conda install boost
 
 ## Step 1: build the Karhunen-Loève expansions
 
-This step we work in folder `factorize/`. 
+For this step, navigate to folder `factorize/`. 
 
 In code `klexpansion.C`:
 
