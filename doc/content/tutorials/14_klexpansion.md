@@ -73,7 +73,7 @@ Line 47
 mesh.read("../factorize/basis.e");
 ```
 
-reads the KL expansions we just generated in step 1. Update this line as needed, and keep Line 53 reading the same mesh as LIne 47.
+reads the KL expansions generated in step 1. Update this line as needed, and keep line 53 reading the same mesh as line 47.
 
 Line 78-80:
 
