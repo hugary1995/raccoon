@@ -8,7 +8,7 @@ The generated field is ready to be used in [Tutorial 5](tutorials/05_soil_desicc
 
 ## Step 0: required packages
 
-Apart from the packages in `moose` environment from `conda`, `boost` is also needed. Install this package by
+`Boost` required for patch generation. While your Conda MOOSE environment is active, install boost by running:
 
 ```
 conda install boost
