@@ -63,7 +63,7 @@ Once it is complete, the KL expansions needed for random field sampling will be 
 
 ## Step 2: sampling the random field
 
-The step we work in folder `sample/`
+For this step, navigate to `sample/`
 
 In code `sample.C`:
 
