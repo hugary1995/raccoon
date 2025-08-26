@@ -18,7 +18,7 @@ conda install boost
 
 For this step, navigate to folder `factorize/`. 
 
-In code `klexpansion.C`:
+In `klexpansion.C`:
 
 Line 52 provided the mesh for kl expansion construction (this mesh does not have to been identical to the mesh for the physical problem).
 
