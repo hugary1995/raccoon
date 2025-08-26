@@ -20,7 +20,7 @@ For this step, navigate to folder `factorize/`.
 
 In `klexpansion.C`:
 
-Line 52 provided the mesh for kl expansion construction (this mesh does not have to been identical to the mesh for the physical problem).
+Line 52 provided the mesh for the kl expansion construction (this mesh does not have to been identical to the mesh for the physical problem).
 
 ```
 MeshTools::Generation::build_square(mesh, 50, 50, 0, 100, 0, 100, QUAD4);
