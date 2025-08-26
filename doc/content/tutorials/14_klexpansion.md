@@ -2,7 +2,7 @@
 
 # Tutorial 12: Random field generation by KL expansion
 
-In this tutorial, we will generate a spatially varied material property field with controlled correlation length.
+In this tutorial, we will generate a spatially varied material property field with a controlled correlation length.
 
 The generated field is ready to be used in [Tutorial 5](tutorials/05_soil_desiccation.md).
 
