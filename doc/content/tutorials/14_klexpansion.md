@@ -98,7 +98,7 @@ To sample a random field
 ```
 
 The tutorial code generates new field with default name `fields.e`.\\
-Each time you run `./sample-opt`, a different field is generated with an update random seed.
+Each time you run `./sample-opt`, a different field is generated with an updated random seed.
 
 
 ## Related source code
