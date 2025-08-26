@@ -59,7 +59,7 @@ or in parallel, by
 mpiexec -n NumberofTasks ./klexpansion-opt 
 ```
 
-Once it is complete, the KL expansions needed for random field sampling are stored in a new exodus file, by default `basis.e`.
+Once it is complete, the KL expansions needed for random field sampling will be stored in a new exodus file. By default this is `basis.e`.
 
 ## Step 2: sampling the random field
 
