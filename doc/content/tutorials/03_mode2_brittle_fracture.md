@@ -14,7 +14,7 @@ Since we can no longer utilize half symmetry in the Mode-II problem, we will hav
          block=Mesh
          language=python
 
-First, the top half of the domain is meshed using the [`GeneratedMeshGenerator`](GeneratedMeshGenerator.md), and a node set named "top_stitch" is identified using the [`BoundingBoxNodeSetGenerator`](BoundingBoxNodeSetGenerator.md). Next, similarly, the bottom half of the domain is meshed and a node set named "bottom_stitch" is identified. Finally, the top half and the bottom half meshes are "stitched" together by merging the "top_stitch" and the "bottom_stitch" node sets using the [`StitchedMeshGenerator`](StitchedMeshGenerator.md). The parameter `construct_side_list_from_node_list` is set to true to construct side sets from all of the node sets.
+First, the top half of the domain is meshed using the [`GeneratedMeshGenerator`](GeneratedMeshGenerator.md), and a node set named "top_stitch" is identified using the [`BoundingBoxNodeSetGenerator`](BoundingBoxNodeSetGenerator.md). Next, similarly, the bottom half of the domain is meshed and a node set named "bottom_stitch" is identified. Finally, the top half and the bottom half meshes are "stitched" together by merging the "top_stitch" and the "bottom_stitch" node sets using the [`StitchedMeshGenerator`](StitchMeshGenerator.md). The parameter `construct_side_list_from_node_list` is set to true to construct side sets from all of the node sets.
 
 ## `elasticity.i`: The displacement subproblem
 
