@@ -83,7 +83,7 @@ Line 78-80:
   compute_correlated_Gamma_fields(Xi_1, Xi_2, Gc, 8e-4, 0.03, psic, 3e-5, 0.03, 0);
 ```
 
-Field $G_c$  will be generated with mean $8e-4$ and coefficient of variation $0.03$. Field $\psi_c$ will be generated with mean $3e-5$ and COV $0.03$. The correlation between the two fields is $0$.
+Field $G_c$ will be generated with mean $8e-4$ and coefficient of variation $0.03$. Field $\psi_c$ will be generated with mean $3e-5$ and COV $0.03$. The correlation between the two fields is $0$.
 
 To compile the code
 
