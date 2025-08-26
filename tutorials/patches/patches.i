@@ -23,7 +23,7 @@
 []
 
 [ICs]
-  [power]
+  [raw]
     type = RandomIC
     variable = scale
     max = 1
@@ -41,7 +41,7 @@
     coupled_variables = 'scale'
     expression = 'sigma_ts_raw*(10+ceil(scale))/10'
     output_properties = 'sigma_ts'
-    outputs = nemesis
+    outputs = exodus
   []
 []
 
@@ -65,6 +65,5 @@
 [Outputs]
   [exodus]
     type = Exodus
-    enable = false
   []
 []
