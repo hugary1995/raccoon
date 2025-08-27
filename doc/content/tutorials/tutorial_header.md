@@ -13,6 +13,8 @@
 - [11. Adaptivity](tutorials/11_adaptivity.md)
 - [12. Crack nucleation](tutorials/12_nucleation.md)
 - [13. Traction separation law](tutorials/13_traction_separation.md)
+- [14. Random field generation by KL expansion](tutorials/14_klexpansion.md)
+- [15. Mosaic field generation (patches)](tutorials/15_mosaic_patches.md)
 
 !alert note title=Before you proceed
 All tutorials are written assuming that you are reasonably familiar with MOOSE. If you find most of the tutorials difficult to follow, please refer to [the official MOOSE website](https://mooseframework.inl.gov/) for learning resources.
