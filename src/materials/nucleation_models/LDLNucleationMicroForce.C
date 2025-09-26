@@ -107,7 +107,7 @@ LDLNucleationMicroForce::computeQpProperties()
   // Compute the external driving force required to recover the desired strength envelope.
   _ex_driving[_qp] =
       alpha_2 * std::sqrt(J2) + alpha_1 * I1 +
-      (1.0 - std::sqrt(I1 * I1) / I1) / std::pow(_g[_qp], 1.5) *
+      (I1 > 0 ? 0 : 2) / std::pow(_g[_qp], 1.5) *
           (J2 / 2.0 / _mu[_qp] + I1 * I1 / 6.0 / (3.0 * _lambda[_qp] + 2.0 * _mu[_qp]));
 
   _stress_balance[_qp] =
