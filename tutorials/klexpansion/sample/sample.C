@@ -63,8 +63,8 @@ main(int argc, char ** argv)
     // read eigenvector
     basis_helper.read_nodal_var_values("v", i);
     std::vector<Real> vecOfValues;
-    for(auto elem : basis_helper.nodal_var_values)
-     vecOfValues.push_back(elem.second);
+    for (auto elem : basis_helper.nodal_var_values)
+      vecOfValues.push_back(elem.second);
     eigvecs.push_back(vecOfValues);
   }
 

@@ -4,7 +4,7 @@
 
 In this tutorial, we benchmark the fiber-reinforced matrix problem proposed in [!cite](bourdin2007numerical).
 
-!media media/matrix_fiber_bcs.png style=display:block;margin:auto;width:60%; caption=Geometry and boundary conditions of the fiber-reinforced matrix problem. id=matrix_fiber_schematics
+!media media/matrix_fiber_bcs.png alt=matrix_fiber_bcs style=display:block;margin:auto;width:60%; caption=Geometry and boundary conditions of the fiber-reinforced matrix problem. id=matrix_fiber_schematics
 
 The boundary conditions are defined as
 

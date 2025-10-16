@@ -42,7 +42,7 @@ Create a file called `raccoon.code-workspace` with the above content and place i
 
 Clangd will now be activated by opening a source file and saving it (this can typically be done by pressing Ctrl+S). If all is in order, then you will see the indexing process start in the status bar of VSCode:
 
-!media media/indexing.png style=display:block;margin:auto;width:50%;
+!media media/indexing.png alt=indexing style=display:block;margin:auto;width:50%;
 
 This may take a while depending on the speed of your processor; however, it only needs to be done once.
 

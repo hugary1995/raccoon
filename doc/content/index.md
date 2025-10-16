@@ -2,7 +2,7 @@
 
 # HOME style=visibility:hidden;
 
-!media media/raccoon_logo.png style=display:block;margin-left:auto;margin-right:auto;width:60%;
+!media media/raccoon_logo.png alt=raccoon_logo style=display:block;margin-left:auto;margin-right:auto;width:60%;
 
 # A parallel finite-element code specialized in phase-field for fracture class=center style=font-weight:200;font-size:200%
 
