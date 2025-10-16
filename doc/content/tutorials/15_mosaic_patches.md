@@ -11,7 +11,7 @@ The subapp `patches.i` first assigns random initial values to the Auxvariable `s
          link=False
          language=python
 
-From this raw field, a material field is constructed using selected statistics (e.g., maximum, mean, minimum) within a selected range (e.g., normalized range of [0, 1] )
+From this raw field, a material field is constructed using selected statistics (e.g., maximum, mean, minimum) within a selected range (e.g., normalized range of \[0, 1] )
 
 !listing tutorials/patches/patches.i
          block=Materials

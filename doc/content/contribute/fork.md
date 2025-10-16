@@ -7,8 +7,8 @@ It is *completely* fine if you want to make changes to the source code of RACCOO
 1. Log into your GitHub account, navigate to the [hugary1995/raccoon](https://github.com/hugary1995/raccoon) repository.
 2. In the top-right corner of the page, click +Fork+
 
-   !media media/fork_button.jpg
-          style=width:300px;padding:auto;
+   !media media/fork_button.jpg 
+      alt="fork" style=width:300px;padding:auto;
 
 3. After the forking process is done, you should be able to find your fork under your GitHub account, i.e. `https://github.com/YourGitHubUsername/raccoon`.
 
