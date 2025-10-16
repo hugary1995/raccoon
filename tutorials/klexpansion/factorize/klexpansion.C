@@ -107,8 +107,8 @@ main(int argc, char ** argv)
   // We request eigenpairs with largest real eigenvalues.
   // As a result, eigenvalues will be sorted with descending real eigenvalues.
   libMesh::out << "Solving the generalized eigen system...";
-  // PetscOptionsSetValue(PETSC_NULL, "-eps_largest_real", PETSC_NULL); 
-  PetscOptionsSetValue(PETSC_NULLPTR, "-eps_largest_real", PETSC_NULLPTR); 
+  // PetscOptionsSetValue(PETSC_NULL, "-eps_largest_real", PETSC_NULL);
+  PetscOptionsSetValue(PETSC_NULLPTR, "-eps_largest_real", PETSC_NULLPTR);
   eigen_system.solve();
   libMesh::out << "complete\n" << std::endl;
 
