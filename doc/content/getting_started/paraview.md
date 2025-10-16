@@ -10,5 +10,5 @@ paraview elasticity_out.e
 
 Below is a screenshot of what it looks like:
 
-!media media/paraview.png
+!media media/paraview.png alt=paraview
        style=display:block;margin-left:auto;margin-right:auto;width:100%;

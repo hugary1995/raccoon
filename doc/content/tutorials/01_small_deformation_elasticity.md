@@ -6,7 +6,7 @@ This tutorial covers the basic usage of RACCOON.
 
 Consider a two-dimensional square plate with a notch (the commonly used geometry for Mode-I fracture) under stretch, we would like to solve for the displacements and visualize its strains and stresses everywhere.
 
-!media media/mode1_bcs.png style=display:block;margin:auto;width:60%; caption=Geometry and boundary conditions of the Mode-I crack propagation problem. id=mode1_schematics
+!media media/mode1_bcs.png alt=mode1_bcs style=display:block;margin:auto;width:60%; caption=Geometry and boundary conditions of the Mode-I crack propagation problem. id=mode1_schematics
 
 ## Global expressions and parameters
 

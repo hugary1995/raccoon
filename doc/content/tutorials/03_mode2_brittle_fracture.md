@@ -4,7 +4,7 @@
 
 In this tutorial, we will set up the model for Mode-II crack propagation. This problem is almost identical to [Tutorial 2](tutorials/02_mode1_brittle_fracture.md) except for its mesh and boundary conditions.
 
-!media media/mode2_bcs.png style=display:block;margin:auto;width:60%; caption=Geometry and boundary conditions of the Mode-II crack propagation problem. id=mode2_schematics
+!media media/mode2_bcs.png alt=mode2_bcs style=display:block;margin:auto;width:60%; caption=Geometry and boundary conditions of the Mode-II crack propagation problem. id=mode2_schematics
 
 ## Mesh generators
 

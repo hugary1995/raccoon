@@ -104,7 +104,7 @@ Each time you run `./sample-opt`, a different field is generated with an updated
 
 Below is a set of example random fields generated using different kernels, correlation lengths, and geometries.
 
-!media media/randomfield_examples.png style=display:block;margin:auto;width:60%; caption=Samples of the (non-Gaussian) random field, generated with mean and coefficient of variation set to 1.0 and 3\%, respectively, for the sake of illustration. Here, $L^* =L/a$ is the normalized correlation length on the rectangular domain. [!cite](ZENG2025105170) id=example 
+!media media/randomfield_examples.png alt=randomfield_examples style=display:block;margin:auto;width:60%; caption=Samples of the (non-Gaussian) random field, generated with mean and coefficient of variation set to 1.0 and 3\%, respectively, for the sake of illustration. Here, $L^* =L/a$ is the normalized correlation length on the rectangular domain. [!cite](ZENG2025105170) id=example 
 
 ## Related source code
 
