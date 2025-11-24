@@ -36,6 +36,8 @@ LDLNucleationMicroForce::LDLNucleationMicroForce(const InputParameters & paramet
 void
 LDLNucleationMicroForce::computeQpProperties()
 {
+  using std::pow;
+  using std::sqrt;
   // The bulk modulus
   ADReal K = _lambda[_qp] + 2.0 * _mu[_qp] / 3.0;
 
@@ -72,13 +74,13 @@ LDLNucleationMicroForce::computeQpProperties()
   if (!_h_correction)
   {
     // Use formula without h correction
-    _delta[_qp] = (_sigma_ts[_qp] + (1 + 2 * std::sqrt(3)) * _sigma_hs[_qp]) /
-                      (8 + 3 * std::sqrt(3)) / _sigma_hs[_qp] * 3.0 / 16.0 *
-                      (_Gc[_qp] / W_ts / _L[_qp]) +
+    _delta[_qp] = (_sigma_ts[_qp] + (1 + 2 * sqrt(3)) * _sigma_hs[_qp]) / (8 + 3 * sqrt(3)) /
+                      _sigma_hs[_qp] * 3.0 / 16.0 * (_Gc[_qp] / W_ts / _L[_qp]) +
                   3.0 / 8.0;
   }
   else
   {
+    using std::pow;
     // Get mesh size of current element
     ADReal h = _current_elem->hmin();
     // if (_L[_qp]/h *_L[_qp]/l_ch > 0.16)
@@ -89,27 +91,25 @@ LDLNucleationMicroForce::computeQpProperties()
           "the mesh, reduce the reg length, or turn h_correction=false.");
 
     // Use formula with h correction
-    _delta[_qp] = std::pow(1 + 3.0 / 8.0 * h / _L[_qp], -2) *
-                      (_sigma_ts[_qp] + (1 + 2 * std::sqrt(3.0)) * _sigma_hs[_qp]) /
-                      (8 + 3 * std::sqrt(3.0)) / _sigma_hs[_qp] * 3 / 16 *
-                      (_Gc[_qp] / W_ts / _L[_qp]) +
-                  std::pow(1 + 3.0 / 8.0 * h / _L[_qp], -1) * 2 / 5;
+    _delta[_qp] = pow(1 + 3.0 / 8.0 * h / _L[_qp], -2) *
+                      (_sigma_ts[_qp] + (1 + 2 * sqrt(3.0)) * _sigma_hs[_qp]) /
+                      (8 + 3 * sqrt(3.0)) / _sigma_hs[_qp] * 3 / 16 * (_Gc[_qp] / W_ts / _L[_qp]) +
+                  pow(1 + 3.0 / 8.0 * h / _L[_qp], -1) * 2 / 5;
   }
 
   // Parameters in the strength surface
   ADReal alpha_1 =
       -_delta[_qp] * _Gc[_qp] / 8.0 / _sigma_hs[_qp] / _L[_qp] + 2.0 / 3.0 * W_hs / _sigma_hs[_qp];
-  ADReal alpha_2 = -(std::sqrt(3.0) / 8.0 * _delta[_qp] * (3.0 * _sigma_hs[_qp] - _sigma_ts[_qp]) /
-                         (_sigma_hs[_qp] * _sigma_ts[_qp]) * _Gc[_qp] / _L[_qp] +
-                     2.0 / std::sqrt(3.0) * W_hs / _sigma_hs[_qp] -
-                     2.0 * std::sqrt(3.0) * W_ts / _sigma_ts[_qp]);
+  ADReal alpha_2 =
+      -(sqrt(3.0) / 8.0 * _delta[_qp] * (3.0 * _sigma_hs[_qp] - _sigma_ts[_qp]) /
+            (_sigma_hs[_qp] * _sigma_ts[_qp]) * _Gc[_qp] / _L[_qp] +
+        2.0 / sqrt(3.0) * W_hs / _sigma_hs[_qp] - 2.0 * sqrt(3.0) * W_ts / _sigma_ts[_qp]);
 
   // Compute the external driving force required to recover the desired strength envelope.
   _ex_driving[_qp] =
-      alpha_2 * std::sqrt(J2) + alpha_1 * I1 +
-      (I1 > 0 ? 0 : 2) / std::pow(_g[_qp], 1.5) *
+      alpha_2 * sqrt(J2) + alpha_1 * I1 +
+      (I1 > 0 ? 0 : 2) / pow(_g[_qp], 1.5) *
           (J2 / 2.0 / _mu[_qp] + I1 * I1 / 6.0 / (3.0 * _lambda[_qp] + 2.0 * _mu[_qp]));
 
-  _stress_balance[_qp] =
-      J2 / _mu[_qp] + std::pow(I1, 2) / 9.0 / K - _ex_driving[_qp] - M * _delta[_qp];
+  _stress_balance[_qp] = J2 / _mu[_qp] + pow(I1, 2) / 9.0 / K - _ex_driving[_qp] - M * _delta[_qp];
 }

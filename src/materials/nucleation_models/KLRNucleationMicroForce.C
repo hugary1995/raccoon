@@ -38,6 +38,8 @@ KLRNucleationMicroForce::KLRNucleationMicroForce(const InputParameters & paramet
 void
 KLRNucleationMicroForce::computeQpProperties()
 {
+  using std::pow;
+  using std::sqrt;
   // The bulk modulus
   ADReal K = _lambda[_qp] + 2 * _mu[_qp] / 3;
 
@@ -66,19 +68,19 @@ KLRNucleationMicroForce::computeQpProperties()
   ADReal gamma_1 = (1.0 + _delta[_qp]) / (2.0 * _sigma_ts[_qp] * _sigma_cs[_qp]);
   ADReal beta_0 = _delta[_qp] * M;
   ADReal beta_1 = -gamma_1 * M * (_sigma_cs[_qp] - _sigma_ts[_qp]) + gamma_0;
-  ADReal beta_2 = std::sqrt(3.0) * (-gamma_1 * M * (_sigma_cs[_qp] + _sigma_ts[_qp]) + gamma_0);
+  ADReal beta_2 = sqrt(3.0) * (-gamma_1 * M * (_sigma_cs[_qp] + _sigma_ts[_qp]) + gamma_0);
   ADReal beta_3 = _L[_qp] * _sigma_ts[_qp] / _mu[_qp] / K / _Gc[_qp];
 
   // Compute the external driving force required to recover the desired strength envelope.
   _ex_driving[_qp] =
-      (beta_2 * std::sqrt(J2) + beta_1 * I1 + beta_0) +
-      (1.0 - std::sqrt(I1 * I1) / I1) / std::pow(_g[_qp], 1.5) *
+      (beta_2 * sqrt(J2) + beta_1 * I1 + beta_0) +
+      (1.0 - sqrt(I1 * I1) / I1) / pow(_g[_qp], 1.5) *
           (J2 / 2.0 / _mu[_qp] + I1 * I1 / 6.0 / (3.0 * _lambda[_qp] + 2.0 * _mu[_qp]));
 
-  _stress_balance[_qp] = J2 / _mu[_qp] + std::pow(I1, 2) / 9.0 / K - _ex_driving[_qp] - M;
+  _stress_balance[_qp] = J2 / _mu[_qp] + pow(I1, 2) / 9.0 / K - _ex_driving[_qp] - M;
 
   _druck_prager_balance[_qp] =
-      std::sqrt(J2) +
-      (_sigma_cs[_qp] - _sigma_ts[_qp]) / std::sqrt(3.0) / (_sigma_cs[_qp] + _sigma_ts[_qp]) * I1 -
-      2.0 * _sigma_ts[_qp] * _sigma_cs[_qp] / std::sqrt(3.0) / (_sigma_cs[_qp] + _sigma_ts[_qp]);
+      sqrt(J2) +
+      (_sigma_cs[_qp] - _sigma_ts[_qp]) / sqrt(3.0) / (_sigma_cs[_qp] + _sigma_ts[_qp]) * I1 -
+      2.0 * _sigma_ts[_qp] * _sigma_cs[_qp] / sqrt(3.0) / (_sigma_cs[_qp] + _sigma_ts[_qp]);
 }

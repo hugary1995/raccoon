@@ -41,6 +41,7 @@ ArrheniusLaw::ArrheniusLaw(const InputParameters & parameters)
 void
 ArrheniusLaw::computeQpProperties()
 {
-  _arrhenius_coef[_qp] = std::exp(-_Q[_qp] / _R / _T[_qp]);
+  using std::exp;
+  _arrhenius_coef[_qp] = exp(-_Q[_qp] / _R / _T[_qp]);
   _darrhenius_coef_dT[_qp] = _arrhenius_coef[_qp] * _Q[_qp] / _R / _T[_qp] / _T[_qp];
 }

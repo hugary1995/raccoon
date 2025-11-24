@@ -25,6 +25,7 @@ LargeDeformationJ2Plasticity::LargeDeformationJ2Plasticity(const InputParameters
 void
 LargeDeformationJ2Plasticity::updateState(ADRankTwoTensor & stress, ADRankTwoTensor & Fe)
 {
+  using std::sqrt;
   // First assume no plastic increment
   ADReal delta_ep = 0;
   Fe = Fe * _Fp_old[_qp].inverse();
@@ -36,7 +37,7 @@ LargeDeformationJ2Plasticity::updateState(ADRankTwoTensor & stress, ADRankTwoTen
   ADReal stress_dev_norm = stress_dev.doubleContraction(stress_dev);
   if (MooseUtils::absoluteFuzzyEqual(stress_dev_norm, 0))
     stress_dev_norm.value() = libMesh::TOLERANCE * libMesh::TOLERANCE;
-  stress_dev_norm = std::sqrt(1.5 * stress_dev_norm);
+  stress_dev_norm = sqrt(1.5 * stress_dev_norm);
   _Np[_qp] = 1.5 * stress_dev / stress_dev_norm;
   // Return mapping
   ADReal phi = computeResidual(stress_dev_norm, delta_ep);
