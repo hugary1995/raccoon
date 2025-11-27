@@ -32,6 +32,7 @@ ADReal
 LargeDeformationJ2PowerLawCreep::computeResidual(const ADReal & effective_trial_stress,
                                                  const ADReal & delta_ep)
 {
+  using std::pow;
   const ADReal stress_delta =
       effective_trial_stress -
       _elasticity_model->computeMandelStress(delta_ep * _Np[_qp], /*plasticity_update = */ true)
@@ -39,7 +40,7 @@ LargeDeformationJ2PowerLawCreep::computeResidual(const ADReal & effective_trial_
   const ADReal yield_stress =
       _hardening_model->plasticEnergy(_ep_old[_qp] + delta_ep, 1) +
       _hardening_model->plasticDissipation(delta_ep, _ep_old[_qp] + delta_ep, 1);
-  const ADReal creep_rate = _coefficient * std::pow(stress_delta / yield_stress, _exponent);
+  const ADReal creep_rate = _coefficient * pow(stress_delta / yield_stress, _exponent);
   return creep_rate * _dt - delta_ep;
 }
 
@@ -47,6 +48,7 @@ ADReal
 LargeDeformationJ2PowerLawCreep::computeDerivative(const ADReal & effective_trial_stress,
                                                    const ADReal & delta_ep)
 {
+  using std::pow;
   const ADReal stress_delta =
       effective_trial_stress -
       _elasticity_model->computeMandelStress(delta_ep * _Np[_qp], /*plasticity_update = */ true)
@@ -61,7 +63,7 @@ LargeDeformationJ2PowerLawCreep::computeDerivative(const ADReal & effective_tria
       _hardening_model->plasticEnergy(_ep_old[_qp] + delta_ep, 2) +
       _hardening_model->plasticDissipation(delta_ep, _ep_old[_qp] + delta_ep, 2);
   const ADReal dcreep_rate =
-      _coefficient * _exponent * std::pow(stress_delta / yield_stress, _exponent - 1);
+      _coefficient * _exponent * pow(stress_delta / yield_stress, _exponent - 1);
   return dcreep_rate *
              (dstress_delta_ddelta_ep * yield_stress - stress_delta * dyield_stress_ddelta_ep) /
              yield_stress / yield_stress * _dt -

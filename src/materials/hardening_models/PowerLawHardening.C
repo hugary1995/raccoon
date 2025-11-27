@@ -53,20 +53,22 @@ PowerLawHardening::PowerLawHardening(const InputParameters & parameters)
 ADReal
 PowerLawHardening::plasticEnergy(const ADReal & ep, const unsigned int derivative)
 {
+  using std::pow;
   if (derivative == 0)
   {
+    using std::pow;
     _psip_active[_qp] = _n[_qp] * _sigma_y[_qp] * _ep0[_qp] / (_n[_qp] + 1) *
-                        (std::pow(1 + ep / _ep0[_qp], 1 / _n[_qp] + 1) - 1);
+                        (pow(1 + ep / _ep0[_qp], 1 / _n[_qp] + 1) - 1);
     _psip[_qp] = _gp[_qp] * _psip_active[_qp];
     _dpsip_dd[_qp] = _dgp_dd[_qp] * _psip_active[_qp];
     return _psip[_qp];
   }
 
   if (derivative == 1)
-    return _gp[_qp] * _sigma_y[_qp] * std::pow(1 + ep / _ep0[_qp], 1 / _n[_qp]);
+    return _gp[_qp] * _sigma_y[_qp] * pow(1 + ep / _ep0[_qp], 1 / _n[_qp]);
 
   if (derivative == 2)
-    return _gp[_qp] * _sigma_y[_qp] * std::pow(1 + ep / _ep0[_qp], 1 / _n[_qp] - 1) / _n[_qp] /
+    return _gp[_qp] * _sigma_y[_qp] * pow(1 + ep / _ep0[_qp], 1 / _n[_qp] - 1) / _n[_qp] /
            _ep0[_qp];
 
   mooseError(name(), "internal error: unsupported derivative order.");

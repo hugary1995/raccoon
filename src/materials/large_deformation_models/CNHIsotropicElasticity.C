@@ -71,6 +71,7 @@ ADRankTwoTensor
 CNHIsotropicElasticity::computeMandelStressNoDecomposition(const ADRankTwoTensor & Fe,
                                                            const bool plasticity_update)
 {
+  using std::sqrt;
   // We use the left Cauchy-Green strain
   ADRankTwoTensor strain;
   if (plasticity_update)
@@ -81,7 +82,7 @@ CNHIsotropicElasticity::computeMandelStressNoDecomposition(const ADRankTwoTensor
   else
     strain = Fe * Fe.transpose();
 
-  ADReal J = std::sqrt(strain.det());
+  ADReal J = sqrt(strain.det());
 
   const ADRankTwoTensor I2(ADRankTwoTensor::initIdentity);
   // Here, we keep the volumetric part no matter what. But ideally, in the case of J2 plasticity,
@@ -93,8 +94,10 @@ CNHIsotropicElasticity::computeMandelStressNoDecomposition(const ADRankTwoTensor
   // compute the strain energy density
   if (!plasticity_update)
   {
-    ADRankTwoTensor strain_bar = std::pow(J, -2. / 3.) * strain;
-    ADReal U = 0.5 * _K[_qp] * (0.5 * (J * J - 1) - std::log(J));
+    using std::log;
+    using std::pow;
+    ADRankTwoTensor strain_bar = pow(J, -2. / 3.) * strain;
+    ADReal U = 0.5 * _K[_qp] * (0.5 * (J * J - 1) - log(J));
     ADReal W = 0.5 * _G[_qp] * (strain_bar.trace() - 3.0);
     _psie_active[_qp] = U + W;
     _psie[_qp] = _g[_qp] * _psie_active[_qp];
@@ -108,6 +111,7 @@ ADRankTwoTensor
 CNHIsotropicElasticity::computeMandelStressVolDevDecomposition(const ADRankTwoTensor & Fe,
                                                                const bool plasticity_update)
 {
+  using std::sqrt;
   // We use the left Cauchy-Green strain
   ADRankTwoTensor strain;
   if (plasticity_update)
@@ -118,7 +122,7 @@ CNHIsotropicElasticity::computeMandelStressVolDevDecomposition(const ADRankTwoTe
   else
     strain = Fe * Fe.transpose();
 
-  ADReal J = std::sqrt(strain.det());
+  ADReal J = sqrt(strain.det());
 
   const ADRankTwoTensor I2(ADRankTwoTensor::initIdentity);
   // Here, we keep the volumetric part no matter what. But ideally, in the case of J2 plasticity,
@@ -132,8 +136,10 @@ CNHIsotropicElasticity::computeMandelStressVolDevDecomposition(const ADRankTwoTe
   // compute the strain energy density
   if (!plasticity_update)
   {
-    ADRankTwoTensor strain_bar = std::pow(J, -2. / 3.) * strain;
-    ADReal U = 0.5 * _K[_qp] * (0.5 * (J * J - 1) - std::log(J));
+    using std::log;
+    using std::pow;
+    ADRankTwoTensor strain_bar = pow(J, -2. / 3.) * strain;
+    ADReal U = 0.5 * _K[_qp] * (0.5 * (J * J - 1) - log(J));
     ADReal W = 0.5 * _G[_qp] * (strain_bar.trace() - 3.0);
     _psie_active[_qp] = J > 1 ? U + W : W;
     _psie[_qp] = _g[_qp] * _psie_active[_qp];

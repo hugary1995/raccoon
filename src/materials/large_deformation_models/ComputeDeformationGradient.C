@@ -123,8 +123,9 @@ ComputeDeformationGradient::computeProperties()
 
   for (_qp = 0; _qp < _qrule->n_points(); ++_qp)
   {
+    using std::cbrt;
     if (_volumetric_locking_correction)
-      _F[_qp] *= std::cbrt(ave_F_det / _F[_qp].det());
+      _F[_qp] *= cbrt(ave_F_det / _F[_qp].det());
 
     // Remove the eigen deformation gradient
     ADRankTwoTensor Fg(ADRankTwoTensor::initIdentity);
