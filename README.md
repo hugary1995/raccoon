@@ -8,4 +8,4 @@ RACCOON extends the framework's standard utility to solve phase-field fracture e
 
 Follow [instructions](https://hugary1995.github.io/raccoon/getting_started/install.html) to install RACCOON.
 
-Full documentation available at [here](https://hugary1995.github.io/raccoon/index.html)
+Full documentation available [here](https://hugary1995.github.io/raccoon/index.html)
