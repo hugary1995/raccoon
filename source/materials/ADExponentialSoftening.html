@@ -1,0 +1,401 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>AD Exponential Softening | RACCOON</title><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" alt="GitHub wordmark" class="github-mark"></img><img src="../../media/framework/github-mark.png" alt="GitHub logo" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="03813657-d949-40b6-9b5a-f5f3c29fd45b" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="35e89143-ebeb-405b-9b3c-700521e0b259" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="7833d8f8-bbfd-4011-8535-af9ae2745a56" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="7be3d3ed-334d-4c90-8d11-0e0910729e34" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="6aa54cb6-2d79-4999-aa13-01c76810f1b3"><i class="material-icons">menu</i></a><ul class="sidenav" id="6aa54cb6-2d79-4999-aa13-01c76810f1b3"><li><a href="#!" class="dropdown-trigger" data-target="e9d25db9-27f9-49f6-8ca7-483a0385893e" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="017195af-3709-46df-b1a2-1cb11df984d6" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="d0aea44c-38c7-4961-b1ec-119d39109c26" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="1f238956-8fe8-4fbe-9bca-cef398e11c71" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="03813657-d949-40b6-9b5a-f5f3c29fd45b"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="35e89143-ebeb-405b-9b3c-700521e0b259"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="7833d8f8-bbfd-4011-8535-af9ae2745a56"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="7be3d3ed-334d-4c90-8d11-0e0910729e34"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="e9d25db9-27f9-49f6-8ca7-483a0385893e"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="017195af-3709-46df-b1a2-1cb11df984d6"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="d0aea44c-38c7-4961-b1ec-119d39109c26"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="1f238956-8fe8-4fbe-9bca-cef398e11c71"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="8f722eeb-2268-40fa-8146-6c502f62f938" data-section-level="1" data-section-text="AD Exponential Softening"><h1 id="ad-exponential-softening">AD Exponential Softening</h1><p>Softening model with an exponential softening response upon cracking. This class is intended to be used with ADComputeSmearedCrackingStress and relies on automatic differentiation.</p><section id="cae18a14-67e7-4448-8011-7d93c4f4ca0f" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The material <code>ADExponentialSoftening</code> computes the reduced stress and stiffness in the direction of a crack according to a exponential function. The computed cracked stiffness ratio softens the tensile response of the material once the principle stress exceeds the cracking stress threshold of the material.  It uses automatic differentiation for the computation of its Jacobian.</p><p>For more details, refer to the non-AD version <a href="ExponentialSoftening.html">ExponentialSoftening</a>.</p></section><section id="0d16906c-ac62-4e62-b55b-b42696c9bd28" data-section-level="2" data-section-text="Example Input File"><h2 id="example-input-file">Example Input File</h2><pre style="max-height:350px;"><code class="language-moose">[./exponential_softening]
+  type = ADExponentialSoftening
+[../]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#c1bbe5a6-0494-4767-ac94-e17e00bfa5da">(moose/modules/solid_mechanics/test/tests/ad_smeared_cracking/cracking_rotation.i)</a><p><code>ADExponentialSoftening</code> must be run in conjunction with the ad fixed smeared cracking material model as shown below:</p><pre style="max-height:350px;"><code class="language-moose">[./cracking_stress]
+  type = ADComputeSmearedCrackingStress
+  shear_retention_factor = 0.1
+  cracking_stress = 3.e9
+  cracked_elasticity_type = FULL
+  softening_models = exponential_softening
+[../]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#26c5e3f7-6254-495b-ab98-ac3592a8cee8">(moose/modules/solid_mechanics/test/tests/ad_smeared_cracking/cracking_rotation.i)</a></section><section id="598f8176-c8ec-4fcc-b145-64475857ba56" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="f9f7e410-e19b-4f99-abb8-4e7fa431c969" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">alpha</span><span class="moose-parameter-header-default">-1</span><span class="moose-parameter-header-description">Initial slope of the exponential softening curve at crack initiation. If not specified, it is equal to the negative of the Young's modulus.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>-1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-doc-range"><span>Range:</span>alpha <= 0</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Initial slope of the exponential softening curve at crack initiation. If not specified, it is equal to the negative of the Young's modulus.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">beta</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">Multiplier applied to alpha to control the exponential softening behavior.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-doc-range"><span>Range:</span>beta >= 0</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Multiplier applied to alpha to control the exponential softening behavior.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of blocks (ids or names) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;SubdomainName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The list of blocks (ids or names) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundaries (ids or names) from the mesh where this object applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;BoundaryName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The list of boundaries (ids or names) from the mesh where this object applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_on</span><span class="moose-parameter-header-default">NONE</span><span class="moose-parameter-header-description">When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>NONE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE, ELEMENT, SUBDOMAIN</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">declare_suffix</span><span class="moose-parameter-header-description">An optional suffix parameter that can be appended to any declared properties. The suffix will be prepended with a '_' character.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>An optional suffix parameter that can be appended to any declared properties. The suffix will be prepended with a '_' character.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">residual_stress</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The fraction of the cracking stress allowed to be maintained following a crack.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-doc-range"><span>Range:</span>residual_stress <= 1 & residual_stress >= 0</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The fraction of the cracking stress allowed to be maintained following a crack.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="309f9e3f-208a-4ede-ba9c-ed50aa58fda4" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>Yes</p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">search_method</span><span class="moose-parameter-header-default">nearest_node_connected_sides</span><span class="moose-parameter-header-description">Choice of search algorithm.  All options begin by finding the nearest node in the primary boundary to a query point in the secondary boundary.  In the default nearest_node_connected_sides algorithm, primary boundary elements are searched iff that nearest node is one of their nodes.  This is fast to determine via a pregenerated node-to-elem map and is robust on conforming meshes.  In the optional all_proximate_sides algorithm, primary boundary elements are searched iff they touch that nearest node, even if they are not topologically connected to it.  This is more CPU-intensive but is necessary for robustness on any boundary surfaces which has disconnections (such as Flex IGA meshes) or non-conformity (such as hanging nodes in adaptively h-refined meshes).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nearest_node_connected_sides</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nearest_node_connected_sides, all_proximate_sides</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Choice of search algorithm.  All options begin by finding the nearest node in the primary boundary to a query point in the secondary boundary.  In the default nearest_node_connected_sides algorithm, primary boundary elements are searched iff that nearest node is one of their nodes.  This is fast to determine via a pregenerated node-to-elem map and is robust on conforming meshes.  In the optional all_proximate_sides algorithm, primary boundary elements are searched iff they touch that nearest node, even if they are not topologically connected to it.  This is more CPU-intensive but is necessary for robustness on any boundary surfaces which has disconnections (such as Flex IGA meshes) or non-conformity (such as hanging nodes in adaptively h-refined meshes).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="f38fa001-a937-46d3-9a4c-07e90311701c" data-section-level="3" data-section-text="Outputs Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">output_properties</span><span class="moose-parameter-header-description">List of material properties, from this material, to output (outputs must also be defined to an output type)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>List of material properties, from this material, to output (outputs must also be defined to an output type)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-default">none </span><span class="moose-parameter-header-description">Vector of output names where you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>none </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;OutputName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Vector of output names where you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Outputs Parameters</h3></summary></details></section><section id="cf1c63a3-e601-44a2-b386-76be0faf9b46" data-section-level="3" data-section-text="Material Property Retrieval Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">prop_getter_suffix</span><span class="moose-parameter-header-description">An optional suffix parameter that can be appended to any attempt to retrieve/get material properties. The suffix will be prepended with a '_' character.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>An optional suffix parameter that can be appended to any attempt to retrieve/get material properties. The suffix will be prepended with a '_' character.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_interpolated_state</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">For the old and older state use projected material properties interpolated at the quadrature points. To set up projection use the ProjectedStatefulMaterialStorageAction.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>For the old and older state use projected material properties interpolated at the quadrature points. To set up projection use the ProjectedStatefulMaterialStorageAction.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Material Property Retrieval Parameters</h3></summary></details></section></section><section id="33ad113a-8f0a-427c-94c3-5efa50a18437" data-section-level="2" data-section-text="References"><h2 id="references">References</h2>No citations exist within this document.</section></section><div class="moose-modal modal" id="c1bbe5a6-0494-4767-ac94-e17e00bfa5da"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/ad_smeared_cracking/cracking_rotation.i)</h4><pre style="max-height:350px;"><code class="language-moose"># This test is to ensure that the smeared cracking model correctly handles finite
+# rotation of cracked elements.
+
+# This consists of a single element that is first  subjected to tensile loading
+# in the y-direction via a prescribed displacement. This loading is sufficiently
+# high to crack the material in that direction, but not completely unload. The
+# prescribed displacement is then reversed so that the element is returned to its
+# original configuration.
+
+# In the next phase of the analysis, this element is then rotated 90 degrees by
+# prescribing the displacement of the bottom of the element. The prescribed
+# displacement BC used to crack the element in the first phase is deactivated.
+
+# Once the element is fully rotated, a new BC is activated on what was originally
+# the top surface (but is now the surface on the right hand side) to pull in
+# the x-direction.
+
+# If everything is working correctly, the model should re-load on the original
+# crack (which should be rotated along with the elemnent) up to the peak stress
+# in the first phase of the analysis, and then continue the unloading process
+# as the crack strains continue to increase. Throughout this analysis, there should
+# only be a single crack, as manifested in the crack_flags variables.
+
+[Mesh]
+  file = cracking_test.e
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [./all]
+    strain = FINITE
+    add_variables = true
+    generate_output = &#x27;stress_xx stress_yy stress_zz stress_xy stress_yz stress_zx&#x27;
+    use_automatic_differentiation = true
+  [../]
+[]
+
+[AuxVariables]
+  [./crack_flags1]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./crack_flags2]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./crack_flags3]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./crack_flags1]
+    type = ADMaterialRealVectorValueAux
+    property = crack_flags
+    variable = crack_flags1
+    component = 0
+  [../]
+  [./crack_flags2]
+    type = ADMaterialRealVectorValueAux
+    property = crack_flags
+    variable = crack_flags2
+    component = 1
+  [../]
+  [./crack_flags3]
+    type = ADMaterialRealVectorValueAux
+    property = crack_flags
+    variable = crack_flags3
+    component = 2
+  [../]
+[]
+
+[BCs]
+  [./x_pin]
+    type = ADDirichletBC
+    variable = disp_x
+    boundary = &#x27;15 16&#x27;
+    value = 0.0
+  [../]
+  [./y_pin]
+    type = ADDirichletBC
+    variable = disp_y
+    boundary = &#x27;15 16&#x27;
+    value = 0.0
+  [../]
+  [./z_all]
+    type = ADDirichletBC
+    variable = disp_z
+    boundary = &#x27;11 12 13 14 15 16 17 18&#x27;
+    value = 0.0
+  [../]
+  [./x_lb]
+    type = ADFunctionDirichletBC
+    variable = disp_x
+    boundary = &#x27;11 12&#x27;
+    function = &#x27;if(t&lt;10,0,if(t&gt;=100,1,1-cos((t-10)*pi/180)))&#x27;
+  [../]
+  [./y_lb]
+    type = ADFunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;11 12&#x27;
+    function = &#x27;if(t&lt;10,0,if(t&gt;=100,1,sin((t-10)*pi/180)))&#x27;
+  [../]
+  [./x_lt]
+    type = ADFunctionDirichletBC
+    variable = disp_x
+    boundary = &#x27;13 14&#x27;
+    function = &#x27;2+(t-100)*0.01&#x27;
+  [../]
+  [./x_rt]
+    type = ADFunctionDirichletBC
+    variable = disp_x
+    boundary = &#x27;17 18&#x27;
+    function = &#x27;1+(t-100)*0.01&#x27;
+  [../]
+  [./top_pull]
+    type = ADFunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;13 14 17 18&#x27;
+    function = &#x27;if(t&lt;5,t*0.01,0.05-(t-5)*0.01)&#x27;
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ADComputeIsotropicElasticityTensor
+    youngs_modulus = 100.e9
+    poissons_ratio = 0.
+  [../]
+  [./cracking_stress]
+    type = ADComputeSmearedCrackingStress
+    shear_retention_factor = 0.1
+    cracking_stress = 3.e9
+    cracked_elasticity_type = FULL
+    softening_models = exponential_softening
+  [../]
+  [./exponential_softening]
+    type = ADExponentialSoftening
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type&#x27;
+  petsc_options_value = &#x27;101                lu&#x27;
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 100
+  l_tol = 1e-5
+
+  nl_max_its = 100
+  nl_abs_tol = 1e-5
+  nl_rel_tol = 1e-12
+
+  start_time = 0
+  end_time = 110
+  dt = 1
+[]
+
+[Controls]
+  [./p1]
+    type = TimePeriod
+    start_time = 0.0
+    end_time = 10.0
+    disable_objects = &#x27;BCs/x_lt BCs/x_rt&#x27;
+    enable_objects = &#x27;BCs/top_pull&#x27;
+    reverse_on_false = false
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+  [./p2]
+    type = TimePeriod
+    start_time = 10.0
+    end_time = 101.0
+    disable_objects = &#x27;BCs/x_lt BCs/x_rt BCs/top_pull&#x27;
+    reverse_on_false = false
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+  [./p3]
+    type = TimePeriod
+    start_time = 101.0
+    end_time = 110.0
+    enable_objects = &#x27;BCs/x_lt BCs/x_rt&#x27;
+    disable_objects = &#x27;BCs/top_pull&#x27;
+    reverse_on_false = false
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="26c5e3f7-6254-495b-ab98-ac3592a8cee8"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/ad_smeared_cracking/cracking_rotation.i)</h4><pre style="max-height:350px;"><code class="language-moose"># This test is to ensure that the smeared cracking model correctly handles finite
+# rotation of cracked elements.
+
+# This consists of a single element that is first  subjected to tensile loading
+# in the y-direction via a prescribed displacement. This loading is sufficiently
+# high to crack the material in that direction, but not completely unload. The
+# prescribed displacement is then reversed so that the element is returned to its
+# original configuration.
+
+# In the next phase of the analysis, this element is then rotated 90 degrees by
+# prescribing the displacement of the bottom of the element. The prescribed
+# displacement BC used to crack the element in the first phase is deactivated.
+
+# Once the element is fully rotated, a new BC is activated on what was originally
+# the top surface (but is now the surface on the right hand side) to pull in
+# the x-direction.
+
+# If everything is working correctly, the model should re-load on the original
+# crack (which should be rotated along with the elemnent) up to the peak stress
+# in the first phase of the analysis, and then continue the unloading process
+# as the crack strains continue to increase. Throughout this analysis, there should
+# only be a single crack, as manifested in the crack_flags variables.
+
+[Mesh]
+  file = cracking_test.e
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [./all]
+    strain = FINITE
+    add_variables = true
+    generate_output = &#x27;stress_xx stress_yy stress_zz stress_xy stress_yz stress_zx&#x27;
+    use_automatic_differentiation = true
+  [../]
+[]
+
+[AuxVariables]
+  [./crack_flags1]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./crack_flags2]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./crack_flags3]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./crack_flags1]
+    type = ADMaterialRealVectorValueAux
+    property = crack_flags
+    variable = crack_flags1
+    component = 0
+  [../]
+  [./crack_flags2]
+    type = ADMaterialRealVectorValueAux
+    property = crack_flags
+    variable = crack_flags2
+    component = 1
+  [../]
+  [./crack_flags3]
+    type = ADMaterialRealVectorValueAux
+    property = crack_flags
+    variable = crack_flags3
+    component = 2
+  [../]
+[]
+
+[BCs]
+  [./x_pin]
+    type = ADDirichletBC
+    variable = disp_x
+    boundary = &#x27;15 16&#x27;
+    value = 0.0
+  [../]
+  [./y_pin]
+    type = ADDirichletBC
+    variable = disp_y
+    boundary = &#x27;15 16&#x27;
+    value = 0.0
+  [../]
+  [./z_all]
+    type = ADDirichletBC
+    variable = disp_z
+    boundary = &#x27;11 12 13 14 15 16 17 18&#x27;
+    value = 0.0
+  [../]
+  [./x_lb]
+    type = ADFunctionDirichletBC
+    variable = disp_x
+    boundary = &#x27;11 12&#x27;
+    function = &#x27;if(t&lt;10,0,if(t&gt;=100,1,1-cos((t-10)*pi/180)))&#x27;
+  [../]
+  [./y_lb]
+    type = ADFunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;11 12&#x27;
+    function = &#x27;if(t&lt;10,0,if(t&gt;=100,1,sin((t-10)*pi/180)))&#x27;
+  [../]
+  [./x_lt]
+    type = ADFunctionDirichletBC
+    variable = disp_x
+    boundary = &#x27;13 14&#x27;
+    function = &#x27;2+(t-100)*0.01&#x27;
+  [../]
+  [./x_rt]
+    type = ADFunctionDirichletBC
+    variable = disp_x
+    boundary = &#x27;17 18&#x27;
+    function = &#x27;1+(t-100)*0.01&#x27;
+  [../]
+  [./top_pull]
+    type = ADFunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;13 14 17 18&#x27;
+    function = &#x27;if(t&lt;5,t*0.01,0.05-(t-5)*0.01)&#x27;
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ADComputeIsotropicElasticityTensor
+    youngs_modulus = 100.e9
+    poissons_ratio = 0.
+  [../]
+  [./cracking_stress]
+    type = ADComputeSmearedCrackingStress
+    shear_retention_factor = 0.1
+    cracking_stress = 3.e9
+    cracked_elasticity_type = FULL
+    softening_models = exponential_softening
+  [../]
+  [./exponential_softening]
+    type = ADExponentialSoftening
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = Newton
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type&#x27;
+  petsc_options_value = &#x27;101                lu&#x27;
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 100
+  l_tol = 1e-5
+
+  nl_max_its = 100
+  nl_abs_tol = 1e-5
+  nl_rel_tol = 1e-12
+
+  start_time = 0
+  end_time = 110
+  dt = 1
+[]
+
+[Controls]
+  [./p1]
+    type = TimePeriod
+    start_time = 0.0
+    end_time = 10.0
+    disable_objects = &#x27;BCs/x_lt BCs/x_rt&#x27;
+    enable_objects = &#x27;BCs/top_pull&#x27;
+    reverse_on_false = false
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+  [./p2]
+    type = TimePeriod
+    start_time = 10.0
+    end_time = 101.0
+    disable_objects = &#x27;BCs/x_lt BCs/x_rt BCs/top_pull&#x27;
+    reverse_on_false = false
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+  [./p3]
+    type = TimePeriod
+    start_time = 101.0
+    end_time = 110.0
+    enable_objects = &#x27;BCs/x_lt BCs/x_rt&#x27;
+    disable_objects = &#x27;BCs/top_pull&#x27;
+    reverse_on_false = false
+    execute_on = &#x27;initial timestep_begin&#x27;
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script><script type="text/javascript" src="../../js/moose_input_parser.js"></script>

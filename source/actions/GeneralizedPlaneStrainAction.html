@@ -1,0 +1,499 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Generalized Plane Strain Action | RACCOON</title><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" alt="GitHub wordmark" class="github-mark"></img><img src="../../media/framework/github-mark.png" alt="GitHub logo" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="9bf04714-9312-4102-b450-6a08efd556f8" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="0058a168-ffad-40b0-b7a2-6725225ffa1b" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="757412b0-ddf5-471c-95dc-ce9304ee74a4" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="9f5dc459-e3cf-4b53-b1c0-4694d9a89a7c" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="75412479-046f-4074-8b66-192f0aa6dfcf"><i class="material-icons">menu</i></a><ul class="sidenav" id="75412479-046f-4074-8b66-192f0aa6dfcf"><li><a href="#!" class="dropdown-trigger" data-target="9bf6b96c-1032-48b5-b967-1fa29c52584b" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="bff0fd16-7cb9-4fc4-b785-d21bf4733ca6" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="5a170559-69f2-4d2c-8165-450b58d6f28a" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="1889ad2a-59a9-4522-94bc-4d9079b7f5f0" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="9bf04714-9312-4102-b450-6a08efd556f8"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="0058a168-ffad-40b0-b7a2-6725225ffa1b"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="757412b0-ddf5-471c-95dc-ce9304ee74a4"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="9f5dc459-e3cf-4b53-b1c0-4694d9a89a7c"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="9bf6b96c-1032-48b5-b967-1fa29c52584b"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="bff0fd16-7cb9-4fc4-b785-d21bf4733ca6"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="5a170559-69f2-4d2c-8165-450b58d6f28a"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="1889ad2a-59a9-4522-94bc-4d9079b7f5f0"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="79134787-2068-486c-a144-5613671d0fc6" data-section-level="1" data-section-text="Generalized Plane Strain Action"><h1 id="generalized-plane-strain-action">Generalized Plane Strain Action</h1><section id="05a233db-19e7-462f-8033-daa39ec9a284" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>This action simplifies the input file syntax for creating a generalized plane strain model. It creates the following MOOSE objects (i.e. Kernel, ScalarKernel and UserObject) related to the out-of-plane scalar variable.</p><section id="8aacc927-e851-4b3e-baa0-1a76a692fe2f" data-section-level="3" data-section-text="Kernel"><h3 id="kernel">Kernel</h3><ul class="browser-default"><li><p><a href="../kernels/GeneralizedPlaneStrainOffDiag.html">Generalized Plane Strain Off-diagonal Kernel</a>: in-plane displacement variables and scalar out-of-plane strain coupling</p></li></ul></section><section id="d9fe828c-5f2a-4fac-b866-2d0929f2ecb8" data-section-level="3" data-section-text="ScalarKernel"><h3 id="scalarkernel">ScalarKernel</h3><ul class="browser-default"><li><p><a href="../scalarkernels/GeneralizedPlaneStrain.html">Generalized Plane Strain ScalarKernel</a>: out-of-plane equilibrium condition</p></li></ul></section><section id="84333256-ce18-4410-b929-68b185dede7c" data-section-level="3" data-section-text="UserObject"><h3 id="userobject">UserObject</h3><ul class="browser-default"><li><p><a href="../userobjects/GeneralizedPlaneStrainUserObject.html">Generalized Plane Strain UserObject</a>: residual and diagonal Jacobian calculation for scalar out-of-plane strain variable</p></li></ul></section></section><section id="bdafbf04-14dd-4148-a36b-ff9381722d4f" data-section-level="2" data-section-text="Generalized Plane Strain and Reference Residual"><h2 id="generalized-plane-strain-and-reference-residual">Generalized Plane Strain and Reference Residual</h2><p>Generalized plane strain problems may use <code>ReferenceResidualProblem</code>. In this case, a reference scalar variable is needed to correspond with the scalar strain variable.</p><pre style="max-height:350px;"><code class="language-moose">[Problem&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Problem/index.html&quot;}&gt;&gt;&gt;]
+  type = ReferenceResidualProblem
+  extra_tag_vectors = &#x27;ref&#x27;
+  reference_vector = &#x27;ref&#x27;
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#7f2e41c7-61eb-40bd-a51f-41bf6e6e04c9">(moose/modules/combined/test/tests/generalized_plane_strain_tm_contact/out_of_plane_pressure.i)</a><p>The reference scalar variable is set using the <code>AuxScalarKernel</code> <a href="../auxkernels/GeneralizedPlaneStrainReferenceResidual.html">Generalized Plane Strain Reference Residual</a> using the <a href="../userobjects/GeneralizedPlaneStrainUserObject.html">Generalized Plane Strain UserObject</a>.</p><pre style="max-height:350px;"><code class="language-moose">[AuxScalarKernels&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/AuxScalarKernels/index.html&quot;}&gt;&gt;&gt;]
+  [./gps_ref_res]
+    type = GeneralizedPlaneStrainReferenceResidual&lt;&lt;&lt;{&quot;description&quot;: &quot;Generalized Plane Strain Reference Residual Scalar Kernel&quot;, &quot;href&quot;: &quot;../auxkernels/GeneralizedPlaneStrainReferenceResidual.html&quot;}&gt;&gt;&gt;
+    variable&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the variable that this kernel operates on&quot;}&gt;&gt;&gt; = saved_zz
+    generalized_plane_strain&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the GeneralizedPlaneStrainUserObject&quot;}&gt;&gt;&gt; = gps_GeneralizedPlaneStrainUserObject
+  [../]
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#293979c3-c574-4a82-80ab-b46b7325729f">(moose/modules/combined/test/tests/generalized_plane_strain_tm_contact/out_of_plane_pressure.i)</a></section><section id="565ddfb2-6f97-4c47-a477-725e3698c99b" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="3ecc6a5a-ea8b-4fd1-b767-7da8495b50cb" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The displacement variables</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;VariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The displacement variables</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">scalar_out_of_plane_strain</span><span class="moose-parameter-header-description">Scalar variable for the out-of-plane strain (in y direction for 1D Axisymmetric or in z direction for 2D Cartesian problems)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VariableName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Scalar variable for the out-of-plane strain (in y direction for 1D Axisymmetric or in z direction for 2D Cartesian problems)</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="16fec4a1-ec65-43de-a782-fa9383da7e19" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">absolute_value_vector_tags</span><span class="moose-parameter-header-description">The tag names for extra vectors that the absolute value of the residual should be accumulated into</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;TagName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The tag names for extra vectors that the absolute value of the residual should be accumulated into</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">active</span><span class="moose-parameter-header-default">__all__ </span><span class="moose-parameter-header-description">If specified only the blocks named will be visited and made active</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>__all__ </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>If specified only the blocks named will be visited and made active</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Material property base name</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Material property base name</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of ids of the blocks (subdomain) that the GeneralizedPlaneStrain kernels will be applied to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;SubdomainName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The list of ids of the blocks (subdomain) that the GeneralizedPlaneStrain kernels will be applied to</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The tag names for extra vectors that residual data should be saved into</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;TagName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The tag names for extra vectors that residual data should be saved into</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">inactive</span><span class="moose-parameter-header-description">If specified blocks matching these identifiers will be skipped.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>If specified blocks matching these identifiers will be skipped.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">out_of_plane_direction</span><span class="moose-parameter-header-default">z</span><span class="moose-parameter-header-description">The direction of the out-of-plane strain.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>z</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>x, y, z</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The direction of the out-of-plane strain.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">out_of_plane_pressure_function</span><span class="moose-parameter-header-description">Function used to prescribe pressure (applied toward the body) in the out-of-plane direction (y for 1D Axisymmetric or z for 2D Cartesian problems)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Function used to prescribe pressure (applied toward the body) in the out-of-plane direction (y for 1D Axisymmetric or z for 2D Cartesian problems)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">out_of_plane_pressure_material</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">Material used to prescribe pressure (applied toward the body) in the out-of-plane direction</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Material used to prescribe pressure (applied toward the body) in the out-of-plane direction</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">pressure_factor</span><span class="moose-parameter-header-description">Scale factor applied to prescribed out-of-plane pressure (both material and function)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Scale factor applied to prescribed out-of-plane pressure (both material and function)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">temperature</span><span class="moose-parameter-header-description">The temperature variable</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;VariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The temperature variable</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether to use displaced mesh</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Whether to use displaced mesh</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="3424e153-7b87-4824-9dd3-a98abee02e72" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section></section></section><div class="moose-modal modal" id="7f2e41c7-61eb-40bd-a51f-41bf6e6e04c9"><div class="modal-content"><h4>(moose/modules/combined/test/tests/generalized_plane_strain_tm_contact/out_of_plane_pressure.i)</h4><pre style="max-height:350px;"><code class="language-moose"># Tests for application of out-of-plane pressure in generalized plane strain.
+
+[Mesh]
+  type = GeneratedMesh
+  nx = 2
+  ny = 2
+  dim = 2
+  xmin = 0.0
+  xmax = 1.0
+  ymin = 0.0
+  ymax = 1.0
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Problem]
+  type = ReferenceResidualProblem
+  extra_tag_vectors = &#x27;ref&#x27;
+  reference_vector = &#x27;ref&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./scalar_strain_zz]
+    order = FIRST
+    family = SCALAR
+  [../]
+[]
+
+[AuxVariables]
+  [./saved_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./saved_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./saved_zz]
+    order = FIRST
+    family = SCALAR
+  [../]
+
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_xy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Postprocessors]
+  [./react_z]
+    type = MaterialTensorIntegral
+    rank_two_tensor = stress
+    index_i = 2
+    index_j = 2
+  [../]
+[]
+
+[Physics]
+  [./SolidMechanics]
+    [./GeneralizedPlaneStrain]
+      [./gps]
+        displacements = &#x27;disp_x disp_y&#x27;
+        scalar_out_of_plane_strain = scalar_strain_zz
+        out_of_plane_pressure = traction_function
+        factor = 1e5
+      [../]
+    [../]
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    use_displaced_mesh = true
+    displacements = &#x27;disp_x disp_y&#x27;
+    save_in = &#x27;saved_x saved_y&#x27;
+    extra_vector_tags = &#x27;ref&#x27;
+  [../]
+[]
+
+[AuxScalarKernels]
+  [./gps_ref_res]
+    type = GeneralizedPlaneStrainReferenceResidual
+    variable = saved_zz
+    generalized_plane_strain = gps_GeneralizedPlaneStrainUserObject
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_xx]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xx
+    index_i = 0
+    index_j = 0
+  [../]
+  [./stress_xy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xy
+    index_i = 0
+    index_j = 1
+  [../]
+  [./stress_yy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yy
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_zz]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_zz
+    index_i = 2
+    index_j = 2
+  [../]
+
+  [./strain_xx]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_xx
+    index_i = 0
+    index_j = 0
+  [../]
+  [./strain_xy]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_xy
+    index_i = 0
+    index_j = 1
+  [../]
+  [./strain_yy]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_yy
+    index_i = 1
+    index_j = 1
+  [../]
+  [./strain_zz]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_zz
+    index_i = 2
+    index_j = 2
+  [../]
+[]
+
+[Functions]
+  [./traction_function]
+    type = PiecewiseLinear
+    x = &#x27;0  2&#x27;
+    y = &#x27;0  1&#x27;
+  [../]
+[]
+
+[BCs]
+  [./leftx]
+    type = DirichletBC
+    boundary = left
+    variable = disp_x
+    value = 0.0
+  [../]
+  [./bottomy]
+    type = DirichletBC
+    boundary = bottom
+    variable = disp_y
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elastic_tensor]
+    type = ComputeIsotropicElasticityTensor
+    poissons_ratio = 0.3
+    youngs_modulus = 1e6
+  [../]
+  [./strain]
+    type = ComputePlaneSmallStrain
+    displacements = &#x27;disp_x disp_y&#x27;
+    scalar_out_of_plane_strain = scalar_strain_zz
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = PJFNK
+  line_search = none
+
+# controls for linear iterations
+  l_max_its = 100
+  l_tol = 1e-4
+
+# controls for nonlinear iterations
+  nl_max_its = 15
+  nl_rel_tol = 1e-14
+  nl_abs_tol = 1e-11
+
+# time control
+  start_time = 0.0
+  dt = 1.0
+  dtmin = 1.0
+  end_time = 2.0
+  num_steps = 5000
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="293979c3-c574-4a82-80ab-b46b7325729f"><div class="modal-content"><h4>(moose/modules/combined/test/tests/generalized_plane_strain_tm_contact/out_of_plane_pressure.i)</h4><pre style="max-height:350px;"><code class="language-moose"># Tests for application of out-of-plane pressure in generalized plane strain.
+
+[Mesh]
+  type = GeneratedMesh
+  nx = 2
+  ny = 2
+  dim = 2
+  xmin = 0.0
+  xmax = 1.0
+  ymin = 0.0
+  ymax = 1.0
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Problem]
+  type = ReferenceResidualProblem
+  extra_tag_vectors = &#x27;ref&#x27;
+  reference_vector = &#x27;ref&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+  [./scalar_strain_zz]
+    order = FIRST
+    family = SCALAR
+  [../]
+[]
+
+[AuxVariables]
+  [./saved_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./saved_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./saved_zz]
+    order = FIRST
+    family = SCALAR
+  [../]
+
+  [./stress_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_xy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./stress_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+
+  [./strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_xy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[Postprocessors]
+  [./react_z]
+    type = MaterialTensorIntegral
+    rank_two_tensor = stress
+    index_i = 2
+    index_j = 2
+  [../]
+[]
+
+[Physics]
+  [./SolidMechanics]
+    [./GeneralizedPlaneStrain]
+      [./gps]
+        displacements = &#x27;disp_x disp_y&#x27;
+        scalar_out_of_plane_strain = scalar_strain_zz
+        out_of_plane_pressure = traction_function
+        factor = 1e5
+      [../]
+    [../]
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+    use_displaced_mesh = true
+    displacements = &#x27;disp_x disp_y&#x27;
+    save_in = &#x27;saved_x saved_y&#x27;
+    extra_vector_tags = &#x27;ref&#x27;
+  [../]
+[]
+
+[AuxScalarKernels]
+  [./gps_ref_res]
+    type = GeneralizedPlaneStrainReferenceResidual
+    variable = saved_zz
+    generalized_plane_strain = gps_GeneralizedPlaneStrainUserObject
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_xx]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xx
+    index_i = 0
+    index_j = 0
+  [../]
+  [./stress_xy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xy
+    index_i = 0
+    index_j = 1
+  [../]
+  [./stress_yy]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yy
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_zz]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    variable = stress_zz
+    index_i = 2
+    index_j = 2
+  [../]
+
+  [./strain_xx]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_xx
+    index_i = 0
+    index_j = 0
+  [../]
+  [./strain_xy]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_xy
+    index_i = 0
+    index_j = 1
+  [../]
+  [./strain_yy]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_yy
+    index_i = 1
+    index_j = 1
+  [../]
+  [./strain_zz]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    variable = strain_zz
+    index_i = 2
+    index_j = 2
+  [../]
+[]
+
+[Functions]
+  [./traction_function]
+    type = PiecewiseLinear
+    x = &#x27;0  2&#x27;
+    y = &#x27;0  1&#x27;
+  [../]
+[]
+
+[BCs]
+  [./leftx]
+    type = DirichletBC
+    boundary = left
+    variable = disp_x
+    value = 0.0
+  [../]
+  [./bottomy]
+    type = DirichletBC
+    boundary = bottom
+    variable = disp_y
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elastic_tensor]
+    type = ComputeIsotropicElasticityTensor
+    poissons_ratio = 0.3
+    youngs_modulus = 1e6
+  [../]
+  [./strain]
+    type = ComputePlaneSmallStrain
+    displacements = &#x27;disp_x disp_y&#x27;
+    scalar_out_of_plane_strain = scalar_strain_zz
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = PJFNK
+  line_search = none
+
+# controls for linear iterations
+  l_max_its = 100
+  l_tol = 1e-4
+
+# controls for nonlinear iterations
+  nl_max_its = 15
+  nl_rel_tol = 1e-14
+  nl_abs_tol = 1e-11
+
+# time control
+  start_time = 0.0
+  dt = 1.0
+  dtmin = 1.0
+  end_time = 2.0
+  num_steps = 5000
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script><script type="text/javascript" src="../../js/moose_input_parser.js"></script>

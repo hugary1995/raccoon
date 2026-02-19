@@ -1,0 +1,589 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Stress Divergence RZ Tensors | RACCOON</title><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" alt="GitHub wordmark" class="github-mark"></img><img src="../../media/framework/github-mark.png" alt="GitHub logo" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="8b1677a7-2c9e-4be6-886d-9118305f4e16" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="f2e0e6a9-08b3-49a9-aa78-c2bc90b494f2" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="e7780871-e1ea-48a2-9bbe-d96f24cfced5" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="49f12634-a7b6-4527-a838-2f6ef62e991b" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="bc24b4f2-08c2-4994-a68d-309ee23c6a11"><i class="material-icons">menu</i></a><ul class="sidenav" id="bc24b4f2-08c2-4994-a68d-309ee23c6a11"><li><a href="#!" class="dropdown-trigger" data-target="c6ce2e69-bf3a-4906-80e0-0d353cb47c18" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="2955d226-75d0-407c-a02c-eaa7b88a2f6b" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="edb0e8d2-5b0d-48ef-a59b-ad1ca707dd79" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="33870b78-d236-4e0a-9946-0d890c931dbf" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="8b1677a7-2c9e-4be6-886d-9118305f4e16"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="f2e0e6a9-08b3-49a9-aa78-c2bc90b494f2"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="e7780871-e1ea-48a2-9bbe-d96f24cfced5"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="49f12634-a7b6-4527-a838-2f6ef62e991b"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="c6ce2e69-bf3a-4906-80e0-0d353cb47c18"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="2955d226-75d0-407c-a02c-eaa7b88a2f6b"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="edb0e8d2-5b0d-48ef-a59b-ad1ca707dd79"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="33870b78-d236-4e0a-9946-0d890c931dbf"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="9b97d83a-4923-495d-a21b-819e480c8d8d" data-section-level="1" data-section-text="Stress Divergence RZ Tensors"><h1 id="stress-divergence-rz-tensors">Stress Divergence RZ Tensors</h1><p>Calculate stress divergence for an axisymmetric problem in cylindrical coordinates.</p><section id="80fb4986-1d03-41a4-8d94-0682a21f489c" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The kernel <code>StressDivergenceRZTensors</code> solves the stress divergence equation for an Axisymmetric problem in the cylindrical coordinate system on a 2D mesh.</p><div class="card moose-alert moose-alert-warning"><div class="card-title moose-alert-title"><i class="material-icons moose-inline-icon">warning</i><span class="moose-alert-title-brand">warning:</span>Symmetry Assumed About the <span class="moose-katex-inline-equation" id="moose-equation-ef3b1a32-bd09-4e0e-9ef9-f30dbb4c3102"><script>var element = document.getElementById("moose-equation-ef3b1a32-bd09-4e0e-9ef9-f30dbb4c3102");katex.render("z", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>-axis</div><div class="card-content"><div class="moose-alert-content"><p>The axis of symmetry must lie along the <span class="moose-katex-inline-equation" id="moose-equation-4e7e652a-ab48-412e-b91c-bfda5242f995"><script>var element = document.getElementById("moose-equation-4e7e652a-ab48-412e-b91c-bfda5242f995");katex.render("z", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>-axis in a <span class="moose-katex-inline-equation" id="moose-equation-ef64b4d9-0ffa-4dff-af0e-f6a188674f35"><script>var element = document.getElementById("moose-equation-ef64b4d9-0ffa-4dff-af0e-f6a188674f35");katex.render("\\left(r, z, \\theta \\right)", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> or cylindrical coordinate system. This symmetry orientation is required for the calculation of the residual and of the jacobian, as defined in <a href="#moose-equation-77904576-c0c6-4452-8e9a-98ce7ffefae4">Eq. (1)</a>.</p></div></div></div><p>The <code>StressDivergenceRZTensors</code> kernel can be automatically created with the <a href="../../syntax/Physics/SolidMechanics/QuasiStatic/index.html">Solid Mechanics Physics</a>. Use of the tensor mechanics quasi-static physics is recommended to ensure the consistent setting of the <code>use_displaced_mesh</code> parameter for the strain formulation selected.  For a detailed explanation of the settings for _use_displaced_mesh_ in mechanics problems and the Solid Mechanics Physics usage, see the <a href="../../modules/solid_mechanics/StressDivergence.html">Introduction/Stress Divergence</a> page.</p></section><section id="0102ede5-df31-4750-ab33-10df05619f3c" data-section-level="2" data-section-text="Residual Calculation"><h2 id="residual-calculation">Residual Calculation</h2><p>The stress divergence kernel handles the calculation of the residual, <span class="moose-katex-inline-equation" id="moose-equation-41ddfc42-a23b-43ed-9ea0-11bcfec93b1b"><script>var element = document.getElementById("moose-equation-41ddfc42-a23b-43ed-9ea0-11bcfec93b1b");katex.render("\\mathbb{R}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, from the governing equation and the calculation of the Jacobian.  From the strong form of the governing equation for mechanics, neglecting body forces, <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-4ae35e08-6bd8-4f20-8daf-ff9f068f367e"></span><script>var element = document.getElementById("moose-equation-4ae35e08-6bd8-4f20-8daf-ff9f068f367e");katex.render("\\nabla \\cdot \\sigma = 0", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> the weak form, using Galerkin&#x27;s method and the Gauss divergence theorem, becomes <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-dfab014f-219b-4b70-b722-7a969c8a1852"></span><script>var element = document.getElementById("moose-equation-dfab014f-219b-4b70-b722-7a969c8a1852");katex.render("\\int_S n \\cdot (\\sigma \\psi) dS - \\int_V \\sigma \\cdot \\nabla \\psi dV = 0", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> in which <span class="moose-katex-inline-equation" id="moose-equation-08a0a14d-ad15-43ca-a257-cbd5c5467457"><script>var element = document.getElementById("moose-equation-08a0a14d-ad15-43ca-a257-cbd5c5467457");katex.render("\\psi", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the test function.  The second term of the weak form equation is the residual contribution calculated by the stress divergence kernel.</p><p>The calculation of the Jacobian can be approximated with the elasticity tensor if the simulation solve type is <strong>JFNK</strong>:</p><p><span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-50820e57-f79e-4c5c-b5c7-d28f381fd86d"></span><script>var element = document.getElementById("moose-equation-50820e57-f79e-4c5c-b5c7-d28f381fd86d");katex.render("\\frac{d(\\sigma_{ij} \\cdot d(\\psi) / dx_j)}{du_k} = \\frac{d(C_{ijmn} \\cdot du_m / dx_n \\cdot d\\psi /dx_j)}{du_k}", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> which is nonzero for <span class="moose-katex-inline-equation" id="moose-equation-215a267e-5447-4f2d-8982-ffc3131d7881"><script>var element = document.getElementById("moose-equation-215a267e-5447-4f2d-8982-ffc3131d7881");katex.render("m == k", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>.</p><p>If the solve type for the simulation is set to <strong>NEWTON</strong> the finite deformation Jacobian will need to be calculated.  Set the parameter <code>use_finite_deform_jacobian = true</code> in this case.</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><i class="material-icons moose-inline-icon">comment</i><span class="moose-alert-title-brand">note:</span>Use of the Solid Mechanics QuasiStatic Physics Recommended</div><div class="card-content"><div class="moose-alert-content"><p>The <code>use_displaced_mesh</code> parameter must be set correcting to ensure consistency in the equilibrium equation: if the stress is calculated with respect to the deformed mesh, the test function gradients must also be calculated with respect to the deformed mesh. The <a href="../../syntax/Physics/SolidMechanics/QuasiStatic/index.html">Solid Mechanics QuasiStatic Physics</a> is designed to automatically determine and set the parameter correctly for the selected strain formulation.  We recommend that users employ the <a href="../../syntax/Physics/SolidMechanics/QuasiStatic/index.html">Solid Mechanics QuasiStatic Physics</a> whenever possible to ensure consistency between the test function gradients and the strain formulation selected.</p></div></div></div><p>In cylindrical coordinates, the <a href="https://en.wikipedia.org/wiki/Tensor_derivative_%28continuum_mechanics%29#Cylindrical_polar_coordinates_2">divergence of a rank-2 tensor</a> includes mixed term contributions.  In the axisymmetric model we assume symmetric loading conditions, in addition to the zero out-of-plane shear strains, so that the residual computation is simplified.</p><p><span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-77904576-c0c6-4452-8e9a-98ce7ffefae4"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-77904576-c0c6-4452-8e9a-98ce7ffefae4");katex.render("     \\begin{aligned}   \\nabla \\sigma  & = \\left[ \\frac{\\partial \\sigma_{rr}}{\\partial r} + \\frac{u_r}{X_r}\\sigma_{\\theta \\theta} + \\frac{\\partial \\sigma_{rz}}{\\partial z} \\right] \\hat{e}_r \\\\    & + \\left[ \\frac{\\partial \\sigma_{zz}}{\\partial z} + \\frac{\\partial \\sigma_{rz}}{\\partial r}    \\right] \\hat{e}_z   \\end{aligned}", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span></p><p>The calculation of the Jacobian is similarly complex, requiring up to four terms in the calculation of the diagonal entries.</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><i class="material-icons moose-inline-icon">comment</i><span class="moose-alert-title-brand">note:</span>Notation Order Change</div><div class="card-content"><div class="moose-alert-content"><p>The axisymmetric system changes the order of the displacement vector from <span class="moose-katex-inline-equation" id="moose-equation-ec05e710-2b36-4b80-9395-2d757f0c8acc"><script>var element = document.getElementById("moose-equation-ec05e710-2b36-4b80-9395-2d757f0c8acc");katex.render("(u_r, u_{\\theta}, u_z)", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, usually seen in textbooks, to <span class="moose-katex-inline-equation" id="moose-equation-827ab7ef-a865-4a23-b812-73b6185501fd"><script>var element = document.getElementById("moose-equation-827ab7ef-a865-4a23-b812-73b6185501fd");katex.render("(u_r, u_z, u_{\\theta})", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>. Take care to follow this convention in your input files and when adding extra stresses.</p></div></div></div></section><section id="68034ac8-3545-43d5-b09d-bcc6c69c2e24" data-section-level="2" data-section-text="Example Input File"><h2 id="example-input-file">Example Input File</h2><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><i class="material-icons moose-inline-icon">comment</i><span class="moose-alert-title-brand">note:</span>Use RZ Coordinate Type</div><div class="card-content"><div class="moose-alert-content"><p>The coordinate type in the Problem block of the input file must be set to <strong><code>COORD_TYPE = RZ</code></strong>.</p></div></div></div><p>Using the solid mechanics quasi-static physics, as shown</p><pre style="max-height:350px;"><code class="language-moose">[Physics&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Physics/index.html&quot;}&gt;&gt;&gt;]
+  [SolidMechanics&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Physics/SolidMechanics/index.html&quot;}&gt;&gt;&gt;]
+    [QuasiStatic&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Physics/SolidMechanics/QuasiStatic/index.html&quot;}&gt;&gt;&gt;]
+      [./all]
+        strain&lt;&lt;&lt;{&quot;description&quot;: &quot;Strain formulation&quot;}&gt;&gt;&gt; = FINITE
+        add_variables&lt;&lt;&lt;{&quot;description&quot;: &quot;Add the displacement variables&quot;}&gt;&gt;&gt; = true
+        block&lt;&lt;&lt;{&quot;description&quot;: &quot;The list of ids of the blocks (subdomain) that the stress divergence kernels will be applied to&quot;}&gt;&gt;&gt; = 1
+      [../]
+    []
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#0f67adfa-f714-4790-8d71-bb45e838dd67">(moose/modules/solid_mechanics/test/tests/2D_geometries/2D-RZ_finiteStrain_test.i)</a><p>the <code>StressDivergenceRZTensors</code> kernel will be automatically built when the coordinate system in the Problem block is specified for the axisymmetric RZ system,</p><pre style="max-height:350px;"><code class="language-moose">[Mesh&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Mesh/index.html&quot;}&gt;&gt;&gt;]
+  file = 2D-RZ_mesh.e
+  coord_type = RZ
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#f9c7bc4a-272e-481c-b179-272080394332">(moose/modules/solid_mechanics/test/tests/2D_geometries/2D-RZ_finiteStrain_test.i)</a><p>and only two displacement variables are provided:</p><pre style="max-height:350px;"><code class="language-moose">[GlobalParams&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/GlobalParams/index.html&quot;}&gt;&gt;&gt;]
+  displacements = &#x27;disp_r disp_z&#x27;
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#deac8376-1af4-47dc-a9aa-52fec0db375f">(moose/modules/solid_mechanics/test/tests/2D_geometries/2D-RZ_finiteStrain_test.i)</a></section><section id="2543f48f-7d3f-403f-a295-5e8e3cb1157e" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="fbd23044-fe40-4f96-bcb5-9abb74ddaa8c" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">component</span><span class="moose-parameter-header-description">An integer corresponding to the direction the variable this kernel acts in. (0 refers to the radial and 1 to the axial displacement.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-doc-range"><span>Range:</span>component < 2</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>An integer corresponding to the direction the variable this kernel acts in. (0 refers to the radial and 1 to the axial displacement.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The string of displacements suitable for the problem statement</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;VariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The string of displacements suitable for the problem statement</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">variable</span><span class="moose-parameter-header-description">The name of the variable that this residual object operates on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>NonlinearVariableName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The name of the variable that this residual object operates on</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="a5abd145-4a2e-4d63-8702-5b3f389616ba" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Material property base name</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Material property base name</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of blocks (ids or names) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;SubdomainName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The list of blocks (ids or names) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">coupled_variables</span><span class="moose-parameter-header-description">Vector of nonlinear variable arguments this object depends on</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;VariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Vector of nonlinear variable arguments this object depends on</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">eigenstrain_names</span><span class="moose-parameter-header-description">List of eigenstrains used in the strain calculation. Used for computing their derivatives for off-diagonal Jacobian terms.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;MaterialPropertyName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>List of eigenstrains used in the strain calculation. Used for computing their derivatives for off-diagonal Jacobian terms.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">out_of_plane_direction</span><span class="moose-parameter-header-default">z</span><span class="moose-parameter-header-description">The direction of the out_of_plane_strain variable used in the WeakPlaneStress kernel.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>z</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>x, y, z</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The direction of the out_of_plane_strain variable used in the WeakPlaneStress kernel.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">out_of_plane_strain</span><span class="moose-parameter-header-description">The name of the out_of_plane_strain variable used in the WeakPlaneStress kernel.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;VariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The name of the out_of_plane_strain variable used in the WeakPlaneStress kernel.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">temperature</span><span class="moose-parameter-header-description">The name of the temperature variable used in the ComputeThermalExpansionEigenstrain.  (Not required for simulations without temperature coupling.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;VariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The name of the temperature variable used in the ComputeThermalExpansionEigenstrain.  (Not required for simulations without temperature coupling.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_finite_deform_jacobian</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Jacobian for corotational finite strain</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Jacobian for corotational finite strain</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">volumetric_locking_correction</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Set to false to turn off volumetric locking correction</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Set to false to turn off volumetric locking correction</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="79477326-6d11-4a84-a20f-73b88b798c44" data-section-level="3" data-section-text="Contribution To Tagged Field Data Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">absolute_value_vector_tags</span><span class="moose-parameter-header-description">The tags for the vectors this residual object should fill with the absolute value of the residual contribution</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;TagName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The tags for the vectors this residual object should fill with the absolute value of the residual contribution</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_matrix_tags</span><span class="moose-parameter-header-description">The extra tags for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;TagName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The extra tags for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;TagName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The extra tags for the vectors this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_only</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether this object is only doing assembly to matrices (no vectors)</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Whether this object is only doing assembly to matrices (no vectors)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">matrix_tags</span><span class="moose-parameter-header-default">system</span><span class="moose-parameter-header-description">The tag for the matrices this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>system</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime, system</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The tag for the matrices this Kernel should fill</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">vector_tags</span><span class="moose-parameter-header-default">nontime</span><span class="moose-parameter-header-description">The tag for the vectors this Kernel should fill</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nontime</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nontime, time</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The tag for the vectors this Kernel should fill</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Contribution To Tagged Field Data Parameters</h3></summary></details></section><section id="45a1a735-bf4d-4c75-a4d7-92349911ab66" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;AuxVariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's diagonal Jacobian contributions to. Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>Yes</p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;AuxVariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The name of auxiliary variables to save this Kernel's residual contributions to.  Everything about that variable must match everything about this variable (the type, what blocks it's on, etc.)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">search_method</span><span class="moose-parameter-header-default">nearest_node_connected_sides</span><span class="moose-parameter-header-description">Choice of search algorithm.  All options begin by finding the nearest node in the primary boundary to a query point in the secondary boundary.  In the default nearest_node_connected_sides algorithm, primary boundary elements are searched iff that nearest node is one of their nodes.  This is fast to determine via a pregenerated node-to-elem map and is robust on conforming meshes.  In the optional all_proximate_sides algorithm, primary boundary elements are searched iff they touch that nearest node, even if they are not topologically connected to it.  This is more CPU-intensive but is necessary for robustness on any boundary surfaces which has disconnections (such as Flex IGA meshes) or non-conformity (such as hanging nodes in adaptively h-refined meshes).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nearest_node_connected_sides</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nearest_node_connected_sides, all_proximate_sides</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Choice of search algorithm.  All options begin by finding the nearest node in the primary boundary to a query point in the secondary boundary.  In the default nearest_node_connected_sides algorithm, primary boundary elements are searched iff that nearest node is one of their nodes.  This is fast to determine via a pregenerated node-to-elem map and is robust on conforming meshes.  In the optional all_proximate_sides algorithm, primary boundary elements are searched iff they touch that nearest node, even if they are not topologically connected to it.  This is more CPU-intensive but is necessary for robustness on any boundary surfaces which has disconnections (such as Flex IGA meshes) or non-conformity (such as hanging nodes in adaptively h-refined meshes).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation. Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="45691745-f15b-4a29-a52d-a0ec7b06b122" data-section-level="3" data-section-text="Material Property Retrieval Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">prop_getter_suffix</span><span class="moose-parameter-header-description">An optional suffix parameter that can be appended to any attempt to retrieve/get material properties. The suffix will be prepended with a '_' character.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>An optional suffix parameter that can be appended to any attempt to retrieve/get material properties. The suffix will be prepended with a '_' character.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_interpolated_state</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">For the old and older state use projected material properties interpolated at the quadrature points. To set up projection use the ProjectedStatefulMaterialStorageAction.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>For the old and older state use projected material properties interpolated at the quadrature points. To set up projection use the ProjectedStatefulMaterialStorageAction.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Material Property Retrieval Parameters</h3></summary></details></section></section><section id="ca2a7375-641d-4957-ba6b-51667fdd301c" data-section-level="2" data-section-text="The stress divergence family of automatic differentiation kernels"><h2 id="the-stress-divergence-family-of-automatic-differentiation-kernels">The stress divergence family of automatic differentiation kernels</h2><ul class="browser-default"><li><p><a href="ADStressDivergenceTensors.html">ADStressDivergenceTensors</a> - Stress divergence kernel for Cartesian coordinates <code>Problem/coord_type=XYZ</code> (default) </p></li><li><p><a href="ADStressDivergenceRZTensors.html">ADStressDivergenceRZTensors</a> - Stress divergence kernel for 2D cylindrical coordinates <code>Problem/coord_type=RZ</code> </p></li><li><p><a href="ADStressDivergenceRSphericalTensors.html">ADStressDivergenceRSphericalTensors</a> - Stress divergence kernel for 1D spherical coordinates <code>Problem/coord_type=RSPHERICAL</code></p></li></ul></section></section><div class="moose-modal modal" id="0f67adfa-f714-4790-8d71-bb45e838dd67"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/2D_geometries/2D-RZ_finiteStrain_test.i)</h4><pre style="max-height:350px;"><code class="language-moose"># Considers the mechanics solution for a thick spherical shell that is uniformly
+# pressurized on the inner and outer surfaces, using 2D axisymmetric geometry.
+# This test uses the strain calculator ComputeAxisymmetricRZFiniteStrain,
+# which is generated through the use of the SolidMechanics QuasiStatic Physics.
+#
+# From Roark (Formulas for Stress and Strain, McGraw-Hill, 1975), the radially-dependent
+# circumferential stress in a uniformly pressurized thick spherical shell is given by:
+#
+# S(r) = [ Pi[ri^3(2r^3+ro^3)] - Po[ro^3(2r^3+ri^3)] ] / [2r^3(ro^3-ri^3)]
+#
+#   where:
+#          Pi = inner pressure
+#          Po = outer pressure
+#          ri = inner radius
+#          ro = outer radius
+#
+# The tests assume an inner and outer radii of 5 and 10, with internal and external
+# pressures of 100000 and 200000 at t = 1.0, respectively. The resulting compressive
+# tangential stress is largest at the inner wall and, from the above equation, has a
+# value of -271429.
+#
+# RESULTS are below. Since stresses are average element values, values for the
+# edge element and one-element-in are used to extrapolate the stress to the
+# inner surface. The vesrion of the tests that are checked use the coarsest meshes.
+#
+#  Mesh    Radial elem   S(edge elem)  S(one elem in)  S(extrap to surf)
+# 1D-SPH
+# 2D-RZ        12 (x10)    -265004      -254665        -270174
+#  3D          12 (6x6)    -261880      -252811        -266415
+#
+# 1D-SPH
+# 2D-RZ        48 (x10)    -269853      -266710        -271425
+#  3D          48 (10x10)  -268522      -265653        -269957
+#
+# The numerical solution converges to the analytical solution as the mesh is
+# refined.
+
+[Mesh]
+  file = 2D-RZ_mesh.e
+  coord_type = RZ
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_r disp_z&#x27;
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [./all]
+    strain = FINITE
+    add_variables = true
+    block = 1
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_theta]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 2
+    index_j = 2
+    variable = stress_theta
+    execute_on = timestep_end
+  [../]
+  [./strain_theta]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 2
+    index_j = 2
+    variable = strain_theta
+    execute_on = timestep_end
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e10
+    poissons_ratio = 0.345
+    block = 1
+  [../]
+
+  [./_elastic_strain]
+    type = ComputeFiniteStrainElasticStress
+    block = 1
+  [../]
+[]
+
+[BCs]
+# pin particle along symmetry planes
+  [./no_disp_r]
+    type = DirichletBC
+    variable = disp_r
+    boundary = xzero
+    value = 0.0
+  [../]
+
+  [./no_disp_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = yzero
+    value = 0.0
+  [../]
+
+# exterior and internal pressures
+  [./exterior_pressure_r]
+    type = Pressure
+    variable = disp_r
+    boundary = outer
+    function = &#x27;200000*t&#x27;
+  [../]
+
+ [./exterior_pressure_z]
+    type = Pressure
+    variable = disp_z
+    boundary = outer
+    function = &#x27;200000*t&#x27;
+  [../]
+
+  [./interior_pressure_r]
+    type = Pressure
+    variable = disp_r
+    boundary = inner
+    function = &#x27;100000*t&#x27;
+  [../]
+
+  [./interior_pressure_z]
+    type = Pressure
+    variable = disp_z
+    boundary = inner
+    function = &#x27;100000*t&#x27;
+  [../]
+[]
+
+[Debug]
+    show_var_residual_norms = true
+[]
+
+[Executioner]
+  type = Transient
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;  201               hypre    boomeramg      10&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  nl_rel_tol = 5e-9
+  nl_abs_tol = 1e-10
+  nl_max_its = 15
+
+  l_tol = 1e-3
+  l_max_its = 50
+
+  start_time = 0.0
+  end_time = 0.2
+  dt = 0.1
+[]
+
+[Postprocessors]
+  [./strainTheta]
+    type = ElementAverageValue
+    variable = strain_theta
+  [../]
+  [./stressTheta]
+    type = ElementAverageValue
+    variable = stress_theta
+  [../]
+  [./stressTheta_pt]
+    type = PointValue
+    point = &#x27;5.0 0.0 0.0&#x27;
+    #bottom inside edge for comparison to theory; use csv = true
+    variable = stress_theta
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="f9c7bc4a-272e-481c-b179-272080394332"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/2D_geometries/2D-RZ_finiteStrain_test.i)</h4><pre style="max-height:350px;"><code class="language-moose"># Considers the mechanics solution for a thick spherical shell that is uniformly
+# pressurized on the inner and outer surfaces, using 2D axisymmetric geometry.
+# This test uses the strain calculator ComputeAxisymmetricRZFiniteStrain,
+# which is generated through the use of the SolidMechanics QuasiStatic Physics.
+#
+# From Roark (Formulas for Stress and Strain, McGraw-Hill, 1975), the radially-dependent
+# circumferential stress in a uniformly pressurized thick spherical shell is given by:
+#
+# S(r) = [ Pi[ri^3(2r^3+ro^3)] - Po[ro^3(2r^3+ri^3)] ] / [2r^3(ro^3-ri^3)]
+#
+#   where:
+#          Pi = inner pressure
+#          Po = outer pressure
+#          ri = inner radius
+#          ro = outer radius
+#
+# The tests assume an inner and outer radii of 5 and 10, with internal and external
+# pressures of 100000 and 200000 at t = 1.0, respectively. The resulting compressive
+# tangential stress is largest at the inner wall and, from the above equation, has a
+# value of -271429.
+#
+# RESULTS are below. Since stresses are average element values, values for the
+# edge element and one-element-in are used to extrapolate the stress to the
+# inner surface. The vesrion of the tests that are checked use the coarsest meshes.
+#
+#  Mesh    Radial elem   S(edge elem)  S(one elem in)  S(extrap to surf)
+# 1D-SPH
+# 2D-RZ        12 (x10)    -265004      -254665        -270174
+#  3D          12 (6x6)    -261880      -252811        -266415
+#
+# 1D-SPH
+# 2D-RZ        48 (x10)    -269853      -266710        -271425
+#  3D          48 (10x10)  -268522      -265653        -269957
+#
+# The numerical solution converges to the analytical solution as the mesh is
+# refined.
+
+[Mesh]
+  file = 2D-RZ_mesh.e
+  coord_type = RZ
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_r disp_z&#x27;
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [./all]
+    strain = FINITE
+    add_variables = true
+    block = 1
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_theta]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 2
+    index_j = 2
+    variable = stress_theta
+    execute_on = timestep_end
+  [../]
+  [./strain_theta]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 2
+    index_j = 2
+    variable = strain_theta
+    execute_on = timestep_end
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e10
+    poissons_ratio = 0.345
+    block = 1
+  [../]
+
+  [./_elastic_strain]
+    type = ComputeFiniteStrainElasticStress
+    block = 1
+  [../]
+[]
+
+[BCs]
+# pin particle along symmetry planes
+  [./no_disp_r]
+    type = DirichletBC
+    variable = disp_r
+    boundary = xzero
+    value = 0.0
+  [../]
+
+  [./no_disp_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = yzero
+    value = 0.0
+  [../]
+
+# exterior and internal pressures
+  [./exterior_pressure_r]
+    type = Pressure
+    variable = disp_r
+    boundary = outer
+    function = &#x27;200000*t&#x27;
+  [../]
+
+ [./exterior_pressure_z]
+    type = Pressure
+    variable = disp_z
+    boundary = outer
+    function = &#x27;200000*t&#x27;
+  [../]
+
+  [./interior_pressure_r]
+    type = Pressure
+    variable = disp_r
+    boundary = inner
+    function = &#x27;100000*t&#x27;
+  [../]
+
+  [./interior_pressure_z]
+    type = Pressure
+    variable = disp_z
+    boundary = inner
+    function = &#x27;100000*t&#x27;
+  [../]
+[]
+
+[Debug]
+    show_var_residual_norms = true
+[]
+
+[Executioner]
+  type = Transient
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;  201               hypre    boomeramg      10&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  nl_rel_tol = 5e-9
+  nl_abs_tol = 1e-10
+  nl_max_its = 15
+
+  l_tol = 1e-3
+  l_max_its = 50
+
+  start_time = 0.0
+  end_time = 0.2
+  dt = 0.1
+[]
+
+[Postprocessors]
+  [./strainTheta]
+    type = ElementAverageValue
+    variable = strain_theta
+  [../]
+  [./stressTheta]
+    type = ElementAverageValue
+    variable = stress_theta
+  [../]
+  [./stressTheta_pt]
+    type = PointValue
+    point = &#x27;5.0 0.0 0.0&#x27;
+    #bottom inside edge for comparison to theory; use csv = true
+    variable = stress_theta
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="deac8376-1af4-47dc-a9aa-52fec0db375f"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/2D_geometries/2D-RZ_finiteStrain_test.i)</h4><pre style="max-height:350px;"><code class="language-moose"># Considers the mechanics solution for a thick spherical shell that is uniformly
+# pressurized on the inner and outer surfaces, using 2D axisymmetric geometry.
+# This test uses the strain calculator ComputeAxisymmetricRZFiniteStrain,
+# which is generated through the use of the SolidMechanics QuasiStatic Physics.
+#
+# From Roark (Formulas for Stress and Strain, McGraw-Hill, 1975), the radially-dependent
+# circumferential stress in a uniformly pressurized thick spherical shell is given by:
+#
+# S(r) = [ Pi[ri^3(2r^3+ro^3)] - Po[ro^3(2r^3+ri^3)] ] / [2r^3(ro^3-ri^3)]
+#
+#   where:
+#          Pi = inner pressure
+#          Po = outer pressure
+#          ri = inner radius
+#          ro = outer radius
+#
+# The tests assume an inner and outer radii of 5 and 10, with internal and external
+# pressures of 100000 and 200000 at t = 1.0, respectively. The resulting compressive
+# tangential stress is largest at the inner wall and, from the above equation, has a
+# value of -271429.
+#
+# RESULTS are below. Since stresses are average element values, values for the
+# edge element and one-element-in are used to extrapolate the stress to the
+# inner surface. The vesrion of the tests that are checked use the coarsest meshes.
+#
+#  Mesh    Radial elem   S(edge elem)  S(one elem in)  S(extrap to surf)
+# 1D-SPH
+# 2D-RZ        12 (x10)    -265004      -254665        -270174
+#  3D          12 (6x6)    -261880      -252811        -266415
+#
+# 1D-SPH
+# 2D-RZ        48 (x10)    -269853      -266710        -271425
+#  3D          48 (10x10)  -268522      -265653        -269957
+#
+# The numerical solution converges to the analytical solution as the mesh is
+# refined.
+
+[Mesh]
+  file = 2D-RZ_mesh.e
+  coord_type = RZ
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_r disp_z&#x27;
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [./all]
+    strain = FINITE
+    add_variables = true
+    block = 1
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_theta]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 2
+    index_j = 2
+    variable = stress_theta
+    execute_on = timestep_end
+  [../]
+  [./strain_theta]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 2
+    index_j = 2
+    variable = strain_theta
+    execute_on = timestep_end
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e10
+    poissons_ratio = 0.345
+    block = 1
+  [../]
+
+  [./_elastic_strain]
+    type = ComputeFiniteStrainElasticStress
+    block = 1
+  [../]
+[]
+
+[BCs]
+# pin particle along symmetry planes
+  [./no_disp_r]
+    type = DirichletBC
+    variable = disp_r
+    boundary = xzero
+    value = 0.0
+  [../]
+
+  [./no_disp_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = yzero
+    value = 0.0
+  [../]
+
+# exterior and internal pressures
+  [./exterior_pressure_r]
+    type = Pressure
+    variable = disp_r
+    boundary = outer
+    function = &#x27;200000*t&#x27;
+  [../]
+
+ [./exterior_pressure_z]
+    type = Pressure
+    variable = disp_z
+    boundary = outer
+    function = &#x27;200000*t&#x27;
+  [../]
+
+  [./interior_pressure_r]
+    type = Pressure
+    variable = disp_r
+    boundary = inner
+    function = &#x27;100000*t&#x27;
+  [../]
+
+  [./interior_pressure_z]
+    type = Pressure
+    variable = disp_z
+    boundary = inner
+    function = &#x27;100000*t&#x27;
+  [../]
+[]
+
+[Debug]
+    show_var_residual_norms = true
+[]
+
+[Executioner]
+  type = Transient
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;  201               hypre    boomeramg      10&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  nl_rel_tol = 5e-9
+  nl_abs_tol = 1e-10
+  nl_max_its = 15
+
+  l_tol = 1e-3
+  l_max_its = 50
+
+  start_time = 0.0
+  end_time = 0.2
+  dt = 0.1
+[]
+
+[Postprocessors]
+  [./strainTheta]
+    type = ElementAverageValue
+    variable = strain_theta
+  [../]
+  [./stressTheta]
+    type = ElementAverageValue
+    variable = stress_theta
+  [../]
+  [./stressTheta_pt]
+    type = PointValue
+    point = &#x27;5.0 0.0 0.0&#x27;
+    #bottom inside edge for comparison to theory; use csv = true
+    variable = stress_theta
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script><script type="text/javascript" src="../../js/moose_input_parser.js"></script>

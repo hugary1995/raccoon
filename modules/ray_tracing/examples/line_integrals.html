@@ -1,0 +1,425 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Computing Line Integrals | RACCOON</title><link rel="icon" type="image/x-icon" href="../../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../../contrib/katex/katex.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../../media/framework/github-logo.png" alt="GitHub wordmark" class="github-mark"></img><img src="../../../media/framework/github-mark.png" alt="GitHub logo" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="d8a46739-0043-4354-a246-6118df655aee" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="f2d1a575-0a2d-47ca-a640-006557174794" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="d6b5622f-3242-4703-820f-9247b31d8c8f" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="fb214082-fba4-4d63-ba22-bf0208fd34a4" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="f8e6f18c-9e54-4f98-a588-b9bc2d31e4be"><i class="material-icons">menu</i></a><ul class="sidenav" id="f8e6f18c-9e54-4f98-a588-b9bc2d31e4be"><li><a href="#!" class="dropdown-trigger" data-target="308939fc-907b-4390-aba8-76fa48dee503" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="5171dd73-e6a1-46ce-902c-020a9b7a165a" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="dc1410ff-df4a-4a50-a07a-78db14a96816" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="285bf63d-2b6a-4229-922b-29b165870641" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="d8a46739-0043-4354-a246-6118df655aee"><li><a href="../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../getting_started/ide.html">Code development</a></li><li><a href="../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="f2d1a575-0a2d-47ca-a640-006557174794"><li><a href="../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="d6b5622f-3242-4703-820f-9247b31d8c8f"><li><a href="../../../theory/intro.html">Introduction</a></li><li><a href="../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="fb214082-fba4-4d63-ba22-bf0208fd34a4"><li><a href="../../index.html">Physics modules</a></li><li><a href="../../../syntax/index.html">Complete syntax</a></li><li><a href="../../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="308939fc-907b-4390-aba8-76fa48dee503"><li><a href="../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../getting_started/ide.html">Code development</a></li><li><a href="../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="5171dd73-e6a1-46ce-902c-020a9b7a165a"><li><a href="../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="dc1410ff-df4a-4a50-a07a-78db14a96816"><li><a href="../../../theory/intro.html">Introduction</a></li><li><a href="../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="285bf63d-2b6a-4229-922b-29b165870641"><li><a href="../../index.html">Physics modules</a></li><li><a href="../../../syntax/index.html">Complete syntax</a></li><li><a href="../../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="00cce797-cd69-406b-9f63-46ee93c4c902" data-section-level="1" data-section-text="Computing Line Integrals"><h1 id="computing-line-integrals">Computing Line Integrals</h1><p>The <a href="../index.html">Ray Tracing Module</a> can be utilized to integrate fields along a line throughout the domain. Example fields include <a href="../../../syntax/Variables/index.html">Variables</a>, <a href="../../../syntax/AuxVariables/index.html">AuxVariables</a>, <a href="../../../syntax/Materials/index.html">Material properties</a>, and <a href="../../../syntax/Functions/index.html">Functions</a>.</p><p>The discussion that follows will describe how to integrate a variable across a line in a simple diffusion problem. To integrate other fields, the process remains the same except for the definition of the RayKernel.</p><section id="aff4b571-fe24-48b5-99ed-69551d9380c8" data-section-level="2" data-section-text="Problem Definition"><h2 id="problem-definition">Problem Definition</h2><p>We begin with the standard &quot;simple diffusion&quot; problem:</p><pre style="max-height:350px;"><code class="language-moose">[Mesh&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/Mesh/index.html&quot;}&gt;&gt;&gt;]
+  [gmg]
+    type = GeneratedMeshGenerator&lt;&lt;&lt;{&quot;description&quot;: &quot;Create a line, square, or cube mesh with uniformly spaced or biased elements.&quot;, &quot;href&quot;: &quot;../../../source/meshgenerators/GeneratedMeshGenerator.html&quot;}&gt;&gt;&gt;
+    dim&lt;&lt;&lt;{&quot;description&quot;: &quot;The dimension of the mesh to be generated&quot;}&gt;&gt;&gt; = 2
+    nx&lt;&lt;&lt;{&quot;description&quot;: &quot;Number of elements in the X direction&quot;}&gt;&gt;&gt; = 5
+    ny&lt;&lt;&lt;{&quot;description&quot;: &quot;Number of elements in the Y direction&quot;}&gt;&gt;&gt; = 5
+    xmax&lt;&lt;&lt;{&quot;description&quot;: &quot;Upper X Coordinate of the generated mesh&quot;}&gt;&gt;&gt; = 5
+    ymax&lt;&lt;&lt;{&quot;description&quot;: &quot;Upper Y Coordinate of the generated mesh&quot;}&gt;&gt;&gt; = 5
+  []
+[]
+
+[Variables&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/Variables/index.html&quot;}&gt;&gt;&gt;/u]
+[]
+
+[Kernels&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/Kernels/index.html&quot;}&gt;&gt;&gt;/diff]
+  type = Diffusion&lt;&lt;&lt;{&quot;description&quot;: &quot;The Laplacian operator ($-\\nabla \\cdot \\nabla u$), with the weak form of $(\\nabla \\phi_i, \\nabla u_h)$.&quot;, &quot;href&quot;: &quot;../../../source/kernels/Diffusion.html&quot;}&gt;&gt;&gt;
+  variable&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the variable that this residual object operates on&quot;}&gt;&gt;&gt; = u
+[]
+
+[BCs&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/BCs/index.html&quot;}&gt;&gt;&gt;]
+  [left]
+    type = DirichletBC&lt;&lt;&lt;{&quot;description&quot;: &quot;Imposes the essential boundary condition $u=g$, where $g$ is a constant, controllable value.&quot;, &quot;href&quot;: &quot;../../../source/bcs/DirichletBC.html&quot;}&gt;&gt;&gt;
+    variable&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the variable that this residual object operates on&quot;}&gt;&gt;&gt; = u
+    boundary&lt;&lt;&lt;{&quot;description&quot;: &quot;The list of boundary IDs from the mesh where this object applies&quot;}&gt;&gt;&gt; = left
+    value&lt;&lt;&lt;{&quot;description&quot;: &quot;Value of the BC&quot;}&gt;&gt;&gt; = 0
+  []
+  [right]
+    type = DirichletBC&lt;&lt;&lt;{&quot;description&quot;: &quot;Imposes the essential boundary condition $u=g$, where $g$ is a constant, controllable value.&quot;, &quot;href&quot;: &quot;../../../source/bcs/DirichletBC.html&quot;}&gt;&gt;&gt;
+    variable&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the variable that this residual object operates on&quot;}&gt;&gt;&gt; = u
+    boundary&lt;&lt;&lt;{&quot;description&quot;: &quot;The list of boundary IDs from the mesh where this object applies&quot;}&gt;&gt;&gt; = right
+    value&lt;&lt;&lt;{&quot;description&quot;: &quot;Value of the BC&quot;}&gt;&gt;&gt; = 1
+  []
+[]
+
+[Executioner&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/Executioner/index.html&quot;}&gt;&gt;&gt;]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#ceba18ba-fa85-4161-b50a-87c8b553ce9b">(moose/modules/ray_tracing/test/tests/raykernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i)</a><p>For this problem, we seek the value of the integrals (where <span class="moose-katex-inline-equation" id="moose-equation-656d3094-f216-4c79-aea9-26ced4e1306f"><script>var element = document.getElementById("moose-equation-656d3094-f216-4c79-aea9-26ced4e1306f");katex.render("u_h", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the finite-element solution)</p><span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-6431c11e-3db9-42b6-9e38-6dd5a4bb0771"></span><script>var element = document.getElementById("moose-equation-6431c11e-3db9-42b6-9e38-6dd5a4bb0771");katex.render("\\int_{L_1} u_h(\\vec{r})~dr, \\quad L_1 = \\{(0, 0) + t(5, 5) \\mid t \\in [0, 1]\\}\\,,", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span><p>and</p><span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-8b17fc98-eed2-403a-8f1a-2299adee6b15"></span><script>var element = document.getElementById("moose-equation-8b17fc98-eed2-403a-8f1a-2299adee6b15");katex.render("\\int_{L_2} u_h(\\vec{r})~dr, \\quad L_2 = \\{(5, 0) + t(5, 5) \\mid t \\in [0, 1]\\}\\,,", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span><p>in which we will denote the first line, <span class="moose-katex-inline-equation" id="moose-equation-625a9abe-dca0-4926-96c1-5c7ee0c4c16e"><script>var element = document.getElementById("moose-equation-625a9abe-dca0-4926-96c1-5c7ee0c4c16e");katex.render("L_1", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, as <code>diag</code> and the second, <span class="moose-katex-inline-equation" id="moose-equation-e0395406-bf90-4b15-85cc-194b590744f1"><script>var element = document.getElementById("moose-equation-e0395406-bf90-4b15-85cc-194b590744f1");katex.render("L_2", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, as <code>right_up</code> for simplicity.</p><p>Note that the integral along the second line, <span class="moose-katex-inline-equation" id="moose-equation-3611b428-5a6f-409b-a74b-2700e68f9ffc"><script>var element = document.getElementById("moose-equation-3611b428-5a6f-409b-a74b-2700e68f9ffc");katex.render("L_2", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, is trivial due to the Dirichlet boundary condition,</p><span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-c90c9293-d6a7-4494-9e89-822c6ff1ea48"></span><script>var element = document.getElementById("moose-equation-c90c9293-d6a7-4494-9e89-822c6ff1ea48");katex.render("u_h(5, y) = 1\\,, \\quad y \\in [0, 5]\\,,", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span><p>which implies</p><span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-9da802e0-5a68-41ec-b931-796bbdaad774"></span><script>var element = document.getElementById("moose-equation-9da802e0-5a68-41ec-b931-796bbdaad774");katex.render("\\int_{L_2} u_h(\\vec{r})~dr = \\int_0^5 u_h(5, y)\\,dy = \\int_0^5 dy = 5\\,, \\quad L_2 = \\{(5, 0) + t(5, 5) \\mid t \\in [0, 1]\\}\\,.", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span></section><section id="321d4e2e-34ff-4325-a4e9-b127e7e2a414" data-section-level="2" data-section-text="Defining the Study"><h2 id="defining-the-study">Defining the Study</h2><p>A <a href="../../../source/userobjects/RepeatableRayStudy.html">RepeatableRayStudy</a> is defined that generates and executes the rays that compute the variable line integral:</p><pre style="max-height:350px;"><code class="language-moose">[UserObjects&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/UserObjects/index.html&quot;}&gt;&gt;&gt;/study]
+  type = RepeatableRayStudy&lt;&lt;&lt;{&quot;description&quot;: &quot;A ray tracing study that generates rays from vector of user-input start points and end points/directions.&quot;, &quot;href&quot;: &quot;../../../source/userobjects/RepeatableRayStudy.html&quot;}&gt;&gt;&gt;
+  names&lt;&lt;&lt;{&quot;description&quot;: &quot;Unique names for the Rays&quot;}&gt;&gt;&gt; = &#x27;diag
+           right_up&#x27;
+  start_points&lt;&lt;&lt;{&quot;description&quot;: &quot;The points to start Rays from&quot;}&gt;&gt;&gt; = &#x27;0 0 0
+                  5 0 0&#x27;
+  end_points&lt;&lt;&lt;{&quot;description&quot;: &quot;The points where Rays should end. Use either this parameter or the directions parameter, but not both!&quot;}&gt;&gt;&gt; = &#x27;5 5 0
+                5 5 0&#x27;
+
+  execute_on&lt;&lt;&lt;{&quot;description&quot;: &quot;The list of flag(s) indicating when this object should be executed. For a description of each flag, see https://mooseframework.inl.gov/source/interfaces/SetupInterface.html.&quot;}&gt;&gt;&gt; = TIMESTEP_END
+
+  # Needed to cache trace information for RayTracingMeshOutput
+  # always_cache_traces = true
+  # Needed to cache Ray data for RayTracingMeshOutput
+  # data_on_cache_traces = true
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#fbbf0812-de01-490e-975f-21b6bf148af3">(moose/modules/ray_tracing/test/tests/raykernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i)</a><p>The <code>study</code> object defines two rays to be executed on <code>TIMESTEP_END</code>:</p><ul class="browser-default"><li><p><code>diag</code> from <span class="moose-katex-inline-equation" id="moose-equation-6588976d-78ce-49fc-99a2-ecd6355ce3e0"><script>var element = document.getElementById("moose-equation-6588976d-78ce-49fc-99a2-ecd6355ce3e0");katex.render("(0, 0)", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> to <span class="moose-katex-inline-equation" id="moose-equation-5b3f6c8f-0730-4fb7-8c3b-3362c1a8127a"><script>var element = document.getElementById("moose-equation-5b3f6c8f-0730-4fb7-8c3b-3362c1a8127a");katex.render("(5, 5)", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> </p></li><li><p><code>right_up</code> from <span class="moose-katex-inline-equation" id="moose-equation-06ceccb7-b9e4-45c1-95f4-77e68be45251"><script>var element = document.getElementById("moose-equation-06ceccb7-b9e4-45c1-95f4-77e68be45251");katex.render("(5, 0)", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> to <span class="moose-katex-inline-equation" id="moose-equation-4fb50b13-6422-4f49-9058-b9242af0168a"><script>var element = document.getElementById("moose-equation-4fb50b13-6422-4f49-9058-b9242af0168a");katex.render("(5, 5)", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span></p></li></ul></section><section id="1253e28b-45bf-4a09-bb16-e9e638722b7c" data-section-level="2" data-section-text="Defining the RayKernel"><h2 id="defining-the-raykernel">Defining the RayKernel</h2><p><a href="../../../syntax/RayKernels/index.html">RayKernels</a> are objects that are executed on the segments of the rays. In this case, we wish to compute the integral of a variable so we will define a <a href="../../../source/raykernels/VariableIntegralRayKernel.html">VariableIntegralRayKernel</a>:</p><pre style="max-height:350px;"><code class="language-moose">[RayKernels&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/RayKernels/index.html&quot;}&gt;&gt;&gt;/u_integral]
+  type = VariableIntegralRayKernel&lt;&lt;&lt;{&quot;description&quot;: &quot;Integrates a Variable or AuxVariable along a Ray.&quot;, &quot;href&quot;: &quot;../../../source/raykernels/VariableIntegralRayKernel.html&quot;}&gt;&gt;&gt;
+  variable&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the variable to integrate&quot;}&gt;&gt;&gt; = u
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#c5030a99-0d8d-4c1b-9852-b69990d1f654">(moose/modules/ray_tracing/test/tests/raykernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i)</a><p>The <code>u_integral</code> <a href="../../../source/raykernels/VariableIntegralRayKernel.html">VariableIntegralRayKernel</a> will accumulate the variable line integral of the <code>u</code> Variable for our defined rays, <code>diag</code> and <code>right_up</code>.</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><i class="material-icons moose-inline-icon">comment</i><span class="moose-alert-title-brand">note</span></div><div class="card-content"><div class="moose-alert-content"><p>Other commonly used <a href="../../../source/raykernels/IntegralRayKernel.html">IntegralRayKernels</a> are the <a href="../../../source/raykernels/FunctionIntegralRayKernel.html">FunctionIntegralRayKernel</a> and the <a href="../../../source/raykernels/MaterialIntegralRayKernel.html">MaterialIntegralRayKernel</a>.</p></div></div></div></section><section id="9f8bfcc9-c61a-4f10-9a97-27302a4abf5a" data-section-level="2" data-section-text="Integral Output"><h2 id="integral-output">Integral Output</h2><p>Lastly, we need to obtain the accumulated integrals from the <code>study</code>. We will utilize a <a href="../../../source/postprocessors/RayIntegralValue.html">RayIntegralValue</a> <a href="../../../syntax/Postprocessors/index.html">Postprocessor</a> to achieve this:</p><pre style="max-height:350px;"><code class="language-moose">[Postprocessors&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/Postprocessors/index.html&quot;}&gt;&gt;&gt;]
+  [diag_line_integral]
+    type = RayIntegralValue&lt;&lt;&lt;{&quot;description&quot;: &quot;Obtains the integrated value accumulated into a Ray from an IntegralRayKernel-derived class.&quot;, &quot;href&quot;: &quot;../../../source/postprocessors/RayIntegralValue.html&quot;}&gt;&gt;&gt;
+    ray_kernel&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the IntegralRayKernel-derived RayKernel to obtain the integral value of&quot;}&gt;&gt;&gt; = u_integral
+    ray&lt;&lt;&lt;{&quot;description&quot;: &quot;Name of the Ray to get the final integral value from&quot;}&gt;&gt;&gt; = diag
+  []
+  [right_up_line_integral]
+    type = RayIntegralValue&lt;&lt;&lt;{&quot;description&quot;: &quot;Obtains the integrated value accumulated into a Ray from an IntegralRayKernel-derived class.&quot;, &quot;href&quot;: &quot;../../../source/postprocessors/RayIntegralValue.html&quot;}&gt;&gt;&gt;
+    ray_kernel&lt;&lt;&lt;{&quot;description&quot;: &quot;The name of the IntegralRayKernel-derived RayKernel to obtain the integral value of&quot;}&gt;&gt;&gt; = u_integral
+    ray&lt;&lt;&lt;{&quot;description&quot;: &quot;Name of the Ray to get the final integral value from&quot;}&gt;&gt;&gt; = right_up
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#89833334-8345-43ee-a856-91410dec045d">(moose/modules/ray_tracing/test/tests/raykernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i)</a><p>The accumulated integrals are seen in output:</p><pre style="max-height:350px;"><code class="language-text">
+Postprocessor Values:
++----------------+--------------------+------------------------+
+| time           | diag_line_integral | right_up_line_integral |
++----------------+--------------------+------------------------+
+|   0.000000e+00 |       0.000000e+00 |           0.000000e+00 |
+|   1.000000e+00 |       3.535534e+00 |           5.000000e+00 |
++----------------+--------------------+------------------------+
+</code></pre></section><section id="9e915998-e9fd-4e98-9f40-77d81a2c468f" data-section-level="2" data-section-text="Segment - wise Integral Output"><h2 id="segment-wise-integral-output">Segment-wise Integral Output</h2><p>The segment-wise accumulated integral can also be outputted in a mesh format using the <a href="../../../source/outputs/RayTracingMeshOutput.html">RayTracingMeshOutput</a>. For more information, see <a href="../../../source/outputs/RayTracingMeshOutput.html#example">Example</a>. </p></section></section><div class="moose-modal modal" id="ceba18ba-fa85-4161-b50a-87c8b553ce9b"><div class="modal-content"><h4>(moose/modules/ray_tracing/test/tests/raykernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 5
+    ny = 5
+    xmax = 5
+    ymax = 5
+  []
+[]
+
+[Variables/u]
+[]
+
+[Kernels/diff]
+  type = Diffusion
+  variable = u
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+  [rays]
+    type = RayTracingExodus
+    study = study
+    output_data = false # enable for data output
+    output_data_nodal = false # enable for nodal data output
+    execute_on = NONE # TIMESTEP_END for Ray mesh output
+  []
+[]
+
+[UserObjects/study]
+  type = RepeatableRayStudy
+  names = &#x27;diag
+           right_up&#x27;
+  start_points = &#x27;0 0 0
+                  5 0 0&#x27;
+  end_points = &#x27;5 5 0
+                5 5 0&#x27;
+
+  execute_on = TIMESTEP_END
+
+  # Needed to cache trace information for RayTracingMeshOutput
+  # always_cache_traces = true
+  # Needed to cache Ray data for RayTracingMeshOutput
+  # data_on_cache_traces = true
+[]
+
+[RayKernels/u_integral]
+  type = VariableIntegralRayKernel
+  variable = u
+[]
+
+[Postprocessors]
+  [diag_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = diag
+  []
+  [right_up_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = right_up
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="fbbf0812-de01-490e-975f-21b6bf148af3"><div class="modal-content"><h4>(moose/modules/ray_tracing/test/tests/raykernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 5
+    ny = 5
+    xmax = 5
+    ymax = 5
+  []
+[]
+
+[Variables/u]
+[]
+
+[Kernels/diff]
+  type = Diffusion
+  variable = u
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+  [rays]
+    type = RayTracingExodus
+    study = study
+    output_data = false # enable for data output
+    output_data_nodal = false # enable for nodal data output
+    execute_on = NONE # TIMESTEP_END for Ray mesh output
+  []
+[]
+
+[UserObjects/study]
+  type = RepeatableRayStudy
+  names = &#x27;diag
+           right_up&#x27;
+  start_points = &#x27;0 0 0
+                  5 0 0&#x27;
+  end_points = &#x27;5 5 0
+                5 5 0&#x27;
+
+  execute_on = TIMESTEP_END
+
+  # Needed to cache trace information for RayTracingMeshOutput
+  # always_cache_traces = true
+  # Needed to cache Ray data for RayTracingMeshOutput
+  # data_on_cache_traces = true
+[]
+
+[RayKernels/u_integral]
+  type = VariableIntegralRayKernel
+  variable = u
+[]
+
+[Postprocessors]
+  [diag_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = diag
+  []
+  [right_up_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = right_up
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="c5030a99-0d8d-4c1b-9852-b69990d1f654"><div class="modal-content"><h4>(moose/modules/ray_tracing/test/tests/raykernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 5
+    ny = 5
+    xmax = 5
+    ymax = 5
+  []
+[]
+
+[Variables/u]
+[]
+
+[Kernels/diff]
+  type = Diffusion
+  variable = u
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+  [rays]
+    type = RayTracingExodus
+    study = study
+    output_data = false # enable for data output
+    output_data_nodal = false # enable for nodal data output
+    execute_on = NONE # TIMESTEP_END for Ray mesh output
+  []
+[]
+
+[UserObjects/study]
+  type = RepeatableRayStudy
+  names = &#x27;diag
+           right_up&#x27;
+  start_points = &#x27;0 0 0
+                  5 0 0&#x27;
+  end_points = &#x27;5 5 0
+                5 5 0&#x27;
+
+  execute_on = TIMESTEP_END
+
+  # Needed to cache trace information for RayTracingMeshOutput
+  # always_cache_traces = true
+  # Needed to cache Ray data for RayTracingMeshOutput
+  # data_on_cache_traces = true
+[]
+
+[RayKernels/u_integral]
+  type = VariableIntegralRayKernel
+  variable = u
+[]
+
+[Postprocessors]
+  [diag_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = diag
+  []
+  [right_up_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = right_up
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="89833334-8345-43ee-a856-91410dec045d"><div class="modal-content"><h4>(moose/modules/ray_tracing/test/tests/raykernels/variable_integral_ray_kernel/simple_diffusion_line_integral.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 5
+    ny = 5
+    xmax = 5
+    ymax = 5
+  []
+[]
+
+[Variables/u]
+[]
+
+[Kernels/diff]
+  type = Diffusion
+  variable = u
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    variable = u
+    boundary = left
+    value = 0
+  []
+  [right]
+    type = DirichletBC
+    variable = u
+    boundary = right
+    value = 1
+  []
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;PJFNK&#x27;
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type&#x27;
+  petsc_options_value = &#x27;hypre boomeramg&#x27;
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+  [rays]
+    type = RayTracingExodus
+    study = study
+    output_data = false # enable for data output
+    output_data_nodal = false # enable for nodal data output
+    execute_on = NONE # TIMESTEP_END for Ray mesh output
+  []
+[]
+
+[UserObjects/study]
+  type = RepeatableRayStudy
+  names = &#x27;diag
+           right_up&#x27;
+  start_points = &#x27;0 0 0
+                  5 0 0&#x27;
+  end_points = &#x27;5 5 0
+                5 5 0&#x27;
+
+  execute_on = TIMESTEP_END
+
+  # Needed to cache trace information for RayTracingMeshOutput
+  # always_cache_traces = true
+  # Needed to cache Ray data for RayTracingMeshOutput
+  # data_on_cache_traces = true
+[]
+
+[RayKernels/u_integral]
+  type = VariableIntegralRayKernel
+  variable = u
+[]
+
+[Postprocessors]
+  [diag_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = diag
+  []
+  [right_up_line_integral]
+    type = RayIntegralValue
+    ray_kernel = u_integral
+    ray = right_up
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../../js/init.js"></script><script type="text/javascript" src="../../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../../js/sqa_moose.js"></script><script type="text/javascript" src="../../../js/moose_input_parser.js"></script>

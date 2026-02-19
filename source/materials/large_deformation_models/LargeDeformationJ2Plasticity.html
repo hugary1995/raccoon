@@ -1,0 +1,2012 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>LargeDeformationJ 2 Plasticity | RACCOON</title><link rel="icon" type="image/x-icon" href="../../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../../contrib/katex/katex.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../../media/framework/github-logo.png" alt="GitHub wordmark" class="github-mark"></img><img src="../../../media/framework/github-mark.png" alt="GitHub logo" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="8320c22a-076f-4065-8f47-f39b65e5bea8" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="aef20cf0-31b4-4290-8830-57a3447639e4" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="bbff61e5-1fa2-4195-b1fa-97daceac7e9a" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="7d2b33b4-4847-4ac0-8d53-7eb9458c961a" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="8da49fa1-d89f-4c1d-a441-a7aa0d56e4cd"><i class="material-icons">menu</i></a><ul class="sidenav" id="8da49fa1-d89f-4c1d-a441-a7aa0d56e4cd"><li><a href="#!" class="dropdown-trigger" data-target="e9c6393a-a75e-4b07-b309-4a369a3ea31a" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="cbb7c679-957d-4d11-983d-ec7f11b9edc9" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="3d103965-0bf3-4fea-b636-47dbdbeb6a31" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="e948b4a0-6e67-46d5-afc5-c63181a0997c" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="8320c22a-076f-4065-8f47-f39b65e5bea8"><li><a href="../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../getting_started/ide.html">Code development</a></li><li><a href="../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="aef20cf0-31b4-4290-8830-57a3447639e4"><li><a href="../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="bbff61e5-1fa2-4195-b1fa-97daceac7e9a"><li><a href="../../../theory/intro.html">Introduction</a></li><li><a href="../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="7d2b33b4-4847-4ac0-8d53-7eb9458c961a"><li><a href="../../../modules/index.html">Physics modules</a></li><li><a href="../../../syntax/index.html">Complete syntax</a></li><li><a href="../../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="e9c6393a-a75e-4b07-b309-4a369a3ea31a"><li><a href="../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../getting_started/ide.html">Code development</a></li><li><a href="../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="cbb7c679-957d-4d11-983d-ec7f11b9edc9"><li><a href="../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="3d103965-0bf3-4fea-b636-47dbdbeb6a31"><li><a href="../../../theory/intro.html">Introduction</a></li><li><a href="../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="e948b4a0-6e67-46d5-afc5-c63181a0997c"><li><a href="../../../modules/index.html">Physics modules</a></li><li><a href="../../../syntax/index.html">Complete syntax</a></li><li><a href="../../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="b389e608-afb6-408d-902b-07bc4688a7be" data-section-level="1" data-section-text="LargeDeformationJ 2 Plasticity"><h1 id="largedeformationj-2-plasticity">LargeDeformationJ2Plasticity</h1><p>Large deformation <span class="moose-katex-inline-equation" id="moose-equation-6e5a4808-3876-448d-8558-eeec0c82df58"><script>var element = document.getElementById("moose-equation-6e5a4808-3876-448d-8558-eeec0c82df58");katex.render("J_2", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> plasticity. The exponential constitutive update is used to update the plastic deformation.</p><section id="13ec4cd3-26ff-4c7c-8aec-27f6b5b7b04f" data-section-level="2" data-section-text="Overview"><h2 id="overview">Overview</h2><p>Following <a href="../../../theory/minimization.html">the theory</a>, Given the Prandtl-Reuss flow rule,</p><p><span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-759c4e53-8f32-4b18-b98f-a6bd1ff73cf1"></span><script>var element = document.getElementById("moose-equation-759c4e53-8f32-4b18-b98f-a6bd1ff73cf1");katex.render("  \\begin{aligned}     \\tr\\left( \\dot{\\bfF}^p {\\bfF^p}^{-1} \\right) &= 0, \\\\     \\norm{\\dot{\\bfF}^p {\\bfF^p}^{-1}}^2 - \\dfrac{3}{2} \\abs{\\epdot}^2 &= 0,   \\end{aligned}", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span></p><p>minimizing the total potential jointly with respect to <span class="moose-katex-inline-equation" id="moose-equation-b6e5e5c4-0963-41e7-8628-1a3f72697951"><script>var element = document.getElementById("moose-equation-b6e5e5c4-0963-41e7-8628-1a3f72697951");katex.render("\\epdot", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> and <span class="moose-katex-inline-equation" id="moose-equation-26c130e6-15ac-4828-9ac6-334ce6e3f820"><script>var element = document.getElementById("moose-equation-26c130e6-15ac-4828-9ac6-334ce6e3f820");katex.render("\\dot{\\bfF}^p", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> (say, using Lagrange multipliers) gives the yield surface:</p><p><span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-97d7261a-b037-49ae-9b2d-4bba52e5d789"></span><script>var element = document.getElementById("moose-equation-97d7261a-b037-49ae-9b2d-4bba52e5d789");katex.render("  \\phi^p = \\norm{\\dev(\\bfM)} - \\sqrt{\\dfrac{2}{3}} \\psi^p_{, \\epdot},", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span></p><p>where <span class="moose-katex-inline-equation" id="moose-equation-d6ab43bc-d3f2-4609-b85c-77fa0b7d33de"><script>var element = document.getElementById("moose-equation-d6ab43bc-d3f2-4609-b85c-77fa0b7d33de");katex.render("\\bfM", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the Mandel stress and <span class="moose-katex-inline-equation" id="moose-equation-6e64e2db-bd22-4c68-8453-1474cb798d5a"><script>var element = document.getElementById("moose-equation-6e64e2db-bd22-4c68-8453-1474cb798d5a");katex.render("\\psi^p", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the plastic energy.</p><p>This class uses the exponential update to integrate the constitutive constraint in time. The plasticity model calls the elasticity model to get the value of the Mandel stress, and it calls the plastic hardening model to get the value of the plastic energy and its derivatives with respect to <span class="moose-katex-inline-equation" id="moose-equation-0e6a3751-e12e-4ac0-8a13-f7228cb33684"><script>var element = document.getElementById("moose-equation-0e6a3751-e12e-4ac0-8a13-f7228cb33684");katex.render("\\epdot", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>.</p></section><section id="5c583f46-6ee8-4555-af79-a42ed2890c63" data-section-level="2" data-section-text="Example Input File Syntax"><h2 id="example-input-file-syntax">Example Input File Syntax</h2></section><section id="d6a60307-97ad-4360-b1ef-75d035def9b1" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="791e40ca-1749-43cd-924e-0c8478cb1216" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">hardening_model</span><span class="moose-parameter-header-description">Name of the plastic hardening model</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialName</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Name of the plastic hardening model</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="d2df5f32-d71d-4cf7-892c-ec776e7bcc5e" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">absolute_tolerance</span><span class="moose-parameter-header-default">1e-11</span><span class="moose-parameter-header-description">Absolute convergence tolerance for Newton iteration</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1e-11</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Absolute convergence tolerance for Newton iteration</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">acceptable_multiplier</span><span class="moose-parameter-header-default">10</span><span class="moose-parameter-header-description">Factor applied to relative and absolute tolerance for acceptable convergence if iterations are no longer making progress</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>10</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Factor applied to relative and absolute tolerance for acceptable convergence if iterations are no longer making progress</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">automatic_differentiation_return_mapping</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether to use automatic differentiation to compute the derivative.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Whether to use automatic differentiation to compute the derivative.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of blocks (ids or names) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;SubdomainName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The list of blocks (ids or names) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundaries (ids or names) from the mesh where this object applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;BoundaryName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The list of boundaries (ids or names) from the mesh where this object applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_on</span><span class="moose-parameter-header-default">NONE</span><span class="moose-parameter-header-description">When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>NONE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE, ELEMENT, SUBDOMAIN</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">declare_suffix</span><span class="moose-parameter-header-description">An optional suffix parameter that can be appended to any declared properties. The suffix will be prepended with a '_' character.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>An optional suffix parameter that can be appended to any declared properties. The suffix will be prepended with a '_' character.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">relative_tolerance</span><span class="moose-parameter-header-default">1e-08</span><span class="moose-parameter-header-description">Relative convergence tolerance for Newton iteration</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1e-08</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Relative convergence tolerance for Newton iteration</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="f7809552-3aec-4d94-a495-d81da52c0fea" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>Yes</p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">search_method</span><span class="moose-parameter-header-default">nearest_node_connected_sides</span><span class="moose-parameter-header-description">Choice of search algorithm.  All options begin by finding the nearest node in the primary boundary to a query point in the secondary boundary.  In the default nearest_node_connected_sides algorithm, primary boundary elements are searched iff that nearest node is one of their nodes.  This is fast to determine via a pregenerated node-to-elem map and is robust on conforming meshes.  In the optional all_proximate_sides algorithm, primary boundary elements are searched iff they touch that nearest node, even if they are not topologically connected to it.  This is more CPU-intensive but is necessary for robustness on any boundary surfaces which has disconnections (such as Flex IGA meshes) or non-conformity (such as hanging nodes in adaptively h-refined meshes).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nearest_node_connected_sides</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nearest_node_connected_sides, all_proximate_sides</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Choice of search algorithm.  All options begin by finding the nearest node in the primary boundary to a query point in the secondary boundary.  In the default nearest_node_connected_sides algorithm, primary boundary elements are searched iff that nearest node is one of their nodes.  This is fast to determine via a pregenerated node-to-elem map and is robust on conforming meshes.  In the optional all_proximate_sides algorithm, primary boundary elements are searched iff they touch that nearest node, even if they are not topologically connected to it.  This is more CPU-intensive but is necessary for robustness on any boundary surfaces which has disconnections (such as Flex IGA meshes) or non-conformity (such as hanging nodes in adaptively h-refined meshes).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="0e594525-0f68-493a-9766-985a14bfff79" data-section-level="3" data-section-text="Debug Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">internal_solve_full_iteration_history</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Set true to output full internal Newton iteration history at times determined by `internal_solve_output_on`. If false, only a summary is output.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Set true to output full internal Newton iteration history at times determined by `internal_solve_output_on`. If false, only a summary is output.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">internal_solve_output_on</span><span class="moose-parameter-header-default">on_error</span><span class="moose-parameter-header-description">When to output internal Newton solve information</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>on_error</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>never, on_error, always</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>When to output internal Newton solve information</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Debug Parameters</h3></summary></details></section><section id="17a86ad4-7c79-40d7-8a57-38035316c73b" data-section-level="3" data-section-text="Outputs Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">output_properties</span><span class="moose-parameter-header-description">List of material properties, from this material, to output (outputs must also be defined to an output type)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>List of material properties, from this material, to output (outputs must also be defined to an output type)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-default">none </span><span class="moose-parameter-header-description">Vector of output names where you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>none </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;OutputName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Vector of output names where you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Outputs Parameters</h3></summary></details></section><section id="874ba636-e8fa-44dd-9650-41d7759718d0" data-section-level="3" data-section-text="Material Property Retrieval Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">prop_getter_suffix</span><span class="moose-parameter-header-description">An optional suffix parameter that can be appended to any attempt to retrieve/get material properties. The suffix will be prepended with a '_' character.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>An optional suffix parameter that can be appended to any attempt to retrieve/get material properties. The suffix will be prepended with a '_' character.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_interpolated_state</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">For the old and older state use projected material properties interpolated at the quadrature points. To set up projection use the ProjectedStatefulMaterialStorageAction.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>For the old and older state use projected material properties interpolated at the quadrature points. To set up projection use the ProjectedStatefulMaterialStorageAction.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Material Property Retrieval Parameters</h3></summary></details></section></section><section id="45628e3d-2a1c-44ee-8b18-2baa808e39df" data-section-level="2" data-section-text="Input Files"><h2 id="input-files">Input Files</h2><ul class="moose-list-inputs browser-default"><li><a class="moose-source-filename tooltipped modal-trigger" href="#c4a8d83b-4ab1-4058-9b48-992c51575814">(tutorials/homogeneous_cube/Hencky_J2_linearhardening/elastoplasticity.i)</a></li><li><a class="moose-source-filename tooltipped modal-trigger" href="#81a703d0-7287-4130-bb47-fead0e2968cb">(tutorials/homogeneous_cube/Hencky_J2_JohnsonCook/elastoplasticity.i)</a></li><li><a class="moose-source-filename tooltipped modal-trigger" href="#761bec90-fca4-4f48-9608-0c392eb98233">(test/tests/hardening_models/elastoplasticity.i)</a></li><li><a class="moose-source-filename tooltipped modal-trigger" href="#6e5a5a9f-7f7e-4ae5-af2c-033cdc219ebe">(tutorials/three_point_bending/elastoplasticity.i)</a></li><li><a class="moose-source-filename tooltipped modal-trigger" href="#a4a901fc-331e-4518-ae36-d7532c9b749b">(tutorials/homogeneous_cube/Hencky_J2_arrheniuslawhardening/elastoplasticity.i)</a></li><li><a class="moose-source-filename tooltipped modal-trigger" href="#e40c7897-28b3-4d1d-b127-9705d1425c7f">(tutorials/homogeneous_cube/CNH_J2_powerlawhardening/elastoplasticity_fracture.i)</a></li><li><a class="moose-source-filename tooltipped modal-trigger" href="#82a466d4-b460-4e01-9cf2-483c49d627bf">(tutorials/homogeneous_cube/Hencky_J2_powerlawhardening/elastoplasticity_fracture.i)</a></li><li><a class="moose-source-filename tooltipped modal-trigger" href="#b12e0561-4bb8-47a7-aace-42b9723d315c">(tutorials/large_deformation/elastoplasticity.i)</a></li></ul></section><section id="a52a42e1-6a5e-4eda-a49c-39dc6fc573bc" data-section-level="2" data-section-text="Child Objects"><h2 id="child-objects">Child Objects</h2><ul class="moose-list-children browser-default"><li><a class="moose-source-filename tooltipped modal-trigger" href="#54a92fa7-aad0-4b8f-8c56-29271da40423">(include/materials/large_deformation_models/LargeDeformationJ2PowerLawCreep.h)</a></li></ul></section></section><div class="moose-modal modal" id="c4a8d83b-4ab1-4058-9b48-992c51575814"><div class="modal-content"><h4>(tutorials/homogeneous_cube/Hencky_J2_linearhardening/elastoplasticity.i)</h4><pre style="max-height:350px;"><code class="language-moose">a = 250
+R = 4
+
+psic = 15
+Gc = 1.38e5
+l = &#x27;${fparse R * a}&#x27;
+
+E = 6.88e4
+nu = 0.33
+K = &#x27;${fparse E/3/(1-2*nu)}&#x27;
+G = &#x27;${fparse E/2/(1+nu)}&#x27;
+
+sigma_y = 320
+H = 3.44e3
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+  volumetric_locking_correction = true
+[]
+
+[MultiApps]
+  [fracture]
+    type = TransientMultiApp
+    input_files = &#x27;fracture.i&#x27;
+    cli_args = &#x27;a=${a};psic=${psic};Gc=${Gc};l=${l} &#x27;
+    execute_on = &#x27;TIMESTEP_END&#x27;
+  []
+[]
+
+[Transfers]
+  [from_d]
+    type = MultiAppCopyTransfer
+    from_multi_app = &#x27;fracture&#x27;
+    variable = d
+    source_variable = d
+  []
+  [to_psie_active]
+    type = MultiAppCopyTransfer
+    to_multi_app = &#x27;fracture&#x27;
+    variable = psie_active
+    source_variable = psie_active
+  []
+  [to_psip_active]
+    type = MultiAppCopyTransfer
+    to_multi_app = &#x27;fracture&#x27;
+    variable = psip_active
+    source_variable = psip_active
+  []
+[]
+
+[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 3
+    xmax = ${a}
+    ymax = ${a}
+    zmax = ${a}
+  []
+[]
+
+[Variables]
+  [disp_x]
+  []
+  [disp_y]
+  []
+  [disp_z]
+  []
+[]
+
+[AuxVariables]
+  [d]
+  []
+  [stress]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [F]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+[]
+
+[AuxKernels]
+  [stress]
+    type = ADRankTwoAux
+    variable = stress
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+  []
+  [F]
+    type = ADRankTwoAux
+    variable = F
+    rank_two_tensor = deformation_gradient
+    index_i = 1
+    index_j = 1
+  []
+[]
+
+[Kernels]
+  [solid_x]
+    type = ADStressDivergenceTensors
+    variable = disp_x
+    component = 0
+    use_displaced_mesh = true
+  []
+  [solid_y]
+    type = ADStressDivergenceTensors
+    variable = disp_y
+    component = 1
+    use_displaced_mesh = true
+  []
+  [solid_z]
+    type = ADStressDivergenceTensors
+    variable = disp_z
+    component = 2
+    use_displaced_mesh = true
+  []
+[]
+
+[Materials]
+  [bulk_properties]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;K G l Gc psic sigma_y H&#x27;
+    prop_values = &#x27;${K} ${G} ${l} ${Gc} ${psic} ${sigma_y} ${H}&#x27;
+  []
+  [degradation]
+    type = RationalDegradationFunction
+    property_name = g
+    expression = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
+    phase_field = d
+    material_property_names = &#x27;Gc psic xi c0 l &#x27;
+    parameter_names = &#x27;p a2 a3 eta &#x27;
+    parameter_values = &#x27;2 -0.5 0 1e-6&#x27;
+  []
+  [crack_geometric]
+    type = CrackGeometricFunction
+    property_name = alpha
+    expression = &#x27;d&#x27;
+    phase_field = d
+  []
+  [defgrad]
+    type = ComputeDeformationGradient
+  []
+  [hencky]
+    type = HenckyIsotropicElasticity
+    bulk_modulus = K
+    shear_modulus = G
+    phase_field = d
+    degradation_function = g
+    output_properties = &#x27;psie_active&#x27;
+    outputs = exodus
+  []
+  [linear_hardening]
+    type = LinearHardening
+    phase_field = d
+    yield_stress = sigma_y
+    hardening_modulus = H
+    degradation_function = g
+    output_properties = &#x27;psip_active&#x27;
+    outputs = exodus
+  []
+  [J2]
+    type = LargeDeformationJ2Plasticity
+    hardening_model = linear_hardening
+  []
+  [stress]
+    type = ComputeLargeDeformationStress
+    elasticity_model = hencky
+    plasticity_model = J2
+  []
+[]
+
+[BCs]
+  [xfix]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;left&#x27;
+    value = 0
+  []
+  [yfix]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom&#x27;
+    value = 0
+  []
+  [zfix]
+    type = DirichletBC
+    variable = disp_z
+    boundary = &#x27;back&#x27;
+    value = 0
+  []
+  [ydisp]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;top&#x27;
+    function = &#x27;t&#x27;
+    preset = false
+  []
+[]
+
+[Postprocessors]
+  [F]
+    type = ElementAverageValue
+    variable = F
+  []
+  [stress]
+    type = ElementAverageValue
+    variable = stress
+  []
+  [d]
+    type = ElementAverageValue
+    variable = d
+  []
+  [ep]
+    type = ADElementAverageMaterialProperty
+    mat_prop = effective_plastic_strain
+  []
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;lu&#x27;
+
+  nl_rel_tol = 1e-08
+  nl_abs_tol = 1e-10
+  nl_max_its = 50
+
+  dt = &#x27;${fparse 0.0005 * a}&#x27;
+  end_time = &#x27;${fparse 0.1 * a}&#x27;
+
+  automatic_scaling = true
+
+  fixed_point_max_its = 100
+  fixed_point_rel_tol = 1e-08
+  fixed_point_abs_tol = 1e-10
+  accept_on_max_fixed_point_iteration = true
+  abort_on_solve_fail = true
+[]
+
+[Outputs]
+  file_base = &#x27;stress_deformation&#x27;
+  print_linear_residuals = false
+  csv = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="81a703d0-7287-4130-bb47-fead0e2968cb"><div class="modal-content"><h4>(tutorials/homogeneous_cube/Hencky_J2_JohnsonCook/elastoplasticity.i)</h4><pre style="max-height:350px;"><code class="language-moose">a = 1
+ratio = 4
+
+beta = 0.5
+ep0 = 0.5
+
+psic = 0.9
+Gc = 23.6
+l = &#x27;${fparse ratio * a}&#x27;
+
+E = 201.8e3
+nu = 0.3
+K = &#x27;${fparse E/3/(1-2*nu)}&#x27;
+G = &#x27;${fparse E/2/(1+nu)}&#x27;
+
+rate = 1000
+T_init = 300
+
+rho = 7.9e-9
+cv = 4.47e7
+k = 44
+
+tqf = 0.9
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+  volumetric_locking_correction = true
+[]
+
+[MultiApps]
+  [fracture]
+    type = TransientMultiApp
+    input_files = &#x27;fracture.i&#x27;
+    cli_args = &#x27;a=${a};psic=${psic};Gc=${Gc};l=${l} &#x27;
+    execute_on = &#x27;TIMESTEP_END&#x27;
+  []
+[]
+
+[Transfers]
+  [from_fracture]
+    type = MultiAppCopyTransfer
+    from_multi_app = fracture
+    variable = d
+    source_variable = d
+  []
+  [to_fracture]
+    type = MultiAppCopyTransfer
+    to_multi_app = fracture
+    variable = &#x27;psie_active psip_active&#x27;
+    source_variable = &#x27;psie_active psip_active&#x27;
+  []
+  [to_sub_coalescence]
+    type = MultiAppCopyTransfer
+    to_multi_app = fracture
+    source_variable = coalescence
+    variable = coalescence
+  []
+[]
+
+[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 3
+    xmax = ${a}
+    ymax = ${a}
+    zmax = ${a}
+  []
+[]
+
+[Variables]
+  [disp_x]
+  []
+  [disp_y]
+  []
+  [disp_z]
+  []
+  [T]
+    initial_condition = ${T_init}
+  []
+[]
+
+[AuxVariables]
+  [d]
+  []
+  [stress]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [F]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+[]
+
+[AuxKernels]
+  [stress]
+    type = ADRankTwoAux
+    variable = stress
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+  [F]
+    type = ADRankTwoAux
+    variable = F
+    rank_two_tensor = deformation_gradient
+    index_i = 1
+    index_j = 1
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+[]
+
+[Kernels]
+  [solid_x]
+    type = ADStressDivergenceTensors
+    variable = disp_x
+    component = 0
+    use_displaced_mesh = true
+  []
+  [solid_y]
+    type = ADStressDivergenceTensors
+    variable = disp_y
+    component = 1
+    use_displaced_mesh = true
+  []
+  [solid_z]
+    type = ADStressDivergenceTensors
+    variable = disp_z
+    component = 2
+    use_displaced_mesh = true
+  []
+  [hcond_time]
+    type = HeatConductionTimeDerivative
+    variable = T
+    density_name = density
+    specific_heat = specific_heat
+  []
+  [hcond]
+    type = HeatConduction
+    variable = T
+    diffusion_coefficient = thermal_conductivity
+  []
+  [heat_source]
+    type = ADCoefMatSource
+    variable = T
+    coefficient = -1
+    prop_names = &#x27;plastic_heat_generation&#x27;
+  []
+[]
+
+[Materials]
+  [thermal_properties]
+    type = GenericConstantMaterial
+    prop_names = &#x27;density specific_heat thermal_conductivity&#x27;
+    prop_values = &#x27;${rho} ${cv} ${k}&#x27;
+  []
+  [bulk_properties]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;K G l Gc psic&#x27;
+    prop_values = &#x27;${K} ${G} ${l} ${Gc} ${psic}&#x27;
+  []
+  [degradation]
+    type = RationalDegradationFunction
+    property_name = g
+    expression = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
+    phase_field = d
+    material_property_names = &#x27;Gc psic xi c0 l &#x27;
+    parameter_names = &#x27;p a2 a3 eta &#x27;
+    parameter_values = &#x27;2 -0.5 0 1e-6&#x27;
+  []
+  [nodeg]
+    type = NoDegradation
+    phase_field = d
+    property_name = nodeg
+  []
+  [coalescence]
+    type = ADParsedMaterial
+    property_name = coalescence
+    material_property_names = &#x27;effective_plastic_strain&#x27;
+    constant_names = &#x27;beta ep0&#x27;
+    constant_expressions = &#x27;${beta} ${ep0}&#x27;
+    expression = 1-(1-beta)*(1-exp(-(effective_plastic_strain/ep0)))
+    outputs = exodus
+    output_properties = &#x27;coalescence&#x27;
+  []
+  [crack_geometric]
+    type = CrackGeometricFunction
+    property_name = alpha
+    expression = &#x27;d&#x27;
+    phase_field = d
+  []
+  [defgrad]
+    type = ComputeDeformationGradient
+  []
+  [hencky]
+    type = HenckyIsotropicElasticity
+    bulk_modulus = K
+    shear_modulus = G
+    phase_field = d
+    degradation_function = g
+    output_properties = &#x27;psie_active&#x27;
+    outputs = exodus
+  []
+  [JohnsonCookHardening]
+    type = JohnsonCookHardening
+    T = T
+    taylor_quinney_factor = 0.9
+    sigma_0 = 1
+    T0 = 293
+    reference_plastic_strain = 1
+    reference_plastic_strain_rate = 1.6e-4
+    phase_field = d
+    degradation_function = nodeg
+    A = 517
+    B = 405
+    C = 0.0075
+    n = 0.41
+    m = 1.1
+    Tm = 750
+    output_properties = &#x27;psip_active&#x27;
+    outputs = exodus
+  []
+  [J2]
+    type = LargeDeformationJ2Plasticity
+    hardening_model = JohnsonCookHardening
+    relative_tolerance = 1e-08
+    output_properties = &#x27;effective_plastic_strain trial&#x27;
+    outputs = exodus
+  []
+  [stress]
+    type = ComputeLargeDeformationStress
+    elasticity_model = hencky
+    plasticity_model = J2
+  []
+[]
+
+[BCs]
+  [xfix]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;left&#x27;
+    value = 0
+  []
+  [yfix]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom&#x27;
+    value = 0
+  []
+  [zfix]
+    type = DirichletBC
+    variable = disp_z
+    boundary = &#x27;back&#x27;
+    value = 0
+  []
+  [ydisp]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;top&#x27;
+    function = &#x27;${rate}*t&#x27;
+    preset = false
+  []
+[]
+
+[Postprocessors]
+  [F]
+    type = ElementAverageValue
+    variable = F
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+  [stress]
+    type = ElementAverageValue
+    variable = stress
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+  [d]
+    type = ElementAverageValue
+    variable = d
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+  [ep]
+    type = ADElementAverageMaterialProperty
+    mat_prop = effective_plastic_strain
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+  [heat]
+    type = ADElementAverageMaterialProperty
+    mat_prop = plastic_heat_generation
+    execute_on = &#x27;TIMESTEP_END&#x27;
+  []
+  [T]
+    type = ElementAverageValue
+    variable = T
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;lu&#x27;
+
+  nl_rel_tol = 1e-08
+  nl_abs_tol = 1e-10
+  nl_max_its = 50
+
+  dt = &#x27;${fparse 0.00005 * a / rate}&#x27;
+  end_time = 4.8e-6
+
+  automatic_scaling = true
+
+  fixed_point_max_its = 100
+  fixed_point_rel_tol = 1e-08
+  fixed_point_abs_tol = 1e-10
+  accept_on_max_fixed_point_iteration = true
+  abort_on_solve_fail = true
+[]
+
+[Outputs]
+  file_base = &#x27;stress_deformation_rate_${rate}_tqf_${tqf}&#x27;
+  print_linear_residuals = false
+  csv = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="761bec90-fca4-4f48-9608-0c392eb98233"><div class="modal-content"><h4>(test/tests/hardening_models/elastoplasticity.i)</h4><pre style="max-height:350px;"><code class="language-moose">a = 250
+ratio = 4
+
+psic = 15
+Gc = 1.38e5
+l = &#x27;${fparse ratio * a}&#x27;
+
+E = 6.88e4
+nu = 0.33
+K = &#x27;${fparse E/3/(1-2*nu)}&#x27;
+G = &#x27;${fparse E/2/(1+nu)}&#x27;
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+  volumetric_locking_correction = true
+[]
+
+[MultiApps]
+  [fracture]
+    type = TransientMultiApp
+    input_files = &#x27;fracture.i&#x27;
+    cli_args = &#x27;a=${a};psic=${psic};Gc=${Gc};l=${l} &#x27;
+    execute_on = &#x27;TIMESTEP_END&#x27;
+  []
+[]
+
+[Transfers]
+  [from_fracture]
+    type = MultiAppCopyTransfer
+    from_multi_app = &#x27;fracture&#x27;
+    variable = &#x27;d&#x27;
+    source_variable = &#x27;d&#x27;
+  []
+  [to_fracture]
+    type = MultiAppCopyTransfer
+    to_multi_app = &#x27;fracture&#x27;
+    variable = &#x27;psie_active psip_active&#x27;
+    source_variable = &#x27;psie_active psip_active&#x27;
+  []
+[]
+
+[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 3
+    xmax = ${a}
+    ymax = ${a}
+    zmax = ${a}
+  []
+[]
+
+[Variables]
+  [disp_x]
+  []
+  [disp_y]
+  []
+  [disp_z]
+  []
+[]
+
+[AuxVariables]
+  [d]
+  []
+  [stress]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [F]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [psip_active]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+[]
+
+[AuxKernels]
+  [stress]
+    type = ADRankTwoAux
+    variable = stress
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+  []
+  [F]
+    type = ADRankTwoAux
+    variable = F
+    rank_two_tensor = deformation_gradient
+    index_i = 1
+    index_j = 1
+  []
+  [psip_active]
+    type = ADMaterialRealAux
+    variable = psip_active
+    property = psip_active
+  []
+[]
+
+[Kernels]
+  [solid_x]
+    type = ADStressDivergenceTensors
+    variable = disp_x
+    component = 0
+    use_displaced_mesh = true
+  []
+  [solid_y]
+    type = ADStressDivergenceTensors
+    variable = disp_y
+    component = 1
+    use_displaced_mesh = true
+  []
+  [solid_z]
+    type = ADStressDivergenceTensors
+    variable = disp_z
+    component = 2
+    use_displaced_mesh = true
+  []
+[]
+
+[Materials]
+  [bulk_properties]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;K G l Gc psic&#x27;
+    prop_values = &#x27;${K} ${G} ${l} ${Gc} ${psic}&#x27;
+  []
+  [degradation]
+    type = RationalDegradationFunction
+    property_name = g
+    expression = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
+    phase_field = d
+    material_property_names = &#x27;Gc psic xi c0 l &#x27;
+    parameter_names = &#x27;p a2 a3 eta &#x27;
+    parameter_values = &#x27;2 -0.5 0 1e-6&#x27;
+  []
+  [crack_geometric]
+    type = CrackGeometricFunction
+    property_name = alpha
+    expression = &#x27;d&#x27;
+    phase_field = d
+  []
+  [defgrad]
+    type = ComputeDeformationGradient
+  []
+  [hencky]
+    type = HenckyIsotropicElasticity
+    bulk_modulus = K
+    shear_modulus = G
+    phase_field = d
+    degradation_function = g
+    output_properties = &#x27;psie_active&#x27;
+    outputs = exodus
+  []
+  [J2]
+    type = LargeDeformationJ2Plasticity
+    hardening_model = ${hardening_model_name}
+  []
+  [stress]
+    type = ComputeLargeDeformationStress
+    elasticity_model = hencky
+    plasticity_model = J2
+  []
+[]
+
+[BCs]
+  [xfix]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;left&#x27;
+    value = 0
+  []
+  [yfix]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom&#x27;
+    value = 0
+  []
+  [zfix]
+    type = DirichletBC
+    variable = disp_z
+    boundary = &#x27;back&#x27;
+    value = 0
+  []
+  [ydisp]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;top&#x27;
+    function = &#x27;t&#x27;
+    preset = false
+  []
+[]
+
+[Postprocessors]
+  [F]
+    type = ElementAverageValue
+    variable = F
+  []
+  [stress]
+    type = ElementAverageValue
+    variable = stress
+  []
+  [d]
+    type = ElementAverageValue
+    variable = d
+  []
+  [ep]
+    type = ADElementAverageMaterialProperty
+    mat_prop = effective_plastic_strain
+  []
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;lu&#x27;
+
+  nl_rel_tol = 1e-08
+  nl_abs_tol = 1e-10
+  nl_max_its = 50
+
+  dt = &#x27;${fparse 0.0005 * a}&#x27;
+  end_time = &#x27;${fparse 0.1 * a}&#x27;
+
+  automatic_scaling = true
+
+  fixed_point_max_its = 100
+  fixed_point_rel_tol = 1e-08
+  fixed_point_abs_tol = 1e-10
+  accept_on_max_fixed_point_iteration = true
+  abort_on_solve_fail = true
+[]
+
+[Outputs]
+  file_base = &#x27;${hardening_model_name}&#x27;
+  print_linear_residuals = false
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="6e5a5a9f-7f7e-4ae5-af2c-033cdc219ebe"><div class="modal-content"><h4>(tutorials/three_point_bending/elastoplasticity.i)</h4><pre style="max-height:350px;"><code class="language-moose">mesh_file = &#x27;gold/beam.msh&#x27;
+
+psic = 90
+Gc = 20
+l = 0.027
+
+E = 7.25e4
+nu = 0.34
+K = &#x27;${fparse E/3/(1-2*nu)}&#x27;
+G = &#x27;${fparse E/2/(1+nu)}&#x27;
+eta = 1
+
+sigma_y = 345
+n = 1
+ep0 = 0.345
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+  volumetric_locking_correction = true
+[]
+
+[MultiApps]
+  [fracture]
+    type = TransientMultiApp
+    input_files = &#x27;fracture.i&#x27;
+    cli_args = &#x27;mesh_file=${mesh_file};Gc=${Gc};psic=${psic};l=${l}&#x27;
+  []
+[]
+
+[Transfers]
+  [from_d]
+    type = MultiAppCopyTransfer
+    from_multi_app = &#x27;fracture&#x27;
+    source_variable = d
+    variable = d
+  []
+  [to_psie_active]
+    type = MultiAppCopyTransfer
+    to_multi_app = &#x27;fracture&#x27;
+    source_variable = psie_active
+    variable = psie_active
+  []
+  [to_psip_active]
+    type = MultiAppCopyTransfer
+    to_multi_app = &#x27;fracture&#x27;
+    source_variable = psip_active
+    variable = psip_active
+  []
+[]
+
+[Problem]
+  kernel_coverage_check = false
+  material_coverage_check = false
+  boundary_restricted_node_integrity_check = false
+[]
+
+[Mesh]
+  [fmg]
+    type = FileMeshGenerator
+    file = ${mesh_file}
+  []
+  [active]
+    type = SubdomainBoundingBoxGenerator
+    input = fmg
+    block_id = 0
+    bottom_left = &#x27;0 0 0&#x27;
+    top_right = &#x27;100 16 0&#x27;
+  []
+  [inactive]
+    type = SubdomainBoundingBoxGenerator
+    input = active
+    block_id = 1
+    bottom_left = &#x27;100 0 0&#x27;
+    top_right = &#x27;200 16 0&#x27;
+  []
+[]
+
+[MeshModifiers]
+  [esm]
+    type = CoupledVarThresholdElementSubdomainModifier
+    coupled_var = d
+    threshold = 0.925
+    criterion_type = ABOVE
+    subdomain_id = 1
+    complement_subdomain_id = 0
+    execute_on = &#x27;INITIAL TIMESTEP_END&#x27;
+    reinitialize_subdomains = &#x27;&#x27;
+  []
+[]
+
+[Variables]
+  [disp_x]
+    block = 0
+  []
+  [disp_y]
+    block = 0
+  []
+[]
+
+[AuxVariables]
+  [d]
+  []
+  [fy]
+  []
+[]
+
+[Kernels]
+  [solid_x]
+    type = ADStressDivergenceTensors
+    variable = &#x27;disp_x&#x27;
+    component = 0
+    use_displaced_mesh = true
+    block = 0
+  []
+  [solid_y]
+    type = ADStressDivergenceTensors
+    variable = &#x27;disp_y&#x27;
+    component = 1
+    use_displaced_mesh = true
+    save_in = fy
+    block = 0
+  []
+[]
+
+[Materials]
+  [fracture_properties]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;K G l Gc psic viscosity&#x27;
+    prop_values = &#x27;${K} ${G} ${l} ${Gc} ${psic} ${eta}&#x27;
+    block = 0
+  []
+  [degradation]
+    type = ADDerivativeParsedMaterial
+    property_name = g
+    coupled_variables = d
+    expression = &#x27;(1-d)^2/(1+(0.5*Gc/c0/l/psic-1)*d)^2*(1-eta)+eta&#x27;
+    material_property_names = &#x27;Gc c0 l psic&#x27;
+    constant_names = &#x27;eta &#x27;
+    constant_expressions = &#x27;5e-3&#x27;
+    derivative_order = 1
+    block = 0
+  []
+  [crack_geometric]
+    type = CrackGeometricFunction
+    property_name = alpha
+    expression = &#x27;d&#x27;
+    phase_field = d
+    block = 0
+  []
+  [defgrad]
+    type = ComputeDeformationGradient
+    block = 0
+  []
+  [hencky]
+    type = HenckyIsotropicElasticity
+    bulk_modulus = K
+    shear_modulus = G
+    phase_field = d
+    degradation_function = g
+    output_properties = &#x27;psie_active&#x27;
+    outputs = exodus
+    block = 0
+  []
+  [power_law_hardening]
+    type = PowerLawHardening
+    yield_stress = ${sigma_y}
+    exponent = ${n}
+    reference_plastic_strain = ${ep0}
+    phase_field = d
+    degradation_function = g
+    output_properties = &#x27;psip_active&#x27;
+    outputs = exodus
+    block = 0
+  []
+  [J2]
+    type = LargeDeformationJ2Plasticity
+    hardening_model = power_law_hardening
+    output_properties = &#x27;effective_plastic_strain&#x27;
+    outputs = exodus
+    block = 0
+  []
+  [newtonian_viscosity]
+    type = LargeDeformationNewtonianViscosity
+    block = 0
+  []
+  [stress]
+    type = ComputeLargeDeformationStress
+    elasticity_model = hencky
+    plasticity_model = J2
+    viscoelasticity_model = newtonian_viscosity
+    block = 0
+  []
+[]
+
+[BCs]
+  [ydisp]
+    type = FunctionDirichletBC
+    variable = &#x27;disp_y&#x27;
+    boundary = &#x27;left right&#x27;
+    function = &#x27;t&#x27;
+    preset = false
+  []
+  [top_xfix]
+    type = DirichletBC
+    variable = &#x27;disp_x&#x27;
+    boundary = &#x27;top&#x27;
+    value = 0
+  []
+  [top_yfix]
+    type = DirichletBC
+    variable = &#x27;disp_y&#x27;
+    boundary = &#x27;top&#x27;
+    value = 0
+  []
+[]
+
+[Postprocessors]
+  [force]
+    type = NodalSum
+    variable = fy
+    boundary = top
+  []
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+  petsc_options_value = &#x27;lu       superlu_dist                 &#x27;
+
+  nl_rel_tol = 1e-06
+  nl_abs_tol = 1e-06
+  nl_max_its = 50
+
+  automatic_scaling = true
+  [TimeStepper]
+    type = FunctionDT
+    function = &#x27;0.05&#x27;
+    growth_factor = 1.5
+    cutback_factor_at_failure = 0.5
+  []
+  end_time = 6.4
+[]
+
+[Outputs]
+  print_linear_residuals = false
+  csv = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="a4a901fc-331e-4518-ae36-d7532c9b749b"><div class="modal-content"><h4>(tutorials/homogeneous_cube/Hencky_J2_arrheniuslawhardening/elastoplasticity.i)</h4><pre style="max-height:350px;"><code class="language-moose">a = 250
+ratio = 4
+
+psic = 15
+Gc = 1.38e5
+l = &#x27;${fparse ratio * a}&#x27;
+
+E = 6.88e4
+nu = 0.33
+K = &#x27;${fparse E/3/(1-2*nu)}&#x27;
+G = &#x27;${fparse E/2/(1+nu)}&#x27;
+
+sigma_0 = 2e-7
+Q = &#x27;${fparse 1.4054e8}&#x27;
+R = 8.3143e3
+T = 800
+eps = &#x27;${fparse E/100}&#x27;
+
+tqf = 0
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+  volumetric_locking_correction = true
+[]
+
+[MultiApps]
+  [fracture]
+    type = TransientMultiApp
+    input_files = &#x27;fracture.i&#x27;
+    cli_args = &#x27;a=${a};psic=${psic};Gc=${Gc};l=${l} &#x27;
+    execute_on = &#x27;TIMESTEP_END&#x27;
+  []
+[]
+
+[Transfers]
+  [from_fracture]
+    type = MultiAppCopyTransfer
+    from_multi_app = &#x27;fracture&#x27;
+    variable = d
+    source_variable = d
+  []
+  [to_fracture]
+    type = MultiAppCopyTransfer
+    to_multi_app = &#x27;fracture&#x27;
+    variable = &#x27;psie_active psip_active&#x27;
+    source_variable = &#x27;psie_active psip_active&#x27;
+  []
+[]
+
+[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 3
+    xmax = ${a}
+    ymax = ${a}
+    zmax = ${a}
+  []
+[]
+
+[Variables]
+  [disp_x]
+  []
+  [disp_y]
+  []
+  [disp_z]
+  []
+[]
+
+[AuxVariables]
+  [d]
+  []
+  [T]
+    initial_condition = ${T}
+  []
+  [stress]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [F]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+[]
+
+[AuxKernels]
+  [stress]
+    type = ADRankTwoAux
+    variable = stress
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+  []
+  [F]
+    type = ADRankTwoAux
+    variable = F
+    rank_two_tensor = deformation_gradient
+    index_i = 1
+    index_j = 1
+  []
+[]
+
+[Kernels]
+  [solid_x]
+    type = ADStressDivergenceTensors
+    variable = disp_x
+    component = 0
+    use_displaced_mesh = true
+  []
+  [solid_y]
+    type = ADStressDivergenceTensors
+    variable = disp_y
+    component = 1
+    use_displaced_mesh = true
+  []
+  [solid_z]
+    type = ADStressDivergenceTensors
+    variable = disp_z
+    component = 2
+    use_displaced_mesh = true
+  []
+[]
+
+[Materials]
+  [bulk_properties]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;K G l Gc psic sigma_0 Q&#x27;
+    prop_values = &#x27;${K} ${G} ${l} ${Gc} ${psic} ${sigma_0} ${Q}&#x27;
+  []
+  [degradation]
+    type = RationalDegradationFunction
+    property_name = g
+    expression = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
+    phase_field = d
+    material_property_names = &#x27;Gc psic xi c0 l &#x27;
+    parameter_names = &#x27;p a2 a3 eta &#x27;
+    parameter_values = &#x27;2 -0.5 0 1e-6&#x27;
+  []
+  [crack_geometric]
+    type = CrackGeometricFunction
+    property_name = alpha
+    expression = &#x27;d&#x27;
+    phase_field = d
+  []
+  [arrhenius_law]
+    type = ArrheniusLaw
+    arrhenius_coefficient = A
+    activation_energy = Q
+    ideal_gas_constant = ${R}
+    temperature = T
+  []
+  [defgrad]
+    type = ComputeDeformationGradient
+  []
+  [hencky]
+    type = HenckyIsotropicElasticity
+    bulk_modulus = K
+    shear_modulus = G
+    phase_field = d
+    degradation_function = g
+    output_properties = &#x27;psie_active&#x27;
+    outputs = exodus
+  []
+  [arrhenius_law_hardening]
+    type = ArrheniusLawHardening
+    reference_stress = sigma_0
+    arrhenius_coefficient = A
+    eps = ${eps}
+    phase_field = d
+    degradation_function = g
+    taylor_quinney_factor = ${tqf}
+    temperature = T
+    output_properties = &#x27;psip_active&#x27;
+    outputs = exodus
+  []
+  [J2]
+    type = LargeDeformationJ2Plasticity
+    hardening_model = arrhenius_law_hardening
+  []
+  [stress]
+    type = ComputeLargeDeformationStress
+    elasticity_model = hencky
+    plasticity_model = J2
+  []
+[]
+
+[BCs]
+  [xfix]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;left&#x27;
+    value = 0
+  []
+  [yfix]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom&#x27;
+    value = 0
+  []
+  [zfix]
+    type = DirichletBC
+    variable = disp_z
+    boundary = &#x27;back&#x27;
+    value = 0
+  []
+  [ydisp]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;top&#x27;
+    function = &#x27;t&#x27;
+    preset = false
+  []
+[]
+
+[Postprocessors]
+  [F]
+    type = ElementAverageValue
+    variable = F
+  []
+  [stress]
+    type = ElementAverageValue
+    variable = stress
+  []
+  [d]
+    type = ElementAverageValue
+    variable = d
+  []
+  [ep]
+    type = ADElementAverageMaterialProperty
+    mat_prop = effective_plastic_strain
+  []
+  # [heat]
+  #   type = ADElementAverageMaterialProperty
+  #   mat_prop = plastic_heat_generation
+  # []
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;lu&#x27;
+
+  nl_rel_tol = 1e-08
+  nl_abs_tol = 1e-10
+  nl_max_its = 50
+
+  dt = &#x27;${fparse 0.0005 * a}&#x27;
+  end_time = &#x27;${fparse 0.1 * a}&#x27;
+
+  automatic_scaling = true
+
+  fixed_point_max_its = 100
+  fixed_point_rel_tol = 1e-08
+  fixed_point_abs_tol = 1e-10
+  accept_on_max_fixed_point_iteration = true
+  abort_on_solve_fail = true
+[]
+
+[Outputs]
+  file_base = &#x27;stress_deformation&#x27;
+  print_linear_residuals = false
+  csv = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="e40c7897-28b3-4d1d-b127-9705d1425c7f"><div class="modal-content"><h4>(tutorials/homogeneous_cube/CNH_J2_powerlawhardening/elastoplasticity_fracture.i)</h4><pre style="max-height:350px;"><code class="language-moose">a = 250
+R = 4
+
+psic = 15
+Gc = 1.38e5
+l = &#x27;${fparse R * a}&#x27;
+
+E = 6.88e4
+nu = 0.33
+K = &#x27;${fparse E/3/(1-2*nu)}&#x27;
+G = &#x27;${fparse E/2/(1+nu)}&#x27;
+
+sigma_y = 320
+n = 5
+ep0 = 0.01
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+  volumetric_locking_correction = true
+[]
+
+[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 3
+    xmax = ${a}
+    ymax = ${a}
+    zmax = ${a}
+  []
+[]
+
+[Variables]
+  [disp_x]
+  []
+  [disp_y]
+  []
+  [disp_z]
+  []
+  [d]
+  []
+[]
+
+[AuxVariables]
+  [bounds_dummy]
+  []
+  [stress]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [F]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+[]
+
+[Bounds]
+  [irreversibility]
+    type = VariableOldValueBounds
+    variable = bounds_dummy
+    bounded_variable = d
+    bound_type = lower
+  []
+  [upper]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = d
+    bound_type = upper
+    bound_value = 1
+  []
+[]
+
+[AuxKernels]
+  [stress]
+    type = ADRankTwoAux
+    variable = stress
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+  []
+  [F]
+    type = ADRankTwoAux
+    variable = F
+    rank_two_tensor = deformation_gradient
+    index_i = 1
+    index_j = 1
+  []
+[]
+
+[Kernels]
+  [solid_x]
+    type = ADStressDivergenceTensors
+    variable = disp_x
+    component = 0
+    use_displaced_mesh = true
+  []
+  [solid_y]
+    type = ADStressDivergenceTensors
+    variable = disp_y
+    component = 1
+    use_displaced_mesh = true
+  []
+  [solid_z]
+    type = ADStressDivergenceTensors
+    variable = disp_z
+    component = 2
+    use_displaced_mesh = true
+  []
+  [pff_diff]
+    type = ADPFFDiffusion
+    variable = d
+  []
+  [pff_source]
+    type = ADPFFSource
+    variable = d
+    free_energy = psi
+  []
+[]
+
+[Materials]
+  [bulk_properties]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;K G l Gc psic&#x27;
+    prop_values = &#x27;${K} ${G} ${l} ${Gc} ${psic}&#x27;
+  []
+  [degradation]
+    type = RationalDegradationFunction
+    property_name = g
+    expression = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
+    phase_field = d
+    material_property_names = &#x27;Gc psic xi c0 l &#x27;
+    parameter_names = &#x27;p a2 a3 eta &#x27;
+    parameter_values = &#x27;2 -0.5 0 1e-6&#x27;
+  []
+  [crack_geometric]
+    type = CrackGeometricFunction
+    property_name = alpha
+    expression = &#x27;d&#x27;
+    phase_field = d
+  []
+  [defgrad]
+    type = ComputeDeformationGradient
+  []
+  [cnh]
+    type = CNHIsotropicElasticity
+    bulk_modulus = K
+    shear_modulus = G
+    phase_field = d
+    degradation_function = g
+  []
+  [power_law_hardening]
+    type = PowerLawHardening
+    yield_stress = ${sigma_y}
+    exponent = ${n}
+    reference_plastic_strain = ${ep0}
+    phase_field = d
+    degradation_function = g
+  []
+  [J2]
+    type = LargeDeformationJ2Plasticity
+    hardening_model = power_law_hardening
+  []
+  [stress]
+    type = ComputeLargeDeformationStress
+    elasticity_model = cnh
+    plasticity_model = J2
+  []
+  [psi]
+    type = ADDerivativeParsedMaterial
+    property_name = psi
+    expression = &#x27;alpha*Gc/c0/l+psie+psip&#x27;
+    coupled_variables = d
+    material_property_names = &#x27;alpha(d) g(d) Gc c0 l psie(d) psip(d)&#x27;
+    derivative_order = 1
+  []
+[]
+
+[BCs]
+  [xfix]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;left&#x27;
+    value = 0
+  []
+  [yfix]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom&#x27;
+    value = 0
+  []
+  [zfix]
+    type = DirichletBC
+    variable = disp_z
+    boundary = &#x27;back&#x27;
+    value = 0
+  []
+  [ydisp]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;top&#x27;
+    function = &#x27;t&#x27;
+    preset = false
+  []
+[]
+
+[Postprocessors]
+  [F]
+    type = ElementAverageValue
+    variable = F
+  []
+  [stress]
+    type = ElementAverageValue
+    variable = stress
+  []
+  [d]
+    type = ElementAverageValue
+    variable = d
+  []
+  [ep]
+    type = ADElementAverageMaterialProperty
+    mat_prop = effective_plastic_strain
+  []
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -snes_type   -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       vinewtonrsls NONZERO               1e-10&#x27;
+
+  line_search = none
+
+  nl_rel_tol = 1e-08
+  nl_abs_tol = 1e-10
+  nl_max_its = 50
+
+  dt = &#x27;${fparse 0.0001 * a}&#x27;
+  end_time = &#x27;${fparse 0.1 * a}&#x27;
+
+  automatic_scaling = true
+
+  abort_on_solve_fail = true
+[]
+
+[Outputs]
+  file_base = stress_deformation
+  print_linear_residuals = false
+  csv = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="82a466d4-b460-4e01-9cf2-483c49d627bf"><div class="modal-content"><h4>(tutorials/homogeneous_cube/Hencky_J2_powerlawhardening/elastoplasticity_fracture.i)</h4><pre style="max-height:350px;"><code class="language-moose">a = 250
+R = 4
+
+psic = 15
+Gc = 1.38e5
+l = &#x27;${fparse R * a}&#x27;
+
+E = 6.88e4
+nu = 0.33
+K = &#x27;${fparse E/3/(1-2*nu)}&#x27;
+G = &#x27;${fparse E/2/(1+nu)}&#x27;
+
+sigma_y = 320
+n = 5
+ep0 = 0.01
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+  volumetric_locking_correction = true
+[]
+
+[Mesh]
+  [gmg]
+    type = GeneratedMeshGenerator
+    dim = 3
+    xmax = ${a}
+    ymax = ${a}
+    zmax = ${a}
+  []
+[]
+
+[Variables]
+  [disp_x]
+  []
+  [disp_y]
+  []
+  [disp_z]
+  []
+  [d]
+  []
+[]
+
+[AuxVariables]
+  [bounds_dummy]
+  []
+  [stress]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [F]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+[]
+
+[Bounds]
+  [irreversibility]
+    type = VariableOldValueBounds
+    variable = bounds_dummy
+    bounded_variable = d
+    bound_type = lower
+  []
+  [upper]
+    type = ConstantBounds
+    variable = bounds_dummy
+    bounded_variable = d
+    bound_type = upper
+    bound_value = 1
+  []
+[]
+
+[AuxKernels]
+  [stress]
+    type = ADRankTwoAux
+    variable = stress
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+  []
+  [F]
+    type = ADRankTwoAux
+    variable = F
+    rank_two_tensor = deformation_gradient
+    index_i = 1
+    index_j = 1
+  []
+[]
+
+[Kernels]
+  [solid_x]
+    type = ADStressDivergenceTensors
+    variable = disp_x
+    component = 0
+    use_displaced_mesh = true
+  []
+  [solid_y]
+    type = ADStressDivergenceTensors
+    variable = disp_y
+    component = 1
+    use_displaced_mesh = true
+  []
+  [solid_z]
+    type = ADStressDivergenceTensors
+    variable = disp_z
+    component = 2
+    use_displaced_mesh = true
+  []
+  [pff_diff]
+    type = ADPFFDiffusion
+    variable = d
+  []
+  [pff_source]
+    type = ADPFFSource
+    variable = d
+    free_energy = psi
+  []
+[]
+
+[Materials]
+  [bulk_properties]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;K G l Gc psic&#x27;
+    prop_values = &#x27;${K} ${G} ${l} ${Gc} ${psic}&#x27;
+  []
+  [degradation]
+    type = RationalDegradationFunction
+    property_name = g
+    expression = (1-d)^p/((1-d)^p+(Gc/psic*xi/c0/l)*d*(1+a2*d+a2*a3*d^2))*(1-eta)+eta
+    phase_field = d
+    material_property_names = &#x27;Gc psic xi c0 l &#x27;
+    parameter_names = &#x27;p a2 a3 eta &#x27;
+    parameter_values = &#x27;2 -0.5 0 1e-6&#x27;
+  []
+  [crack_geometric]
+    type = CrackGeometricFunction
+    property_name = alpha
+    expression = &#x27;d&#x27;
+    phase_field = d
+  []
+  [defgrad]
+    type = ComputeDeformationGradient
+  []
+  [hencky]
+    type = HenckyIsotropicElasticity
+    bulk_modulus = K
+    shear_modulus = G
+    phase_field = d
+    degradation_function = g
+  []
+  [power_law_hardening]
+    type = PowerLawHardening
+    yield_stress = ${sigma_y}
+    exponent = ${n}
+    reference_plastic_strain = ${ep0}
+    phase_field = d
+    degradation_function = g
+  []
+  [J2]
+    type = LargeDeformationJ2Plasticity
+    hardening_model = power_law_hardening
+  []
+  [stress]
+    type = ComputeLargeDeformationStress
+    elasticity_model = hencky
+    plasticity_model = J2
+  []
+  [psi]
+    type = ADDerivativeParsedMaterial
+    property_name = psi
+    expression = &#x27;alpha*Gc/c0/l+psie+psip&#x27;
+    coupled_variables = d
+    material_property_names = &#x27;alpha(d) g(d) Gc c0 l psie(d) psip(d)&#x27;
+    derivative_order = 1
+  []
+[]
+
+[BCs]
+  [xfix]
+    type = DirichletBC
+    variable = disp_x
+    boundary = &#x27;left&#x27;
+    value = 0
+  []
+  [yfix]
+    type = DirichletBC
+    variable = disp_y
+    boundary = &#x27;bottom&#x27;
+    value = 0
+  []
+  [zfix]
+    type = DirichletBC
+    variable = disp_z
+    boundary = &#x27;back&#x27;
+    value = 0
+  []
+  [ydisp]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = &#x27;top&#x27;
+    function = &#x27;t&#x27;
+    preset = false
+  []
+[]
+
+[Postprocessors]
+  [F]
+    type = ElementAverageValue
+    variable = F
+  []
+  [stress]
+    type = ElementAverageValue
+    variable = stress
+  []
+  [d]
+    type = ElementAverageValue
+    variable = d
+  []
+  [ep]
+    type = ADElementAverageMaterialProperty
+    mat_prop = effective_plastic_strain
+  []
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -snes_type   -pc_factor_shift_type -pc_factor_shift_amount&#x27;
+  petsc_options_value = &#x27;lu       vinewtonrsls NONZERO               1e-10&#x27;
+
+  line_search = none
+
+  nl_rel_tol = 1e-08
+  nl_abs_tol = 1e-10
+  nl_max_its = 50
+
+  dt = &#x27;${fparse 0.0001 * a}&#x27;
+  end_time = &#x27;${fparse 0.1 * a}&#x27;
+
+  automatic_scaling = true
+
+  abort_on_solve_fail = true
+[]
+
+[Outputs]
+  file_base = stress_deformation
+  print_linear_residuals = false
+  csv = true
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="b12e0561-4bb8-47a7-aace-42b9723d315c"><div class="modal-content"><h4>(tutorials/large_deformation/elastoplasticity.i)</h4><pre style="max-height:350px;"><code class="language-moose">E = 2.1e5
+nu = 0.3
+K = &#x27;${fparse E/3/(1-2*nu)}&#x27;
+G = &#x27;${fparse E/2/(1+nu)}&#x27;
+sigma_y = 50
+n = 5
+ep0 = 0.001
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+  volumetric_locking_correction = true
+[]
+
+[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 30
+    ny = 15
+    ymax = 0.5
+  []
+  [noncrack]
+    type = BoundingBoxNodeSetGenerator
+    input = gen
+    new_boundary = noncrack
+    bottom_left = &#x27;0.5 0 0&#x27;
+    top_right = &#x27;1 0 0&#x27;
+  []
+  construct_side_list_from_node_list = true
+[]
+
+[Variables]
+  [disp_x]
+  []
+  [disp_y]
+  []
+[]
+
+[AuxVariables]
+  [fy]
+  []
+  [d]
+  []
+[]
+
+[Kernels]
+  [solid_x]
+    type = ADStressDivergenceTensors
+    variable = disp_x
+    component = 0
+    use_displaced_mesh = true
+  []
+  [solid_y]
+    type = ADStressDivergenceTensors
+    variable = disp_y
+    component = 1
+    save_in = fy
+    use_displaced_mesh = true
+  []
+[]
+
+[BCs]
+  [ydisp]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = top
+    function = &#x27;t&#x27;
+  []
+  [yfix]
+    type = DirichletBC
+    variable = disp_y
+    boundary = noncrack
+    value = 0
+  []
+  [xfix]
+    type = DirichletBC
+    variable = disp_x
+    boundary = top
+    value = 0
+  []
+[]
+
+[Materials]
+  [bulk]
+    type = ADGenericConstantMaterial
+    prop_names = &#x27;K G&#x27;
+    prop_values = &#x27;${K} ${G}&#x27;
+  []
+  [no_degradation]
+    type = NoDegradation
+    property_name = g
+    expression = 1
+    phase_field = d
+  []
+  [defgrad]
+    type = ComputeDeformationGradient
+  []
+  [hencky]
+    type = HenckyIsotropicElasticity
+    bulk_modulus = K
+    shear_modulus = G
+    phase_field = d
+    degradation_function = g
+  []
+  [power_law_hardening]
+    type = PowerLawHardening
+    yield_stress = ${sigma_y}
+    exponent = ${n}
+    reference_plastic_strain = ${ep0}
+    phase_field = d
+    degradation_function = g
+  []
+  [J2]
+    type = LargeDeformationJ2Plasticity
+    hardening_model = power_law_hardening
+    output_properties = &#x27;effective_plastic_strain&#x27;
+    outputs = exodus
+  []
+  [stress]
+    type = ComputeLargeDeformationStress
+    elasticity_model = hencky
+    plasticity_model = J2
+    output_properties = &#x27;stress&#x27;
+    outputs = exodus
+  []
+[]
+
+[Postprocessors]
+  [Fy]
+    type = NodalSum
+    variable = fy
+    boundary = top
+  []
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+  petsc_options_value = &#x27;lu       superlu_dist                 &#x27;
+  automatic_scaling = true
+
+  nl_rel_tol = 1e-8
+  nl_abs_tol = 1e-10
+
+  dt = 1e-5
+  end_time = 1e-3
+[]
+
+[Outputs]
+  exodus = true
+  print_linear_residuals = false
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="54a92fa7-aad0-4b8f-8c56-29271da40423"><div class="modal-content"><h4>(include/materials/large_deformation_models/LargeDeformationJ2PowerLawCreep.h)</h4><pre style="max-height:350px;"><code class="language-cpp">// This file is part of the RACCOON application
+// being developed at Dolbow lab at Duke University
+// http://dolbow.pratt.duke.edu
+
+#pragma once
+
+#include &quot;LargeDeformationJ2Plasticity.h&quot;
+
+class LargeDeformationJ2PowerLawCreep : public LargeDeformationJ2Plasticity
+{
+public:
+  static InputParameters validParams();
+
+  LargeDeformationJ2PowerLawCreep(const InputParameters &amp; parameters);
+
+protected:
+  virtual ADReal computeResidual(const ADReal &amp; effective_trial_stress,
+                                 const ADReal &amp; delta_ep) override;
+
+  virtual ADReal computeDerivative(const ADReal &amp; effective_trial_stress,
+                                   const ADReal &amp; delta_ep) override;
+
+  // @{ The parameters of the power law creep update
+  const Real _coefficient;
+  const Real _exponent;
+  // @}
+};
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../../js/init.js"></script><script type="text/javascript" src="../../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../../js/sqa_moose.js"></script>

@@ -1,0 +1,663 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Physics system | RACCOON</title><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" alt="GitHub wordmark" class="github-mark"></img><img src="../../media/framework/github-mark.png" alt="GitHub logo" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="f424aa2b-934b-42b5-a0d6-e95bc44da2ee" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="95f2d77c-89d5-496a-bfbf-867de16214f5" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="def401e6-05b0-4ce5-a524-8665c3c52170" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="4fd49c31-4e88-4b0d-a201-a262aacab6f2" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="cf30a9d2-bd62-41b7-8868-d216d1a01378"><i class="material-icons">menu</i></a><ul class="sidenav" id="cf30a9d2-bd62-41b7-8868-d216d1a01378"><li><a href="#!" class="dropdown-trigger" data-target="4fced971-a51d-4947-8693-15d1b031fad2" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="a9eee6e3-a8db-4ca2-8942-474407849eee" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="1e230c45-1926-492c-9288-16f30251e7f3" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="179f4c30-d641-4508-b354-e824a93cfc28" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="f424aa2b-934b-42b5-a0d6-e95bc44da2ee"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="95f2d77c-89d5-496a-bfbf-867de16214f5"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="def401e6-05b0-4ce5-a524-8665c3c52170"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="4fd49c31-4e88-4b0d-a201-a262aacab6f2"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../index.html">Complete syntax</a></li><li><a href="../raccoon.html">RACCOON syntax</a></li><li><a href="../solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../phase_field.html">Phase field syntax</a></li><li><a href="../heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="4fced971-a51d-4947-8693-15d1b031fad2"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="a9eee6e3-a8db-4ca2-8942-474407849eee"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="1e230c45-1926-492c-9288-16f30251e7f3"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="179f4c30-d641-4508-b354-e824a93cfc28"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../index.html">Complete syntax</a></li><li><a href="../raccoon.html">RACCOON syntax</a></li><li><a href="../solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../phase_field.html">Phase field syntax</a></li><li><a href="../heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="8180fc7a-b2b9-4ab5-ae23-d70f40dac5f7" data-section-level="1" data-section-text="Physics system"><h1 id="physics-system">Physics system</h1><p>The <code>Physics</code> system is meant to standardize the process of adding an equation and its discretization to a simulation. It is based on the <a href="../../source/actions/Action.html">Action system</a>, with additional APIs defined to support the definition of an equation.</p><section id="378e01e7-857a-47fe-8925-74ca6c0a2923" data-section-level="2" data-section-text="Interaction with Components"><h2 id="interaction-with-components">Interaction with Components</h2><p>The interaction with Components is one of the main goals of the Physics system. Stay tuned for future developments.</p></section><section id="d25cf96b-7d66-40b2-bcba-f33d73074dd4" data-section-level="2" data-section-text="Generating a traditional input from a Physics input"><h2 id="generating-a-traditional-input-from-a-physics-input">Generating a traditional input from a Physics input</h2><p>By substituting the traditional <a href="../Problem/index.html">Problem</a> in your simulation for the <a href="../../source/problems/DumpObjectsProblem.html">DumpObjectsProblem</a>, you can generate the equivalent input using the traditional Kernel/BCs/etc syntax to an input using <code>Physics</code>. This is useful for debugging purposes.</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><i class="material-icons moose-inline-icon">comment</i><span class="moose-alert-title-brand">note</span></div><div class="card-content"><div class="moose-alert-content"><p>This is not currently possible for thermal hydraulics inputs which use a specific problem.</p></div></div></div></section><section id="4a718de5-9374-495c-916f-814950be37be" data-section-level="2" data-section-text="Implementing your own Physics"><h2 id="implementing-your-own-physics">Implementing your own Physics</h2><p>If you have <em>not</em> created the kernels, boundary conditions, and so on, the <code>Physics</code> system is not a good place to start. You must start with a working implementation of your equations before attempting to create a <code>Physics</code> object.</p><p>If you do have a working set of kernels, boundary conditions, and other MOOSE objects, that let you solve an equation in MOOSE, you should consider the following before implementing a <code>Physics</code>:</p><ul class="browser-default"><li><p>is user-friendliness a priority for the expansion of my work? </p></li><li><p>is the current workflow unsatisfactory in that regard? </p></li><li><p>would creating objects programmatically reduce the potential for user-error while allowing sufficient flexibility?</p></li></ul><p>If the answer is yes to all three, then you may start implementing a <code>Physics</code> object for your equation. The simple concepts behind the simulation setup in a <code>Physics</code> is that the <code>add&lt;various MOOSE object&gt;</code> routines are all called on the <code>Physics</code> and they are all called at the same time in the setup as with a regular input file.</p><p>So for example, to make a <code>DiffusionPhysics</code> create a finite element diffusion kernel, one can override <code>addFEKernels</code> like this:</p><pre style="max-height:350px;"><code class="language-text">
+void
+DiffusionPhysics::addFEKernels()
+{
+  {
+    const std::string kernel_type = &quot;ADDiffusion&quot;;
+    InputParameters params = getFactory().getValidParams(kernel_type);
+    params.set&lt;NonlinearVariableName&gt;(&quot;variable&quot;) = _temperature_name;  // we saved the name of the variable as a class attribute
+    getProblem().addKernel(kernel_type, name() + &quot;_diffusion&quot;, params);
+  }
+}
+</code></pre><p>Notice how we use the <code>PhysicsBase::getFactory()</code> routine to get access to the <code>Factory</code> that will get the parameters we need to fill, and the <code>PhysicsBase::getProblem()</code> to get access to the <code>Problem</code> which stores the objects created. We want the <code>Physics</code> to be able to be created with various types of <code>Problem</code> classes.</p><p>If you already have an <code>Action</code> defined for your equations, converting it to a <code>Physics</code> should be fairly straightforward. The principal advantages of doing so are:</p><ul class="browser-default"><li><p>benefit from new APIs implemented in the <code>Physics</code> system </p></li><li><p>a standardized definition of the equation, which will help others maintain your <code>Action</code> </p></li><li><p>future ability to leverage the <code>Components</code> system to define a complex system</p></li></ul><section id="d06e7002-0f77-4860-9745-0455806b9b3b" data-section-level="3" data-section-text="Advice on implementation"><h3 id="advice-on-implementation">Advice on implementation</h3><section id="0e44a266-1291-4c17-a799-d1f89c790894" data-section-level="4" data-section-text="Add a lot of checks"><h4 id="add-a-lot-of-checks">Add a lot of checks</h4><p>Please add as much parameter checking as you can. The <code>PhysicsBase</code> class inherits the <code>InputParameterCheckUtils</code> that implements routines like the ones below that let you check that the user inputs to your physics are correct.</p><pre style="max-height:350px;"><code class="language-cpp">InputParametersChecksUtils&lt;C&gt;::checkVectorParamsSameLength(const std::string &amp; param1,
+                                                           const std::string &amp; param2) const
+{
+  assertParamDefined&lt;std::vector&lt;T&gt;&gt;(param1);
+  assertParamDefined&lt;std::vector&lt;S&gt;&gt;(param2);
+
+  if (forwardIsParamValid(param1) &amp;&amp; forwardIsParamValid(param2))
+  {
+    const auto size_1 = forwardGetParam&lt;std::vector&lt;T&gt;&gt;(param1).size();
+    const auto size_2 = forwardGetParam&lt;std::vector&lt;S&gt;&gt;(param2).size();
+    if (size_1 != size_2)
+      forwardParamError(param1,
+                        &quot;Vector parameters &#x27;&quot; + param1 + &quot;&#x27; (size &quot; + std::to_string(size_1) +
+                            &quot;) and &#x27;&quot; + param2 + &quot;&#x27; (size &quot; + std::to_string(size_2) +
+                            &quot;) must be the same size&quot;);
+  }
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#e440cbdb-0b31-4925-a498-d42c4833d017">(moose/framework/include/utils/InputParametersChecksUtils.h)</a><p>Using this utility, consider checking that:</p><ul class="browser-default"><li><p>the size of vector, vector of vectors, <code>MultiMooseEnum</code> and map parameters are consistent </p></li><li><p>if a parameter is passed it must be used, for example if one parameter conditions the use of other parameters </p></li><li><p>the block restrictions are consistent between the <code>Physics</code> and objects it defines</p></li></ul></section><section id="e8bd508d-fabc-4b1f-8fd7-7fabe8b98029" data-section-level="4" data-section-text="Separate the definition of the equation from its discretization"><h4 id="separate-the-definition-of-the-equation-from-its-discretization">Separate the definition of the equation from its discretization</h4><p>You may consider creating a <code>PhysicsBase</code> class to hold the parameters that are shared between all the implementations of the equations with each discretization. This will greatly facilitate switching between discretizations for users. It will also maximize code re-use in the definition and retrieval of parameters, and in the attributes of the various discretized <code>Physics</code> classes.</p><p>Physics and spatial discretizations are as separated as we could make them, but they are still very much intertwined. So when you are adding a parameter you need to think about:</p><ul class="browser-default"><li><p>is this more tied to the strong form of the equation? If so then it likely belongs in a <code>XYZPhysicsBase</code> base class </p></li><li><p>is this more tied to the discretization of the equation? If so then it likely belong in the derived, user-instantiated, <code>XYZPhysics(CG/DG/HDG/FV/LinearFV)</code> class.</p></li></ul></section><section id="d7e9dfda-220a-4a91-8848-372a142a7651" data-section-level="4" data-section-text="Rules for implementation of Physics with regards to restarting variables or using initial conditions"><h4 id="rules-for-implementation-of-physics-with-regards-to-restarting-variables-or-using-initial-conditions">Rules for implementation of Physics with regards to restarting variables or using initial conditions</h4><p>It is often convenient to define initial conditions in the <code>Physics</code>, and also to be able to restart the variables defined by the <code>Physics</code> automatically with minimal user effort. User-defined initial conditions are convenient to keep the input syntax compact, and default initial conditions are useful to avoid non-physical initial states. However, all these objectives conflict when the user defines parameters for initialization in a restarted simulation. To make things simple, developers of <code>Physics</code> should follow these rules, which we developed based on user feedback.</p><ul class="browser-default"><li><p>if the <code>initialize_variables_from_mesh_file</code> parameter is set to true, then: - skip adding initial conditions - error if an initial condition parameter is passed by the user to the <code>Physics</code> </p></li><li><p>if the <code>Physics</code> is set to use (define kernels for) variables that are defined outside the <code>Physics</code>, then: - skip adding initial conditions - error if an initial condition parameter is passed by the user to the <code>Physics</code> </p></li><li><p>else, if the user specifies initial conditions for variables in the <code>Physics</code> - always obey these parameters and add the initial conditions, even if the simulation is restarting - as a sanity check, the <a href="../../source/problems/FEProblemBase.html">FEProblemBase</a> will error during restarts, unless <a href="#1ee36558-b10b-4c40-b737-9fafe316f789" class="moose-modal-link modal-trigger">&quot;allow_initial_conditions_with_restart&quot;</a> is set to true </p></li><li><p>else, if the user does not specify initial conditions in the <code>Physics</code>, but the <code>Physics</code> does define default values for the initial conditions - if the simulation is restarting (from <a href="../../source/outputs/Checkpoint.html">Checkpoint</a> notably), skip adding the default initial conditions - (redundant due to the first rule) if the <code>initialize_variables_from_mesh_file</code> parameter is set to true, skip adding the default initial conditions - (redundant due to the second rule) if the <code>Physics</code> is set to use (define kernels for) variables that are defined outside the <code>Physics</code>, skip adding the default initial conditions</p></li></ul><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><i class="material-icons moose-inline-icon">comment</i><span class="moose-alert-title-brand">note</span></div><div class="card-content"><div class="moose-alert-content"><p>For <code>initialize_variables_from_mesh_file</code> to work correctly, you must use the <code>saveNonlinearVariable()</code> and <code>saveAuxiliaryVariable()</code> <code>Physics</code> routines in the constructor of your <code>Physics</code> on any variable that you desire to be restarted.</p></div></div></div></section></section></section></section><div class="moose-modal modal" id="e440cbdb-0b31-4925-a498-d42c4833d017"><div class="modal-content"><h4>(moose/framework/include/utils/InputParametersChecksUtils.h)</h4><pre style="max-height:350px;"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://mooseframework.inl.gov
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#pragma once
+
+#include &quot;InputParameters.h&quot;
+#include &quot;Moose.h&quot;
+
+// C++ includes
+#include &lt;cstdlib&gt;
+#include &lt;tuple&gt;
+#include &lt;type_traits&gt;
+
+/**
+ * Utility class to help check parameters.
+ * This will be replaced by every check being baked into the validParams() logic, one day
+ * @tparam C type of the class using this utility
+ * C must be derived from both MooseBaseParameterInterface and MooseBaseErrorInterface
+ */
+template &lt;typename C&gt;
+class InputParametersChecksUtils
+{
+public:
+  InputParametersChecksUtils(const C * customer_class) : _customer_class(customer_class) {}
+
+protected:
+  /// Check in debug mode that this parameter has been added to the validParams
+  /// @param param parameter that should be defined
+  template &lt;typename T&gt;
+  void assertParamDefined(const std::string &amp; param) const;
+  /// Check that two parameters are either both set or both not set
+  /// @param param1 first parameter to check
+  /// @param param2 second parameter to check
+  void checkParamsBothSetOrNotSet(const std::string &amp; param1, const std::string &amp; param2) const;
+  /// Check that a parameter is set only if the first one is set to true
+  /// @param param1 first parameter to check, check the second if true
+  /// @param param2 second parameter to check, that should be set if first one is true
+  void checkSecondParamSetOnlyIfFirstOneTrue(const std::string &amp; param1,
+                                             const std::string &amp; param2) const;
+  /// Check that a parameter is set only if the first one is set
+  /// @param param1 first parameter to check, check the second if set
+  /// @param param2 second parameter to check, that should be set if first one is set
+  void checkSecondParamSetOnlyIfFirstOneSet(const std::string &amp; param1,
+                                            const std::string &amp; param2) const;
+  /// Check that a parameter is not set if the first one is set
+  /// @param param1 first parameter to check, check that the second is not if this one is set
+  /// @param param2 second parameter to check, that should not be set if first one is set
+  void checkSecondParamNotSetIfFirstOneSet(const std::string &amp; param1,
+                                           const std::string &amp; param2) const;
+  /// Check that the two vector parameters are of the same length
+  /// @param param1 first vector parameter to compare the size of
+  /// @param param2 second vector parameter to compare the size of
+  template &lt;typename T, typename S&gt;
+  void checkVectorParamsSameLength(const std::string &amp; param1, const std::string &amp; param2) const;
+  /// Check that this vector parameter (with name defined in \p param1) has the same length as the MultiMooseEnum (with name defined in \p param2)
+  /// @param param1 vector parameter to compare the size of
+  /// @param param2 multiMooseEnum parameter to compare the size of
+  template &lt;typename T&gt;
+  void checkVectorParamAndMultiMooseEnumLength(const std::string &amp; param1,
+                                               const std::string &amp; param2) const;
+  /// Check that the two-D vectors have exactly the same length in both dimensions
+  /// @param param1 first two-D vector parameter to check the dimensions of
+  /// @param param2 second two-D vector parameter to check the dimensions of
+  template &lt;typename T, typename S&gt;
+  void checkTwoDVectorParamsSameLength(const std::string &amp; param1,
+                                       const std::string &amp; param2) const;
+  /// Check that there is no overlap between the items in each vector parameters
+  /// Each vector parameter should also have unique items
+  /// @param param_vecs vector of parameters that should not overlap with each other
+  template &lt;typename T&gt;
+  void checkVectorParamsNoOverlap(const std::vector&lt;std::string&gt; &amp; param_vecs) const;
+  /// Check that there is no overlap between the respective items in each vector of the two-D parameters
+  /// Each vector of the two-D vector parameter should also have unique items
+  /// @param param_vecs vector of parameters that should not overlap with each other
+  template &lt;typename T&gt;
+  void checkTwoDVectorParamsNoRespectiveOverlap(const std::vector&lt;std::string&gt; &amp; param_vecs) const;
+  /// Check that each inner vector of a two-D vector parameter are the same size as another one-D vector parameter
+  /// @param param1 two-D vector parameter to check the dimensions of
+  /// @param param2 one-D vector parameter to set the desired size
+  template &lt;typename T, typename S&gt;
+  void checkTwoDVectorParamInnerSameLengthAsOneDVector(const std::string &amp; param1,
+                                                       const std::string &amp; param2) const;
+  /// Check that the size of a two-D vector parameter matches the size of a MultiMooseEnum parameter
+  /// @param param1 two-D vector parameter to check the unrolled size of
+  /// @param param2 MultiMooseEnum parameter to set the desired size
+  template &lt;typename T&gt;
+  void checkTwoDVectorParamMultiMooseEnumSameLength(const std::string &amp; param1,
+                                                    const std::string &amp; param2,
+                                                    const bool error_for_param2) const;
+  /// Check that the user did not pass an empty vector
+  /// @param param1 vector parameter that should not be empty
+  template &lt;typename T&gt;
+  void checkVectorParamNotEmpty(const std::string &amp; param1) const;
+  /// Check that two vector parameters are the same length if both are set
+  /// @param param1 first vector parameter to check the size of
+  /// @param param2 second vector parameter to check the size of
+  template &lt;typename T, typename S&gt;
+  void checkVectorParamsSameLengthIfSet(const std::string &amp; param1,
+                                        const std::string &amp; param2,
+                                        const bool ignore_empty_default_param2 = false) const;
+  /// Check that a vector parameter is the same length as two others combined
+  /// @param param1 vector parameter that provides the target size
+  /// @param param2 vector parameter that provides one term in the combined size
+  /// @param param3 vector parameter that provides one term in the combined size
+  template &lt;typename T, typename S, typename U&gt;
+  void checkVectorParamLengthSameAsCombinedOthers(const std::string &amp; param1,
+                                                  const std::string &amp; param2,
+                                                  const std::string &amp; param3) const;
+
+  /// Check if the user commited errors during the definition of block-wise parameters
+  /// @param block_param_name the name of the parameter that provides the groups of blocks
+  /// @param parameter_names vector of the names of the parameters that are defined on a per-block basis
+  template &lt;typename T&gt;
+  void checkBlockwiseConsistency(const std::string &amp; block_param_name,
+                                 const std::vector&lt;std::string&gt; &amp; parameter_names) const;
+  /// Return whether two parameters are consistent
+  /// @param other_param InputParameters object from another object to check the &#x27;param_name&#x27; parameter in
+  /// @param param_name the name of the parameter to check for consistency
+  template &lt;typename T&gt;
+  bool parameterConsistent(const InputParameters &amp; other_param,
+                           const std::string &amp; param_name) const;
+  /// Emits a warning if two parameters are not equal to each other
+  /// @param other_param InputParameters object from another object to check the &#x27;param_name&#x27; parameter in
+  /// @param param_name the name of the parameter to check for consistency
+  template &lt;typename T&gt;
+  void warnInconsistent(const InputParameters &amp; parameters, const std::string &amp; param_name) const;
+  /// Error messages for parameters that should depend on another parameter
+  /// @param param1 the parameter has not been set to the desired value (for logging purposes)
+  /// @param value_not_set the desired value (for logging purposes)
+  /// @param dependent_params all the parameters that should not have been since &#x27;param1&#x27; was not set to &#x27;value_not_set&#x27;
+  void errorDependentParameter(const std::string &amp; param1,
+                               const std::string &amp; value_not_set,
+                               const std::vector&lt;std::string&gt; &amp; dependent_params) const;
+  /// Error messages for parameters that should depend on another parameter but with a different error message
+  /// @param param1 the parameter has not been set to the desired value (for logging purposes)
+  /// @param value_set the value it has been set to and which is not appropriate (for logging purposes)
+  /// @param dependent_params all the parameters that should not have been set since &#x27;param1&#x27; was set to &#x27;value_set&#x27;
+  void errorInconsistentDependentParameter(const std::string &amp; param1,
+                                           const std::string &amp; value_set,
+                                           const std::vector&lt;std::string&gt; &amp; dependent_params) const;
+
+private:
+  // Convenience routines so that defining new checks feels very similar to coding checks in
+  // MooseObjects and Actions (MooseParameterInterface-derived classes)
+  /// Forwards parameter check to the class using this utility
+  template &lt;typename T&gt;
+  T forwardGetParam(const std::string &amp; param_name) const
+  {
+    return _customer_class-&gt;template getParam&lt;T&gt;(param_name);
+  }
+  /// Forwards obtaining parameters to the class using this utility
+  const InputParameters &amp; forwardParameters() const { return _customer_class-&gt;parameters(); }
+  /// Forwards parameter check to the class using this utility
+  bool forwardIsParamSetByUser(const std::string &amp; param_name) const
+  {
+    return _customer_class-&gt;isParamSetByUser(param_name);
+  }
+  /// Forwards parameter check to the class using this utility
+  bool forwardIsParamValid(const std::string &amp; param_name) const
+  {
+    return _customer_class-&gt;isParamValid(param_name);
+  }
+  /// Forwards error to the class using this utility to get better error messages
+  template &lt;typename... Args&gt;
+  void forwardParamError(Args &amp;&amp;... args) const
+  {
+    _customer_class-&gt;paramError(std::forward&lt;Args&gt;(args)...);
+  }
+  /// Forwards error to the class using this utility to get better error messages
+  template &lt;typename... Args&gt;
+  void forwardMooseError(Args &amp;&amp;... args) const
+  {
+    _customer_class-&gt;mooseError(std::forward&lt;Args&gt;(args)...);
+  }
+  /// Forwards warning to the class using this utility to get better error messages
+  template &lt;typename... Args&gt;
+  void forwardMooseWarning(Args &amp;&amp;... args) const
+  {
+    _customer_class-&gt;mooseWarning(std::forward&lt;Args&gt;(args)...);
+  }
+  /// Get the type of the class using this utility
+  const std::string &amp; forwardType() const { return _customer_class-&gt;type(); }
+  /// Get the name of the class using this utility
+  virtual const std::string &amp; forwardName() const { return _customer_class-&gt;name(); }
+  /// Get the blocks for the class using this utility
+  const std::vector&lt;SubdomainName&gt; &amp; forwardBlocks() const
+  {
+    // TODO Use SFINAE to create a version for classes that do not define blocks()
+    // TODO Use SFINAE to force blocks() to return a reference as well
+    return _customer_class-&gt;blocks();
+  }
+
+  // A pointer to the class using this
+  const C * const _customer_class;
+};
+
+template &lt;typename C&gt;
+template &lt;typename T&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::assertParamDefined(const std::string &amp; libmesh_dbg_var(param)) const
+{
+  mooseAssert(forwardParameters().template have_parameter&lt;T&gt;(param),
+              &quot;Parameter &#x27;&quot; + param + &quot;&#x27; is not defined with type &#x27;&quot; +
+                  MooseUtils::prettyCppType&lt;T&gt;() + &quot;&#x27; in object type &#x27;&quot; +
+                  MooseUtils::prettyCppType(forwardType()) + &quot;&#x27;. Check your code.&quot;);
+}
+
+template &lt;typename C&gt;
+template &lt;typename T, typename S&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkVectorParamsSameLength(const std::string &amp; param1,
+                                                           const std::string &amp; param2) const
+{
+  assertParamDefined&lt;std::vector&lt;T&gt;&gt;(param1);
+  assertParamDefined&lt;std::vector&lt;S&gt;&gt;(param2);
+
+  if (forwardIsParamValid(param1) &amp;&amp; forwardIsParamValid(param2))
+  {
+    const auto size_1 = forwardGetParam&lt;std::vector&lt;T&gt;&gt;(param1).size();
+    const auto size_2 = forwardGetParam&lt;std::vector&lt;S&gt;&gt;(param2).size();
+    if (size_1 != size_2)
+      forwardParamError(param1,
+                        &quot;Vector parameters &#x27;&quot; + param1 + &quot;&#x27; (size &quot; + std::to_string(size_1) +
+                            &quot;) and &#x27;&quot; + param2 + &quot;&#x27; (size &quot; + std::to_string(size_2) +
+                            &quot;) must be the same size&quot;);
+  }
+  // handle empty vector defaults
+  else if (forwardIsParamValid(param1) || forwardIsParamValid(param2))
+    if (forwardGetParam&lt;std::vector&lt;T&gt;&gt;(param1).size() ||
+        forwardGetParam&lt;std::vector&lt;S&gt;&gt;(param2).size())
+      checkParamsBothSetOrNotSet(param1, param2);
+}
+
+template &lt;typename C&gt;
+template &lt;typename T&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkVectorParamAndMultiMooseEnumLength(
+    const std::string &amp; param1, const std::string &amp; param2) const
+{
+  assertParamDefined&lt;std::vector&lt;T&gt;&gt;(param1);
+  assertParamDefined&lt;MultiMooseEnum&gt;(param2);
+
+  if (forwardIsParamValid(param1) &amp;&amp; forwardIsParamValid(param2))
+  {
+    const auto size_1 = forwardGetParam&lt;std::vector&lt;T&gt;&gt;(param1).size();
+    const auto size_2 = forwardGetParam&lt;MultiMooseEnum&gt;(param2).size();
+    if (size_1 != size_2)
+      forwardParamError(param1,
+                        &quot;Vector parameters &#x27;&quot; + param1 + &quot;&#x27; (size &quot; + std::to_string(size_1) +
+                            &quot;) and &#x27;&quot; + param2 + &quot;&#x27; (size &quot; + std::to_string(size_2) +
+                            &quot;) must be the same size&quot;);
+  }
+  // handle empty vector defaults
+  else if (forwardIsParamValid(param1) || forwardIsParamValid(param2))
+    if (forwardGetParam&lt;std::vector&lt;T&gt;&gt;(param1).size() ||
+        forwardGetParam&lt;MultiMooseEnum&gt;(param2).size())
+      checkParamsBothSetOrNotSet(param1, param2);
+}
+
+template &lt;typename C&gt;
+template &lt;typename T, typename S&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkTwoDVectorParamsSameLength(const std::string &amp; param1,
+                                                               const std::string &amp; param2) const
+{
+  checkVectorParamsSameLength&lt;std::vector&lt;T&gt;, std::vector&lt;S&gt;&gt;(param1, param2);
+  if (forwardIsParamValid(param1) &amp;&amp; forwardIsParamValid(param2))
+  {
+    const auto value1 = forwardGetParam&lt;std::vector&lt;std::vector&lt;T&gt;&gt;&gt;(param1);
+    const auto value2 = forwardGetParam&lt;std::vector&lt;std::vector&lt;S&gt;&gt;&gt;(param2);
+    for (const auto index : index_range(value1))
+      if (value1[index].size() != value2[index].size())
+        forwardParamError(
+            param1,
+            &quot;Vector at index &quot; + std::to_string(index) + &quot; of 2D vector parameter &#x27;&quot; + param1 +
+                &quot;&#x27; is not the same size as its counterpart from 2D vector parameter &#x27;&quot; + param2 +
+                &quot;&#x27;.\nSize first vector: &quot; + std::to_string(value1[index].size()) +
+                &quot;\nSize second vector: &quot; + std::to_string(value2[index].size()));
+  }
+  // handle empty vector defaults
+  else if (forwardIsParamValid(param1) || forwardIsParamValid(param2))
+    if (forwardGetParam&lt;std::vector&lt;T&gt;&gt;(param1).size() ||
+        forwardGetParam&lt;std::vector&lt;S&gt;&gt;(param2).size())
+      checkParamsBothSetOrNotSet(param1, param2);
+}
+
+template &lt;typename C&gt;
+template &lt;typename T, typename S&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkTwoDVectorParamInnerSameLengthAsOneDVector(
+    const std::string &amp; param1, const std::string &amp; param2) const
+{
+  assertParamDefined&lt;std::vector&lt;std::vector&lt;T&gt;&gt;&gt;(param1);
+  assertParamDefined&lt;std::vector&lt;S&gt;&gt;(param2);
+  for (const auto &amp; sub_vec_i : index_range(forwardGetParam&lt;std::vector&lt;std::vector&lt;T&gt;&gt;&gt;(param1)))
+  {
+    const auto size_1 = forwardGetParam&lt;std::vector&lt;std::vector&lt;T&gt;&gt;&gt;(param1)[sub_vec_i].size();
+    const auto size_2 = forwardGetParam&lt;std::vector&lt;S&gt;&gt;(param2).size();
+    if (size_1 != size_2)
+      forwardParamError(param1,
+                        &quot;Vector at index &quot; + std::to_string(sub_vec_i) + &quot; (size &quot; +
+                            std::to_string(size_1) +
+                            &quot;) &quot;
+                            &quot; of this parameter should be the same length as parameter &#x27;&quot; +
+                            param2 + &quot;&#x27; (size &quot; + std::to_string(size_2) + &quot;)&quot;);
+  }
+}
+
+template &lt;typename C&gt;
+template &lt;typename T&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkTwoDVectorParamMultiMooseEnumSameLength(
+    const std::string &amp; param1, const std::string &amp; param2, const bool error_for_param2) const
+{
+  assertParamDefined&lt;std::vector&lt;std::vector&lt;T&gt;&gt;&gt;(param1);
+  assertParamDefined&lt;MultiMooseEnum&gt;(param2);
+  const auto vec1 = forwardGetParam&lt;std::vector&lt;std::vector&lt;T&gt;&gt;&gt;(param1);
+  const auto enum2 = forwardGetParam&lt;MultiMooseEnum&gt;(param2);
+  const auto size_1 = vec1.empty() ? 0 : vec1.size() * vec1[0].size();
+  const auto size_2 = enum2.size();
+  if (size_1 != size_2)
+  {
+    if (error_for_param2)
+      forwardParamError(param2,
+                        &quot;Vector enumeration parameter (size &quot; + std::to_string(size_2) +
+                            &quot;) is not the same size as the vector of vector parameter &#x27;&quot; + param1 +
+                            &quot;&#x27; (size &quot; + std::to_string(size_1) + &quot;)&quot;);
+    else
+      forwardParamError(param1,
+                        &quot;Vector of vector parameter &#x27;&quot; + param1 + &quot;&#x27; (total size &quot; +
+                            std::to_string(size_1) +
+                            &quot;) is not the same size as vector-enumeration parameter &#x27;&quot; + param2 +
+                            &quot;&#x27; (size &quot; + std::to_string(size_2) + &quot;)&quot;);
+  }
+}
+
+template &lt;typename C&gt;
+template &lt;typename T, typename S, typename U&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkVectorParamLengthSameAsCombinedOthers(
+    const std::string &amp; param1, const std::string &amp; param2, const std::string &amp; param3) const
+{
+  assertParamDefined&lt;std::vector&lt;T&gt;&gt;(param1);
+  assertParamDefined&lt;std::vector&lt;S&gt;&gt;(param2);
+  assertParamDefined&lt;std::vector&lt;U&gt;&gt;(param3);
+  const auto size_1 = forwardGetParam&lt;std::vector&lt;T&gt;&gt;(param1).size();
+  const auto size_2 = forwardGetParam&lt;std::vector&lt;S&gt;&gt;(param2).size();
+  const auto size_3 = forwardGetParam&lt;std::vector&lt;U&gt;&gt;(param3).size();
+
+  if (size_1 != size_2 + size_3)
+    forwardParamError(param1,
+                      &quot;Vector parameter &#x27;&quot; + param1 + &quot;&#x27; (size &quot; + std::to_string(size_1) +
+                          &quot;) should be the same size as parameter &#x27;&quot; + param2 + &quot;&#x27; and &#x27;&quot; + param3 +
+                          &quot; combined (total size &quot; + std::to_string(size_2 + size_3) + &quot;)&quot;);
+}
+
+template &lt;typename C&gt;
+template &lt;typename T&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkVectorParamsNoOverlap(
+    const std::vector&lt;std::string&gt; &amp; param_vec) const
+{
+  std::set&lt;std::string&gt; unique_params;
+  for (const auto &amp; param : param_vec)
+  {
+    assertParamDefined&lt;std::vector&lt;T&gt;&gt;(param);
+
+    for (const auto &amp; value : forwardGetParam&lt;std::vector&lt;T&gt;&gt;(param))
+      if (!unique_params.insert(value).second)
+      {
+        auto copy_params = param_vec;
+        copy_params.erase(std::find(copy_params.begin(), copy_params.end(), param));
+        // Overlap between multiple vectors of parameters
+        if (copy_params.size())
+          forwardMooseError(&quot;Item &#x27;&quot; + value + &quot;&#x27; specified in vector parameter &#x27;&quot; + param +
+                            &quot;&#x27; is also present in one or more of the parameters &#x27;&quot; +
+                            Moose::stringify(copy_params) + &quot;&#x27;, which is not allowed.&quot;);
+        // Overlap within a single vector parameter caused by a repeated item
+        else
+          forwardMooseError(&quot;Item &#x27;&quot; + value + &quot;&#x27; specified in vector parameter &#x27;&quot; + param +
+                            &quot;&#x27; is repeated, which is not allowed.&quot;);
+      }
+  }
+}
+
+template &lt;typename C&gt;
+template &lt;typename T&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkTwoDVectorParamsNoRespectiveOverlap(
+    const std::vector&lt;std::string&gt; &amp; param_vec) const
+{
+  // Outer loop, each param is the name of a parameter for a vector of vectors
+  for (const auto &amp; param : param_vec)
+  {
+    assertParamDefined&lt;std::vector&lt;std::vector&lt;T&gt;&gt;&gt;(param);
+    const auto &amp; twoD_vec = forwardGetParam&lt;std::vector&lt;std::vector&lt;T&gt;&gt;&gt;(param);
+    std::vector&lt;std::set&lt;T&gt;&gt; unique_params(twoD_vec.size());
+
+    // Loop over each outer vector and compare the inner vectors respectively to other parameters
+    for (const auto i : index_range(twoD_vec))
+    {
+      for (const auto &amp; value : twoD_vec[i])
+        if (!unique_params[i].insert(value).second)
+        {
+          auto copy_params = param_vec;
+          copy_params.erase(std::find(copy_params.begin(), copy_params.end(), param));
+          forwardMooseError(&quot;Item &#x27;&quot; + value + &quot;&#x27; specified in vector parameter &#x27;&quot; + param +
+                            &quot;&#x27; is also present in one or more of the two-D vector parameters &#x27;&quot; +
+                            Moose::stringify(copy_params) +
+                            &quot;&#x27; in the inner vector of the same index, which is not allowed.&quot;);
+        }
+    }
+  }
+}
+
+template &lt;typename C&gt;
+template &lt;typename T&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkVectorParamNotEmpty(const std::string &amp; param) const
+{
+  assertParamDefined&lt;std::vector&lt;T&gt;&gt;(param);
+  if (!forwardGetParam&lt;std::vector&lt;T&gt;&gt;(param).size())
+    forwardParamError(param, &quot;Parameter &#x27;&quot; + param + &quot;&#x27; should not be set to an empty vector.&quot;);
+}
+
+template &lt;typename C&gt;
+template &lt;typename T, typename S&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkVectorParamsSameLengthIfSet(
+    const std::string &amp; param1,
+    const std::string &amp; param2,
+    const bool ignore_empty_default_param2) const
+{
+  assertParamDefined&lt;std::vector&lt;T&gt;&gt;(param1);
+  assertParamDefined&lt;std::vector&lt;S&gt;&gt;(param2);
+
+  if (forwardIsParamValid(param1) &amp;&amp; forwardIsParamValid(param2))
+  {
+    const auto size_1 = forwardGetParam&lt;std::vector&lt;T&gt;&gt;(param1).size();
+    const auto size_2 = forwardGetParam&lt;std::vector&lt;S&gt;&gt;(param2).size();
+    if (ignore_empty_default_param2 &amp;&amp; (size_2 == 0) &amp;&amp; !forwardIsParamSetByUser(param2))
+      return;
+    if (size_1 != size_2)
+      forwardParamError(param1,
+                        &quot;Parameter &#x27;&quot; + param1 + &quot;&#x27; (size &quot; + std::to_string(size_1) + &quot;) and &#x27;&quot; +
+                            param2 + &quot;&#x27; (size &quot; + std::to_string(size_2) +
+                            &quot;) must be the same size if set.&quot;);
+  }
+}
+
+template &lt;typename C&gt;
+template &lt;typename T&gt;
+bool
+InputParametersChecksUtils&lt;C&gt;::parameterConsistent(const InputParameters &amp; other_param,
+                                                   const std::string &amp; param_name) const
+{
+  assertParamDefined&lt;T&gt;(param_name);
+  mooseAssert(other_param.have_parameter&lt;T&gt;(param_name),
+              &quot;This should have been a parameter from the parameters being compared&quot;);
+  bool consistent = true;
+  if (forwardParameters().isParamValid(param_name) &amp;&amp; other_param.isParamValid(param_name))
+  {
+    if constexpr (std::is_same_v&lt;MooseEnum, T&gt;)
+    {
+      if (!forwardGetParam&lt;T&gt;(param_name).compareCurrent(other_param.get&lt;T&gt;(param_name)))
+        consistent = false;
+    }
+    else if (forwardGetParam&lt;T&gt;(param_name) != other_param.get&lt;T&gt;(param_name))
+      consistent = false;
+  }
+  return consistent;
+}
+
+template &lt;typename C&gt;
+template &lt;typename T&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkBlockwiseConsistency(
+    const std::string &amp; block_param_name, const std::vector&lt;std::string&gt; &amp; parameter_names) const
+{
+  const std::vector&lt;std::vector&lt;SubdomainName&gt;&gt; &amp; block_names =
+      forwardGetParam&lt;std::vector&lt;std::vector&lt;SubdomainName&gt;&gt;&gt;(block_param_name);
+
+  if (block_names.size())
+  {
+    // We only check block-restrictions if the customer class is not restricted to `ANY_BLOCK_ID`.
+    // If the users define blocks that are not on the mesh, they will receive errors from the
+    // objects created by the customer class
+    const auto &amp; object_blocks = forwardBlocks();
+    if (std::find(object_blocks.begin(), object_blocks.end(), &quot;ANY_BLOCK_ID&quot;) ==
+        object_blocks.end())
+      for (const auto &amp; block_group : block_names)
+        for (const auto &amp; block : block_group)
+          if (std::find(object_blocks.begin(), object_blocks.end(), block) == object_blocks.end())
+            forwardParamError(block_param_name,
+                              &quot;Block &#x27;&quot; + block + &quot;&#x27; is not present in the block restriction of &quot; +
+                                  forwardName() +
+                                  &quot;!\nBlock restriction: &quot; + Moose::stringify(object_blocks));
+
+    for (const auto &amp; param_name : parameter_names)
+    {
+      const std::vector&lt;T&gt; &amp; param_vector = forwardGetParam&lt;std::vector&lt;T&gt;&gt;(param_name);
+      if (block_names.size() != param_vector.size())
+        forwardParamError(param_name,
+                          &quot;The number of entries in &#x27;&quot; + param_name + &quot;&#x27; (&quot; +
+                              std::to_string(param_vector.size()) +
+                              &quot;) is not the same as the number of blocks&quot;
+                              &quot; (&quot; +
+                              std::to_string(block_names.size()) + &quot;) in &#x27;&quot; + block_param_name +
+                              &quot;&#x27;!&quot;);
+    }
+  }
+  else
+  {
+    unsigned int previous_size = 0;
+    for (const auto param_i : index_range(parameter_names))
+    {
+      const std::vector&lt;T&gt; &amp; param_vector =
+          forwardGetParam&lt;std::vector&lt;T&gt;&gt;(parameter_names[param_i]);
+      if (param_i == 0)
+      {
+        if (param_vector.size() &gt; 1)
+          forwardParamError(parameter_names[param_i],
+                            &quot;The user should only use one or zero entries in &quot; +
+                                parameter_names[param_i] + &quot; if &quot; + block_param_name +
+                                &quot; not defined!&quot;);
+        previous_size = param_vector.size();
+      }
+      else
+      {
+        if (previous_size != param_vector.size())
+          forwardParamError(parameter_names[param_i],
+                            &quot;The number of entries in &#x27;&quot; + parameter_names[param_i] +
+                                &quot;&#x27; is not the same as the number of entries in &#x27;&quot; +
+                                parameter_names[param_i - 1] + &quot;&#x27;!&quot;);
+      }
+    }
+  }
+}
+
+template &lt;typename C&gt;
+template &lt;typename T&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::warnInconsistent(const InputParameters &amp; other_param,
+                                                const std::string &amp; param_name) const
+{
+  const bool consistent = parameterConsistent&lt;T&gt;(other_param, param_name);
+  if (!consistent)
+    forwardMooseWarning(&quot;Parameter &quot; + param_name + &quot; is inconsistent between Physics \&quot;&quot; +
+                        forwardName() + &quot;\&quot; of type \&quot;&quot; + forwardType() +
+                        &quot;\&quot; and the parameter set for \&quot;&quot; + other_param.getObjectName() +
+                        &quot;\&quot; of type \&quot;&quot; + other_param.getObjectType() + &quot;\&quot;&quot;);
+}
+
+template &lt;typename C&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::errorDependentParameter(
+    const std::string &amp; param1,
+    const std::string &amp; value_not_set,
+    const std::vector&lt;std::string&gt; &amp; dependent_params) const
+{
+  for (const auto &amp; dependent_param : dependent_params)
+    if (forwardIsParamSetByUser(dependent_param))
+      forwardParamError(dependent_param,
+                        &quot;Parameter &#x27;&quot; + dependent_param +
+                            &quot;&#x27; should not be set by the user if parameter &#x27;&quot; + param1 +
+                            &quot;&#x27; has not been set to &#x27;&quot; + value_not_set + &quot;&#x27;&quot;);
+}
+
+template &lt;typename C&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::errorInconsistentDependentParameter(
+    const std::string &amp; param1,
+    const std::string &amp; value_set,
+    const std::vector&lt;std::string&gt; &amp; dependent_params) const
+{
+  for (const auto &amp; dependent_param : dependent_params)
+    if (forwardIsParamSetByUser(dependent_param))
+      forwardParamError(dependent_param,
+                        &quot;Parameter &#x27;&quot; + dependent_param +
+                            &quot;&#x27; should not be set by the user if parameter &#x27;&quot; + param1 +
+                            &quot;&#x27; has been set to &#x27;&quot; + value_set + &quot;&#x27;&quot;);
+}
+
+template &lt;typename C&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkParamsBothSetOrNotSet(const std::string &amp; param1,
+                                                          const std::string &amp; param2) const
+{
+  if ((forwardIsParamValid(param1) + forwardIsParamValid(param2)) % 2 != 0)
+    forwardParamError(param1,
+                      &quot;Parameters &#x27;&quot; + param1 + &quot;&#x27; and &#x27;&quot; + param2 +
+                          &quot;&#x27; must be either both set or both not set.&quot;);
+}
+
+template &lt;typename C&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkSecondParamSetOnlyIfFirstOneTrue(
+    const std::string &amp; param1, const std::string &amp; param2) const
+{
+  mooseAssert(forwardParameters().template have_parameter&lt;bool&gt;(param1),
+              &quot;Cannot check if parameter &quot; + param1 +
+                  &quot; is true if it&#x27;s not a bool parameter of this object&quot;);
+  if (!forwardGetParam&lt;bool&gt;(param1) &amp;&amp; forwardIsParamSetByUser(param2))
+    forwardParamError(param2,
+                      &quot;Parameter &#x27;&quot; + param1 + &quot;&#x27; cannot be set to false if parameter &#x27;&quot; + param2 +
+                          &quot;&#x27; is set by the user&quot;);
+}
+
+template &lt;typename C&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkSecondParamSetOnlyIfFirstOneSet(
+    const std::string &amp; param1, const std::string &amp; param2) const
+{
+  if (!forwardIsParamSetByUser(param1) &amp;&amp; forwardIsParamSetByUser(param2))
+    forwardParamError(param2,
+                      &quot;Parameter &#x27;&quot; + param2 + &quot;&#x27; should not be set if parameter &#x27;&quot; + param1 +
+                          &quot;&#x27; is not specified.&quot;);
+}
+
+template &lt;typename C&gt;
+void
+InputParametersChecksUtils&lt;C&gt;::checkSecondParamNotSetIfFirstOneSet(const std::string &amp; param1,
+                                                                   const std::string &amp; param2) const
+{
+  if (forwardIsParamSetByUser(param1) &amp;&amp; forwardIsParamSetByUser(param2))
+    forwardParamError(param2,
+                      &quot;Parameter &#x27;&quot; + param2 + &quot;&#x27; should not be specified if parameter &#x27;&quot; + param1 +
+                          &quot;&#x27; is specified.&quot;);
+}
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="1ee36558-b10b-4c40-b737-9fafe316f789"><div class="modal-content"><h4>allow_initial_conditions_with_restart</h4><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>True to allow the user to specify initial conditions when restarting. Initial conditions can override any restarted field</p></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

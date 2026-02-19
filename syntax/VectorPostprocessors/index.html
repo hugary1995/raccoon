@@ -1,0 +1,1502 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>VectorPostprocessors System | RACCOON</title><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" alt="GitHub wordmark" class="github-mark"></img><img src="../../media/framework/github-mark.png" alt="GitHub logo" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="9684bee3-a1e2-4050-b6d3-c96ad30fe269" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="ea9b13a7-f66d-46af-a0a0-7f81d4cfac94" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="eac4b407-7fee-4b9a-8d4e-4e6a332a0def" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="26d0c2c1-4541-4978-a807-5db4a8a5f9b9" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="ea608dcc-51ec-4e58-aa58-26d66dd3bbea"><i class="material-icons">menu</i></a><ul class="sidenav" id="ea608dcc-51ec-4e58-aa58-26d66dd3bbea"><li><a href="#!" class="dropdown-trigger" data-target="7a52fb56-2f0d-459f-a446-df4bb19cd0a6" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="3bdf7c32-e3e0-43df-8eeb-030372362e0a" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="4bc711a8-f3ee-4dc3-b9b4-9a221324c257" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="f3a38075-cdc5-4b1e-a409-c656df91d487" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="9684bee3-a1e2-4050-b6d3-c96ad30fe269"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="ea9b13a7-f66d-46af-a0a0-7f81d4cfac94"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="eac4b407-7fee-4b9a-8d4e-4e6a332a0def"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="26d0c2c1-4541-4978-a807-5db4a8a5f9b9"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../index.html">Complete syntax</a></li><li><a href="../raccoon.html">RACCOON syntax</a></li><li><a href="../solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../phase_field.html">Phase field syntax</a></li><li><a href="../heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="7a52fb56-2f0d-459f-a446-df4bb19cd0a6"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="3bdf7c32-e3e0-43df-8eeb-030372362e0a"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="4bc711a8-f3ee-4dc3-b9b4-9a221324c257"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="f3a38075-cdc5-4b1e-a409-c656df91d487"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../index.html">Complete syntax</a></li><li><a href="../raccoon.html">RACCOON syntax</a></li><li><a href="../solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../phase_field.html">Phase field syntax</a></li><li><a href="../heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="5aa7588e-304f-4abc-8b28-228f8d0cb914" data-section-level="1" data-section-text="VectorPostprocessors System"><h1 id="vectorpostprocessors-system">VectorPostprocessors System</h1><p>The VectorPostprocessors (VPP) System is designed to compute multiple related values each time it is executed.  It can be thought of as a Postprocessor that outputs multiple values. For example, if you&#x27;d like to sample a solution field across a line, a VPP is a good choice (See <a href="../../source/vectorpostprocessors/PointValueSampler.html">PointValueSampler</a>).  In addition to outputting the values along the line a VPP can actually output multiple vectors simultaneously.  Each vector is given a name, which is the column name.  Together, all of the vectors a VPP outputs are output in one CSV file (usually per-timestep).</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><i class="material-icons moose-inline-icon">comment</i><span class="moose-alert-title-brand">note</span></div><div class="card-content"><div class="moose-alert-content"><p>The <a href="../Reporters/index.html">Reporter System</a> is a newer, more flexible system for computing aggregate values. It is recommended that new objects for aggregate calculations use the Reporter system.</p></div></div></div><section id="2d65fbd7-534e-47a9-85be-63da83843db4" data-section-level="2" data-section-text="Design"><h2 id="design">Design</h2><p>The VPP system builds off from MOOSE&#x27;s <a href="../UserObjects/index.html">UserObject</a> system. Each VPP contains the full interface of a UserObject but is also expected to declare one or more vectors that will be populated and output by each VPP. There are no restrictions on the lengths of these vectors and the state of these vectors is managed by MOOSE and is automatically &quot;restartable&quot;.</p><p>Vectors are declared with the <code>declareVector</code> method:</p><pre style="max-height:350px;"><code class="language-cpp">  VectorPostprocessorValue &amp; declareVector(const std::string &amp; vector_name);
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#7960074c-f99b-46d5-8b04-a59c30455924">(moose/framework/include/vectorpostprocessors/VectorPostprocessor.h)</a><p>This method returns a writable reference to a VectorPostprocessorValue that must be captured and stored in the object.</p><pre style="max-height:350px;"><code class="language-cpp">typedef Real ScatterVectorPostprocessorValue;
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#be8db178-9531-42b9-8e84-b27965f866c6">(moose/framework/include/utils/MooseTypes.h)</a><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><i class="material-icons moose-inline-icon">comment</i><span class="moose-alert-title-brand">note</span></div><div class="card-content"><div class="moose-alert-content"><p>Developers are responsible for sizing these vectors as needed. </p></div></div></div></section><section id="f08dc056-85cb-437a-afd7-628bb33286cc" data-section-level="2" data-section-text="Output"><h2 id="output">Output</h2><p>VPP data can vary depending on the type of data being output. Again, the &quot;sample over line&quot; example mentioned in the introduction, a complete set of values will be generated each time the VPP is executed. The VPP system handles this scenario by creating separate output files for each invocation. The form of the output is as follows:</p><pre style="max-height:350px;"><code class="language-text">
+&lt;filebase&gt;_&lt;vector name&gt;_&lt;serial number&gt;.csv
+
+# filebase - the normal output file base
+# vector name - the name of the vector postprocessor (normally the input block name for that VPP)
+# serial number - a fixed-width (normally four digit) number starting from 0000 and counting up.
+</code></pre><p>In some cases however, a VPP may be accumulating information in time. For example, a user may wish to track values at several locations over time. The output might consist of the coordinates of those positions and the sampled value. In such a scenario, the default separate file output may be cumbersome as each file would effectively have a single line so a script to aggregate the information from all of the separate output files may need to be used. Instead, MOOSE supports an option, which may be of use in these cases:</p><pre style="max-height:350px;"><code class="language-text">
+contains_complete_history = true
+</code></pre><p>By setting this value, you are telling MOOSE that the values in all of the vectors of the given VPP are cumulative. MOOSE will take advantage of this information in multiple ways. First, it will turn off writing the output to separate files and will drop the serial number from the output filename format altogether. Secondly, it will ignore any changed values in the vectors only outputting the newest rows in each vector postprocessor.</p><section id="a641fc17-156b-4683-8721-4b017ec0646f" data-section-level="3" data-section-text="Parallel Assumptions"><h3 id="parallel-assumptions">Parallel Assumptions</h3><p>VectorPostprocessors are required to create their complete vectors on processor zero (rank 0).  They should use the <code>_communicator</code> to reduce their values to processor zero.  Objects that use VPPs must specify how they need the data by calling the <code>getVectorPostprocessorValue()</code> or <code>getScatterVectorPostprocessorValue()</code> functions with the correct arguments.</p><p>If the object needing VPP values only needs those values on processor zero it should call:</p><pre style="max-height:350px;"><code class="language-cpp">
+getVectorPostprocessorValue(&#x27;the_vpp_parameter_name&#x27;, &#x27;the_vector_name&#x27;, false)
+</code></pre><p>The <code>false</code> in that call tells MOOSE that this object does NOT need the vector to be &quot;broadcast&quot; (i.e. &quot;replicated).</p><p>If this object does indeed need the VPP data to be broadcast (replicated on all processors) it should make this call:</p><pre style="max-height:350px;"><code class="language-cpp">
+getVectorPostprocessorValue(&#x27;the_vpp_parameter_name&#x27;, &#x27;the_vector_name&#x27;, true)
+</code></pre><p>In the very special case that a VPP is producing vectors that are <code>num_procs</code> length an object can ask for the value of a VPP to be &quot;scattered&quot; - which means that each processor will receive only the value that corresponds to it&#x27;s rank (i.e. <code>_values[rank]</code>).  This is accomplished by calling:</p><pre style="max-height:350px;"><code class="language-cpp">
+getScatterVectorPostprocessorValue(&#x27;the_vpp_parameter_name&#x27;, &#x27;the_vector_name&#x27;)
+</code></pre><p><code>getScatterVectorPostprocessorValue()</code> returns a <code>const ScatterVectorPostprocessorValue &amp;</code>... which is a single scalar value that you don&#x27;t index into.  Each process receives the &quot;correct&quot; value and can just directly use it.</p><p>If the data in a VPP is naturally replicated on all processors a VectorPostprocessor should set <code>_auto_broadcast = false</code> in its <code>validParams()</code> like so:</p><pre style="max-height:350px;"><code class="language-cpp">
+params.set&lt;bool&gt;(&quot;_auto_broadcast&quot;) = &quot;false&quot;;
+</code></pre><p>This tells MOOSE that the data is already replicated and there is no need to broadcast it if another object is asking for it to be broadcast.</p></section></section><section id="03ee68b5-db7e-4c62-9ba2-4641f0130de8" data-section-level="2" data-section-text="TimeData"><h2 id="timedata">TimeData</h2><p>The <code>time_data</code> parameter produces an additional CSV file containing just the real time and the corresponding time step for any VectorPostprocessor output information. This file may be useful in producing animations or your simulation results.</p></section><section id="61c03458-61a9-4cad-8c7e-d100d993d69d" data-section-level="2" data-section-text="Restore on Rejected Timesteps"><h2 id="restore-on-rejected-timesteps">Restore on Rejected Timesteps</h2><p>When a timestep is rejected due to a failed solve, a failed multiapp solve, or any other reason, the timestep is usually repeated, usually with a smaller timestep size. However, unlike postprocessors, VPPs are not restored to their old values, i.e. before the initial timestep, unless an old value is requested by another object. This can cause statefulness in objects dependent on the VPP between the repeated timesteps. If you suspect this might be causing indeterminate behavior in your simulation, you can check all the data being restored between the failed and repeated timestep by setting <code>Problem/</code><a href="#d8b4c82d-f682-49d7-a8a4-7bf84c68abfc" class="moose-modal-link modal-trigger">&quot;verbose_restore&quot;</a>` = true`.</p></section></section><section id="39ba69c8-359b-4b46-92cd-93042865510f" data-section-level="1" data-section-text="VectorPostprocessor List"><h1 id="vectorpostprocessor-list">VectorPostprocessor List</h1><section id="6e26cd68-3070-493f-9071-bad702a38b9f" data-section-level="2" data-section-text="Available Objects"><h2 id="available-objects">Available Objects</h2><ul class="moose-syntax-list collection with-header"><li class="collection-header">Moose App</li><li class="collection-item"><a href="../../source/vectorpostprocessors/CSVReaderVectorPostprocessor.html">CSVReader</a>Converts columns of a CSV file into vectors of a VectorPostprocessor.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/CSVReaderVectorPostprocessor.html">CSVReaderVectorPostprocessor</a>Converts columns of a CSV file into vectors of a VectorPostprocessor.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/ConstantVectorPostprocessor.html">ConstantVectorPostprocessor</a>Populate constant VectorPostprocessorValue directly from input file.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/CylindricalAverage.html">CylindricalAverage</a>Compute a cylindrical average of a variableas a function of radius throughout the simulation domain.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/Eigenvalues.html">Eigenvalues</a>Returns the Eigen values from the nonlinear Eigen system.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/ElementMaterialSampler.html">ElementMaterialSampler</a>Records all Real-valued material properties of a material object, or Real-valued material properties of the supplied property names on quadrature points on elements at the indicated execution points.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/ElementValueSampler.html">ElementValueSampler</a>Samples values of variables on elements.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/ElementVariablesDifferenceMax.html">ElementVariablesDifferenceMax</a>Computes the largest difference between two variable fields.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/ElementsAlongLine.html">ElementsAlongLine</a>Outputs the IDs of every element intersected by a user-defined line</li><li class="collection-item"><a href="../../source/vectorpostprocessors/ElementsAlongPlane.html">ElementsAlongPlane</a>Outputs the IDs of every element intersected by a user-defined plane</li><li class="collection-item"><a href="../../source/vectorpostprocessors/ExtraIDIntegralVectorPostprocessor.html">ExtraIDIntegralVectorPostprocessor</a>Integrates or averages variables based on extra element IDs</li><li class="collection-item"><a href="../../source/vectorpostprocessors/HistogramVectorPostprocessor.html">HistogramVectorPostprocessor</a>Compute a histogram for each column of a VectorPostprocessor</li><li class="collection-item"><a href="../../source/vectorpostprocessors/IntersectionPointsAlongLine.html">IntersectionPointsAlongLine</a>Get the intersection points for all of the elements that are intersected by a line.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/LeastSquaresFit.html">LeastSquaresFit</a>Performs a polynomial least squares fit on the data contained in another VectorPostprocessor</li><li class="collection-item"><a href="../../source/vectorpostprocessors/LeastSquaresFitHistory.html">LeastSquaresFitHistory</a>Performs a polynomial least squares fit on the data contained in another VectorPostprocessor and stores the full time history of the coefficients</li><li class="collection-item"><a href="../../source/vectorpostprocessors/LineFunctionSampler.html">LineFunctionSampler</a>Sample one or more functions along a line.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/LineMaterialRealSampler.html">LineMaterialRealSampler</a>Samples real-valued material properties for all quadrature points in all elements that are intersected by a specified line</li><li class="collection-item"><a href="../../source/vectorpostprocessors/LineValueSampler.html">LineValueSampler</a>Samples variable(s) along a specified line</li><li class="collection-item"><a href="../../source/vectorpostprocessors/ElementMaterialSampler.html">MaterialVectorPostprocessor</a>Records all Real-valued material properties of a material object, or Real-valued material properties of the supplied property names on quadrature points on elements at the indicated execution points.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/MeshDivisionFunctorReductionVectorPostprocessor.html">MeshDivisionFunctorReductionVectorPostprocessor</a>Perform reductions on functors based on a per-mesh-division basis</li><li class="collection-item"><a href="../../source/userobjects/NearestPointIntegralVariablePostprocessor.html">NearestPointIntegralVariablePostprocessor</a>Compute element variable integrals for nearest-point based subdomains</li><li class="collection-item"><a href="../../source/vectorpostprocessors/NodalValueSampler.html">NodalValueSampler</a>Samples values of nodal variable(s).</li><li class="collection-item"><a href="../../source/vectorpostprocessors/PointValueSampler.html">PointValueSampler</a>Sample a variable at specific points.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/PositionsFunctorValueSampler.html">PositionsFunctorValueSampler</a>Sample one or more functors at points specified by a Positions object.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/SideValueSampler.html">SideValueSampler</a>Sample variable(s) along a sideset, internal or external.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/SidesetInfoVectorPostprocessor.html">SidesetInfoVectorPostprocessor</a>This VectorPostprocessor collects meta data for provided sidesets.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/SpatialUserObjectVectorPostprocessor.html">SpatialUserObjectVectorPostprocessor</a>Outputs the values of a spatial user object in the order of the specified spatial points</li><li class="collection-item"><a href="../../source/vectorpostprocessors/SphericalAverage.html">SphericalAverage</a>Compute a spherical average of a variable as a function of radius throughout the simulation domain.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/VariableValueVolumeHistogram.html">VariableValueVolumeHistogram</a>Compute a histogram of volume fractions binned according to variable values.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/VectorMemoryUsage.html">VectorMemoryUsage</a>Get memory stats for all ranks in the simulation</li><li class="collection-item"><a href="../../source/vectorpostprocessors/VectorOfPostprocessors.html">VectorOfPostprocessors</a>Outputs the values of an arbitrary user-specified set of postprocessors as a vector in the order specified by the user</li><li class="collection-item"><a href="../../source/vectorpostprocessors/VariableValueVolumeHistogram.html">VolumeHistogram</a>Compute a histogram of volume fractions binned according to variable values.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/WorkBalance.html">WorkBalance</a>Computes several metrics for workload balance per processor</li><li class="collection-header">Phase Field App</li><li class="collection-item"><a href="../../source/vectorpostprocessors/EulerAngleUpdaterCheck.html">EulerAngleUpdaterCheck</a>Provide updated Euler angles after rigid body rotation of the grains.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/FeatureVolumeVectorPostprocessor.html">FeatureVolumeVectorPostprocessor</a>This object is designed to pull information from the data structures of a &quot;FeatureFloodCount&quot; or derived object (e.g. individual feature volumes)</li><li class="collection-item"><a href="../../source/vectorpostprocessors/GrainForcesPostprocessor.html">GrainForcesPostprocessor</a>Outputs the values from GrainForcesPostprocessor</li><li class="collection-item"><a href="../../source/vectorpostprocessors/GrainTextureVectorPostprocessor.html">GrainTextureVectorPostprocessor</a>Gives out info on the grain boundary properties</li><li class="collection-header">Ray Tracing App</li><li class="collection-item"><a href="../../source/vectorpostprocessors/PerProcessorRayTracingResultsVectorPostprocessor.html">PerProcessorRayTracingResultsVectorPostprocessor</a>Accumulates ray tracing results (information about the trace) on a per-processor basis.</li><li class="collection-header">Heat Transfer App</li><li class="collection-item"><a href="../../source/vectorpostprocessors/SurfaceRadiationVectorPostprocessor.html">SurfaceRadiationVectorPostprocessor</a>VectorPostprocessor for accessing information stored in surface radiation user object</li><li class="collection-item"><a href="../../source/vectorpostprocessors/ViewfactorVectorPostprocessor.html">ViewfactorVectorPostprocessor</a>VectorPostprocessor for accessing view factors from GrayLambertSurfaceRadiationBase UO</li><li class="collection-header">Solid Mechanics App</li><li class="collection-item"><a href="../../source/vectorpostprocessors/InteractionIntegral.html">ADInteractionIntegral</a>Computes the interaction integral, which is used to compute various fracture mechanics parameters at a crack tip, including KI, KII, KIII, and the T stress.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/AverageSectionValueSampler.html">AverageSectionValueSampler</a>Compute the section&#x27;s variable average in three-dimensions given a user-defined definition of the cross section.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/CrackFrontNonlocalScalarMaterial.html">CrackFrontNonlocalScalarMaterial</a>Computes the average material at points provided by the crack_front_definition vectorpostprocessor.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/CrackFrontNonlocalStress.html">CrackFrontNonlocalStress</a>Computes the average stress normal to the crack face.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/InteractionIntegral.html">InteractionIntegral</a>Computes the interaction integral, which is used to compute various fracture mechanics parameters at a crack tip, including KI, KII, KIII, and the T stress.</li><li class="collection-item"><a href="../../source/vectorpostprocessors/JIntegral.html">JIntegral</a>Computes the J-Integral, a measure of the strain energy release rate at a crack tip, which can be used as a criterion for fracture growth. It can, alternatively, compute the C(t) integral</li><li class="collection-item"><a href="../../source/vectorpostprocessors/LineMaterialRankTwoSampler.html">LineMaterialRankTwoSampler</a>Access a component of a RankTwoTensor</li><li class="collection-item"><a href="../../source/vectorpostprocessors/LineMaterialRankTwoScalarSampler.html">LineMaterialRankTwoScalarSampler</a>Compute a scalar property of a RankTwoTensor</li><li class="collection-item"><a href="../../source/vectorpostprocessors/MixedModeEquivalentK.html">MixedModeEquivalentK</a>Computes the mixed-mode stress intensity factor given the <span class="moose-katex-inline-equation" id="moose-equation-ee3dfe16-13b9-4cdd-82dc-6a4bb494f65b"><script>var element = document.getElementById("moose-equation-ee3dfe16-13b9-4cdd-82dc-6a4bb494f65b");katex.render("K_I", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, <span class="moose-katex-inline-equation" id="moose-equation-0c445013-910e-442e-bf4c-3551dc025dc3"><script>var element = document.getElementById("moose-equation-0c445013-910e-442e-bf4c-3551dc025dc3");katex.render("K_{II}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, and <span class="moose-katex-inline-equation" id="moose-equation-d0e45b72-a5a3-49e2-9d2a-3863b9b04326"><script>var element = document.getElementById("moose-equation-d0e45b72-a5a3-49e2-9d2a-3863b9b04326");katex.render("K_{III}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> stress intensity factors</li></ul></section><section id="642df710-e16d-4d29-9ee3-565a744d2be9" data-section-level="2" data-section-text="Available Actions"><h2 id="available-actions">Available Actions</h2><ul class="moose-syntax-list collection with-header"><li class="collection-header">Moose App</li><li class="collection-item"><a href="../../source/actions/AddVectorPostprocessorAction.html">AddVectorPostprocessorAction</a>Add a VectorPostprocessor object to the simulation.</li></ul></section></section><div class="moose-modal modal" id="7960074c-f99b-46d5-8b04-a59c30455924"><div class="modal-content"><h4>(moose/framework/include/vectorpostprocessors/VectorPostprocessor.h)</h4><pre style="max-height:350px;"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://mooseframework.inl.gov
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#pragma once
+
+// MOOSE includes
+#include &quot;MooseTypes.h&quot;
+#include &quot;OutputInterface.h&quot;
+#include &quot;MooseEnum.h&quot;
+#include &quot;ReporterContext.h&quot;
+#include &quot;NonADFunctorInterface.h&quot;
+
+// libMesh
+#include &quot;libmesh/parallel.h&quot;
+
+// Forward declarations
+class FEProblemBase;
+class InputParameters;
+class SamplerBase;
+class VectorPostprocessorData;
+
+template &lt;typename T&gt;
+InputParameters validParams();
+
+/**
+ * Base class for Postprocessors that produce a vector of values.
+ */
+class VectorPostprocessor : public OutputInterface, public NonADFunctorInterface
+{
+public:
+  static InputParameters validParams();
+
+  VectorPostprocessor(const MooseObject * moose_object);
+
+  virtual ~VectorPostprocessor() = default;
+
+#ifdef MOOSE_KOKKOS_ENABLED
+  /**
+   * Special constructor used for Kokkos functor copy during parallel dispatch
+   */
+  VectorPostprocessor(const VectorPostprocessor &amp; object, const Moose::Kokkos::FunctorCopy &amp; key);
+#endif
+
+  /**
+   * Returns the name of the VectorPostprocessor.
+   */
+  std::string PPName() const { return _vpp_name; }
+
+  /**
+   * Return whether or not this VectorPostprocessor contains complete history
+   */
+  bool containsCompleteHistory() const { return _contains_complete_history; }
+
+  /**
+   * Return true if the VPP is operating in distributed mode.
+   */
+  bool isDistributed() const { return _is_distributed; }
+
+  /**
+   * Return the names of the vectors associated with this object.
+   */
+  const std::set&lt;std::string&gt; &amp; getVectorNames() const;
+
+protected:
+  /**
+   * Register a new vector to fill up.
+   */
+  VectorPostprocessorValue &amp; declareVector(const std::string &amp; vector_name);
+
+  /// The name of the VectorPostprocessor
+  const std::string _vpp_name;
+
+  /// The FEProblemBase
+  FEProblemBase &amp; _vpp_fe_problem;
+
+  /// DISTRIBUTED or REPLICATED
+  const MooseEnum &amp; _parallel_type;
+
+  friend class SamplerBase;
+
+private:
+  const MooseObject &amp; _vpp_moose_object;
+
+  const THREAD_ID _vpp_tid;
+
+  const bool _contains_complete_history;
+
+  const bool _is_distributed;
+
+  const bool _is_broadcast;
+
+  std::map&lt;std::string, VectorPostprocessorValue&gt; _thread_local_vectors;
+
+  std::set&lt;std::string&gt; _vector_names;
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+// The following items were created to maintain the various getScatter methods in the
+// VectorPostprocessorInterface.
+
+// Special consumer module add
+extern const ReporterMode REPORTER_MODE_VPP_SCATTER;
+
+/*
+ * Special ReporterContext that performs a scatter operation if a getScatter method is called on the
+ * VPP value.
+ *
+ * The source file contains an explicit instantiation.
+ * @see VectorPostprocessorInterface
+ */
+template &lt;typename T&gt;
+class VectorPostprocessorContext : public ReporterGeneralContext&lt;T&gt;
+{
+public:
+  VectorPostprocessorContext(const libMesh::ParallelObject &amp; other,
+                             const MooseObject &amp; producer,
+                             ReporterState&lt;T&gt; &amp; state);
+  virtual void finalize() override;
+  virtual void copyValuesBack() override;
+
+  const ScatterVectorPostprocessorValue &amp; getScatterValue() const;
+  const ScatterVectorPostprocessorValue &amp; getScatterValueOld() const;
+
+private:
+  ScatterVectorPostprocessorValue _scatter_value;
+  ScatterVectorPostprocessorValue _scatter_value_old;
+};
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="be8db178-9531-42b9-8e84-b27965f866c6"><div class="modal-content"><h4>(moose/framework/include/utils/MooseTypes.h)</h4><pre style="max-height:350px;"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://mooseframework.inl.gov
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#pragma once
+
+#include &quot;Moose.h&quot;
+#include &quot;ADReal.h&quot;
+#include &quot;EigenADReal.h&quot;
+#include &quot;ChainedReal.h&quot;
+#include &quot;ChainedADReal.h&quot;
+#include &quot;ADRankTwoTensorForward.h&quot;
+#include &quot;ADRankThreeTensorForward.h&quot;
+#include &quot;ADRankFourTensorForward.h&quot;
+#include &quot;ADSymmetricRankTwoTensorForward.h&quot;
+#include &quot;ADSymmetricRankFourTensorForward.h&quot;
+
+// This is not strictly needed here, but it used to be included by ADReal.h
+// so developers relied heavily on it being already available
+#include &quot;MooseError.h&quot;
+
+#include &quot;libmesh/libmesh.h&quot;
+#include &quot;libmesh/id_types.h&quot;
+#include &quot;libmesh/stored_range.h&quot;
+#include &quot;libmesh/petsc_macro.h&quot;
+#include &quot;libmesh/boundary_info.h&quot;
+#include &quot;libmesh/parameters.h&quot;
+#include &quot;libmesh/dense_vector.h&quot;
+#include &quot;libmesh/dense_matrix.h&quot;
+#include &quot;libmesh/int_range.h&quot;
+
+// BOOST include
+#include &quot;boost/bitmask_operators.h&quot;
+
+#include &quot;libmesh/ignore_warnings.h&quot;
+#include &quot;Eigen/Core&quot;
+#include &quot;libmesh/restore_warnings.h&quot;
+#include &quot;libmesh/tensor_tools.h&quot;
+
+#include &quot;metaphysicl/ct_types.h&quot;
+
+#include &lt;string&gt;
+#include &lt;vector&gt;
+#include &lt;memory&gt;
+#include &lt;type_traits&gt;
+#include &lt;functional&gt;
+#include &lt;iterator&gt; // std::data
+
+#if !defined(INCLUDE_NLOHMANN_JSON_HPP_) &amp;&amp; !defined(MOOSE_NLOHMANN_INCLUDED)
+#undef INCLUDE_NLOHMANN_JSON_FWD_HPP_
+#include &quot;nlohmann/json_fwd.h&quot;
+#define MOOSE_NLOHMANN_INCLUDED
+#endif
+
+// DO NOT USE (Deprecated)
+#define MooseSharedPointer std::shared_ptr
+#define MooseSharedNamespace std
+
+/**
+ * Macro for inferring the proper type of a normal loop index compatible
+ * with the &quot;auto&quot; keyword.
+ * Usage:
+ *   for (auto i = beginIndex(v); i &lt; v.size(); ++i)    // default index is zero
+ *   for (auto i = beginIndex(v, 1); i &lt; v.size(); ++i) // index is supplied
+ */
+// The multiple macros that you would need anyway [as per: Crazy Eddie (stack overflow)]
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored &quot;-Wgnu-zero-variadic-macro-arguments&quot;
+#endif
+
+#define beginIndex_0() ERROR-- &gt; &quot;beginIndex() requires one or two arguments&quot;
+#define beginIndex_1(A) decltype(A.size())(0)
+#define beginIndex_2(A, B) decltype(A.size())(B)
+#define beginIndex_3(A, B, C) ERROR-- &gt; &quot;beginIndex() requires one or two arguments&quot;
+#define beginIndex_4(A, B, C, D) ERROR-- &gt; &quot;beginIndex() requires one or two arguments&quot;
+
+// The interim macro that simply strips the excess and ends up with the required macro
+#define beginIndex_X(x, A, B, C, D, FUNC, ...) FUNC
+
+// The macro that the programmer uses
+#define beginIndex(...)                                                                            \
+  beginIndex_X(,                                                                                   \
+               ##__VA_ARGS__,                                                                      \
+               beginIndex_4(__VA_ARGS__),                                                          \
+               beginIndex_3(__VA_ARGS__),                                                          \
+               beginIndex_2(__VA_ARGS__),                                                          \
+               beginIndex_1(__VA_ARGS__),                                                          \
+               beginIndex_0(__VA_ARGS__))
+
+/**
+ * MooseIndex Macro for creating an index type of the right type for loops and other places where
+ * type matching is important.
+ * Usage:
+ *
+ * Type t;
+ *
+ * Container type:
+ * for (MooseIndex(t) i = 0; i &lt; t.size(); ++i)
+ *
+ * POD type:
+ * for (MooseIndex(t) i = 0; i &lt; t; ++i)
+ */
+#define MooseIndex(type) decltype(_MooseIndex(type, 0))
+
+// SFINAE templates for type MooseIndex type selection
+template &lt;typename T, typename std::enable_if&lt;std::is_integral&lt;T&gt;::value&gt;::type * = nullptr&gt;
+typename std::remove_const&lt;T&gt;::type
+_MooseIndex(T, int)
+{
+}
+
+template &lt;typename T&gt;
+decltype(std::declval&lt;T&gt;().size())
+_MooseIndex(T &amp;&amp;, int)
+{
+}
+
+template &lt;typename T&gt;
+decltype(&quot;NOTE: MooseIndex only works with integers and objects with size()!&quot;)
+_MooseIndex(T, double) = delete;
+
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
+
+/**
+ * forward declarations
+ */
+template &lt;typename&gt;
+class MooseArray;
+template &lt;typename&gt;
+class MaterialProperty;
+template &lt;typename&gt;
+class ADMaterialProperty;
+class InputParameters;
+
+namespace libMesh
+{
+typedef VectorValue&lt;Real&gt; RealVectorValue;
+typedef Eigen::Matrix&lt;Real, Moose::dim, 1&gt; RealDIMValue;
+typedef Eigen::Matrix&lt;Real, Eigen::Dynamic, 1&gt; RealEigenVector;
+typedef Eigen::Matrix&lt;ADReal, Eigen::Dynamic, 1&gt; ADRealEigenVector;
+typedef Eigen::Matrix&lt;Real, Eigen::Dynamic, Moose::dim&gt; RealVectorArrayValue;
+typedef Eigen::Matrix&lt;Real, Eigen::Dynamic, Moose::dim * Moose::dim&gt; RealTensorArrayValue;
+typedef Eigen::Matrix&lt;Real, Eigen::Dynamic, Eigen::Dynamic&gt; RealEigenMatrix;
+typedef Eigen::Matrix&lt;ADReal, Eigen::Dynamic, Eigen::Dynamic&gt; ADRealEigenMatrix;
+typedef TensorValue&lt;Real&gt; RealTensorValue;
+
+namespace TensorTools
+{
+template &lt;&gt;
+struct IncrementRank&lt;Eigen::Matrix&lt;Real, Eigen::Dynamic, 1&gt;&gt;
+{
+  typedef Eigen::Matrix&lt;Real, Eigen::Dynamic, Moose::dim&gt; type;
+};
+
+template &lt;&gt;
+struct IncrementRank&lt;Eigen::Matrix&lt;Real, Eigen::Dynamic, Moose::dim&gt;&gt;
+{
+  typedef Eigen::Matrix&lt;Real, Eigen::Dynamic, Moose::dim * Moose::dim&gt; type;
+};
+
+template &lt;&gt;
+struct DecrementRank&lt;Eigen::Matrix&lt;Real, Eigen::Dynamic, Moose::dim&gt;&gt;
+{
+  typedef Eigen::Matrix&lt;Real, Eigen::Dynamic, 1&gt; type;
+};
+
+template &lt;&gt;
+struct IncrementRank&lt;Eigen::Matrix&lt;ADReal, Eigen::Dynamic, 1&gt;&gt;
+{
+  typedef Eigen::Matrix&lt;ADReal, Eigen::Dynamic, Moose::dim&gt; type;
+};
+
+template &lt;&gt;
+struct IncrementRank&lt;Eigen::Matrix&lt;ADReal, Eigen::Dynamic, Moose::dim&gt;&gt;
+{
+  typedef Eigen::Matrix&lt;ADReal, Eigen::Dynamic, Moose::dim * Moose::dim&gt; type;
+};
+
+template &lt;&gt;
+struct DecrementRank&lt;Eigen::Matrix&lt;ADReal, Eigen::Dynamic, Moose::dim&gt;&gt;
+{
+  typedef Eigen::Matrix&lt;ADReal, Eigen::Dynamic, 1&gt; type;
+};
+}
+}
+
+// Common types defined in libMesh
+using libMesh::Gradient;
+using libMesh::RealGradient;
+
+// Bring these common types added to the libMesh namespace in this header
+// to global namespace
+using libMesh::ADRealEigenMatrix;
+using libMesh::ADRealEigenVector;
+using libMesh::DenseMatrix;
+using libMesh::DenseVector;
+using libMesh::RealDIMValue;
+using libMesh::RealEigenMatrix;
+using libMesh::RealEigenVector;
+using libMesh::RealTensorArrayValue;
+using libMesh::RealTensorValue;
+using libMesh::RealVectorArrayValue;
+using libMesh::RealVectorValue;
+
+namespace MetaPhysicL
+{
+template &lt;typename U&gt;
+struct ReplaceAlgebraicType&lt;libMesh::RealEigenVector, U&gt;
+{
+  typedef U type;
+};
+template &lt;typename U&gt;
+struct ReplaceAlgebraicType&lt;libMesh::ADRealEigenVector, U&gt;
+{
+  typedef U type;
+};
+}
+
+/**
+ * various MOOSE typedefs
+ */
+typedef Real PostprocessorValue;
+typedef std::vector&lt;Real&gt; VectorPostprocessorValue;
+typedef Real ScatterVectorPostprocessorValue;
+typedef boundary_id_type BoundaryID;
+typedef unsigned int InterfaceID;
+typedef subdomain_id_type SubdomainID;
+typedef unsigned int MooseObjectID;
+typedef unsigned int THREAD_ID;
+typedef unsigned int TagID;
+typedef unsigned int TagTypeID;
+typedef unsigned int PerfID;
+typedef unsigned int InvalidSolutionID;
+using RestartableDataMapName = std::string; // see MooseApp.h
+
+typedef libMesh::StoredRange&lt;std::vector&lt;dof_id_type&gt;::iterator, dof_id_type&gt; NodeIdRange;
+typedef libMesh::StoredRange&lt;std::vector&lt;const Elem *&gt;::iterator, const Elem *&gt;
+    ConstElemPointerRange;
+
+namespace Moose
+{
+
+/// This is used for places where we initialize some qp-sized data structures
+/// that would end up being sized too small after the quadrature order gets
+/// bumped (dynamically in-sim).  So for these cases, we just use this constant
+/// to size those data structures overly large to accommodate rather than come
+/// up with some overkill complex mechanism for dynamically resizing them.
+/// Eventually, we may need or implement that more sophisticated mechanism and
+/// will no longer need this.
+constexpr std::size_t constMaxQpsPerElem = 1000;
+
+// These are used by MooseVariableData and MooseVariableDataFV
+enum SolutionState : int
+{
+  Current = 0,
+  Old = 1,
+  Older = 2,
+  PreviousNL = -1
+};
+
+enum class SolutionIterationType : unsigned short
+{
+  Time = 0,
+  Nonlinear = 1,
+  FixedPoint = 2
+};
+
+// These are used by MooseVariableData and MooseVariableDataFV
+enum GeometryType
+{
+  Volume,
+  Face
+};
+
+template &lt;typename OutputType&gt;
+struct ShapeType
+{
+  typedef OutputType type;
+};
+template &lt;&gt;
+struct ShapeType&lt;Eigen::Matrix&lt;Real, Eigen::Dynamic, 1&gt;&gt;
+{
+  typedef Real type;
+};
+
+template &lt;typename OutputType&gt;
+struct DOFType
+{
+  typedef OutputType type;
+};
+template &lt;&gt;
+struct DOFType&lt;RealVectorValue&gt;
+{
+  typedef Real type;
+};
+} // namespace Moose
+
+template &lt;typename OutputType&gt;
+struct OutputTools
+{
+  typedef typename libMesh::TensorTools::IncrementRank&lt;OutputType&gt;::type OutputGradient;
+  typedef typename libMesh::TensorTools::IncrementRank&lt;OutputGradient&gt;::type OutputSecond;
+  typedef typename libMesh::TensorTools::DecrementRank&lt;OutputType&gt;::type OutputDivergence;
+
+  typedef MooseArray&lt;OutputType&gt; VariableValue;
+  typedef MooseArray&lt;OutputGradient&gt; VariableGradient;
+  typedef MooseArray&lt;OutputSecond&gt; VariableSecond;
+  typedef MooseArray&lt;OutputType&gt; VariableCurl;
+  typedef MooseArray&lt;OutputDivergence&gt; VariableDivergence;
+
+  typedef typename Moose::ShapeType&lt;OutputType&gt;::type OutputShape;
+  typedef typename libMesh::TensorTools::IncrementRank&lt;OutputShape&gt;::type OutputShapeGradient;
+  typedef typename libMesh::TensorTools::IncrementRank&lt;OutputShapeGradient&gt;::type OutputShapeSecond;
+  typedef typename libMesh::TensorTools::DecrementRank&lt;OutputShape&gt;::type OutputShapeDivergence;
+
+  typedef MooseArray&lt;std::vector&lt;OutputShape&gt;&gt; VariablePhiValue;
+  typedef MooseArray&lt;std::vector&lt;OutputShapeGradient&gt;&gt; VariablePhiGradient;
+  typedef MooseArray&lt;std::vector&lt;OutputShapeSecond&gt;&gt; VariablePhiSecond;
+  typedef MooseArray&lt;std::vector&lt;OutputShape&gt;&gt; VariablePhiCurl;
+  typedef MooseArray&lt;std::vector&lt;OutputShapeDivergence&gt;&gt; VariablePhiDivergence;
+
+  typedef MooseArray&lt;std::vector&lt;OutputShape&gt;&gt; VariableTestValue;
+  typedef MooseArray&lt;std::vector&lt;OutputShapeGradient&gt;&gt; VariableTestGradient;
+  typedef MooseArray&lt;std::vector&lt;OutputShapeSecond&gt;&gt; VariableTestSecond;
+  typedef MooseArray&lt;std::vector&lt;OutputShape&gt;&gt; VariableTestCurl;
+  typedef MooseArray&lt;std::vector&lt;OutputShapeDivergence&gt;&gt; VariableTestDivergence;
+
+  // DoF value type for the template class OutputType
+  typedef typename Moose::DOFType&lt;OutputType&gt;::type OutputData;
+  typedef MooseArray&lt;OutputData&gt; DofValue;
+  typedef OutputType OutputValue;
+};
+
+// types for standard variable
+typedef typename OutputTools&lt;Real&gt;::VariableValue VariableValue;
+typedef typename OutputTools&lt;Real&gt;::VariableGradient VariableGradient;
+typedef typename OutputTools&lt;Real&gt;::VariableSecond VariableSecond;
+typedef typename OutputTools&lt;Real&gt;::VariableCurl VariableCurl;
+typedef typename OutputTools&lt;Real&gt;::VariableDivergence VariableDivergence;
+typedef typename OutputTools&lt;Real&gt;::VariablePhiValue VariablePhiValue;
+typedef typename OutputTools&lt;Real&gt;::VariablePhiGradient VariablePhiGradient;
+typedef typename OutputTools&lt;Real&gt;::VariablePhiSecond VariablePhiSecond;
+typedef typename OutputTools&lt;Real&gt;::VariablePhiCurl VariablePhiCurl;
+typedef typename OutputTools&lt;Real&gt;::VariablePhiDivergence VariablePhiDivergence;
+typedef typename OutputTools&lt;Real&gt;::VariableTestValue VariableTestValue;
+typedef typename OutputTools&lt;Real&gt;::VariableTestGradient VariableTestGradient;
+typedef typename OutputTools&lt;Real&gt;::VariableTestSecond VariableTestSecond;
+typedef typename OutputTools&lt;Real&gt;::VariableTestCurl VariableTestCurl;
+typedef typename OutputTools&lt;Real&gt;::VariableTestDivergence VariableTestDivergence;
+
+// types for vector variable
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariableValue VectorVariableValue;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariableGradient VectorVariableGradient;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariableSecond VectorVariableSecond;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariableCurl VectorVariableCurl;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariableDivergence VectorVariableDivergence;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariablePhiValue VectorVariablePhiValue;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariablePhiGradient VectorVariablePhiGradient;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariablePhiSecond VectorVariablePhiSecond;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariablePhiCurl VectorVariablePhiCurl;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariablePhiDivergence VectorVariablePhiDivergence;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariableTestValue VectorVariableTestValue;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariableTestGradient VectorVariableTestGradient;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariableTestSecond VectorVariableTestSecond;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariableTestCurl VectorVariableTestCurl;
+typedef typename OutputTools&lt;RealVectorValue&gt;::VariableTestDivergence VectorVariableTestDivergence;
+
+// types for array variable
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariableValue ArrayVariableValue;
+typedef typename OutputTools&lt;ADRealEigenVector&gt;::VariableValue ADArrayVariableValue;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariableGradient ArrayVariableGradient;
+typedef typename OutputTools&lt;ADRealEigenVector&gt;::VariableGradient ADArrayVariableGradient;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariableSecond ArrayVariableSecond;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariableCurl ArrayVariableCurl;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariableDivergence ArrayVariableDivergence;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariablePhiValue ArrayVariablePhiValue;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariablePhiGradient ArrayVariablePhiGradient;
+typedef std::vector&lt;std::vector&lt;Eigen::Map&lt;RealDIMValue&gt;&gt;&gt; MappedArrayVariablePhiGradient;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariablePhiSecond ArrayVariablePhiSecond;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariablePhiCurl ArrayVariablePhiCurl;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariablePhiDivergence ArrayVariablePhiDivergence;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariableTestValue ArrayVariableTestValue;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariableTestGradient ArrayVariableTestGradient;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariableTestSecond ArrayVariableTestSecond;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariableTestCurl ArrayVariableTestCurl;
+typedef typename OutputTools&lt;RealEigenVector&gt;::VariableTestDivergence ArrayVariableTestDivergence;
+
+/**
+ * AD Array typedefs
+ */
+/*
+typedef typename OutputTools&lt;ADRealEigenVector&gt;::VariableTestValue ADArrayVariableTestValue;
+typedef typename OutputTools&lt;ADRealEigenVector&gt;::VariableTestGradient ADArrayVariableTestGradient;
+*/
+/**
+ * AD typedefs
+ */
+typedef libMesh::VectorValue&lt;ADReal&gt; ADRealVectorValue;
+typedef ADRealVectorValue ADRealGradient;
+typedef libMesh::VectorValue&lt;ADReal&gt; ADPoint;
+typedef libMesh::TensorValue&lt;ADReal&gt; ADRealTensorValue;
+typedef libMesh::DenseMatrix&lt;ADReal&gt; ADDenseMatrix;
+typedef libMesh::DenseVector&lt;ADReal&gt; ADDenseVector;
+typedef MooseArray&lt;ADReal&gt; ADVariableValue;
+typedef MooseArray&lt;ADRealVectorValue&gt; ADVariableGradient;
+typedef MooseArray&lt;ADRealTensorValue&gt; ADVariableSecond;
+typedef MooseArray&lt;ADRealVectorValue&gt; ADVectorVariableValue;
+typedef MooseArray&lt;ADRealTensorValue&gt; ADVectorVariableGradient;
+typedef MooseArray&lt;libMesh::TypeNTensor&lt;3, ADReal&gt;&gt; ADVectorVariableSecond;
+typedef MooseArray&lt;ADRealVectorValue&gt; ADVectorVariableCurl;
+
+namespace Moose
+{
+
+// type conversion from regular to AD
+template &lt;typename T&gt;
+struct ADType
+{
+  // unless a specialization exists we assume there is no specific AD type
+  typedef T type;
+};
+
+template &lt;&gt;
+struct ADType&lt;Real&gt;
+{
+  typedef ADReal type;
+};
+template &lt;&gt;
+struct ADType&lt;ChainedReal&gt;
+{
+  typedef ChainedADReal type;
+};
+template &lt;&gt;
+struct ADType&lt;Point&gt;
+{
+  typedef ADPoint type;
+};
+
+template &lt;&gt;
+struct ADType&lt;RealVectorValue&gt;
+{
+  typedef ADRealVectorValue type;
+};
+template &lt;&gt;
+struct ADType&lt;RankTwoTensor&gt;
+{
+  typedef ADRankTwoTensor type;
+};
+template &lt;&gt;
+struct ADType&lt;RankThreeTensor&gt;
+{
+  typedef ADRankThreeTensor type;
+};
+template &lt;&gt;
+struct ADType&lt;RankFourTensor&gt;
+{
+  typedef ADRankFourTensor type;
+};
+
+template &lt;&gt;
+struct ADType&lt;SymmetricRankTwoTensor&gt;
+{
+  typedef ADSymmetricRankTwoTensor type;
+};
+template &lt;&gt;
+struct ADType&lt;SymmetricRankFourTensor&gt;
+{
+  typedef ADSymmetricRankFourTensor type;
+};
+
+template &lt;template &lt;typename T&gt; class W, typename T&gt;
+struct ADType&lt;W&lt;T&gt;&gt;
+{
+  typedef W&lt;typename ADType&lt;T&gt;::type&gt; type;
+};
+
+template &lt;typename T&gt;
+struct ADType&lt;std::vector&lt;T, std::allocator&lt;T&gt;&gt;&gt;
+{
+  typedef typename ADType&lt;T&gt;::type adT;
+  typedef std::vector&lt;adT, std::allocator&lt;adT&gt;&gt; type;
+};
+
+template &lt;typename T&gt;
+struct ADType&lt;std::list&lt;T, std::allocator&lt;T&gt;&gt;&gt;
+{
+  typedef typename ADType&lt;T&gt;::type adT;
+  typedef std::list&lt;adT, std::allocator&lt;adT&gt;&gt; type;
+};
+
+template &lt;typename T&gt;
+struct ADType&lt;std::set&lt;T, std::less&lt;T&gt;, std::allocator&lt;T&gt;&gt;&gt;
+{
+  typedef typename ADType&lt;T&gt;::type adT;
+  typedef std::set&lt;adT, std::less&lt;adT&gt;, std::allocator&lt;adT&gt;&gt; type;
+};
+
+template &lt;typename T&gt;
+struct ADType&lt;DenseVector&lt;T&gt;&gt;
+{
+  typedef DenseVector&lt;typename ADType&lt;T&gt;::type&gt; type;
+};
+
+template &lt;typename T&gt;
+struct ADType&lt;DenseMatrix&lt;T&gt;&gt;
+{
+  typedef DenseMatrix&lt;typename ADType&lt;T&gt;::type&gt; type;
+};
+
+template &lt;&gt;
+struct ADType&lt;RealEigenVector&gt;
+{
+  typedef ADRealEigenVector type;
+};
+
+template &lt;&gt;
+struct ADType&lt;RealEigenMatrix&gt;
+{
+  typedef ADRealEigenMatrix type;
+};
+
+template &lt;&gt;
+struct ADType&lt;VariableValue&gt;
+{
+  typedef ADVariableValue type;
+};
+template &lt;&gt;
+struct ADType&lt;VariableGradient&gt;
+{
+  typedef ADVariableGradient type;
+};
+template &lt;&gt;
+struct ADType&lt;VariableSecond&gt;
+{
+  typedef ADVariableSecond type;
+};
+
+template &lt;&gt;
+struct ADType&lt;ADReal&gt;
+{
+  typedef ADReal type;
+};
+template &lt;&gt;
+struct ADType&lt;ChainedADReal&gt;
+{
+  typedef ChainedADReal type;
+};
+template &lt;&gt;
+struct ADType&lt;ADRankTwoTensor&gt;
+{
+  typedef ADRankTwoTensor type;
+};
+template &lt;&gt;
+struct ADType&lt;ADRankThreeTensor&gt;
+{
+  typedef ADRankThreeTensor type;
+};
+template &lt;&gt;
+struct ADType&lt;ADRankFourTensor&gt;
+{
+  typedef ADRankFourTensor type;
+};
+
+template &lt;&gt;
+struct ADType&lt;ADSymmetricRankTwoTensor&gt;
+{
+  typedef ADSymmetricRankTwoTensor type;
+};
+template &lt;&gt;
+struct ADType&lt;ADSymmetricRankFourTensor&gt;
+{
+  typedef ADSymmetricRankFourTensor type;
+};
+
+template &lt;&gt;
+struct ADType&lt;ADVariableValue&gt;
+{
+  typedef ADVariableValue type;
+};
+template &lt;&gt;
+struct ADType&lt;ADVariableGradient&gt;
+{
+  typedef ADVariableGradient type;
+};
+template &lt;&gt;
+struct ADType&lt;ADVariableSecond&gt;
+{
+  typedef ADVariableSecond type;
+};
+
+template &lt;typename T&gt;
+struct IsADType
+{
+  static constexpr bool value = false;
+};
+
+template &lt;&gt;
+struct IsADType&lt;ADReal&gt;
+{
+  static constexpr bool value = true;
+};
+
+template &lt;&gt;
+struct IsADType&lt;ADPoint&gt;
+{
+  static constexpr bool value = true;
+};
+
+template &lt;template &lt;typename T, typename... Args&gt; class W, typename T, typename... Args&gt;
+struct IsADType&lt;W&lt;T, Args...&gt;&gt;
+{
+  static constexpr bool value = IsADType&lt;T&gt;::value;
+};
+
+template &lt;typename T, typename... Args&gt;
+struct IsADType&lt;MetaPhysicL::DualNumber&lt;T, Args...&gt;&gt;
+{
+  static constexpr bool value = true;
+};
+
+/**
+ * This is a helper variable template for cases when we want to use a default compile-time
+ * error with constexpr-based if conditions. The templating delays the triggering
+ * of the static assertion until the template is instantiated.
+ */
+template &lt;class... Ts&gt;
+constexpr std::false_type always_false{};
+
+} // namespace Moose
+
+/**
+ * some AD typedefs for backwards compatibility
+ */
+typedef ADRealVectorValue ADRealVectorValue;
+typedef ADRealTensorValue ADRealTensorValue;
+typedef ADRealGradient ADRealGradient;
+
+template &lt;typename T&gt;
+using ADTemplateVariableValue =
+    typename OutputTools&lt;typename Moose::ADType&lt;T&gt;::type&gt;::VariableValue;
+template &lt;typename T&gt;
+using ADTemplateVariableGradient =
+    typename OutputTools&lt;typename Moose::ADType&lt;T&gt;::type&gt;::VariableGradient;
+template &lt;typename T&gt;
+using ADTemplateVariableSecond =
+    typename OutputTools&lt;typename Moose::ADType&lt;T&gt;::type&gt;::VariableSecond;
+template &lt;typename T&gt;
+using ADTemplateVariableCurl = typename OutputTools&lt;typename Moose::ADType&lt;T&gt;::type&gt;::VariableCurl;
+
+typedef VariableTestValue ADVariableTestValue;
+typedef VariableTestGradient ADVariableTestGradient;
+typedef VariableTestSecond ADVariableTestSecond;
+typedef VectorVariableTestValue ADVectorVariableTestValue;
+typedef VectorVariableTestGradient ADVectorVariableTestGradient;
+typedef VectorVariableTestSecond ADVectorVariableTestSecond;
+
+// We can  use the non-ad version for test values because these don&#x27;t depend on the mesh
+// displacements  (unless the location of the quadrature points depend on the mesh displacements...)
+template &lt;typename T&gt;
+using ADTemplateVariableTestValue = typename OutputTools&lt;T&gt;::VariableTestValue;
+template &lt;typename T&gt;
+using ADTemplateVariablePhiValue = typename OutputTools&lt;T&gt;::VariablePhiValue;
+
+// We need to use the AD version for test gradients and seconds because these *do* depend on the
+// mesh displacements
+template &lt;typename T&gt;
+using ADTemplateVariableTestGradient =
+    typename OutputTools&lt;typename Moose::ADType&lt;T&gt;::type&gt;::VariableTestGradient;
+template &lt;typename T&gt;
+using ADTemplateVariableTestSecond =
+    typename OutputTools&lt;typename Moose::ADType&lt;T&gt;::type&gt;::VariableTestSecond;
+template &lt;typename T&gt;
+using ADTemplateVariablePhiGradient =
+    typename OutputTools&lt;typename Moose::ADType&lt;T&gt;::type&gt;::VariablePhiGradient;
+using ADVariablePhiGradient = ADTemplateVariablePhiGradient&lt;Real&gt;;
+
+// Templated typed to support is_ad templated classes
+namespace Moose
+{
+template &lt;typename T, bool is_ad&gt;
+using GenericType = typename std::conditional&lt;is_ad, typename ADType&lt;T&gt;::type, T&gt;::type;
+}
+
+template &lt;bool is_ad&gt;
+using GenericReal = Moose::GenericType&lt;Real, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericChainedReal = Moose::GenericType&lt;ChainedReal, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericRealVectorValue = Moose::GenericType&lt;RealVectorValue, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericRealTensorValue = Moose::GenericType&lt;RealTensorValue, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericRankTwoTensor = Moose::GenericType&lt;RankTwoTensor, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericRankThreeTensor = Moose::GenericType&lt;RankThreeTensor, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericRankFourTensor = Moose::GenericType&lt;RankFourTensor, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericVariableValue = Moose::GenericType&lt;VariableValue, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericVectorVariableValue = Moose::GenericType&lt;VectorVariableValue, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericVariableGradient = Moose::GenericType&lt;VariableGradient, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericVariableSecond = Moose::GenericType&lt;VariableSecond, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericDenseVector = Moose::GenericType&lt;DenseVector&lt;Real&gt;, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericDenseMatrix = Moose::GenericType&lt;DenseMatrix&lt;Real&gt;, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericRealEigenVector = Moose::GenericType&lt;RealEigenVector, is_ad&gt;;
+template &lt;bool is_ad&gt;
+using GenericRealEigenMatrix = Moose::GenericType&lt;RealEigenMatrix, is_ad&gt;;
+
+namespace Moose
+{
+extern const processor_id_type INVALID_PROCESSOR_ID;
+extern const SubdomainID ANY_BLOCK_ID;
+extern const SubdomainID INVALID_BLOCK_ID;
+extern const BoundaryID ANY_BOUNDARY_ID;
+extern const BoundaryID INVALID_BOUNDARY_ID;
+extern const TagID INVALID_TAG_ID;
+extern const TagTypeID INVALID_TAG_TYPE_ID;
+const std::set&lt;SubdomainID&gt; EMPTY_BLOCK_IDS = {};
+const std::set&lt;BoundaryID&gt; EMPTY_BOUNDARY_IDS = {};
+
+/**
+ * MaterialData types
+ *
+ * @see FEProblemBase, MaterialPropertyInterface
+ */
+enum MaterialDataType
+{
+  BLOCK_MATERIAL_DATA,
+  BOUNDARY_MATERIAL_DATA,
+  FACE_MATERIAL_DATA,
+  NEIGHBOR_MATERIAL_DATA,
+  INTERFACE_MATERIAL_DATA
+};
+
+/**
+ * Flag for AuxKernel related execution type.
+ */
+enum AuxGroup
+{
+  PRE_IC = 0,
+  PRE_AUX = 1,
+  POST_AUX = 2,
+  ALL = 3
+};
+
+/**
+ * Framework-wide stuff
+ */
+enum VarKindType
+{
+  VAR_SOLVER,
+  VAR_AUXILIARY,
+  VAR_ANY
+};
+
+enum VarFieldType
+{
+  VAR_FIELD_STANDARD,
+  VAR_FIELD_SCALAR,
+  VAR_FIELD_VECTOR,
+  VAR_FIELD_ARRAY,
+  VAR_FIELD_ANY
+};
+
+enum CouplingType
+{
+  COUPLING_DIAG,
+  COUPLING_FULL,
+  COUPLING_CUSTOM
+};
+
+enum ConstraintSideType
+{
+  SIDE_PRIMARY,
+  SIDE_SECONDARY
+};
+
+enum DGResidualType
+{
+  Element,
+  Neighbor
+};
+
+enum DGJacobianType
+{
+  ElementElement,
+  ElementNeighbor,
+  NeighborElement,
+  NeighborNeighbor
+};
+
+enum ConstraintType
+{
+  Secondary = Element,
+  Primary = Neighbor
+};
+
+enum class ElementType : unsigned int
+{
+  Element = DGResidualType::Element,
+  Neighbor = DGResidualType::Neighbor,
+  Lower = DGResidualType::Neighbor + 1
+};
+
+enum class MortarType : unsigned int
+{
+  Secondary = static_cast&lt;unsigned int&gt;(Moose::ElementType::Element),
+  Primary = static_cast&lt;unsigned int&gt;(Moose::ElementType::Neighbor),
+  Lower = static_cast&lt;unsigned int&gt;(Moose::ElementType::Lower)
+};
+
+/**
+ * The type of nonlinear computation being performed
+ */
+enum class ComputeType
+{
+  Residual,
+  Jacobian,
+  ResidualAndJacobian
+};
+
+/**
+ * The filter type applied to a particular piece of &quot;restartable&quot; data. These filters
+ * will be applied during deserialization to include or exclude data as appropriate.
+ */
+enum class RESTARTABLE_FILTER : unsigned char
+{
+  RECOVERABLE
+};
+
+enum ConstraintJacobianType
+{
+  SecondarySecondary = ElementElement,
+  SecondaryPrimary = ElementNeighbor,
+  PrimarySecondary = NeighborElement,
+  PrimaryPrimary = NeighborNeighbor,
+  LowerLower,
+  LowerSecondary,
+  LowerPrimary,
+  SecondaryLower,
+  PrimaryLower
+};
+
+enum CoordinateSystemType : int
+{
+  COORD_XYZ = 0,
+  COORD_RZ,
+  COORD_RSPHERICAL
+};
+
+/**
+ * Preconditioning side
+ */
+enum PCSideType
+{
+  PCS_LEFT,
+  PCS_RIGHT,
+  PCS_SYMMETRIC,
+  PCS_DEFAULT ///&lt; Use whatever we have in PETSc
+};
+
+/**
+ * Norm type for converge test
+ */
+enum MooseKSPNormType
+{
+  KSPN_NONE,
+  KSPN_PRECONDITIONED,
+  KSPN_UNPRECONDITIONED,
+  KSPN_NATURAL,
+  KSPN_DEFAULT ///&lt; Use whatever we have in PETSc
+};
+
+/**
+ * Type of the solve
+ */
+enum SolveType
+{
+  ST_PJFNK,  ///&lt; Preconditioned Jacobian-Free Newton Krylov
+  ST_JFNK,   ///&lt; Jacobian-Free Newton Krylov
+  ST_NEWTON, ///&lt; Full Newton Solve
+  ST_FD,     ///&lt; Use finite differences to compute Jacobian
+  ST_LINEAR  ///&lt; Solving a linear problem
+};
+
+/**
+ * Type of the eigen solve
+ */
+enum EigenSolveType
+{
+  EST_POWER,           ///&lt; Power / Inverse / RQI
+  EST_ARNOLDI,         ///&lt; Arnoldi
+  EST_KRYLOVSCHUR,     ///&lt; Krylov-Schur
+  EST_JACOBI_DAVIDSON, ///&lt; Jacobi-Davidson
+  EST_NONLINEAR_POWER, ///&lt; Nonlinear inverse power
+  EST_NEWTON, ///&lt; Newton-based eigensolver with an assembled Jacobian matrix (fully coupled by default)
+  EST_PJFNK,   ///&lt; Preconditioned Jacobian-free Newton Krylov
+  EST_PJFNKMO, ///&lt; The same as PJFNK except that matrix-vector multiplication is employed to replace residual evaluation in linear solver
+  EST_JFNK     ///&lt; Jacobian-free Newton Krylov
+};
+
+/**
+ * Type of the eigen problem
+ */
+enum EigenProblemType
+{
+  EPT_HERMITIAN,             ///&lt; Hermitian
+  EPT_NON_HERMITIAN,         ///&lt; Non-Hermitian
+  EPT_GEN_HERMITIAN,         ///&lt; Generalized Hermitian
+  EPT_GEN_INDEFINITE,        ///&lt; Generalized Hermitian indefinite
+  EPT_GEN_NON_HERMITIAN,     ///&lt; Generalized Non-Hermitian
+  EPT_POS_GEN_NON_HERMITIAN, ///&lt; Generalized Non-Hermitian with positive (semi-)definite B
+  EPT_SLEPC_DEFAULT          ///&lt; use whatever SLPEC has by default
+};
+
+/**
+ * Which eigen pairs
+ */
+enum WhichEigenPairs
+{
+  WEP_LARGEST_MAGNITUDE,  ///&lt; largest magnitude
+  WEP_SMALLEST_MAGNITUDE, ///&lt; smallest magnitude
+  WEP_LARGEST_REAL,       ///&lt; largest real
+  WEP_SMALLEST_REAL,      ///&lt; smallest real
+  WEP_LARGEST_IMAGINARY,  ///&lt; largest imaginary
+  WEP_SMALLEST_IMAGINARY, ///&lt; smallest imaginary
+  WEP_TARGET_MAGNITUDE,   ///&lt; target magnitude
+  WEP_TARGET_REAL,        ///&lt; target real
+  WEP_TARGET_IMAGINARY,   ///&lt; target imaginary
+  WEP_ALL_EIGENVALUES,    ///&lt; all eigenvalues
+  WEP_SLEPC_DEFAULT       ///&lt; use whatever we have in SLEPC
+};
+
+/**
+ * Time integrators
+ */
+enum TimeIntegratorType
+{
+  TI_IMPLICIT_EULER,
+  TI_EXPLICIT_EULER,
+  TI_CRANK_NICOLSON,
+  TI_BDF2,
+  TI_EXPLICIT_MIDPOINT,
+  TI_LSTABLE_DIRK2,
+  TI_EXPLICIT_TVD_RK_2,
+  TI_NEWMARK_BETA
+};
+
+/**
+ * Type of constraint formulation
+ */
+enum ConstraintFormulationType
+{
+  Penalty,
+  Kinematic
+};
+/**
+ * Type of the line search
+ */
+enum LineSearchType
+{
+  LS_INVALID, ///&lt; means not set
+  LS_DEFAULT,
+  LS_NONE,
+  LS_BASIC,
+  LS_SHELL,
+  LS_CONTACT,
+  LS_PROJECT,
+  LS_L2,
+  LS_BT,
+  LS_CP
+};
+
+/**
+ * Type of the matrix-free finite-differencing parameter
+ */
+enum MffdType
+{
+  MFFD_INVALID, ///&lt; means not set
+  MFFD_WP,
+  MFFD_DS
+};
+
+/**
+ * Type of patch update strategy for modeling node-face constraints or contact
+ */
+enum PatchUpdateType
+{
+  Never,
+  Always,
+  Auto,
+  Iteration
+};
+
+/**
+ * Main types of Relationship Managers
+ */
+enum class RelationshipManagerType : unsigned char
+{
+  DEFAULT = 0,
+  GEOMETRIC = 1 &lt;&lt; 0,
+  ALGEBRAIC = 1 &lt;&lt; 1,
+  COUPLING = 1 &lt;&lt; 2
+};
+
+enum RMSystemType
+{
+  NONLINEAR,
+  AUXILIARY,
+  NONE
+};
+
+enum VectorTagType
+{
+  VECTOR_TAG_RESIDUAL = 0,
+  VECTOR_TAG_SOLUTION = 1,
+  VECTOR_TAG_ANY = 2
+};
+
+/**
+ * The type for the callback to set RelationshipManager parameters
+ */
+typedef std::function&lt;void(const InputParameters &amp;, InputParameters &amp;)&gt;
+    RelationshipManagerInputParameterCallback;
+
+std::string stringify(const Moose::RelationshipManagerType &amp; t);
+std::string stringify(const Moose::TimeIntegratorType &amp; t);
+
+/**
+ * Struct that all MOOSE derivative strings derive from
+ */
+struct DerivativeStringClass
+{
+};
+
+/**
+ * Replacement for std::span which we only get in c++20. This concept was generated in conversation
+ * with chatgpt-5. A few notes
+ * - Denoting all methods as const is apparently the standard idiom for span views
+ * - We mark all these methods as noexcept because they are trivial. E.g. we do no bounds checking
+ *   or anything like that so there are no possibilities for throwing exceptions. By marking
+ *   noexcept we are making this property known to the compiler so it can potentially perform
+ *   optimizations
+ */
+template &lt;typename T&gt;
+class Span
+{
+public:
+  using element_type = T;
+  using size_type = std::size_t;
+  using pointer = T *;
+  using reference = T &amp;;
+
+  constexpr Span(T * ptr, size_type n) noexcept : _ptr(ptr), _n(n) {}
+
+  // observers (enough for std::data / std::size)
+  constexpr pointer data() const noexcept { return _ptr; }
+  constexpr size_type size() const noexcept { return _n; }
+  constexpr bool empty() const noexcept { return _n == 0; }
+
+  // optional element/iterator access
+  constexpr reference operator[](size_type i) const noexcept { return _ptr[i]; }
+  constexpr pointer begin() const noexcept { return _ptr; }
+  constexpr pointer end() const noexcept { return _ptr + _n; }
+
+private:
+  T * _ptr;
+  size_type _n;
+};
+
+/**
+ * Helper function for creating a span from a given \p container. This helper function will
+ * automatically deduce whether we&#x27;re spanning over non-const or const elements  */
+template &lt;class C&gt;
+auto
+makeSpan(C &amp; container, std::size_t offset, std::size_t n)
+{
+  using PointerType = decltype(std::data(container));
+  using ElementType = std::remove_pointer_t&lt;PointerType&gt;;
+  return Moose::Span&lt;ElementType&gt;{std::data(container) + offset, n};
+}
+} // namespace Moose
+
+namespace libMesh
+{
+template &lt;&gt;
+inline void
+print_helper(std::ostream &amp; os, const Moose::RelationshipManagerType * param)
+{
+  // Specialization so that we don&#x27;t print out unprintable characters
+  os &lt;&lt; Moose::stringify(*param);
+}
+} // namespace libMesh
+
+template &lt;&gt;
+struct enable_bitmask_operators&lt;Moose::RelationshipManagerType&gt;
+{
+  static const bool enable = true;
+};
+
+/**
+ * This Macro is used to generate std::string derived types useful for
+ * strong type checking and special handling in the GUI.  It does not
+ * extend std::string in any way so it is generally &quot;safe&quot;
+ *
+ * Be sure to use the DerivativeStringToJSON macro for new types in
+ * MooseTypes.C to also define to_json for each
+ */
+#define MooseDerivativeStringClass(TheName)                                                        \
+  class TheName : public std::string, public Moose::DerivativeStringClass                          \
+  {                                                                                                \
+  public:                                                                                          \
+    TheName() : std::string() {}                                                                   \
+    TheName(const std::string &amp; str) : std::string(str) {}                                         \
+    TheName(const std::string &amp; str, size_t pos, size_t n = npos) : std::string(str, pos, n) {}    \
+    TheName(const char * s, size_t n) : std::string(s, n) {}                                       \
+    TheName(const char * s) : std::string(s) {}                                                    \
+    TheName(size_t n, char c) : std::string(n, c) {}                                               \
+  };                                                                                               \
+  namespace nlohmann                                                                               \
+  {                                                                                                \
+  template &lt;&gt;                                                                                      \
+  struct adl_serializer&lt;TheName&gt;                                                                   \
+  {                                                                                                \
+    static void to_json(json &amp; j, const TheName &amp; v);                                              \
+  };                                                                                               \
+  }                                                                                                \
+  static_assert(true, &quot;&quot;)
+
+// Instantiate new Types
+
+/// This type is for expected (i.e. input) file names or paths that your simulation needs.
+/// If relative types are assigned to this type, they are replaced with an absolute path
+/// that is relative to the context of the parameter (usually the input file).
+MooseDerivativeStringClass(FileName);
+
+/// Similar to FileName but without an extension
+MooseDerivativeStringClass(FileNameNoExtension);
+
+/// This type is for expected filenames that should be relative and will not have their
+/// values set to absolute paths like FileName
+MooseDerivativeStringClass(RelativeFileName);
+
+/// This type is for files used in the DataFileInterface, which enables searching of files
+/// within the registered data directory
+MooseDerivativeStringClass(DataFileName);
+
+/// This type is similar to &quot;FileName&quot;, but is used to further filter file dialogs on known file mesh types
+MooseDerivativeStringClass(MeshFileName);
+
+/// This type is similar to &quot;FileName&quot;, but is used to further filter file dialogs on known matrix file types
+MooseDerivativeStringClass(MatrixFileName);
+
+/// This type is for output file base
+MooseDerivativeStringClass(OutFileBase);
+
+/// This type is used for objects that expect nonlinear variable names (i.e. Kernels, BCs)
+MooseDerivativeStringClass(NonlinearVariableName);
+
+/// This type is used for objects that expect linear variable names (i.e. LinearFVKernels, LinearFVBCs)
+MooseDerivativeStringClass(LinearVariableName);
+
+/// This type is used for objects that expect linear or nonlinear solver variable names
+MooseDerivativeStringClass(SolverVariableName);
+
+/// This type is used for objects that expect Auxiliary variable names (i.e. AuxKernels, AuxBCs)
+MooseDerivativeStringClass(AuxVariableName);
+
+/// This type is used for objects that expect either Solver or Auxiliary Variables such as postprocessors
+MooseDerivativeStringClass(VariableName);
+
+/// This type is used for objects that expect Boundary Names/Ids read from or generated on the current mesh
+MooseDerivativeStringClass(BoundaryName);
+
+/// This type is similar to BoundaryName but is used for &quot;blocks&quot; or subdomains in the current mesh
+MooseDerivativeStringClass(SubdomainName);
+
+/// This type is used for objects that expect Postprocessor objects
+MooseDerivativeStringClass(PostprocessorName);
+
+/// This type is used for objects that expect VectorPostprocessor objects
+MooseDerivativeStringClass(VectorPostprocessorName);
+
+/// This type is used for objects that expect MeshDivision objects
+MooseDerivativeStringClass(MeshDivisionName);
+
+/// This type is used for objects that expect Moose Function objects
+MooseDerivativeStringClass(FunctionName);
+
+/// This type is used for objects that expect Moose Distribution objects
+MooseDerivativeStringClass(DistributionName);
+
+/// This type is used for objects that expect Moose Sampler objects
+MooseDerivativeStringClass(SamplerName);
+
+/// This type is used for objects that expect &quot;UserObject&quot; names
+MooseDerivativeStringClass(UserObjectName);
+
+/// This type is used for objects that expect an Indicator object name
+MooseDerivativeStringClass(IndicatorName);
+
+/// This type is used for objects that expect an Marker object name
+MooseDerivativeStringClass(MarkerName);
+
+/// This type is used for objects that expect an MultiApp object name
+MooseDerivativeStringClass(MultiAppName);
+
+/// Used for objects the require Output object names
+MooseDerivativeStringClass(OutputName);
+
+/// Used for objects that expect MaterialProperty names
+MooseDerivativeStringClass(MaterialPropertyName);
+
+/// Used for objects that expect Moose::Functor names
+MooseDerivativeStringClass(MooseFunctorName);
+
+/// User for accessing Material objects
+MooseDerivativeStringClass(MaterialName);
+
+/// Tag Name
+MooseDerivativeStringClass(TagName);
+
+/// Name of MeshGenerators
+MooseDerivativeStringClass(MeshGeneratorName);
+
+/// Name of extra element IDs
+MooseDerivativeStringClass(ExtraElementIDName);
+
+/// Name of a Reporter Value, second argument to ReporterName (see Reporter.h)
+MooseDerivativeStringClass(ReporterValueName);
+
+/// Name of a Component object
+MooseDerivativeStringClass(ComponentName);
+
+/// Name of a Physics object
+MooseDerivativeStringClass(PhysicsName);
+
+/// Name of a Positions object
+MooseDerivativeStringClass(PositionsName);
+
+/// Name of a Times object
+MooseDerivativeStringClass(TimesName);
+
+/// Name of an Executor.  Used for inputs to Executors
+MooseDerivativeStringClass(ExecutorName);
+
+/// ParsedFunction/ParsedMaterial etc. FParser expression
+MooseDerivativeStringClass(ParsedFunctionExpression);
+
+/// System name support of multiple nonlinear systems on the same mesh
+MooseDerivativeStringClass(NonlinearSystemName);
+
+/// Name of a Convergence object
+MooseDerivativeStringClass(ConvergenceName);
+
+/// System name support of multiple linear systems on the same mesh
+MooseDerivativeStringClass(LinearSystemName);
+
+/// Name of a system which either be linear or nonlinear
+MooseDerivativeStringClass(SolverSystemName);
+
+/// Command line argument, specialized to handle quotes in vector arguments
+MooseDerivativeStringClass(CLIArgString);
+
+#ifdef MOOSE_MFEM_ENABLED
+/**
+ * Coefficients used in input for MFEM residual objects
+ */
+///@{
+MooseDerivativeStringClass(MFEMScalarCoefficientName);
+MooseDerivativeStringClass(MFEMVectorCoefficientName);
+MooseDerivativeStringClass(MFEMMatrixCoefficientName);
+///@}
+#endif
+/**
+ * additional MOOSE typedefs
+ */
+typedef std::vector&lt;VariableName&gt; CoupledName;
+
+namespace Moose
+{
+extern const TagName SOLUTION_TAG;
+extern const TagName OLD_SOLUTION_TAG;
+extern const TagName OLDER_SOLUTION_TAG;
+extern const TagName PREVIOUS_NL_SOLUTION_TAG;
+extern const TagName PREVIOUS_FP_SOLUTION_TAG;
+extern const TagName SOLUTION_DOT_TAG;
+extern const TagName SOLUTION_DOTDOT_TAG;
+
+enum class FEBackend
+{
+  LibMesh
+#ifdef MOOSE_MFEM_ENABLED
+  ,
+  MFEM
+#endif
+};
+
+#ifdef MOOSE_KOKKOS_ENABLED
+namespace Kokkos
+{
+// Passkey for calling special constructors for functor copy
+class FunctorCopy
+{
+  friend class ResidualObject;
+  friend class KernelBase;
+  friend class NodalKernelBase;
+  friend class BoundaryCondition;
+  friend class IntegratedBCBase;
+  friend class NodalBCBase;
+  friend class MaterialBase;
+  friend class Material;
+  friend class AuxKernel;
+  friend class FunctionBase;
+  friend class UserObject;
+  friend class ElementUserObject;
+  friend class NodalUserObject;
+  friend class SideUserObject;
+  friend class GeneralUserObject;
+  friend class Postprocessor;
+  friend class VectorPostprocessor;
+  friend class Reporter;
+
+  FunctorCopy() {}
+  FunctorCopy(const FunctorCopy &amp;) {}
+};
+}
+#endif
+}
+
+/// macros for adding Tensor index enums locally
+#define usingTensorIndices(...)                                                                    \
+  enum                                                                                             \
+  {                                                                                                \
+    __VA_ARGS__                                                                                    \
+  }
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="d8b4c82d-f682-49d7-a8a4-7bf84c68abfc"><div class="modal-content"><h4>verbose_restore</h4><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Set to True to enable verbose screen printing related to solution restoration</p></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script>

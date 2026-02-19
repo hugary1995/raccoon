@@ -1,0 +1,524 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Polycrystal Initial Conditions | RACCOON</title><link rel="icon" type="image/x-icon" href="../../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../../contrib/jquery/jquery.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../../media/framework/github-logo.png" alt="GitHub wordmark" class="github-mark"></img><img src="../../../media/framework/github-mark.png" alt="GitHub logo" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="6d738fec-178f-4b08-86fb-f7b6d7f2b7c6" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="8ebc06c4-fb35-4f84-8c4a-e5da300e8e20" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="9bc56b25-77e0-401b-aa91-3214b402e2e4" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="a1d0043b-96da-49c1-8352-3919bfd45906" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="2328170f-ed25-42cc-b54e-b65e36028062"><i class="material-icons">menu</i></a><ul class="sidenav" id="2328170f-ed25-42cc-b54e-b65e36028062"><li><a href="#!" class="dropdown-trigger" data-target="2c02f1cf-6fc0-46c5-813f-2992daea87c7" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="31a9a430-ab07-4ca2-9678-b367b24ff1cc" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="8639e3c9-d502-49bc-80bd-1bf41e957b08" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="f00e3a83-1543-483b-afa1-930f3fda9eed" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="6d738fec-178f-4b08-86fb-f7b6d7f2b7c6"><li><a href="../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../getting_started/ide.html">Code development</a></li><li><a href="../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="8ebc06c4-fb35-4f84-8c4a-e5da300e8e20"><li><a href="../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="9bc56b25-77e0-401b-aa91-3214b402e2e4"><li><a href="../../../theory/intro.html">Introduction</a></li><li><a href="../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="a1d0043b-96da-49c1-8352-3919bfd45906"><li><a href="../../index.html">Physics modules</a></li><li><a href="../../../syntax/index.html">Complete syntax</a></li><li><a href="../../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="2c02f1cf-6fc0-46c5-813f-2992daea87c7"><li><a href="../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../getting_started/ide.html">Code development</a></li><li><a href="../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="31a9a430-ab07-4ca2-9678-b367b24ff1cc"><li><a href="../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="8639e3c9-d502-49bc-80bd-1bf41e957b08"><li><a href="../../../theory/intro.html">Introduction</a></li><li><a href="../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="f00e3a83-1543-483b-afa1-930f3fda9eed"><li><a href="../../index.html">Physics modules</a></li><li><a href="../../../syntax/index.html">Complete syntax</a></li><li><a href="../../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="cba1008e-e130-4ce2-9543-1ffbccf788e2" data-section-level="1" data-section-text="Polycrystal Initial Conditions"><h1 id="polycrystal-initial-conditions">Polycrystal Initial Conditions</h1><p>Polycrystal Initial Conditions can be created in a few ways. They can be read from a file, generated with Voronoi Tesselation of a set of points, or placed in some regular crystal pattern such as hex or circles. In any case, it is advantageous to simulate such a system with a reduced number of order parameters for efficiency, which requires the use of the <a href="../../../source/postprocessors/GrainTracker.html">Grain Tracker</a>. The trickiest part of running a reduced order parameter model however, is the initial assignment of order parameters to grains. This process is akin to solving a <a href="https://en.wikipedia.org/wiki/Graph_coloring">graph coloring</a>. Fortunately, the order parameter assignment process has been taken care of for you. Each polycrystal initial condition should simply extend the PolycrystalUserObjectBase class.</p><div class="card moose-float"><div class="card-content"><picture class="materialboxed moose-image"><img src="../../../media/phase_field/voronoi_flood.png" alt="Grain structure with associated neighbor graph overlaid."></img></picture><p class="moose-caption"><span class="moose-caption-text">Grain structure with associated neighbor graph overlaid.</span></p></div></div><p>Extensions of this class must begin by providing reporting the number of grains in the initial condition.</p><pre style="max-height:350px;"><code class="language-cpp">  virtual unsigned int getNumGrains() const = 0;
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#2234d7c7-1551-45ef-83ff-93bea54e78eb">(moose/modules/phase_field/include/userobjects/PolycrystalUserObjectBase.h)</a><p>Additionally, the developer must provide an implementation for reporting the grain(s) at every point in the domain:</p><pre style="max-height:350px;"><code class="language-cpp">  virtual void getGrainsBasedOnPoint(const Point &amp; point,
+                                     std::vector&lt;unsigned int&gt; &amp; grains) const = 0;
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#5fbbdb3a-f3a3-4cf5-a970-e10cbceed816">(moose/modules/phase_field/include/userobjects/PolycrystalUserObjectBase.h)</a><p>Finally, a method to report the variable value of the current order parameter at a point must be provided. This method is called after order parameters have been assigned to all grains.</p><pre style="max-height:350px;"><code class="language-cpp">  virtual Real getVariableValue(unsigned int op_index, const Point &amp; p) const = 0;
+</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#ad61cd5e-fc58-4d05-a9ac-1d823f375780">(moose/modules/phase_field/include/userobjects/PolycrystalUserObjectBase.h)</a><p>The object uses these implementations to build a grain adjacency graph that can be feed to a stochastic or deterministic graph coloring algorithm. MOOSE defaults to using one of the built-in high performance coloring algorithms from the PETSc package. However, a simple backtracking algorithm is also included which works reasonably well on smaller to mid-sized problems.</p><p>The centroids of grains can be randomly generated or read from a file. The use of Maximal Poisson-Disk Sampling (MPS) to generate grain centroids is described in <a href="MPS.html">MPS</a>.</p><p>See:</p><p><a href="../../../source/userobjects/PolycrystalVoronoi.html">PolycrystalVoronoi</a></p><p><a href="../../../source/userobjects/PolycrystalEBSD.html">PolycrystalEBSD</a></p><p><a href="../../../source/userobjects/PolycrystalCircles.html">PolycrystalCircles</a></p><p><a href="../../../source/userobjects/PolycrystalHex.html">PolycrystalHex</a> </p></section><div class="moose-modal modal" id="2234d7c7-1551-45ef-83ff-93bea54e78eb"><div class="modal-content"><h4>(moose/modules/phase_field/include/userobjects/PolycrystalUserObjectBase.h)</h4><pre style="max-height:350px;"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://mooseframework.inl.gov
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#pragma once
+
+#include &quot;DenseMatrix.h&quot;
+#include &quot;FeatureFloodCount.h&quot;
+
+// Forward Declarations
+
+/**
+ * This object provides the base capability for creating proper polycrystal ICs. It is
+ * able to discover the grain structure to provide information about neighboring grains
+ * so that they will not be assigned the same order parameters with a reduced set of variables.
+ */
+class PolycrystalUserObjectBase : public FeatureFloodCount
+{
+public:
+  static InputParameters validParams();
+
+  PolycrystalUserObjectBase(const InputParameters &amp; parameters);
+
+  /**
+   * This callback is triggered after the object is initialized and may be optionally
+   * overridden to do precompute the element to grain identifiers ahead of time.
+   */
+  virtual void precomputeGrainStructure() {}
+
+  /**
+   * Method for retrieving active grain IDs based on some point in the mesh. Typically these
+   * are element centroids or nodes depending on the basis functions being initialized. ICs that
+   * have fixed resolution data (i.e. experimental datasets) may choose to implement
+   * the element based method as well for added convenience.
+   */
+  virtual void getGrainsBasedOnPoint(const Point &amp; point,
+                                     std::vector&lt;unsigned int&gt; &amp; grains) const = 0;
+
+  /**
+   * This method may be defined in addition to the point based initialization to speed up lookups.
+   * It returns grain IDs based on the current element. Note: If your simulation contains adaptivity
+   * the point based method may be used to retrieve grain information as well as this method.
+   */
+  virtual void getGrainsBasedOnElem(const Elem &amp; elem, std::vector&lt;unsigned int&gt; &amp; grains) const
+  {
+    getGrainsBasedOnPoint(elem.vertex_average(), grains);
+  }
+
+  /**
+   * Must be overridden by the deriving class to provide the number of grains in the polycrystal
+   * structure.
+   */
+  virtual unsigned int getNumGrains() const = 0;
+
+  /**
+   * Returns the variable value for a given op_index and mesh point. This is the method used by the
+   * initial condition after the Polycrystal grain structure has be setup. Those grains are
+   * then distributed to the typically smaller number of order parameters by this class.
+   * This method is then used to return those values but it may be overridden in a derived class.
+   */
+  virtual Real getVariableValue(unsigned int op_index, const Point &amp; p) const = 0;
+
+  /**
+   * Similarly to the getVariableValue method, this method also returns values but may be optimized
+   * for returning nodal values.
+   */
+  virtual Real getNodalVariableValue(unsigned int op_index, const Node &amp; n) const
+  {
+    return getVariableValue(op_index, static_cast&lt;const Point &amp;&gt;(n));
+  }
+
+  /* Returns all available coloring algorithms as an enumeration type for input files.
+   */
+  static MooseEnum coloringAlgorithms();
+
+  /**
+   * Returns corresponding descriptions of available coloring algorithms.
+   */
+  static std::string coloringAlgorithmDescriptions();
+
+  /**
+   * UserObject interface overrides. Derived classes should _not_ override any of these methods.
+   */
+  virtual void initialSetup() override;
+  virtual void initialize() override;
+  virtual void execute() override;
+  virtual void finalize() override;
+
+protected:
+  virtual bool areFeaturesMergeable(const FeatureData &amp; f1, const FeatureData &amp; f2) const override;
+  virtual bool isNewFeatureOrConnectedRegion(const DofObject * dof_object,
+                                             std::size_t &amp; current_index,
+                                             FeatureData *&amp; feature,
+                                             Status &amp; status,
+                                             unsigned int &amp; new_id) override;
+  virtual void prepareDataForTransfer() override;
+  virtual void mergeSets() override;
+  virtual processor_id_type numberOfDistributedMergeHelpers() const override;
+  virtual void restoreOriginalDataStructures(std::vector&lt;std::list&lt;FeatureData&gt;&gt; &amp; orig) override;
+
+  /**
+   * Builds a dense adjacency matrix based on the discovery of grain neighbors and halos
+   * surrounding each grain.
+   */
+  void buildGrainAdjacencyMatrix();
+
+  /**
+   * Method that runs a coloring algorithm to assign OPs to grains.
+   */
+  void assignOpsToGrains();
+
+  /**
+   * Built-in simple &quot;back-tracking&quot; algorithm to assign colors to a graph.
+   */
+  bool colorGraph(unsigned int vertex);
+
+  /**
+   * Helper method for the back-tracking graph coloring algorithm.
+   */
+  bool isGraphValid(unsigned int vertex, unsigned int color);
+
+  /**
+   * Prints out the adjacency matrix in a nicely spaced integer format.
+   */
+  void printGrainAdjacencyMatrix() const;
+
+  /*************************************************
+   *************** Data Structures *****************
+   ************************************************/
+  /// The dense adjacency matrix
+  std::unique_ptr&lt;DenseMatrix&lt;Real&gt;&gt; _adjacency_matrix;
+
+  /// mesh dimension
+  const unsigned int _dim;
+
+  /// The maximum number of order parameters (colors) available to assign to the grain structure
+  const unsigned int _op_num;
+
+  /// A map of the grain_id to op
+  std::map&lt;unsigned int, unsigned int&gt; _grain_to_op;
+
+  /// The selected graph coloring algorithm used by this object
+  const MooseEnum _coloring_algorithm;
+
+  /// A Boolean indicating whether the object has assigned colors to grains (internal use)
+  bool _colors_assigned;
+
+  /// A user controllable Boolean which can be used to print the adjacency matrix to the console
+  const bool _output_adjacency_matrix;
+
+  /// Used to indicate an invalid coloring for the built-in back-tracking algorithm
+  static const unsigned int INVALID_COLOR;
+
+  /// Used to hold the thickness of the halo that should be constructed for detecting adjacency
+  static const unsigned int HALO_THICKNESS;
+
+private:
+  /// The number of chunks (for merging the features together)
+  processor_id_type _num_chunks;
+
+  /// A vector indicating which op is assigned to each grain (by index of the grain)
+  std::vector&lt;unsigned int&gt; _grain_idx_to_op;
+
+  /// Temporary storage area for current grains at a point to avoid memory churn
+  std::vector&lt;unsigned int&gt; _prealloc_tmp_grains;
+
+  std::map&lt;dof_id_type, std::vector&lt;unsigned int&gt;&gt; _entity_to_grain_cache;
+};
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="5fbbdb3a-f3a3-4cf5-a970-e10cbceed816"><div class="modal-content"><h4>(moose/modules/phase_field/include/userobjects/PolycrystalUserObjectBase.h)</h4><pre style="max-height:350px;"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://mooseframework.inl.gov
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#pragma once
+
+#include &quot;DenseMatrix.h&quot;
+#include &quot;FeatureFloodCount.h&quot;
+
+// Forward Declarations
+
+/**
+ * This object provides the base capability for creating proper polycrystal ICs. It is
+ * able to discover the grain structure to provide information about neighboring grains
+ * so that they will not be assigned the same order parameters with a reduced set of variables.
+ */
+class PolycrystalUserObjectBase : public FeatureFloodCount
+{
+public:
+  static InputParameters validParams();
+
+  PolycrystalUserObjectBase(const InputParameters &amp; parameters);
+
+  /**
+   * This callback is triggered after the object is initialized and may be optionally
+   * overridden to do precompute the element to grain identifiers ahead of time.
+   */
+  virtual void precomputeGrainStructure() {}
+
+  /**
+   * Method for retrieving active grain IDs based on some point in the mesh. Typically these
+   * are element centroids or nodes depending on the basis functions being initialized. ICs that
+   * have fixed resolution data (i.e. experimental datasets) may choose to implement
+   * the element based method as well for added convenience.
+   */
+  virtual void getGrainsBasedOnPoint(const Point &amp; point,
+                                     std::vector&lt;unsigned int&gt; &amp; grains) const = 0;
+
+  /**
+   * This method may be defined in addition to the point based initialization to speed up lookups.
+   * It returns grain IDs based on the current element. Note: If your simulation contains adaptivity
+   * the point based method may be used to retrieve grain information as well as this method.
+   */
+  virtual void getGrainsBasedOnElem(const Elem &amp; elem, std::vector&lt;unsigned int&gt; &amp; grains) const
+  {
+    getGrainsBasedOnPoint(elem.vertex_average(), grains);
+  }
+
+  /**
+   * Must be overridden by the deriving class to provide the number of grains in the polycrystal
+   * structure.
+   */
+  virtual unsigned int getNumGrains() const = 0;
+
+  /**
+   * Returns the variable value for a given op_index and mesh point. This is the method used by the
+   * initial condition after the Polycrystal grain structure has be setup. Those grains are
+   * then distributed to the typically smaller number of order parameters by this class.
+   * This method is then used to return those values but it may be overridden in a derived class.
+   */
+  virtual Real getVariableValue(unsigned int op_index, const Point &amp; p) const = 0;
+
+  /**
+   * Similarly to the getVariableValue method, this method also returns values but may be optimized
+   * for returning nodal values.
+   */
+  virtual Real getNodalVariableValue(unsigned int op_index, const Node &amp; n) const
+  {
+    return getVariableValue(op_index, static_cast&lt;const Point &amp;&gt;(n));
+  }
+
+  /* Returns all available coloring algorithms as an enumeration type for input files.
+   */
+  static MooseEnum coloringAlgorithms();
+
+  /**
+   * Returns corresponding descriptions of available coloring algorithms.
+   */
+  static std::string coloringAlgorithmDescriptions();
+
+  /**
+   * UserObject interface overrides. Derived classes should _not_ override any of these methods.
+   */
+  virtual void initialSetup() override;
+  virtual void initialize() override;
+  virtual void execute() override;
+  virtual void finalize() override;
+
+protected:
+  virtual bool areFeaturesMergeable(const FeatureData &amp; f1, const FeatureData &amp; f2) const override;
+  virtual bool isNewFeatureOrConnectedRegion(const DofObject * dof_object,
+                                             std::size_t &amp; current_index,
+                                             FeatureData *&amp; feature,
+                                             Status &amp; status,
+                                             unsigned int &amp; new_id) override;
+  virtual void prepareDataForTransfer() override;
+  virtual void mergeSets() override;
+  virtual processor_id_type numberOfDistributedMergeHelpers() const override;
+  virtual void restoreOriginalDataStructures(std::vector&lt;std::list&lt;FeatureData&gt;&gt; &amp; orig) override;
+
+  /**
+   * Builds a dense adjacency matrix based on the discovery of grain neighbors and halos
+   * surrounding each grain.
+   */
+  void buildGrainAdjacencyMatrix();
+
+  /**
+   * Method that runs a coloring algorithm to assign OPs to grains.
+   */
+  void assignOpsToGrains();
+
+  /**
+   * Built-in simple &quot;back-tracking&quot; algorithm to assign colors to a graph.
+   */
+  bool colorGraph(unsigned int vertex);
+
+  /**
+   * Helper method for the back-tracking graph coloring algorithm.
+   */
+  bool isGraphValid(unsigned int vertex, unsigned int color);
+
+  /**
+   * Prints out the adjacency matrix in a nicely spaced integer format.
+   */
+  void printGrainAdjacencyMatrix() const;
+
+  /*************************************************
+   *************** Data Structures *****************
+   ************************************************/
+  /// The dense adjacency matrix
+  std::unique_ptr&lt;DenseMatrix&lt;Real&gt;&gt; _adjacency_matrix;
+
+  /// mesh dimension
+  const unsigned int _dim;
+
+  /// The maximum number of order parameters (colors) available to assign to the grain structure
+  const unsigned int _op_num;
+
+  /// A map of the grain_id to op
+  std::map&lt;unsigned int, unsigned int&gt; _grain_to_op;
+
+  /// The selected graph coloring algorithm used by this object
+  const MooseEnum _coloring_algorithm;
+
+  /// A Boolean indicating whether the object has assigned colors to grains (internal use)
+  bool _colors_assigned;
+
+  /// A user controllable Boolean which can be used to print the adjacency matrix to the console
+  const bool _output_adjacency_matrix;
+
+  /// Used to indicate an invalid coloring for the built-in back-tracking algorithm
+  static const unsigned int INVALID_COLOR;
+
+  /// Used to hold the thickness of the halo that should be constructed for detecting adjacency
+  static const unsigned int HALO_THICKNESS;
+
+private:
+  /// The number of chunks (for merging the features together)
+  processor_id_type _num_chunks;
+
+  /// A vector indicating which op is assigned to each grain (by index of the grain)
+  std::vector&lt;unsigned int&gt; _grain_idx_to_op;
+
+  /// Temporary storage area for current grains at a point to avoid memory churn
+  std::vector&lt;unsigned int&gt; _prealloc_tmp_grains;
+
+  std::map&lt;dof_id_type, std::vector&lt;unsigned int&gt;&gt; _entity_to_grain_cache;
+};
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="ad61cd5e-fc58-4d05-a9ac-1d823f375780"><div class="modal-content"><h4>(moose/modules/phase_field/include/userobjects/PolycrystalUserObjectBase.h)</h4><pre style="max-height:350px;"><code class="language-cpp">// This file is part of the MOOSE framework
+// https://mooseframework.inl.gov
+//
+// All rights reserved, see COPYRIGHT for full restrictions
+// https://github.com/idaholab/moose/blob/master/COPYRIGHT
+//
+// Licensed under LGPL 2.1, please see LICENSE for details
+// https://www.gnu.org/licenses/lgpl-2.1.html
+
+#pragma once
+
+#include &quot;DenseMatrix.h&quot;
+#include &quot;FeatureFloodCount.h&quot;
+
+// Forward Declarations
+
+/**
+ * This object provides the base capability for creating proper polycrystal ICs. It is
+ * able to discover the grain structure to provide information about neighboring grains
+ * so that they will not be assigned the same order parameters with a reduced set of variables.
+ */
+class PolycrystalUserObjectBase : public FeatureFloodCount
+{
+public:
+  static InputParameters validParams();
+
+  PolycrystalUserObjectBase(const InputParameters &amp; parameters);
+
+  /**
+   * This callback is triggered after the object is initialized and may be optionally
+   * overridden to do precompute the element to grain identifiers ahead of time.
+   */
+  virtual void precomputeGrainStructure() {}
+
+  /**
+   * Method for retrieving active grain IDs based on some point in the mesh. Typically these
+   * are element centroids or nodes depending on the basis functions being initialized. ICs that
+   * have fixed resolution data (i.e. experimental datasets) may choose to implement
+   * the element based method as well for added convenience.
+   */
+  virtual void getGrainsBasedOnPoint(const Point &amp; point,
+                                     std::vector&lt;unsigned int&gt; &amp; grains) const = 0;
+
+  /**
+   * This method may be defined in addition to the point based initialization to speed up lookups.
+   * It returns grain IDs based on the current element. Note: If your simulation contains adaptivity
+   * the point based method may be used to retrieve grain information as well as this method.
+   */
+  virtual void getGrainsBasedOnElem(const Elem &amp; elem, std::vector&lt;unsigned int&gt; &amp; grains) const
+  {
+    getGrainsBasedOnPoint(elem.vertex_average(), grains);
+  }
+
+  /**
+   * Must be overridden by the deriving class to provide the number of grains in the polycrystal
+   * structure.
+   */
+  virtual unsigned int getNumGrains() const = 0;
+
+  /**
+   * Returns the variable value for a given op_index and mesh point. This is the method used by the
+   * initial condition after the Polycrystal grain structure has be setup. Those grains are
+   * then distributed to the typically smaller number of order parameters by this class.
+   * This method is then used to return those values but it may be overridden in a derived class.
+   */
+  virtual Real getVariableValue(unsigned int op_index, const Point &amp; p) const = 0;
+
+  /**
+   * Similarly to the getVariableValue method, this method also returns values but may be optimized
+   * for returning nodal values.
+   */
+  virtual Real getNodalVariableValue(unsigned int op_index, const Node &amp; n) const
+  {
+    return getVariableValue(op_index, static_cast&lt;const Point &amp;&gt;(n));
+  }
+
+  /* Returns all available coloring algorithms as an enumeration type for input files.
+   */
+  static MooseEnum coloringAlgorithms();
+
+  /**
+   * Returns corresponding descriptions of available coloring algorithms.
+   */
+  static std::string coloringAlgorithmDescriptions();
+
+  /**
+   * UserObject interface overrides. Derived classes should _not_ override any of these methods.
+   */
+  virtual void initialSetup() override;
+  virtual void initialize() override;
+  virtual void execute() override;
+  virtual void finalize() override;
+
+protected:
+  virtual bool areFeaturesMergeable(const FeatureData &amp; f1, const FeatureData &amp; f2) const override;
+  virtual bool isNewFeatureOrConnectedRegion(const DofObject * dof_object,
+                                             std::size_t &amp; current_index,
+                                             FeatureData *&amp; feature,
+                                             Status &amp; status,
+                                             unsigned int &amp; new_id) override;
+  virtual void prepareDataForTransfer() override;
+  virtual void mergeSets() override;
+  virtual processor_id_type numberOfDistributedMergeHelpers() const override;
+  virtual void restoreOriginalDataStructures(std::vector&lt;std::list&lt;FeatureData&gt;&gt; &amp; orig) override;
+
+  /**
+   * Builds a dense adjacency matrix based on the discovery of grain neighbors and halos
+   * surrounding each grain.
+   */
+  void buildGrainAdjacencyMatrix();
+
+  /**
+   * Method that runs a coloring algorithm to assign OPs to grains.
+   */
+  void assignOpsToGrains();
+
+  /**
+   * Built-in simple &quot;back-tracking&quot; algorithm to assign colors to a graph.
+   */
+  bool colorGraph(unsigned int vertex);
+
+  /**
+   * Helper method for the back-tracking graph coloring algorithm.
+   */
+  bool isGraphValid(unsigned int vertex, unsigned int color);
+
+  /**
+   * Prints out the adjacency matrix in a nicely spaced integer format.
+   */
+  void printGrainAdjacencyMatrix() const;
+
+  /*************************************************
+   *************** Data Structures *****************
+   ************************************************/
+  /// The dense adjacency matrix
+  std::unique_ptr&lt;DenseMatrix&lt;Real&gt;&gt; _adjacency_matrix;
+
+  /// mesh dimension
+  const unsigned int _dim;
+
+  /// The maximum number of order parameters (colors) available to assign to the grain structure
+  const unsigned int _op_num;
+
+  /// A map of the grain_id to op
+  std::map&lt;unsigned int, unsigned int&gt; _grain_to_op;
+
+  /// The selected graph coloring algorithm used by this object
+  const MooseEnum _coloring_algorithm;
+
+  /// A Boolean indicating whether the object has assigned colors to grains (internal use)
+  bool _colors_assigned;
+
+  /// A user controllable Boolean which can be used to print the adjacency matrix to the console
+  const bool _output_adjacency_matrix;
+
+  /// Used to indicate an invalid coloring for the built-in back-tracking algorithm
+  static const unsigned int INVALID_COLOR;
+
+  /// Used to hold the thickness of the halo that should be constructed for detecting adjacency
+  static const unsigned int HALO_THICKNESS;
+
+private:
+  /// The number of chunks (for merging the features together)
+  processor_id_type _num_chunks;
+
+  /// A vector indicating which op is assigned to each grain (by index of the grain)
+  std::vector&lt;unsigned int&gt; _grain_idx_to_op;
+
+  /// Temporary storage area for current grains at a point to avoid memory churn
+  std::vector&lt;unsigned int&gt; _prealloc_tmp_grains;
+
+  std::map&lt;dof_id_type, std::vector&lt;unsigned int&gt;&gt; _entity_to_grain_cache;
+};
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../../js/init.js"></script><script type="text/javascript" src="../../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../../js/sqa_moose.js"></script>

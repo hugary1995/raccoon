@@ -1,0 +1,706 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Abaqus UMAT Stress | RACCOON</title><link rel="icon" type="image/x-icon" href="../../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../../contrib/jquery/jquery.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../../media/framework/github-logo.png" alt="GitHub wordmark" class="github-mark"></img><img src="../../../media/framework/github-mark.png" alt="GitHub logo" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="f99520e1-155c-4061-aacf-39e7a3359035" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="0d908be0-4a12-4209-9718-1bb9906b39d8" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="64716d29-feb9-4c10-b53e-e6ffe4e9f657" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="63262043-6c2c-4ff1-b8da-e98a5f8dacd7" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="4ea809a2-a456-420e-b00b-f6c360c9338f"><i class="material-icons">menu</i></a><ul class="sidenav" id="4ea809a2-a456-420e-b00b-f6c360c9338f"><li><a href="#!" class="dropdown-trigger" data-target="ec7c8fef-381c-49ca-8288-9dcc203c39ab" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="92f5b670-c5a5-45de-b0df-0a9a13213a95" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="3a5a99d1-0b9b-4803-b1e6-3041cb3a0c33" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="a95cc2d9-4a15-44f8-8432-65be60bc4df7" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="f99520e1-155c-4061-aacf-39e7a3359035"><li><a href="../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../getting_started/ide.html">Code development</a></li><li><a href="../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="0d908be0-4a12-4209-9718-1bb9906b39d8"><li><a href="../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="64716d29-feb9-4c10-b53e-e6ffe4e9f657"><li><a href="../../../theory/intro.html">Introduction</a></li><li><a href="../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="63262043-6c2c-4ff1-b8da-e98a5f8dacd7"><li><a href="../../../modules/index.html">Physics modules</a></li><li><a href="../../../syntax/index.html">Complete syntax</a></li><li><a href="../../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="ec7c8fef-381c-49ca-8288-9dcc203c39ab"><li><a href="../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../getting_started/ide.html">Code development</a></li><li><a href="../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="92f5b670-c5a5-45de-b0df-0a9a13213a95"><li><a href="../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="3a5a99d1-0b9b-4803-b1e6-3041cb3a0c33"><li><a href="../../../theory/intro.html">Introduction</a></li><li><a href="../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="a95cc2d9-4a15-44f8-8432-65be60bc4df7"><li><a href="../../../modules/index.html">Physics modules</a></li><li><a href="../../../syntax/index.html">Complete syntax</a></li><li><a href="../../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="71961018-0d65-4307-aaa4-5874881b1fb1" data-section-level="1" data-section-text="Abaqus UMAT Stress"><h1 id="abaqus-umat-stress">Abaqus UMAT Stress</h1><p>Coupling material to use Abaqus UMAT models in MOOSE</p><section id="78fdecbd-ebeb-4f47-b298-6a1e0fe3e76d" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p><code>AbaqusUMATStress</code> provides an interface for using _Abaqus UMAT_ functions as constitutive models in MOOSE.</p></section><section id="30c53059-684f-4879-a722-d34e28d14a97" data-section-level="2" data-section-text="UMAT User subroutine interface"><h2 id="umat-user-subroutine-interface">UMAT User subroutine interface</h2><p>UMAT functions are commonly coded in Fortran, are located in the <code>$(APPLICATION_DIR)/plugins</code> and <code>$(APPLICATION_DIR)/test/plugins</code> directories, and are automatically compiled by the MOOSE build system.</p><p>A UMAT file <code>my_umat.f</code> can be loaded by the <code>AbaqusUMATStress</code> by providing the the full path and filename without an extension via the <a href="#a67f39a0-4bf5-4ecd-b23b-24b860b6a7e1" class="moose-modal-link modal-trigger">&quot;plugin&quot;</a> parameter in the MOOSE input file.</p><p>A valid UMAT subroutine has the following call signature</p><pre style="max-height:350px;"><code class="language-text">
+SUBROUTINE UMAT(STRESS,STATEV,DDSDDE,SSE,SPD,SCD,
+     1 RPL,DDSDDT,DRPLDE,DRPLDT,
+     2 STRAN,DSTRAN,TIME,DTIME,TEMP,DTEMP,PREDEF,DPRED,CMNAME,
+     3 NDI,NSHR,NTENS,NSTATV,PROPS,NPROPS,COORDS,DROT,PNEWDT,
+     4 CELENTCELENT,DFGRD0,DFGRD1,NOEL,NPT,LAYER,KSPT,KSTEP,KINC)
+C
+      CHARACTER*80 CMNAME
+      DIMENSION STRESS(NTENS),STATEV(NSTATV),
+     1 DDSDDE(NTENS,NTENS),DDSDDT(NTENS),DRPLDE(NTENS),
+     2 STRAN(NTENS),DSTRAN(NTENS),TIME(2),PREDEF(1),DPRED(1),
+     3 PROPS(NPROPS),COORDS(3),DROT(3,3),DFGRD0(3,3),DFGRD1(3,3)
+
+
+      user coding to define DDSDDE, STRESS, STATEV, SSE, SPD, SCD
+      and, if necessary, RPL, DDSDDT, DRPLDE, DRPLDT, PNEWDT
+
+
+      RETURN
+      END
+</code></pre><p>A description of the input and output parameters of the UMAT user subroutines can be found in the Abaqus user manual.</p><p>Note that the UMAT standard uses 1-based indexing for <code>NOEL</code> (element number) and <code>NPT</code> (integration point number), while MOOSE uses 0-based indexing internally. We therefore add one to the element and integration point numbers from MOOSE before passing them to the UMAT.</p></section><section id="84211069-7eef-452e-8da6-5be42a5ec88c" data-section-level="2" data-section-text="UMAT Time step control"><h2 id="umat-time-step-control">UMAT Time step control</h2><p>Time step control within the UMAT subroutine is used together with MOOSE&#x27;s general capabilities to control time steps based on material behavior. <code>PNEWDT</code> denotes a factor that can be modified in the UMAT routine to be less than one, to signal a cut in the time step, or more than one, to signal a local increment in the time step. Since these time step controls are local to the quadrature point, MOOSE provides a layer of objects to handle the information provided by UMAT&#x27;s <code>PNEWDT</code>. First, we select a soft <code>Terminator</code> which will invalidate a time step if the time step increment used turns out to be larger than a computed maximum time step increment anywhere in the system:</p><pre style="max-height:350px;"><code class="language-moose">[UserObjects&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/UserObjects/index.html&quot;}&gt;&gt;&gt;]
+  [time_step_size]
+    type = TimestepSize&lt;&lt;&lt;{&quot;description&quot;: &quot;Reports the timestep size&quot;, &quot;href&quot;: &quot;../../postprocessors/TimestepSize.html&quot;}&gt;&gt;&gt;
+    execute_on&lt;&lt;&lt;{&quot;description&quot;: &quot;The list of flag(s) indicating when this object should be executed. For a description of each flag, see https://mooseframework.inl.gov/source/interfaces/SetupInterface.html.&quot;}&gt;&gt;&gt; = &#x27;INITIAL LINEAR&#x27;
+  []
+  [terminator_umat]
+    type = Terminator&lt;&lt;&lt;{&quot;description&quot;: &quot;Requests termination of the current solve based on the evaluation of a parsed logical expression of the Postprocessor value(s).&quot;, &quot;href&quot;: &quot;../../userobjects/Terminator.html&quot;}&gt;&gt;&gt;
+    expression&lt;&lt;&lt;{&quot;description&quot;: &quot;FParser expression to process Postprocessor values into a boolean value. Termination of the simulation occurs when this returns true.&quot;}&gt;&gt;&gt; = &#x27;time_step_size &gt; matl_ts_min&#x27;
+    fail_mode&lt;&lt;&lt;{&quot;description&quot;: &quot;Abort entire simulation (HARD), just the current time step (SOFT), or not at all (NONE).&quot;}&gt;&gt;&gt; = SOFT
+    execute_on&lt;&lt;&lt;{&quot;description&quot;: &quot;The list of flag(s) indicating when this object should be executed. For a description of each flag, see https://mooseframework.inl.gov/source/interfaces/SetupInterface.html.&quot;}&gt;&gt;&gt; = &#x27;FINAL&#x27;
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#ea5ec9c7-b494-4a07-828a-d3365c02584f">(moose/modules/solid_mechanics/test/tests/umat/time_step/elastic_timestep.i)</a><p>As a second step, we select the time stepper controls for the entire finite element system. These controls will apply to UMAT stepping as well as any other kernel or object in the system:</p><pre style="max-height:350px;"><code class="language-moose">[Executioner&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/Executioner/index.html&quot;}&gt;&gt;&gt;]
+  [TimeStepper&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/Executioner/TimeStepper/index.html&quot;}&gt;&gt;&gt;]
+    type = IterationAdaptiveDT
+    optimal_iterations = 30
+    iteration_window = 9
+    growth_factor = 2.0
+    cutback_factor = 1.0
+    timestep_limiting_postprocessor = matl_ts_min
+    dt = 1.0
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#94fd02b8-63b5-4783-8754-8a0ae3a26e00">(moose/modules/solid_mechanics/test/tests/umat/time_step/elastic_timestep.i)</a><p>The time step increment will be reduced as prescribed in the UMAT routine. However, the maximum increment will be limited by the selection of <code>growth_factor</code>. This avoids increasing the time step too much from one time step to the next. To further rely on UMAT&#x27;s <code>PNEWDT</code>, one can choose to select a larger <code>growth_factor</code>.</p><p>A subroutine that acts on <code>PNEWDT</code> is chosen in the regression test:</p><pre style="max-height:350px;"><code class="language-moose">[Materials&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/Materials/index.html&quot;}&gt;&gt;&gt;]
+  [umat]
+    type = AbaqusUMATStress&lt;&lt;&lt;{&quot;description&quot;: &quot;Coupling material to use Abaqus UMAT models in MOOSE&quot;, &quot;href&quot;: &quot;AbaqusUMATStress.html&quot;}&gt;&gt;&gt;
+    constant_properties&lt;&lt;&lt;{&quot;description&quot;: &quot;Constant mechanical and thermal material properties (PROPS)&quot;}&gt;&gt;&gt; = &#x27;1000 0.3&#x27;
+    plugin&lt;&lt;&lt;{&quot;description&quot;: &quot;The path to the compiled dynamic library for the plugin you want to use&quot;}&gt;&gt;&gt; = &#x27;../../../plugins/elastic_timestep&#x27;
+    num_state_vars&lt;&lt;&lt;{&quot;description&quot;: &quot;The number of state variables this UMAT is going to use&quot;}&gt;&gt;&gt; = 0
+    use_one_based_indexing&lt;&lt;&lt;{&quot;description&quot;: &quot;Parameter to control whether indexing for element and integration points as presented to UMAT models is based on 1 (true) or 0 (false). This does not affect internal MOOSE numbering. The option to use 0-based numbering is deprecated and will be removed soon.&quot;}&gt;&gt;&gt; = true
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#4e5db658-a6b5-4d88-b63a-20a086527a2a">(moose/modules/solid_mechanics/test/tests/umat/time_step/elastic_timestep.i)</a></section><section id="b3258928-3ad6-48f5-8706-6990e90aed97" data-section-level="2" data-section-text="UMAT Analysis steps"><h2 id="umat-analysis-steps">UMAT Analysis steps</h2><p>When setting up an input file, it can be useful to organize it in terms of the loading and boundary conditions that the structural component will undergo throughout the numerical simulation. For example, a user may want to apply natural boundary conditions as a first analysis step (Step 1), then apply gradually a permanent or long-term load, e.g. the internal pressure in a vessel (Step 2). Finally, other loads, such as those originated by wind, can be added to the existing analysis step to obtain the desired final numerical results (Step 3). For this case, MOOSE steps need to be defined throughout the simulation in <a href="../../userobjects/AnalysisStepUserObject.html">AnalysisStepUserObject</a>. his user object can be passed to <code>AbaqusUMATStress</code> to inform the UMAT routine of the value of step time at the beginning of the current increment (TIME(1) with Fortran indexing).</p><p>An example of how to pass the user object in an input file is given below:</p><pre style="max-height:350px;"><code class="language-moose">[Materials&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/Materials/index.html&quot;}&gt;&gt;&gt;]
+  [umat]
+    type = AbaqusUMATStress&lt;&lt;&lt;{&quot;description&quot;: &quot;Coupling material to use Abaqus UMAT models in MOOSE&quot;, &quot;href&quot;: &quot;AbaqusUMATStress.html&quot;}&gt;&gt;&gt;
+    constant_properties&lt;&lt;&lt;{&quot;description&quot;: &quot;Constant mechanical and thermal material properties (PROPS)&quot;}&gt;&gt;&gt; = &#x27;1000 0.3&#x27;
+    plugin&lt;&lt;&lt;{&quot;description&quot;: &quot;The path to the compiled dynamic library for the plugin you want to use&quot;}&gt;&gt;&gt; = &#x27;../../../plugins/elastic_temperature&#x27;
+    num_state_vars&lt;&lt;&lt;{&quot;description&quot;: &quot;The number of state variables this UMAT is going to use&quot;}&gt;&gt;&gt; = 0
+    temperature&lt;&lt;&lt;{&quot;description&quot;: &quot;Coupled temperature&quot;}&gt;&gt;&gt; = temperature
+    use_one_based_indexing&lt;&lt;&lt;{&quot;description&quot;: &quot;Parameter to control whether indexing for element and integration points as presented to UMAT models is based on 1 (true) or 0 (false). This does not affect internal MOOSE numbering. The option to use 0-based numbering is deprecated and will be removed soon.&quot;}&gt;&gt;&gt; = true
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#e6a020e9-4f33-4ffd-990d-5b3630e4187c">(moose/modules/solid_mechanics/test/tests/umat/analysis_steps/elastic_temperature_steps_uo.i)</a><p>Note that the step capability is three-pronged: 1) It allows to pass the step number to the UMAT routine via the present object, 2) It allows to pass the step number to the <a href="../../userobjects/AbaqusUExternalDB.html">AbaqusUExternalDB</a> plugin, and 3) It allows to directly drive controls via step number in <a href="../../controls/AnalysisStepPeriod.html">AnalysisStepPeriod</a>.</p></section><section id="0426208e-dfd9-47e2-ba21-4f63a9ef9f9c" data-section-level="2" data-section-text="UMAT Orientation"><h2 id="umat-orientation">UMAT Orientation</h2><p>Anisotropic material models typically have a specified local coordinate system that may need to be oriented differently than the global system. The <code>orientation</code> parameter takes a vector of 3 Euler angles that defines the rotation between the local and global coordinate systems. More information on the use of Euler angles for rotating material models in MOOSE can be found on the <a href="../ComputeElasticityTensor.html">ComputeElasticityTensor</a> page.</p></section><section id="b4264eaa-d99f-4f2b-98ae-6bcc51ff33c6" data-section-level="2" data-section-text="Example input file"><h2 id="example-input-file">Example input file</h2><pre style="max-height:350px;"><code class="language-moose">[Materials&lt;&lt;&lt;{&quot;href&quot;: &quot;../../../syntax/Materials/index.html&quot;}&gt;&gt;&gt;]
+  [constant]
+    type = AbaqusUMATStress&lt;&lt;&lt;{&quot;description&quot;: &quot;Coupling material to use Abaqus UMAT models in MOOSE&quot;, &quot;href&quot;: &quot;AbaqusUMATStress.html&quot;}&gt;&gt;&gt;
+    #                      Young&#x27;s modulus,  Poisson&#x27;s Ratio, Yield, Hardening
+    constant_properties&lt;&lt;&lt;{&quot;description&quot;: &quot;Constant mechanical and thermal material properties (PROPS)&quot;}&gt;&gt;&gt; = &#x27;1000 0.3 10 100&#x27;
+    plugin&lt;&lt;&lt;{&quot;description&quot;: &quot;The path to the compiled dynamic library for the plugin you want to use&quot;}&gt;&gt;&gt; = ../../../plugins/linear_strain_hardening
+    num_state_vars&lt;&lt;&lt;{&quot;description&quot;: &quot;The number of state variables this UMAT is going to use&quot;}&gt;&gt;&gt; = 3
+    use_one_based_indexing&lt;&lt;&lt;{&quot;description&quot;: &quot;Parameter to control whether indexing for element and integration points as presented to UMAT models is based on 1 (true) or 0 (false). This does not affect internal MOOSE numbering. The option to use 0-based numbering is deprecated and will be removed soon.&quot;}&gt;&gt;&gt; = true
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#2f529459-49d4-4903-8442-3fea2ae623c3">(moose/modules/solid_mechanics/test/tests/umat/elastic_hardening/linear_strain_hardening.i)</a></section><section id="5c370cd8-3767-4a3c-895a-0141440947d8" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="d875d393-edcc-45f0-8398-c4f36073c0d1" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">constant_properties</span><span class="moose-parameter-header-description">Constant mechanical and thermal material properties (PROPS)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;double&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Constant mechanical and thermal material properties (PROPS)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">num_state_vars</span><span class="moose-parameter-header-description">The number of state variables this UMAT is going to use</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The number of state variables this UMAT is going to use</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">plugin</span><span class="moose-parameter-header-description">The path to the compiled dynamic library for the plugin you want to use</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FileName</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The path to the compiled dynamic library for the plugin you want to use</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_one_based_indexing</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Parameter to control whether indexing for element and integration points as presented to UMAT models is based on 1 (true) or 0 (false). This does not affect internal MOOSE numbering. The option to use 0-based numbering is deprecated and will be removed soon.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Parameter to control whether indexing for element and integration points as presented to UMAT models is based on 1 (true) or 0 (false). This does not affect internal MOOSE numbering. The option to use 0-based numbering is deprecated and will be removed soon.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="c385a8d5-0763-437f-ba27-e8e5ce40eb6e" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">analysis_step_user_object</span><span class="moose-parameter-header-description">The AnalysisStepUserObject that provides times from simulation loading steps.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>UserObjectName</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The AnalysisStepUserObject that provides times from simulation loading steps.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of blocks (ids or names) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;SubdomainName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The list of blocks (ids or names) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundaries (ids or names) from the mesh where this object applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;BoundaryName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The list of boundaries (ids or names) from the mesh where this object applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">compute</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_on</span><span class="moose-parameter-header-default">NONE</span><span class="moose-parameter-header-description">When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>NONE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE, ELEMENT, SUBDOMAIN</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">declare_suffix</span><span class="moose-parameter-header-description">An optional suffix parameter that can be appended to any declared properties. The suffix will be prepended with a '_' character.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>An optional suffix parameter that can be appended to any declared properties. The suffix will be prepended with a '_' character.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">decomposition_method</span><span class="moose-parameter-header-default">TaylorExpansion</span><span class="moose-parameter-header-description">Method to calculate the strain kinematics.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TaylorExpansion</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>TaylorExpansion, EigenSolution, HughesWinget</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Method to calculate the strain kinematics.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">external_fields</span><span class="moose-parameter-header-description">The external fields that can be used in the UMAT subroutine</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;VariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The external fields that can be used in the UMAT subroutine</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">external_properties</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;MaterialPropertyName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"></p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">orientation</span><span class="moose-parameter-header-description">Euler angles that describe the orientation of the local material coordinate system.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::VectorValue&lt;double&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Euler angles that describe the orientation of the local material coordinate system.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">temperature</span><span class="moose-parameter-header-description">Coupled temperature</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;VariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Coupled temperature</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="a9722e9b-0815-4039-9680-c416fd8a6ca2" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>Yes</p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">search_method</span><span class="moose-parameter-header-default">nearest_node_connected_sides</span><span class="moose-parameter-header-description">Choice of search algorithm.  All options begin by finding the nearest node in the primary boundary to a query point in the secondary boundary.  In the default nearest_node_connected_sides algorithm, primary boundary elements are searched iff that nearest node is one of their nodes.  This is fast to determine via a pregenerated node-to-elem map and is robust on conforming meshes.  In the optional all_proximate_sides algorithm, primary boundary elements are searched iff they touch that nearest node, even if they are not topologically connected to it.  This is more CPU-intensive but is necessary for robustness on any boundary surfaces which has disconnections (such as Flex IGA meshes) or non-conformity (such as hanging nodes in adaptively h-refined meshes).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nearest_node_connected_sides</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nearest_node_connected_sides, all_proximate_sides</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Choice of search algorithm.  All options begin by finding the nearest node in the primary boundary to a query point in the secondary boundary.  In the default nearest_node_connected_sides algorithm, primary boundary elements are searched iff that nearest node is one of their nodes.  This is fast to determine via a pregenerated node-to-elem map and is robust on conforming meshes.  In the optional all_proximate_sides algorithm, primary boundary elements are searched iff they touch that nearest node, even if they are not topologically connected to it.  This is more CPU-intensive but is necessary for robustness on any boundary surfaces which has disconnections (such as Flex IGA meshes) or non-conformity (such as hanging nodes in adaptively h-refined meshes).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computing displacements and quantities based on the deformed state.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computing displacements and quantities based on the deformed state.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="3cfc502f-7273-49a8-9f6c-cc8f14b71d27" data-section-level="3" data-section-text="Outputs Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">output_properties</span><span class="moose-parameter-header-description">List of material properties, from this material, to output (outputs must also be defined to an output type)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>List of material properties, from this material, to output (outputs must also be defined to an output type)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-default">none </span><span class="moose-parameter-header-description">Vector of output names where you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>none </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;OutputName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Vector of output names where you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Outputs Parameters</h3></summary></details></section><section id="7bf56f74-c3a7-4a0a-a9d0-3b1708391112" data-section-level="3" data-section-text="Material Property Retrieval Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">prop_getter_suffix</span><span class="moose-parameter-header-description">An optional suffix parameter that can be appended to any attempt to retrieve/get material properties. The suffix will be prepended with a '_' character.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>An optional suffix parameter that can be appended to any attempt to retrieve/get material properties. The suffix will be prepended with a '_' character.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_interpolated_state</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">For the old and older state use projected material properties interpolated at the quadrature points. To set up projection use the ProjectedStatefulMaterialStorageAction.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>For the old and older state use projected material properties interpolated at the quadrature points. To set up projection use the ProjectedStatefulMaterialStorageAction.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Material Property Retrieval Parameters</h3></summary></details></section></section><section id="75996980-afa5-4bb7-a554-d5a36838e7b3" data-section-level="2" data-section-text="References"><h2 id="references">References</h2>No citations exist within this document.</section></section><div class="moose-modal modal" id="a67f39a0-4bf5-4ecd-b23b-24b860b6a7e1"><div class="modal-content"><h4>plugin</h4><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FileName</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The path to the compiled dynamic library for the plugin you want to use</p></div></div><div class="moose-modal modal" id="ea5ec9c7-b494-4a07-828a-d3365c02584f"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/umat/time_step/elastic_timestep.i)</h4><pre style="max-height:350px;"><code class="language-moose"># Testing the UMAT Interface - linear elastic model using the large strain formulation.
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 3
+    xmin = -0.5
+    xmax = 0.5
+    ymin = -0.5
+    ymax = 0.5
+    zmin = -0.5
+    zmax = 0.5
+  []
+[]
+
+[Functions]
+  [top_pull]
+    type = ParsedFunction
+    expression = t/100
+  []
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [all]
+    add_variables = true
+    strain = FINITE
+  []
+[]
+
+[BCs]
+  [y_pull_function]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = top
+    function = top_pull
+  []
+  [x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  []
+  [y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  []
+  [z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = front
+    value = 0.0
+  []
+[]
+
+[Materials]
+  [umat]
+    type = AbaqusUMATStress
+    constant_properties = &#x27;1000 0.3&#x27;
+    plugin = &#x27;../../../plugins/elastic_timestep&#x27;
+    num_state_vars = 0
+    use_one_based_indexing = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options = &#x27;-snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;101&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 100
+  nl_max_its = 100
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+  start_time = 0.0
+  end_time = 30
+
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    optimal_iterations = 30
+    iteration_window = 9
+    growth_factor = 2.0
+    cutback_factor = 1.0
+    timestep_limiting_postprocessor = matl_ts_min
+    dt = 1.0
+  []
+[]
+
+[UserObjects]
+  [time_step_size]
+    type = TimestepSize
+    execute_on = &#x27;INITIAL LINEAR&#x27;
+  []
+  [terminator_umat]
+    type = Terminator
+    expression = &#x27;time_step_size &gt; matl_ts_min&#x27;
+    fail_mode = SOFT
+    execute_on = &#x27;FINAL&#x27;
+  []
+[]
+
+[Postprocessors]
+  [matl_ts_min]
+    type = MaterialTimeStepPostprocessor
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="94fd02b8-63b5-4783-8754-8a0ae3a26e00"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/umat/time_step/elastic_timestep.i)</h4><pre style="max-height:350px;"><code class="language-moose"># Testing the UMAT Interface - linear elastic model using the large strain formulation.
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 3
+    xmin = -0.5
+    xmax = 0.5
+    ymin = -0.5
+    ymax = 0.5
+    zmin = -0.5
+    zmax = 0.5
+  []
+[]
+
+[Functions]
+  [top_pull]
+    type = ParsedFunction
+    expression = t/100
+  []
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [all]
+    add_variables = true
+    strain = FINITE
+  []
+[]
+
+[BCs]
+  [y_pull_function]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = top
+    function = top_pull
+  []
+  [x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  []
+  [y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  []
+  [z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = front
+    value = 0.0
+  []
+[]
+
+[Materials]
+  [umat]
+    type = AbaqusUMATStress
+    constant_properties = &#x27;1000 0.3&#x27;
+    plugin = &#x27;../../../plugins/elastic_timestep&#x27;
+    num_state_vars = 0
+    use_one_based_indexing = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options = &#x27;-snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;101&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 100
+  nl_max_its = 100
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+  start_time = 0.0
+  end_time = 30
+
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    optimal_iterations = 30
+    iteration_window = 9
+    growth_factor = 2.0
+    cutback_factor = 1.0
+    timestep_limiting_postprocessor = matl_ts_min
+    dt = 1.0
+  []
+[]
+
+[UserObjects]
+  [time_step_size]
+    type = TimestepSize
+    execute_on = &#x27;INITIAL LINEAR&#x27;
+  []
+  [terminator_umat]
+    type = Terminator
+    expression = &#x27;time_step_size &gt; matl_ts_min&#x27;
+    fail_mode = SOFT
+    execute_on = &#x27;FINAL&#x27;
+  []
+[]
+
+[Postprocessors]
+  [matl_ts_min]
+    type = MaterialTimeStepPostprocessor
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="4e5db658-a6b5-4d88-b63a-20a086527a2a"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/umat/time_step/elastic_timestep.i)</h4><pre style="max-height:350px;"><code class="language-moose"># Testing the UMAT Interface - linear elastic model using the large strain formulation.
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 3
+    xmin = -0.5
+    xmax = 0.5
+    ymin = -0.5
+    ymax = 0.5
+    zmin = -0.5
+    zmax = 0.5
+  []
+[]
+
+[Functions]
+  [top_pull]
+    type = ParsedFunction
+    expression = t/100
+  []
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [all]
+    add_variables = true
+    strain = FINITE
+  []
+[]
+
+[BCs]
+  [y_pull_function]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = top
+    function = top_pull
+  []
+  [x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  []
+  [y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  []
+  [z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = front
+    value = 0.0
+  []
+[]
+
+[Materials]
+  [umat]
+    type = AbaqusUMATStress
+    constant_properties = &#x27;1000 0.3&#x27;
+    plugin = &#x27;../../../plugins/elastic_timestep&#x27;
+    num_state_vars = 0
+    use_one_based_indexing = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options = &#x27;-snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;101&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 100
+  nl_max_its = 100
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+  start_time = 0.0
+  end_time = 30
+
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    optimal_iterations = 30
+    iteration_window = 9
+    growth_factor = 2.0
+    cutback_factor = 1.0
+    timestep_limiting_postprocessor = matl_ts_min
+    dt = 1.0
+  []
+[]
+
+[UserObjects]
+  [time_step_size]
+    type = TimestepSize
+    execute_on = &#x27;INITIAL LINEAR&#x27;
+  []
+  [terminator_umat]
+    type = Terminator
+    expression = &#x27;time_step_size &gt; matl_ts_min&#x27;
+    fail_mode = SOFT
+    execute_on = &#x27;FINAL&#x27;
+  []
+[]
+
+[Postprocessors]
+  [matl_ts_min]
+    type = MaterialTimeStepPostprocessor
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="e6a020e9-4f33-4ffd-990d-5b3630e4187c"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/umat/analysis_steps/elastic_temperature_steps_uo.i)</h4><pre style="max-height:350px;"><code class="language-moose"># Testing the UMAT Interface - linear elastic model using the large strain formulation.
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 3
+    xmin = -0.5
+    xmax = 0.5
+    ymin = -0.5
+    ymax = 0.5
+    zmin = -0.5
+    zmax = 0.5
+  []
+[]
+
+[Functions]
+  [top_pull_step2]
+    type = ParsedFunction
+    expression = (t-5.0)/20
+  []
+  # Forced evolution of temperature
+  [temperature_load]
+    type = ParsedFunction
+    expression = &#x27;273&#x27;
+  []
+[]
+
+[AuxVariables]
+  [temperature]
+  []
+[]
+
+[AuxKernels]
+  [temperature_function]
+    type = FunctionAux
+    variable = temperature
+    function = temperature_load
+  []
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [all]
+    add_variables = true
+    strain = FINITE
+    generate_output = &#x27;stress_yy&#x27;
+  []
+[]
+
+[BCs]
+  [y_step1]
+    type = DirichletBC
+    variable = disp_y
+    boundary = top
+    value = 0.0
+  []
+  [y_pull_function_step2]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = top
+    function = top_pull_step2
+  []
+  [x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  []
+  [y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  []
+  [z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = front
+    value = 0.0
+  []
+[]
+
+[Controls]
+  [step1]
+    type = AnalysisStepPeriod
+    enable_objects = &#x27;BCs::y_step1&#x27;
+    disable_objects = &#x27;BCs::y_pull_function_step2&#x27;
+    analysis_step_user_object = step_uo
+    step_number = 0
+  []
+  [step2]
+    type = AnalysisStepPeriod
+    enable_objects = &#x27;BCs::y_pull_function_step2&#x27;
+    disable_objects = &#x27;BCs::y_step1&#x27;
+    analysis_step_user_object = step_uo
+    step_number = 1
+  []
+[]
+
+[UserObjects]
+  [step_uo]
+   type = AnalysisStepUserObject
+   step_start_times = &#x27;0 5&#x27;
+  []
+[]
+
+[Materials]
+  [umat]
+    type = AbaqusUMATStress
+    constant_properties = &#x27;1000 0.3&#x27;
+    plugin = &#x27;../../../plugins/elastic_temperature&#x27;
+    num_state_vars = 0
+    temperature = temperature
+    use_one_based_indexing = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options = &#x27;-snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;101&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 100
+  nl_max_its = 100
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+  start_time = 0.0
+  num_steps = 10
+  dt = 1.0
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="2f529459-49d4-4903-8442-3fea2ae623c3"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/umat/elastic_hardening/linear_strain_hardening.i)</h4><pre style="max-height:350px;"><code class="language-moose"># Testing the UMAT Interface - creep linear strain hardening model using the finite strain formulation - visco-plastic material.
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 3
+    xmin = -0.5
+    xmax = 0.5
+    ymin = -0.5
+    ymax = 0.5
+    zmin = -0.5
+    zmax = 0.5
+  []
+[]
+
+[Functions]
+  [top_pull]
+    type = ParsedFunction
+    expression = t/100
+  []
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [all]
+    add_variables = true
+    strain = FINITE
+  []
+[]
+
+[BCs]
+  [y_pull_function]
+    type = FunctionDirichletBC
+    variable = disp_y
+    boundary = top
+    function = top_pull
+  []
+  [x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  []
+  [y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  []
+  [z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = front
+    value = 0.0
+  []
+[]
+
+[Materials]
+  [constant]
+    type = AbaqusUMATStress
+    #                      Young&#x27;s modulus,  Poisson&#x27;s Ratio, Yield, Hardening
+    constant_properties = &#x27;1000 0.3 10 100&#x27;
+    plugin = ../../../plugins/linear_strain_hardening
+    num_state_vars = 3
+    use_one_based_indexing = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options = &#x27;-snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;101&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  l_max_its = 100
+  nl_max_its = 100
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+  start_time = 0.0
+  num_steps = 30
+  dt = 1.0
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Outputs]
+  [out]
+    type = Exodus
+    elemental_as_nodal = true
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../../js/init.js"></script><script type="text/javascript" src="../../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../../js/sqa_moose.js"></script><script type="text/javascript" src="../../../js/moose_input_parser.js"></script>

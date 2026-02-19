@@ -1,0 +1,618 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Solid Mechanics QuasiStatic Physics System | RACCOON</title><link rel="icon" type="image/x-icon" href="../../../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../../../contrib/jquery/jquery.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../../../media/framework/github-logo.png" alt="GitHub wordmark" class="github-mark"></img><img src="../../../../media/framework/github-mark.png" alt="GitHub logo" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="4f97f15a-77fa-426e-8e1d-338bdfeeea9a" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="3186fbe0-4252-46a3-8c48-d30baace3dd7" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="e4bb3cf5-dbe0-43b3-b8da-48b0aa1ff1fe" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="ac990912-62f9-4d52-ba8c-1e8757a0d023" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="d79dc191-0a02-48fa-adea-a9081fb190a1"><i class="material-icons">menu</i></a><ul class="sidenav" id="d79dc191-0a02-48fa-adea-a9081fb190a1"><li><a href="#!" class="dropdown-trigger" data-target="0f546ae1-29c6-419a-a808-362f2b487e2e" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="9576178e-62e0-4c52-a042-c6f237900096" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="009a50ea-e0a1-4ce2-b670-6d117d8e36bf" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="e731ddd0-c919-4a57-bdec-6243962c2c42" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="4f97f15a-77fa-426e-8e1d-338bdfeeea9a"><li><a href="../../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../../getting_started/ide.html">Code development</a></li><li><a href="../../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="3186fbe0-4252-46a3-8c48-d30baace3dd7"><li><a href="../../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="e4bb3cf5-dbe0-43b3-b8da-48b0aa1ff1fe"><li><a href="../../../../theory/intro.html">Introduction</a></li><li><a href="../../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="ac990912-62f9-4d52-ba8c-1e8757a0d023"><li><a href="../../../../modules/index.html">Physics modules</a></li><li><a href="../../../index.html">Complete syntax</a></li><li><a href="../../../raccoon.html">RACCOON syntax</a></li><li><a href="../../../solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../phase_field.html">Phase field syntax</a></li><li><a href="../../../heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="0f546ae1-29c6-419a-a808-362f2b487e2e"><li><a href="../../../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../../../getting_started/running.html">Running your first model</a></li><li><a href="../../../../getting_started/paraview.html">Visualization</a></li><li><a href="../../../../getting_started/ide.html">Code development</a></li><li><a href="../../../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="9576178e-62e0-4c52-a042-c6f237900096"><li><a href="../../../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="009a50ea-e0a1-4ce2-b670-6d117d8e36bf"><li><a href="../../../../theory/intro.html">Introduction</a></li><li><a href="../../../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../../../theory/minimization.html">The minimization problem</a></li><li><a href="../../../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="e731ddd0-c919-4a57-bdec-6243962c2c42"><li><a href="../../../../modules/index.html">Physics modules</a></li><li><a href="../../../index.html">Complete syntax</a></li><li><a href="../../../raccoon.html">RACCOON syntax</a></li><li><a href="../../../solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../../phase_field.html">Phase field syntax</a></li><li><a href="../../../heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="84ea477c-daff-4e4b-bb6f-1aca91be1fb4" data-section-level="1" data-section-text="Solid Mechanics QuasiStatic Physics System"><h1 id="solid-mechanics-quasistatic-physics-system">Solid Mechanics QuasiStatic Physics System</h1><p>Set up stress divergence kernels with coordinate system aware logic</p><p>The Solid Mechanics Physics Action is a convenience <a href="../../../../source/actions/Action.html">Action</a> that simplifies part of the mechanics system setup.</p><p>It applies to both the current kernel system based on the <a href="../../../../source/kernels/StressDivergenceTensors.html">StressDivergenceTensors</a> kernels and to the new kernel system based on the <a href="../../../../source/kernels/lagrangian/TotalLagrangianStressDivergence.html">TotalLagrangianStressDivergence</a> and <a href="../../../../source/kernels/lagrangian/UpdatedLagrangianStressDivergence.html">UpdatedLagrangianStressDivergence</a> kernels. Some options only apply to one or the other system, as outlined below.</p><p>It performs</p><ul class="browser-default"><li><p>Add StressDivergence Kernels (for the current coordinate system) &ndash; both systems, only Cartesian coordinates for the <em>Lagrangian</em> kernel system </p></li><li><p>Add WeakPlaneStress Kernel (for weak enforcement of the plane stress condition) &ndash; only the <code>StressDivergenceTensors</code> system </p></li><li><p>Add Strain calculation material (for the chosen strain model) &ndash; both systems </p></li><li><p>Correctly set use of displaced mesh &ndash; both systems </p></li><li><p>Optional: Setup of displacement variables (with the correct order for the current mesh) &ndash; both systems </p></li><li><p>Optional: Add AuxVariables and AuxKernels for various tensor components and quantity outputs &ndash; both systems </p></li><li><p>Optional: Set up out-of-plane stress/strain consistently &ndash; only the <code>StressDivergenceTensors</code> system </p></li><li><p>Optional: Automatic extraction of eigenstrain names from materials and correct application to proper blocks &ndash; both systems </p></li><li><p>Optional: Setup cell-average homogenization constraints on the simulation &ndash; only the new <em>Lagrangian</em> kernels</p></li></ul><section id="bf5e6709-abd4-4856-a4f5-cb59aae018eb" data-section-level="2" data-section-text="Constructed MooseObjects"><h2 id="constructed-mooseobjects">Constructed MooseObjects</h2><p>The Solid Mechanics QuasiStatic Physics Action is used to construct the kernels, displacement variables, and strain materials in a consistent manner as required for a continuum mechanics simulation simulation. Optionally it generates aux variables and auxkernels to aid in the output of tensor components and scalar quantities.</p><section id="aec061a3-5791-4a00-91b9-78267bc4186d" data-section-level="3" data-section-text="For the Kernels StressDivergenceTensors"><h3 id="for-the-kernels">For the <code>StressDivergenceTensors</code> Kernels</h3><div class="card moose-float"><div class="card-content"><p class="moose-caption"><span class="moose-caption-heading">Table 1: </span><span class="moose-caption-text" id="tmMaster_action_table_sdt">Correspondence Among Action Functionality and MooseObjects for the Solid Mechanics QuasiStatic Physics Action, current kernel system</span></p><div recursive form="['center', 'center', 'center']" class="moose-table-div"><table><thead><tr><th style=";text-align:center">Functionality</th><th style=";text-align:center">Replaced Classes</th><th style=";text-align:center">Associated Parameters</th></tr></thead><tbody><tr><td style=";text-align:center">Calculate stress divergence equilibrium for the given coordinate system</td><td style=";text-align:center"><a href="../../../../source/kernels/StressDivergenceTensors.html">StressDivergenceTensors</a> and optionally <a href="../../../../source/kernels/WeakPlaneStress.html">WeakPlaneStress</a> or <a href="../../../../source/kernels/StressDivergenceRZTensors.html">StressDivergenceRZTensors</a> or <a href="../../../../source/kernels/StressDivergenceRSphericalTensors.html">StressDivergenceRSphericalTensors</a></td><td style=";text-align:center"><code>displacements</code> : a string of the displacement field variables</td></tr></tbody><tbody><tr><td style=";text-align:center">Add the displacement variables</td><td style=";text-align:center"><a href="../../../Variables/index.html">Variables</a></td><td style=";text-align:center"><code>add_variables</code>: boolean</td></tr></tbody><tbody><tr><td style=";text-align:center">Calculation of strain for the given coordinate system</td><td style=";text-align:center"><a href="../../../../source/materials/ComputeFiniteStrain.html">ComputeFiniteStrain</a> or <a href="../../../../source/materials/ComputePlaneFiniteStrain.html">ComputePlaneFiniteStrain</a> or <a href="../../../../source/materials/ComputeAxisymmetric1DFiniteStrain.html">ComputeAxisymmetric1DFiniteStrain</a> or <a href="../../../../source/materials/ComputeAxisymmetricRZFiniteStrain.html">ComputeAxisymmetricRZFiniteStrain</a></td><td style=";text-align:center"><code>strain</code>: MooseEnum to select finite or strain formulations</td></tr></tbody><tbody><tr><td style=";text-align:center"></td><td style=";text-align:center"><a href="../../../../source/materials/ComputeSmallStrain.html">ComputeSmallStrain</a> or <a href="../../../../source/materials/ComputePlaneSmallStrain.html">ComputePlaneSmallStrain</a> or <a href="../../../../source/materials/ComputeAxisymmetric1DSmallStrain.html">ComputeAxisymmetric1DSmallStrain</a> or <a href="../../../../source/materials/ComputeAxisymmetricRZSmallStrain.html">ComputeAxisymmetricRZSmallStrain</a></td><td style=";text-align:center"></td></tr></tbody><tbody><tr><td style=";text-align:center"></td><td style=";text-align:center"><a href="../../../../source/materials/ComputeIncrementalStrain.html">ComputeIncrementalStrain</a> or <a href="../../../../source/materials/ComputePlaneIncrementalStrain.html">ComputePlaneIncrementalStrain</a> or <a href="../../../../source/materials/ComputeAxisymmetric1DIncrementalStrain.html">ComputeAxisymmetric1DIncrementalStrain</a> or <a href="../../../../source/materials/ComputeAxisymmetricRZIncrementalStrain.html">ComputeAxisymmetricRZIncrementalStrain</a></td><td style=";text-align:center"><code>incremental</code> : boolean for using a incremental strain formulation</td></tr></tbody><tbody><tr><td style=";text-align:center">Add AuxVariables and AuxKernels for various tensor component and quantity outputs</td><td style=";text-align:center">Material Properties as well as <a href="../../../AuxVariables/index.html">AuxVariables</a> and <a href="../../../../source/auxkernels/RankTwoAux.html">RankTwoAux</a> or <a href="../../../../source/auxscalarkernels/RankTwoScalarAux.html">RankTwoScalarAux</a> or <a href="../../../../source/auxkernels/RankFourAux.html">RankFourAux</a></td><td style=";text-align:center"><code>generate_output</code>: a string of the quantities to add</td></tr></tbody><tbody><tr><td style=";text-align:center">Add Material Properties for various tensor component and quantity outputs</td><td style=";text-align:center"><code>generate_output</code>: a string of the quantities to add</td></tr></tbody><tbody><tr><td style=";text-align:center">Add the optional global strain contribution to the strain calculation</td><td style=";text-align:center">Couples the <a href="../GlobalStrain/index.html">GlobalStrain</a> system</td><td style=";text-align:center"><code>global_strain</code>: name of the material property that computes the global strain tensor</td></tr></tbody></table></div></div></div><p>Note that there are many variations for the calculation of the stress divergence and the strain measure. Review the theoretical introduction for the <a href="../../../../modules/solid_mechanics/StressDivergence.html">Stress Divergence</a> and the <a href="../../../../modules/solid_mechanics/Strains.html">Strain Formulations</a> for more information.</p></section><section id="edaf95bf-63b5-40cd-975b-fbaa49929aa3" data-section-level="3" data-section-text="For the New Lagrangian Kernel system"><h3 id="for-the-new-lagrangian-kernel-system">For the New Lagrangian Kernel system</h3><div class="card moose-float"><div class="card-content"><p class="moose-caption"><span class="moose-caption-heading">Table 2: </span><span class="moose-caption-text" id="tmMaster_action_table_lc">Correspondence Among Action Functionality and MooseObjects for the Solid Mechanics QuasiStatic Physics Action, new kernel system</span></p><div recursive form="['center', 'center', 'center']" class="moose-table-div"><table><thead><tr><th style=";text-align:center">Functionality</th><th style=";text-align:center">Replaced Classes</th><th style=";text-align:center">Associated Parameters</th></tr></thead><tbody><tr><td style=";text-align:center">Calculate stress divergence equilibrium for the given coordinate system</td><td style=";text-align:center"><a href="../../../../source/kernels/lagrangian/TotalLagrangianStressDivergence.html">TotalLagrangianStressDivergence</a> or <a href="../../../../source/kernels/lagrangian/UpdatedLagrangianStressDivergence.html">UpdatedLagrangianStressDivergence</a></td><td style=";text-align:center"><code>displacements</code> : a string of the displacement field variables, <code>formulation</code> : a MooseEnum controlling if the <code>UPDATED</code> or <code>TOTAL</code> Lagrangian formulation is used</td></tr></tbody><tbody><tr><td style=";text-align:center">Add the displacement variables</td><td style=";text-align:center"><a href="../../../Variables/index.html">Variables</a></td><td style=";text-align:center"><code>add_variables</code>: boolean</td></tr></tbody><tbody><tr><td style=";text-align:center">Calculation of strain for the given coordinate system</td><td style=";text-align:center"><a href="../../../../source/materials/lagrangian/ComputeLagrangianStrain.html">ComputeLagrangianStrain</a></td><td style=";text-align:center"><code>strain</code>: MooseEnum to select finite or small kinematic formulations</td></tr></tbody><tbody><tr><td style=";text-align:center">Add AuxVariables and AuxKernels for various tensor component and quantity outputs</td><td style=";text-align:center">Material Properties as well as <a href="../../../AuxVariables/index.html">AuxVariables</a> and <a href="../../../../source/auxkernels/RankTwoAux.html">RankTwoAux</a> or <a href="../../../../source/auxscalarkernels/RankTwoScalarAux.html">RankTwoScalarAux</a> or <a href="../../../../source/auxkernels/RankFourAux.html">RankFourAux</a></td><td style=";text-align:center"><code>generate_output</code>: a string of the quantities to add</td></tr></tbody><tbody><tr><td style=";text-align:center">Add Material Properties for various tensor component and quantity outputs</td><td style=";text-align:center"><code>generate_output</code>: a string of the quantities to add</td></tr></tbody><tbody><tr><td style=";text-align:center">Add the optional homogenization constraints</td><td style=";text-align:center">Adds all objects required to impose the <a href="../../../../modules/solid_mechanics/Homogenization.html">homogenization constraints</a></td><td style=";text-align:center"><code>constraint_types</code> : MooseEnum controlling whether <code>strain</code> or <code>stress</code> constraints and imposed, <code>targets</code> : Functions providing the time-dependent targets</td></tr></tbody></table></div></div></div><div class="card moose-alert moose-alert-warning"><div class="card-title moose-alert-title"><i class="material-icons moose-inline-icon">warning</i><span class="moose-alert-title-brand">warning</span></div><div class="card-content"><div class="moose-alert-content"><p><code>automatic_eigenstrain_names = true</code>, the eigenstrain_names will be populated under restrictive conditions for classes such as <a href="../../../../source/materials/CompositeEigenstrain.html">CompositeEigenstrain</a>, <a href="../../../../source/materials/ComputeReducedOrderEigenstrain.html">ComputeReducedOrderEigenstrain</a>, and <a href="../../../../source/materials/MaterialADConverter.html">RankTwoTensorMaterialADConverter</a>.  The input components for these classes are not included in the <a href="#17ce40ee-ecc1-4fa2-8946-71294ea56a40" class="moose-modal-link modal-trigger">&quot;eigenstrain_names&quot;</a> passed to the <code>Physics/SolidMechanics/QuasiStatic</code> block.  Set the <code>automatic_eigenstrain_names = false</code> and populate this list manually if these components need to be included.</p></div></div></div></section></section><section id="121ae0c8-1c43-44dd-82ab-5f2a3eb9c4b3" data-section-level="2" data-section-text="Example Input File Syntax"><h2 id="example-input-file-syntax">Example Input File Syntax</h2><section id="ddf5158f-6869-4434-8bd4-8d9a95540b5d" data-section-level="3" data-section-text="New Kernel System"><h3 id="new-kernel-system">New Kernel System</h3><p>The following example sets up the new <em>Lagrangian</em> kernel system with a total Lagrangian formulation for a large displacement kinematics problem.</p><pre style="max-height:350px;"><code class="language-moose">[Physics&lt;&lt;&lt;{&quot;href&quot;: &quot;../../index.html&quot;}&gt;&gt;&gt;]
+  [SolidMechanics&lt;&lt;&lt;{&quot;href&quot;: &quot;../index.html&quot;}&gt;&gt;&gt;]
+    [QuasiStatic&lt;&lt;&lt;{&quot;href&quot;: &quot;index.html&quot;}&gt;&gt;&gt;]
+      [all]
+        strain&lt;&lt;&lt;{&quot;description&quot;: &quot;Strain formulation&quot;}&gt;&gt;&gt; = SMALL
+        add_variables&lt;&lt;&lt;{&quot;description&quot;: &quot;Add the displacement variables&quot;}&gt;&gt;&gt; = true
+        new_system&lt;&lt;&lt;{&quot;description&quot;: &quot;If true use the new LagrangianStressDiverence kernels.&quot;}&gt;&gt;&gt; = true
+        formulation&lt;&lt;&lt;{&quot;description&quot;: &quot;Select between the total Lagrangian (TOTAL) and updated Lagrangian (UPDATED) formulations for the new kernel system.&quot;}&gt;&gt;&gt; = TOTAL
+        volumetric_locking_correction&lt;&lt;&lt;{&quot;description&quot;: &quot;Flag to correct volumetric locking&quot;}&gt;&gt;&gt; = true
+        generate_output&lt;&lt;&lt;{&quot;description&quot;: &quot;Add scalar quantity output for stress and/or strain&quot;}&gt;&gt;&gt; = &#x27;cauchy_stress_xx cauchy_stress_yy cauchy_stress_zz cauchy_stress_xy cauchy_stress_xz cauchy_stress_yz strain_xx strain_yy strain_zz strain_xy strain_xz strain_yz&#x27;
+      []
+    []
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#b67c420f-f745-4cfb-986e-763cc7fed18f">(moose/modules/solid_mechanics/test/tests/lagrangian/cartesian/total/action/action_L.i)</a></section><section id="f31f49ab-eb1c-4934-86b1-214d1d7c5aca" data-section-level="3" data-section-text="New Kernel System , with Homogenization Constraints"><h3 id="new-kernel-system-with-homogenization-constraints">New Kernel System, with Homogenization Constraints</h3><p>The following uses the action to setup homogenization constraints in a problem using the new kernel system.</p><pre style="max-height:350px;"><code class="language-moose">[Physics&lt;&lt;&lt;{&quot;href&quot;: &quot;../../index.html&quot;}&gt;&gt;&gt;]
+  [SolidMechanics&lt;&lt;&lt;{&quot;href&quot;: &quot;../index.html&quot;}&gt;&gt;&gt;]
+    [QuasiStatic&lt;&lt;&lt;{&quot;href&quot;: &quot;index.html&quot;}&gt;&gt;&gt;]
+      [all]
+        strain&lt;&lt;&lt;{&quot;description&quot;: &quot;Strain formulation&quot;}&gt;&gt;&gt; = FINITE
+        add_variables&lt;&lt;&lt;{&quot;description&quot;: &quot;Add the displacement variables&quot;}&gt;&gt;&gt; = true
+        new_system&lt;&lt;&lt;{&quot;description&quot;: &quot;If true use the new LagrangianStressDiverence kernels.&quot;}&gt;&gt;&gt; = true
+        formulation&lt;&lt;&lt;{&quot;description&quot;: &quot;Select between the total Lagrangian (TOTAL) and updated Lagrangian (UPDATED) formulations for the new kernel system.&quot;}&gt;&gt;&gt; = TOTAL
+        volumetric_locking_correction&lt;&lt;&lt;{&quot;description&quot;: &quot;Flag to correct volumetric locking&quot;}&gt;&gt;&gt; = false
+        constraint_types&lt;&lt;&lt;{&quot;description&quot;: &quot;Type of each constraint: strain, stress, or none. The types are specified in the column-major order, and there must be 9 entries in total.&quot;}&gt;&gt;&gt; = &#x27;stress strain strain strain stress strain strain strain strain&#x27;
+        targets&lt;&lt;&lt;{&quot;description&quot;: &quot;Functions giving the targets to hit for constraint types that are not none.&quot;}&gt;&gt;&gt; = &#x27;stress11 strain21 strain31 strain12 stress22 strain32 strain13 strain23 strain33&#x27;
+        generate_output&lt;&lt;&lt;{&quot;description&quot;: &quot;Add scalar quantity output for stress and/or strain&quot;}&gt;&gt;&gt; = &#x27;pk1_stress_xx pk1_stress_xy pk1_stress_xz pk1_stress_yx pk1_stress_yy pk1_stress_yz pk1_stress_zx pk1_stress_zy pk1_stress_zz deformation_gradient_xx deformation_gradient_xy deformation_gradient_xz deformation_gradient_yx deformation_gradient_yy deformation_gradient_yz deformation_gradient_zx deformation_gradient_zy deformation_gradient_zz&#x27;
+      []
+    []
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#746bdc3a-5a9f-4bf3-ab71-3b207548aaeb">(moose/modules/solid_mechanics/test/tests/lagrangian/cartesian/total/homogenization/action/action_3d.i)</a></section><section id="e4aefcd3-5255-47f2-a27b-f44cb1de058a" data-section-level="3" data-section-text="Subblocks"><h3 id="subblocks">Subblocks</h3><p>The subblocks of the QuasiStatic Physics Action are what triggers MOOSE objects to be built. If none of the mechanics is subdomain restricted a single subblock can be used</p><pre style="max-height:350px;"><code class="language-moose">[Physics&lt;&lt;&lt;{&quot;href&quot;: &quot;../../index.html&quot;}&gt;&gt;&gt;]
+  [SolidMechanics&lt;&lt;&lt;{&quot;href&quot;: &quot;../index.html&quot;}&gt;&gt;&gt;]
+    [QuasiStatic&lt;&lt;&lt;{&quot;href&quot;: &quot;index.html&quot;}&gt;&gt;&gt;]
+      [./all]
+        strain&lt;&lt;&lt;{&quot;description&quot;: &quot;Strain formulation&quot;}&gt;&gt;&gt; = FINITE
+        add_variables&lt;&lt;&lt;{&quot;description&quot;: &quot;Add the displacement variables&quot;}&gt;&gt;&gt; = true
+      [../]
+    [../]
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#b972ffa2-3a4a-457f-ae74-e5607e291dfe">(moose/modules/solid_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i)</a><p>if different mechanics models are needed, multiple subblocks with subdomain restrictions can be used.</p><pre style="max-height:350px;"><code class="language-moose">[Physics&lt;&lt;&lt;{&quot;href&quot;: &quot;../../index.html&quot;}&gt;&gt;&gt;]
+  [SolidMechanics&lt;&lt;&lt;{&quot;href&quot;: &quot;../index.html&quot;}&gt;&gt;&gt;]
+    [QuasiStatic&lt;&lt;&lt;{&quot;href&quot;: &quot;index.html&quot;}&gt;&gt;&gt;]
+      # parameters that apply to all subblocks are specified at this level. They
+      # can be overwritten in the subblocks.
+      add_variables&lt;&lt;&lt;{&quot;description&quot;: &quot;Add the displacement variables&quot;}&gt;&gt;&gt; = true
+      strain&lt;&lt;&lt;{&quot;description&quot;: &quot;Strain formulation&quot;}&gt;&gt;&gt; = FINITE
+      generate_output&lt;&lt;&lt;{&quot;description&quot;: &quot;Add scalar quantity output for stress and/or strain&quot;}&gt;&gt;&gt; = &#x27;stress_xx&#x27;
+
+      [./block1]
+        # the `block` parameter is only valid insde a subblock.
+        block&lt;&lt;&lt;{&quot;description&quot;: &quot;The list of ids of the blocks (subdomain) that the stress divergence kernels will be applied to&quot;}&gt;&gt;&gt; = 1
+      [../]
+      [./block2]
+        block&lt;&lt;&lt;{&quot;description&quot;: &quot;The list of ids of the blocks (subdomain) that the stress divergence kernels will be applied to&quot;}&gt;&gt;&gt; = 2
+        # the `additional_generate_output` parameter is also only valid inside a
+        # subblock. Values specified here are appended to the `generate_output`
+        # parameter values.
+        additional_generate_output&lt;&lt;&lt;{&quot;description&quot;: &quot;Add scalar quantity output for stress and/or strain (will be appended to the list in `generate_output`)&quot;}&gt;&gt;&gt; = &#x27;strain_yy&#x27;
+      [../]
+    []
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#9e366592-57f8-49d2-9f60-01ba3afc12f8">(moose/modules/solid_mechanics/test/tests/action/two_block_new.i)</a><p>Parameters supplied at the <code>[Physics/SolidMechanics/QuasiStatic]</code> level act as defaults for the QuasiStatic Solid Mechanics Physics subblocks.</p></section></section><section id="f04e8a6d-a410-447c-9f02-c69b34796a15" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="ce1a49ad-db7c-432c-b69d-912de493c417" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">absolute_value_vector_tags</span><span class="moose-parameter-header-description">The tag names for extra vectors that the absolute value of the residual should be accumulated into</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;TagName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The tag names for extra vectors that the absolute value of the residual should be accumulated into</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">active</span><span class="moose-parameter-header-default">__all__ </span><span class="moose-parameter-header-description">If specified only the blocks named will be visited and made active</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>__all__ </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>If specified only the blocks named will be visited and made active</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Material property base name</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Material property base name</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constraint_types</span><span class="moose-parameter-header-description">Type of each constraint: strain, stress, or none. The types are specified in the column-major order, and there must be 9 entries in total.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>strain, stress, none</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Type of each constraint: strain, stress, or none. The types are specified in the column-major order, and there must be 9 entries in total.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">decomposition_method</span><span class="moose-parameter-header-default">TaylorExpansion</span><span class="moose-parameter-header-description">Methods to calculate the finite strain and rotation increments</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TaylorExpansion</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>TaylorExpansion, EigenSolution, HughesWinget</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Methods to calculate the finite strain and rotation increments</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">extra_vector_tags</span><span class="moose-parameter-header-description">The tag names for extra vectors that residual data should be saved into</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;TagName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The tag names for extra vectors that residual data should be saved into</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">formulation</span><span class="moose-parameter-header-default">TOTAL</span><span class="moose-parameter-header-description">Select between the total Lagrangian (TOTAL) and updated Lagrangian (UPDATED) formulations for the new kernel system.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>TOTAL</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>TOTAL, UPDATED</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Select between the total Lagrangian (TOTAL) and updated Lagrangian (UPDATED) formulations for the new kernel system.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">global_strain</span><span class="moose-parameter-header-description">Name of the global strain material to be applied in this strain calculation. The global strain tensor is constant over the whole domain and allows visualization of the deformed shape with the periodic BC</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Name of the global strain material to be applied in this strain calculation. The global strain tensor is constant over the whole domain and allows visualization of the deformed shape with the periodic BC</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">inactive</span><span class="moose-parameter-header-description">If specified blocks matching these identifiers will be skipped.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>If specified blocks matching these identifiers will be skipped.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">new_system</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">If true use the new LagrangianStressDiverence kernels.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>If true use the new LagrangianStressDiverence kernels.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">targets</span><span class="moose-parameter-header-description">Functions giving the targets to hit for constraint types that are not none.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;FunctionName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Functions giving the targets to hit for constraint types that are not none.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_automatic_differentiation</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Flag to use automatic differentiation (AD) objects when possible</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Flag to use automatic differentiation (AD) objects when possible</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">verbose</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Display extra information.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Display extra information.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">volumetric_locking_correction</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Flag to correct volumetric locking</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Flag to correct volumetric locking</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="28403c2f-cccb-48d7-aba3-d23e25d189ac" data-section-level="3" data-section-text="Variables Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">add_variables</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Add the displacement variables</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Add the displacement variables</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">displacements</span><span class="moose-parameter-header-description">The nonlinear displacement variables for the problem</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;VariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The nonlinear displacement variables for the problem</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">scaling</span><span class="moose-parameter-header-description">The scaling to apply to the displacement variables</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The scaling to apply to the displacement variables</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">temperature</span><span class="moose-parameter-header-description">The temperature</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;VariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The temperature</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Variables Parameters</h3></summary></details></section><section id="a100b337-89d1-4d03-a6eb-015f4e9d1fa5" data-section-level="3" data-section-text="Output Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">additional_generate_output</span><span class="moose-parameter-header-description">Add scalar quantity output for stress and/or strain (will be appended to the list in `generate_output`)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>cauchy_stress_xx, cauchy_stress_xy, cauchy_stress_xz, cauchy_stress_yx, cauchy_stress_yy, cauchy_stress_yz, cauchy_stress_zx, cauchy_stress_zy, cauchy_stress_zz, creep_strain_xx, creep_strain_xy, creep_strain_xz, creep_strain_yx, creep_strain_yy, creep_strain_yz, creep_strain_zx, creep_strain_zy, creep_strain_zz, creep_stress_xx, creep_stress_xy, creep_stress_xz, creep_stress_yx, creep_stress_yy, creep_stress_yz, creep_stress_zx, creep_stress_zy, creep_stress_zz, deformation_gradient_xx, deformation_gradient_xy, deformation_gradient_xz, deformation_gradient_yx, deformation_gradient_yy, deformation_gradient_yz, deformation_gradient_zx, deformation_gradient_zy, deformation_gradient_zz, elastic_strain_xx, elastic_strain_xy, elastic_strain_xz, elastic_strain_yx, elastic_strain_yy, elastic_strain_yz, elastic_strain_zx, elastic_strain_zy, elastic_strain_zz, mechanical_strain_xx, mechanical_strain_xy, mechanical_strain_xz, mechanical_strain_yx, mechanical_strain_yy, mechanical_strain_yz, mechanical_strain_zx, mechanical_strain_zy, mechanical_strain_zz, pk1_stress_xx, pk1_stress_xy, pk1_stress_xz, pk1_stress_yx, pk1_stress_yy, pk1_stress_yz, pk1_stress_zx, pk1_stress_zy, pk1_stress_zz, pk2_stress_xx, pk2_stress_xy, pk2_stress_xz, pk2_stress_yx, pk2_stress_yy, pk2_stress_yz, pk2_stress_zx, pk2_stress_zy, pk2_stress_zz, plastic_strain_xx, plastic_strain_xy, plastic_strain_xz, plastic_strain_yx, plastic_strain_yy, plastic_strain_yz, plastic_strain_zx, plastic_strain_zy, plastic_strain_zz, small_stress_xx, small_stress_xy, small_stress_xz, small_stress_yx, small_stress_yy, small_stress_yz, small_stress_zx, small_stress_zy, small_stress_zz, strain_xx, strain_xy, strain_xz, strain_yx, strain_yy, strain_yz, strain_zx, strain_zy, strain_zz, stress_xx, stress_xy, stress_xz, stress_yx, stress_yy, stress_yz, stress_zx, stress_zy, stress_zz, effective_plastic_strain, effective_creep_strain, firstinv_stress, firstinv_cauchy_stress, firstinv_pk1_stress, firstinv_pk2_stress, firstinv_small_stress, firstinv_strain, hydrostatic_stress, hydrostatic_cauchy_stress, hydrostatic_pk1_stress, hydrostatic_pk2_stress, hydrostatic_small_stress, intensity_stress, intensity_cauchy_stress, intensity_pk1_stress, intensity_pk2_stress, intensity_small_stress, l2norm_mechanical_strain, l2norm_stress, l2norm_cauchy_stress, l2norm_pk1_stress, l2norm_strain, l2norm_elastic_strain, l2norm_plastic_strain, l2norm_creep_strain, max_principal_mechanical_strain, max_principal_stress, max_principal_cauchy_stress, max_principal_pk1_stress, max_principal_pk2_stress, max_principal_small_stress, max_principal_strain, maxshear_stress, maxshear_cauchy_stress, maxshear_pk1_stress, maxshear_pk2_stress, maxshear_small_stress, mid_principal_mechanical_strain, mid_principal_stress, mid_principal_cauchy_stress, mid_principal_pk1_stress, mid_principal_pk2_stress, mid_principal_small_stress, mid_principal_strain, min_principal_mechanical_strain, min_principal_stress, min_principal_cauchy_stress, min_principal_pk1_stress, min_principal_pk2_stress, min_principal_small_stress, min_principal_strain, secondinv_stress, secondinv_cauchy_stress, secondinv_pk1_stress, secondinv_pk2_stress, secondinv_small_stress, secondinv_strain, thirdinv_stress, thirdinv_cauchy_stress, thirdinv_pk1_stress, thirdinv_pk2_stress, thirdinv_small_stress, thirdinv_strain, triaxiality_stress, triaxiality_cauchy_stress, triaxiality_pk1_stress, triaxiality_pk2_stress, triaxiality_small_stress, volumetric_mechanical_strain, volumetric_strain, vonmises_stress, vonmises_cauchy_stress, vonmises_pk1_stress, vonmises_pk2_stress, directional_stress, directional_strain, axial_stress, axial_strain, axial_plastic_strain, axial_creep_strain, axial_elastic_strain, hoop_stress, hoop_strain, hoop_plastic_strain, hoop_creep_strain, hoop_elastic_strain, radial_stress, radial_strain, spherical_hoop_stress, spherical_hoop_strain, spherical_hoop_plastic_strain, spherical_hoop_creep_strain, spherical_hoop_elastic_strain, spherical_radial_stress, spherical_radial_strain</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Add scalar quantity output for stress and/or strain (will be appended to the list in `generate_output`)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">additional_material_output_family</span><span class="moose-parameter-header-description">Specifies the family of FE shape functions to use for this variable.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>MONOMIAL, LAGRANGE</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Specifies the family of FE shape functions to use for this variable.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">additional_material_output_order</span><span class="moose-parameter-header-description">Specifies the order of the FE shape function to use for this variable.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>CONSTANT, FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH, SEVENTH, EIGHTH, NINTH</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Specifies the order of the FE shape function to use for this variable.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">generate_output</span><span class="moose-parameter-header-description">Add scalar quantity output for stress and/or strain</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>cauchy_stress_xx, cauchy_stress_xy, cauchy_stress_xz, cauchy_stress_yx, cauchy_stress_yy, cauchy_stress_yz, cauchy_stress_zx, cauchy_stress_zy, cauchy_stress_zz, creep_strain_xx, creep_strain_xy, creep_strain_xz, creep_strain_yx, creep_strain_yy, creep_strain_yz, creep_strain_zx, creep_strain_zy, creep_strain_zz, creep_stress_xx, creep_stress_xy, creep_stress_xz, creep_stress_yx, creep_stress_yy, creep_stress_yz, creep_stress_zx, creep_stress_zy, creep_stress_zz, deformation_gradient_xx, deformation_gradient_xy, deformation_gradient_xz, deformation_gradient_yx, deformation_gradient_yy, deformation_gradient_yz, deformation_gradient_zx, deformation_gradient_zy, deformation_gradient_zz, elastic_strain_xx, elastic_strain_xy, elastic_strain_xz, elastic_strain_yx, elastic_strain_yy, elastic_strain_yz, elastic_strain_zx, elastic_strain_zy, elastic_strain_zz, mechanical_strain_xx, mechanical_strain_xy, mechanical_strain_xz, mechanical_strain_yx, mechanical_strain_yy, mechanical_strain_yz, mechanical_strain_zx, mechanical_strain_zy, mechanical_strain_zz, pk1_stress_xx, pk1_stress_xy, pk1_stress_xz, pk1_stress_yx, pk1_stress_yy, pk1_stress_yz, pk1_stress_zx, pk1_stress_zy, pk1_stress_zz, pk2_stress_xx, pk2_stress_xy, pk2_stress_xz, pk2_stress_yx, pk2_stress_yy, pk2_stress_yz, pk2_stress_zx, pk2_stress_zy, pk2_stress_zz, plastic_strain_xx, plastic_strain_xy, plastic_strain_xz, plastic_strain_yx, plastic_strain_yy, plastic_strain_yz, plastic_strain_zx, plastic_strain_zy, plastic_strain_zz, small_stress_xx, small_stress_xy, small_stress_xz, small_stress_yx, small_stress_yy, small_stress_yz, small_stress_zx, small_stress_zy, small_stress_zz, strain_xx, strain_xy, strain_xz, strain_yx, strain_yy, strain_yz, strain_zx, strain_zy, strain_zz, stress_xx, stress_xy, stress_xz, stress_yx, stress_yy, stress_yz, stress_zx, stress_zy, stress_zz, effective_plastic_strain, effective_creep_strain, firstinv_stress, firstinv_cauchy_stress, firstinv_pk1_stress, firstinv_pk2_stress, firstinv_small_stress, firstinv_strain, hydrostatic_stress, hydrostatic_cauchy_stress, hydrostatic_pk1_stress, hydrostatic_pk2_stress, hydrostatic_small_stress, intensity_stress, intensity_cauchy_stress, intensity_pk1_stress, intensity_pk2_stress, intensity_small_stress, l2norm_mechanical_strain, l2norm_stress, l2norm_cauchy_stress, l2norm_pk1_stress, l2norm_strain, l2norm_elastic_strain, l2norm_plastic_strain, l2norm_creep_strain, max_principal_mechanical_strain, max_principal_stress, max_principal_cauchy_stress, max_principal_pk1_stress, max_principal_pk2_stress, max_principal_small_stress, max_principal_strain, maxshear_stress, maxshear_cauchy_stress, maxshear_pk1_stress, maxshear_pk2_stress, maxshear_small_stress, mid_principal_mechanical_strain, mid_principal_stress, mid_principal_cauchy_stress, mid_principal_pk1_stress, mid_principal_pk2_stress, mid_principal_small_stress, mid_principal_strain, min_principal_mechanical_strain, min_principal_stress, min_principal_cauchy_stress, min_principal_pk1_stress, min_principal_pk2_stress, min_principal_small_stress, min_principal_strain, secondinv_stress, secondinv_cauchy_stress, secondinv_pk1_stress, secondinv_pk2_stress, secondinv_small_stress, secondinv_strain, thirdinv_stress, thirdinv_cauchy_stress, thirdinv_pk1_stress, thirdinv_pk2_stress, thirdinv_small_stress, thirdinv_strain, triaxiality_stress, triaxiality_cauchy_stress, triaxiality_pk1_stress, triaxiality_pk2_stress, triaxiality_small_stress, volumetric_mechanical_strain, volumetric_strain, vonmises_stress, vonmises_cauchy_stress, vonmises_pk1_stress, vonmises_pk2_stress, directional_stress, directional_strain, axial_stress, axial_strain, axial_plastic_strain, axial_creep_strain, axial_elastic_strain, hoop_stress, hoop_strain, hoop_plastic_strain, hoop_creep_strain, hoop_elastic_strain, radial_stress, radial_strain, spherical_hoop_stress, spherical_hoop_strain, spherical_hoop_plastic_strain, spherical_hoop_creep_strain, spherical_hoop_elastic_strain, spherical_radial_stress, spherical_radial_strain</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Add scalar quantity output for stress and/or strain</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">material_output_family</span><span class="moose-parameter-header-description">Specifies the family of FE shape functions to use for this variable.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>MONOMIAL, LAGRANGE</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Specifies the family of FE shape functions to use for this variable.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">material_output_order</span><span class="moose-parameter-header-description">Specifies the order of the FE shape function to use for this variable.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MultiMooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>CONSTANT, FIRST, SECOND, THIRD, FOURTH, FIFTH, SIXTH, SEVENTH, EIGHTH, NINTH</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Specifies the order of the FE shape function to use for this variable.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Output Parameters</h3></summary></details></section><section id="24887e1c-6c73-4e24-9680-b96f670204df" data-section-level="3" data-section-text="Strain Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">automatic_eigenstrain_names</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Collects all material eigenstrains and passes to required strain calculator within TMA internally.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Collects all material eigenstrains and passes to required strain calculator within TMA internally.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">eigenstrain_names</span><span class="moose-parameter-header-description">List of eigenstrains to be applied in this strain calculation</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;MaterialPropertyName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>List of eigenstrains to be applied in this strain calculation</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">incremental</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Use incremental or total strain (if not explicitly specified this defaults to incremental for finite strain and total for small strain)</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Use incremental or total strain (if not explicitly specified this defaults to incremental for finite strain and total for small strain)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">strain</span><span class="moose-parameter-header-default">SMALL</span><span class="moose-parameter-header-description">Strain formulation</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>SMALL</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>SMALL, FINITE</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Strain formulation</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">strain_base_name</span><span class="moose-parameter-header-description">The base name used for the strain. If not provided, it will be set equal to base_name</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The base name used for the strain. If not provided, it will be set equal to base_name</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_finite_deform_jacobian</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Jacobian for corrotational finite strain</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Jacobian for corrotational finite strain</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Strain Parameters</h3></summary></details></section><section id="37b02f3e-6940-40fd-9842-616a4d0c46db" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of ids of the blocks (subdomain) that the stress divergence kernels will be applied to</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;SubdomainName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The list of ids of the blocks (subdomain) that the stress divergence kernels will be applied to</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">diag_save_in</span><span class="moose-parameter-header-description">The displacement diagonal preconditioner terms</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;AuxVariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The displacement diagonal preconditioner terms</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">save_in</span><span class="moose-parameter-header-description">The displacement residuals</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;AuxVariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The displacement residuals</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="2784a48f-0c53-4450-b01b-d29a8ac8aa02" data-section-level="3" data-section-text="Coordinate System Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">cylindrical_axis_point1</span><span class="moose-parameter-header-description">Starting point for direction of axis of rotation for cylindrical stress/strain.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::Point</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Starting point for direction of axis of rotation for cylindrical stress/strain.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">cylindrical_axis_point2</span><span class="moose-parameter-header-description">Ending point for direction of axis of rotation for cylindrical stress/strain.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::Point</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Ending point for direction of axis of rotation for cylindrical stress/strain.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">direction</span><span class="moose-parameter-header-description">Direction stress/strain is calculated in</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::Point</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Direction stress/strain is calculated in</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">spherical_center_point</span><span class="moose-parameter-header-description">Center point of the spherical coordinate system.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::Point</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Center point of the spherical coordinate system.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Coordinate System Parameters</h3></summary></details></section><section id="a825bbd1-f896-4760-8bc3-0d10adfa5829" data-section-level="3" data-section-text="Out-Of-Plane Stress/Strain Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">out_of_plane_direction</span><span class="moose-parameter-header-default">z</span><span class="moose-parameter-header-description">The direction of the out-of-plane strain.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>z</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>x, y, z</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The direction of the out-of-plane strain.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">out_of_plane_pressure_function</span><span class="moose-parameter-header-description">Function used to prescribe pressure (applied toward the body) in the out-of-plane direction (y for 1D Axisymmetric or z for 2D Cartesian problems)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>FunctionName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Function used to prescribe pressure (applied toward the body) in the out-of-plane direction (y for 1D Axisymmetric or z for 2D Cartesian problems)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">out_of_plane_pressure_material</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">Material used to prescribe pressure (applied toward the body) in the out-of-plane direction</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Material used to prescribe pressure (applied toward the body) in the out-of-plane direction</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">out_of_plane_strain</span><span class="moose-parameter-header-description">Variable for the out-of-plane strain for plane stress models</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VariableName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Variable for the out-of-plane strain for plane stress models</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">planar_formulation</span><span class="moose-parameter-header-default">NONE</span><span class="moose-parameter-header-description">Out-of-plane stress/strain formulation</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>NONE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE, WEAK_PLANE_STRESS, PLANE_STRAIN, GENERALIZED_PLANE_STRAIN</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Out-of-plane stress/strain formulation</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">pressure_factor</span><span class="moose-parameter-header-description">Scale factor applied to prescribed out-of-plane pressure (both material and function)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>double</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Scale factor applied to prescribed out-of-plane pressure (both material and function)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">scalar_out_of_plane_strain</span><span class="moose-parameter-header-description">Scalar variable for the out-of-plane strain (in y direction for 1D Axisymmetric or in z direction for 2D Cartesian problems)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>VariableName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Scalar variable for the out-of-plane strain (in y direction for 1D Axisymmetric or in z direction for 2D Cartesian problems)</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Out-Of-Plane Stress/Strain Parameters</h3></summary></details></section></section><section id="2367c429-2eab-46fe-90d4-ec1b45f12119" data-section-level="2" data-section-text="Associated Actions"><h2 id="associated-actions">Associated Actions</h2></section><section id="7f1b6131-79cd-4758-9111-fc7daa5fda85" data-section-level="2" data-section-text="Available Actions"><h2 id="available-actions">Available Actions</h2><ul class="moose-syntax-list collection with-header"><li class="collection-header">Solid Mechanics App</li><li class="collection-item"><a href="../../../../source/actions/CommonSolidMechanicsAction.html">CommonSolidMechanicsAction</a>Store common solid mechanics parameters</li><li class="collection-item"><a href="../../../../source/physics/QuasiStaticSolidMechanicsPhysics.html">QuasiStaticSolidMechanicsPhysics</a>Set up stress divergence kernels with coordinate system aware logic</li></ul></section></section><div class="moose-modal modal" id="17ce40ee-ecc1-4fa2-8946-71294ea56a40"><div class="modal-content"><h4>eigenstrain_names</h4><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;MaterialPropertyName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>List of eigenstrains to be applied in this strain calculation</p></div></div><div class="moose-modal modal" id="b67c420f-f745-4cfb-986e-763cc7fed18f"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/lagrangian/cartesian/total/action/action_L.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  type = FileMesh
+  file = &#x27;L.exo&#x27;
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Physics]
+  [SolidMechanics]
+    [QuasiStatic]
+      [all]
+        strain = SMALL
+        add_variables = true
+        new_system = true
+        formulation = TOTAL
+        volumetric_locking_correction = true
+        generate_output = &#x27;cauchy_stress_xx cauchy_stress_yy cauchy_stress_zz cauchy_stress_xy &#x27;
+                          &#x27;cauchy_stress_xz cauchy_stress_yz strain_xx strain_yy strain_zz strain_xy &#x27;
+                          &#x27;strain_xz strain_yz&#x27;
+      []
+    []
+  []
+[]
+
+[Functions]
+  [pfn]
+    type = PiecewiseLinear
+    x = &#x27;0    1    2&#x27;
+    y = &#x27;0.00 0.3 0.5&#x27;
+  []
+[]
+
+[BCs]
+  [left]
+    type = DirichletBC
+    preset = true
+    variable = disp_x
+    boundary = fix
+    value = 0.0
+  []
+
+  [bottom]
+    type = DirichletBC
+    preset = true
+    variable = disp_y
+    boundary = fix
+    value = 0.0
+  []
+
+  [back]
+    type = DirichletBC
+    preset = true
+    variable = disp_z
+    boundary = fix
+    value = 0.0
+  []
+
+  [front]
+    type = FunctionDirichletBC
+    variable = disp_z
+    boundary = pull
+    function = pfn
+    preset = true
+  []
+[]
+
+[Materials]
+  [elastic_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 100000.0
+    poissons_ratio = 0.25
+  []
+  [compute_stress]
+    type = ComputeLagrangianLinearElasticStress
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;newton&#x27;
+
+  petsc_options_iname = -pc_type
+  petsc_options_value = lu
+
+  nl_abs_tol = 1e-10
+  nl_rel_tol = 1e-8
+
+  end_time = 1.0
+  dtmin = 0.5
+  dt = 0.5
+[]
+
+[Outputs]
+  [out]
+    type = Exodus
+    file_base = &#x27;blah&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="746bdc3a-5a9f-4bf3-ab71-3b207548aaeb"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/lagrangian/cartesian/total/homogenization/action/action_3d.i)</h4><pre style="max-height:350px;"><code class="language-moose"># 3D mixed test
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Mesh]
+  [base]
+    type = FileMeshGenerator
+    file = &#x27;3d.exo&#x27;
+  []
+
+  [sidesets]
+    type = SideSetsFromNormalsGenerator
+    input = base
+    normals = &#x27;-1 0 0
+                1 0 0
+                0 -1 0
+                0 1 0
+            &#x27;
+              &#x27;    0 0 -1
+                0 0 1&#x27;
+    fixed_normal = true
+    new_boundary = &#x27;left right bottom top back front&#x27;
+  []
+[]
+
+[Physics]
+  [SolidMechanics]
+    [QuasiStatic]
+      [all]
+        strain = FINITE
+        add_variables = true
+        new_system = true
+        formulation = TOTAL
+        volumetric_locking_correction = false
+        constraint_types = &#x27;stress strain strain strain stress strain strain strain strain&#x27;
+        targets = &#x27;stress11 strain21 strain31 strain12 stress22 strain32 strain13 strain23 strain33&#x27;
+        generate_output = &#x27;pk1_stress_xx pk1_stress_xy pk1_stress_xz pk1_stress_yx pk1_stress_yy &#x27;
+                          &#x27;pk1_stress_yz pk1_stress_zx pk1_stress_zy pk1_stress_zz &#x27;
+                          &#x27;deformation_gradient_xx deformation_gradient_xy deformation_gradient_xz &#x27;
+                          &#x27;deformation_gradient_yx deformation_gradient_yy deformation_gradient_yz &#x27;
+                          &#x27;deformation_gradient_zx deformation_gradient_zy deformation_gradient_zz&#x27;
+      []
+    []
+  []
+[]
+
+[Functions]
+  [stress11]
+    type = ParsedFunction
+    expression = &#x27;120.0*t&#x27;
+  []
+  [stress22]
+    type = ParsedFunction
+    expression = &#x27;65*t&#x27;
+  []
+  [strain33]
+    type = ParsedFunction
+    expression = &#x27;8.0e-2*t&#x27;
+  []
+  [strain23]
+    type = ParsedFunction
+    expression = &#x27;2.0e-2*t&#x27;
+  []
+  [strain13]
+    type = ParsedFunction
+    expression = &#x27;-7.0e-2*t&#x27;
+  []
+  [strain12]
+    type = ParsedFunction
+    expression = &#x27;1.0e-2*t&#x27;
+  []
+  [strain32]
+    type = ParsedFunction
+    expression = &#x27;1.0e-2*t&#x27;
+  []
+  [strain31]
+    type = ParsedFunction
+    expression = &#x27;2.0e-2*t&#x27;
+  []
+  [strain21]
+    type = ParsedFunction
+    expression = &#x27;-1.5e-2*t&#x27;
+  []
+  [zero]
+    type = ConstantFunction
+    value = 0
+  []
+[]
+
+[BCs]
+  [Periodic]
+    [x]
+      variable = disp_x
+      auto_direction = &#x27;x y z&#x27;
+    []
+    [y]
+      variable = disp_y
+      auto_direction = &#x27;x y z&#x27;
+    []
+    [z]
+      variable = disp_z
+      auto_direction = &#x27;x y z&#x27;
+    []
+  []
+
+  [fix1_x]
+    type = DirichletBC
+    boundary = &quot;fix_all&quot;
+    variable = disp_x
+    value = 0
+  []
+  [fix1_y]
+    type = DirichletBC
+    boundary = &quot;fix_all&quot;
+    variable = disp_y
+    value = 0
+  []
+  [fix1_z]
+    type = DirichletBC
+    boundary = &quot;fix_all&quot;
+    variable = disp_z
+    value = 0
+  []
+
+  [fix2_x]
+    type = DirichletBC
+    boundary = &quot;fix_xy&quot;
+    variable = disp_x
+    value = 0
+  []
+  [fix2_y]
+    type = DirichletBC
+    boundary = &quot;fix_xy&quot;
+    variable = disp_y
+    value = 0
+  []
+
+  [fix3_z]
+    type = DirichletBC
+    boundary = &quot;fix_z&quot;
+    variable = disp_z
+    value = 0
+  []
+[]
+
+[Materials]
+  [elastic_tensor_1]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 100000.0
+    poissons_ratio = 0.3
+    block = &#x27;1&#x27;
+  []
+  [elastic_tensor_2]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 120000.0
+    poissons_ratio = 0.21
+    block = &#x27;2&#x27;
+  []
+  [elastic_tensor_3]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 80000.0
+    poissons_ratio = 0.4
+    block = &#x27;3&#x27;
+  []
+  [elastic_tensor_4]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 76000.0
+    poissons_ratio = 0.11
+    block = &#x27;4&#x27;
+  []
+  [compute_stress]
+    type = ComputeLagrangianLinearElasticStress
+    large_kinematics = true
+  []
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;newton&#x27;
+  line_search = none
+
+  petsc_options_iname = &#x27;-pc_type&#x27;
+  petsc_options_value = &#x27;lu&#x27;
+
+  l_max_its = 2
+  l_tol = 1e-14
+  nl_max_its = 20
+  nl_rel_tol = 1e-8
+  nl_abs_tol = 1e-10
+
+  start_time = 0.0
+  dt = 0.2
+  dtmin = 0.2
+  end_time = 1.0
+[]
+
+[Outputs]
+  [out]
+    type = Exodus
+    file_base = &#x27;3d&#x27;
+  []
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="b972ffa2-3a4a-457f-ae74-e5607e291dfe"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  elem_type = HEX8
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Functions]
+  [./tdisp]
+    type = ParsedFunction
+    expression = &#x27;0.01 * t&#x27;
+  [../]
+[]
+
+[Physics]
+  [SolidMechanics]
+    [QuasiStatic]
+      [./all]
+        strain = FINITE
+        add_variables = true
+      [../]
+    [../]
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+  [./tdisp]
+    type = FunctionDirichletBC
+    variable = disp_z
+    boundary = front
+    function = tdisp
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;1.684e5 0.176e5 0.176e5 1.684e5 0.176e5 1.684e5 0.754e5 0.754e5 0.754e5&#x27;
+    fill_method = symmetric9
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.05
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = -pc_hypre_type
+  petsc_options_value = boomeramg
+  nl_abs_tol = 1e-10
+  nl_rel_step_tol = 1e-10
+  dtmax = 10.0
+  nl_rel_tol = 1e-10
+  end_time = 1
+  dtmin = 0.05
+  num_steps = 10
+  nl_abs_step_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="9e366592-57f8-49d2-9f60-01ba3afc12f8"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/action/two_block_new.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  [generated_mesh]
+    type = GeneratedMeshGenerator
+    dim = 2
+    nx = 4
+    ny = 4
+  []
+  [block1]
+    type = SubdomainBoundingBoxGenerator
+    block_id = 1
+    bottom_left = &#x27;0 0 0&#x27;
+    top_right = &#x27;0.5 1 0&#x27;
+    input = generated_mesh
+  []
+  [block2]
+    type = SubdomainBoundingBoxGenerator
+    block_id = 2
+    bottom_left = &#x27;0.5 0 0&#x27;
+    top_right = &#x27;1 1 0&#x27;
+    input = block1
+  []
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  # parameters that apply to all subblocks are specified at this level. They
+  # can be overwritten in the subblocks.
+  add_variables = true
+  strain = FINITE
+  generate_output = &#x27;stress_xx&#x27;
+
+  [./block1]
+    # the `block` parameter is only valid insde a subblock.
+    block = 1
+  [../]
+  [./block2]
+    block = 2
+    # the `additional_generate_output` parameter is also only valid inside a
+    # subblock. Values specified here are appended to the `generate_output`
+    # parameter values.
+    additional_generate_output = &#x27;strain_yy&#x27;
+  [../]
+[]
+
+[AuxVariables]
+  [./stress_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./strain_theta]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+[]
+
+[AuxKernels]
+  [./stress_theta]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 2
+    index_j = 2
+    variable = stress_theta
+    execute_on = timestep_end
+  [../]
+  [./strain_theta]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 2
+    index_j = 2
+    variable = strain_theta
+    execute_on = timestep_end
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 1e10
+    poissons_ratio = 0.345
+  [../]
+  [./_elastic_stress1]
+    type = ComputeFiniteStrainElasticStress
+    block = 1
+  [../]
+  [./_elastic_stress2]
+    type = ComputeFiniteStrainElasticStress
+    block = 2
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    boundary = &#x27;left&#x27;
+    variable = disp_x
+    value = 0.0
+  [../]
+  [./top]
+    type = DirichletBC
+    boundary = &#x27;top&#x27;
+    variable = disp_y
+    value = 0.0
+  [../]
+  [./right]
+    type = DirichletBC
+    boundary = &#x27;right&#x27;
+    variable = disp_x
+    value = 0.01
+  [../]
+  [./bottom]
+    type = DirichletBC
+    boundary = &#x27;bottom&#x27;
+    variable = disp_y
+    value = 0.01
+  [../]
+[]
+
+[Debug]
+  show_var_residual_norms = true
+[]
+
+[Executioner]
+  type = Steady
+
+  petsc_options_iname = &#x27;-ksp_gmres_restart -pc_type -pc_hypre_type -pc_hypre_boomeramg_max_iter&#x27;
+  petsc_options_value = &#x27;  201               hypre    boomeramg      10&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  nl_rel_tol = 5e-9
+  nl_abs_tol = 1e-10
+  nl_max_its = 15
+
+  l_tol = 1e-3
+  l_max_its = 50
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../../../js/init.js"></script><script type="text/javascript" src="../../../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../../../js/sqa_moose.js"></script><script type="text/javascript" src="../../../../js/moose_input_parser.js"></script>

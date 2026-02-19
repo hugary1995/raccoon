@@ -1,0 +1,927 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Hill Constants | RACCOON</title><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" alt="GitHub wordmark" class="github-mark"></img><img src="../../media/framework/github-mark.png" alt="GitHub logo" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="0ff0a800-50bb-4644-a38b-3fa159545e8d" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="999255dc-5859-465b-8558-0937587ff03d" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="b6409426-4b15-448a-9029-b3513538f326" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="11cf3a8d-48e8-4ee7-b3d5-5cdc3cf20d0c" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="ab91f6fa-a88b-4a4c-89c8-6bf7bd63afaf"><i class="material-icons">menu</i></a><ul class="sidenav" id="ab91f6fa-a88b-4a4c-89c8-6bf7bd63afaf"><li><a href="#!" class="dropdown-trigger" data-target="e460d640-c9ad-4ec8-8986-5e5b5e552826" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="7e91dd94-3bec-48a6-b49f-2af8eaf80bcd" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="21a97f06-87de-420b-a252-c70c2194b677" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="d5f77c10-58cb-4965-a3a7-568c9fc2d73b" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="0ff0a800-50bb-4644-a38b-3fa159545e8d"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="999255dc-5859-465b-8558-0937587ff03d"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="b6409426-4b15-448a-9029-b3513538f326"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="11cf3a8d-48e8-4ee7-b3d5-5cdc3cf20d0c"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="e460d640-c9ad-4ec8-8986-5e5b5e552826"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="7e91dd94-3bec-48a6-b49f-2af8eaf80bcd"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="21a97f06-87de-420b-a252-c70c2194b677"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="d5f77c10-58cb-4965-a3a7-568c9fc2d73b"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="c3e17f5d-9215-424e-a1a2-35d14ddec283" data-section-level="1" data-section-text="Hill Constants"><h1 id="hill-constants">Hill Constants</h1><p>Build and rotate the Hill Tensor. It can be used with other Hill plasticity and creep materials.</p><section id="10068081-c3dd-46bb-9ada-3660cbddaa3a" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The <code>HillConstants</code> material transforms the user specified hill constants from global co-ordinates to the material co-ordinates and stores them as a material property. It rotates the hill constants during the initial time step only. This class does not rotate the hill tensor during the simulation.  The initial rotation is performed based of the user defined rotation angle parameters. The rotated Hill tensor is obtained as <a href="#stewart2011anisotropic">Stewart et al. (2011)</a>:</p><p><span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-468e608f-5a01-4c0d-9228-a18291e2c6bb"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-468e608f-5a01-4c0d-9228-a18291e2c6bb");katex.render("   H_{rot} = T_m H T_m^T", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span></p><p>Here, <span class="moose-katex-inline-equation" id="moose-equation-34e16c55-19f1-4fa3-b556-9c25c4c5e696"><script>var element = document.getElementById("moose-equation-34e16c55-19f1-4fa3-b556-9c25c4c5e696");katex.render("H_{rot}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the transformed hill tensor, <span class="moose-katex-inline-equation" id="moose-equation-7cff0176-8b2c-47c1-b3fa-fbff2a729962"><script>var element = document.getElementById("moose-equation-7cff0176-8b2c-47c1-b3fa-fbff2a729962");katex.render("H", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the initial Hill tensor and <span class="moose-katex-inline-equation" id="moose-equation-d2848897-9b13-4415-b3d6-7e9e1a660ca0"><script>var element = document.getElementById("moose-equation-d2848897-9b13-4415-b3d6-7e9e1a660ca0");katex.render("T_m", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the transformation matrix. The transformation matrix <span class="moose-katex-inline-equation" id="moose-equation-d6186207-c9b2-41e4-8bc8-849ec3520040"><script>var element = document.getElementById("moose-equation-d6186207-c9b2-41e4-8bc8-849ec3520040");katex.render("T_m", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is formed from the components of the total rotation matrix due to initial rotation and the orientation change due to large deformation.</p></section><section id="02f81b1d-3bda-4d01-a048-3b50cab6d87d" data-section-level="2" data-section-text="Temperature dependency and large deformation kinematics"><h2 id="temperature-dependency-and-large-deformation-kinematics">Temperature dependency and large deformation kinematics</h2><p>The Hill&#x27;s tensor varies depending on temperature (due to texture) and depending on the material&#x27;s rotation. To that effect, the user can create functions describing the evolution of the coefficients with temperature and provide it to the material, as follows:</p><pre style="max-height:350px;"><code class="language-moose">[Materials&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Materials/index.html&quot;}&gt;&gt;&gt;]
+  [hill_constants]
+    type = ADHillConstants&lt;&lt;&lt;{&quot;description&quot;: &quot;Build and rotate the Hill Tensor. It can be used with other Hill plasticity and creep materials.&quot;, &quot;href&quot;: &quot;HillConstants.html&quot;}&gt;&gt;&gt;
+    # F G H L M N
+    hill_constants&lt;&lt;&lt;{&quot;description&quot;: &quot;Hill material constants in order: F, G, H, L, M, N&quot;}&gt;&gt;&gt; = &quot;0.5 0.5 0.5 1.5 1.5 1.5&quot;
+    function_names&lt;&lt;&lt;{&quot;description&quot;: &quot;A set of functions that describe the evolution of anisotropy with temperature&quot;}&gt;&gt;&gt; = &#x27;F G H L M N&#x27;
+    temperature&lt;&lt;&lt;{&quot;description&quot;: &quot;Coupled temperature&quot;}&gt;&gt;&gt; = temperature
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#b94a382e-d6d3-4af2-a0b1-5660f15d46cf">(moose/modules/solid_mechanics/test/tests/ad_anisotropic_creep/ad_aniso_creep_temperature_coefficients_function_variation.i)</a><p>where six piecewise linear functions are created to define the material directional creep dependency with temperature.</p><p>In addition, the code accounts for finite strain rotation to update the Hill&#x27;s tensor by default. For simple problems, the user can deactivate this feature by setting the input argument <code>use_large_rotation</code> to false. Updating of directional coefficients with finite strain rotation kinematics is strongly encouraged when the material Similarly, use of the transformed Hill&#x27;s tensor would need to be disabled in the creep model, i.e. the following input file&#x27;s command line needs to be passed: <code>use_transformation = false</code>.</p><pre style="max-height:350px;"><code class="language-moose">[Materials&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Materials/index.html&quot;}&gt;&gt;&gt;]
+  [hill_tensor]
+    type = ADHillConstants&lt;&lt;&lt;{&quot;description&quot;: &quot;Build and rotate the Hill Tensor. It can be used with other Hill plasticity and creep materials.&quot;, &quot;href&quot;: &quot;HillConstants.html&quot;}&gt;&gt;&gt;
+    # F G H L M N
+    hill_constants&lt;&lt;&lt;{&quot;description&quot;: &quot;Hill material constants in order: F, G, H, L, M, N&quot;}&gt;&gt;&gt; = &quot;0.5 1.0 0.5 1.5 1.5 1.5&quot;
+    use_large_rotation&lt;&lt;&lt;{&quot;description&quot;: &quot;Whether to rotate the Hill tensor (anisotropic parameters) to account for large kinematic rotations. It&#x27;s recommended to set it to true if large displacements are to be expected.&quot;}&gt;&gt;&gt; = true
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#c6af178e-19d9-43c7-a123-effe3218707f">(moose/modules/solid_mechanics/test/tests/ad_anisotropic_creep/3d_bar_orthotropic_90deg_rotation_ad_creep_z.i)</a><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><i class="material-icons moose-inline-icon">comment</i><span class="moose-alert-title-brand">note</span></div><div class="card-content"><div class="moose-alert-content"><p>Temperature coupling and large deformation updates have only been tested on creep models.</p></div></div></div><section id="33390aa7-34ea-4e5d-8277-aa78bc2f1ef2" data-section-level="3" data-section-text="Example Input File Syntax"><h3 id="example-input-file-syntax">Example Input File Syntax</h3><pre style="max-height:350px;"><code class="language-moose">[Materials&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Materials/index.html&quot;}&gt;&gt;&gt;]
+  [hill_tensor]
+    type = ADHillConstants&lt;&lt;&lt;{&quot;description&quot;: &quot;Build and rotate the Hill Tensor. It can be used with other Hill plasticity and creep materials.&quot;, &quot;href&quot;: &quot;HillConstants.html&quot;}&gt;&gt;&gt;
+    # F G H L M N
+    hill_constants&lt;&lt;&lt;{&quot;description&quot;: &quot;Hill material constants in order: F, G, H, L, M, N&quot;}&gt;&gt;&gt; = &quot;0.5829856 0.364424 0.6342174 2.0691375 2.3492325 1.814589&quot;
+    base_name&lt;&lt;&lt;{&quot;description&quot;: &quot;Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases&quot;}&gt;&gt;&gt; = trial_plasticity
+  []
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#83398d4a-63fa-4274-877f-5493dd9d3a58">(moose/modules/solid_mechanics/test/tests/anisotropic_plasticity/ad_aniso_plasticity_x.i)</a></section></section><section id="9a07f6a8-7b41-4ece-989e-b0f346f4e78f" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="238d15a9-7a31-4c26-aa62-df7023a97497" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">hill_constants</span><span class="moose-parameter-header-description">Hill material constants in order: F, G, H, L, M, N</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;double&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-doc-range"><span>Range:</span>hill_constants_size = 6</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Hill material constants in order: F, G, H, L, M, N</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="e7123541-cb05-478b-9502-16273d47fbc3" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of blocks (ids or names) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;SubdomainName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The list of blocks (ids or names) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundaries (ids or names) from the mesh where this object applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;BoundaryName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The list of boundaries (ids or names) from the mesh where this object applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">compute</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_on</span><span class="moose-parameter-header-default">NONE</span><span class="moose-parameter-header-description">When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>NONE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE, ELEMENT, SUBDOMAIN</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">declare_suffix</span><span class="moose-parameter-header-description">An optional suffix parameter that can be appended to any declared properties. The suffix will be prepended with a '_' character.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>An optional suffix parameter that can be appended to any declared properties. The suffix will be prepended with a '_' character.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">function_names</span><span class="moose-parameter-header-description">A set of functions that describe the evolution of anisotropy with temperature</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;FunctionName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>A set of functions that describe the evolution of anisotropy with temperature</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">rotation_angles</span><span class="moose-parameter-header-description">Provide the rotation angles for the transformation matrix. This should be a vector that provides the rotation angles about z-, x-, and z-axis, respectively in degrees.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>libMesh::VectorValue&lt;double&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Provide the rotation angles for the transformation matrix. This should be a vector that provides the rotation angles about z-, x-, and z-axis, respectively in degrees.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">temperature</span><span class="moose-parameter-header-description">Coupled temperature</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;VariableName&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Coupled temperature</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_automatic_differentiation</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether thermal contact depends on automatic differentiation materials.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Whether thermal contact depends on automatic differentiation materials.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_large_rotation</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Whether to rotate the Hill tensor (anisotropic parameters) to account for large kinematic rotations. It's recommended to set it to true if large displacements are to be expected.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Whether to rotate the Hill tensor (anisotropic parameters) to account for large kinematic rotations. It's recommended to set it to true if large displacements are to be expected.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="8398c7a1-4f29-461e-abea-a7828a18218e" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>Yes</p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">search_method</span><span class="moose-parameter-header-default">nearest_node_connected_sides</span><span class="moose-parameter-header-description">Choice of search algorithm.  All options begin by finding the nearest node in the primary boundary to a query point in the secondary boundary.  In the default nearest_node_connected_sides algorithm, primary boundary elements are searched iff that nearest node is one of their nodes.  This is fast to determine via a pregenerated node-to-elem map and is robust on conforming meshes.  In the optional all_proximate_sides algorithm, primary boundary elements are searched iff they touch that nearest node, even if they are not topologically connected to it.  This is more CPU-intensive but is necessary for robustness on any boundary surfaces which has disconnections (such as Flex IGA meshes) or non-conformity (such as hanging nodes in adaptively h-refined meshes).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nearest_node_connected_sides</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nearest_node_connected_sides, all_proximate_sides</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Choice of search algorithm.  All options begin by finding the nearest node in the primary boundary to a query point in the secondary boundary.  In the default nearest_node_connected_sides algorithm, primary boundary elements are searched iff that nearest node is one of their nodes.  This is fast to determine via a pregenerated node-to-elem map and is robust on conforming meshes.  In the optional all_proximate_sides algorithm, primary boundary elements are searched iff they touch that nearest node, even if they are not topologically connected to it.  This is more CPU-intensive but is necessary for robustness on any boundary surfaces which has disconnections (such as Flex IGA meshes) or non-conformity (such as hanging nodes in adaptively h-refined meshes).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="33f9502f-25af-4c53-bb3e-ed40554e668e" data-section-level="3" data-section-text="Outputs Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">output_properties</span><span class="moose-parameter-header-description">List of material properties, from this material, to output (outputs must also be defined to an output type)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>List of material properties, from this material, to output (outputs must also be defined to an output type)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-default">none </span><span class="moose-parameter-header-description">Vector of output names where you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>none </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;OutputName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Vector of output names where you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Outputs Parameters</h3></summary></details></section><section id="9a6205bb-93c5-49bf-909d-a7474d7b6127" data-section-level="3" data-section-text="Material Property Retrieval Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">prop_getter_suffix</span><span class="moose-parameter-header-description">An optional suffix parameter that can be appended to any attempt to retrieve/get material properties. The suffix will be prepended with a '_' character.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>An optional suffix parameter that can be appended to any attempt to retrieve/get material properties. The suffix will be prepended with a '_' character.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_interpolated_state</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">For the old and older state use projected material properties interpolated at the quadrature points. To set up projection use the ProjectedStatefulMaterialStorageAction.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>For the old and older state use projected material properties interpolated at the quadrature points. To set up projection use the ProjectedStatefulMaterialStorageAction.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Material Property Retrieval Parameters</h3></summary></details></section></section><section id="98fb5847-bcf8-474f-993b-6dafe8477a59" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol><li id="stewart2011anisotropic">Calvin&nbsp;M Stewart, Ali&nbsp;P Gordon, Young&nbsp;Wha Ma, and Richard&nbsp;W Neu.
+An anisotropic tertiary creep damage constitutive model for anisotropic materials.
+<em>International Journal of Pressure Vessels and Piping</em>, 88(8-9):356–364, 2011.<a href="#207dfc4f-244c-4faa-858f-5b26ce4e601c" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="207dfc4f-244c-4faa-858f-5b26ce4e601c"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@article{stewart2011anisotropic,
+    author = "Stewart, Calvin M and Gordon, Ali P and Ma, Young Wha and Neu, Richard W",
+    title = "An anisotropic tertiary creep damage constitutive model for anisotropic materials",
+    journal = "International Journal of Pressure Vessels and Piping",
+    volume = "88",
+    number = "8-9",
+    pages = "356--364",
+    year = "2011",
+    publisher = "Elsevier"
+}
+</code></pre></div></div></li></ol></div></section></section><div class="moose-modal modal" id="b94a382e-d6d3-4af2-a0b1-5660f15d46cf"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/ad_anisotropic_creep/ad_aniso_creep_temperature_coefficients_function_variation.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 3
+    nx = 10
+    ny = 2
+    nz = 2
+    xmin = 0.0
+    ymin = 0.0
+    zmin = 0.0
+
+    xmax = 10.0
+    ymax = 1.0
+    zmax = 1.0
+  []
+  [corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;100&#x27;
+    nodes = &#x27;3 69&#x27;
+    input = gen
+  []
+  [corner_node_2]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;101&#x27;
+    nodes = &#x27;4 47&#x27;
+    input = corner_node
+  []
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+  volumetric_locking_correction = true
+[]
+
+[AuxVariables]
+  [temperature]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [hydrostatic_stress]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [creep_strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [creep_strain_xy]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [creep_strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [creep_strain_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [creep_strain_xz]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [creep_strain_yz]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [hill_constants_f]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [hill_constants_g]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [hill_constants_h]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+[]
+
+[AuxKernels]
+  [temperature]
+    type = FunctionAux
+    variable = temperature
+    function = time_temperature
+  []
+  [hydrostatic_stress]
+    type = ADRankTwoScalarAux
+    variable = hydrostatic_stress
+    rank_two_tensor = stress
+    scalar_type = Hydrostatic
+  []
+  [creep_strain_xx]
+    type = ADRankTwoAux
+    rank_two_tensor = creep_strain
+    variable = creep_strain_xx
+    index_i = 0
+    index_j = 0
+  []
+  [creep_strain_xy]
+    type = ADRankTwoAux
+    rank_two_tensor = creep_strain
+    variable = creep_strain_xy
+    index_i = 0
+    index_j = 1
+  []
+  [creep_strain_yy]
+    type = ADRankTwoAux
+    rank_two_tensor = creep_strain
+    variable = creep_strain_yy
+    index_i = 1
+    index_j = 1
+  []
+  [creep_strain_zz]
+    type = ADRankTwoAux
+    rank_two_tensor = creep_strain
+    variable = creep_strain_zz
+    index_i = 2
+    index_j = 2
+  []
+  [creep_strain_xz]
+    type = ADRankTwoAux
+    rank_two_tensor = creep_strain
+    variable = creep_strain_xz
+    index_i = 0
+    index_j = 2
+  []
+  [creep_strain_yz]
+    type = ADRankTwoAux
+    rank_two_tensor = creep_strain
+    variable = creep_strain_yz
+    index_i = 1
+    index_j = 2
+  []
+  [sigma_xx]
+    type = ADRankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xx
+    index_i = 1
+    index_j = 1
+  []
+  [hill_constant_f]
+    type = MaterialStdVectorAux
+    property = hill_constants
+    variable = hill_constants_f
+    index = 0
+  []
+  [hill_constant_g]
+    type = MaterialStdVectorAux
+    property = hill_constants
+    variable = hill_constants_g
+    index = 1
+  []
+  [hill_constant_h]
+    type = MaterialStdVectorAux
+    property = hill_constants
+    variable = hill_constants_h
+    index = 2
+  []
+[]
+
+[ICs]
+  [temp]
+    type = ConstantIC
+    variable = temperature
+    value = 50.0
+  []
+[]
+
+[Functions]
+  [pull]
+    type = PiecewiseLinear
+    x = &#x27;0 1.0e-9 1.0&#x27;
+    y = &#x27;0 -4e1 -4e1&#x27;
+  []
+  [F]
+    type = PiecewiseLinear
+    x = &#x27;50 200&#x27;
+    y = &#x27;0.2 0.5&#x27;
+  []
+  [G]
+    type = PiecewiseLinear
+    x = &#x27;50 200&#x27;
+    y = &#x27;0.9 0.6&#x27;
+  []
+  [H]
+    type = PiecewiseLinear
+    x = &#x27;50 200&#x27;
+    y = &#x27;0.5 0.3&#x27;
+  []
+  [L]
+    type = PiecewiseLinear
+    x = &#x27;50 200&#x27;
+    y = &#x27;1.5 1.5&#x27;
+  []
+  [M]
+    type = PiecewiseLinear
+    x = &#x27;50 200&#x27;
+    y = &#x27;1.5 1.5&#x27;
+  []
+  [N]
+    type = PiecewiseLinear
+    x = &#x27;50 200&#x27;
+    y = &#x27;1.5 1.5&#x27;
+  []
+  [time_temperature]
+    type = PiecewiseLinear
+    x = &#x27;0 1.0e-2&#x27;
+    y = &#x27;50 200&#x27;
+  []
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [all]
+    strain = FINITE
+    generate_output = &#x27;elastic_strain_xx stress_xx&#x27;
+    use_automatic_differentiation = true
+    add_variables = true
+  []
+[]
+
+[Materials]
+  [elasticity_tensor]
+    type = ADComputeIsotropicElasticityTensor
+    youngs_modulus = 700
+    poissons_ratio = 0.0
+  []
+
+  [elastic_strain]
+    type = ADComputeMultipleInelasticStress
+    inelastic_models = &#x27;trial_creep_aniso_iso&#x27;
+    max_iterations = 50
+  []
+  [hill_constants]
+    type = ADHillConstants
+    # F G H L M N
+    hill_constants = &quot;0.5 0.5 0.5 1.5 1.5 1.5&quot;
+    function_names = &#x27;F G H L M N&#x27;
+    temperature = temperature
+  []
+  [trial_creep_aniso_iso]
+    type = ADHillCreepStressUpdate
+    coefficient = 1e-16
+    n_exponent = 9
+    m_exponent = 0
+    activation_energy = 0
+    max_inelastic_increment = 0.00003
+    relative_tolerance = 1e-20
+    absolute_tolerance = 1e-20
+    internal_solve_output_on = never
+    # Force it to not use integration error
+    max_integration_error = 1.0
+  []
+
+[]
+
+[BCs]
+  [no_disp_x]
+    type = ADDirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  []
+
+  [no_disp_y]
+    type = ADDirichletBC
+    variable = disp_y
+    boundary = 100
+    value = 0.0
+  []
+
+  [no_disp_z]
+    type = ADDirichletBC
+    variable = disp_z
+    boundary = 101
+    value = 0.0
+  []
+
+  [Pressure]
+    [Side1]
+      boundary = right
+      function = pull
+    []
+  []
+
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+  petsc_options_value = &#x27;lu     superlu_dist&#x27;
+
+  nl_rel_tol = 1e-13
+  nl_abs_tol = 1.0e-14
+  l_max_its = 90
+  num_steps = 20
+  dt = 5.0e-4
+  start_time = 0
+  automatic_scaling = true
+[]
+
+[Postprocessors]
+  [matl_ts_min]
+    type = MaterialTimeStepPostprocessor
+  []
+  [max_disp_x]
+    type = ElementExtremeValue
+    variable = disp_x
+  []
+  [max_disp_y]
+    type = ElementExtremeValue
+    variable = disp_y
+  []
+  [max_hydro]
+    type = ElementAverageValue
+    variable = hydrostatic_stress
+  []
+  [dt]
+    type = TimestepSize
+  []
+  [num_lin]
+    type = NumLinearIterations
+    outputs = console
+  []
+  [num_nonlin]
+    type = NumNonlinearIterations
+    outputs = console
+  []
+  [creep_strain_xx]
+    type = ElementalVariableValue
+    variable = creep_strain_xx
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+  [creep_strain_yy]
+    type = ElementalVariableValue
+    variable = creep_strain_yy
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+  [creep_strain_zz]
+    type = ElementalVariableValue
+    variable = creep_strain_zz
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+  [creep_strain_xy]
+    type = ElementalVariableValue
+    variable = creep_strain_xy
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+  [creep_strain_yz]
+    type = ElementalVariableValue
+    variable = creep_strain_yz
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+  [creep_strain_xz]
+    type = ElementalVariableValue
+    variable = creep_strain_xz
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+  [elastic_strain_xx]
+    type = ElementalVariableValue
+    variable = elastic_strain_xx
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+  [sigma_xx]
+    type = ElementalVariableValue
+    variable = stress_xx
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+[]
+
+[Outputs]
+  csv = true
+  exodus = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="c6af178e-19d9-43c7-a123-effe3218707f"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/ad_anisotropic_creep/3d_bar_orthotropic_90deg_rotation_ad_creep_z.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  [generated_mesh]
+    type = GeneratedMeshGenerator
+    dim = 3
+    xmin = 0
+    xmax = 2
+    ymin = 0
+    ymax = 10
+    zmin = 0
+    zmax = 2
+    nx = 1
+    ny = 1
+    nz = 1
+    elem_type = HEX8
+  []
+  [corner]
+    type = ExtraNodesetGenerator
+    new_boundary = 101
+    coord = &#x27;0 0 0&#x27;
+    input = generated_mesh
+  []
+  [side]
+    type = ExtraNodesetGenerator
+    new_boundary = 102
+    coord = &#x27;2 0 0&#x27;
+    input = corner
+  []
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [all]
+    strain = FINITE
+    add_variables = true
+    volumetric_locking_correction = true
+    use_automatic_differentiation = true
+    generate_output = &#x27;elastic_strain_xx stress_xx creep_strain_xx&#x27;
+  []
+[]
+
+[Materials]
+  [elastic_strain]
+    type = ADComputeMultipleInelasticStress
+    inelastic_models = &quot;trial_creep&quot;
+    max_iterations = 50
+    absolute_tolerance = 1e-18
+  []
+  [hill_tensor]
+    type = ADHillConstants
+    # F G H L M N
+    hill_constants = &quot;0.5 1.0 0.5 1.5 1.5 1.5&quot;
+    use_large_rotation = true
+  []
+  [trial_creep]
+    type = ADHillCreepStressUpdate
+    coefficient = 5e-14
+    n_exponent = 10
+    m_exponent = 0
+    activation_energy = 0
+    max_inelastic_increment = 0.00003
+    absolute_tolerance = 1e-18
+    relative_tolerance = 1e-18
+    # Force it to not use integration error
+    max_integration_error = 100.0
+    use_transformation = true
+  []
+  [elasticity_tensor]
+    type = ADComputeIsotropicElasticityTensor
+    youngs_modulus = 500
+    poissons_ratio = 0.0
+  []
+[]
+
+[BCs]
+  [fix_z]
+    type = ADDirichletBC
+    variable = disp_z
+    boundary = bottom
+    value = 0
+  []
+
+  [rot_y]
+    type = DisplacementAboutAxis
+    boundary = bottom
+    function = t
+    angle_units = degrees
+    axis_origin = &#x27;0. 0. 0.&#x27;
+    axis_direction = &#x27;0. 0. 1.&#x27;
+    component = 1
+    variable = disp_y
+  []
+  #
+  [rot_x]
+    type = DisplacementAboutAxis
+    boundary = bottom
+    function = t
+    angle_units = degrees
+    axis_origin = &#x27;0. 0. 0.&#x27;
+    axis_direction = &#x27;0. 0. 1.&#x27;
+    component = 0
+    variable = disp_x
+  []
+
+  [rot_y90]
+    type = DisplacementAboutAxis
+    boundary = bottom
+    function = 90
+    angle_units = degrees
+    axis_origin = &#x27;0. 0. 0.&#x27;
+    axis_direction = &#x27;0. 0. 1.&#x27;
+    component = 1
+    variable = disp_y
+  []
+  #
+  [rot_x90]
+    type = DisplacementAboutAxis
+    boundary = bottom
+    function = 90
+    angle_units = degrees
+    axis_origin = &#x27;0. 0. 0.&#x27;
+    axis_direction = &#x27;0. 0. 1.&#x27;
+    component = 0
+    variable = disp_x
+  []
+
+  [press]
+    boundary = top
+    function = &#x27;-1.0*(t-90)*0.1&#x27;
+    use_displaced_mesh = true
+    displacements = &#x27;disp_x disp_y disp_z&#x27;
+    type = Pressure
+    variable = disp_x
+  []
+[]
+
+[Postprocessors]
+  [creep_strain_xx]
+    type = ADElementAverageMaterialProperty
+    mat_prop = creep_strain_xx
+  []
+[]
+
+[Controls]
+  [c1]
+    type = TimePeriod
+    enable_objects = &#x27;BCs::rot_x BCs::rot_y&#x27;
+    disable_objects = &#x27;BCs::rot_x90 BCs::rot_y90 BCs::press&#x27;
+    start_time = &#x27;0&#x27;
+    end_time = &#x27;90&#x27;
+  []
+  [c190plus]
+    type = TimePeriod
+    enable_objects = &#x27;BCs::rot_x90 BCs::rot_y90 BCs::press&#x27;
+    disable_objects = &#x27;BCs::rot_x BCs::rot_y &#x27;
+    start_time = &#x27;90&#x27;
+    end_time = &#x27;390&#x27;
+  []
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options = &#x27;-snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;101&#x27;
+
+  line_search = &#x27;none&#x27;
+
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-12
+  nl_max_its = 50
+
+  automatic_scaling = true
+  l_tol = 1e-4
+  l_max_its = 50
+  start_time = 0.0
+
+  dt = 0.1
+  dtmin = 0.1
+
+  num_steps = 1200
+[]
+
+[Preconditioning]
+  [smp]
+    type = SMP
+    full = true
+  []
+[]
+
+[Outputs]
+  exodus = false
+  csv = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="83398d4a-63fa-4274-877f-5493dd9d3a58"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/anisotropic_plasticity/ad_aniso_plasticity_x.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  [gen]
+    type = GeneratedMeshGenerator
+    dim = 3
+    nx = 10
+    ny = 2
+    nz = 2
+    xmin = 0.0
+    ymin = 0.0
+    zmin = 0.0
+
+    xmax = 10.0
+    ymax = 1.0
+    zmax = 1.0
+  []
+  [corner_node]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;100&#x27;
+    nodes = &#x27;3 69&#x27;
+    input = gen
+  []
+  [corner_node_2]
+    type = ExtraNodesetGenerator
+    new_boundary = &#x27;101&#x27;
+    nodes = &#x27;4 47&#x27;
+    input = corner_node
+  []
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+  volumetric_locking_correction = true
+[]
+
+[AuxVariables]
+  [hydrostatic_stress]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [plastic_strain_xx]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [plastic_strain_xy]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [plastic_strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [plastic_strain_zz]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [stress_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+  [elastic_strain_yy]
+    order = CONSTANT
+    family = MONOMIAL
+  []
+[]
+
+[AuxKernels]
+  [hydrostatic_stress]
+    type = ADRankTwoScalarAux
+    variable = hydrostatic_stress
+    rank_two_tensor = stress
+    scalar_type = Hydrostatic
+  []
+  [plasticity_strain_xx]
+    type = ADRankTwoAux
+    rank_two_tensor = trial_plasticity_plastic_strain
+    variable = plastic_strain_xx
+    index_i = 0
+    index_j = 0
+  []
+  [plasticity_strain_xy]
+    type = ADRankTwoAux
+    rank_two_tensor = trial_plasticity_plastic_strain
+    variable = plastic_strain_xy
+    index_i = 0
+    index_j = 1
+  []
+  [plasticity_strain_yy]
+    type = ADRankTwoAux
+    rank_two_tensor = trial_plasticity_plastic_strain
+    variable = plastic_strain_yy
+    index_i = 1
+    index_j = 1
+  []
+  [plasticity_strain_zz]
+    type = ADRankTwoAux
+    rank_two_tensor = trial_plasticity_plastic_strain
+    variable = plastic_strain_zz
+    index_i = 2
+    index_j = 2
+  []
+  [sigma_xx]
+    type = ADRankTwoAux
+    rank_two_tensor = stress
+    variable = stress_xx
+    index_i = 1
+    index_j = 1
+  []
+  [elastic_strain_yy]
+    type = ADRankTwoAux
+    rank_two_tensor = elastic_strain
+    variable = elastic_strain_yy
+    index_i = 1
+    index_j = 1
+  []
+  [sigma_yy]
+    type = ADRankTwoAux
+    rank_two_tensor = stress
+    variable = stress_yy
+    index_i = 1
+    index_j = 1
+  []
+[]
+
+[Functions]
+  [pull]
+    type = PiecewiseLinear
+    x = &#x27;0 1e1 1e8&#x27;
+    y = &#x27;0 -4e2 -4e2&#x27;
+  []
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [all]
+    strain = FINITE
+    generate_output = &#x27;elastic_strain_xx stress_xx&#x27;
+    use_automatic_differentiation = true
+    add_variables = true
+  []
+[]
+
+[Materials]
+
+  [elasticity_tensor]
+    type = ADComputeIsotropicElasticityTensor
+    youngs_modulus = 70000
+    poissons_ratio = 0.25
+  []
+
+  [elastic_strain]
+    type = ADComputeMultipleInelasticStress
+    inelastic_models = &quot;trial_plasticity&quot;
+    max_iterations = 50
+    absolute_tolerance = 1e-16
+  []
+
+  [hill_tensor]
+    type = ADHillConstants
+    # F G H L M N
+    hill_constants = &quot;0.5829856 0.364424 0.6342174 2.0691375 2.3492325 1.814589&quot;
+    base_name = trial_plasticity
+  []
+
+  [trial_plasticity]
+    type = ADHillPlasticityStressUpdate
+    hardening_constant = 2000.0
+    yield_stress = 0.001 # was 200 for verification
+    absolute_tolerance = 1e-14
+    relative_tolerance = 1e-12
+    base_name = trial_plasticity
+    internal_solve_full_iteration_history = true
+    max_inelastic_increment = 2.0e-6
+    internal_solve_output_on = on_error
+  []
+[]
+
+[BCs]
+  [no_disp_x]
+    type = ADDirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  []
+
+  [no_disp_y]
+    type = ADDirichletBC
+    variable = disp_y
+    boundary = 100
+    value = 0.0
+  []
+
+  [no_disp_z]
+    type = ADDirichletBC
+    variable = disp_z
+    boundary = 101
+    value = 0.0
+  []
+
+  [Pressure]
+    [Side1]
+      boundary = right
+      function = pull
+    []
+  []
+
+[]
+
+[Executioner]
+  type = Transient
+
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_factor_mat_solver_package&#x27;
+  petsc_options_value = &#x27;lu     superlu_dist&#x27;
+
+  nl_rel_tol = 1e-11
+  nl_abs_tol = 1.0e-14
+  l_max_its = 90
+  num_steps = 25
+  [TimeStepper]
+    type = IterationAdaptiveDT
+    optimal_iterations = 30
+    iteration_window = 9
+    growth_factor = 1.05
+    cutback_factor = 0.5
+    timestep_limiting_postprocessor = matl_ts_min
+    dt = 1.0e-5
+    time_t = &#x27;0 3.4e-5 10&#x27;
+    time_dt = &#x27;1.0e-5 1.0e-7 1.0e-7&#x27;
+  []
+  start_time = 0
+  automatic_scaling = true
+[]
+
+[Postprocessors]
+  [matl_ts_min]
+    type = MaterialTimeStepPostprocessor
+  []
+  [max_disp_x]
+    type = ElementExtremeValue
+    variable = disp_x
+  []
+  [max_disp_y]
+    type = ElementExtremeValue
+    variable = disp_y
+  []
+  [max_hydro]
+    type = ElementAverageValue
+    variable = hydrostatic_stress
+  []
+  [dt]
+    type = TimestepSize
+  []
+  [num_lin]
+    type = NumLinearIterations
+    outputs = console
+  []
+  [num_nonlin]
+    type = NumNonlinearIterations
+    outputs = console
+  []
+  [plasticity_strain_yy]
+    type = ElementalVariableValue
+    variable = plastic_strain_yy
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+  [elastic_strain_yy]
+    type = ElementalVariableValue
+    variable = elastic_strain_yy
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+  [sigma_yy]
+    type = ElementalVariableValue
+    variable = stress_yy
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+  [plasticity_strain_xx]
+    type = ElementalVariableValue
+    variable = plastic_strain_xx
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+  [elastic_strain_xx]
+    type = ElementalVariableValue
+    variable = elastic_strain_xx
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+  [sigma_xx]
+    type = ElementalVariableValue
+    variable = stress_xx
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+  [plasticity_strain_zz]
+    type = ElementalVariableValue
+    variable = plastic_strain_zz
+    execute_on = &#x27;TIMESTEP_END&#x27;
+    elementid = 39
+  []
+[]
+
+[Outputs]
+  csv = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script><script type="text/javascript" src="../../js/moose_input_parser.js"></script>

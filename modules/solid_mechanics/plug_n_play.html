@@ -1,0 +1,1400 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Plug n Play System Overview in Solid Mechanics | RACCOON</title><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" alt="GitHub wordmark" class="github-mark"></img><img src="../../media/framework/github-mark.png" alt="GitHub logo" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="d76f4109-fecf-4e9e-b3e3-c10f10917985" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="aab0ea53-7bda-4f40-ad59-b598ff6a2432" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="c1d352ee-8819-47a7-b5ad-bb768314449c" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="fb2c75da-ca6e-4937-b43e-c2b8d98b41b4" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="5f0df871-51a7-41b9-a019-0b20b95c16ea"><i class="material-icons">menu</i></a><ul class="sidenav" id="5f0df871-51a7-41b9-a019-0b20b95c16ea"><li><a href="#!" class="dropdown-trigger" data-target="f23c64ca-8986-4512-9dc9-b6af89083b8f" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="3e97f7ee-4157-422e-9a79-5773b2819f0f" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="1e54f0f8-729c-4832-8393-a03cdc1e1431" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="7c906cc8-8b05-427e-adfd-4c81d7374dd1" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="d76f4109-fecf-4e9e-b3e3-c10f10917985"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="aab0ea53-7bda-4f40-ad59-b598ff6a2432"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="c1d352ee-8819-47a7-b5ad-bb768314449c"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="fb2c75da-ca6e-4937-b43e-c2b8d98b41b4"><li><a href="../index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="f23c64ca-8986-4512-9dc9-b6af89083b8f"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="3e97f7ee-4157-422e-9a79-5773b2819f0f"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="1e54f0f8-729c-4832-8393-a03cdc1e1431"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="7c906cc8-8b05-427e-adfd-4c81d7374dd1"><li><a href="../index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="4b0464f3-016c-4d47-bd70-343927145e9a" data-section-level="1" data-section-text="Plug - n - Play System Overview in Solid Mechanics"><h1 id="plug-n-play-system-overview-in-solid-mechanics">Plug-n-Play System Overview in Solid Mechanics</h1><p>The solid mechanics materials use a plug-and-play system where the main tensors used in the residual equation are defined in individual material classes in MOOSE. The plug-and-play approach used in the Solid Mechanics module requires at least three separate classes to fully describe a material model.</p><div class="card moose-alert moose-alert-note"><div class="card-title moose-alert-title"><i class="material-icons moose-inline-icon">comment</i><span class="moose-alert-title-brand">note:</span>Three Tensors Are Required for a Mechanics Problem</div><div class="card-content"><div class="moose-alert-content"><p>The three tensors that must be defined for any mechanics problem are the strain <span class="moose-katex-inline-equation" id="moose-equation-a403612e-8c28-4827-9da7-b05c24580711"><script>var element = document.getElementById("moose-equation-a403612e-8c28-4827-9da7-b05c24580711");katex.render("\\boldsymbol{\\epsilon}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> or strain increment, elasticity tensor <span class="moose-katex-inline-equation" id="moose-equation-0221def0-3d43-44f8-a15b-9a848c38f791"><script>var element = document.getElementById("moose-equation-0221def0-3d43-44f8-a15b-9a848c38f791");katex.render("\\boldsymbol{\\mathcal{C}}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>, and the stress <span class="moose-katex-inline-equation" id="moose-equation-0b5db420-2192-458e-b39b-76940a074055"><script>var element = document.getElementById("moose-equation-0b5db420-2192-458e-b39b-76940a074055");katex.render("\\boldsymbol{\\sigma}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>. Optional tensors include stress-free strain (also known as an eigenstrain) <span class="moose-katex-inline-equation" id="moose-equation-ef213df7-7198-414b-9edb-4e51b9374fde"><script>var element = document.getElementById("moose-equation-ef213df7-7198-414b-9edb-4e51b9374fde");katex.render("\\boldsymbol{\\epsilon}_0", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> and additional stress <span class="moose-katex-inline-equation" id="moose-equation-5d9e8129-5db1-4200-9266-d1279ddcacb2"><script>var element = document.getElementById("moose-equation-5d9e8129-5db1-4200-9266-d1279ddcacb2");katex.render("\\boldsymbol{\\sigma}_0", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>.</p></div></div></div><div class="card moose-float" style="width:800;float:right;"><div class="card-content"><picture class="materialboxed moose-image"><img src="../../media/solid_mechanics/IntroPlugNPlay.png" alt="Figure 1: Tensors required to fully describe a mechanics material."></img></picture><p class="moose-caption"><span class="moose-caption-text">Figure 1: Tensors required to fully describe a mechanics material.</span></p></div></div><p>At times, a user may need to define multiple mechanics properties over a single block. For this reason, all material properties can be prepended by a name defined by the input parameter <code>base_name</code>.</p><section id="ef787550-703b-4864-9612-851e02083496" data-section-level="2" data-section-text="Strain Materials"><h2 id="strain-materials">Strain Materials</h2><p>The base material class to create strains (<span class="moose-katex-inline-equation" id="moose-equation-a33c909b-d868-4a58-8b89-c630d6b64012"><script>var element = document.getElementById("moose-equation-a33c909b-d868-4a58-8b89-c630d6b64012");katex.render("\\boldsymbol{\\epsilon}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>) or strain increments is <code>ComputeStrainBase</code>; this class is a pure virtual class, requiring that all children override the <code>computeQpProperties()</code> method.  For all strains the base class defines the property <code>total_strain</code>. For incremental strains, both finite and small, the compute strain base class defines the properties <code>strain_rate</code>, <code>strain_increment</code>, <code>rotation_increment</code>, and <code>deformation_gradient</code>. A discussion of the different types of strain formulations is available on the <a href="Strains.html">Strains</a> page.</p><p>For small strains, use <a href="../../source/materials/ComputeSmallStrain.html">ComputeSmallStrain</a> in which <span class="moose-katex-inline-equation" id="moose-equation-61ecf7d9-2c9b-4134-8414-70063e1129b3"><script>var element = document.getElementById("moose-equation-61ecf7d9-2c9b-4134-8414-70063e1129b3");katex.render("\\boldsymbol{\\epsilon} = (\\nabla \\boldsymbol{u} + \\nabla \\boldsymbol{u}^T)/2", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>. For finite strains, use <a href="../../source/materials/ComputeFiniteStrain.html">ComputeFiniteStrain</a> in which an incremental form is employed such that the strain_increment and rotation_increment are calculated.</p><p>With the SolidMechanics quasi-static physics, the strain formulation can be set with the <code>strain= SMALL |
+FINITE</code> parameter, as shown below.</p><pre style="max-height:350px;"><code class="language-moose">[Physics&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Physics/index.html&quot;}&gt;&gt;&gt;]
+  [SolidMechanics&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Physics/SolidMechanics/index.html&quot;}&gt;&gt;&gt;]
+    [QuasiStatic&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Physics/SolidMechanics/QuasiStatic/index.html&quot;}&gt;&gt;&gt;]
+      [./all]
+        strain&lt;&lt;&lt;{&quot;description&quot;: &quot;Strain formulation&quot;}&gt;&gt;&gt; = FINITE
+        add_variables&lt;&lt;&lt;{&quot;description&quot;: &quot;Add the displacement variables&quot;}&gt;&gt;&gt; = true
+      [../]
+    [../]
+  [../]
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#8174f2d1-bb03-42a8-aa0d-df40fc4a0b6f">(moose/modules/solid_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i)</a></section><section id="64b39f16-3f00-47c1-98fc-1f7a3c80a576" data-section-level="2" data-section-text="Elasticity Tensor Materials"><h2 id="elasticity-tensor-materials">Elasticity Tensor Materials</h2><p>The primary class for creating elasticity tensors (<span class="moose-katex-inline-equation" id="moose-equation-200dedec-c8dd-424b-abb6-0367bf6f0621"><script>var element = document.getElementById("moose-equation-200dedec-c8dd-424b-abb6-0367bf6f0621");katex.render("\\boldsymbol{\\mathcal{C_{ijkl}}}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>) is <a href="../../source/materials/ComputeElasticityTensor.html">ComputeElasticityTensor</a>. This class defines the property <code>_elasticity_tensor</code>. Given the elastic constants required for the applicable symmetry, such as <code>symmetric9</code>, this material calculates the elasticity tensor. If you wish to rotate the elasticity tensor, constant Euler angles can be provided. The elasticity tensor can also be scaled with a function, if desired.  <code>ComputeElasticityTensor</code> also serves as a base class for specialized elasticity tensors, including:</p><ul class="browser-default"><li><p>An elasticity tensor for crystal plasticity, <a href="../../source/materials/crystal_plasticity/ComputeElasticityTensorCP.html">ComputeElasticityTensorCP</a>, </p></li><li><p>A Cosserat elasticity tensor <a href="../../source/materials/ComputeLayeredCosseratElasticityTensor.html">ComputeLayeredCosseratElasticityTensor</a>, </p></li><li><p>An isotropic elasticity tensor <a href="../../source/materials/ComputeIsotropicElasticityTensor.html">ComputeIsotropicElasticityTensor</a>.</p></li></ul><p>The input file syntax for the isotropic elasticity tensor is</p><pre style="max-height:350px;"><code class="language-moose">[./elasticity_tensor]
+  type = ComputeIsotropicElasticityTensor
+  youngs_modulus = 2.1e5
+  poissons_ratio = 0.3
+[../]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#148b19a0-0ce3-484b-b313-ba1570b1a8f0">(moose/modules/solid_mechanics/tutorials/basics/part_1.1.i)</a><p>and for an orthotropic material, such as a metal crystal, is</p><pre style="max-height:350px;"><code class="language-moose">[./elasticity_tensor]
+  type = ComputeElasticityTensor
+  C_ijkl = &#x27;1.684e5 0.176e5 0.176e5 1.684e5 0.176e5 1.684e5 0.754e5 0.754e5 0.754e5&#x27;
+  fill_method = symmetric9
+[../]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#be049e53-83d7-4361-a662-a9df73f4faf3">(moose/modules/solid_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i)</a></section><section id="01adbf4e-8836-4d7c-a1f9-55d86003536c" data-section-level="2" data-section-text="Stress Materials"><h2 id="stress-materials">Stress Materials</h2><p>The base class for constitutive equations to compute a stress (<span class="moose-katex-inline-equation" id="moose-equation-33da1a31-699c-450c-882e-11c96c7e2411"><script>var element = document.getElementById("moose-equation-33da1a31-699c-450c-882e-11c96c7e2411");katex.render("\\boldsymbol{\\sigma}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>) is <code>ComputeStressBase</code>. The <code>ComputeStressBase</code> class defines the properties <code>stress</code> and <code>elastic_strain</code>. It is a pure virtual class, requiring all children to override the method <code>computeQpStress()</code>.</p><p>Two elastic constitutive models have been developed, one that assumes small strains <a href="../../source/materials/ComputeLinearElasticStress.html">ComputeLinearElasticStress</a>, and a second which assumes finite strains and rotations increments <a href="../../source/materials/ComputeFiniteStrainElasticStress.html">ComputeFiniteStrainElasticStress</a> The input file syntax for these materials is</p><pre style="max-height:350px;"><code class="language-moose">[./stress]
+  type = ComputeFiniteStrainElasticStress
+[../]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#0c0b64f3-ab46-4a68-8fce-b5629e8b66fa">(moose/modules/solid_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i)</a><p>There are a number of other constitutive models that have been implemented to calculate more complex elasticity problems, plasticity, and creep.  An overview of these different materials is available on the <a href="Stresses.html">Stresses</a> page.</p></section><section id="3be8713c-d5b9-49d5-83fe-f1065d2fd01d" data-section-level="2" data-section-text="Eigenstrain Materials"><h2 id="eigenstrain-materials">Eigenstrain Materials</h2><p>Eigenstrain is the term given to a strain which does not result directly from an applied force. The base class for eigenstrains is <code>ComputeEigenstrainBase</code>. It computes an eigenstrain, which is subtracted from the total strain in the Compute Strain classes. <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-6a895da5-2dab-4434-9488-4a8535e1be0e"></span><script>var element = document.getElementById("moose-equation-6a895da5-2dab-4434-9488-4a8535e1be0e");katex.render("\\epsilon_{mechanical} = \\epsilon_{total} - \\epsilon_{eigen}", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> Chapter 3 of <a href="#qu2006fundamentals">Qu and Cherkaoui (2006)</a> describes the relationship between total, elastic, and eigen- strains and provides examples using thermal expansion and dislocations.</p><p>Eigenstrains are also referred to as residual strains, stress-free strains, or intrinsic strains; translated from German, <a href="http://dict.tu-chemnitz.de/deutsch-englisch/Eigen....html">Eigen</a> means own or intrinsic in English.  The term eigenstrain was introduced by <a href="#mura1982general">Mura (1982)</a>:</p><blockquote><p>Eigenstrain is a generic name given to such nonelastic strains as thermal expansion, phase transformation, initial strains, plastic, misfit strains. Eigenstress is a generic name given to self-equilibrated internal stresses caused by one or several of these eigenstrains in bodies which are free from any other external force and surface constraint.  The eigenstress fields are created by the incompatibility of the eigenstrains.  This new English terminology was adapted from the German &quot;Eigenspannungen and Eigenspannungsquellen,&quot; which is the title of H. Reissner&#x27;s paper (1931) on residual stresses.</p></blockquote><p>Thermal strains are a volumetric change resulting from a change in temperature of the material.  The change in strains can be either a simple linear function of thermal change, e.g. (<span class="moose-katex-inline-equation" id="moose-equation-7fd63212-5fe2-4e5b-a59b-f62c2f989fa1"><script>var element = document.getElementById("moose-equation-7fd63212-5fe2-4e5b-a59b-f62c2f989fa1");katex.render("\\boldsymbol{\\epsilon}_T = \\alpha \\Delta T", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>) or a more complex function of temperature.  The thermal expansion class, <a href="../../source/materials/ComputeThermalExpansionEigenstrain.html">ComputeThermalExpansionEigenstrain</a> computes the thermal strain as a linear function of temperature.  The input file syntax is</p><pre style="max-height:350px;"><code class="language-moose">[./thermal_expansion_strain]
+  type = ComputeThermalExpansionEigenstrain
+  stress_free_temperature = 298
+  thermal_expansion_coeff = 1.3e-5
+  temperature = temp
+  eigenstrain_name = eigenstrain
+[../]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#3f850253-e324-4468-993c-fa7ebed6a18d">(moose/modules/solid_mechanics/test/tests/thermal_expansion/constant_expansion_coeff.i)</a><p>The eigenstrain material block name must also be added as an input parameter, <code>eigenstrain_names</code> to the strain material or SolidMechanics quasi-static physics block. An example of the additional parameter in the SolidMechanics quasi-static physics is shown below.</p><pre style="max-height:350px;"><code class="language-moose">[Physics&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Physics/index.html&quot;}&gt;&gt;&gt;]
+  [SolidMechanics&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Physics/SolidMechanics/index.html&quot;}&gt;&gt;&gt;]
+    [QuasiStatic&lt;&lt;&lt;{&quot;href&quot;: &quot;../../syntax/Physics/SolidMechanics/QuasiStatic/index.html&quot;}&gt;&gt;&gt;]
+      [./all]
+        strain&lt;&lt;&lt;{&quot;description&quot;: &quot;Strain formulation&quot;}&gt;&gt;&gt; = SMALL
+        incremental&lt;&lt;&lt;{&quot;description&quot;: &quot;Use incremental or total strain (if not explicitly specified this defaults to incremental for finite strain and total for small strain)&quot;}&gt;&gt;&gt; = true
+        add_variables&lt;&lt;&lt;{&quot;description&quot;: &quot;Add the displacement variables&quot;}&gt;&gt;&gt; = true
+        eigenstrain_names&lt;&lt;&lt;{&quot;description&quot;: &quot;List of eigenstrains to be applied in this strain calculation&quot;}&gt;&gt;&gt; = eigenstrain
+        generate_output&lt;&lt;&lt;{&quot;description&quot;: &quot;Add scalar quantity output for stress and/or strain&quot;}&gt;&gt;&gt; = &#x27;strain_xx strain_yy strain_zz&#x27;
+      [../]
+    [../]
+  [../]
+[]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#2ff4c8bf-7209-412b-a44f-e0126f0792e0">(moose/modules/solid_mechanics/test/tests/thermal_expansion/constant_expansion_coeff.i)</a><p>Other eigenstrains could be caused by defects such as over-sized or under-sized second phase particles. Such an eigenstrain material is <a href="../../source/materials/ComputeVariableEigenstrain.html">ComputeVariableEigenstrain</a>. This class computes a lattice mismatch due to a secondary phase, where the form of the tensor is defined by an input vector, and the scalar dependence on a phase variable is defined in another material. The input file syntax is</p><pre style="max-height:350px;"><code class="language-moose">[./eigenstrain]
+  type = ComputeVariableEigenstrain
+  block = 0
+  eigen_base = &#x27;1 1 0 0 0 0&#x27;
+  prefactor = var_dep
+  args = c
+  eigenstrain_name = eigenstrain
+[../]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#e988e2c3-7d67-4061-8015-c4ca56f05079">(moose/modules/combined/test/tests/eigenstrain/inclusion.i)</a><p>Note the <code>DerivativeParsedMaterial</code>, which evaluates an expression given in the input file, and its automatically generated derivatives, at each quadrature point.</p><pre style="max-height:350px;"><code class="language-moose">[./var_dependence]
+  type = DerivativeParsedMaterial
+  block = 0
+  expression = 0.005*c^2
+  coupled_variables = c
+  outputs = exodus
+  output_properties = &#x27;var_dep&#x27;
+  f_name = var_dep
+  enable_jit = true
+  derivative_order = 2
+[../]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#8f84b375-9e72-420f-9ed0-2880a78b9234">(moose/modules/combined/test/tests/eigenstrain/inclusion.i)</a></section><section id="9cc4e803-5b74-4e44-b42f-2526d69cbb5c" data-section-level="2" data-section-text="Extra Stress Materials"><h2 id="extra-stress-materials">Extra Stress Materials</h2><p>Extra stresses (<span class="moose-katex-inline-equation" id="moose-equation-9888d955-bbab-4498-97c9-87425de9fe62"><script>var element = document.getElementById("moose-equation-9888d955-bbab-4498-97c9-87425de9fe62");katex.render("\\boldsymbol{\\sigma}_0", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span>) can also be pulled into the residual calculation after the constitutive model calculation of the stress. The extra stress material property, <code>extra_stress</code> is defined in the <code>ComputeExtraStressBase</code> class and is added to the stress value.</p><p><span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-aa12be28-b406-4e6d-aa14-e4d8e1a15ca1"></span><script>var element = document.getElementById("moose-equation-aa12be28-b406-4e6d-aa14-e4d8e1a15ca1");katex.render("  \\sigma_{ij} = \\sigma_{ij} + \\sigma^{extra}_{ij}", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span></p><p>An extra stress may be a residual stress, such as in large civil engineering simulations.  An example of an extra stress material used in an input file is:</p><pre style="max-height:350px;"><code class="language-moose">[./const_stress]
+  type = ComputeExtraStressConstant
+  block = 0
+  base_name = ppt
+  extra_stress_tensor = &#x27;-0.288 -0.373 -0.2747 0 0 0&#x27;
+[../]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#94aab1ee-4f81-4a9a-b0b1-3286af9d4abd">(moose/modules/combined/test/tests/linear_elasticity/extra_stress.i)</a></section><section id="0d49cb12-416e-45e3-8086-f992c4880ec0" data-section-level="2" data-section-text="References"><h2 id="references">References</h2><div class="moose-bibliography"><ol><li id="mura1982general">Toshio Mura.
+General theory of eigenstrains.
+In <em>Micromechanics of Defects in Solids</em>, pages 1–62.
+Springer, 1982.<a href="#d326010d-1f7b-4f00-8619-aa938a15cbb9" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="d326010d-1f7b-4f00-8619-aa938a15cbb9"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@incollection{mura1982general,
+    author = "Mura, Toshio",
+    title = "General theory of eigenstrains",
+    booktitle = "Micromechanics of Defects in Solids",
+    pages = "1--62",
+    year = "1982",
+    publisher = "Springer"
+}
+</code></pre></div></div></li><li id="qu2006fundamentals">Jianmin Qu and Mohammed Cherkaoui.
+<em>Fundamentals of micromechanics of solids</em>.
+Wiley Online Library, 2006.<a href="#001c56f3-0b7c-4ad2-94af-12643ebb611b" class="modal-trigger moose-bibtex-modal" style="padding-left:10px;">[BibTeX]</a><div class="modal" id="001c56f3-0b7c-4ad2-94af-12643ebb611b"><div class="modal-content"><pre style="line-height:1.25;"><code class="language-latex">@book{qu2006fundamentals,
+    author = "Qu, Jianmin and Cherkaoui, Mohammed",
+    title = "Fundamentals of micromechanics of solids",
+    year = "2006",
+    publisher = "Wiley Online Library"
+}
+</code></pre></div></div></li></ol></div></section></section><div class="moose-modal modal" id="8174f2d1-bb03-42a8-aa0d-df40fc4a0b6f"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  elem_type = HEX8
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Functions]
+  [./tdisp]
+    type = ParsedFunction
+    expression = &#x27;0.01 * t&#x27;
+  [../]
+[]
+
+[Physics]
+  [SolidMechanics]
+    [QuasiStatic]
+      [./all]
+        strain = FINITE
+        add_variables = true
+      [../]
+    [../]
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+  [./tdisp]
+    type = FunctionDirichletBC
+    variable = disp_z
+    boundary = front
+    function = tdisp
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;1.684e5 0.176e5 0.176e5 1.684e5 0.176e5 1.684e5 0.754e5 0.754e5 0.754e5&#x27;
+    fill_method = symmetric9
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.05
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = -pc_hypre_type
+  petsc_options_value = boomeramg
+  nl_abs_tol = 1e-10
+  nl_rel_step_tol = 1e-10
+  dtmax = 10.0
+  nl_rel_tol = 1e-10
+  end_time = 1
+  dtmin = 0.05
+  num_steps = 10
+  nl_abs_step_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="148b19a0-0ce3-484b-b313-ba1570b1a8f0"><div class="modal-content"><h4>(moose/modules/solid_mechanics/tutorials/basics/part_1.1.i)</h4><pre style="max-height:350px;"><code class="language-moose">#Tensor Mechanics tutorial: the basics
+#Step 1, part 1
+#2D simulation of uniaxial tension with linear elasticity
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Mesh]
+  file = necking_quad4.e
+[]
+
+[Physics/SolidMechanics/QuasiStatic]
+  [./block1]
+    strain = SMALL #Small linearized strain, automatically set to XY coordinates
+    add_variables = true #Add the variables from the displacement string in GlobalParams
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 2.1e5
+    poissons_ratio = 0.3
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+  [../]
+[]
+
+[BCs]
+  [./left]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./bottom]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./top]
+    type = DirichletBC
+    variable = disp_y
+    boundary = top
+    value = 0.05
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+
+  solve_type = &#x27;NEWTON&#x27;
+
+  petsc_options = &#x27;-snes_ksp_ew&#x27;
+  petsc_options_iname = &#x27;-pc_type -sub_pc_type -pc_asm_overlap -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;asm lu 1 101&#x27;
+[]
+
+[Outputs]
+  exodus = true
+  perf_graph = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="be049e53-83d7-4361-a662-a9df73f4faf3"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  elem_type = HEX8
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Functions]
+  [./tdisp]
+    type = ParsedFunction
+    expression = &#x27;0.01 * t&#x27;
+  [../]
+[]
+
+[Physics]
+  [SolidMechanics]
+    [QuasiStatic]
+      [./all]
+        strain = FINITE
+        add_variables = true
+      [../]
+    [../]
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+  [./tdisp]
+    type = FunctionDirichletBC
+    variable = disp_z
+    boundary = front
+    function = tdisp
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;1.684e5 0.176e5 0.176e5 1.684e5 0.176e5 1.684e5 0.754e5 0.754e5 0.754e5&#x27;
+    fill_method = symmetric9
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.05
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = -pc_hypre_type
+  petsc_options_value = boomeramg
+  nl_abs_tol = 1e-10
+  nl_rel_step_tol = 1e-10
+  dtmax = 10.0
+  nl_rel_tol = 1e-10
+  end_time = 1
+  dtmin = 0.05
+  num_steps = 10
+  nl_abs_step_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="0c0b64f3-ab46-4a68-8fce-b5629e8b66fa"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/finite_strain_elastic/finite_strain_elastic_new_test.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  elem_type = HEX8
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[Functions]
+  [./tdisp]
+    type = ParsedFunction
+    expression = &#x27;0.01 * t&#x27;
+  [../]
+[]
+
+[Physics]
+  [SolidMechanics]
+    [QuasiStatic]
+      [./all]
+        strain = FINITE
+        add_variables = true
+      [../]
+    [../]
+  [../]
+[]
+
+[BCs]
+  [./symmy]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./symmx]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./symmz]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0
+  [../]
+  [./tdisp]
+    type = FunctionDirichletBC
+    variable = disp_z
+    boundary = front
+    function = tdisp
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;1.684e5 0.176e5 0.176e5 1.684e5 0.176e5 1.684e5 0.754e5 0.754e5 0.754e5&#x27;
+    fill_method = symmetric9
+  [../]
+  [./stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+[]
+
+[Preconditioning]
+  [./smp]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  dt = 0.05
+
+  #Preconditioned JFNK (default)
+  solve_type = &#x27;PJFNK&#x27;
+
+  petsc_options_iname = -pc_hypre_type
+  petsc_options_value = boomeramg
+  nl_abs_tol = 1e-10
+  nl_rel_step_tol = 1e-10
+  dtmax = 10.0
+  nl_rel_tol = 1e-10
+  end_time = 1
+  dtmin = 0.05
+  num_steps = 10
+  nl_abs_step_tol = 1e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="3f850253-e324-4468-993c-fa7ebed6a18d"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/thermal_expansion/constant_expansion_coeff.i)</h4><pre style="max-height:350px;"><code class="language-moose"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
+# steel material.  An initial temperature of 25 degrees C is given for the material,
+# and an auxkernel is used to calculate the temperature in the entire cube to
+# raise the temperature each time step.  After the first timestep,in which the
+# temperature jumps, the temperature increases by 6.25C each timestep.
+# The thermal strain increment should therefore be
+#     6.25 C * 1.3e-5 1/C = 8.125e-5 m/m.
+
+# This test is also designed to be used to identify problems with restart files
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 2
+  ny = 2
+  nz = 2
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[AuxVariables]
+  [./temp]
+  [../]
+[]
+
+[Functions]
+  [./temperature_load]
+    type = ParsedFunction
+    expression = t*(500.0)+300.0
+  [../]
+[]
+
+[Physics]
+  [SolidMechanics]
+    [QuasiStatic]
+      [./all]
+        strain = SMALL
+        incremental = true
+        add_variables = true
+        eigenstrain_names = eigenstrain
+        generate_output = &#x27;strain_xx strain_yy strain_zz&#x27;
+      [../]
+    [../]
+  [../]
+[]
+
+[AuxKernels]
+  [./tempfuncaux]
+    type = FunctionAux
+    variable = temp
+    function = temperature_load
+  [../]
+[]
+
+[BCs]
+  [./x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 2.1e5
+    poissons_ratio = 0.3
+  [../]
+  [./small_stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+  [./thermal_expansion_strain]
+    type = ComputeThermalExpansionEigenstrain
+    stress_free_temperature = 298
+    thermal_expansion_coeff = 1.3e-5
+    temperature = temp
+    eigenstrain_name = eigenstrain
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  l_max_its = 50
+  nl_max_its = 50
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+
+  start_time = 0.0
+  end_time = 0.075
+  dt = 0.0125
+  dtmin = 0.0001
+[]
+
+[Outputs]
+  exodus = true
+  checkpoint = true
+[]
+
+[Postprocessors]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+  [../]
+  [./strain_yy]
+    type = ElementAverageValue
+    variable = strain_yy
+  [../]
+  [./strain_zz]
+    type = ElementAverageValue
+    variable = strain_zz
+  [../]
+  [./temperature]
+    type = AverageNodalVariableValue
+    variable = temp
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="2ff4c8bf-7209-412b-a44f-e0126f0792e0"><div class="modal-content"><h4>(moose/modules/solid_mechanics/test/tests/thermal_expansion/constant_expansion_coeff.i)</h4><pre style="max-height:350px;"><code class="language-moose"># This test involves only thermal expansion strains on a 2x2x2 cube of approximate
+# steel material.  An initial temperature of 25 degrees C is given for the material,
+# and an auxkernel is used to calculate the temperature in the entire cube to
+# raise the temperature each time step.  After the first timestep,in which the
+# temperature jumps, the temperature increases by 6.25C each timestep.
+# The thermal strain increment should therefore be
+#     6.25 C * 1.3e-5 1/C = 8.125e-5 m/m.
+
+# This test is also designed to be used to identify problems with restart files
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 3
+  nx = 2
+  ny = 2
+  nz = 2
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y disp_z&#x27;
+[]
+
+[AuxVariables]
+  [./temp]
+  [../]
+[]
+
+[Functions]
+  [./temperature_load]
+    type = ParsedFunction
+    expression = t*(500.0)+300.0
+  [../]
+[]
+
+[Physics]
+  [SolidMechanics]
+    [QuasiStatic]
+      [./all]
+        strain = SMALL
+        incremental = true
+        add_variables = true
+        eigenstrain_names = eigenstrain
+        generate_output = &#x27;strain_xx strain_yy strain_zz&#x27;
+      [../]
+    [../]
+  [../]
+[]
+
+[AuxKernels]
+  [./tempfuncaux]
+    type = FunctionAux
+    variable = temp
+    function = temperature_load
+  [../]
+[]
+
+[BCs]
+  [./x_bot]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0.0
+  [../]
+  [./y_bot]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0.0
+  [../]
+  [./z_bot]
+    type = DirichletBC
+    variable = disp_z
+    boundary = back
+    value = 0.0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeIsotropicElasticityTensor
+    youngs_modulus = 2.1e5
+    poissons_ratio = 0.3
+  [../]
+  [./small_stress]
+    type = ComputeFiniteStrainElasticStress
+  [../]
+  [./thermal_expansion_strain]
+    type = ComputeThermalExpansionEigenstrain
+    stress_free_temperature = 298
+    thermal_expansion_coeff = 1.3e-5
+    temperature = temp
+    eigenstrain_name = eigenstrain
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = &#x27;PJFNK&#x27;
+
+  l_max_its = 50
+  nl_max_its = 50
+  nl_rel_tol = 1e-12
+  nl_abs_tol = 1e-10
+  l_tol = 1e-9
+
+  start_time = 0.0
+  end_time = 0.075
+  dt = 0.0125
+  dtmin = 0.0001
+[]
+
+[Outputs]
+  exodus = true
+  checkpoint = true
+[]
+
+[Postprocessors]
+  [./strain_xx]
+    type = ElementAverageValue
+    variable = strain_xx
+  [../]
+  [./strain_yy]
+    type = ElementAverageValue
+    variable = strain_yy
+  [../]
+  [./strain_zz]
+    type = ElementAverageValue
+    variable = strain_zz
+  [../]
+  [./temperature]
+    type = AverageNodalVariableValue
+    variable = temp
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="e988e2c3-7d67-4061-8015-c4ca56f05079"><div class="modal-content"><h4>(moose/modules/combined/test/tests/eigenstrain/inclusion.i)</h4><pre style="max-height:350px;"><code class="language-moose"># This test allows comparison of simulation and analytical solution for a misfitting precipitate
+# using ComputeVariableEigenstrain for the simulation and the InclusionProperties material
+# for the analytical solution. Increasing mesh resolution will improve agreement.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 40
+  ny = 40
+  xmax = 1.5
+  ymax = 1.5
+  elem_type = QUAD4
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[AuxVariables]
+  [./s11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s12_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s11_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s12_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s22_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e12_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e11_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e12_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./fel_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./c]
+  [../]
+[]
+
+[AuxKernels]
+  [./matl_s11]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+    variable = s11_aux
+  [../]
+  [./matl_s12]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 1
+    variable = s12_aux
+  [../]
+  [./matl_s22]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+    variable = s22_aux
+  [../]
+  [./matl_s11_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 0
+    index_j = 0
+    variable = s11_an
+  [../]
+  [./matl_s12_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 0
+    index_j = 1
+    variable = s12_an
+  [../]
+  [./matl_s22_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 1
+    index_j = 1
+    variable = s22_an
+  [../]
+  [./matl_e11]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 0
+    index_j = 0
+    variable = e11_aux
+  [../]
+  [./matl_e12]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 0
+    index_j = 1
+    variable = e12_aux
+  [../]
+  [./matl_e22]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 1
+    index_j = 1
+    variable = e22_aux
+  [../]
+  [./matl_e11_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 0
+    index_j = 0
+    variable = e11_an
+  [../]
+  [./matl_e12_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 0
+    index_j = 1
+    variable = e12_an
+  [../]
+  [./matl_e22_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 1
+    index_j = 1
+    variable = e22_an
+  [../]
+  [./matl_fel_an]
+    type = MaterialRealAux
+    variable = fel_an
+    property = fel_an_mat
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;1 1&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = 0
+  [../]
+  [./var_dependence]
+    type = DerivativeParsedMaterial
+    block = 0
+    expression = 0.005*c^2
+    coupled_variables = c
+    outputs = exodus
+    output_properties = &#x27;var_dep&#x27;
+    f_name = var_dep
+    enable_jit = true
+    derivative_order = 2
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableEigenstrain
+    block = 0
+    eigen_base = &#x27;1 1 0 0 0 0&#x27;
+    prefactor = var_dep
+    args = c
+    eigenstrain_name = eigenstrain
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y&#x27;
+    eigenstrain_names = eigenstrain
+  [../]
+  [./analytical]
+    type = InclusionProperties
+    a = 0.1
+    b = 0.1
+    lambda = 1
+    mu = 1
+    misfit_strains = &#x27;0.005 0.005&#x27;
+    strain_name = strain_an
+    stress_name = stress_an
+    energy_name = fel_an_mat
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left_x bottom_y&#x27;
+  [./bottom_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+  l_max_its = 30
+  nl_max_its = 10
+  nl_rel_tol = 1.0e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./c_IC]
+    int_width = 0.075
+    x1 = 0
+    y1 = 0
+    radius = 0.1
+    outvalue = 0
+    variable = c
+    invalue = 1
+    type = SmoothCircleIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="8f84b375-9e72-420f-9ed0-2880a78b9234"><div class="modal-content"><h4>(moose/modules/combined/test/tests/eigenstrain/inclusion.i)</h4><pre style="max-height:350px;"><code class="language-moose"># This test allows comparison of simulation and analytical solution for a misfitting precipitate
+# using ComputeVariableEigenstrain for the simulation and the InclusionProperties material
+# for the analytical solution. Increasing mesh resolution will improve agreement.
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 40
+  ny = 40
+  xmax = 1.5
+  ymax = 1.5
+  elem_type = QUAD4
+[]
+
+[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Variables]
+  [./disp_x]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+  [./disp_y]
+    order = FIRST
+    family = LAGRANGE
+  [../]
+[]
+
+[Kernels]
+  [./TensorMechanics]
+  [../]
+[]
+
+[AuxVariables]
+  [./s11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s12_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s11_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s12_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./s22_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e11_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e12_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_aux]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e11_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e12_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./e22_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./fel_an]
+    order = CONSTANT
+    family = MONOMIAL
+  [../]
+  [./c]
+  [../]
+[]
+
+[AuxKernels]
+  [./matl_s11]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+    variable = s11_aux
+  [../]
+  [./matl_s12]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 1
+    variable = s12_aux
+  [../]
+  [./matl_s22]
+    type = RankTwoAux
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+    variable = s22_aux
+  [../]
+  [./matl_s11_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 0
+    index_j = 0
+    variable = s11_an
+  [../]
+  [./matl_s12_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 0
+    index_j = 1
+    variable = s12_an
+  [../]
+  [./matl_s22_an]
+    type = RankTwoAux
+    rank_two_tensor = stress_an
+    index_i = 1
+    index_j = 1
+    variable = s22_an
+  [../]
+  [./matl_e11]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 0
+    index_j = 0
+    variable = e11_aux
+  [../]
+  [./matl_e12]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 0
+    index_j = 1
+    variable = e12_aux
+  [../]
+  [./matl_e22]
+    type = RankTwoAux
+    rank_two_tensor = total_strain
+    index_i = 1
+    index_j = 1
+    variable = e22_aux
+  [../]
+  [./matl_e11_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 0
+    index_j = 0
+    variable = e11_an
+  [../]
+  [./matl_e12_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 0
+    index_j = 1
+    variable = e12_an
+  [../]
+  [./matl_e22_an]
+    type = RankTwoAux
+    rank_two_tensor = strain_an
+    index_i = 1
+    index_j = 1
+    variable = e22_an
+  [../]
+  [./matl_fel_an]
+    type = MaterialRealAux
+    variable = fel_an
+    property = fel_an_mat
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;1 1&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = 0
+  [../]
+  [./var_dependence]
+    type = DerivativeParsedMaterial
+    block = 0
+    expression = 0.005*c^2
+    coupled_variables = c
+    outputs = exodus
+    output_properties = &#x27;var_dep&#x27;
+    f_name = var_dep
+    enable_jit = true
+    derivative_order = 2
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableEigenstrain
+    block = 0
+    eigen_base = &#x27;1 1 0 0 0 0&#x27;
+    prefactor = var_dep
+    args = c
+    eigenstrain_name = eigenstrain
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    block = 0
+    displacements = &#x27;disp_x disp_y&#x27;
+    eigenstrain_names = eigenstrain
+  [../]
+  [./analytical]
+    type = InclusionProperties
+    a = 0.1
+    b = 0.1
+    lambda = 1
+    mu = 1
+    misfit_strains = &#x27;0.005 0.005&#x27;
+    strain_name = strain_an
+    stress_name = stress_an
+    energy_name = fel_an_mat
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left_x bottom_y&#x27;
+  [./bottom_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = NEWTON
+  petsc_options_iname = &#x27;-pc_type -pc_hypre_type -ksp_gmres_restart&#x27;
+  petsc_options_value = &#x27;hypre boomeramg 31&#x27;
+  l_max_its = 30
+  nl_max_its = 10
+  nl_rel_tol = 1.0e-10
+[]
+
+[Outputs]
+  exodus = true
+[]
+
+[ICs]
+  [./c_IC]
+    int_width = 0.075
+    x1 = 0
+    y1 = 0
+    radius = 0.1
+    outvalue = 0
+    variable = c
+    invalue = 1
+    type = SmoothCircleIC
+  [../]
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="94aab1ee-4f81-4a9a-b0b1-3286af9d4abd"><div class="modal-content"><h4>(moose/modules/combined/test/tests/linear_elasticity/extra_stress.i)</h4><pre style="max-height:350px;"><code class="language-moose">[GlobalParams]
+  displacements = &#x27;disp_x disp_y&#x27;
+[]
+
+[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 128
+  ny = 1
+  xmax = 3.2
+  ymax = 0.025
+  elem_type = QUAD4
+[]
+
+[Physics/SolidMechanics/QuasiStatic/All]
+  add_variables = true
+  generate_output = &#x27;stress_xx stress_xy stress_yy stress_zz strain_xx strain_xy strain_yy&#x27;
+[]
+
+[AuxVariables]
+  [./c]
+  [../]
+[]
+
+[ICs]
+  [./c_IC]
+    type = BoundingBoxIC
+    variable = c
+    x1 = -1
+    y1 = -1
+    x2 = 1.6
+    y2 = 1
+    inside = 0
+    outside = 1
+    block = 0
+  [../]
+[]
+
+[Materials]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;104 74 74 104 74 104 47.65 47.65 47.65&#x27;
+    fill_method = symmetric9
+    base_name = matrix
+  [../]
+  [./stress]
+    type = ComputeLinearElasticStress
+    block = 0
+    base_name = matrix
+  [../]
+  [./strain]
+    type = ComputeSmallStrain
+    block = 0
+    base_name = matrix
+  [../]
+  [./elasticity_tensor_ppt]
+    type = ComputeElasticityTensor
+    block = 0
+    C_ijkl = &#x27;0.104 0.074 0.074 0.104 0.074 0.104 0.04765 0.04765 0.04765&#x27;
+    fill_method = symmetric9
+    base_name = ppt
+  [../]
+  [./stress_ppt]
+    type = ComputeLinearElasticStress
+    block = 0
+    base_name = ppt
+  [../]
+  [./strain_ppt]
+    type = ComputeSmallStrain
+    block = 0
+    base_name = ppt
+  [../]
+  [./const_stress]
+    type = ComputeExtraStressConstant
+    block = 0
+    base_name = ppt
+    extra_stress_tensor = &#x27;-0.288 -0.373 -0.2747 0 0 0&#x27;
+  [../]
+  [./global_stress]
+    type = TwoPhaseStressMaterial
+    base_A = matrix
+    base_B = ppt
+  [../]
+  [./switching]
+    type = SwitchingFunctionMaterial
+    eta = c
+  [../]
+[]
+
+[BCs]
+  active = &#x27;left_x right_x bottom_y top_y&#x27;
+  [./bottom_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+  [./left_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./right_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = right
+    value = 0
+  [../]
+  [./top_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = top
+    value = 0
+  [../]
+[]
+
+[Preconditioning]
+  [./SMP]
+    type = SMP
+    full = true
+  [../]
+[]
+
+[Executioner]
+  type = Steady
+  solve_type = &#x27;NEWTON&#x27;
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script><script type="text/javascript" src="../../js/moose_input_parser.js"></script>
