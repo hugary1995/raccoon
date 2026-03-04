@@ -1,0 +1,944 @@
+<!DOCTYPE html><head><meta charset="UTF-8"><title>Compute Variable Base EigenStrain | RACCOON</title><link rel="icon" type="image/x-icon" href="../../media/raccoon_icon.png" sizes="16x16 32x32 64x64 128x128"></link><link href="../../contrib/materialize/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"></link><link href="../../contrib/prism/prism.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/devel_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/alert_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/content_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/sqa_moose.css" type="text/css" rel="stylesheet"></link><link href="../../css/civet_moose.css" type="text/css" rel="stylesheet"></link><link href="../../contrib/katex/katex.min.css" type="text/css" rel="stylesheet"></link><link href="../../css/katex_moose.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../contrib/jquery/jquery.min.js"></script><script type="text/javascript" src="../../contrib/katex/katex.min.js"></script></head><body><div class="page-wrap"><header><nav><div class="nav-wrapper container"><a href="../../index.html" class="left moose-logo hide-on-med-and-down" id="home-button">RACCOON</a><a href="https://github.com/hugary1995/raccoon" class="right"><img src="../../media/framework/github-logo.png" alt="GitHub wordmark" class="github-mark"></img><img src="../../media/framework/github-mark.png" alt="GitHub logo" class="github-logo"></img></a><ul class="right hide-on-med-and-down"><li><a href="#!" class="dropdown-trigger" data-target="2098fac6-35a4-420c-b9e4-255c990a005b" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="75e5257e-1d2b-490a-a3c0-3d8023b7666b" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="9188133c-615c-40cd-9397-68848f6a60c9" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="f3824ea7-1297-4ef5-bf92-1dfe6ca9bd9b" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#" class="sidenav-trigger" data-target="0ec1bf48-8264-4aeb-b2f0-e8db58d3f7db"><i class="material-icons">menu</i></a><ul class="sidenav" id="0ec1bf48-8264-4aeb-b2f0-e8db58d3f7db"><li><a href="#!" class="dropdown-trigger" data-target="3be98b07-ef0a-4179-8946-0a80f1122d01" data-constrainWidth="false">Getting Started<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="a7664139-00ae-437e-b409-674bdc4faddc" data-constrainWidth="false">Tutorials<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="75c5f76a-080a-433b-893f-fc06e056425f" data-constrainWidth="false">Theory<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="#!" class="dropdown-trigger" data-target="32e8605f-b90c-4edd-913d-fe85fbd57fcf" data-constrainWidth="false">Documentation<i class="material-icons right">arrow_drop_down</i></a></li><li><a href="../../contribute/index.html">Contribute</a></li></ul><a href="#moose-search" class="modal-trigger"><i class="material-icons">search</i></a></div><ul class="dropdown-content" id="2098fac6-35a4-420c-b9e4-255c990a005b"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="75e5257e-1d2b-490a-a3c0-3d8023b7666b"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="9188133c-615c-40cd-9397-68848f6a60c9"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="f3824ea7-1297-4ef5-bf92-1dfe6ca9bd9b"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul><ul class="dropdown-content" id="3be98b07-ef0a-4179-8946-0a80f1122d01"><li><a href="../../getting_started/install.html">Install RACCOON</a></li><li><a href="../../getting_started/update.html">Update RACCOON</a></li><li><a href="../../getting_started/running.html">Running your first model</a></li><li><a href="../../getting_started/paraview.html">Visualization</a></li><li><a href="../../getting_started/ide.html">Code development</a></li><li><a href="../../getting_started/docs.html">Browse the documentation locally</a></li></ul><ul class="dropdown-content" id="a7664139-00ae-437e-b409-674bdc4faddc"><li><a href="../../tutorials/01_small_deformation_elasticity.html">1. Small deformation</a></li><li><a href="../../tutorials/02_mode1_brittle_fracture.html">2. Mode-I fracture</a></li><li><a href="../../tutorials/03_mode2_brittle_fracture.html">3. Mode-II fracture</a></li><li><a href="../../tutorials/04_fiber_reinforced_matrix.html">4. Fiber-reinforced matrix</a></li><li><a href="../../tutorials/05_soil_desiccation.html">5. Soil desiccation</a></li><li><a href="../../tutorials/06_large_deformation_elasticity.html">6. Large deformation</a></li><li><a href="../../tutorials/07_elastoplasticity.html">7. Elastoplasticity</a></li><li><a href="../../tutorials/08_ductile_fracture.html">8. Ductile fracture</a></li><li><a href="../../tutorials/09_three_point_bending.html">9. Three-point bending</a></li><li><a href="../../tutorials/10_quenching_bibeam.html">10. Quenching of bi-beam</a></li><li><a href="../../tutorials/11_adaptivity.html">11. Adaptive mesh refinement</a></li><li><a href="../../tutorials/12_nucleation.html">12. Crack nucleation</a></li><li><a href="../../tutorials/13_traction_separation.html">13. Traction separation law</a></li><li><a href="../../tutorials/14_klexpansion.html">14. Random field generation</a></li><li><a href="../../tutorials/15_mosaic_patches.html">15. Mosaic field generation</a></li></ul><ul class="dropdown-content" id="75c5f76a-080a-433b-893f-fc06e056425f"><li><a href="../../theory/intro.html">Introduction</a></li><li><a href="../../theory/kinematics.html">State variables and kinematics</a></li><li><a href="../../theory/thermodynamics.html">Thermodynamics</a></li><li><a href="../../theory/minimization.html">The minimization problem</a></li><li><a href="../../theory/constitutive_models.html">Constitutive Models</a></li></ul><ul class="dropdown-content" id="32e8605f-b90c-4edd-913d-fe85fbd57fcf"><li><a href="../../modules/index.html">Physics modules</a></li><li><a href="../../syntax/index.html">Complete syntax</a></li><li><a href="../../syntax/raccoon.html">RACCOON syntax</a></li><li><a href="../../syntax/solid_mechanics.html">Solid mechanics syntax</a></li><li><a href="../../syntax/phase_field.html">Phase field syntax</a></li><li><a href="../../syntax/heat_transfer.html">Heat conduction syntax</a></li></ul></nav><div class="modal modal-fixed-footer moose-search-modal" id="moose-search"><div class="modal-content container moose-search-modal-content"><div class="gcse-search"></div></div><div class="modal-footer"><a href="#!" class="modal-close btn-flat">Close</a></div></div></header><main class="main"><div class="container"><div class="row"><div class="moose-content col s12 m12 l12"><section id="dad5ec8a-b41e-4c6e-9f5f-38957d45d639" data-section-level="1" data-section-text="Compute Variable Base EigenStrain"><h1 id="compute-variable-base-eigenstrain">Compute Variable Base EigenStrain</h1><p>Computes Eigenstrain based on material property tensor base</p><section id="0c3debe1-42ad-4d13-93f5-606df1774c76" data-section-level="2" data-section-text="Description"><h2 id="description">Description</h2><p>The material <code>ComputeVariableBaseEigenStrain</code> calculates a Rank-2 tensor eigenstrain as a function of a Rank-2 tensor base and a scalar material property. <span class="moose-katex-block-equation"><span class="moose-katex-equation table-cell" id="moose-equation-612ab9cf-cfb3-4ee9-b1e0-4397fc0d20a4"></span><span class="moose-katex-equation-number">(1)</span><script>var element = document.getElementById("moose-equation-612ab9cf-cfb3-4ee9-b1e0-4397fc0d20a4");katex.render("     \\boldsymbol{\\epsilon}_{eigen} = p \\boldsymbol{T} + \\boldsymbol{A}", element, {displayMode:true,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> where <span class="moose-katex-inline-equation" id="moose-equation-e739c47f-b229-483e-af3d-1043edc6655b"><script>var element = document.getElementById("moose-equation-e739c47f-b229-483e-af3d-1043edc6655b");katex.render("\\boldsymbol{\\epsilon}_{eigen}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the calculated eigenstrain, <span class="moose-katex-inline-equation" id="moose-equation-0ca844fb-3644-4f3b-b67f-904b59fb4054"><script>var element = document.getElementById("moose-equation-0ca844fb-3644-4f3b-b67f-904b59fb4054");katex.render("p", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is a scalar material property, <span class="moose-katex-inline-equation" id="moose-equation-f0b079d3-3aea-43dc-9611-b3d678867126"><script>var element = document.getElementById("moose-equation-f0b079d3-3aea-43dc-9611-b3d678867126");katex.render("\\boldsymbol{T}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the tensor selected by the user as the base of the eigenstrain, and <span class="moose-katex-inline-equation" id="moose-equation-c8df22b1-239f-404f-ab88-df5beb2df02e"><script>var element = document.getElementById("moose-equation-c8df22b1-239f-404f-ab88-df5beb2df02e");katex.render("\\boldsymbol{A}", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is the offset, or constant initial, eigenstrain tensor. The material property <span class="moose-katex-inline-equation" id="moose-equation-82660569-0809-4342-a2ff-0d7112ed3589"><script>var element = document.getElementById("moose-equation-82660569-0809-4342-a2ff-0d7112ed3589");katex.render("p", element, {displayMode:false,throwOnError:false,macros:{"\\bs":"\\boldsymbol{#1}","\\normal":"\\bs{n}","\\grad":"\\bs{\\nabla}","\\divergence":"\\grad \\cdot","\\norm":"\\left\\lVert#1\\right\\rVert","\\abs":"\\left\\lvert#1\\right\\rvert","\\tr":"\\text{tr}","\\dev":"\\text{dev}","\\sym":"\\text{sym}","\\diff":"\\text{ d}#1","\\activepart":"{\\left< A \\right>}","\\inactivepart":"{\\left< I \\right>}","\\Gc":"{\\mathcal{G}_c}","\\strain":"\\bs{\\varepsilon}","\\stress":"\\bs{\\sigma}","\\macaulay":"\\left<#1\\right>","\\body":"\\Omega","\\bodyboundary":"{\\partial\\body}","\\ep":"{\\varepsilon^p}","\\ep0":"{\\varepsilon_0^p}","\\epdot":"{\\dot{\\varepsilon}}^p","\\epdot0":"{\\dot{\\varepsilon}}_0^p","\\bfa":"\\boldsymbol{a}","\\bfb":"\\boldsymbol{b}","\\bfc":"\\boldsymbol{c}","\\bfd":"\\boldsymbol{d}","\\bfe":"\\boldsymbol{e}","\\bff":"\\boldsymbol{f}","\\bfg":"\\boldsymbol{g}","\\bfh":"\\boldsymbol{h}","\\bfi":"\\boldsymbol{i}","\\bfj":"\\boldsymbol{j}","\\bfk":"\\boldsymbol{k}","\\bfl":"\\boldsymbol{l}","\\bfm":"\\boldsymbol{m}","\\bfn":"\\boldsymbol{n}","\\bfo":"\\boldsymbol{o}","\\bfp":"\\boldsymbol{p}","\\bfq":"\\boldsymbol{q}","\\bfr":"\\boldsymbol{r}","\\bfs":"\\boldsymbol{s}","\\bft":"\\boldsymbol{t}","\\bfu":"\\boldsymbol{u}","\\bfv":"\\boldsymbol{v}","\\bfw":"\\boldsymbol{w}","\\bfx":"\\boldsymbol{x}","\\bfy":"\\boldsymbol{y}","\\bfz":"\\boldsymbol{z}","\\bfA":"\\boldsymbol{A}","\\bfB":"\\boldsymbol{B}","\\bfC":"\\boldsymbol{C}","\\bfD":"\\boldsymbol{D}","\\bfE":"\\boldsymbol{E}","\\bfF":"\\boldsymbol{F}","\\bfG":"\\boldsymbol{G}","\\bfH":"\\boldsymbol{H}","\\bfI":"\\boldsymbol{I}","\\bfJ":"\\boldsymbol{J}","\\bfK":"\\boldsymbol{K}","\\bfL":"\\boldsymbol{L}","\\bfM":"\\boldsymbol{M}","\\bfN":"\\boldsymbol{N}","\\bfO":"\\boldsymbol{O}","\\bfP":"\\boldsymbol{P}","\\bfQ":"\\boldsymbol{Q}","\\bfR":"\\boldsymbol{R}","\\bfS":"\\boldsymbol{S}","\\bfT":"\\boldsymbol{T}","\\bfU":"\\boldsymbol{U}","\\bfV":"\\boldsymbol{V}","\\bfW":"\\boldsymbol{W}","\\bfX":"\\boldsymbol{X}","\\bfY":"\\boldsymbol{Y}","\\bfZ":"\\boldsymbol{Z}"}});</script></span> is used to introduce dependence of the eigenstrain on the user-specified variable.</p></section><section id="2e623bb8-ed52-4301-9346-b631f49170f1" data-section-level="2" data-section-text="Example Input File"><h2 id="example-input-file">Example Input File</h2><pre style="max-height:350px;"><code class="language-moose">[./eigenstrain]
+  type = ComputeVariableBaseEigenStrain
+  base_tensor_property_name = aniso_tensor
+  prefactor = eigenstrain_prefactor
+  eigenstrain_name = eigenstrain
+[../]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#906417ec-7944-461e-a730-e9189cadc7ed">(moose/modules/combined/test/tests/DiffuseCreep/variable_base_eigen_strain.i)</a><p>where the argument for the <code>base_tensor_property_name</code> parameter in the eigenstrain is the same as the property parameter <code>gb_tensor_prop_name</code> argument as shown</p><pre style="max-height:350px;"><code class="language-moose">[./aniso_tensor]
+  type = GBDependentAnisotropicTensor
+  gb = gb
+  bulk_parameter = 0.1
+  gb_parameter = 1
+  gb_normal_tensor_name = gb_normal
+  gb_tensor_prop_name = aniso_tensor
+[../]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#63c60a78-a0f6-4ff5-9967-4bfa8368c358">(moose/modules/combined/test/tests/DiffuseCreep/variable_base_eigen_strain.i)</a><p>and the argument for the <code>prefactor</code> parameter in the eigenstrain material matches the function name (<code>f_name</code> parameter) in the <a href="DerivativeParsedMaterial.html">DerivativeParsedMaterial</a></p><pre style="max-height:350px;"><code class="language-moose">[./eigenstrain_prefactor]
+  type = DerivativeParsedMaterial
+  block = 0
+  expression = &#x27;c-0.1&#x27;
+  coupled_variables = c
+  property_name = eigenstrain_prefactor
+  derivative_order = 1
+[../]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#472f012a-e093-41ff-8950-611010eac77c">(moose/modules/combined/test/tests/DiffuseCreep/variable_base_eigen_strain.i)</a><p>Finally, the <code>eigenstrain_name</code> parameter value must also be set for the strain calculator, and an example parameter setting is shown below:</p><pre style="max-height:350px;"><code class="language-moose">[./strain]
+  type = ComputeIncrementalStrain
+  displacements = &#x27;disp_x disp_y&#x27;
+  eigenstrain_names = eigenstrain
+[../]</code></pre><a class="moose-source-filename tooltipped modal-trigger" href="#7f9a62e4-5b00-4d85-8d23-468eb15a315d">(moose/modules/combined/test/tests/DiffuseCreep/variable_base_eigen_strain.i)</a></section><section id="5b9bcbe2-5b1c-4273-b6e8-ffe1aee3aae5" data-section-level="2" data-section-text="Input Parameters"><h2 id="input-parameters">Input Parameters</h2><section id="9cc4dacf-c594-4247-b97c-b3c1ba280d9a" data-section-level="3" data-section-text="Required Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">base_tensor_property_name</span><span class="moose-parameter-header-description">Name of base tensor property</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Name of base tensor property</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">eigenstrain_name</span><span class="moose-parameter-header-description">Material property name for the eigenstrain tensor computed by this model. IMPORTANT: The name of this property must also be provided to the strain calculator.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Material property name for the eigenstrain tensor computed by this model. IMPORTANT: The name of this property must also be provided to the strain calculator.</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Required Parameters</h3></summary></details></section><section id="ad18f99f-65fc-419d-a021-0300b994c991" data-section-level="3" data-section-text="Optional Parameters" data-details-open="open"><details class="moose-section-content" open="open"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">base_name</span><span class="moose-parameter-header-description">Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::string</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Optional parameter that allows the user to define multiple mechanics material systems on the same block, i.e. for multiple phases</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">block</span><span class="moose-parameter-header-description">The list of blocks (ids or names) that this object will be applied</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;SubdomainName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The list of blocks (ids or names) that this object will be applied</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">boundary</span><span class="moose-parameter-header-description">The list of boundaries (ids or names) from the mesh where this object applies</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;BoundaryName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The list of boundaries (ids or names) from the mesh where this object applies</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">compute</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>When false, MOOSE will not call compute methods on this material. The user must call computeProperties() after retrieving the MaterialBase via MaterialBasePropertyInterface::getMaterialBase(). Non-computed MaterialBases are not sorted for dependencies.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">constant_on</span><span class="moose-parameter-header-default">NONE</span><span class="moose-parameter-header-description">When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>NONE</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>NONE, ELEMENT, SUBDOMAIN</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>When ELEMENT, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps.When SUBDOMAIN, MOOSE will only call computeQpProperties() for the 0th quadrature point, and then copy that value to the other qps. Evaluations on element qps will be skipped</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">declare_suffix</span><span class="moose-parameter-header-description">An optional suffix parameter that can be appended to any declared properties. The suffix will be prepended with a '_' character.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>An optional suffix parameter that can be appended to any declared properties. The suffix will be prepended with a '_' character.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">offset_tensor</span><span class="moose-parameter-header-description">Vector of values defining the constant base tensor for the Eigenstrain</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;double&gt;</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Vector of values defining the constant base tensor for the Eigenstrain</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">prefactor</span><span class="moose-parameter-header-default">1</span><span class="moose-parameter-header-description">Name of material defining the variable dependence</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>1</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Name of material defining the variable dependence</p></div></li></ul><summary><h3 data-details-open="open"><span class="moose-section-icon"></span>Optional Parameters</h3></summary></details></section><section id="75a2dccd-72b4-4d67-951e-b42dbdcbc475" data-section-level="3" data-section-text="Advanced Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">control_tags</span><span class="moose-parameter-header-description">Adds user-defined labels for accessing object parameters via control logic.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Adds user-defined labels for accessing object parameters via control logic.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">enable</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Set the enabled status of the MooseObject.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>Yes</p><p class="moose-parameter-description"><span>Description:</span>Set the enabled status of the MooseObject.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">implicit</span><span class="moose-parameter-header-default">True</span><span class="moose-parameter-header-description">Determines whether this object is calculated using an implicit or explicit form</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>True</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Determines whether this object is calculated using an implicit or explicit form</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">search_method</span><span class="moose-parameter-header-default">nearest_node_connected_sides</span><span class="moose-parameter-header-description">Choice of search algorithm.  All options begin by finding the nearest node in the primary boundary to a query point in the secondary boundary.  In the default nearest_node_connected_sides algorithm, primary boundary elements are searched iff that nearest node is one of their nodes.  This is fast to determine via a pregenerated node-to-elem map and is robust on conforming meshes.  In the optional all_proximate_sides algorithm, primary boundary elements are searched iff they touch that nearest node, even if they are not topologically connected to it.  This is more CPU-intensive but is necessary for robustness on any boundary surfaces which has disconnections (such as Flex IGA meshes) or non-conformity (such as hanging nodes in adaptively h-refined meshes).</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>nearest_node_connected_sides</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MooseEnum</p><p class="moose-parameter-description-options"><span>Options:</span>nearest_node_connected_sides, all_proximate_sides</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Choice of search algorithm.  All options begin by finding the nearest node in the primary boundary to a query point in the secondary boundary.  In the default nearest_node_connected_sides algorithm, primary boundary elements are searched iff that nearest node is one of their nodes.  This is fast to determine via a pregenerated node-to-elem map and is robust on conforming meshes.  In the optional all_proximate_sides algorithm, primary boundary elements are searched iff they touch that nearest node, even if they are not topologically connected to it.  This is more CPU-intensive but is necessary for robustness on any boundary surfaces which has disconnections (such as Flex IGA meshes) or non-conformity (such as hanging nodes in adaptively h-refined meshes).</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">seed</span><span class="moose-parameter-header-default">0</span><span class="moose-parameter-header-description">The seed for the master random number generator</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>0</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>unsigned int</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>The seed for the master random number generator</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_displaced_mesh</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Whether or not this object should use the displaced mesh for computation.  Note that in the case this is true but no displacements are provided in the Mesh block the undisplaced mesh will still be used.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Advanced Parameters</h3></summary></details></section><section id="3f8a830d-ea12-4836-bd38-9d01b85c7266" data-section-level="3" data-section-text="Outputs Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">output_properties</span><span class="moose-parameter-header-description">List of material properties, from this material, to output (outputs must also be defined to an output type)</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;std::string&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>List of material properties, from this material, to output (outputs must also be defined to an output type)</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">outputs</span><span class="moose-parameter-header-default">none </span><span class="moose-parameter-header-description">Vector of output names where you would like to restrict the output of variables(s) associated with this object</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>none </p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>std::vector&lt;OutputName&gt;</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>Vector of output names where you would like to restrict the output of variables(s) associated with this object</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Outputs Parameters</h3></summary></details></section><section id="6231dc5b-278c-4f5e-a11e-d45aebf1d409" data-section-level="3" data-section-text="Material Property Retrieval Parameters" data-details-open="close"><details class="moose-section-content"><ul class="collapsible" data-collapsible="expandable"><li><div class="collapsible-header"><span class="moose-parameter-name">prop_getter_suffix</span><span class="moose-parameter-header-description">An optional suffix parameter that can be appended to any attempt to retrieve/get material properties. The suffix will be prepended with a '_' character.</span></div><div class="collapsible-body"><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>MaterialPropertyName</p><p class="moose-parameter-description-doc-unit"><span>Unit:</span>(no unit assumed)</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>An optional suffix parameter that can be appended to any attempt to retrieve/get material properties. The suffix will be prepended with a '_' character.</p></div></li><li><div class="collapsible-header"><span class="moose-parameter-name">use_interpolated_state</span><span class="moose-parameter-header-default">False</span><span class="moose-parameter-header-description">For the old and older state use projected material properties interpolated at the quadrature points. To set up projection use the ProjectedStatefulMaterialStorageAction.</span></div><div class="collapsible-body"><p class="moose-parameter-description-default"><span>Default:</span>False</p><p class="moose-parameter-description-cpptype"><span>C++ Type:</span>bool</p><p class="moose-parameter-description-controllable"><span>Controllable:</span>No</p><p class="moose-parameter-description"><span>Description:</span>For the old and older state use projected material properties interpolated at the quadrature points. To set up projection use the ProjectedStatefulMaterialStorageAction.</p></div></li></ul><summary><h3 data-details-open="close"><span class="moose-section-icon"></span>Material Property Retrieval Parameters</h3></summary></details></section></section><section id="65b61246-3a62-4fa6-a0ea-7eb8c1d3dfdd" data-section-level="2" data-section-text="References"><h2 id="references">References</h2>No citations exist within this document.</section></section><div class="moose-modal modal" id="906417ec-7944-461e-a730-e9189cadc7ed"><div class="modal-content"><h4>(moose/modules/combined/test/tests/DiffuseCreep/variable_base_eigen_strain.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 50
+  ny = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 2
+[]
+
+[Variables]
+  [./c]
+    [./InitialCondition]
+      type = FunctionIC
+      function = &#x27;x0:=5.0;thk:=0.5;m:=2;r:=abs(x-x0);v:=exp(-(r/thk)^m);0.1+0.01*v&#x27;
+    [../]
+  [../]
+  [./mu]
+  [../]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+[]
+
+[AuxVariables]
+  [./gb]
+    family = LAGRANGE
+    order  = FIRST
+  [../]
+  [./eigen_strain_xx]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+  [./eigen_strain_yy]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+  [./stress_xx]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+  [./stress_yy]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+[]
+
+[Kernels]
+  [./conc]
+    type = CHSplitConcentration
+    variable = c
+    mobility = mobility_prop
+    chemical_potential_var = mu
+  [../]
+  [./chempot]
+    type = CHSplitChemicalPotential
+    variable = mu
+    chemical_potential_prop = mu_prop
+    c = c
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = c
+  [../]
+  [./TensorMechanics]
+    displacements = &#x27;disp_x disp_y&#x27;
+  [../]
+[]
+
+[AuxKernels]
+  [./gb]
+    type = FunctionAux
+    variable = gb
+    function = &#x27;x0:=5.0;thk:=0.5;m:=2;r:=abs(x-x0);v:=exp(-(r/thk)^m);v&#x27;
+  [../]
+  [./eigenstrain_xx]
+    type = RankTwoAux
+    variable = eigen_strain_xx
+    rank_two_tensor = eigenstrain
+    index_i = 0
+    index_j = 0
+  [../]
+  [./eigenstrain_yy]
+    type = RankTwoAux
+    variable = eigen_strain_yy
+    rank_two_tensor = eigenstrain
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_xx]
+    type = RankTwoAux
+    variable = stress_xx
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+  [../]
+  [./stress_yy]
+    type = RankTwoAux
+    variable = stress_yy
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+  [../]
+[]
+
+[Materials]
+  [./chemical_potential]
+    type = DerivativeParsedMaterial
+    block = 0
+    property_name = mu_prop
+    coupled_variables = c
+    expression = &#x27;c&#x27;
+    derivative_order = 1
+  [../]
+  [./var_dependence]
+    type = DerivativeParsedMaterial
+    block = 0
+    expression = &#x27;c*(1.0-c)&#x27;
+    coupled_variables = c
+    property_name = var_dep
+    derivative_order = 1
+  [../]
+  [./mobility]
+    type = CompositeMobilityTensor
+    block = 0
+    M_name = mobility_prop
+    tensors = diffusivity
+    weights = var_dep
+    coupled_variables = c
+  [../]
+  [./phase_normal]
+    type = PhaseNormalTensor
+    phase = gb
+    normal_tensor_name = gb_normal
+  [../]
+  [./aniso_tensor]
+    type = GBDependentAnisotropicTensor
+    gb = gb
+    bulk_parameter = 0.1
+    gb_parameter = 1
+    gb_normal_tensor_name = gb_normal
+    gb_tensor_prop_name = aniso_tensor
+  [../]
+  [./diffusivity]
+    type = GBDependentDiffusivity
+    gb = gb
+    bulk_parameter = 0.1
+    gb_parameter = 1
+    gb_normal_tensor_name = gb_normal
+    gb_tensor_prop_name = diffusivity
+  [../]
+  [./eigenstrain_prefactor]
+    type = DerivativeParsedMaterial
+    block = 0
+    expression = &#x27;c-0.1&#x27;
+    coupled_variables = c
+    property_name = eigenstrain_prefactor
+    derivative_order = 1
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableBaseEigenStrain
+    base_tensor_property_name = aniso_tensor
+    prefactor = eigenstrain_prefactor
+    eigenstrain_name = eigenstrain
+  [../]
+  [./strain]
+    type = ComputeIncrementalStrain
+    displacements = &#x27;disp_x disp_y&#x27;
+    eigenstrain_names = eigenstrain
+  [../]
+  [./stress]
+    type = ComputeStrainIncrementBasedStress
+  [../]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;120.0 80.0&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./cbc]
+      auto_direction = &#x27;x y&#x27;
+      variable = c
+    [../]
+  [../]
+  [./fix_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./fix_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+
+  petsc_options_iname = &#x27;-pc_type -ksp_grmres_restart -sub_ksp_type -sub_pc_type -pc_asm_overlap&#x27;
+  petsc_options_value = &#x27;asm      31                  preonly       lu           1&#x27;
+
+  nl_rel_tol = 1e-10
+  nl_max_its = 5
+
+  l_tol = 1e-4
+  l_max_its = 20
+
+  dt = 1
+  num_steps = 5
+[]
+
+[Preconditioning]
+  [./smp]
+     type = SMP
+     full = true
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="63c60a78-a0f6-4ff5-9967-4bfa8368c358"><div class="modal-content"><h4>(moose/modules/combined/test/tests/DiffuseCreep/variable_base_eigen_strain.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 50
+  ny = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 2
+[]
+
+[Variables]
+  [./c]
+    [./InitialCondition]
+      type = FunctionIC
+      function = &#x27;x0:=5.0;thk:=0.5;m:=2;r:=abs(x-x0);v:=exp(-(r/thk)^m);0.1+0.01*v&#x27;
+    [../]
+  [../]
+  [./mu]
+  [../]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+[]
+
+[AuxVariables]
+  [./gb]
+    family = LAGRANGE
+    order  = FIRST
+  [../]
+  [./eigen_strain_xx]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+  [./eigen_strain_yy]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+  [./stress_xx]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+  [./stress_yy]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+[]
+
+[Kernels]
+  [./conc]
+    type = CHSplitConcentration
+    variable = c
+    mobility = mobility_prop
+    chemical_potential_var = mu
+  [../]
+  [./chempot]
+    type = CHSplitChemicalPotential
+    variable = mu
+    chemical_potential_prop = mu_prop
+    c = c
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = c
+  [../]
+  [./TensorMechanics]
+    displacements = &#x27;disp_x disp_y&#x27;
+  [../]
+[]
+
+[AuxKernels]
+  [./gb]
+    type = FunctionAux
+    variable = gb
+    function = &#x27;x0:=5.0;thk:=0.5;m:=2;r:=abs(x-x0);v:=exp(-(r/thk)^m);v&#x27;
+  [../]
+  [./eigenstrain_xx]
+    type = RankTwoAux
+    variable = eigen_strain_xx
+    rank_two_tensor = eigenstrain
+    index_i = 0
+    index_j = 0
+  [../]
+  [./eigenstrain_yy]
+    type = RankTwoAux
+    variable = eigen_strain_yy
+    rank_two_tensor = eigenstrain
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_xx]
+    type = RankTwoAux
+    variable = stress_xx
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+  [../]
+  [./stress_yy]
+    type = RankTwoAux
+    variable = stress_yy
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+  [../]
+[]
+
+[Materials]
+  [./chemical_potential]
+    type = DerivativeParsedMaterial
+    block = 0
+    property_name = mu_prop
+    coupled_variables = c
+    expression = &#x27;c&#x27;
+    derivative_order = 1
+  [../]
+  [./var_dependence]
+    type = DerivativeParsedMaterial
+    block = 0
+    expression = &#x27;c*(1.0-c)&#x27;
+    coupled_variables = c
+    property_name = var_dep
+    derivative_order = 1
+  [../]
+  [./mobility]
+    type = CompositeMobilityTensor
+    block = 0
+    M_name = mobility_prop
+    tensors = diffusivity
+    weights = var_dep
+    coupled_variables = c
+  [../]
+  [./phase_normal]
+    type = PhaseNormalTensor
+    phase = gb
+    normal_tensor_name = gb_normal
+  [../]
+  [./aniso_tensor]
+    type = GBDependentAnisotropicTensor
+    gb = gb
+    bulk_parameter = 0.1
+    gb_parameter = 1
+    gb_normal_tensor_name = gb_normal
+    gb_tensor_prop_name = aniso_tensor
+  [../]
+  [./diffusivity]
+    type = GBDependentDiffusivity
+    gb = gb
+    bulk_parameter = 0.1
+    gb_parameter = 1
+    gb_normal_tensor_name = gb_normal
+    gb_tensor_prop_name = diffusivity
+  [../]
+  [./eigenstrain_prefactor]
+    type = DerivativeParsedMaterial
+    block = 0
+    expression = &#x27;c-0.1&#x27;
+    coupled_variables = c
+    property_name = eigenstrain_prefactor
+    derivative_order = 1
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableBaseEigenStrain
+    base_tensor_property_name = aniso_tensor
+    prefactor = eigenstrain_prefactor
+    eigenstrain_name = eigenstrain
+  [../]
+  [./strain]
+    type = ComputeIncrementalStrain
+    displacements = &#x27;disp_x disp_y&#x27;
+    eigenstrain_names = eigenstrain
+  [../]
+  [./stress]
+    type = ComputeStrainIncrementBasedStress
+  [../]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;120.0 80.0&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./cbc]
+      auto_direction = &#x27;x y&#x27;
+      variable = c
+    [../]
+  [../]
+  [./fix_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./fix_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+
+  petsc_options_iname = &#x27;-pc_type -ksp_grmres_restart -sub_ksp_type -sub_pc_type -pc_asm_overlap&#x27;
+  petsc_options_value = &#x27;asm      31                  preonly       lu           1&#x27;
+
+  nl_rel_tol = 1e-10
+  nl_max_its = 5
+
+  l_tol = 1e-4
+  l_max_its = 20
+
+  dt = 1
+  num_steps = 5
+[]
+
+[Preconditioning]
+  [./smp]
+     type = SMP
+     full = true
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="472f012a-e093-41ff-8950-611010eac77c"><div class="modal-content"><h4>(moose/modules/combined/test/tests/DiffuseCreep/variable_base_eigen_strain.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 50
+  ny = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 2
+[]
+
+[Variables]
+  [./c]
+    [./InitialCondition]
+      type = FunctionIC
+      function = &#x27;x0:=5.0;thk:=0.5;m:=2;r:=abs(x-x0);v:=exp(-(r/thk)^m);0.1+0.01*v&#x27;
+    [../]
+  [../]
+  [./mu]
+  [../]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+[]
+
+[AuxVariables]
+  [./gb]
+    family = LAGRANGE
+    order  = FIRST
+  [../]
+  [./eigen_strain_xx]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+  [./eigen_strain_yy]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+  [./stress_xx]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+  [./stress_yy]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+[]
+
+[Kernels]
+  [./conc]
+    type = CHSplitConcentration
+    variable = c
+    mobility = mobility_prop
+    chemical_potential_var = mu
+  [../]
+  [./chempot]
+    type = CHSplitChemicalPotential
+    variable = mu
+    chemical_potential_prop = mu_prop
+    c = c
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = c
+  [../]
+  [./TensorMechanics]
+    displacements = &#x27;disp_x disp_y&#x27;
+  [../]
+[]
+
+[AuxKernels]
+  [./gb]
+    type = FunctionAux
+    variable = gb
+    function = &#x27;x0:=5.0;thk:=0.5;m:=2;r:=abs(x-x0);v:=exp(-(r/thk)^m);v&#x27;
+  [../]
+  [./eigenstrain_xx]
+    type = RankTwoAux
+    variable = eigen_strain_xx
+    rank_two_tensor = eigenstrain
+    index_i = 0
+    index_j = 0
+  [../]
+  [./eigenstrain_yy]
+    type = RankTwoAux
+    variable = eigen_strain_yy
+    rank_two_tensor = eigenstrain
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_xx]
+    type = RankTwoAux
+    variable = stress_xx
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+  [../]
+  [./stress_yy]
+    type = RankTwoAux
+    variable = stress_yy
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+  [../]
+[]
+
+[Materials]
+  [./chemical_potential]
+    type = DerivativeParsedMaterial
+    block = 0
+    property_name = mu_prop
+    coupled_variables = c
+    expression = &#x27;c&#x27;
+    derivative_order = 1
+  [../]
+  [./var_dependence]
+    type = DerivativeParsedMaterial
+    block = 0
+    expression = &#x27;c*(1.0-c)&#x27;
+    coupled_variables = c
+    property_name = var_dep
+    derivative_order = 1
+  [../]
+  [./mobility]
+    type = CompositeMobilityTensor
+    block = 0
+    M_name = mobility_prop
+    tensors = diffusivity
+    weights = var_dep
+    coupled_variables = c
+  [../]
+  [./phase_normal]
+    type = PhaseNormalTensor
+    phase = gb
+    normal_tensor_name = gb_normal
+  [../]
+  [./aniso_tensor]
+    type = GBDependentAnisotropicTensor
+    gb = gb
+    bulk_parameter = 0.1
+    gb_parameter = 1
+    gb_normal_tensor_name = gb_normal
+    gb_tensor_prop_name = aniso_tensor
+  [../]
+  [./diffusivity]
+    type = GBDependentDiffusivity
+    gb = gb
+    bulk_parameter = 0.1
+    gb_parameter = 1
+    gb_normal_tensor_name = gb_normal
+    gb_tensor_prop_name = diffusivity
+  [../]
+  [./eigenstrain_prefactor]
+    type = DerivativeParsedMaterial
+    block = 0
+    expression = &#x27;c-0.1&#x27;
+    coupled_variables = c
+    property_name = eigenstrain_prefactor
+    derivative_order = 1
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableBaseEigenStrain
+    base_tensor_property_name = aniso_tensor
+    prefactor = eigenstrain_prefactor
+    eigenstrain_name = eigenstrain
+  [../]
+  [./strain]
+    type = ComputeIncrementalStrain
+    displacements = &#x27;disp_x disp_y&#x27;
+    eigenstrain_names = eigenstrain
+  [../]
+  [./stress]
+    type = ComputeStrainIncrementBasedStress
+  [../]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;120.0 80.0&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./cbc]
+      auto_direction = &#x27;x y&#x27;
+      variable = c
+    [../]
+  [../]
+  [./fix_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./fix_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+
+  petsc_options_iname = &#x27;-pc_type -ksp_grmres_restart -sub_ksp_type -sub_pc_type -pc_asm_overlap&#x27;
+  petsc_options_value = &#x27;asm      31                  preonly       lu           1&#x27;
+
+  nl_rel_tol = 1e-10
+  nl_max_its = 5
+
+  l_tol = 1e-4
+  l_max_its = 20
+
+  dt = 1
+  num_steps = 5
+[]
+
+[Preconditioning]
+  [./smp]
+     type = SMP
+     full = true
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div><div class="moose-modal modal" id="7f9a62e4-5b00-4d85-8d23-468eb15a315d"><div class="modal-content"><h4>(moose/modules/combined/test/tests/DiffuseCreep/variable_base_eigen_strain.i)</h4><pre style="max-height:350px;"><code class="language-moose">[Mesh]
+  type = GeneratedMesh
+  dim = 2
+  nx = 50
+  ny = 2
+  xmin = 0
+  xmax = 10
+  ymin = 0
+  ymax = 2
+[]
+
+[Variables]
+  [./c]
+    [./InitialCondition]
+      type = FunctionIC
+      function = &#x27;x0:=5.0;thk:=0.5;m:=2;r:=abs(x-x0);v:=exp(-(r/thk)^m);0.1+0.01*v&#x27;
+    [../]
+  [../]
+  [./mu]
+  [../]
+  [./disp_x]
+  [../]
+  [./disp_y]
+  [../]
+[]
+
+[AuxVariables]
+  [./gb]
+    family = LAGRANGE
+    order  = FIRST
+  [../]
+  [./eigen_strain_xx]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+  [./eigen_strain_yy]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+  [./stress_xx]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+  [./stress_yy]
+    family = MONOMIAL
+    order  = CONSTANT
+  [../]
+[]
+
+[Kernels]
+  [./conc]
+    type = CHSplitConcentration
+    variable = c
+    mobility = mobility_prop
+    chemical_potential_var = mu
+  [../]
+  [./chempot]
+    type = CHSplitChemicalPotential
+    variable = mu
+    chemical_potential_prop = mu_prop
+    c = c
+  [../]
+  [./time]
+    type = TimeDerivative
+    variable = c
+  [../]
+  [./TensorMechanics]
+    displacements = &#x27;disp_x disp_y&#x27;
+  [../]
+[]
+
+[AuxKernels]
+  [./gb]
+    type = FunctionAux
+    variable = gb
+    function = &#x27;x0:=5.0;thk:=0.5;m:=2;r:=abs(x-x0);v:=exp(-(r/thk)^m);v&#x27;
+  [../]
+  [./eigenstrain_xx]
+    type = RankTwoAux
+    variable = eigen_strain_xx
+    rank_two_tensor = eigenstrain
+    index_i = 0
+    index_j = 0
+  [../]
+  [./eigenstrain_yy]
+    type = RankTwoAux
+    variable = eigen_strain_yy
+    rank_two_tensor = eigenstrain
+    index_i = 1
+    index_j = 1
+  [../]
+  [./stress_xx]
+    type = RankTwoAux
+    variable = stress_xx
+    rank_two_tensor = stress
+    index_i = 0
+    index_j = 0
+  [../]
+  [./stress_yy]
+    type = RankTwoAux
+    variable = stress_yy
+    rank_two_tensor = stress
+    index_i = 1
+    index_j = 1
+  [../]
+[]
+
+[Materials]
+  [./chemical_potential]
+    type = DerivativeParsedMaterial
+    block = 0
+    property_name = mu_prop
+    coupled_variables = c
+    expression = &#x27;c&#x27;
+    derivative_order = 1
+  [../]
+  [./var_dependence]
+    type = DerivativeParsedMaterial
+    block = 0
+    expression = &#x27;c*(1.0-c)&#x27;
+    coupled_variables = c
+    property_name = var_dep
+    derivative_order = 1
+  [../]
+  [./mobility]
+    type = CompositeMobilityTensor
+    block = 0
+    M_name = mobility_prop
+    tensors = diffusivity
+    weights = var_dep
+    coupled_variables = c
+  [../]
+  [./phase_normal]
+    type = PhaseNormalTensor
+    phase = gb
+    normal_tensor_name = gb_normal
+  [../]
+  [./aniso_tensor]
+    type = GBDependentAnisotropicTensor
+    gb = gb
+    bulk_parameter = 0.1
+    gb_parameter = 1
+    gb_normal_tensor_name = gb_normal
+    gb_tensor_prop_name = aniso_tensor
+  [../]
+  [./diffusivity]
+    type = GBDependentDiffusivity
+    gb = gb
+    bulk_parameter = 0.1
+    gb_parameter = 1
+    gb_normal_tensor_name = gb_normal
+    gb_tensor_prop_name = diffusivity
+  [../]
+  [./eigenstrain_prefactor]
+    type = DerivativeParsedMaterial
+    block = 0
+    expression = &#x27;c-0.1&#x27;
+    coupled_variables = c
+    property_name = eigenstrain_prefactor
+    derivative_order = 1
+  [../]
+  [./eigenstrain]
+    type = ComputeVariableBaseEigenStrain
+    base_tensor_property_name = aniso_tensor
+    prefactor = eigenstrain_prefactor
+    eigenstrain_name = eigenstrain
+  [../]
+  [./strain]
+    type = ComputeIncrementalStrain
+    displacements = &#x27;disp_x disp_y&#x27;
+    eigenstrain_names = eigenstrain
+  [../]
+  [./stress]
+    type = ComputeStrainIncrementBasedStress
+  [../]
+  [./elasticity_tensor]
+    type = ComputeElasticityTensor
+    C_ijkl = &#x27;120.0 80.0&#x27;
+    fill_method = symmetric_isotropic
+  [../]
+[]
+
+[BCs]
+  [./Periodic]
+    [./cbc]
+      auto_direction = &#x27;x y&#x27;
+      variable = c
+    [../]
+  [../]
+  [./fix_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = left
+    value = 0
+  [../]
+  [./fix_y]
+    type = DirichletBC
+    variable = disp_y
+    boundary = bottom
+    value = 0
+  [../]
+[]
+
+[Executioner]
+  type = Transient
+  solve_type = PJFNK
+
+  petsc_options_iname = &#x27;-pc_type -ksp_grmres_restart -sub_ksp_type -sub_pc_type -pc_asm_overlap&#x27;
+  petsc_options_value = &#x27;asm      31                  preonly       lu           1&#x27;
+
+  nl_rel_tol = 1e-10
+  nl_max_its = 5
+
+  l_tol = 1e-4
+  l_max_its = 20
+
+  dt = 1
+  num_steps = 5
+[]
+
+[Preconditioning]
+  [./smp]
+     type = SMP
+     full = true
+  [../]
+[]
+
+[Outputs]
+  exodus = true
+[]
+</code></pre></div><div class="modal-footer"><a class="modal-close btn-flat">Close</a></div></div></div></div></div></main></div></body><script type="text/javascript" src="../../contrib/materialize/materialize.min.js"></script><script type="text/javascript" src="../../contrib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="../../contrib/prism/prism.min.js"></script><script type="text/javascript" src="../../js/init.js"></script><script type="text/javascript" src="../../js/navigation.js"></script><script type="text/javascript" src="https://cse.google.com/cse.js?cx=008852834041008754713:g3ilnhhbbj9"></script><script type="text/javascript" src="../../js/sqa_moose.js"></script><script type="text/javascript" src="../../js/moose_input_parser.js"></script>
