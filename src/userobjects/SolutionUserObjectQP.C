@@ -1,4 +1,5 @@
 #include "SolutionUserObjectQP.h"
+#include "libmesh/nemesis_io.h"
 // MOOSE includes
 #include "ConsoleUtils.h"
 #include "MooseError.h"
