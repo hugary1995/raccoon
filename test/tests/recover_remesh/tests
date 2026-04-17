@@ -1,0 +1,43 @@
+[Tests]
+  issues = '#0'
+  design = 'LargeDeformationJ2PlasticityCorrection.md ComputeDeformationGradient.md'
+
+  # --------------------------------------------------------------------------
+  # Stage 1: Reference simulation.
+  # Runs a short dynamic J2-plasticity + temperature + phase-field problem on
+  # a small HEX8 mesh and writes the QP material/tensor fields to Exodus.
+  # --------------------------------------------------------------------------
+  [reference]
+    type = CSVDiff
+    input = 'reference.i'
+    csvdiff = 'reference_out.csv'
+    abs_zero = 1e-10
+    rel_err = 1e-6
+    requirement = 'The system shall run a small dynamic J2-plasticity problem '
+                  'with temperature and phase-field fracture and emit the QP '
+                  'fields needed for recovery.'
+  []
+
+  # --------------------------------------------------------------------------
+  # Stage 2: Restart simulation.
+  # Re-runs on the SAME generated mesh using SolutionUserObjectQP to seed the
+  # material state from reference_out.e.  Because centroid-to-centroid lookup
+  # is exact on an identical mesh, the integrated psie_corr_active /
+  # psip_active / effective_plastic_strain reported at INITIAL must match the
+  # reference's final row to recovery tolerance.  Any drift is a bug in the
+  # recovery machinery itself (polar_decomposition seeding, b_bar restoration,
+  # rotation-tensor axis continuity, etc.).
+  # --------------------------------------------------------------------------
+  [restart_matches_reference]
+    type = CSVDiff
+    input = 'restart.i'
+    csvdiff = 'restart_out.csv'
+    prereq = 'reference'
+    abs_zero = 1e-10
+    rel_err = 1e-6
+    requirement = 'The system shall reproduce the integrated elastic and '
+                  'plastic strain energy densities and effective plastic '
+                  'strain of a reference run when restarted on the same mesh '
+                  'through SolutionUserObjectQP recovery.'
+  []
+[]

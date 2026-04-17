@@ -3,9 +3,11 @@
 //* http://dolbow.pratt.duke.edu
 
 #include "ComputeLargeDeformationStress.h"
+#include "EigenADReal.h"
 #include "LargeDeformationElasticityModel.h"
 #include "LargeDeformationPlasticityModel.h"
 #include "LargeDeformationViscoelasticityModel.h"
+#include "MooseError.h"
 
 registerMooseObject("raccoonApp", ComputeLargeDeformationStress);
 
@@ -34,7 +36,9 @@ ComputeLargeDeformationStress::ComputeLargeDeformationStress(const InputParamete
                 ? &getMaterialPropertyOld<RankTwoTensor>(
                       prependBaseName("mechanical_deformation_gradient"))
                 : nullptr),
-    _stress(declareADProperty<RankTwoTensor>(prependBaseName("stress")))
+    _stress(declareADProperty<RankTwoTensor>(prependBaseName("stress"))),
+    _stress_old(getMaterialPropertyOld<RankTwoTensor>("stress")),
+    _stress_old_store(declareADProperty<RankTwoTensor>("stress_old_store"))
 {
   if (getParam<bool>("use_displaced_mesh"))
     mooseError("The stress calculator needs to run on the undisplaced mesh.");
@@ -72,8 +76,10 @@ ComputeLargeDeformationStress::initQpStatefulProperties()
 void
 ComputeLargeDeformationStress::computeQpProperties()
 {
+
   _elasticity_model->setQp(_qp);
   _elasticity_model->updateState(_Fm[_qp], _stress[_qp]);
+  _stress_old_store[_qp] = _stress_old[_qp];
 
   if (_viscoelasticity_model)
   {

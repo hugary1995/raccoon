@@ -45,4 +45,6 @@ protected:
 
   /// The stress
   ADMaterialProperty<RankTwoTensor> & _stress;
+  const MaterialProperty<RankTwoTensor> & _stress_old;
+  ADMaterialProperty<RankTwoTensor> & _stress_old_store;
 };

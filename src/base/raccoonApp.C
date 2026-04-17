@@ -27,12 +27,19 @@ raccoonApp::raccoonApp(const InputParameters & parameters) : MooseApp(parameters
 
 raccoonApp::~raccoonApp() {}
 
+static void
+associateSyntaxInner(Syntax & syntax, ActionFactory & /*action_factory*/)
+{
+  registerSyntax("RecoverVariablesAction", "RecoverVariables/*");
+}
+
 void
 raccoonApp::registerAll(Factory & f, ActionFactory & af, Syntax & s)
 {
   ModulesApp::registerAllObjects<raccoonApp>(f, af, s);
   Registry::registerObjectsTo(f, {"raccoonApp"});
   Registry::registerActionsTo(af, {"raccoonApp"});
+  associateSyntaxInner(s, af);
 }
 
 void
