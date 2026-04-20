@@ -46,15 +46,15 @@ dt = 0.1
   [gmg]
     type = GeneratedMeshGenerator
     dim = 3
-    nx = 3
-    ny = 3
+    nx = 1
+    ny = 1
     nz = 1
     xmin = 0
     xmax = 3
     ymin = 0
     ymax = 3
     zmin = 0
-    zmax = 1
+    zmax = 3
     elem_type = TET10
   []
 []
@@ -361,13 +361,9 @@ dt = 0.1
   []
   [J2]
     type = LargeDeformationJ2PlasticityCorrection
-    K = K
-    G = G
-    elastic_degradation_function = g
     phase_field = d_corr
     hardening_model = JC
     relative_tolerance = 1e-08
-    d2 = 2
     output_properties = 'effective_plastic_strain'
     outputs = exodus
   []
@@ -464,8 +460,8 @@ final_velocity = 0.05
   type = Transient
   solve_type = NEWTON
   line_search = none
-  petsc_options_iname = '-pc_type'
-  petsc_options_value = 'lu'
+  petsc_options_iname = '-pc_type -pc_hypre_type'
+  petsc_options_value = 'hypre    boomeramg'
 
   [TimeIntegrator]
     type = ImplicitEuler

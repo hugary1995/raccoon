@@ -18,6 +18,11 @@ public:
   virtual ADRankTwoTensor computeMandelStress(const ADRankTwoTensor & Fe,
                                               const bool plasticity_update = false) override;
 
+  const ADMaterialProperty<Real> & getK() const { return _K; }
+  const ADMaterialProperty<Real> & getG() const { return _G; }
+  const ADMaterialProperty<Real> & getDegradation() const { return _g; }
+  const ADMaterialProperty<Real> & getDegradationDerivative() const { return _dg_dd; }
+
 protected:
   // @{ Decomposition methods
   virtual ADRankTwoTensor computeMandelStressNoDecomposition(const ADRankTwoTensor & Fe,

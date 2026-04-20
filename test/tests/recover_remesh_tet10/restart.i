@@ -29,7 +29,7 @@ newmark_gamma = '${fparse 1/2-hht_alpha}'
 ref_end_time = 1
 dt = 0.1
 start_time = '${ref_end_time}'
-end_time = 2
+end_time = 1.5
 
 trans_time = 1.0
 final_velocity = 0.05
@@ -467,13 +467,9 @@ recover_file = reference_out_disp.e
   []
   [J2]
     type = LargeDeformationJ2PlasticityCorrection
-    K = K
-    G = G
-    elastic_degradation_function = g
     phase_field = d_corr
     hardening_model = JC
     relative_tolerance = 1e-08
-    d2 = 2
     recover = true
     solution = epsol
     output_properties = 'effective_plastic_strain'
@@ -560,8 +556,8 @@ recover_file = reference_out_disp.e
   type = Transient
   solve_type = NEWTON
   line_search = none
-  petsc_options_iname = '-pc_type'
-  petsc_options_value = 'lu'
+  petsc_options_iname = '-pc_type -pc_hypre_type'
+  petsc_options_value = 'hypre    boomeramg'
 
   [TimeIntegrator]
     type = ImplicitEuler

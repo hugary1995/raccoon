@@ -2,6 +2,7 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
+#include "EigenADReal.h"
 #include "PowerLawHardening.h"
 
 registerMooseObject("raccoonApp", PowerLawHardening);

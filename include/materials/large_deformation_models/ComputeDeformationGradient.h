@@ -80,9 +80,9 @@ protected:
 
   std::vector<const ADVariableValue *> _F_recover;
 
-  QpMapping::Element _element;
+  QpMapping::Element _element = QpMapping::Element::HEX8_3rd;
 
-  unsigned int _qpnum;
+  unsigned int _qpnum = 0;
   MaterialProperty<Real> & _Frobenius;
   MaterialProperty<Real> & _Jacobian;
 

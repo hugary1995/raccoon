@@ -77,29 +77,6 @@ LargeDeformationPlasticityModel::setElasticityModel(
 void
 LargeDeformationPlasticityModel::initQpStatefulProperties()
 {
-
-  _ep[_qp] = 0;
   _Fp[_qp].setToIdentity();
-  //}
-
-  std::vector<std::string> indices = {"x", "y", "z"};
-  if (_recover)
-  {
-    _ep[_qp] =
-        _solution_object_ptr->pointValue(_t,
-                                         _current_elem->true_centroid(),
-                                         "effective_plastic_strain_" + std::to_string(_qp + 1),
-                                         nullptr);
-
-    for (int i_ind = 0; i_ind < 3; i_ind++)
-      for (int j_ind = 0; j_ind < 3; j_ind++)
-      {
-        _Fp[_qp](i_ind, j_ind) =
-            _solution_object_ptr->pointValue(_t,
-                                             _current_elem->true_centroid(),
-                                             "plastic_deformation_gradie_" + indices[i_ind] +
-                                                 indices[j_ind] + "_" + std::to_string(_qp + 1),
-                                             nullptr);
-      }
-  }
+  _ep[_qp] = 0;
 }

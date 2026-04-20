@@ -65,8 +65,8 @@ ComputeDeformationGradient::validParams()
   params.addParam<UserObjectName>("solution", "The SolutionUserObject to extract data from.");
   params.addParam<Real>("num_qps", 8, "Number of QPs");
   params.addCoupledVar("F_ext_rec", "External F to recover with");
-  params.addRequiredParam<MooseEnum>(
-      "element", MooseEnum(QpMapping::ELEMENT_ENUM_DEFINITION), "The element type");
+  params.addParam<MooseEnum>(
+      "element", MooseEnum(QpMapping::ELEMENT_ENUM_DEFINITION), "Element type for QP remapping; required when recover = true");
   return params;
 }
 
@@ -97,7 +97,7 @@ ComputeDeformationGradient::ComputeDeformationGradient(const InputParameters & p
     _recover(getParam<bool>("recover")),
     _solution_object_ptr(NULL),
     _F_recover(adCoupledValues("F_ext_rec")),
-    _element(getParam<MooseEnum>("element").getEnum<QpMapping::Element>()),
+    _element(QpMapping::Element::HEX8_3rd),
     _Frobenius(declareProperty<Real>(prependBaseName("Frobenius_norm"))),
     _Jacobian(declareProperty<Real>(prependBaseName("Jacobian"))),
     _rotation_tensor(declareADProperty<RankTwoTensor>(prependBaseName("rotation_tensor"))),
@@ -115,7 +115,12 @@ ComputeDeformationGradient::ComputeDeformationGradient(const InputParameters & p
     MaterialBase::paramError("use_displaced_mesh",
                              "The strain calculator needs to run on the undisplaced mesh.");
   if (_recover)
+  {
+    if (!isParamSetByUser("element"))
+      mooseError("'element' must be specified when recover = true");
+    _element = getParam<MooseEnum>("element").getEnum<QpMapping::Element>();
     _lookup = QpMapping::getLookup(_element, _qpnum, /*reversed=*/true);
+  }
 }
 
 void

@@ -2,7 +2,9 @@
 //* being developed at Dolbow lab at Duke University
 //* http://dolbow.pratt.duke.edu
 
+#include "EigenADReal.h"
 #include "LargeDeformationJ2Plasticity.h"
+#include "LargeDeformationElasticityModel.h"
 #include "RaccoonUtils.h"
 
 registerMooseObject("raccoonApp", LargeDeformationJ2Plasticity);
@@ -10,14 +12,14 @@ registerMooseObject("raccoonApp", LargeDeformationJ2Plasticity);
 InputParameters
 LargeDeformationJ2Plasticity::validParams()
 {
-  InputParameters params = LargeDeformationPlasticityModel::validParams();
+  InputParameters params = LargeDeformationJ2PlasticityBase::validParams();
   params.addClassDescription("Large deformation $J_2$ plasticity. The exponential constitutive "
                              "update is used to update the plastic deformation.");
   return params;
 }
 
 LargeDeformationJ2Plasticity::LargeDeformationJ2Plasticity(const InputParameters & parameters)
-  : LargeDeformationPlasticityModel(parameters)
+  : LargeDeformationJ2PlasticityBase(parameters)
 {
   _check_range = true;
 }
@@ -39,6 +41,7 @@ LargeDeformationJ2Plasticity::updateState(ADRankTwoTensor & stress, ADRankTwoTen
     stress_dev_norm.value() = libMesh::TOLERANCE * libMesh::TOLERANCE;
   stress_dev_norm = sqrt(1.5 * stress_dev_norm);
   _Np[_qp] = 1.5 * stress_dev / stress_dev_norm;
+
   // Return mapping
   ADReal phi = computeResidual(stress_dev_norm, delta_ep);
   if (phi > 0)

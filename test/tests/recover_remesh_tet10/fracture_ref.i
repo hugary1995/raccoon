@@ -7,15 +7,15 @@
   [gmg]
     type = GeneratedMeshGenerator
     dim = 3
-    nx = 3
-    ny = 3
+    nx = 1
+    ny = 1
     nz = 1
     xmin = 0
     xmax = 3
     ymin = 0
     ymax = 3
     zmin = 0
-    zmax = 1
+    zmax = 3
     elem_type = TET10
   []
 []

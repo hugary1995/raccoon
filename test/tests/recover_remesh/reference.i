@@ -314,13 +314,9 @@ dt = 0.1
   []
   [J2]
     type = LargeDeformationJ2PlasticityCorrection
-    K = K
-    G = G
-    elastic_degradation_function = g
     phase_field = d
     hardening_model = JC
     relative_tolerance = 1e-08
-    d2 = 2
     output_properties = 'psie_corr_active effective_plastic_strain'
     outputs = exodus
   []

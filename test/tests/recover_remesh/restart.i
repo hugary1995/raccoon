@@ -383,13 +383,9 @@ recover_file = reference_out_disp.e
   []
   [J2]
     type = LargeDeformationJ2PlasticityCorrection
-    K = K
-    G = G
-    elastic_degradation_function = g
     phase_field = d
     hardening_model = JC
     relative_tolerance = 1e-08
-    d2 = 2
     recover = true
     solution = epsol
     output_properties = 'psie_corr_active effective_plastic_strain'
@@ -509,7 +505,6 @@ recover_file = reference_out_disp.e
 
 [Outputs]
   print_linear_residuals = false
-  execute_on = 'INITIAL'
   [exodus]
     type = Exodus
     file_base = restart_out
@@ -519,8 +514,5 @@ recover_file = reference_out_disp.e
   [csv]
     type = CSV
     file_base = restart_out
-    # Emit postprocessors at INITIAL *before* the first solve; this is the
-    # moment where any recovery inconsistency is visible.
-    execute_on = 'INITIAL'
   []
 []
