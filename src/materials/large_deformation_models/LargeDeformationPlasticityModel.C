@@ -16,7 +16,6 @@ LargeDeformationPlasticityModel::validParams()
 
   params.set<bool>("compute") = false;
   params.suppressParameter<bool>("compute");
-
   return params;
 }
 
@@ -40,8 +39,8 @@ LargeDeformationPlasticityModel::initialSetup()
   _hardening_model = dynamic_cast<PlasticHardeningModel *>(&getMaterial("hardening_model"));
   if (!_hardening_model)
     paramError("hardening_model",
-               "Plastic hardening model " + getParam<MaterialName>("hardening_model") +
-                   " is not compatible with " + name());
+               "Plastic hardening model " + _hardening_model->name() + " is not compatible with " +
+                   name());
 }
 
 void

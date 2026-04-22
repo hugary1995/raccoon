@@ -1,0 +1,23 @@
+[Tests]
+  [exp_return]
+    type = CSVDiff
+    input = exp_return.i
+    csvdiff = 'exp_return.csv'
+    requirement = 'LargeDeformationJ2Plasticity shall run under uniaxial tension without error.'
+  []
+  [bebar_return]
+    type = CSVDiff
+    input = correction_return.i
+    csvdiff = 'correction_return.csv'
+    prereq = exp_return
+    requirement = 'LargeDeformationJ2PlasticityBeBar shall produce results consistent with LargeDeformationJ2Plasticity under uniaxial tension.'
+  []
+  [analytical_comparison]
+    type = CSVDiff
+    input = analytical_comparison.i
+    csvdiff = 'analytical_comparison.csv'
+    rel_err = 1e-3
+    prereq = bebar_return
+    requirement = 'LargeDeformationJ2PlasticityBeBar shall match the small-strain analytical solution for uniaxial tension with linear isotropic hardening to within 0.1%.'
+  []
+[]
