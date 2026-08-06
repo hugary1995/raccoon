@@ -11,6 +11,7 @@
  * Computes the total potential energy density
  *
  *   psi_total = psie                         (stored, degraded elastic energy  g*psie+ + psie-)
+ *             + psip                          (stored, degraded plastic energy  gp*psip_active; optional)
  *             + Gc/c0 * (alpha/l + l|grad d|^2)   (fracture surface energy  Gc*gamma)
  *             + (penalty/2) <d - d_old>_-^2        (penalty irreversibility energy)
  *
@@ -31,6 +32,9 @@ protected:
 
   /// Stored (degraded) elastic strain energy density, g*psie_active + psie_inactive
   const ADMaterialProperty<Real> & _psie;
+
+  /// Stored (degraded) plastic energy density gp*psip_active (nullptr if not coupled -- brittle)
+  const ADMaterialProperty<Real> * _psip;
 
   /// Crack geometric function alpha(d)
   const ADMaterialProperty<Real> & _alpha;

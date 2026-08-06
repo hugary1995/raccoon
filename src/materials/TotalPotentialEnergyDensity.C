@@ -13,7 +13,7 @@ TotalPotentialEnergyDensity::validParams()
   InputParameters params = Material::validParams();
   params += BaseNameInterface::validParams();
   params.addClassDescription(
-      "Computes the total potential energy density (stored elastic energy + fracture surface "
+      "Computes the total potential energy density (stored elastic + plastic energy + fracture surface "
       "energy + penalty irreversibility energy) as a plain Real material property. Its domain "
       "integral is the total potential energy whose gradient is the residual, so it serves as a "
       "consistent merit for a custom outer nonlinear-preconditioner line search.");
@@ -23,6 +23,9 @@ TotalPotentialEnergyDensity::validParams()
       "strain_energy_density",
       "psie",
       "Stored (degraded) elastic strain energy density, g*psie_active + psie_inactive");
+  params.addParam<MaterialPropertyName>(
+      "plastic_energy_density",
+      "Stored (degraded) plastic energy density gp*psip_active (optional; omit for brittle).");
   params.addParam<MaterialPropertyName>(
       "crack_geometric_function", "alpha", "The crack geometric function alpha(d)");
   params.addParam<MaterialPropertyName>("fracture_toughness", "Gc", "The fracture toughness Gc");
@@ -51,6 +54,9 @@ TotalPotentialEnergyDensity::TotalPotentialEnergyDensity(const InputParameters &
   : Material(parameters),
     BaseNameInterface(parameters),
     _psie(getADMaterialProperty<Real>(prependBaseName("strain_energy_density", true))),
+    _psip(isParamValid("plastic_energy_density")
+              ? &getADMaterialProperty<Real>(prependBaseName("plastic_energy_density", true))
+              : nullptr),
     _alpha(getADMaterialProperty<Real>(prependBaseName("crack_geometric_function", true))),
     _Gc(getADMaterialProperty<Real>(prependBaseName("fracture_toughness", true))),
     _c0(getADMaterialProperty<Real>(prependBaseName("normalization_constant", true))),
@@ -68,6 +74,7 @@ void
 TotalPotentialEnergyDensity::computeQpProperties()
 {
   const Real psie = MetaPhysicL::raw_value(_psie[_qp]);
+  const Real psip = _psip ? MetaPhysicL::raw_value((*_psip)[_qp]) : 0.0;
   const Real alpha = MetaPhysicL::raw_value(_alpha[_qp]);
   const Real Gc = MetaPhysicL::raw_value(_Gc[_qp]);
   const Real c0 = MetaPhysicL::raw_value(_c0[_qp]);
@@ -86,5 +93,5 @@ TotalPotentialEnergyDensity::computeQpProperties()
   // psi_total the CONSISTENT merit (grad = the full residual) for the trust-region line search.
   const Real visc = (_viscosity > 0.0 && _dt > 0.0) ? 0.5 * _viscosity / _dt * jump * jump : 0.0;
 
-  _psi_total[_qp] = psie + frac + pen + visc;
+  _psi_total[_qp] = psie + psip + frac + pen + visc;
 }
