@@ -46,7 +46,7 @@ SolutionChangeNormFixedPoint::initialize()
 
   // solutionState(1, FixedPoint) is the PREVIOUS_FP_SOLUTION_TAG vector — d^(k-1), copied
   // there by SystemBase::copyPreviousFixedPointSolutions() before the current solve began.
-  sys.solutionState(1, Moose::SolutionIterationType::FixedPoint).localize(_fp_old_local);
+  sys.solutionState(1, Moose::SolutionIterationType::MultiAppFixedPoint).localize(_fp_old_local);
 }
 
 Real // Compute (d^k-d^(k-1))^2
