@@ -29,6 +29,10 @@ ADRankTwoTensor
 LargeDeformationNewtonianViscosity::computeCauchyStress(const ADRankTwoTensor & Fm,
                                                         const RankTwoTensor & Fm_old)
 {
+  // Avoiding /0 issues at the initial step, where _dt is not yet defined
+  if (_t_step == 0)
+    return ADRankTwoTensor();
+
   ADRankTwoTensor Fm_dot = (Fm - Fm_old) / _dt;
   ADRankTwoTensor Fm_inv = Fm.inverse();
   ADRankTwoTensor D = (Fm_dot * Fm_inv + Fm_inv.transpose() * Fm_dot.transpose()) / 2;

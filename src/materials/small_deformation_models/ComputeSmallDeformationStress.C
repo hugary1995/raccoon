@@ -50,6 +50,20 @@ ComputeSmallDeformationStress::initialSetup()
           : nullptr;
   if (_plasticity_model)
     _elasticity_model->setPlasticityModel(_plasticity_model);
+
+  // The elasticity (and plasticity) models are discrete materials manually driven by this
+  // material, so MOOSE's automatic material dependency resolution cannot see the properties they
+  // in turn depend on (e.g. the bulk/shear modulus or the degradation function). Without
+  // propagating those dependencies here, boundary/face consumers of "stress" (such as a
+  // SideIntegralPostprocessor) would reinit the discrete models without their inputs ever being
+  // computed, silently yielding zero-valued properties.
+  const auto & elasticity_deps = _elasticity_model->getMatPropDependencies();
+  _material_property_dependencies.insert(elasticity_deps.begin(), elasticity_deps.end());
+  if (_plasticity_model)
+  {
+    const auto & plasticity_deps = _plasticity_model->getMatPropDependencies();
+    _material_property_dependencies.insert(plasticity_deps.begin(), plasticity_deps.end());
+  }
 }
 
 void

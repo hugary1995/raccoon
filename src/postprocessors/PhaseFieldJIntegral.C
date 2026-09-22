@@ -13,9 +13,8 @@ PhaseFieldJIntegral::validParams()
   params += BaseNameInterface::validParams();
   params.addClassDescription("Compute the J integral for a phase-field model of fracture");
   params.addRequiredParam<RealVectorValue>("J_direction", "direction of J integral");
-  params.addParam<MaterialPropertyName>("strain_energy_density",
-                                        "psie"
-                                        "Name of the strain energy density");
+  params.addParam<MaterialPropertyName>(
+      "strain_energy_density", "psie", "Name of the strain energy density");
   params.addRequiredCoupledVar(
       "displacements",
       "The displacements appropriate for the simulation geometry and coordinate system");
@@ -26,7 +25,7 @@ PhaseFieldJIntegral::PhaseFieldJIntegral(const InputParameters & parameters)
   : SideIntegralPostprocessor(parameters),
     BaseNameInterface(parameters),
     _stress(getADMaterialPropertyByName<RankTwoTensor>(prependBaseName("stress"))),
-    _psie(getADMaterialProperty<Real>(prependBaseName("strain_energy_density"))),
+    _psie(getADMaterialProperty<Real>(prependBaseName("strain_energy_density", true))),
     _ndisp(coupledComponents("displacements")),
     _grad_disp(coupledGradients("displacements")),
     _t(getParam<RealVectorValue>("J_direction"))
