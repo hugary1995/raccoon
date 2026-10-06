@@ -10,18 +10,18 @@
   [elastic_energy]
     type = LinearIsotropicStrainEnergyDensity
     strain = 'forces/E'
-    strain_energy_density_active = 'state/psie_active'
-    strain_energy_density_inactive = 'state/psie_inactive'
+    active_strain_energy_density = 'state/psie_active'
+    inactive_strain_energy_density = 'state/psie_inactive'
     coefficient_types = 'YOUNGS_MODULUS POISSONS_RATIO'
     coefficients = '2.1e5 0.3'
     decomposition = 'NONE'
   []
   [sum]
     type = ScalarLinearCombination
-    from_var = 'state/psie_active state/psie_inactive'
-    to_var = 'state/psi'
-    coefficients = 'degradation 1'
-    coefficient_as_parameter = 'true false'
+    from = 'state/psie_active state/psie_inactive'
+    to = 'state/psi'
+    weights = 'degradation 1'
+    weight_as_parameter = 'true false'
   []
   [energy]
     type = ComposedModel

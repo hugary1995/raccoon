@@ -64,6 +64,20 @@ ComputeSmallDeformationStress::initialSetup()
     const auto & plasticity_deps = _plasticity_model->getMatPropDependencies();
     _material_property_dependencies.insert(plasticity_deps.begin(), plasticity_deps.end());
   }
+
+  // The elasticity (and plasticity) models are never reinited on their own (their own
+  // computeQpProperties() is a no-op; all of their actual work, including declared properties
+  // like psie_active, only happens inside the updateState() call below). Claim their supplied
+  // properties as our own too, so that a consumer reading one of them directly (e.g. an output or
+  // a Postprocessor on psie_active) also marks us active and causes updateState() to actually run
+  // with the current solution, instead of leaving those properties stuck at a stale value.
+  const auto & elasticity_supplied = _elasticity_model->getSuppliedPropIDs();
+  _supplied_prop_ids.insert(elasticity_supplied.begin(), elasticity_supplied.end());
+  if (_plasticity_model)
+  {
+    const auto & plasticity_supplied = _plasticity_model->getSuppliedPropIDs();
+    _supplied_prop_ids.insert(plasticity_supplied.begin(), plasticity_supplied.end());
+  }
 }
 
 void
