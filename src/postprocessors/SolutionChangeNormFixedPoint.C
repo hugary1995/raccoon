@@ -49,7 +49,7 @@ SolutionChangeNormFixedPoint::SolutionChangeNormFixedPoint(const InputParameters
   else
     _fe_problem.needsPreviousMultiAppFixedPointIterationSolution(true, _sys_num);
 
-  sys.needSolutionState(1, Moose::SolutionIterationType::FixedPoint);
+  sys.needSolutionState(1, Moose::SolutionIterationType::MultiAppFixedPoint);
 }
 
 void
@@ -74,10 +74,6 @@ SolutionChangeNormFixedPoint::initialSetup()
 void
 SolutionChangeNormFixedPoint::timestepSetup()
 {
-  // No base call: NodalPostprocessor inherits SetupInterface twice (through NodalUserObject and
-  // through Postprocessor), so the qualified call is ambiguous. SetupInterface::timestepSetup()
-  // is empty and nothing in this chain overrides it, so there is nothing to forward to.
-
   // Start a fresh history for each time step. A step that fails and is retried with a smaller
   // dt re-enters here, so the retry gets its own history rather than appending to the failure.
   _history.clear();
@@ -88,10 +84,6 @@ SolutionChangeNormFixedPoint::initialize()
 {
   _max_change = 0.0;
 
-  // Deliberately const: the const overload of solutionState() errors if the state does not
-  // exist, whereas the non-const overload would silently allocate a zero vector.
-  // NOTE: localize() is a collective operation, so this object is not thread-safe. It is only
-  // ever run with a single thread per rank in practice.
   const auto & sys = _fp_var->sys();
 
   // solutionState(0) is the current solution, updated by the MultiAppCopyTransfer to d^(k).
@@ -105,9 +97,7 @@ SolutionChangeNormFixedPoint::initialize()
 void
 SolutionChangeNormFixedPoint::execute()
 {
-  // Skip nodes where the variable is not defined (e.g. block-restricted variables). For a
-  // higher-order Lagrange variable this loop still visits every node carrying a DOF, so
-  // mid-edge values on TET10 are included.
+  // Skip nodes where the variable is not defined (e.g. block-restricted variables).
   if (_current_node->n_dofs(_sys_num, _var_num) == 0)
     return;
 
@@ -136,12 +126,9 @@ SolutionChangeNormFixedPoint::finalize()
   // gatherMax() has synchronized the value, so every rank appends the same history.
   _history.push_back(_max_change);
 
-  if (processor_id() != 0)
-    return;
-
   if (!_print_history)
   {
-    Moose::out << "  " << name() << " = " << _max_change << "\n";
+    _console << "  " << name() << " = " << _max_change << std::endl;
     return;
   }
 
@@ -156,5 +143,5 @@ SolutionChangeNormFixedPoint::finalize()
       oss << "   ratio " << std::fixed << std::setprecision(3) << (_history[i] / _history[i - 1]);
     oss << "\n";
   }
-  Moose::out << oss.str() << std::flush;
+  _console << oss.str() << std::flush;
 }
