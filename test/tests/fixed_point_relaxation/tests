@@ -1,0 +1,64 @@
+[Tests]
+  [no_relaxation]
+    type = CSVDiff
+    input = 'main.i'
+    csvdiff = 'no_relax_out.csv'
+    cli_args = 'Outputs/file_base=no_relax_out'
+    rel_err = 1e-8
+    requirement = 'MultiApp fixed point iterations without relaxation shall converge to the '
+                  'solution of the coupled problem, giving d = t for a sub-app that drives d to '
+                  'a uniform value of t.'
+  []
+  [relaxation_default_restore]
+    type = CSVDiff
+    input = 'main.i'
+    csvdiff = 'relax_default_restore_out.csv'
+    cli_args = 'Outputs/file_base=relax_default_restore_out '
+               'MultiApps/fracture/relaxation_factor=0.5 '
+               'MultiApps/fracture/transformed_variables=d'
+    rel_err = 1e-8
+    requirement = 'Sub-app relaxation with the default restore behavior shall converge to a '
+                  'solution biased toward the previous time step, because the vector relaxation '
+                  'blends against is restored to the previous time step at the start of every '
+                  'fixed point iteration, giving d = alpha*t + (1-alpha)*d_previous_step rather '
+                  'than d = t.'
+  []
+  [relaxation_keep_solution]
+    type = CSVDiff
+    input = 'main.i'
+    csvdiff = 'relax_keep_solution_out.csv'
+    cli_args = 'Outputs/file_base=relax_keep_solution_out '
+               'MultiApps/fracture/relaxation_factor=0.5 '
+               'MultiApps/fracture/transformed_variables=d '
+               'MultiApps/fracture/keep_solution_during_restore=true '
+               'MultiApps/fracture/catch_up=true'
+    rel_err = 1e-8
+    requirement = 'Sub-app relaxation with keep_solution_during_restore enabled shall blend '
+                  'against the previous fixed point iterate and therefore converge to the same '
+                  'solution as the unrelaxed case, d = t.'
+  []
+  [coupled_no_relaxation]
+    type = CSVDiff
+    input = 'coupled_main.i'
+    csvdiff = 'coupled_no_relax_out.csv'
+    cli_args = 'Outputs/file_base=coupled_no_relax_out'
+    rel_err = 1e-6
+    requirement = 'A two-way coupled fixed point without relaxation shall converge to d = 2/3 at '
+                  'the rate of the underlying map, taking 11 fixed point iterations.'
+  []
+  [coupled_relaxation]
+    type = CSVDiff
+    input = 'coupled_main.i'
+    csvdiff = 'coupled_relax_out.csv'
+    cli_args = 'Outputs/file_base=coupled_relax_out '
+               'MultiApps/sub/relaxation_factor=0.5 '
+               'MultiApps/sub/transformed_variables=d '
+               'MultiApps/sub/keep_solution_during_restore=true '
+               'MultiApps/sub/catch_up=true'
+    rel_err = 1e-6
+    requirement = 'Correctly configured sub-app relaxation shall damp the fixed point update, '
+                  'changing the iteration count from 11 to 26 while converging to the same '
+                  'solution d = 2/3, demonstrating that the relaxation factor is applied and '
+                  'that it does not bias the converged result.'
+  []
+[]
