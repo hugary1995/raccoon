@@ -1,10 +1,12 @@
 # SolutionChangeNormFixedPoint
 
-Computes the L2 norm of the change in a variable between consecutive fixed-point (Picard) iterations:
+Computes the maximum nodal change in a variable between consecutive fixed-point (Picard) iterations:
 
 \begin{equation}
-  \| d^{(k)} - d^{(k-1)} \|_2 = \sqrt{\int_\Omega \left( d^{(k)} - d^{(k-1)} \right)^2 \, \mathrm{d}V}
+  \max_i \left| d_i^{(k)} - d_i^{(k-1)} \right|
 \end{equation}
+
+An L-infinity measure is used rather than an integral L2 norm so that the value is independent of domain size and of how far the crack has advanced. For a phase field bounded in $[0,1]$, a tolerance of $10^{-3}$ means no node's damage moved by more than 0.001 over the iteration.
 
 Intended for use as a staggered-scheme convergence criterion in conjunction with [PostprocessorConvergence.md] and the `multiapp_fixed_point_convergence` Executioner parameter.
 
